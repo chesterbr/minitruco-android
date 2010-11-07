@@ -38,40 +38,40 @@ public class SituacaoJogo {
 	 * Posição do jogador. 1 e 3 são parceiros entre si, assim como 2 e 4, e
 	 * jogam na ordem numérica.
 	 */
-	int posJogador;
+	public int posJogador;
 
 	/**
 	 * Rodada que estamos jogando (de 1 a 3)
 	 */
-	int numRodadaAtual;
+	public int numRodadaAtual;
 
 	/**
 	 * Resultados de cada rodada (1 para vitória da equipe 1/3, 2 para vitória
 	 * da equipe 2/4 e 3 para empate)
 	 */
-	int resultadoRodada[] = new int[3];
+	public int resultadoRodada[] = new int[3];
 
 	/**
 	 * Valor atual da mão (1, 3, 6, 9 ou 12)
 	 */
-	int valorMao;
+	public int valorMao;
 
 	/**
 	 * Valor da mão caso o jogador peça aumento de aposta (se for 0, significa
 	 * que não pode ser pedido aumento)
 	 */
-	int valorProximaAposta;
+	public int valorProximaAposta;
 
 	/**
 	 * Jogador que está pedindo aumento de aposta (pedindo truco, 6, 9 ou 12).
 	 * Se for null, ninguém está pedindo
 	 */
-	int posJogadorPedindoAumento;
+	public int posJogadorPedindoAumento;
 
 	/**
 	 * Posição (1 a 4) do do jogador que abriu a rodada
 	 */
-	int posJogadorQueAbriuRodada;
+	public int posJogadorQueAbriuRodada;
 
 	/**
 	 * Letra da manilha (quando aplicável).
@@ -80,44 +80,39 @@ public class SituacaoJogo {
 	 * Jogo.getValorTruco(), pois, no caso de jogo com manilha velha, seu valor
 	 * não é o de uma carta
 	 */
-	char manilha;
+	public char manilha;
 
 	/**
 	 * Valor que a proprieade manilha assume quando estamos jogando com manilha
 	 * velha (não-fixa)
 	 */
-	static char MANILHA_INDETERMINADA = 'X';
+	public static char MANILHA_INDETERMINADA = 'X';
 
 	/**
 	 * Pontos de cada equipe na partida
 	 */
-	int[] pontosEquipe = new int[2];
+	public int[] pontosEquipe = new int[2];
 
-	/**
-	 * Número de vaquinhas no pasto de cada equipe
-	 */
-	int[] vaquinhasNoPasto = new int[2];
-	
 	/**
 	 * Para cada rodada (0-2) dá as cartas jogadas pelas 4 posicões (0-3)
 	 */
-	Carta[][] cartasJogadas = new Carta[3][4];
+	public Carta[][] cartasJogadas = new Carta[3][4];
 
 	/**
 	 * Cartas que ainda estão na mão do jogador
 	 */
-	Carta[] cartasJogador;
+	public Carta[] cartasJogador;
 
 	/**
 	 * Determina se o baralho inclui as cartas 4, 5, 6 e 7 (true) ou não
 	 * (false).
 	 * <p>
 	 */
-	boolean baralhoSujo;
+	public boolean baralhoSujo;
 
 	/**
 	 * Informa se vale jogar carta fechada
 	 */
-	boolean podeFechada;
+	public boolean podeFechada;
 
 }

@@ -43,6 +43,44 @@ import android.util.Log;
 public class JogoLocal extends Jogo {
 
 	/**
+	 * Cria um novo jogo.
+	 * <p>
+	 * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
+	 * 
+	 * @param manilhaVelha
+	 *            true para jogo com manilhas fixas, false para jogar com "vira"
+	 * @param baralhoLimpo
+	 *            true para baralho sem os 4, 5, 6, 7, false para baralho
+	 *            completo (sujo)
+	 */
+	public JogoLocal(boolean baralhoLimpo, boolean manilhaVelha) {
+		this.manilhaVelha = manilhaVelha;
+		this.baralhoLimpo = baralhoLimpo;
+		this.baralho = new Baralho(baralhoLimpo);
+	}
+
+	/**
+	 * Cria um novo jogo.
+	 * <p>
+	 * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
+	 * 
+	 * @param manilhaVelha
+	 *            true para jogo com manilhas fixas, false para jogar com "vira"
+	 * @param baralho
+	 *            Instância de baralho a ser utilizado no jogo.
+	 */
+	public JogoLocal(Baralho baralho, boolean manilhaVelha) {
+		this.manilhaVelha = manilhaVelha;
+		this.baralhoLimpo = baralho.isLimpo();
+		this.baralho = baralho;
+	}
+
+	/**
+	 * Baralho que será usado durante esse jogo
+	 */
+	private Baralho baralho;
+
+	/**
 	 * Resultados de cada rodada (1 para vitória da equipe 1/3, 2 para vitória
 	 * da equipe 2/4 e 3 para empate)
 	 */
@@ -90,22 +128,6 @@ public class JogoLocal extends Jogo {
 
 	private boolean manilhaVelha, baralhoLimpo;
 
-	/**
-	 * Cria um novo jogo.
-	 * <p>
-	 * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
-	 * 
-	 * @param manilhaVelha
-	 *            true para jogo com manilhas fixas, false para jogar ocm "vira"
-	 * @param baralhoLimpo
-	 *            true para baralho sem os 4, 5, 6, 7, false para baralho
-	 *            completo (sujo)
-	 */
-	public JogoLocal(boolean baralhoLimpo, boolean manilhaVelha) {
-		this.manilhaVelha = manilhaVelha;
-		this.baralhoLimpo = baralhoLimpo;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -133,8 +155,6 @@ public class JogoLocal extends Jogo {
 	 */
 	public synchronized void jogaCarta(Jogador j, Carta c) {
 
-		Log.i("jogo","jogador "+j+" jogou "+ c);
-		
 		// Se o jogo acabou, a mesa não estiver completa, já houver alguém
 		// trucando, estivermos aguardando ok da mão de 11 ou não for a vez do
 		// cara, recusa
@@ -158,6 +178,8 @@ public class JogoLocal extends Jogo {
 		if (!isPodeFechada()) {
 			c.setFechada(false);
 		}
+
+		Log.i("JogoLocal", "J" + j.getPosicao() + " joga " + c);
 
 		// Dá a carta como jogada, notificando os jogadores
 		cartasJogadasPorRodada[numRodadaAtual - 1][j.getPosicao() - 1] = c;
@@ -197,6 +219,9 @@ public class JogoLocal extends Jogo {
 					}
 				}
 			}
+
+			Log.i("JogoLocal", "Rodada fechou. Resultado: "
+					+ getResultadoRodada(numRodadaAtual));
 
 			// Se houve vencedor, passa a vez para o jogador que fechou a
 			// vitória, senão deixa quem abriu a mão anterior abrir a próxima
@@ -268,6 +293,9 @@ public class JogoLocal extends Jogo {
 		// início)
 		if (jogoFinalizado || !aguardandoRespostaMaoDe11[j.getPosicao() - 1])
 			return;
+		
+		Log.i("JogoLocal","J" + j.getPosicao() + (aceita ? "" : " nao")
+				+ " quer jogar mao de 11 ");
 
 		// Avisa os outros jogadores da decisão
 		for (int i = 1; i <= 4; i++) {
@@ -322,6 +350,8 @@ public class JogoLocal extends Jogo {
 				|| isAguardandoRespostaMao11() || !j.equals(getJogadorDaVez())) {
 			return;
 		}
+		
+		Log.i("JogoLocal","Jogador  " + j.getPosicao() + " pede aumento");
 
 		// Atualiza o status e notifica os outros jogadores do pedido
 		jogadorPedindoAumento = j;
@@ -374,6 +404,9 @@ public class JogoLocal extends Jogo {
 				|| jogadorPedindoAumento.getEquipeAdversaria() != j.getEquipe()) {
 			return;
 		}
+		
+		Log.i("JogoLocal","Jogador  " + j.getPosicao()
+				+ (aceitou ? "aceitou" : "recusou"));
 
 		if (aceitou) {
 			// Se o jogador aceitou, seta o novo valor, notifica a galera e tira
@@ -407,6 +440,9 @@ public class JogoLocal extends Jogo {
 	 *            Jogador que irá abrir a próxima mão, se houver
 	 */
 	private void fechaMao() {
+		
+		Log.i("JogoLocal","Mao fechou. Placar: " + pontosEquipe[0] + " a "
+				+ pontosEquipe[1]);
 
 		boolean acabou = false;
 
@@ -441,8 +477,8 @@ public class JogoLocal extends Jogo {
 	 */
 	private void iniciaMao(Jogador jogadorQueAbre) {
 
-		// Pega um novo baralho e reinicia a mesa
-		Baralho baralho = new Baralho(baralhoLimpo);
+		// Embaralha as cartas e reinicia a mesa
+		baralho.embaralha();
 		cartasJogadasPorRodada = new Carta[3][4];
 
 		// Distribui as cartas de cada jogador
@@ -465,6 +501,9 @@ public class JogoLocal extends Jogo {
 		numRodadaAtual = 1;
 		jogadorAbriuMao = jogadorAbriuRodada = jogadorQueAbre;
 
+		Log.i("JogoLocal","Abrindo mao com j" + jogadorQueAbre.getPosicao()
+				+ ",manilha=" + getManilha());
+		
 		// Abre a primeira rodada, informando a carta da mesa e quem vai abrir
 		posJogadorDaVez = jogadorQueAbre.getPosicao();
 		for (int i = 1; i <= numJogadores; i++) {
@@ -546,6 +585,8 @@ public class JogoLocal extends Jogo {
 			public boolean podeFechada;
 
 			public void run() {
+				Log.i("JogoLocal","notifica " + numNotificado + " da vez de "
+						+ jogadorDaVez.getPosicao());
 				getJogador(numNotificado).vez(jogadorDaVez, podeFechada);
 			}
 		}

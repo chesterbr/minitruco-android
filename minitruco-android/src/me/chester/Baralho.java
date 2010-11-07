@@ -46,6 +46,10 @@ public class Baralho {
 	public Baralho(boolean isLimpo) {
 		limpo = isLimpo;
 	}
+	
+	public boolean isLimpo() {
+		return limpo;
+	}
 
 	/**
 	 * Sorteia uma carta do baralho.
@@ -70,13 +74,12 @@ public class Baralho {
 	}
 	
 	/**
-	 * Tira uma carta do baralho, evitando que ela seja sorteada
-	 * @param c Carta a retirar
+	 * Recolhe as cartas do baralho, zerando-o para um novo uso
 	 */
-	public void tiraDoBaralho(Carta c) {
-		sorteadas.addElement(c);
+	public void embaralha() {
+		sorteadas = new Vector();
 	}
-
+	
 	/**
 	 * Sortea numeros entre 0 e um valor especificado, inclusive
 	 * 
