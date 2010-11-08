@@ -1,0 +1,5 @@
+Depois de muito tempo, finalmente comecei a versao Android do miniTruco.
+
+Por enquanto nao tem muita coisa, ainda estou "limpando a casa" das classes que trouxe. Da' pra acompanhar uma partida textualmente (ainda sem a parte de truco)se voce rodar os testes e chamar o adb logcat, mas estou organizando para que seja possivel fazer isso no celular em breve. Aguardem.
+
+Chester
