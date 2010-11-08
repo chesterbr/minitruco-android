@@ -126,6 +126,21 @@ public class JogoLocal extends Jogo {
 	 */
 	private boolean[] aguardandoRespostaMaoDe11 = new boolean[4];
 
+	/**
+	 * Sinaliza para o loop principal que alguém jogou uma carta
+	 */
+	boolean alguemJogou = false;
+
+	/**
+	 * Se alguemJogou = true, é o alguém que jogou
+	 */
+	private Jogador jogadorQueJogou;
+
+	/**
+	 * Se alguemJogou = true, é a carta jogada
+	 */
+	private Carta cartaJogada;
+
 	private boolean manilhaVelha, baralhoLimpo;
 
 	/*
@@ -146,14 +161,89 @@ public class JogoLocal extends Jogo {
 
 		// Inicia a primeira rodada, usando o jogador na posição 1
 		iniciaMao(getJogador(1));
+		while (pontosEquipe[0] < 12 && pontosEquipe[1] < 12) {
+			while (!alguemJogou) {
+				sleep(100);
+			}
+			processaJogada();
+			alguemJogou = false;
+		}
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Inicia uma mão (i.e., uma distribuição de cartas)
 	 * 
-	 * @see mt.JogoGenerico#jogaCarta(mt.Jogador, mt.Carta)
+	 * @param jogadorQueAbre
+	 *            Jogador que abre a rodada
 	 */
-	public synchronized void jogaCarta(Jogador j, Carta c) {
+	private void iniciaMao(Jogador jogadorQueAbre) {
+
+		// Embaralha as cartas e reinicia a mesa
+		baralho.embaralha();
+		cartasJogadasPorRodada = new Carta[3][4];
+
+		// Distribui as cartas de cada jogador
+		for (int j = 1; j <= 4; j++) {
+			Jogador jogador = getJogador(j);
+			Carta[] cartas = new Carta[3];
+			for (int i = 0; i <= 2; i++) {
+				cartas[i] = baralho.sorteiaCarta();
+			}
+			jogador.setCartas(cartas);
+		}
+
+		// Vira a carta da mesa, determinando a manilha
+		cartaDaMesa = baralho.sorteiaCarta();
+		setManilha(cartaDaMesa);
+
+		// Inicializa a mão
+		valorMao = 1;
+		jogadorPedindoAumento = null;
+		numRodadaAtual = 1;
+		jogadorAbriuMao = jogadorAbriuRodada = jogadorQueAbre;
+
+		Log.i("JogoLocal", "Abrindo mao com j" + jogadorQueAbre.getPosicao()
+				+ ",manilha=" + getManilha());
+
+		// Abre a primeira rodada, informando a carta da mesa e quem vai abrir
+		posJogadorDaVez = jogadorQueAbre.getPosicao();
+		for (int i = 1; i <= numJogadores; i++) {
+			getJogador(i).inicioMao();
+		}
+
+		if (pontosEquipe[0] == 11 ^ pontosEquipe[1] == 11) {
+			// Se apenas uma das equipes tiver 11 pontos, verifica se eles
+			// querem realmente jogar (eles podem desistir);
+			if (pontosEquipe[0] == 11) {
+				setEquipeAguardandoMao11(1);
+				getJogador(1).informaMao11(getJogador(3).getCartas());
+				getJogador(3).informaMao11(getJogador(1).getCartas());
+			} else {
+				setEquipeAguardandoMao11(2);
+				getJogador(2).informaMao11(getJogador(4).getCartas());
+				getJogador(4).informaMao11(getJogador(2).getCartas());
+			}
+		} else {
+			// Se for uma mão normal, passa a vez para o jogador que abre
+			setEquipeAguardandoMao11(0);
+			notificaVez();
+		}
+
+	}
+
+	/**
+	 * Processa uma jogada e passa a vez para o próximo jogador (ou finaliza a
+	 * rodoada/mão/jogo), notificando os jogadores apropriadamente
+	 * 
+	 * @param j
+	 *            Jogador que efetuou a jogada
+	 * @param c
+	 *            Carta que foi jogada
+	 */
+	private void processaJogada() {
+
+		Jogador j = this.jogadorQueJogou;
+		Carta c = this.cartaJogada;
 
 		// Se o jogo acabou, a mesa não estiver completa, já houver alguém
 		// trucando, estivermos aguardando ok da mão de 11 ou não for a vez do
@@ -281,6 +371,64 @@ public class JogoLocal extends Jogo {
 
 	}
 
+	/**
+	 * Conclui a mão atual, e, se o jogo não acabou, inicia uma nova.
+	 * 
+	 * @param jogadorQueTorna
+	 *            Jogador que irá abrir a próxima mão, se houver
+	 */
+	private void fechaMao() {
+
+		Log.i("JogoLocal", "Mao fechou. Placar: " + pontosEquipe[0] + " a "
+				+ pontosEquipe[1]);
+
+		// Notifica os jogadores que a rodada acabou, e, se for o caso, que o
+		// jogo acabou também
+
+		for (int i = 1; i <= 4; i++) {
+			getJogador(i).maoFechada(pontosEquipe);
+			if (pontosEquipe[0] > 11) {
+				getJogador(i).jogoFechado(1);
+			} else if (pontosEquipe[1] > 11) {
+				getJogador(i).jogoFechado(2);
+			}
+		}
+
+		// Se ainda estivermos em jogo, incia a nova mao
+		if (pontosEquipe[0] <= 11 && pontosEquipe[1] <= 11) {
+			int posAbre = jogadorAbriuMao.getPosicao() + 1;
+			if (posAbre == 5)
+				posAbre = 1;
+			iniciaMao(getJogador(posAbre));
+		}
+
+		return;
+	}
+
+	// /// NOTIFICAÇÕES RECEBIDAS DOS JOGADORES
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see mt.JogoGenerico#jogaCarta(mt.Jogador, mt.Carta)
+	 */
+	public synchronized void jogaCarta(Jogador j, Carta c) {
+
+		// Se alguém tiver jogado e ainda não foi processado, segura a onda
+		while (alguemJogou) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// No worries
+			}
+		}
+
+		this.jogadorQueJogou = j;
+		this.cartaJogada = c;
+		this.alguemJogou = true;
+
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -293,8 +441,8 @@ public class JogoLocal extends Jogo {
 		// início)
 		if (jogoFinalizado || !aguardandoRespostaMaoDe11[j.getPosicao() - 1])
 			return;
-		
-		Log.i("JogoLocal","J" + j.getPosicao() + (aceita ? "" : " nao")
+
+		Log.i("JogoLocal", "J" + j.getPosicao() + (aceita ? "" : " nao")
 				+ " quer jogar mao de 11 ");
 
 		// Avisa os outros jogadores da decisão
@@ -321,20 +469,6 @@ public class JogoLocal extends Jogo {
 
 	}
 
-	/**
-	 * Verifica se estamos aguardando resposta para mão de 11
-	 * 
-	 * @return true se falta alguém responder, false caso contrário
-	 */
-	private boolean isAguardandoRespostaMao11() {
-		for (int i = 0; i <= 3; i++) {
-			if (aguardandoRespostaMaoDe11[i]) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -350,8 +484,8 @@ public class JogoLocal extends Jogo {
 				|| isAguardandoRespostaMao11() || !j.equals(getJogadorDaVez())) {
 			return;
 		}
-		
-		Log.i("JogoLocal","Jogador  " + j.getPosicao() + " pede aumento");
+
+		Log.i("JogoLocal", "Jogador  " + j.getPosicao() + " pede aumento");
 
 		// Atualiza o status e notifica os outros jogadores do pedido
 		jogadorPedindoAumento = j;
@@ -404,8 +538,8 @@ public class JogoLocal extends Jogo {
 				|| jogadorPedindoAumento.getEquipeAdversaria() != j.getEquipe()) {
 			return;
 		}
-		
-		Log.i("JogoLocal","Jogador  " + j.getPosicao()
+
+		Log.i("JogoLocal", "Jogador  " + j.getPosicao()
 				+ (aceitou ? "aceitou" : "recusou"));
 
 		if (aceitou) {
@@ -431,103 +565,6 @@ public class JogoLocal extends Jogo {
 				recusouAumento[j.getPosicao() - 1] = true;
 			}
 		}
-	}
-
-	/**
-	 * Conclui a mão atual, e, se o jogo não acabou, inicia uma nova.
-	 * 
-	 * @param jogadorQueTorna
-	 *            Jogador que irá abrir a próxima mão, se houver
-	 */
-	private void fechaMao() {
-		
-		Log.i("JogoLocal","Mao fechou. Placar: " + pontosEquipe[0] + " a "
-				+ pontosEquipe[1]);
-
-		boolean acabou = false;
-
-		// Notifica os jogadores que a rodada acabou, e, se for o caso, que o
-		// jogo acabou também
-
-		for (int i = 1; i <= 4; i++) {
-			getJogador(i).maoFechada(pontosEquipe);
-			if (pontosEquipe[0] > 11) {
-				getJogador(i).jogoFechado(1);
-			} else if (pontosEquipe[1] > 11) {
-				getJogador(i).jogoFechado(2);
-			}
-		}
-
-		// Se ainda estivermos em jogo, incia a nova mao
-		if (pontosEquipe[0] <= 11 && pontosEquipe[1] <= 11 && acabou == false) {
-			int posAbre = jogadorAbriuMao.getPosicao() + 1;
-			if (posAbre == 5)
-				posAbre = 1;
-			iniciaMao(getJogador(posAbre));
-		}
-
-		return;
-	}
-
-	/**
-	 * Inicia uma mão (i.e., uma distribuição de cartas)
-	 * 
-	 * @param jogadorQueAbre
-	 *            Jogador que abre a rodada
-	 */
-	private void iniciaMao(Jogador jogadorQueAbre) {
-
-		// Embaralha as cartas e reinicia a mesa
-		baralho.embaralha();
-		cartasJogadasPorRodada = new Carta[3][4];
-
-		// Distribui as cartas de cada jogador
-		for (int j = 1; j <= 4; j++) {
-			Jogador jogador = getJogador(j);
-			Carta[] cartas = new Carta[3];
-			for (int i = 0; i <= 2; i++) {
-				cartas[i] = baralho.sorteiaCarta();
-			}
-			jogador.setCartas(cartas);
-		}
-
-		// Vira a carta da mesa, determinando a manilha
-		cartaDaMesa = baralho.sorteiaCarta();
-		setManilha(cartaDaMesa);
-
-		// Inicializa a mão
-		valorMao = 1;
-		jogadorPedindoAumento = null;
-		numRodadaAtual = 1;
-		jogadorAbriuMao = jogadorAbriuRodada = jogadorQueAbre;
-
-		Log.i("JogoLocal","Abrindo mao com j" + jogadorQueAbre.getPosicao()
-				+ ",manilha=" + getManilha());
-		
-		// Abre a primeira rodada, informando a carta da mesa e quem vai abrir
-		posJogadorDaVez = jogadorQueAbre.getPosicao();
-		for (int i = 1; i <= numJogadores; i++) {
-			getJogador(i).inicioMao();
-		}
-
-		if (pontosEquipe[0] == 11 ^ pontosEquipe[1] == 11) {
-			// Se apenas uma das equipes tiver 11 pontos, verifica se eles
-			// querem realmente jogar (eles podem desistir);
-			if (pontosEquipe[0] == 11) {
-				setEquipeAguardandoMao11(1);
-				getJogador(1).informaMao11(getJogador(3).getCartas());
-				getJogador(3).informaMao11(getJogador(1).getCartas());
-			} else {
-				setEquipeAguardandoMao11(2);
-				getJogador(2).informaMao11(getJogador(4).getCartas());
-				getJogador(4).informaMao11(getJogador(2).getCartas());
-			}
-		} else {
-			// Se for uma mão normal, passa a vez para o jogador que abre
-			setEquipeAguardandoMao11(0);
-			notificaVez();
-		}
-
 	}
 
 	/**
@@ -572,45 +609,19 @@ public class JogoLocal extends Jogo {
 
 	/**
 	 * Informa aos jogadores participantes que é a vez de um deles.
-	 * <p>
-	 * Faz isso em threads distintas, para que eles joguem sem se preocupar
 	 */
 	private void notificaVez() {
 
-		class ThreadNotifica extends Thread {
-			public int numNotificado;
-
-			public Jogador jogadorDaVez;
-
-			public boolean podeFechada;
-
-			public void run() {
-				Log.i("JogoLocal","notifica " + numNotificado + " da vez de "
-						+ jogadorDaVez.getPosicao());
-				getJogador(numNotificado).vez(jogadorDaVez, podeFechada);
-			}
-		}
-
 		// Esses dados têm que ser coletados *antes* de chamar as Threads.
 		// Motivo: se uma delas resolver jogar, a informação para as outras pode
-		// ficar destaualizada. Isso causou um/ bug *muito* hardcore de
-		// encontrar nos Nokia Series 40, que provavelmente possuem uma
-		// implementação minimalista de Threads
+		// ficar destaualizada.
 		Jogador j = getJogadorDaVez();
 		boolean pf = isPodeFechada();
 
 		for (int i = 1; i <= 4; i++) {
-			// Isso é uma otimização: os JogadorCPU ignoram notificação de vez
-			// que não sejam da sua própria, então podemos pular essas, evitando
-			// abrir uma thread à toa.
-			if ((getJogador(i) instanceof JogadorCPU) && (i != j.getPosicao())) {
-				continue;
-			}
-			ThreadNotifica tn = new ThreadNotifica();
-			tn.numNotificado = i;
-			tn.jogadorDaVez = j;
-			tn.podeFechada = pf;
-			tn.start();
+			Log.i("JogoLocal", "notificando jogador " + i + " da vez de "
+					+ j.getPosicao());
+			getJogador(i).vez(j, pf);
 		}
 
 	}
@@ -702,6 +713,28 @@ public class JogoLocal extends Jogo {
 	 */
 	public boolean isManilhaVelha() {
 		return manilhaVelha;
+	}
+
+	/**
+	 * Verifica se estamos aguardando resposta para mão de 11
+	 * 
+	 * @return true se falta alguém responder, false caso contrário
+	 */
+	private boolean isAguardandoRespostaMao11() {
+		for (int i = 0; i <= 3; i++) {
+			if (aguardandoRespostaMaoDe11[i]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void sleep(int i) {
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

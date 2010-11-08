@@ -34,6 +34,16 @@ package me.chester;
  */
 public class SituacaoJogo {
 
+	@Override
+	public String toString() {
+		// TODO transformar em algo semi-serializável e desserializar para
+		// debug/regressão
+		return "pos:" + posJogador + ",pontos:" + pontosEquipe[0] + ","
+				+ pontosEquipe[1] + ",rodada:" + numRodadaAtual + ",results:"
+				+ resultadoRodada[0] + "," + resultadoRodada[1] + ","
+				+ resultadoRodada[2] + ",valMao:" + valorMao;
+	}
+
 	/**
 	 * Posição do jogador. 1 e 3 são parceiros entre si, assim como 2 e 4, e
 	 * jogam na ordem numérica.

@@ -50,16 +50,9 @@ public class JogoTest extends TestCase {
 		assertEquals(0, e.joga(s));
 	}
 
-	public void testPartida() {
-		String[][] cartas = {
-				{ "Kp", "Jo", "Ap", "2p", "2e", "2o", "Ke", "Jp", "Ao", "3p",
-						"4e", "5o", "7e" },
-				{ "Qo", "Kp", "Jo", "Ap", "2p", "2e", "2o", "Ke", "Jp", "Ao",
-						"3p", "4e", "5o", "7e" },
-				{ "Qp", "Kp", "Jo", "Ap", "2p", "2e", "2o", "Ke", "Jp", "Ao",
-						"3p", "4e", "5o", "7e" } };
-		Baralho b = new BaralhoOrdenado(cartas);
-		Jogo j = new JogoLocal(b, false);
+	public void testPartidaGeral() {
+		// Cria um jogo com 4 CPUs e roda ele
+		Jogo j = new JogoLocal(false, false);
 		Jogador jogador = null;
 		SituacaoJogo situacao = new SituacaoJogo();
 		for (int i = 0; i < 4; i++) {
@@ -67,8 +60,24 @@ public class JogoTest extends TestCase {
 			j.adiciona(jogador);
 		}
 		j.run();
+		// Verifica que um dos dois realmente fez 12 pontos ou mais
 		j.atualizaSituacao(situacao, jogador);
-	//	assertEquals(11, situacao.pontosEquipe[1]);
 
+		assertTrue("Jogo deveria terminar com alguem ganhando: Jogo: "
+				+ situacao, Math.max(situacao.pontosEquipe[0],
+				situacao.pontosEquipe[1]) >= 12);
+
+		/*
+		 * String[][] cartas = { { "Kp", "Jo", "Ap", "2p", "2e", "2o", "Ke",
+		 * "Jp", "Ao", "3p", "4e", "5o", "7e" }, { "Qo", "Kp", "Jo", "Ap", "2p",
+		 * "2e", "2o", "Ke", "Jp", "Ao", "3p", "4e", "5o", "7e" }, { "Qp", "Kp",
+		 * "Jo", "Ap", "2p", "2e", "2o", "Ke", "Jp", "Ao", "3p", "4e", "5o",
+		 * "7e" } }; Baralho b = new BaralhoOrdenado(cartas); Jogo j = new
+		 * JogoLocal(b, false); Jogador jogador = null; SituacaoJogo situacao =
+		 * new SituacaoJogo(); for (int i = 0; i < 4; i++) { jogador = new
+		 * JogadorCPU(new EstrategiaSequencial()); j.adiciona(jogador); }
+		 * j.run(); j.atualizaSituacao(situacao, jogador); // assertEquals(11,
+		 * situacao.pontosEquipe[1]);
+		 */
 	}
 }
