@@ -1,5 +1,8 @@
 package me.chester;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
@@ -27,8 +30,8 @@ package me.chester;
  * <p>
  * As implementações desta classe irão cuidar de executar o jogo (no caso de
  * <code>JogoLocal</code>) ou manter a comunicação com um jogo em execução
- * remota (<code>JogoRemoto</code>). Em qualquer caso, os objetos Jogador
- * não terão ciência de onde o jogo está se passando.
+ * remota (<code>JogoRemoto</code>). Em qualquer caso, os objetos Jogador não
+ * terão ciência de onde o jogo está se passando.
  * <p>
  * A classe também faz o log (para fins de debug). Idealmente haveria uma classe
  * para isso, mas economizamos uns Ks deixando aqui (não pode ser na classe
@@ -175,8 +178,8 @@ public abstract class Jogo implements Runnable {
 	 * @param j
 	 *            Jogador que respondeu ao pedido
 	 * @param aceitou
-	 *            <code>true</code> se ele mandou descer, <code>false</code>
-	 *            se correu
+	 *            <code>true</code> se ele mandou descer, <code>false</code> se
+	 *            correu
 	 */
 	public abstract void respondeAumento(Jogador j, boolean aceitou);
 
@@ -222,24 +225,39 @@ public abstract class Jogo implements Runnable {
 	}
 
 	/**
-	 * Adiiciona um jogador na próxima posição disponível
+	 * Objetos interessados em receber notificações deste jogo
+	 */
+	protected List<Interessado> interessados = new ArrayList<Interessado>();
+
+	/**
+	 * Adiciona um interessado (isto é, um jogador ou uma mesa) neste jogo.
+	 * <p>
+	 * Se for um Jogador, será colocado na próxima posição disponível. Se for
+	 * uma mesa, ficará num local à parte. Em qualquer caso, o interessado passa
+	 * a receber eventos do jogo.
 	 * 
-	 * @param j
-	 *            Jogador a adicionar
+	 * @param i
+	 *            Objeto interessado em ser adicionado ao jogo
 	 * @return true se adicionou o jogador, false se não conseguiu
 	 */
-	public synchronized boolean adiciona(Jogador j) {
+	public synchronized boolean adiciona(Interessado i) {
 
-		// A mesa tem que ter vaga
-		if (numJogadores == 4) {
-			return false;
+		// Se for jogador, só entra se a mesa ainda tiver vaga.
+		if (i instanceof Jogador) {
+			Jogador j = (Jogador) i;
+			if (numJogadores == 4) {
+				return false;
+			}
+			jogadores[numJogadores] = j;
+			numJogadores++;
+			j.setPosicao(numJogadores);
 		}
 
-		// Coloca o jogador na próxima vaga e vincula ao jogo
-		jogadores[numJogadores] = j;
-		numJogadores++;
-		j.setPosicao(numJogadores);
-		j.jogo = this;
+		// Adiciona na lista e notifica a todos (incluindo ele) de sua presença
+		interessados.add(i);
+		for (Interessado interessado : interessados) {
+			interessado.entrouNoJogo(i, this);
+		}
 		return true;
 
 	}
@@ -333,10 +351,9 @@ public abstract class Jogo implements Runnable {
 	 */
 	public void abortaJogo(int posicao) {
 		jogoFinalizado = true;
-		for (int i = 1; i <= 4; i++) {
-			if (i != posicao)
-				getJogador(i).jogoAbortado(posicao);
+		for (Interessado interessado : interessados) {
+			interessado.jogoAbortado(posicao);
 		}
 	}
-	
+
 }

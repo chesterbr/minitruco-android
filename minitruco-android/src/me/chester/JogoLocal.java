@@ -151,13 +151,9 @@ public class JogoLocal extends Jogo {
 	public void run() {
 
 		// Avisa os jogadores que o jogo vai começar
-		for (int i = 1; i <= numJogadores; i++) {
-			getJogador(i).inicioPartida();
+		for (Interessado interessado : interessados) {
+			interessado.inicioPartida();
 		}
-
-		// Descomentar para debug da mão de 11, conforme o caso
-		// pontosEquipe[0] = 11;
-		// pontosEquipe[1] = 11;
 
 		// Inicia a primeira rodada, usando o jogador na posição 1
 		iniciaMao(getJogador(1));
@@ -207,11 +203,14 @@ public class JogoLocal extends Jogo {
 
 		// Abre a primeira rodada, informando a carta da mesa e quem vai abrir
 		posJogadorDaVez = jogadorQueAbre.getPosicao();
-		for (int i = 1; i <= numJogadores; i++) {
-			getJogador(i).inicioMao();
+		for (Interessado interessado : interessados) {
+			interessado.inicioMao();
 		}
 
 		if (pontosEquipe[0] == 11 ^ pontosEquipe[1] == 11) {
+			// TODO rever notificações aqui - teria que notificar todo mundo,
+			// passando a dupla beneficiada
+			//
 			// Se apenas uma das equipes tiver 11 pontos, verifica se eles
 			// querem realmente jogar (eles podem desistir);
 			if (pontosEquipe[0] == 11) {
@@ -273,8 +272,8 @@ public class JogoLocal extends Jogo {
 
 		// Dá a carta como jogada, notificando os jogadores
 		cartasJogadasPorRodada[numRodadaAtual - 1][j.getPosicao() - 1] = c;
-		for (int i = 1; i <= 4; i++) {
-			getJogador(i).cartaJogada(j, c);
+		for (Interessado interessado : interessados) {
+			interessado.cartaJogada(j, c);
 		}
 
 		// Passa a vez para o próximo jogador
@@ -321,9 +320,9 @@ public class JogoLocal extends Jogo {
 				jogadorQueTorna = getJogadorDaVez();
 			}
 
-			// Notifica os jogadores que a mão foi feita
-			for (int i = 1; i <= 4; i++) {
-				getJogador(i).rodadaFechada(numRodadaAtual,
+			// Notifica os interessados que a mão foi feita
+			for (Interessado interessado : interessados) {
+				interessado.rodadaFechada(numRodadaAtual,
 						getResultadoRodada(numRodadaAtual), jogadorQueTorna);
 			}
 
@@ -382,15 +381,15 @@ public class JogoLocal extends Jogo {
 		Log.i("JogoLocal", "Mao fechou. Placar: " + pontosEquipe[0] + " a "
 				+ pontosEquipe[1]);
 
-		// Notifica os jogadores que a rodada acabou, e, se for o caso, que o
+		// Notifica os interessados que a rodada acabou, e, se for o caso, que o
 		// jogo acabou também
 
-		for (int i = 1; i <= 4; i++) {
-			getJogador(i).maoFechada(pontosEquipe);
+		for (Interessado interessado : interessados) {
+			interessado.maoFechada(pontosEquipe);
 			if (pontosEquipe[0] > 11) {
-				getJogador(i).jogoFechado(1);
+				interessado.jogoFechado(1);
 			} else if (pontosEquipe[1] > 11) {
-				getJogador(i).jogoFechado(2);
+				interessado.jogoFechado(2);
 			}
 		}
 
@@ -618,10 +617,10 @@ public class JogoLocal extends Jogo {
 		Jogador j = getJogadorDaVez();
 		boolean pf = isPodeFechada();
 
-		for (int i = 1; i <= 4; i++) {
-			Log.i("JogoLocal", "notificando jogador " + i + " da vez de "
-					+ j.getPosicao());
-			getJogador(i).vez(j, pf);
+		for (Interessado interessado : interessados) {
+//			Log.i("JogoLocal", "notificando interessado " + interessado + " da vez de "
+//					+ j.getPosicao());
+			interessado.vez(j, pf);		
 		}
 
 	}

@@ -8,6 +8,7 @@ import me.chester.Jogador;
 import me.chester.JogadorCPU;
 import me.chester.Jogo;
 import me.chester.JogoLocal;
+import me.chester.Mesa;
 import me.chester.SituacaoJogo;
 
 public class JogoTest extends TestCase {
@@ -59,6 +60,7 @@ public class JogoTest extends TestCase {
 			jogador = new JogadorCPU(new EstrategiaSequencial());
 			j.adiciona(jogador);
 		}
+		j.adiciona(new Mesa());
 		j.run();
 		// Verifica que um dos dois realmente fez 12 pontos ou mais
 		j.atualizaSituacao(situacao, jogador);
