@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Selection;
 import android.text.Spannable;
+import android.util.Log;
 import android.widget.TextView;
 
 /**
@@ -20,13 +21,15 @@ public class Mesa extends Activity implements Interessado {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.i("Mesa", "create");
+
 		setContentView(R.layout.mesa);
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.
 		MenuPrincipal.jogo.adiciona(this);
 		Thread t = new Thread(MenuPrincipal.jogo);
-		t.start();
+//		t.start();
 
 	}
 
@@ -34,12 +37,8 @@ public class Mesa extends Activity implements Interessado {
 	// progress
 	final Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
-			TextView textview = (TextView) findViewById(R.id.textview_log);
-			textview.append(msg.getData().getString("texto")+"\n");
-//			textview.setSelected(true);
-//			Spannable text = (Spannable) textview.getText();
-//			Selection.setSelection(text, text.length());
-//			textview.setSelected(false);
+//			TextView textview = (TextView) findViewById(R.id.textview_log);
+//			textview.append(msg.getData().getString("texto")+"\n");
 		}
 	};
 

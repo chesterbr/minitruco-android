@@ -17,7 +17,6 @@ public class MenuPrincipal extends Activity implements OnClickListener {
 		setContentView(R.layout.main);
 		Button button = (Button) findViewById(R.id.button_iniciar);
 		System.out.println(button);
-		Log.i("create", "" + button);
 		button.setOnClickListener(this);
 	}
 	
