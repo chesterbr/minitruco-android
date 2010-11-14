@@ -1,6 +1,10 @@
 package me.chester.minitruco.android;
 
+import java.util.Date;
+
 import me.chester.minitruco.core.Carta;
+import android.graphics.Canvas;
+import android.util.Log;
 
 /**
  * Uma carta "visual", isto é, o objeto estilo View (embora não seja uma View)
@@ -30,10 +34,48 @@ public class CartaVisual {
 	 */
 	public int y;
 
-	public void movePara(int destinoX, int destinoY) {
-		x = destinoX;
-		y = destinoY;
+	private int destX;
 
+	private int destY;
+
+	private Date destTime;
+
+	private Date ultimoTime;
+
+	public void movePara(int x, int y) {
+		this.x = x;
+		this.y = y;
+		ultimoTime = new Date();
 	}
 
+	public void movePara(int x, int y, int tempoMS) {
+		this.destX = x;
+		this.destY = y;
+		ultimoTime = new Date();
+		destTime = new Date();
+		destTime.setTime(destTime.getTime() + tempoMS);
+	}
+
+	public void draw(Canvas canvas) {
+		// Se a carta não chegou ao destino, avançamos ela direção e na
+		// velocidade necessárias para atingi-lo no momento desejado. Se
+		// passamos desse momento, movemos ela direto para o destino.
+		if (x != destX || y != destY) {
+			Date agora = new Date();
+			if (agora.before(destTime)) {
+				double passado = agora.getTime() - ultimoTime.getTime();
+				double total = destTime.getTime() - ultimoTime.getTime();
+				double ratio = passado / total;
+				Log.i("draw", "passado: " + passado);
+				Log.i("draw", "total: " + total);
+				Log.i("draw", "ratio: " + ratio);
+				movePara((int) ((destX - x) * ratio),
+						(int) ((destY - y) * ratio));
+			} else {
+				movePara(destX, destY);
+			}
+		}
+		// TODO efetivamente desenhar a carta
+
+	}
 }
