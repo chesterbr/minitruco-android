@@ -30,7 +30,7 @@ public class MenuPrincipal extends Activity implements OnClickListener {
 		for (int i = 0; i < 4; i++) {
 			jogo.adiciona(new JogadorCPU());
 		}
-		Intent intent = new Intent(MenuPrincipal.this, Mesa.class);
+		Intent intent = new Intent(MenuPrincipal.this, Partida.class);
 		startActivity(intent);
 
 	}

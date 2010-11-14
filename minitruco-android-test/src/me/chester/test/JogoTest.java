@@ -2,7 +2,7 @@ package me.chester.test;
 
 import junit.framework.TestCase;
 import me.chester.minitruco.android.CartaVisual;
-import me.chester.minitruco.android.Mesa;
+import me.chester.minitruco.android.Partida;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Estrategia;
@@ -11,7 +11,9 @@ import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 import me.chester.minitruco.core.SituacaoJogo;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 
 public class JogoTest extends TestCase {
 
@@ -62,14 +64,14 @@ public class JogoTest extends TestCase {
 			jogador = new JogadorCPU(new EstrategiaSequencial());
 			j.adiciona(jogador);
 		}
-		j.adiciona(new Mesa());
-//		j.run();
-//		// Verifica que um dos dois realmente fez 12 pontos ou mais
-//		j.atualizaSituacao(situacao, jogador);
-//
-//		assertTrue("Jogo deveria terminar com alguem ganhando: Jogo: "
-//				+ situacao, Math.max(situacao.pontosEquipe[0],
-//				situacao.pontosEquipe[1]) >= 12);
+		j.adiciona(new Partida());
+		// j.run();
+		// // Verifica que um dos dois realmente fez 12 pontos ou mais
+		// j.atualizaSituacao(situacao, jogador);
+		//
+		// assertTrue("Jogo deveria terminar com alguem ganhando: Jogo: "
+		// + situacao, Math.max(situacao.pontosEquipe[0],
+		// situacao.pontosEquipe[1]) >= 12);
 
 		/*
 		 * String[][] cartas = { { "Kp", "Jo", "Ap", "2p", "2e", "2o", "Ke",
@@ -86,7 +88,9 @@ public class JogoTest extends TestCase {
 	}
 
 	public void testAnimacaoCarta() throws InterruptedException {
-		CartaVisual cv = new CartaVisual();
+		CartaVisual cv = new CartaVisual(33,66);
+		assertEquals(33, cv.x);
+		assertEquals(66, cv.y);
 		Canvas canvas = new Canvas();
 		// Posicionamento simples
 		cv.movePara(10, 20);
@@ -111,4 +115,46 @@ public class JogoTest extends TestCase {
 				cv.y, 100);
 	}
 
+	public void testDesenhoCarta() {
+		int color = Color.MAGENTA;
+		Bitmap bitmap = Bitmap.createBitmap(50, 50,
+				Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bitmap);
+		canvas.drawColor(color);
+		assertEquals(color, bitmap.getPixel(10, 10));
+		assertEquals(color, bitmap.getPixel(40, 40));
+		CartaVisual cv = new CartaVisual(5,5);
+		CartaVisual.width = 30;
+		CartaVisual.height = 30;
+		cv.draw(canvas);
+		assertFalse(color == bitmap.getPixel(10, 10));
+		assertEquals(color, bitmap.getPixel(40, 40));
+		canvas.drawColor(color);
+		assertEquals(color, bitmap.getPixel(10, 10));
+		cv.movePara(20, 20);
+		cv.draw(canvas);
+		assertEquals(color, bitmap.getPixel(10, 10));
+		assertFalse(color == bitmap.getPixel(40, 40));
+	}
+
+	public void testTamanhoCarta() {
+		int[][] telas = { { 320, 200 }, { 200, 320 }, { 640, 480 },
+				{ 120, 240 }, { 240, 120 } };
+		for (int[] tela : telas) {
+			int width = tela[0];
+			int height = tela[1];
+			Bitmap bitmap = Bitmap.createBitmap(width, height,
+					Bitmap.Config.RGB_565);
+			Canvas canvas = new Canvas(bitmap);
+			CartaVisual.ajustaTamanho(canvas);
+			String result = "Tela " + width + "," + height + " =>  carta "
+					+ CartaVisual.width + "," + CartaVisual.height;
+			assertTrue(CartaVisual.width > 0);
+			assertTrue(CartaVisual.height > 0);
+			assertTrue("Tem que caber 6 cartas na largura. " + result,
+					CartaVisual.width * 6 <= width);
+			assertTrue("Tem que caber 5 cartas na altura. " + result,
+					CartaVisual.height * 5 <= height);
+		}
+	}
 }

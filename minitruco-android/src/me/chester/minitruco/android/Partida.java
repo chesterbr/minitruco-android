@@ -18,14 +18,14 @@ import android.util.Log;
  * @author chester
  * 
  */
-public class Mesa extends Activity implements Interessado {
+public class Partida extends Activity implements Interessado {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i("Mesa", "create");
 
-		setContentView(R.layout.mesa);
+		setContentView(R.layout.partida);
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.

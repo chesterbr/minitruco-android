@@ -1,5 +1,7 @@
 package me.chester.minitruco.core;
 
+import android.graphics.Canvas;
+
 
 /*
  * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
@@ -66,6 +68,7 @@ public class Carta {
 	public static final char LETRA_NENHUMA = 'X';
 
 	private static final String LETRAS_VALIDAS = "A23456789JQK";
+
 
 	private boolean cartaEmJogo = true;
 
