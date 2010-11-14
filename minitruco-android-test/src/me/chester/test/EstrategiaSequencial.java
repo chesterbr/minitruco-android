@@ -1,8 +1,8 @@
 package me.chester.test;
 
-import me.chester.Carta;
-import me.chester.Estrategia;
-import me.chester.SituacaoJogo;
+import me.chester.minitruco.core.Carta;
+import me.chester.minitruco.core.Estrategia;
+import me.chester.minitruco.core.SituacaoJogo;
 
 /**
  * Estratégia que joga as cartas na ordem oferecida (i.e., sempre a 1a. carta da

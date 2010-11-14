@@ -1,4 +1,4 @@
-package me.chester;
+package me.chester.minitruco.core;
 /*
  * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
@@ -20,6 +20,7 @@ package me.chester;
 
 import java.util.Random;
 import java.util.Vector;
+
 
 /**
  * Gerencia as cartas já distribuídas, garantindo que não se sorteie duas vezes

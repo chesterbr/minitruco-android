@@ -1,7 +1,7 @@
 package me.chester.test;
 
-import me.chester.Baralho;
-import me.chester.Carta;
+import me.chester.minitruco.core.Baralho;
+import me.chester.minitruco.core.Carta;
 
 /**
  * Uma versão do baralho para testes que solta cartas pré-definidas.
@@ -36,7 +36,7 @@ public class BaralhoOrdenado extends Baralho {
 	 *            Séries de representações string das cartas a retornar. Ex.:
 	 *            {{"Ao","Kp"},{"4e"}} retornará ás de ouros e rei de paus na
 	 *            primeira embaralhada e quatro de espadas nas segunda.
-	 * @see me.chester.Carta
+	 * @see me.chester.minitruco.core.Carta
 	 */
 	public BaralhoOrdenado(String[][] cartas) {
 		super(false);

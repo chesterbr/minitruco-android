@@ -1,15 +1,16 @@
 package me.chester.test;
 
 import junit.framework.TestCase;
-import me.chester.Baralho;
-import me.chester.Carta;
-import me.chester.Estrategia;
-import me.chester.Jogador;
-import me.chester.JogadorCPU;
-import me.chester.Jogo;
-import me.chester.JogoLocal;
-import me.chester.Mesa;
-import me.chester.SituacaoJogo;
+import me.chester.minitruco.android.CartaVisual;
+import me.chester.minitruco.android.Mesa;
+import me.chester.minitruco.core.Baralho;
+import me.chester.minitruco.core.Carta;
+import me.chester.minitruco.core.Estrategia;
+import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.JogadorCPU;
+import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.JogoLocal;
+import me.chester.minitruco.core.SituacaoJogo;
 
 public class JogoTest extends TestCase {
 
@@ -82,4 +83,12 @@ public class JogoTest extends TestCase {
 		 * situacao.pontosEquipe[1]);
 		 */
 	}
+
+	public void testAnimacaoCarta() {
+		CartaVisual cv = new CartaVisual();
+		cv.movePara(10, 20);
+		assertEquals(10, cv.x);
+		assertEquals(20, cv.y);
+	}
+
 }

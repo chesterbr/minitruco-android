@@ -1,4 +1,4 @@
-package me.chester;
+package me.chester.minitruco.core;
 
 /*
  * Copyright © 2006 Leonardo Sellani

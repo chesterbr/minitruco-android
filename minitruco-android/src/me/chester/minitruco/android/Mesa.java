@@ -1,13 +1,15 @@
-package me.chester;
+package me.chester.minitruco.android;
 
+import me.chester.minitruco.R;
+import me.chester.minitruco.core.Carta;
+import me.chester.minitruco.core.Interessado;
+import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.Jogo;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Selection;
-import android.text.Spannable;
 import android.util.Log;
-import android.widget.TextView;
 
 /**
  * Exibe o andamento de um jogo. Futuramente irá permitir ao JogadorHumano

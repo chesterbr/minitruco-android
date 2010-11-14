@@ -1,5 +1,6 @@
-package me.chester;
+package me.chester.minitruco.android;
 
+import me.chester.minitruco.R;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -30,12 +31,12 @@ public class MesaView extends View {
 		// verde.setARGB(255, 0, 255, 0);
 		canvas.drawRGB(0, 255, 0);
 		Resources r = this.getContext().getResources();
-		Drawable d = r.getDrawable(R.drawable.ap);
+		Drawable d = r.getDrawable(R.drawable.cartaap);
 
 		// Bitmap bitmap = Bitmap.createBitmap(d.getIntrinsicWidth(), d
 		// .getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-				R.drawable.ap);
+				R.drawable.cartaap);
 
 		Log.i("MesaView", bitmap.toString());
 		Log.i("MesaView", "iw:" + d.getIntrinsicWidth());

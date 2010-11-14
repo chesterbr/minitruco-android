@@ -1,4 +1,5 @@
-package me.chester;
+package me.chester.minitruco.core;
+
 
 /*
  * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)

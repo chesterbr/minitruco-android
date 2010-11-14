@@ -1,4 +1,4 @@
-package me.chester;
+package me.chester.minitruco.core;
 
 import android.util.Log;
 

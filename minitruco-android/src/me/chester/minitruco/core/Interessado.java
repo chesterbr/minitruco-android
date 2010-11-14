@@ -1,6 +1,6 @@
-package me.chester;
+package me.chester.minitruco.core;
 
-import java.util.Random;
+
 
 /**
  * Qualquer entidade que tenha interesse em receber os eventos de um jogo.

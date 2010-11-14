@@ -1,10 +1,12 @@
-package me.chester;
+package me.chester.minitruco.android;
 
+import me.chester.minitruco.R;
+import me.chester.minitruco.core.JogadorCPU;
+import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.JogoLocal;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;

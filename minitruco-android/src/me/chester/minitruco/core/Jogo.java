@@ -1,4 +1,4 @@
-package me.chester;
+package me.chester.minitruco.core;
 
 import java.util.ArrayList;
 import java.util.List;
