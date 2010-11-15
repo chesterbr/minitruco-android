@@ -89,30 +89,30 @@ public class JogoTest extends TestCase {
 
 	public void testAnimacaoCarta() throws InterruptedException {
 		CartaVisual cv = new CartaVisual(33,66);
-		assertEquals(33, cv.x);
-		assertEquals(66, cv.y);
+		assertEquals(33, cv.left);
+		assertEquals(66, cv.top);
 		Canvas canvas = new Canvas();
 		// Posicionamento simples
 		cv.movePara(10, 20);
-		assertEquals(10, cv.x);
-		assertEquals(20, cv.y);
+		assertEquals(10, cv.left);
+		assertEquals(20, cv.top);
 		// Animação de 0,0 para 300,100 em 3 segundos
 		cv.movePara(0, 0);
 		cv.movePara(300, 100, 3000);
 		Thread.sleep(1000);
 		cv.draw(canvas);
-		assertTrue("Carta devia andar 100 no x, andou " + cv.x, cv.x >= 100);
-		assertTrue("Carta não pode andar além de 200 no X, andou " + cv.x,
-				cv.x <= 200);
-		assertTrue("Carta tem que andar 33 no Y. andou " + cv.y, cv.y >= 33);
-		assertTrue("Carta não pode andar além de 66 no Y, andou " + cv.y,
-				cv.y <= 66);
+		assertTrue("Carta devia andar 100 no x, andou " + cv.left, cv.left >= 100);
+		assertTrue("Carta não pode andar além de 200 no X, andou " + cv.left,
+				cv.left <= 200);
+		assertTrue("Carta tem que andar 33 no Y. andou " + cv.top, cv.top >= 33);
+		assertTrue("Carta não pode andar além de 66 no Y, andou " + cv.top,
+				cv.top <= 66);
 		Thread.sleep(2100);
 		cv.draw(canvas);
-		assertEquals("Carta tem que chegar ao 300 no X, chegou em " + cv.x,
-				cv.x, 300);
-		assertEquals("Carta tem que chegar aos 100 no Y, chegou em " + cv.y,
-				cv.y, 100);
+		assertEquals("Carta tem que chegar ao 300 no X, chegou em " + cv.left,
+				cv.left, 300);
+		assertEquals("Carta tem que chegar aos 100 no Y, chegou em " + cv.top,
+				cv.top, 100);
 	}
 
 	public void testDesenhoCarta() {
@@ -124,8 +124,8 @@ public class JogoTest extends TestCase {
 		assertEquals(color, bitmap.getPixel(10, 10));
 		assertEquals(color, bitmap.getPixel(40, 40));
 		CartaVisual cv = new CartaVisual(5,5);
-		CartaVisual.width = 30;
-		CartaVisual.height = 30;
+		CartaVisual.largura = 30;
+		CartaVisual.altura = 30;
 		cv.draw(canvas);
 		assertFalse(color == bitmap.getPixel(10, 10));
 		assertEquals(color, bitmap.getPixel(40, 40));
@@ -147,13 +147,13 @@ public class JogoTest extends TestCase {
 					Bitmap.Config.RGB_565);
 			CartaVisual.ajustaTamanho(width, height);
 			String result = "Tela " + width + "," + height + " =>  carta "
-					+ CartaVisual.width + "," + CartaVisual.height;
-			assertTrue(CartaVisual.width > 0);
-			assertTrue(CartaVisual.height > 0);
+					+ CartaVisual.largura + "," + CartaVisual.altura;
+			assertTrue(CartaVisual.largura > 0);
+			assertTrue(CartaVisual.altura > 0);
 			assertTrue("Tem que caber 6 cartas na largura. " + result,
-					CartaVisual.width * 6 <= width);
+					CartaVisual.largura * 6 <= width);
 			assertTrue("Tem que caber 5 cartas na altura. " + result,
-					CartaVisual.height * 5 <= height);
+					CartaVisual.altura * 5 <= height);
 		}
 	}
 }

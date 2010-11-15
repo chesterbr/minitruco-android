@@ -29,9 +29,6 @@ public class Partida extends Activity implements Interessado {
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.
 		MenuPrincipal.jogo.adiciona(this);
-		Thread t = new Thread(MenuPrincipal.jogo);
-		t.start();
-
 	}
 
 	private MesaView mesa;
@@ -61,7 +58,6 @@ public class Partida extends Activity implements Interessado {
 	public void cartaJogada(Jogador j, Carta c) {
 		// TODO Auto-generated method stub
 		print("Jogador " + j.getPosicao() + " jogou " + c);
-
 	}
 
 	public void decidiuMao11(Jogador j, boolean aceita) {
@@ -103,6 +99,7 @@ public class Partida extends Activity implements Interessado {
 	public void maoFechada(int[] pontosEquipe) {
 		// TODO Auto-generated method stub
 		print("Mao fechada. Placar:" + pontosEquipe[0] + "x" + pontosEquipe[1]);
+		mesa.recolheMao();
 
 	}
 

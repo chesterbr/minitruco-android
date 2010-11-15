@@ -26,28 +26,33 @@ public class CartaVisual {
 	/**
 	 * Cria uma nova carta na posição indicada
 	 * 
-	 * @param x
+	 * @param left
 	 *            posição em relação à esquerda
-	 * @param y
+	 * @param top
 	 *            posição em relação ao topo
 	 */
-	public CartaVisual(int x, int y) {
-		movePara(x, y);
-		movePara(x, y, 0); // só para inicializar os timestamps
+	public CartaVisual(int left, int top) {
+		movePara(left, top);
+		movePara(left, top, 0); // só para inicializar os timestamps
 	}
 
+	/**
+	 * Cria uma carta no canto superior esquerdo
+	 */
 	public CartaVisual() {
-		this(0, 0);
+		movePara(0, 0);
 	}
 
 	/**
 	 * Ajusta a altura/largura das cartas para caberem na mesa (considerando a
 	 * folga necessária para o descarte as cartas ao redor dele)
 	 * 
-	 * @param canvas
-	 *            mesa (superfície) onde as cartas serão desenhadas.
+	 * @param larguraCanvas
+	 *            largura da mesa
+	 * @param alturaCanvas
+	 *            altura da mesa
 	 */
-	public static void ajustaTamanho(int largura, int altura) {
+	public static void ajustaTamanho(int larguraCanvas, int alturaCanvas) {
 		// A carta "canônica" tem 180x252, e tem que caber 6 delas
 		// na largura e 5 na altura. Motivo: a largura pede 1 carta para cada
 		// jogador da dupla, 0.5 carta de folga e 3 cartas de área de descarte;
@@ -55,11 +60,11 @@ public class CartaVisual {
 		//
 		// A estratégia é pegar o menor entre o ratio que faz caber na largura
 		// e o que faz caber na largura
-		double ratioLargura = largura / (180 * 6.0);
-		double ratioAltura = altura / (252 * 5.0);
+		double ratioLargura = larguraCanvas / (180 * 6.0);
+		double ratioAltura = alturaCanvas / (252 * 5.0);
 		double ratioCarta = Math.min(ratioLargura, ratioAltura);
-		width = (int) (180 * ratioCarta);
-		height = (int) (252 * ratioCarta);
+		largura = (int) (180 * ratioCarta);
+		altura = (int) (252 * ratioCarta);
 	}
 
 	/**
@@ -67,15 +72,15 @@ public class CartaVisual {
 	 * <p>
 	 * Qualuqer animação em curso será cancelada.
 	 * 
-	 * @param x
+	 * @param left
 	 *            posição em relação à esquerda
-	 * @param y
+	 * @param top
 	 *            posição em relação ao topo
 	 */
 
-	public void movePara(int x, int y) {
-		this.x = this.destX = x;
-		this.y = this.destY = y;
+	public void movePara(int left, int top) {
+		this.left = this.destLeft = left;
+		this.top = this.destTop = top;
 	}
 
 	/**
@@ -84,19 +89,21 @@ public class CartaVisual {
 	 * O método só guarda esses valores - o movimento real acontece à medida em
 	 * que a carta é redesenhada (isto é, no método draw).
 	 * 
-	 * @param x
+	 * @param left
 	 *            posição em relação à esquerda
-	 * @param y
+	 * @param top
 	 *            posição em relação ao topo
 	 * @param tempoMS
 	 *            quantidade de milissegundos que a animação deve durar.
 	 */
-	public void movePara(int x, int y, int tempoMS) {
-		this.destX = x;
-		this.destY = y;
+	public void movePara(int left, int top, int tempoMS) {
+		MesaView.aguardaFimAnimacoes();
+		this.destLeft = left;
+		this.destTop = top;
 		ultimoTime = new Date();
 		destTime = new Date();
 		destTime.setTime(destTime.getTime() + tempoMS);
+		MesaView.notificaAnimacao(destTime);
 	}
 
 	/**
@@ -111,29 +118,27 @@ public class CartaVisual {
 		// Se a carta não chegou ao destino, avançamos ela direção e na
 		// velocidade necessárias para atingi-lo no momento desejado. Se
 		// passamos desse momento, movemos ela direto para o destino.
-		if (x != destX || y != destY) {
+		if (left != destLeft || top != destTop) {
 			Date agora = new Date();
 			if (agora.before(destTime)) {
 				double passado = agora.getTime() - ultimoTime.getTime();
 				double total = destTime.getTime() - ultimoTime.getTime();
 				double ratio = passado / total;
-				Log.i("draw", "passado: " + passado);
-				Log.i("draw", "total: " + total);
-				Log.i("draw", "ratio: " + ratio);
-				x = (int) ((destX - x) * ratio);
-				y = (int) ((destY - y) * ratio);
+				left = (int) ((destLeft - left) * ratio);
+				top = (int) ((destTop - top) * ratio);
 				ultimoTime = new Date();
 			} else {
-				movePara(destX, destY);
+				movePara(destLeft, destTop);
 			}
 		}
 		// TODO desenhar de verdade
-		Rect rect = new Rect(x, y, x + width - 1, y + height - 1);
-		Log.i("CartaViual.draw rect", x + "," + y + "," + (x + width - 1) + ","
-				+ (y + height - 1));
+		Rect rect = new Rect(left, top, left + largura - 1, top + altura - 1);
 		Paint paint = new Paint();
-		paint.setColor(Color.BLUE);
+		paint.setColor(Color.RED);
 		paint.setStyle(Paint.Style.FILL);
+		canvas.drawRect(rect, paint);
+		paint.setColor(Color.BLUE);
+		paint.setStyle(Paint.Style.STROKE);
 		canvas.drawRect(rect, paint);
 
 	}
@@ -147,32 +152,32 @@ public class CartaVisual {
 	/**
 	 * Posição do canto superior esquerdo carta em relação à esquerda da mesa
 	 */
-	public int x;
+	public int left;
 
 	/**
 	 * Posição do canto superior esquerdo da carta em relação ao topo da mesa
 	 */
-	public int y;
+	public int top;
 
 	/**
 	 * Altura das cartas, em pixels
 	 */
-	public static int width;
+	public static int largura;
 
 	/**
 	 * Largura das cartas, em pixels
 	 */
-	public static int height;
+	public static int altura;
 
 	/**
 	 * X em que a carta deve estar no final da animação
 	 */
-	private int destX;
+	private int destLeft;
 
 	/**
 	 * Y em que a carta deve estar no final da animação
 	 */
-	private int destY;
+	private int destTop;
 
 	/**
 	 * Momento em que a animação deve se encerrar
