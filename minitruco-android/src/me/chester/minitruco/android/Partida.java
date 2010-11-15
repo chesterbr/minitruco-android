@@ -23,33 +23,34 @@ public class Partida extends Activity implements Interessado {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i("Mesa", "create");
-
 		setContentView(R.layout.partida);
+		mesa = (MesaView) findViewById(R.id.MesaView01);
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.
 		MenuPrincipal.jogo.adiciona(this);
 		Thread t = new Thread(MenuPrincipal.jogo);
-//		t.start();
+		t.start();
 
 	}
 
-	// Define the Handler that receives messages from the thread and update the
-	// progress
-	final Handler handler = new Handler() {
-		public void handleMessage(Message msg) {
-//			TextView textview = (TextView) findViewById(R.id.textview_log);
-//			textview.append(msg.getData().getString("texto")+"\n");
-		}
-	};
+	private MesaView mesa;
 
-	private void print(String s) {
-		Message msg = handler.obtainMessage();
-		Bundle b = new Bundle();
-		b.putString("texto",s);
-		msg.setData(b);
-		handler.sendMessage(msg);
+	// /**
+	// * Recebe mensagens (da view, principalmente) e executa usando a thread de
+	// * UI (senão o Android não deixa).
+	// */
+	// public final Handler handler = new Handler() {
+	// public void handleMessage(Message msg) {
+	// MesaView mesa = (MesaView) findViewById(R.id.MesaView01);
+	// if (msg.what == WHAT_INVALIDATE) {
+	// mesa.invalidate();
+	// }
+	// }
+	// };
+
+	public void print(String s) {
+		Log.i("Partida.print", s);
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
@@ -59,7 +60,7 @@ public class Partida extends Activity implements Interessado {
 
 	public void cartaJogada(Jogador j, Carta c) {
 		// TODO Auto-generated method stub
-		print("Jogador " + j.getPosicao() + " jogou " + c );
+		print("Jogador " + j.getPosicao() + " jogou " + c);
 
 	}
 
@@ -79,7 +80,7 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void inicioMao() {
-
+		mesa.distribuiMao();
 		// TODO Auto-generated method stub
 
 	}
@@ -127,5 +128,8 @@ public class Partida extends Activity implements Interessado {
 		// TODO Auto-generated method stub
 
 	}
+
+	// // Mensagens para a thread da UI
+	// protected static final int WHAT_INVALIDATE = -1;
 
 }

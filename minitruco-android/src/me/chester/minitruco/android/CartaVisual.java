@@ -36,6 +36,10 @@ public class CartaVisual {
 		movePara(x, y, 0); // só para inicializar os timestamps
 	}
 
+	public CartaVisual() {
+		this(0, 0);
+	}
+
 	/**
 	 * Ajusta a altura/largura das cartas para caberem na mesa (considerando a
 	 * folga necessária para o descarte as cartas ao redor dele)
@@ -43,7 +47,7 @@ public class CartaVisual {
 	 * @param canvas
 	 *            mesa (superfície) onde as cartas serão desenhadas.
 	 */
-	public static void ajustaTamanho(Canvas canvas) {
+	public static void ajustaTamanho(int largura, int altura) {
 		// A carta "canônica" tem 180x252, e tem que caber 6 delas
 		// na largura e 5 na altura. Motivo: a largura pede 1 carta para cada
 		// jogador da dupla, 0.5 carta de folga e 3 cartas de área de descarte;
@@ -51,8 +55,8 @@ public class CartaVisual {
 		//
 		// A estratégia é pegar o menor entre o ratio que faz caber na largura
 		// e o que faz caber na largura
-		double ratioLargura = canvas.getWidth() / (180 * 6.0);
-		double ratioAltura = canvas.getHeight() / (252 * 5.0);
+		double ratioLargura = largura / (180 * 6.0);
+		double ratioAltura = altura / (252 * 5.0);
 		double ratioCarta = Math.min(ratioLargura, ratioAltura);
 		width = (int) (180 * ratioCarta);
 		height = (int) (252 * ratioCarta);

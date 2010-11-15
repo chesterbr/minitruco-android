@@ -145,8 +145,7 @@ public class JogoTest extends TestCase {
 			int height = tela[1];
 			Bitmap bitmap = Bitmap.createBitmap(width, height,
 					Bitmap.Config.RGB_565);
-			Canvas canvas = new Canvas(bitmap);
-			CartaVisual.ajustaTamanho(canvas);
+			CartaVisual.ajustaTamanho(width, height);
 			String result = "Tela " + width + "," + height + " =>  carta "
 					+ CartaVisual.width + "," + CartaVisual.height;
 			assertTrue(CartaVisual.width > 0);
