@@ -189,4 +189,10 @@ public class CartaVisual {
 	 */
 	private Date ultimoTime = new Date();
 
+	/**
+	 * Se true, a carta foi lançada à mesa. Se false, está na mão de um jogador
+	 * (ou é decorativa/vira)
+	 */
+	public boolean descartada = false;
+
 }

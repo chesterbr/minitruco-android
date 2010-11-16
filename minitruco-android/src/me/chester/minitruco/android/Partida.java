@@ -56,6 +56,7 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void cartaJogada(Jogador j, Carta c) {
+		mesa.descarta(c, j.getPosicao());
 		// TODO Auto-generated method stub
 		print("Jogador " + j.getPosicao() + " jogou " + c);
 	}

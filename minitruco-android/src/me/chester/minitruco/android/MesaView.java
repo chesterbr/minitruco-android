@@ -1,8 +1,8 @@
 package me.chester.minitruco.android;
 
 import java.util.Date;
-import java.util.Vector;
 
+import me.chester.minitruco.core.Carta;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -93,6 +93,9 @@ public class MesaView extends View {
 		}
 	});
 
+	/**
+	 * Entrega as cartas iniciais na mão de cada jogador
+	 */
 	public void distribuiMao() {
 
 		// Limpa a mesa
@@ -183,8 +186,58 @@ public class MesaView extends View {
 			CartaVisual c = cartas[i];
 			if ((c.top != topBaralho) || (c.left != leftBaralho)) {
 				c.movePara(leftBaralho, topBaralho, 100);
+				c.descartada = false;
 			}
 		}
+	}
+
+	/**
+	 * Joga a carta no meio da mesa, // TODO marcando-a como jogada.
+	 * 
+	 * @param c
+	 */
+	public void descarta(Carta c, int posicao) {
+
+		// Coloca a carta no meio da tela, mas "puxando" na direção
+		// de quem jogou
+		int topFinal, leftFinal;
+		topFinal = getHeight() / 2 - CartaVisual.altura / 2;
+		leftFinal = getWidth() / 2 - CartaVisual.largura / 2;
+		switch (posicao) {
+		case 1:
+			topFinal += CartaVisual.altura / 2;
+			break;
+		case 2:
+			leftFinal += CartaVisual.largura;
+			break;
+		case 3:
+			topFinal -= CartaVisual.altura / 2;
+			break;
+		case 4:
+			leftFinal -= CartaVisual.largura;
+			break;
+		}
+
+		// Insere um ligeiro fator aleatório, para dar uma bagunçada na mesa
+		topFinal += System.currentTimeMillis() % 5 - 2;
+		leftFinal += System.currentTimeMillis() % 5 - 2;
+
+		// Sinaliza para evitar escolhas futuras desta carta;
+		// cartasJogadas.addElement(c);
+
+		// Pega uma carta para representar aquela
+		CartaVisual cv = null;
+		for (int i = 0; i <= 2; i++) {
+			cv = cartas[i + 1 + posicao * 3];
+			if (!cv.descartada) {
+				break;
+			}
+		}
+
+		// Executa a animação
+		cv.movePara(topFinal, leftFinal, 200);
+		cv.descartada = true;
+
 	}
 
 	@Override
