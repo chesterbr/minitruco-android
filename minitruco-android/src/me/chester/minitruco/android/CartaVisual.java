@@ -33,7 +33,6 @@ public class CartaVisual {
 	 */
 	public CartaVisual(int left, int top) {
 		movePara(left, top);
-		movePara(left, top, 0); // só para inicializar os timestamps
 	}
 
 	/**
@@ -124,8 +123,8 @@ public class CartaVisual {
 				double passado = agora.getTime() - ultimoTime.getTime();
 				double total = destTime.getTime() - ultimoTime.getTime();
 				double ratio = passado / total;
-				left = (int) ((destLeft - left) * ratio);
-				top = (int) ((destTop - top) * ratio);
+				left += (int) ((destLeft - left) * ratio);
+				top += (int) ((destTop - top) * ratio);
 				ultimoTime = new Date();
 			} else {
 				movePara(destLeft, destTop);
@@ -182,11 +181,12 @@ public class CartaVisual {
 	/**
 	 * Momento em que a animação deve se encerrar
 	 */
-	private Date destTime;
+	private Date destTime = new Date();
 
 	/**
-	 * Momento em que a carta avançou para o valor atual de x e y
+	 * Momento em que a carta avançou para o valor atual de x e y (em uma
+	 * animação)
 	 */
-	private Date ultimoTime;
+	private Date ultimoTime = new Date();
 
 }

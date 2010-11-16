@@ -113,6 +113,22 @@ public class JogoTest extends TestCase {
 				cv.left, 300);
 		assertEquals("Carta tem que chegar aos 100 no Y, chegou em " + cv.top,
 				cv.top, 100);
+		// Voltando
+		cv.movePara(0, 0, 3000);
+		Thread.sleep(1000);
+		cv.draw(canvas);
+		assertTrue("Carta devia andar -100 no x, esta em " + cv.left, cv.left <= 200);
+		assertTrue("Carta não pode andar além de -200 no X, esta em " + cv.left,
+				cv.left >= 100);
+		assertTrue("Carta tem que andar -33 no Y. esta em " + cv.top, cv.top <= 67);
+		assertTrue("Carta não pode andar além de -66 no Y, esta em " + cv.top,
+				cv.top >= 32);
+		Thread.sleep(2100);
+		cv.draw(canvas);
+		assertEquals("Carta tem que chegar ao 0 no X, chegou em " + cv.left,
+				cv.left, 0);
+		assertEquals("Carta tem que chegar ao 0 no Y, chegou em " + cv.top,
+				cv.top, 0);
 	}
 
 	public void testDesenhoCarta() {

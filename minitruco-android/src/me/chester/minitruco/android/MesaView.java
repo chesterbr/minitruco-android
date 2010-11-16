@@ -54,6 +54,7 @@ public class MesaView extends View {
 			for (int i = 0; i < cartas.length; i++) {
 				if (cartas[i] == null) {
 					cartas[i] = new CartaVisual(leftBaralho, topBaralho);
+					cartas[i].movePara(leftBaralho, topBaralho);
 				}
 			}
 
@@ -106,11 +107,7 @@ public class MesaView extends View {
 		// Distribui as cartas em círculo
 		for (int i = 0; i <= 2; i++) {
 			for (int j = 1; j <= 4; j++) {
-				// if (j == 1) {
-				// mesa.distribui(getCartas()[i], j, i);
-				// } else {
 				distribui(j, i);
-				// }
 			}
 		}
 
@@ -144,12 +141,9 @@ public class MesaView extends View {
 		int topFinal, leftFinal;
 		switch (numJogador) {
 		case 1:
-			Log.i("larg alt margem",getWidth()+","+getHeight()+","+MARGEM);
-			Log.i("larg alt carta",CartaVisual.largura+","+CartaVisual.altura);
 			leftFinal = getWidth() / 2 - CartaVisual.largura + i
 					* (CartaVisual.largura * 2 / 3);
 			topFinal = getHeight() - (CartaVisual.altura + MARGEM);
-			Log.i("left top final",leftFinal+","+topFinal);
 			// c.setVirada(true);
 			break;
 		case 2:
@@ -183,8 +177,8 @@ public class MesaView extends View {
 
 		// Adiciona a carta na mesa, em cima do baralho, e anima até a posição
 		CartaVisual c = cartas[i + 3 * (numJogador - 1)];
-		//c.movePara(topBaralho, leftBaralho);
-		c.movePara(topFinal, leftFinal);
+		// c.movePara(topBaralho, leftBaralho);
+		c.movePara(leftFinal, topFinal, 150);
 	}
 
 	/**
@@ -194,7 +188,7 @@ public class MesaView extends View {
 		for (int i = 0; i <= 12; i++) {
 			CartaVisual c = cartas[i];
 			if ((c.top != topBaralho) || (c.left != leftBaralho)) {
-				c.movePara(topBaralho, leftBaralho, 1000);
+				c.movePara(topBaralho, leftBaralho, 150);
 			}
 		}
 	}
