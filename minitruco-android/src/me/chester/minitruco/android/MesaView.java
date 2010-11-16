@@ -33,9 +33,10 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Cartas que estão na mesa, na ordem de empilhamento. As cartas[0..2] são
-	 * do jogador na posição inferior, seguidas dos outros jogadores. cartas[12]
-	 * é o "vira" e cartas[13..15] são o baralho decorativo
+	 * Cartas que estão na mesa, na ordem de empilhamento. cartas[0] é o vira,
+	 * cartas[1..3] são o baralho decorativo, cartas[4..6] são as do jogador na
+	 * posição 1 (inferior), cartas[7..9] o jogador 2 e assim por diante para os
+	 * jogadores 3 e 4.
 	 */
 	public CartaVisual[] cartas = new CartaVisual[16];
 
@@ -47,8 +48,8 @@ public class MesaView extends View {
 
 			// Define a posição e tamanho dos elementos da mesa
 			CartaVisual.ajustaTamanho(getWidth(), getHeight());
-			leftBaralho = this.getWidth() - CartaVisual.largura - MARGEM - 8;
-			topBaralho = this.getHeight() - CartaVisual.altura - MARGEM - 8;
+			leftBaralho = this.getWidth() - CartaVisual.largura - MARGEM - 4;
+			topBaralho = this.getHeight() - CartaVisual.altura - MARGEM - 4;
 
 			// Inicializa, se necessário, as cartas em jogo
 			for (int i = 0; i < cartas.length; i++) {
@@ -59,8 +60,8 @@ public class MesaView extends View {
 			}
 
 			// Posiciona as cartas decorativas do baralho
-			cartas[14].movePara(cartas[14].left + 2, cartas[14].top + 2);
-			cartas[15].movePara(cartas[15].left + 4, cartas[15].top + 4);
+			cartas[1].movePara(leftBaralho + 2, topBaralho + 2);
+			cartas[0].movePara(leftBaralho + 4, topBaralho + 4);
 
 			/*
 			 * topCartaDaMesa = c.top; leftCartaDaMesa = c.left -
@@ -91,13 +92,6 @@ public class MesaView extends View {
 			}
 		}
 	});
-
-	/**
-	 * Cartas que compõem o baralhinho desenhado no cenário.
-	 * <p>
-	 * (não confundir com a classe Baralho, usada pela Jogo para sortear cartas)
-	 */
-	public Vector<CartaVisual> baralhoCenario = new Vector<CartaVisual>(3);
 
 	public void distribuiMao() {
 
@@ -176,19 +170,19 @@ public class MesaView extends View {
 		}
 
 		// Adiciona a carta na mesa, em cima do baralho, e anima até a posição
-		CartaVisual c = cartas[i + 3 * (numJogador - 1)];
+		CartaVisual c = cartas[4 + i + 3 * (numJogador - 1)];
 		// c.movePara(topBaralho, leftBaralho);
-		c.movePara(leftFinal, topFinal, 150);
+		c.movePara(leftFinal, topFinal, 100);
 	}
 
 	/**
 	 * Recolhe as cartas jogadas de volta para o baralho
 	 */
 	public void recolheMao() {
-		for (int i = 0; i <= 12; i++) {
+		for (int i = 4; i <= 15; i++) {
 			CartaVisual c = cartas[i];
 			if ((c.top != topBaralho) || (c.left != leftBaralho)) {
-				c.movePara(topBaralho, leftBaralho, 150);
+				c.movePara(leftBaralho, topBaralho, 100);
 			}
 		}
 	}
@@ -201,12 +195,12 @@ public class MesaView extends View {
 		canvas.drawRGB(0, 255, 0);
 
 		// Desenha as cartas na mesa (na mão ou no descarte)
+		// for (int i = cartas.length - 1; i >= 0; i--) {
+		// if (cartas[i] != null) {
+		// cartas[i].draw(canvas);
+		// }
+		// }
 		for (CartaVisual carta : cartas) {
-			if (carta != null) {
-				carta.draw(canvas);
-			}
-		}
-		for (CartaVisual carta : baralhoCenario) {
 			if (carta != null) {
 				carta.draw(canvas);
 			}
@@ -223,7 +217,7 @@ public class MesaView extends View {
 	/**
 	 * Margem entre a mesa e as cartas
 	 */
-	public static final int MARGEM = 1;
+	public static final int MARGEM = 2;
 
 	/**
 	 * Posição do baralho na mesa
