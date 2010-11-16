@@ -47,8 +47,8 @@ public class MesaView extends View {
 
 			// Define a posição e tamanho dos elementos da mesa
 			CartaVisual.ajustaTamanho(getWidth(), getHeight());
-			leftBaralho = this.getWidth() - CartaVisual.largura - MARGEM - 2;
-			topBaralho = this.getHeight() - CartaVisual.altura - MARGEM;
+			leftBaralho = this.getWidth() - CartaVisual.largura - MARGEM - 8;
+			topBaralho = this.getHeight() - CartaVisual.altura - MARGEM - 8;
 
 			// Inicializa, se necessário, as cartas em jogo
 			for (int i = 0; i < cartas.length; i++) {
@@ -144,9 +144,12 @@ public class MesaView extends View {
 		int topFinal, leftFinal;
 		switch (numJogador) {
 		case 1:
+			Log.i("larg alt margem",getWidth()+","+getHeight()+","+MARGEM);
+			Log.i("larg alt carta",CartaVisual.largura+","+CartaVisual.altura);
 			leftFinal = getWidth() / 2 - CartaVisual.largura + i
 					* (CartaVisual.largura * 2 / 3);
 			topFinal = getHeight() - (CartaVisual.altura + MARGEM);
+			Log.i("left top final",leftFinal+","+topFinal);
 			// c.setVirada(true);
 			break;
 		case 2:
@@ -180,8 +183,8 @@ public class MesaView extends View {
 
 		// Adiciona a carta na mesa, em cima do baralho, e anima até a posição
 		CartaVisual c = cartas[i + 3 * (numJogador - 1)];
-		c.movePara(topBaralho, leftBaralho);
-		c.movePara(topFinal, leftFinal, 1000);
+		//c.movePara(topBaralho, leftBaralho);
+		c.movePara(topFinal, leftFinal);
 	}
 
 	/**

@@ -74,9 +74,14 @@ public class Partida extends Activity implements Interessado {
 		// TODO Auto-generated method stub
 
 	}
+	
+	private boolean temp = false;
 
 	public void inicioMao() {
-		mesa.distribuiMao();
+		if (!temp) {
+			mesa.distribuiMao();
+			temp=true;
+		}
 		// TODO Auto-generated method stub
 
 	}
@@ -99,7 +104,7 @@ public class Partida extends Activity implements Interessado {
 	public void maoFechada(int[] pontosEquipe) {
 		// TODO Auto-generated method stub
 		print("Mao fechada. Placar:" + pontosEquipe[0] + "x" + pontosEquipe[1]);
-		mesa.recolheMao();
+		//mesa.recolheMao();
 
 	}
 
