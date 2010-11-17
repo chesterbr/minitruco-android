@@ -186,6 +186,7 @@ public class MesaView extends View {
 			CartaVisual c = cartas[i];
 			if ((c.top != topBaralho) || (c.left != leftBaralho)) {
 				c.movePara(leftBaralho, topBaralho, 100);
+				c.setValor(null);
 				c.descartada = false;
 			}
 		}
@@ -234,8 +235,9 @@ public class MesaView extends View {
 			}
 		}
 
-		// Executa a animação
-		cv.movePara(topFinal, leftFinal, 200);
+		// Seta o valor e executa a animação
+		cv.setValor(c.toString());
+		cv.movePara(leftFinal, topFinal, 200);
 		cv.descartada = true;
 
 	}

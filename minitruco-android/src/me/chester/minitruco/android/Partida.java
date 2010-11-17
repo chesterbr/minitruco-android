@@ -6,6 +6,8 @@ import me.chester.minitruco.core.Interessado;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +27,7 @@ public class Partida extends Activity implements Interessado {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.partida);
 		mesa = (MesaView) findViewById(R.id.MesaView01);
+		CartaVisual.resources = getResources();
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.

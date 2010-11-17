@@ -1,13 +1,17 @@
 package me.chester.minitruco.android;
 
+import java.io.FileNotFoundException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import me.chester.minitruco.core.Carta;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 
 /**
  * Uma carta "visual", isto é, o objeto estilo View (embora não seja uma View)
@@ -33,13 +37,14 @@ public class CartaVisual {
 	 */
 	public CartaVisual(int left, int top) {
 		movePara(left, top);
+		setValor(null);
 	}
 
 	/**
 	 * Cria uma carta no canto superior esquerdo
 	 */
 	public CartaVisual() {
-		movePara(0, 0);
+		this(0, 0);
 	}
 
 	/**
@@ -130,23 +135,60 @@ public class CartaVisual {
 				movePara(destLeft, destTop);
 			}
 		}
-		// TODO desenhar de verdade
-		Rect rect = new Rect(left, top, left + largura - 1, top + altura - 1);
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.FILL);
-		canvas.drawRect(rect, paint);
-		paint.setColor(Color.BLUE);
-		paint.setStyle(Paint.Style.STROKE);
-		canvas.drawRect(rect, paint);
+		if (bitmap != null) {
+			Paint paint = new Paint();
+			paint.setColor(Color.GREEN);
+			paint.setStyle(Paint.Style.FILL);
+			canvas.drawBitmap(bitmap, left, top, paint);
+			Rect rect = new Rect(left, top, left + largura - 1, top + altura - 1);
+			paint.setColor(Color.BLACK);
+			paint.setStyle(Paint.Style.STROKE);
+			canvas.drawRect(rect, paint);
+		}
 
 	}
 
+	public void setValor(String valor) {
+		this.valor = valor;
+		valor = valor == null ? "fundo" : valor;
+		this.bitmap = bitmapCache.get(valor);
+		if (this.bitmap == null && resources != null) {
+			Bitmap bmpOrig = BitmapFactory.decodeResource(resources,
+					getCartaResourceByValor(valor));
+			Bitmap bmpFinal = Bitmap.createScaledBitmap(bmpOrig, largura,
+					altura, true);
+			bitmapCache.put(valor, bmpFinal);
+			this.bitmap = bmpFinal;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private static int getCartaResourceByValor(String valor) {
+		valor = valor.toLowerCase();
+		try {
+			for (Class c : Class.forName("me.chester.minitruco.R").getClasses()) {
+				if (c.getCanonicalName().endsWith(".drawable")) {
+					return c.getField("carta" + valor).getInt(null);
+				}
+			}
+			throw new FileNotFoundException("Carta não encontrada. Valor: "
+					+ valor);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Erro irrecuperável ao obter carta pelo valor. Valor: "
+							+ valor, e);
+		}
+	}
+
+	private static Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
+
 	/**
-	 * Objeto carta que esta carta representa. Se for null, é uma carta
+	 * Valor da carta que este objeto representa. Se for null, é uma carta
 	 * "fechada", isto é, que aparece virada para baixo na mesa
 	 */
-	private Carta carta = null;
+	private String valor = null;
+
+	private Bitmap bitmap = null;
 
 	/**
 	 * Posição do canto superior esquerdo carta em relação à esquerda da mesa
@@ -194,5 +236,11 @@ public class CartaVisual {
 	 * (ou é decorativa/vira)
 	 */
 	public boolean descartada = false;
+
+	/**
+	 * Acessor dos resources da aplicação (deve ser setado antes de chamar
+	 * onDraw por uma Activity que tenha acesso a getResources())
+	 */
+	public static Resources resources;
 
 }
