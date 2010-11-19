@@ -195,11 +195,8 @@ public class JogoTest extends
 	public void testTimingBalaoCorreto() throws InterruptedException {
 		Log.i("JogoTest", "Inicializa dates p/ nao atrapalhar o timing"
 				+ new Date());
-		Balao.diz("truco", 1, 2000);
+		Balao.diz("truco", 1, 1000);
 		// Na primeira e segunda vez, algum desenho deve ser feito
-		// (na real estamos dando um tempo curto porque o teste toma tempo - o
-		// *certo* mesmo seria externalizar e mockar Date(), mas esse teste já
-		// extrapolou o custo/benefício razoável.
 		try {
 			Balao.draw(null);
 			fail("Balao nao desenhou 1o. frame");
@@ -211,12 +208,12 @@ public class JogoTest extends
 			fail("Balao nao desenhou 2o. frame");
 		} catch (NullPointerException e) {
 		}
-		Thread.sleep(1800);
+		Thread.sleep(800);
 		// Nesse ponto, o tempo estourou, não deve ter desenho
 		try {
 			Balao.draw(null);
 		} catch (NullPointerException e) {
-			fail("Balao nao desenhou 1o. frame");
+			fail("Balao desenhou 3o. frame quando não devia");
 		}
 	}
 }
