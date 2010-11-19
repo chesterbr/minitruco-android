@@ -34,7 +34,8 @@ public class Partida extends Activity implements Interessado {
 		if (MenuPrincipal.jogo != null) {
 			MenuPrincipal.jogo.adiciona(this);
 		} else {
-			Log.w("Activity.onCreate", "Partida iniciada sem jogo (ok para testes)");
+			Log.w("Activity.onCreate",
+					"Partida iniciada sem jogo (ok para testes)");
 		}
 	}
 
@@ -83,8 +84,13 @@ public class Partida extends Activity implements Interessado {
 
 	}
 
+	public int n = 1;
+
 	public void inicioMao() {
 		mesa.distribuiMao();
+		Balao.diz("oi, quer tc?", n, 3000);
+		n = (n == 4 ? 1 : n + 1);
+
 	}
 
 	public void inicioPartida() {

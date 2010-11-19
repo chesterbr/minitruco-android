@@ -144,7 +144,7 @@ public class Balao {
 				360, false, paint);
 		// Ponta (desenhada como uma fração de elipse)
 		canvas.drawArc(new RectF(x + deltaX, y + deltaY, x + largBalao - 1, y
-				+ altBalao * 2 - 1), (90 * quadrantePonta) + 120, 25, false,
+				+ altBalao * 2 - 1), (90 * quadrantePonta) + 120, 50, false,
 				paint);
 
 	}

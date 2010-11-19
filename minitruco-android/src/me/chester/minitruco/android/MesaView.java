@@ -267,6 +267,9 @@ public class MesaView extends View {
 		// }
 		// }
 		// }
+		
+		Balao.draw(canvas);
+		
 	}
 
 	/**
