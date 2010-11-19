@@ -82,7 +82,7 @@ public class MesaView extends View {
 
 	Thread animacaoJogo = new Thread(new Runnable() {
 		public void run() {
-			while (true) {
+			while (MenuPrincipal.jogo != null) {
 				postInvalidate();
 				try {
 					Thread.sleep(10);

@@ -1,6 +1,9 @@
 package me.chester.test;
 
+import java.util.Date;
+
 import junit.framework.TestCase;
+import me.chester.minitruco.android.Balao;
 import me.chester.minitruco.android.CartaVisual;
 import me.chester.minitruco.android.Partida;
 import me.chester.minitruco.core.Baralho;
@@ -11,11 +14,21 @@ import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 import me.chester.minitruco.core.SituacaoJogo;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Bitmap.Config;
+import android.util.Log;
 
-public class JogoTest extends TestCase {
+public class JogoTest extends
+		android.test.ActivityInstrumentationTestCase2<Partida> {
+
+	public JogoTest() {
+		super("me.chester.minitruco", Partida.class);
+	}
+
+	// Meta-testes (testam as classes de mock)
 
 	public void testBaralhoOrdenado() {
 		String[][] cartas = { { "Kp", "Jo" }, { "Ae" }, { "Kp" } };
@@ -55,6 +68,8 @@ public class JogoTest extends TestCase {
 		assertEquals(0, e.joga(s));
 	}
 
+	// Esses são os testes de verdade
+
 	public void testPartidaGeral() {
 		// Cria um jogo com 4 CPUs e roda ele
 		Jogo j = new JogoLocal(false, false);
@@ -87,8 +102,9 @@ public class JogoTest extends TestCase {
 		 */
 	}
 
-	public void testAnimacaoCarta() throws InterruptedException {
-		CartaVisual cv = new CartaVisual(33,66);
+	public void testAnimacaoCartaNoTempo() throws InterruptedException {
+		CartaVisual.resources = getActivity().getResources();
+		CartaVisual cv = new CartaVisual(33, 66);
 		assertEquals(33, cv.left);
 		assertEquals(66, cv.top);
 		Canvas canvas = new Canvas();
@@ -101,7 +117,8 @@ public class JogoTest extends TestCase {
 		cv.movePara(300, 100, 3000);
 		Thread.sleep(1000);
 		cv.draw(canvas);
-		assertTrue("Carta devia andar 100 no x, andou " + cv.left, cv.left >= 100);
+		assertTrue("Carta devia andar 100 no x, andou " + cv.left,
+				cv.left >= 100);
 		assertTrue("Carta não pode andar além de 200 no X, andou " + cv.left,
 				cv.left <= 200);
 		assertTrue("Carta tem que andar 33 no Y. andou " + cv.top, cv.top >= 33);
@@ -117,10 +134,13 @@ public class JogoTest extends TestCase {
 		cv.movePara(0, 0, 3000);
 		Thread.sleep(1000);
 		cv.draw(canvas);
-		assertTrue("Carta devia andar -100 no x, esta em " + cv.left, cv.left <= 200);
-		assertTrue("Carta não pode andar além de -200 no X, esta em " + cv.left,
+		assertTrue("Carta devia andar -100 no x, esta em " + cv.left,
+				cv.left <= 200);
+		assertTrue(
+				"Carta não pode andar além de -200 no X, esta em " + cv.left,
 				cv.left >= 100);
-		assertTrue("Carta tem que andar -33 no Y. esta em " + cv.top, cv.top <= 67);
+		assertTrue("Carta tem que andar -33 no Y. esta em " + cv.top,
+				cv.top <= 67);
 		assertTrue("Carta não pode andar além de -66 no Y, esta em " + cv.top,
 				cv.top >= 32);
 		Thread.sleep(2100);
@@ -131,17 +151,18 @@ public class JogoTest extends TestCase {
 				cv.top, 0);
 	}
 
-	public void testDesenhoCarta() {
+	public void testCartaDesenhadaNoLugarCerto() {
+		CartaVisual.resources = getActivity().getResources();
 		int color = Color.MAGENTA;
-		Bitmap bitmap = Bitmap.createBitmap(50, 50,
-				Bitmap.Config.RGB_565);
+		Bitmap bitmap = Bitmap.createBitmap(50, 50, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bitmap);
 		canvas.drawColor(color);
 		assertEquals(color, bitmap.getPixel(10, 10));
 		assertEquals(color, bitmap.getPixel(40, 40));
-		CartaVisual cv = new CartaVisual(5,5);
+		CartaVisual cv = new CartaVisual(5, 5);
 		CartaVisual.largura = 30;
 		CartaVisual.altura = 30;
+		cv.setValor("Ap");
 		cv.draw(canvas);
 		assertFalse(color == bitmap.getPixel(10, 10));
 		assertEquals(color, bitmap.getPixel(40, 40));
@@ -153,14 +174,12 @@ public class JogoTest extends TestCase {
 		assertFalse(color == bitmap.getPixel(40, 40));
 	}
 
-	public void testTamanhoCarta() {
+	public void testTamanhoDaCartaAutoAjustadoAoDoCanvas() {
 		int[][] telas = { { 320, 200 }, { 200, 320 }, { 640, 480 },
 				{ 120, 240 }, { 240, 120 } };
 		for (int[] tela : telas) {
 			int width = tela[0];
 			int height = tela[1];
-			Bitmap bitmap = Bitmap.createBitmap(width, height,
-					Bitmap.Config.RGB_565);
 			CartaVisual.ajustaTamanho(width, height);
 			String result = "Tela " + width + "," + height + " =>  carta "
 					+ CartaVisual.largura + "," + CartaVisual.altura;
@@ -170,6 +189,34 @@ public class JogoTest extends TestCase {
 					CartaVisual.largura * 6 <= width);
 			assertTrue("Tem que caber 5 cartas na altura. " + result,
 					CartaVisual.altura * 5 <= height);
+		}
+	}
+
+	public void testTimingBalaoCorreto() throws InterruptedException {
+		Log.i("JogoTest", "Inicializa dates p/ nao atrapalhar o timing"
+				+ new Date());
+		Balao.diz("truco", 1, 2000);
+		// Na primeira e segunda vez, algum desenho deve ser feito
+		// (na real estamos dando um tempo curto porque o teste toma tempo - o
+		// *certo* mesmo seria externalizar e mockar Date(), mas esse teste já
+		// extrapolou o custo/benefício razoável.
+		try {
+			Balao.draw(null);
+			fail("Balao nao desenhou 1o. frame");
+		} catch (NullPointerException e) {
+		}
+		Thread.sleep(200);
+		try {
+			Balao.draw(null);
+			fail("Balao nao desenhou 2o. frame");
+		} catch (NullPointerException e) {
+		}
+		Thread.sleep(1800);
+		// Nesse ponto, o tempo estourou, não deve ter desenho
+		try {
+			Balao.draw(null);
+		} catch (NullPointerException e) {
+			fail("Balao nao desenhou 1o. frame");
 		}
 	}
 }

@@ -140,7 +140,8 @@ public class CartaVisual {
 			paint.setColor(Color.GREEN);
 			paint.setStyle(Paint.Style.FILL);
 			canvas.drawBitmap(bitmap, left, top, paint);
-			Rect rect = new Rect(left, top, left + largura - 1, top + altura - 1);
+			Rect rect = new Rect(left, top, left + largura - 1, top + altura
+					- 1);
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.STROKE);
 			canvas.drawRect(rect, paint);
@@ -149,10 +150,14 @@ public class CartaVisual {
 	}
 
 	public void setValor(String valor) {
+		if (resources == null) {
+			throw new IllegalStateException(
+					"CartaVisual tem que ter a propriedade resources inicializada");
+		}
 		this.valor = valor;
 		valor = valor == null ? "fundo" : valor;
 		this.bitmap = bitmapCache.get(valor);
-		if (this.bitmap == null && resources != null) {
+		if (this.bitmap == null) {
 			Bitmap bmpOrig = BitmapFactory.decodeResource(resources,
 					getCartaResourceByValor(valor));
 			Bitmap bmpFinal = Bitmap.createScaledBitmap(bmpOrig, largura,

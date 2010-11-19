@@ -31,7 +31,11 @@ public class Partida extends Activity implements Interessado {
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.
-		MenuPrincipal.jogo.adiciona(this);
+		if (MenuPrincipal.jogo != null) {
+			MenuPrincipal.jogo.adiciona(this);
+		} else {
+			Log.w("Activity.onCreate", "Partida iniciada sem jogo (ok para testes)");
+		}
 	}
 
 	private MesaView mesa;
