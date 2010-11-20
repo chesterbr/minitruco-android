@@ -76,6 +76,7 @@ public class MesaView extends View {
 			// Inicia o jogo
 			Thread t = new Thread(MenuPrincipal.jogo);
 			t.start();
+			//Balao.diz("rosquinha", 1, 100000);
 
 		}
 	}

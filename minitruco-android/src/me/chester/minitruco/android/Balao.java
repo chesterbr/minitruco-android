@@ -5,6 +5,7 @@ import java.util.Date;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
@@ -55,11 +56,13 @@ public class Balao {
 			// ponta
 			final int MARGEM_BALAO_LEFT = 10;
 			final int MARGEM_BALAO_TOP = 3;
-			// int largBalao = fonteBalao.stringWidth(textoBalao) + 2
-			// * MARGEM_BALAO_LEFT;
-			// int altBalao = fonteBalao.getHeight() + 2 * MARGEM_BALAO_TOP;
-			int largBalao = 80;
-			int altBalao = 30;
+			Paint paintFonte = new Paint();
+			Rect bounds = new Rect();
+			paintFonte.setColor(Color.BLACK);
+			paintFonte.getTextBounds(frase, 0, frase.length(), bounds);
+
+			int largBalao = bounds.width() + 2 * MARGEM_BALAO_LEFT;
+			int altBalao = bounds.height() + 2 * MARGEM_BALAO_TOP;
 			int x = 0, y = 0;
 			int quadrantePonta = 0;
 			switch (posicao) {
@@ -71,12 +74,12 @@ public class Balao {
 				break;
 			case 2:
 				x = canvas.getWidth() - largBalao - MesaView.MARGEM - 3;
-				y = (canvas.getHeight() - altBalao) / 2 + CartaVisual.altura;
+				y = (canvas.getHeight() - altBalao) / 2;
 				quadrantePonta = 1;
 				break;
 			case 3:
 				x = (canvas.getWidth() - largBalao) / 2 + CartaVisual.largura;
-				y = MesaView.MARGEM + 3 + altBalao;
+				y = MesaView.MARGEM + 3 + altBalao / 2;
 				quadrantePonta = 2;
 				break;
 			case 4:
@@ -106,10 +109,8 @@ public class Balao {
 					paint);
 
 			// Finalmente, escreve o texto do balão
-			paint.setColor(Color.BLACK);
-			// TODO
-			// g.drawString(frase, x + MARGEM_BALAO_LEFT, y
-			// + MARGEM_BALAO_TOP, Graphics.LEFT | Graphics.TOP);
+			canvas.drawText(frase, x + MARGEM_BALAO_LEFT, y + altBalao
+					- MARGEM_BALAO_TOP - 2, paintFonte);
 
 		} else {
 			frase = null;
@@ -120,33 +121,36 @@ public class Balao {
 	/**
 	 * Desenha o balão de texto do cenário
 	 * 
-	 * @param g
+	 * @param canvas
+	 *            onde ele será desenhado
 	 * @param x
+	 *            esquerda
 	 * @param y
+	 *            topo
 	 * @param largBalao
+	 *            largura
 	 * @param altBalao
+	 *            altura
 	 * @param quadrantePonta
-	 *            Quadrante (cartesiano) onde aparece a ponat do balão
+	 *            Quadrante (cartesiano) onde aparece a ponta do balão (com
+	 *            relação a ele mesmo)
 	 */
 	private static void desenhaBalao(Canvas canvas, int x, int y,
 			int largBalao, int altBalao, int quadrantePonta, Paint paint) {
-
-		// Calcula o deslocamento correto da ponta
-		int deltaX = largBalao / 2;
-		int deltaY = altBalao / 2;
-		if (quadrantePonta == 2 || quadrantePonta == 3)
-			deltaX = -deltaX;
-		if (quadrantePonta == 1 || quadrantePonta == 2)
-			deltaY = -deltaY * 3;
-
 		// Elipse principal
 		canvas.drawArc(new RectF(x, y, x + largBalao - 1, y + altBalao - 1), 0,
 				360, false, paint);
-		// Ponta (desenhada como uma fração de elipse)
-		canvas.drawArc(new RectF(x + deltaX, y + deltaY, x + largBalao - 1, y
-				+ altBalao * 2 - 1), (90 * quadrantePonta) + 120, 50, false,
-				paint);
-
+		// Ponta (é um triângulo que desenhamos linha a linha)
+		int xi;
+		for (int i = 0; i < altBalao; i++) {
+			if (quadrantePonta == 2 || quadrantePonta == 3) {
+				xi = x + altBalao * 3 / 2 - i;
+			} else {
+				xi = x - altBalao * 3 / 2 + i + largBalao;
+			}
+			int sinaly = quadrantePonta < 3 ? -1 : 1;
+			canvas.drawLine(xi, y + altBalao / 2, xi, y + altBalao / 2 + i
+					* sinaly, paint);
+		}
 	}
-
 }
