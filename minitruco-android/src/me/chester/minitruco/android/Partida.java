@@ -59,11 +59,12 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
-		// TODO Auto-generated method stub
-
+		MesaView.aguardaFimAnimacoes();
+		Balao.diz("desce", j.getPosicao(), 800);
 	}
 
 	public void cartaJogada(Jogador j, Carta c) {
+		MesaView.aguardaFimAnimacoes();
 		mesa.descarta(c, j.getPosicao());
 		// TODO Auto-generated method stub
 		print("Jogador " + j.getPosicao() + " jogou " + c);
@@ -85,6 +86,7 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void inicioMao() {
+		MesaView.aguardaFimAnimacoes();
 		mesa.distribuiMao();
 	}
 
@@ -104,18 +106,19 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
+		MesaView.aguardaFimAnimacoes();
 		mesa.recolheMao();
 
 	}
 
 	public void pediuAumentoAposta(Jogador j, int valor) {
-		// TODO Auto-generated method stub
-
+		MesaView.aguardaFimAnimacoes();
+		Balao.diz("Truco!", j.getPosicao(), 1000 + 200 * (valor / 3));
 	}
 
 	public void recusouAumentoAposta(Jogador j) {
-		// TODO Auto-generated method stub
-
+		MesaView.aguardaFimAnimacoes();
+		Balao.diz("não quero", j.getPosicao(), 800);
 	}
 
 	public void rodadaFechada(int numRodada, int resultado,

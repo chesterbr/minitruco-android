@@ -492,36 +492,10 @@ public class JogoLocal extends Jogo {
 			recusouAumento[i] = false;
 		int valor = calcValorAumento();
 
-		// O código abaixo notifica primeiro os jogadores que não forem
-		// JogadorCPU, e depois estes.
-		//
-		// Motivo: o JogadorCPU responde imediatamente ao aumento, assim,
-		// se eu não fizer isso, um celular-cliente Bluetooth que esteja numa
-		// posição maior vai mostrar o balão de resposta antes do da pergunta
-		// (pois a notificação de resposta será gerada imediatamente).
-		// 
-		// Isso, em termos OO, é uma quebra de contrato (até então, instâncias
-		// de Jogo tratavam instâncias de Jogador de forma indiscriminada).
-		//
-		// A solução "correta" seria fazer o JogadorCPU segurar a sua resposta,
-		// mas isso implica em mais uma inner class/thread (e a aplicação já
-		// está beirando os limites de tamanho), então vou cercar com as tags
-		// <gambiarra> e </gambiarra>, apenas para me martirzar.
-
-		// <gambiarra>
-		for (int i = 1; i <= 4; i++) {
-			Jogador ji = getJogador(i);
-			if (!(ji instanceof JogadorCPU)) {
-				ji.pediuAumentoAposta(j, valor);
-			}
+		// Notifica os interessados
+		for (Interessado interessado: interessados) {
+			interessado.pediuAumentoAposta(j, valor);
 		}
-		for (int i = 1; i <= 4; i++) {
-			Jogador ji = getJogador(i);
-			if (ji instanceof JogadorCPU) {
-				ji.pediuAumentoAposta(j, valor);
-			}
-		}
-		// </gambiarra>
 		Log.i("JogoLocal", "Jogadores notificados do aumento");
 
 		return;
@@ -548,13 +522,13 @@ public class JogoLocal extends Jogo {
 			// o jogo da situtação de truco
 			valorMao = calcValorAumento();
 			jogadorPedindoAumento = null;
-			for (int i = 1; i <= 4; i++) {
-				getJogador(i).aceitouAumentoAposta(j, valorMao);
+			for (Interessado interessado: interessados) {			
+				interessado.aceitouAumentoAposta(j, valorMao);
 			}
 		} else {
 			// Primeiro notifica todo mundo
-			for (int i = 1; i <= 4; i++) {
-				getJogador(i).recusouAumentoAposta(j);
+			for (Interessado interessado: interessados) {
+				interessado.recusouAumentoAposta(j);
 			}
 			int posParceiro = (j.getPosicao() + 1) % 4 + 1;
 			if (recusouAumento[posParceiro - 1]) {
