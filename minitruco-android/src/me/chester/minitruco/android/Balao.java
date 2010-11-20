@@ -39,6 +39,7 @@ public class Balao {
 		Balao.timestampFim.setTime((new Date()).getTime() + tempoMS);
 		Balao.frase = frase;
 		Balao.posicao = posicao;
+		MesaView.notificaAnimacao(Balao.timestampFim);
 	}
 
 	/**

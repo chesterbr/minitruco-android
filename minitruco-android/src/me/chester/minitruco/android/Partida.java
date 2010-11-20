@@ -84,8 +84,6 @@ public class Partida extends Activity implements Interessado {
 
 	}
 
-	public int n = 1;
-
 	public void inicioMao() {
 		mesa.distribuiMao();
 	}
@@ -125,8 +123,6 @@ public class Partida extends Activity implements Interessado {
 		print("Rodada " + numRodada + "fechada. Resultado:" + resultado
 				+ ". Quem torna: J" + jogadorQueTorna.getPosicao());
 		// TODO Auto-generated method stub
-		Balao.diz("oi, quer tc?", n, 5000);
-		n = (n == 4 ? 1 : n + 1);
 
 	}
 

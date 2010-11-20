@@ -33,6 +33,35 @@ public class MesaView extends View {
 	}
 
 	/**
+	 * Informa à mesa que uma animação começou (garantindo refreshes da tela
+	 * enquanto ela durar).
+	 * 
+	 * @param fim
+	 *            timestamp de quando a animação vai acabar
+	 */
+	public static void notificaAnimacao(Date fim) {
+		comecouAnimacao = true;
+		if (animandoAte.before(fim)) {
+			animandoAte = fim;
+		}
+	}
+
+	/**
+	 * Coloca a thread chamante em sleep até que as animações acabem.
+	 */
+	public static void aguardaFimAnimacoes() {
+		long milisecAteFimAnimacao;
+		while ((milisecAteFimAnimacao = animandoAte.getTime()
+				- (new Date()).getTime()) > 0) {
+			try {
+				Thread.sleep(milisecAteFimAnimacao);
+			} catch (InterruptedException e) {
+				return;
+			}
+		}
+	}
+
+	/**
 	 * Cartas que estão na mesa, na ordem de empilhamento. cartas[0] é o vira,
 	 * cartas[1..3] são o baralho decorativo, cartas[4..6] são as do jogador na
 	 * posição 1 (inferior), cartas[7..9] o jogador 2 e assim por diante para os
@@ -76,19 +105,47 @@ public class MesaView extends View {
 			// Inicia o jogo
 			Thread t = new Thread(MenuPrincipal.jogo);
 			t.start();
-			//Balao.diz("rosquinha", 1, 100000);
+			// Balao.diz("rosquinha", 1, 100000);
 
 		}
 	}
 
+	/**
+	 * Thread/runnable que faz as animações acontecerem.
+	 * <p>
+	 */
 	Thread animacaoJogo = new Thread(new Runnable() {
+
+		private static final int FPS = 20;
+
+		// O loop tem uma fase de "baixo consumo" que espera uma animação
+		// acontecer, e uma mais agressiva. Eventualmente ele vai ficar na
+		// segunda fase um pouco a mais do que o necessário (pois não está
+		// contando o tempo de animar em si), mas é melhor errar pra cima.
 		public void run() {
+			int tempoFrame = 1000 / FPS;
 			while (MenuPrincipal.jogo != null) {
-				postInvalidate();
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				// Nenhuma animação rolando - aguarda alguém sinalizar
+				comecouAnimacao = false;
+				while (!comecouAnimacao) {
+					try {
+						Thread.sleep(tempoFrame);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				// Estamos animando!
+				long milisecsAteFimAnimacao;
+				while ((milisecsAteFimAnimacao = animandoAte.getTime()
+						- (new Date()).getTime()) > 0) {
+					for (int i = 0; i < milisecsAteFimAnimacao; i += tempoFrame) {
+						postInvalidate();
+						try {
+							Thread.sleep(tempoFrame);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		}
@@ -268,9 +325,9 @@ public class MesaView extends View {
 		// }
 		// }
 		// }
-		
+
 		Balao.draw(canvas);
-		
+
 	}
 
 	/**
@@ -294,31 +351,8 @@ public class MesaView extends View {
 	private static Date animandoAte = new Date();
 
 	/**
-	 * Informa à mesa que uma animação começou.
-	 * 
-	 * @param fim
-	 *            timestamp de quando a animação vai acabar
+	 * Diz se a thread animadora deve começar a invalidar
 	 */
-	public static void notificaAnimacao(Date fim) {
-		if (animandoAte.before(fim)) {
-			animandoAte = fim;
-		}
-	}
-
-	/**
-	 * Aguarda (em sleep da thread atual) o fim de quaisquer animações que
-	 * estejam rolando.
-	 */
-	public static void aguardaFimAnimacoes() {
-		long segundosAteFimAnimacao;
-		while ((segundosAteFimAnimacao = animandoAte.getTime()
-				- (new Date()).getTime()) > 0) {
-			try {
-				Thread.sleep(segundosAteFimAnimacao);
-			} catch (InterruptedException e) {
-				return;
-			}
-		}
-	}
+	private static boolean comecouAnimacao = false;
 
 }
