@@ -522,6 +522,8 @@ public class JogoLocal extends Jogo {
 			}
 		}
 		// </gambiarra>
+		Log.i("JogoLocal", "Jogadores notificados do aumento");
+
 		return;
 
 	}

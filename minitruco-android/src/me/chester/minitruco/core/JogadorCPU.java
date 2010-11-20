@@ -104,6 +104,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	public void vez(Jogador j, boolean podeFechada) {
 		if (this.equals(j)) {
+			Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+					+ " recebeu notificacao de vez");
 			this.podeFechada = podeFechada;
 			this.minhaVez = true;
 		}
@@ -116,6 +118,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 			if (minhaVez) {
 
+				minhaVez = false;
 				Log.i("JogadorCPU", "Jogador " + this.getPosicao()
 						+ " viu que e' sua vez");
 
@@ -133,8 +136,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 				// Solicita que o estrategia jogue
 				int posCarta = estrategia.joga(situacaoJogo);
 
-				// Se a estratégia pediu truco, processa, e, após tudo
-				// resolvido, repete a jogada
+				// Se a estratégia pediu truco, processa e desencana de jogar
+				// agora
 				if ((posCarta == -1) && (situacaoJogo.valorProximaAposta != 0)) {
 					// Faz a
 					// solicitação de truco numa nova thread // (usando o
@@ -143,23 +146,13 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// otimizei para reduzir o .jar)
 					aceitaramTruco = false;
 					numRespostasAguardando = 2;
+					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+							+ " vai aumentar aposta");
+					estouAguardandoRepostaAumento = true;
 					jogo.aumentaAposta(this);
-					while ((numRespostasAguardando > 0) && (this.jogo != null)
-							&& !this.jogo.jogoFinalizado) {
-						try {
-							Thread.sleep(100);
-						} catch (InterruptedException e) {
-
-						}
-					}
-					// Se não aceitaram, desencana de jogar, ganhamos a mão...
-					if (!aceitaramTruco) {
-						return;
-					}
-					// ...caso contrário, vamos seguir o jogo e jogar
-					atualizaSituacaoJogo();
-					situacaoJogo.valorProximaAposta = 0;
-					posCarta = estrategia.joga(situacaoJogo);
+					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+							+ " aguardando resposta");
+					continue;
 				}
 
 				// Se a estratégia pediu truco fora de hora, ignora e joga a
@@ -180,30 +173,48 @@ public class JogadorCPU extends Jogador implements Runnable {
 				Log.i("JogadorCPU", "Jogador " + this.getPosicao()
 						+ " vai pedir para jogar " + c);
 				jogo.jogaCarta(this, c);
-				minhaVez = false;
 
 			}
+
+			if (recebiPedidoDeAumento) {
+				recebiPedidoDeAumento = false;
+				atualizaSituacaoJogo();
+				// O if e o synchronzied garantem que, se um jogador aceitar
+				// o
+				// truco, o estrategia do outro não é consultado (além de
+				// ser uma
+				// conosulta inútil, ele receberia infos desatualizadas)
+				synchronized (jogo) {
+					if (situacaoJogo.posJogadorPedindoAumento != 0) {
+						boolean resposta = estrategia.aceitaTruco(situacaoJogo);
+						jogo.respondeAumento(this, resposta);
+					}
+				}
+			}
+
+			if (estouAguardandoRepostaAumento && (numRespostasAguardando == 0)) {
+				estouAguardandoRepostaAumento = false;
+				// Se aceitaram, vamos seguir o jogo
+				if (aceitaramTruco) {
+					atualizaSituacaoJogo();
+					situacaoJogo.valorProximaAposta = 0;
+					minhaVez = true;
+				}
+			}
+
 		}
 
 	}
 
-	public void pediuAumentoAposta(Jogador j, int valor) {
+	private boolean recebiPedidoDeAumento = false;
+	private boolean estouAguardandoRepostaAumento = false;
 
+	public void pediuAumentoAposta(Jogador j, int valor) {
 		// Notifica a estrategia
 		estrategia.pediuAumentoAposta(j.getPosicao(), valor);
-
 		// Se foi a equipe oposta que pediu, gera uma resposta
 		if (j.getEquipe() == this.getEquipeAdversaria()) {
-			atualizaSituacaoJogo();
-			// O if e o synchronzied garantem que, se um jogador aceitar o
-			// truco, o estrategia do outro não é consultado (além de ser uma
-			// conosulta inútil, ele receberia infos desatualizadas)
-			synchronized (jogo) {
-				if (situacaoJogo.posJogadorPedindoAumento != 0) {
-					boolean resposta = estrategia.aceitaTruco(situacaoJogo);
-					jogo.respondeAumento(this, resposta);
-				}
-			}
+			recebiPedidoDeAumento = true;
 		}
 	}
 

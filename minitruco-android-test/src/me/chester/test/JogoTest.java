@@ -9,6 +9,7 @@ import me.chester.minitruco.android.Partida;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Estrategia;
+import me.chester.minitruco.core.EstrategiaSellani;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
@@ -76,17 +77,17 @@ public class JogoTest extends
 		Jogador jogador = null;
 		SituacaoJogo situacao = new SituacaoJogo();
 		for (int i = 0; i < 4; i++) {
-			jogador = new JogadorCPU(new EstrategiaSequencial());
+			jogador = new JogadorCPU(new EstrategiaSellani());
 			j.adiciona(jogador);
 		}
-		j.adiciona(new Partida());
-		// j.run();
-		// // Verifica que um dos dois realmente fez 12 pontos ou mais
-		// j.atualizaSituacao(situacao, jogador);
-		//
-		// assertTrue("Jogo deveria terminar com alguem ganhando: Jogo: "
-		// + situacao, Math.max(situacao.pontosEquipe[0],
-		// situacao.pontosEquipe[1]) >= 12);
+		j.adiciona(this.getActivity());
+		 j.run();
+		 // Verifica que um dos dois realmente fez 12 pontos ou mais
+		 j.atualizaSituacao(situacao, jogador);
+		
+		 assertTrue("Jogo deveria terminar com alguem ganhando: Jogo: "
+		 + situacao, Math.max(situacao.pontosEquipe[0],
+		 situacao.pontosEquipe[1]) >= 12);
 
 		/*
 		 * String[][] cartas = { { "Kp", "Jo", "Ap", "2p", "2e", "2o", "Ke",
