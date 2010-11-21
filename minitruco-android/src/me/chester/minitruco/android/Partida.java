@@ -23,7 +23,7 @@ import android.util.Log;
 public class Partida extends Activity implements Interessado {
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.partida);
 		mesa = (MesaView) findViewById(R.id.MesaView01);

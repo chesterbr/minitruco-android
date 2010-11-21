@@ -15,11 +15,13 @@ import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 import me.chester.minitruco.core.SituacaoJogo;
-import android.app.Activity;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Bitmap.Config;
 import android.util.Log;
 
 public class JogoTest extends
@@ -81,13 +83,13 @@ public class JogoTest extends
 			j.adiciona(jogador);
 		}
 		j.adiciona(this.getActivity());
-		 j.run();
-		 // Verifica que um dos dois realmente fez 12 pontos ou mais
-		 j.atualizaSituacao(situacao, jogador);
-		
-		 assertTrue("Jogo deveria terminar com alguem ganhando: Jogo: "
-		 + situacao, Math.max(situacao.pontosEquipe[0],
-		 situacao.pontosEquipe[1]) >= 12);
+		j.run();
+		// Verifica que um dos dois realmente fez 12 pontos ou mais
+		j.atualizaSituacao(situacao, jogador);
+
+		assertTrue("Jogo deveria terminar com alguem ganhando: Jogo: "
+				+ situacao, Math.max(situacao.pontosEquipe[0],
+				situacao.pontosEquipe[1]) >= 12);
 
 		/*
 		 * String[][] cartas = { { "Kp", "Jo", "Ap", "2p", "2e", "2o", "Ke",
