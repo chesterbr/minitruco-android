@@ -39,7 +39,7 @@ public class Partida extends Activity implements Interessado {
 		}
 	}
 
-	private MesaView mesa;
+	public MesaView mesa;
 
 	// /**
 	// * Recebe mensagens (da view, principalmente) e executa usando a thread de

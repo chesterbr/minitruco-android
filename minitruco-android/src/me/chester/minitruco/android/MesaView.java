@@ -70,7 +70,7 @@ public class MesaView extends View {
 	public CartaVisual[] cartas = new CartaVisual[16];
 
 	@Override
-	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+	public void onSizeChanged(int w, int h, int oldw, int oldh) {
 		if (oldw == 0) {
 			// TODO tosco isso, não considera mudanças de tamanho
 			// no meio do caminho
