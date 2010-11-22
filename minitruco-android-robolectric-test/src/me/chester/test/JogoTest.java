@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.xtremelabs.robolectric.RobolectricTestRunner;
+import com.xtremelabs.robolectric.util.Implements;
 
 @RunWith(RobolectricTestRunner.class)
 public class JogoTest extends TestCase {
@@ -186,7 +187,7 @@ public class JogoTest extends TestCase {
 		CartaVisual cv = new CartaVisual(5, 5);
 		CartaVisual.largura = 30;
 		CartaVisual.altura = 30;
-		cv.setValor("Ap");
+		cv.setCarta(new Carta("Ap"));
 		cv.draw(canvas);
 		assertFalse(color == bitmap.getPixel(10, 10));
 		assertEquals(color, bitmap.getPixel(40, 40));
@@ -242,4 +243,14 @@ public class JogoTest extends TestCase {
 			fail("Balao desenhou 3o. frame quando não devia");
 		}
 	}
+
+	// TODO fazer funcionar
+	@Implements(Log.class)
+	public static class ShadowLog {
+		public static int i(java.lang.String tag, java.lang.String msg) {
+			System.out.println("[" + tag + "] " + msg);
+			return 0;
+		}
+	}
+
 }

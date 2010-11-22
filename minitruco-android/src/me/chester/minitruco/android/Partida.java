@@ -31,8 +31,10 @@ public class Partida extends Activity implements Interessado {
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.
-		if (MenuPrincipal.jogo != null) {
-			MenuPrincipal.jogo.adiciona(this);
+		Jogo jogo = MenuPrincipal.jogo;
+		if (jogo != null) {
+			jogo.adiciona(this);
+			MesaView.jogo = jogo;
 		} else {
 			Log.w("Activity.onCreate",
 					"Partida iniciada sem jogo (ok para testes)");
@@ -130,8 +132,7 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {
-		// TODO Auto-generated method stub
-
+		MesaView.setVezHumano(j instanceof JogadorHumano);
 	}
 
 	// // Mensagens para a thread da UI

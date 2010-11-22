@@ -3,17 +3,20 @@ package me.chester.minitruco.android;
 import java.util.Date;
 
 import me.chester.minitruco.core.Carta;
+import me.chester.minitruco.core.Jogo;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Representa visualmente o andamento de um jogo.
+ * Representa visualmente o andamento de um jogo, permitindo que o usuário
+ * interaja.
  * <p>
- * No futuro, permitirá que o usuário interaja em nome de um JogadorHumano
- * inserido na partida (ex.: permitindo a ele jogar ou pedir truco em sua vez)
+ * Para simplificar o acesso, alguns métodos/propriedades são static - o que só
+ * reitera que só deve existir uma instância desta View.
  * 
  * @author chester
  * 
@@ -69,6 +72,9 @@ public class MesaView extends View {
 	 */
 	public CartaVisual[] cartas = new CartaVisual[16];
 
+	/**
+	 * Ajusta o tamanho das cartas e sua posição de acordo com a resolução
+	 */
 	@Override
 	public void onSizeChanged(int w, int h, int oldw, int oldh) {
 		if (oldw == 0) {
@@ -108,6 +114,25 @@ public class MesaView extends View {
 			// Balao.diz("rosquinha", 1, 100000);
 
 		}
+	}
+
+	/**
+	 * Joga a carta tocada (se for a vez do jogador e ela não tiver sido
+	 * descartada)
+	 */
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (vezHumano) {
+			for (int i = 6; i >= 4; i--) {
+				if ((!cartas[i].descartada)
+						&& cartas[i].isDentro(event.getX(), event.getY())) {
+					JogadorHumano jh = jogo.getJogadorHumano();
+					jogo.jogaCarta(jh, cartas[i].getCarta());
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -152,17 +177,34 @@ public class MesaView extends View {
 	});
 
 	/**
+	 * Permite à partida informar que (não) é a vez de deixar o humano jogar
+	 * 
+	 * @param vezHumano
+	 *            true se for a vez dele, false se não
+	 */
+	public static void setVezHumano(boolean vezHumano) {
+		MesaView.vezHumano = vezHumano;
+	}
+
+	/**
 	 * Entrega as cartas iniciais na mão de cada jogador
+	 * 
+	 * @cartas array com as três cartas do jogador na posição 1. Se
+	 *         <code>null</code>, elas vêm fechadas como as dos outros
 	 */
 	public void distribuiMao() {
-
 		// Limpa a mesa
 		// mesa.limpa();
 
 		// Distribui as cartas em círculo
 		for (int i = 0; i <= 2; i++) {
 			for (int j = 1; j <= 4; j++) {
-				distribui(j, i);
+				Carta c = null;
+				JogadorHumano jh = jogo.getJogadorHumano();
+				if (j == 1 && jh != null) {
+					c = jh.getCartas()[i];
+				}
+				distribui(j, i, c);
 			}
 		}
 
@@ -189,8 +231,10 @@ public class MesaView extends View {
 	 *            Posição do jogador, de 1 a 4 (1 = humano).
 	 * @param i
 	 *            posição da carta na mão do jogador (0 a 2)
+	 * @valor Carta (do jogo, não visual) que foi jogada. Se <code>null</code>,
+	 *        entrega fechada (sem valor)
 	 */
-	private void distribui(int numJogador, int i) {
+	private void distribui(int numJogador, int i, Carta carta) {
 
 		// Determina onde vamos colocar a carta (e se ela vem virada)
 		int topFinal, leftFinal;
@@ -232,6 +276,7 @@ public class MesaView extends View {
 
 		// Adiciona a carta na mesa, em cima do baralho, e anima até a posição
 		CartaVisual c = cartas[4 + i + 3 * (numJogador - 1)];
+		c.setCarta(carta);
 		// c.movePara(topBaralho, leftBaralho);
 		c.movePara(leftFinal, topFinal, 100);
 	}
@@ -244,7 +289,7 @@ public class MesaView extends View {
 			CartaVisual c = cartas[i];
 			if ((c.top != topBaralho) || (c.left != leftBaralho)) {
 				c.movePara(leftBaralho, topBaralho, 100);
-				c.setValor(null);
+				c.setCarta(null);
 				c.descartada = false;
 			}
 		}
@@ -284,17 +329,23 @@ public class MesaView extends View {
 		// Sinaliza para evitar escolhas futuras desta carta;
 		// cartasJogadas.addElement(c);
 
-		// Pega uma carta para representar aquela
+		// Pega uma carta visual naquela posição...
 		CartaVisual cv = null;
 		for (int i = 0; i <= 2; i++) {
-			cv = cartas[i + 1 + posicao * 3];
-			if (!cv.descartada) {
+			CartaVisual cvCandidata = cartas[i + 1 + posicao * 3];
+			// ...que não tenha sido descartada...
+			if (cvCandidata.descartada) {
+				continue;
+			}
+			// ...e, no caso de um humano, que corresponda à carta do jogo
+			cv = cvCandidata;
+			if (c.equals(cvCandidata.getCarta())) {
 				break;
 			}
 		}
 
-		// Seta o valor e executa a animação
-		cv.setValor(c.toString());
+		// Executa a animação de descarte
+		cv.setCarta(c);
 		cv.movePara(leftFinal, topFinal, 200);
 		cv.descartada = true;
 
@@ -355,4 +406,13 @@ public class MesaView extends View {
 	 */
 	private static boolean comecouAnimacao = false;
 
+	/**
+	 * Diz se é a vez do jogador humano dessa mesa
+	 */
+	private static boolean vezHumano = false;
+
+	/**
+	 * Jogo em que a mesa está interagindo
+	 */
+	public static Jogo jogo;
 }

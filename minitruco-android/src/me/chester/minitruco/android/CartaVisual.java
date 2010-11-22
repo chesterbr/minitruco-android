@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.chester.minitruco.core.Carta;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,7 +39,7 @@ public class CartaVisual {
 	 */
 	public CartaVisual(int left, int top) {
 		movePara(left, top);
-		setValor(null);
+		setCarta(null);
 	}
 
 	/**
@@ -149,13 +151,34 @@ public class CartaVisual {
 
 	}
 
-	public void setValor(String valor) {
+	/**
+	 * Diz se um ponto do canvas está dentro dessa carta ou não.
+	 * 
+	 * @param x
+	 *            coordenada x do ponto
+	 * @param y
+	 *            coordenada y do ponto
+	 * @return true se estiver na carta, false se não.
+	 */
+	public boolean isDentro(float x, float y) {
+		return (x >= this.left && x <= this.left + largura && y >= this.top && y <= this.top
+				+ altura);
+	}
+
+	/**
+	 * Associa uma carta do jogo (i.e., não visual) a esse objeto carta visual
+	 * 
+	 * @param c
+	 *            carta a ser associada. Se <code>null</code>, desassocia a
+	 *            carta visual de qualquer carta real.
+	 */
+	public void setCarta(Carta c) {
 		if (resources == null) {
 			throw new IllegalStateException(
 					"CartaVisual tem que ter a propriedade resources inicializada");
 		}
-		this.valor = valor;
-		valor = valor == null ? "fundo" : valor;
+		this.carta = c;
+		String valor = carta == null ? "fundo" : c.toString();
 		this.bitmap = bitmapCache.get(valor);
 		if (this.bitmap == null) {
 			Bitmap bmpOrig = BitmapFactory.decodeResource(resources,
@@ -167,6 +190,22 @@ public class CartaVisual {
 		}
 	}
 
+	/**
+	 * Recuper a carta do jogo associada a esse objeto visual
+	 * 
+	 * @return carta não-visual
+	 */
+	public Carta getCarta() {
+		return carta;
+	}
+
+	/**
+	 * Recupera o bitmap da carta a partir dos resources
+	 * 
+	 * @param valor
+	 *            string que representa o bitmap. Ex.: "Ko" para rei de ouros.
+	 * @return ID de resource do bitmap
+	 */
 	@SuppressWarnings("unchecked")
 	private static int getCartaResourceByValor(String valor) {
 		valor = valor.toLowerCase();
@@ -185,14 +224,20 @@ public class CartaVisual {
 		}
 	}
 
+	/**
+	 * Guarda os bitmaps em que fizemos resize para o tamanho da carta visual
+	 */
 	private static Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
 
 	/**
-	 * Valor da carta que este objeto representa. Se for null, é uma carta
+	 * Carta do jogo que este objeto representa. Se for null, é uma carta
 	 * "fechada", isto é, que aparece virada para baixo na mesa
 	 */
-	private String valor = null;
+	private Carta carta;
 
+	/**
+	 * Bitmap (já no tamanho certo) para esta carta
+	 */
 	private Bitmap bitmap = null;
 
 	/**

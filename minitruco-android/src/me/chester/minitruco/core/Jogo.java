@@ -3,6 +3,8 @@ package me.chester.minitruco.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.chester.minitruco.android.JogadorHumano;
+
 /*
  * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
@@ -353,6 +355,19 @@ public abstract class Jogo implements Runnable {
 		jogoFinalizado = true;
 		for (Interessado interessado : interessados) {
 			interessado.jogoAbortado(posicao);
+		}
+	}
+
+	/**
+	 * Recupera, se existir, o jogador humano deste jogo na posição 1
+	 * 
+	 * @return o JogadorHumano, ou <code>null</code> se não houver nenhum
+	 */
+	public JogadorHumano getJogadorHumano() {
+		if (jogadores[0] instanceof JogadorHumano) {
+			return (JogadorHumano) jogadores[0];
+		} else {
+			return null;
 		}
 	}
 
