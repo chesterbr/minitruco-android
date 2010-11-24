@@ -6,11 +6,10 @@ import me.chester.minitruco.core.Interessado;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 /**
@@ -27,7 +26,22 @@ public class Partida extends Activity implements Interessado {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.partida);
 		mesa = (MesaView) findViewById(R.id.MesaView01);
-		CartaVisual.resources = getResources();
+		// Inicializa componentes das classes visuais que dependem de métodos
+		// disponíveis exclusivamente na Activity
+		if (MesaView.iconesRodadas == null) {
+			MesaView.iconesRodadas = new Bitmap[4];
+			MesaView.iconesRodadas[0] = ((BitmapDrawable) getResources()
+					.getDrawable(R.drawable.placarrodada0)).getBitmap();
+			MesaView.iconesRodadas[1] = ((BitmapDrawable) getResources()
+					.getDrawable(R.drawable.placarrodada1)).getBitmap();
+			MesaView.iconesRodadas[2] = ((BitmapDrawable) getResources()
+					.getDrawable(R.drawable.placarrodada2)).getBitmap();
+			MesaView.iconesRodadas[3] = ((BitmapDrawable) getResources()
+					.getDrawable(R.drawable.placarrodada3)).getBitmap();
+		}
+		if (CartaVisual.resources == null) {
+			CartaVisual.resources = getResources();
+		}
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.
@@ -39,6 +53,7 @@ public class Partida extends Activity implements Interessado {
 			Log.w("Activity.onCreate",
 					"Partida iniciada sem jogo (ok para testes)");
 		}
+
 	}
 
 	public MesaView mesa;
@@ -89,6 +104,9 @@ public class Partida extends Activity implements Interessado {
 
 	public void inicioMao() {
 		MesaView.aguardaFimAnimacoes();
+		for (int i = 0; i <= 2; i++) {
+			mesa.resultadoRodada[i] = 0;
+		}
 		mesa.distribuiMao();
 	}
 
@@ -108,6 +126,8 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
+		mesa.placar[0] = pontosEquipe[0];
+		mesa.placar[1] = pontosEquipe[1];
 		MesaView.aguardaFimAnimacoes();
 		mesa.recolheMao();
 
@@ -127,6 +147,7 @@ public class Partida extends Activity implements Interessado {
 			Jogador jogadorQueTorna) {
 		print("Rodada " + numRodada + "fechada. Resultado:" + resultado
 				+ ". Quem torna: J" + jogadorQueTorna.getPosicao());
+		mesa.resultadoRodada[numRodada - 1] = resultado;
 		// TODO Auto-generated method stub
 
 	}

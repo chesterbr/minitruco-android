@@ -1,11 +1,16 @@
 package me.chester.minitruco.android;
 
 import java.util.Date;
+import java.util.Vector;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogo;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -285,6 +290,7 @@ public class MesaView extends View {
 				c.movePara(leftBaralho, topBaralho, 100);
 				c.setCarta(null);
 				c.descartada = false;
+				cartasJogadas.remove(c);
 			}
 		}
 	}
@@ -320,9 +326,6 @@ public class MesaView extends View {
 		topFinal += System.currentTimeMillis() % 5 - 2;
 		leftFinal += System.currentTimeMillis() % 5 - 2;
 
-		// Sinaliza para evitar escolhas futuras desta carta;
-		// cartasJogadas.addElement(c);
-
 		// Pega uma carta visual naquela posição...
 		CartaVisual cv = null;
 		for (int i = 0; i <= 2; i++) {
@@ -342,6 +345,7 @@ public class MesaView extends View {
 		cv.setCarta(c);
 		cv.movePara(leftFinal, topFinal, 200);
 		cv.descartada = true;
+		cartasJogadas.addElement(cv);
 
 	}
 
@@ -358,11 +362,27 @@ public class MesaView extends View {
 		// cartas[i].draw(canvas);
 		// }
 		// }
+
+		// Desenha as cartas que já foram jogadas (se houverem),
+		// na ordem em que foram jogadas
+		for (int i = 0; i < cartasJogadas.size(); i++) {
+			cartasJogadas.elementAt(i).draw(canvas);
+		}
+
+		// Desenha as cartas restantes.
 		for (CartaVisual carta : cartas) {
-			if (carta != null) {
+			if (carta != null && !cartasJogadas.contains(carta)) {
 				carta.draw(canvas);
 			}
 		}
+
+		// // Desenha a carta destacada por cima das outras, com uma firula
+		// Carta cv = cartaVencedora;
+		// if (cv != null) {
+		// cv.desenhaCarta(g);
+		// cv.destacaVitoriosa(g);
+		// }
+
 		// for (CartaVisual[] cartasJogador : cartasJogadores) {
 		// for (CartaVisual carta : cartasJogador) {
 		// if (carta != null) {
@@ -371,9 +391,41 @@ public class MesaView extends View {
 		// }
 		// }
 
+		// Pontuação
+		Paint p = new Paint();
+		p.setColor(Color.BLACK);
+		p.setTextAlign(Align.LEFT);
+		canvas.drawText("Nós: " + placar[0], MARGEM, getHeight() - MARGEM, p);
+		p.setTextAlign(Align.RIGHT);
+		canvas.drawText("Eles: " + placar[1], getWidth() - MARGEM, MARGEM
+				+ p.getTextSize(), p);
+
+		// ícones das rodadas
+		if (iconesRodadas != null) {
+			for (int i = 0; i <= 2; i++) {
+				canvas.drawBitmap(iconesRodadas[resultadoRodada[i]], MARGEM + i
+						* (2 + iconesRodadas[0].getWidth()), MARGEM + 1, p);
+			}
+		}
+
 		Balao.draw(canvas);
 
 	}
+
+	/**
+	 * Placar atual do jogo
+	 */
+	int[] placar = new int[2];
+
+	/**
+	 * Cache dos ícones que informam o resultado das rodadas
+	 */
+	public static Bitmap[] iconesRodadas;
+
+	/**
+	 * Resultado das rodadas (0=não jogada; 1=vitória; 2=derrota; 3=empate)
+	 */
+	protected int[] resultadoRodada = { 0, 0, 0 };
 
 	/**
 	 * Margem entre a mesa e as cartas
@@ -409,4 +461,10 @@ public class MesaView extends View {
 	 * Jogo em que a mesa está interagindo
 	 */
 	public static Jogo jogo;
+
+	/**
+	 * Guarda as cartas que foram jogadas pelos jogadores (para saber em que
+	 * ordem desenhar)
+	 */
+	private Vector<CartaVisual> cartasJogadas = new Vector<CartaVisual>(12);
 }
