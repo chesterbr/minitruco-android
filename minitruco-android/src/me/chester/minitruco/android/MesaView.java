@@ -135,44 +135,38 @@ public class MesaView extends View {
 		return false;
 	}
 
+	private long calcTempoAteFimAnimacaoMS() {
+		return animandoAte.getTime() - (new Date()).getTime();
+	}
+
 	/**
 	 * Thread/runnable que faz as animações acontecerem.
 	 * <p>
 	 */
 	Thread animacaoJogo = new Thread(new Runnable() {
 
-		private static final int FPS = 20;
-
-		// O loop tem uma fase de "baixo consumo" que espera uma animação
-		// acontecer, e uma mais agressiva. Eventualmente ele vai ficar na
-		// segunda fase um pouco a mais do que o necessário (pois não está
-		// contando o tempo de animar em si), mas é melhor errar pra cima.
+		// Para economizar CPU/bateria, o jogo trabalha a um máximo de 4 FPS
+		// (1000/(200+50)) quando não tem nenhuma animação rolando, e sobe para
+		// um máximo de 20 FPS (1000/50) quando tem (é sempre um pouco menos
+		// porque periga não ter dado tempo de redesenhar a tela entre um
+		// postInvalidate() e outro.
 		public void run() {
-			int tempoFrame = 1000 / FPS;
 			while (MenuPrincipal.jogo != null) {
-				// Nenhuma animação rolando - aguarda alguém sinalizar
-				comecouAnimacao = false;
-				while (!comecouAnimacao) {
-					try {
-						Thread.sleep(tempoFrame);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				// Estamos animando!
-				long milisecsAteFimAnimacao;
-				while ((milisecsAteFimAnimacao = animandoAte.getTime()
-						- (new Date()).getTime()) > 0) {
-					for (int i = 0; i < milisecsAteFimAnimacao; i += tempoFrame) {
-						postInvalidate();
-						try {
-							Thread.sleep(tempoFrame);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
+				sleep(200);
+				do {
+					postInvalidate();
+					sleep(50);
+				} while (calcTempoAteFimAnimacaoMS() >= 0);
 			}
+		}
+
+		private void sleep(int tempoMS) {
+			try {
+				Thread.sleep(tempoMS);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
 		}
 	});
 
