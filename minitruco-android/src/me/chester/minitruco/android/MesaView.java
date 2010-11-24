@@ -99,15 +99,11 @@ public class MesaView extends View {
 				}
 			}
 
-			// Posiciona as cartas decorativas do baralho
-			cartas[1].movePara(leftBaralho + 2, topBaralho + 2);
-			cartas[0].movePara(leftBaralho + 4, topBaralho + 4);
-
-			/*
-			 * topCartaDaMesa = c.top; leftCartaDaMesa = c.left -
-			 * CartaVisual.largura * 3 / 5; // TODO // ajustar // (era 5 p/ //
-			 * cartas // grandes, // 4 p/ // pequenas
-			 */
+			// Posiciona as cartas decorativas do baralho e o vira
+			cartas[0].visible = false;
+			cartas[0].movePara(leftBaralho - 16, topBaralho - 4);
+			cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
+			cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
 
 			// Inicia a thread que vai cuidar das animações (acho)
 			animacaoJogo.start();
@@ -192,8 +188,6 @@ public class MesaView extends View {
 	 *         <code>null</code>, elas vêm fechadas como as dos outros
 	 */
 	public void distribuiMao() {
-		// Limpa a mesa
-		// mesa.limpa();
 
 		// Distribui as cartas em círculo
 		for (int i = 0; i <= 2; i++) {
@@ -207,10 +201,11 @@ public class MesaView extends View {
 			}
 		}
 
-		// // Distribui a carta da mesa (se for manilha nova)
-		// if (!jogo.isManilhaVelha()) {
-		// mesa.distribuiCartaDaMesa(jogo.cartaDaMesa);
-		// }
+		// Abre o vira, se for manilha nova
+		if (!jogo.isManilhaVelha()) {
+			cartas[0].setCarta(jogo.cartaDaMesa);
+			cartas[0].visible = true;
+		}
 		//
 		// // Atualiza o placar
 		// mesa.atualizaPlacar(pontosNos, pontosEles);
@@ -281,9 +276,10 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Recolhe as cartas jogadas de volta para o baralho
+	 * Recolhe o vira e as cartas jogadas de volta para o baralho
 	 */
 	public void recolheMao() {
+		cartas[0].visible = false;
 		for (int i = 4; i <= 15; i++) {
 			CartaVisual c = cartas[i];
 			if ((c.top != topBaralho) || (c.left != leftBaralho)) {

@@ -121,6 +121,9 @@ public class CartaVisual {
 	 * @param canvas
 	 */
 	public void draw(Canvas canvas) {
+		if (!visible) { 
+			return;
+		}
 		// Se a carta não chegou ao destino, avançamos ela direção e na
 		// velocidade necessárias para atingi-lo no momento desejado. Se
 		// passamos desse momento, movemos ela direto para o destino.
@@ -286,6 +289,11 @@ public class CartaVisual {
 	 * (ou é decorativa/vira)
 	 */
 	public boolean descartada = false;
+
+	/**
+	 * Se false, não mostra a carta
+	 */
+	public boolean visible = true;
 
 	/**
 	 * Acessor dos resources da aplicação (deve ser setado antes de chamar
