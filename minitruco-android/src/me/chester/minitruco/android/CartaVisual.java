@@ -106,9 +106,8 @@ public class CartaVisual {
 		MesaView.aguardaFimAnimacoes();
 		this.destLeft = left;
 		this.destTop = top;
-		ultimoTime = new Date();
-		destTime = new Date();
-		destTime.setTime(destTime.getTime() + tempoMS);
+		ultimoTime = System.currentTimeMillis();
+		destTime = ultimoTime + tempoMS;
 		MesaView.notificaAnimacao(destTime);
 	}
 
@@ -121,21 +120,21 @@ public class CartaVisual {
 	 * @param canvas
 	 */
 	public void draw(Canvas canvas) {
-		if (!visible) { 
+		if (!visible) {
 			return;
 		}
 		// Se a carta não chegou ao destino, avançamos ela direção e na
 		// velocidade necessárias para atingi-lo no momento desejado. Se
 		// passamos desse momento, movemos ela direto para o destino.
 		if (left != destLeft || top != destTop) {
-			Date agora = new Date();
-			if (agora.before(destTime)) {
-				double passado = agora.getTime() - ultimoTime.getTime();
-				double total = destTime.getTime() - ultimoTime.getTime();
+			long agora = System.currentTimeMillis();
+			if (agora < destTime) {
+				double passado = agora - ultimoTime;
+				double total = destTime - ultimoTime;
 				double ratio = passado / total;
 				left += (int) ((destLeft - left) * ratio);
 				top += (int) ((destTop - top) * ratio);
-				ultimoTime = new Date();
+				ultimoTime = System.currentTimeMillis();
 			} else {
 				movePara(destLeft, destTop);
 			}
@@ -276,13 +275,13 @@ public class CartaVisual {
 	/**
 	 * Momento em que a animação deve se encerrar
 	 */
-	private Date destTime = new Date();
+	private long destTime = System.currentTimeMillis();
 
 	/**
 	 * Momento em que a carta avançou para o valor atual de x e y (em uma
 	 * animação)
 	 */
-	private Date ultimoTime = new Date();
+	private long ultimoTime = System.currentTimeMillis();
 
 	/**
 	 * Se true, a carta foi lançada à mesa. Se false, está na mão de um jogador

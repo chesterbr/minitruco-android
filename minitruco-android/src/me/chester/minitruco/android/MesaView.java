@@ -1,6 +1,5 @@
 package me.chester.minitruco.android;
 
-import java.util.Date;
 import java.util.Vector;
 
 import me.chester.minitruco.core.Carta;
@@ -47,9 +46,8 @@ public class MesaView extends View {
 	 * @param fim
 	 *            timestamp de quando a animação vai acabar
 	 */
-	public static void notificaAnimacao(Date fim) {
-		comecouAnimacao = true;
-		if (animandoAte.before(fim)) {
+	public static void notificaAnimacao(long fim) {
+		if (animandoAte < fim) {
 			animandoAte = fim;
 		}
 	}
@@ -59,8 +57,8 @@ public class MesaView extends View {
 	 */
 	public static void aguardaFimAnimacoes() {
 		long milisecAteFimAnimacao;
-		while ((milisecAteFimAnimacao = animandoAte.getTime()
-				- (new Date()).getTime()) > 0) {
+		while ((milisecAteFimAnimacao = animandoAte
+				- System.currentTimeMillis()) > 0) {
 			try {
 				Thread.sleep(milisecAteFimAnimacao);
 			} catch (InterruptedException e) {
@@ -137,7 +135,7 @@ public class MesaView extends View {
 	}
 
 	private long calcTempoAteFimAnimacaoMS() {
-		return animandoAte.getTime() - (new Date()).getTime();
+		return animandoAte - System.currentTimeMillis();
 	}
 
 	/**
@@ -254,12 +252,6 @@ public class MesaView extends View {
 			break;
 		default:
 			leftFinal = topFinal = 0;
-			// Carta da mesa
-			// leftFinal = leftCartaDaMesa;
-			// topFinal = topCartaDaMesa;
-			// c.setVirada(true);
-			// c.setCartaEmJogo(false);
-			// break;
 		}
 
 		// Para o jogador da posição superior, inverte a ordem
@@ -404,8 +396,9 @@ public class MesaView extends View {
 			}
 		}
 
+		// Balãozinho (se alguém estiver falando algo)
 		Balao.draw(canvas);
-
+		
 	}
 
 	/**
@@ -434,19 +427,9 @@ public class MesaView extends View {
 	private int topBaralho, leftBaralho;
 
 	/**
-	 * Posição da carta virada na mesa
-	 */
-	private int topCartaDaMesa, leftCartaDaMesa;
-
-	/**
 	 * Timestamp em que as animações em curso irão acabar
 	 */
-	private static Date animandoAte = new Date();
-
-	/**
-	 * Diz se a thread animadora deve começar a invalidar
-	 */
-	private static boolean comecouAnimacao = false;
+	private static long animandoAte = System.currentTimeMillis();
 
 	/**
 	 * Diz se é a vez do jogador humano dessa mesa
@@ -463,4 +446,6 @@ public class MesaView extends View {
 	 * ordem desenhar)
 	 */
 	private Vector<CartaVisual> cartasJogadas = new Vector<CartaVisual>(12);
+
+
 }

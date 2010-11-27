@@ -21,7 +21,7 @@ public class Balao {
 
 	private static String frase = null;
 
-	private static Date timestampFim = new Date();
+	private static long timestampFim = System.currentTimeMillis();
 
 	private static int posicao = 1;
 
@@ -36,7 +36,7 @@ public class Balao {
 	 *            tempo em que ela aparecerá
 	 */
 	public static void diz(String frase, int posicao, int tempoMS) {
-		Balao.timestampFim.setTime((new Date()).getTime() + tempoMS);
+		Balao.timestampFim = System.currentTimeMillis() + tempoMS;
 		Balao.frase = frase;
 		Balao.posicao = posicao;
 		MesaView.notificaAnimacao(Balao.timestampFim);
@@ -49,9 +49,7 @@ public class Balao {
 	 *            canvas onde ele será (ou não) desenhado.
 	 */
 	public static void draw(Canvas canvas) {
-		Log.i("draw", "" + new Date());
-		Log.i("draw", "" + timestampFim);
-		if (frase != null && timestampFim.after(new Date())) {
+		if (frase != null && timestampFim > System.currentTimeMillis()) {
 
 			// Determina o tamanho e a posição do balão e o quadrante da
 			// ponta
