@@ -176,11 +176,8 @@ public class Partida extends Activity implements Interessado {
 
 	public void rodadaFechada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
-		print("Rodada " + numRodada + "fechada. Resultado:" + resultado
-				+ ". Quem torna: J" + jogadorQueTorna.getPosicao());
-		mesa.resultadoRodada[numRodada - 1] = resultado;
-		// TODO Auto-generated method stub
-
+		MesaView.aguardaFimAnimacoes();
+		mesa.mostraPlacar(numRodada, resultado, jogadorQueTorna);
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {

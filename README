@@ -11,8 +11,6 @@ A licença será GPLv3, pois trata-se de um "fork" do miniTruco original.
 Backlog
 -------
 
-- Destacar carta vencedora
-- Piscar placar no final da rodada
 - Piscar placar no final da mão
 - Fechar o diálogo de aceite de aumento se o parceiro acertar
 - Introuduzir textos apropriados para seis/9/12
@@ -24,3 +22,4 @@ Backlog
 - Fechar o jogo no fim da partida
 - Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
 - Acertar ciclo de vida da Activity
+- verificar tempos de piscada (acho que tá ok, mas...)

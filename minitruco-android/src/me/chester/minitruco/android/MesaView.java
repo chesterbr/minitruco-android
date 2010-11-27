@@ -3,6 +3,7 @@ package me.chester.minitruco.android;
 import java.util.Vector;
 
 import me.chester.minitruco.core.Carta;
+import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -113,6 +114,22 @@ public class MesaView extends View {
 			// Balao.diz("rosquinha", 1, 100000);
 
 		}
+	}
+
+	/**
+	 * Recupera a carta visual correspondente a uma carta do jogo.
+	 * 
+	 * @param c
+	 *            carta do jogo
+	 * @return Carta visual com o valor desta, ou <code>null</code> se não achar
+	 */
+	public CartaVisual getCartaVisual(Carta c) {
+		for (CartaVisual cv : cartas) {
+			if (c.equals(cv.getCarta())) {
+				return cv;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -388,17 +405,27 @@ public class MesaView extends View {
 		canvas.drawText("Eles: " + placar[1], getWidth() - MARGEM, MARGEM
 				+ p.getTextSize(), p);
 
-		// ícones das rodadas
+		// Ícones das rodadas
+		long agora = System.currentTimeMillis();
+		if (agora > rodadaPiscaAte && cartaQueFez != null) {
+			cartaQueFez.destacada = false;
+			rodadaPiscando = 0;
+		}
 		if (iconesRodadas != null) {
 			for (int i = 0; i <= 2; i++) {
-				canvas.drawBitmap(iconesRodadas[resultadoRodada[i]], MARGEM + i
-						* (2 + iconesRodadas[0].getWidth()), MARGEM + 1, p);
+				// Desenha se não for a rodada piscando, ou, se for, alterna o
+				// desenho a cada 250ms
+				if (i != (rodadaPiscando - 1) || (agora % 250) % 2 == 0) {
+					canvas.drawBitmap(iconesRodadas[resultadoRodada[i]], MARGEM
+							+ i * (2 + iconesRodadas[0].getWidth()),
+							MARGEM + 1, p);
+				}
 			}
 		}
 
 		// Balãozinho (se alguém estiver falando algo)
 		Balao.draw(canvas);
-		
+
 	}
 
 	/**
@@ -447,5 +474,35 @@ public class MesaView extends View {
 	 */
 	private Vector<CartaVisual> cartasJogadas = new Vector<CartaVisual>(12);
 
+	private int rodadaPiscando = 0;
+
+	private long rodadaPiscaAte = System.currentTimeMillis();
+
+	/**
+	 * Carta que "fez" a última rodada (para fins de destaque)
+	 */
+	private CartaVisual cartaQueFez;
+
+	/**
+	 * Mostra o resultado de uma rodada, destacando a carta vencedora e animando
+	 * durante alguns segundos.
+	 * 
+	 * @param numRodada
+	 *            rodada que finalizou
+	 * @param resultado
+	 *            (0 a 3, vide {@link #resultadoRodada}
+	 * @param jogadorQueTorna
+	 *            jogador cuja carta venceu a rodada
+	 */
+	public void mostraPlacar(int numRodada, int resultado,
+			Jogador jogadorQueTorna) {
+		cartaQueFez = getCartaVisual(jogo.getCartasDaRodada(numRodada)[jogadorQueTorna
+				.getPosicao() - 1]);
+		cartaQueFez.destacada = true;
+		resultadoRodada[numRodada - 1] = resultado;
+		rodadaPiscando = numRodada;
+		rodadaPiscaAte = System.currentTimeMillis() + 1000;
+		notificaAnimacao(rodadaPiscaAte);
+	}
 
 }

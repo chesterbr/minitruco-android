@@ -149,6 +149,14 @@ public class CartaVisual {
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.STROKE);
 			canvas.drawRect(rect, paint);
+
+			if (destacada) {
+				paint.setColor(Color.BLUE);
+				canvas.drawRect(rect, paint);
+				rect.set(left + 1, top + 1, left + largura, top + altura);
+				canvas.drawRect(rect, paint);
+			}
+
 		}
 
 	}
@@ -293,6 +301,12 @@ public class CartaVisual {
 	 * Se false, não mostra a carta
 	 */
 	public boolean visible = true;
+
+	/**
+	 * Se true, desenha uma borda de destaque na carta (ex.: quando ela vence a
+	 * rodada)
+	 */
+	public boolean destacada = false;
 
 	/**
 	 * Acessor dos resources da aplicação (deve ser setado antes de chamar
