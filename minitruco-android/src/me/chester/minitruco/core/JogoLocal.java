@@ -1,5 +1,6 @@
 package me.chester.minitruco.core;
 
+import me.chester.minitruco.android.Partida;
 import android.util.Log;
 
 /*
@@ -217,6 +218,12 @@ public class JogoLocal extends Jogo {
 				setEquipeAguardandoMao11(1);
 				getJogador(1).informaMao11(getJogador(3).getCartas());
 				getJogador(3).informaMao11(getJogador(1).getCartas());
+				for (Interessado interessado : interessados) {
+					//TODO consertar gambi
+					if(interessado instanceof Partida) {
+						interessado.informaMao11(getJogador(3).getCartas());
+					}
+				}
 			} else {
 				setEquipeAguardandoMao11(2);
 				getJogador(2).informaMao11(getJogador(4).getCartas());
@@ -445,8 +452,8 @@ public class JogoLocal extends Jogo {
 				+ " quer jogar mao de 11 ");
 
 		// Avisa os outros jogadores da decisão
-		for (int i = 1; i <= 4; i++) {
-			getJogador(i).decidiuMao11(j, aceita);
+		for (Interessado interessado : interessados) {
+			interessado.decidiuMao11(j, aceita);
 		}
 
 		aguardandoRespostaMaoDe11[j.getPosicao() - 1] = false;

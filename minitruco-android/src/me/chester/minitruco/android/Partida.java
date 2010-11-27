@@ -84,7 +84,7 @@ public class Partida extends Activity implements Interessado {
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
 		MesaView.aguardaFimAnimacoes();
-		Balao.diz("desce", j.getPosicao(), 800);
+		Balao.diz("desce", j.getPosicao(), 1500);
 	}
 
 	public void cartaJogada(Jogador j, Carta c) {
@@ -95,8 +95,8 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void decidiuMao11(Jogador j, boolean aceita) {
-		// TODO Auto-generated method stub
-
+		MesaView.aguardaFimAnimacoes();
+		Balao.diz(aceita ? "Vamos jogar" : "Não quero", j.getPosicao(), 1500);
 	}
 
 	public void entrouNoJogo(Interessado i, Jogo j) {
@@ -105,7 +105,32 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void informaMao11(Carta[] cartasParceiro) {
-		// TODO Auto-generated method stub
+		MesaView.aguardaFimAnimacoes();
+		// TODO mostrar cartas do adversário
+
+		final Partida partida = this;
+		final JogadorHumano jogadorHumano = jogo.getJogadorHumano();
+		if (jogadorHumano != null) {
+			// handler.dispatchMessage(handler.obtainMessage(valor));
+			runOnUiThread(new Runnable() {
+				public void run() {
+					DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							jogo.decideMao11(jogadorHumano,
+									which == DialogInterface.BUTTON_POSITIVE);
+
+						}
+					};
+					AlertDialog.Builder builder = new AlertDialog.Builder(
+							partida);
+					builder.setMessage("Aceita mão de 11?")
+							.setPositiveButton("Sim", dialogClickListener)
+							.setNegativeButton("Não", dialogClickListener)
+							.show();
+				}
+
+			});
+		}
 
 	}
 
@@ -160,9 +185,10 @@ public class Partida extends Activity implements Interessado {
 
 					AlertDialog.Builder builder = new AlertDialog.Builder(
 							partida);
-					builder.setMessage("Aceita?").setPositiveButton("Sim",
-							dialogClickListener).setNegativeButton("Não",
-							dialogClickListener).show();
+					builder.setMessage("Aceita?")
+							.setPositiveButton("Sim", dialogClickListener)
+							.setNegativeButton("Não", dialogClickListener)
+							.show();
 				}
 
 			});
