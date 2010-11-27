@@ -6,10 +6,13 @@ import me.chester.minitruco.core.Interessado;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 /**
@@ -20,6 +23,8 @@ import android.util.Log;
  * 
  */
 public class Partida extends Activity implements Interessado {
+
+	protected static final int WHAT_TRUCO = 3;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,7 @@ public class Partida extends Activity implements Interessado {
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.
-		Jogo jogo = MenuPrincipal.jogo;
+		jogo = MenuPrincipal.jogo;
 		if (jogo != null) {
 			jogo.adiciona(this);
 			MesaView.jogo = jogo;
@@ -58,15 +63,17 @@ public class Partida extends Activity implements Interessado {
 
 	public MesaView mesa;
 
+	Jogo jogo;
+
 	// /**
 	// * Recebe mensagens (da view, principalmente) e executa usando a thread de
 	// * UI (senão o Android não deixa).
 	// */
 	// public final Handler handler = new Handler() {
 	// public void handleMessage(Message msg) {
-	// MesaView mesa = (MesaView) findViewById(R.id.MesaView01);
-	// if (msg.what == WHAT_INVALIDATE) {
-	// mesa.invalidate();
+	// // MesaView mesa = (MesaView) findViewById(R.id.MesaView01);
+	// if (msg.what == WHAT_TRUCO) {
+	//
 	// }
 	// }
 	// };
@@ -136,6 +143,30 @@ public class Partida extends Activity implements Interessado {
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		MesaView.aguardaFimAnimacoes();
 		Balao.diz("Truco!", j.getPosicao(), 1000 + 200 * (valor / 3));
+		MesaView.aguardaFimAnimacoes();
+		final Partida partida = this;
+		final JogadorHumano jogadorHumano = jogo.getJogadorHumano();
+		if (j.getEquipe() == 2 && jogadorHumano != null) {
+			// handler.dispatchMessage(handler.obtainMessage(valor));
+			runOnUiThread(new Runnable() {
+				public void run() {
+					DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							jogo.respondeAumento(jogadorHumano,
+									which == DialogInterface.BUTTON_POSITIVE);
+
+						}
+					};
+
+					AlertDialog.Builder builder = new AlertDialog.Builder(
+							partida);
+					builder.setMessage("Aceita?").setPositiveButton("Sim",
+							dialogClickListener).setNegativeButton("Não",
+							dialogClickListener).show();
+				}
+
+			});
+		}
 	}
 
 	public void recusouAumentoAposta(Jogador j) {
