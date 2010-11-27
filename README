@@ -1,7 +1,26 @@
+miniTruco Android
+-----------------
+
 Depois de muito tempo, finalmente comecei a versao Android do miniTruco.
 
-Por enquanto nao tem muita coisa, ainda estou "limpando a casa" das classes que trouxe. Da' pra acompanhar uma partida textualmente (ainda sem a parte de truco)se voce rodar os testes e chamar o adb logcat, mas estou organizando para que seja possivel fazer isso no celular em breve. Aguardem.
+Ainda está em desenvolvimento - o backlog abaixo informa as tarefas que faltam para uma versão "0.1"
 
-Update: da' pra ver no celular, se voce conseguir instalar
+A licença será GPLv3, pois trata-se de um "fork" do miniTruco original.
 
-Chester
+
+Backlog
+-------
+
+- Destacar carta vencedora
+- Piscar placar no final da rodada
+- Piscar placar no final da mão
+- Fechar o diálogo de aceite de aumento se o parceiro acertar
+- Introuduzir textos apropriados para seis/9/12
+- Introduzir textos aleatórios
+- Novo layout de cartas (compatível com telas pequenas)
+- Verificar evento de touch corretamente (qualquer evento tá descartando)
+- Pedir aumento
+- Jogar carta fechada
+- Fechar o jogo no fim da partida
+- Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
+- Acertar ciclo de vida da Activity
