@@ -1,11 +1,13 @@
 package me.chester.minitruco.android;
 
+import java.util.Random;
 import java.util.Vector;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -149,6 +151,84 @@ public class MesaView extends View {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Atualiza o resultado de uma rodada, destacando a carta vencedora e
+	 * piscando a rodada atual por um instante.
+	 * 
+	 * @param numRodada
+	 *            rodada que finalizou
+	 * @param resultado
+	 *            (0 a 3, vide {@link #resultadoRodada}
+	 * @param jogadorQueTorna
+	 *            jogador cuja carta venceu a rodada
+	 */
+	public void atualizaResultadoRodada(int numRodada, int resultado,
+			Jogador jogadorQueTorna) {
+		cartaQueFez = getCartaVisual(jogo.getCartasDaRodada(numRodada)[jogadorQueTorna
+				.getPosicao() - 1]);
+		cartaQueFez.destacada = true;
+		resultadoRodada[numRodada - 1] = resultado;
+		numRodadaPiscando = numRodada;
+		rodadaPiscaAte = System.currentTimeMillis() + 1000;
+		notificaAnimacao(rodadaPiscaAte);
+	}
+
+	/**
+	 * Atualiza os pontos da equipe, piscando quem sofreu alteração por um
+	 * instante.
+	 * 
+	 * @param novoPlacar
+	 *            nova pontuação para "nós" (elemento 0) e "eles" (elemento 1)
+	 */
+	public void atualizaPontosEquipe(int[] novoPlacar) {
+		if (placar[0] != novoPlacar[0]) {
+			nosPiscaAte = System.currentTimeMillis() + 1000;
+			notificaAnimacao(nosPiscaAte);
+		}
+		if (placar[1] != novoPlacar[1]) {
+			elesPiscaAte = System.currentTimeMillis() + 1000;
+			notificaAnimacao(elesPiscaAte);
+		}
+		placar[0] = novoPlacar[0];
+		placar[1] = novoPlacar[1];
+	}
+
+	/**
+	 * Torna as cartas da mão de 11 visíveis
+	 * 
+	 * @param cartasParceiro
+	 *            cartas do seu parceiro
+	 */
+	public void mostraCartasMao11(Carta[] cartasParceiro) {
+		for (int i = 0; i <= 2; i++) {
+			cartas[10 + i].setCarta(cartasParceiro[i]);
+		}
+	}
+
+	/**
+	 * Faz com que o balão mostre uma frase por um tempo para um jogador.
+	 * <p>
+	 * As frases estão no strings.xml no formato balao_<chave>, e são arrays de
+	 * strings (das quais uma será sorteada para exibição).
+	 * 
+	 * @param chave
+	 *            diz o tipo de texto que aparece no balão. Ex.: "aumento_3"
+	 *            para pedido de truco.
+	 * @param posicao
+	 *            posição (1 a 4) do jogador que "dirá" a frase
+	 * @param tempoMS
+	 *            tempo em que ela aparecerá
+	 */
+	public void diz(String chave, int posicao, int tempoMS) {
+		mostraBalaoAte = System.currentTimeMillis() + tempoMS;
+		Resources res = getResources();
+		String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_"
+				+ chave, "array", "me.chester.minitruco"));
+		fraseBalao = frasesBalao[(new Random()).nextInt(frasesBalao.length)];
+		posicaoBalao = posicao;
+		notificaAnimacao(mostraBalaoAte);
 	}
 
 	/**
@@ -593,77 +673,6 @@ public class MesaView extends View {
 	private long mostraBalaoAte = System.currentTimeMillis();
 
 	private String fraseBalao = null;
-
-	/**
-	 * Atualiza o resultado de uma rodada, destacando a carta vencedora e
-	 * piscando a rodada atual por um instante.
-	 * 
-	 * @param numRodada
-	 *            rodada que finalizou
-	 * @param resultado
-	 *            (0 a 3, vide {@link #resultadoRodada}
-	 * @param jogadorQueTorna
-	 *            jogador cuja carta venceu a rodada
-	 */
-	public void atualizaResultadoRodada(int numRodada, int resultado,
-			Jogador jogadorQueTorna) {
-		cartaQueFez = getCartaVisual(jogo.getCartasDaRodada(numRodada)[jogadorQueTorna
-				.getPosicao() - 1]);
-		cartaQueFez.destacada = true;
-		resultadoRodada[numRodada - 1] = resultado;
-		numRodadaPiscando = numRodada;
-		rodadaPiscaAte = System.currentTimeMillis() + 1000;
-		notificaAnimacao(rodadaPiscaAte);
-	}
-
-	/**
-	 * Atualiza os pontos da equipe, piscando quem sofreu alteração por um
-	 * instante.
-	 * 
-	 * @param novoPlacar
-	 *            nova pontuação para "nós" (elemento 0) e "eles" (elemento 1)
-	 */
-	public void atualizaPontosEquipe(int[] novoPlacar) {
-		if (placar[0] != novoPlacar[0]) {
-			nosPiscaAte = System.currentTimeMillis() + 1000;
-			notificaAnimacao(nosPiscaAte);
-		}
-		if (placar[1] != novoPlacar[1]) {
-			elesPiscaAte = System.currentTimeMillis() + 1000;
-			notificaAnimacao(elesPiscaAte);
-		}
-		placar[0] = novoPlacar[0];
-		placar[1] = novoPlacar[1];
-	}
-
-	/**
-	 * Torna as cartas da mão de 11 visíveis
-	 * 
-	 * @param cartasParceiro
-	 *            cartas do seu parceiro
-	 */
-	public void mostraCartasMao11(Carta[] cartasParceiro) {
-		for (int i = 0; i <= 2; i++) {
-			cartas[10 + i].setCarta(cartasParceiro[i]);
-		}
-	}
-
-	/**
-	 * Faz com que o balão mostre uma frase por um tempo para um jogador
-	 * 
-	 * @param frase
-	 *            texto no balão
-	 * @param posicao
-	 *            posição (1 a 4) do jogador que "dirá" a frase
-	 * @param tempoMS
-	 *            tempo em que ela aparecerá
-	 */
-	public void diz(String frase, int posicao, int tempoMS) {
-		mostraBalaoAte = System.currentTimeMillis() + tempoMS;
-		fraseBalao = frase;
-		posicaoBalao = posicao;
-		notificaAnimacao(mostraBalaoAte);
-	}
 
 	/**
 	 * Desenha a parte gráfica do balão (sem o texto). É chamada várias vezes

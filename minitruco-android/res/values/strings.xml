@@ -1,51 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Use o log (adb logcat no SDK) para debugar</string>
-    <string name="app_name">miniTruco</string>
-    <string name="balao.aumento.3.1">Truco!</string>
-    <string name="balao.aumento.3.2">Truco ladrão!</string>
-    <string name="balao.aumento.3.3">É truco mesmo!</string>
-    <string name="balao.aumento.3.4">Truuuco!</string>
-    <string name="balao.aumento.3.5">Truco na cabeça!</string>
-    <string name="balao.aumento.3.6">É truco!</string>
-    <string name="balao.aumento.6.1">Seis!</string>
-    <string name="balao.aumento.6.2">Meio-pau!</string>
-    <string name="balao.aumento.6.3">Seeeeeis!</string>
-    <string name="balao.aumento.6.4">Seeeeis na lata!</string>
-    <string name="balao.aumento.6.5">Toma seis!</string>
-    <string name="balao.aumento.6.6">SEEEEEEEEIS</string>
-    <string name="balao.aumento.9.1">Nove!</string>
-    <string name="balao.aumento.9.2">Nooooove!</string>
-    <string name="balao.aumento.9.3">Nove na cabeça!</string>
-    <string name="balao.aumento.9.4">É nove!</string>
-    <string name="balao.aumento.12.1">Doze!</string>
-    <string name="balao.aumento.12.2">É doze!</string>
-    <string name="balao.aumento.12.3">Doze sem piedade!</string>
-    <string name="balao.aumento.sim.1">Desce!</string>
-    <string name="balao.aumento.sim.2">Manda bala!</string>
-    <string name="balao.aumento.sim.3">Vamos nessa!</string>
-    <string name="balao.aumento.sim.4">Vamos ver.</string>
-    <string name="balao.aumento.sim.5">Quero ver.</string>
-    <string name="balao.aumento.sim.6">Desce ladrão!</string>
-    <string name="balao.aumento.nao.1">Tô fora.</string>
-    <string name="balao.aumento.nao.2">Não quero.</string>
-    <string name="balao.aumento.nao.3">Não.</string>
-    <string name="balao.aumento.nao.4">Nem pensar.</string>
-    <string name="balao.vitoria.1">Foi fácil demais!!!</string>
-    <string name="balao.vitoria.2">Toooooomem!</string>
-    <string name="balao.vitoria.3">Que lavada!</string>
-    <string name="balao.derrota.1">:-(</string>
-    <string name="balao.derrota.2">Ok...</string>
-    <string name="balao.derrota.3">Raios!</string>
-    <string name="balao.mao11.sim.1">Vamos jogar!</string>
-    <string name="balao.mao11.sim.2">Vamos nessa!</string>
-    <string name="balao.mao11.sim.3">Tô dentro.</string>
-    <string name="balao.mao11.nao.1">Não quero.</string>
-    <string name="balao.mao11.nao.2">Que lixo!</string>
-    <string name="balao.mao11.nao.3">Não.</string>
-    <string name="balao.mao11.nao.4">Nem pensar.</string>
-    <string name="balao.mao11.nao.5">Tô fora.</string>    
-    
-    
-    
+	<string name="hello">Use o log (adb logcat no SDK) para debugar</string>
+	<string name="app_name">miniTruco</string>
+	<string-array name="balao_aumento_3">
+		<item>Truco!</item>
+		<item>Truco ladrão!</item>
+		<item>É truco mesmo!</item>
+		<item>Truuuco!</item>
+		<item>Truco na cabeça!</item>
+		<item>É truco!</item>
+	</string-array>
+	<string-array name="balao_aumento_6">
+		<item>Seis!</item>
+		<item>Meio-pau!</item>
+		<item>Seeeeeis!</item>
+		<item>Seeeeis na lata!</item>
+		<item>Toma seis!</item>
+		<item>SEEEEEEEEIS</item>
+	</string-array>
+	<string-array name="balao_aumento_9">
+		<item>Nove!</item>
+		<item>Nooooove!</item>
+		<item>Nove na cabeça!</item>
+		<item>É nove!</item>
+	</string-array>
+	<string-array name="balao_aumento_12">
+		<item>Doze!</item>
+		<item>É doze!</item>
+		<item>Doze sem piedade!</item>
+	</string-array>
+	<string-array name="balao_aumento_sim">
+		<item>Desce!</item>
+		<item>Manda bala!</item>
+		<item>Vamos nessa!</item>
+		<item>Vamos ver.</item>
+		<item>Quero ver.</item>
+		<item>Desce ladrão!</item>
+	</string-array>
+	<string-array name="balao_aumento_nao">
+		<item>Tô fora.</item>
+		<item>Não quero.</item>
+		<item>Não.</item>
+		<item>Nem pensar.</item>
+	</string-array>
+	<string-array name="balao_vitoria">
+		<item>Foi fácil demais!!!</item>
+		<item>Toooooomem!</item>
+		<item>Que lavada!</item>
+	</string-array>
+	<string-array name="balao_derrota">
+		<item>:-(</item>
+		<item>Ok...</item>
+		<item>Raios!</item>
+	</string-array>
+	<string-array name="balao_mao11_sim">
+		<item>Vamos jogar!</item>
+		<item>Vamos nessa!</item>
+		<item>Tô dentro.</item>
+	</string-array>
+	<string-array name="balao_mao11_nao">
+		<item>Não quero.</item>
+		<item>Que lixo!</item>
+		<item>Não.</item>
+		<item>Nem pensar.</item>
+		<item>Tô fora.</item>
+	</string-array>
+
+
+
 </resources>

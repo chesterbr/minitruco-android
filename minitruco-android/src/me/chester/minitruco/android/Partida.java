@@ -61,7 +61,7 @@ public class Partida extends Activity implements Interessado {
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
 		getMesa().aguardaFimAnimacoes();
-		getMesa().diz("desce", j.getPosicao(), 1500);
+		getMesa().diz("aumento_sim", j.getPosicao(), 1500);
 	}
 
 	public void cartaJogada(Jogador j, Carta c) {
@@ -75,7 +75,7 @@ public class Partida extends Activity implements Interessado {
 			decidiuMao11 = aceita;
 		getMesa().aguardaFimAnimacoes();
 		getMesa().mostrarPerguntaMao11 = false;
-		getMesa().diz(aceita ? "Vamos jogar" : "Não quero", j.getPosicao(), 1500);
+		getMesa().diz(aceita ? "mao11_sim" : "mao11_nao", j.getPosicao(), 1500);
 	}
 
 	public void entrouNoJogo(Interessado i, Jogo j) {
@@ -113,10 +113,8 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void jogoFechado(int numEquipeVencedora) {
-		// TODO fim de jogo, anunciar
-		Log
-				.i("Partida", "Jogo fechado. Equipe vencedora:"
-						+ numEquipeVencedora);
+		mesa.aguardaFimAnimacoes();
+		mesa.diz(numEquipeVencedora == 1 ? "vitoria" : "derrota", 1, 10000);
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
@@ -129,7 +127,8 @@ public class Partida extends Activity implements Interessado {
 
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		getMesa().aguardaFimAnimacoes();
-		getMesa().diz("Truco!", j.getPosicao(), 1500 + 200 * (valor / 3));
+		getMesa().diz("aumento_" + valor, j.getPosicao(),
+				1500 + 200 * (valor / 3));
 		if (j.getEquipe() == 2 && jogo.getJogadorHumano() != null) {
 			getMesa().mostrarPerguntaAumento = true;
 		}
@@ -137,7 +136,7 @@ public class Partida extends Activity implements Interessado {
 
 	public void recusouAumentoAposta(Jogador j) {
 		getMesa().aguardaFimAnimacoes();
-		getMesa().diz("não quero", j.getPosicao(), 1300);
+		getMesa().diz("aumento_nao", j.getPosicao(), 1300);
 	}
 
 	public void rodadaFechada(int numRodada, int resultado,
@@ -145,7 +144,8 @@ public class Partida extends Activity implements Interessado {
 		getMesa().mostrarPerguntaMao11 = false;
 		getMesa().mostrarPerguntaAumento = false;
 		getMesa().aguardaFimAnimacoes();
-		getMesa().atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
+		getMesa()
+				.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {

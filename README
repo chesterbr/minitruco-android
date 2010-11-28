@@ -11,20 +11,24 @@ A licença será GPLv3, pois trata-se de um "fork" do miniTruco original.
 Backlog
 -------
 
-- Introuduzir textos apropriados para seis/9/12
-- Introduzir textos aleatórios
+Features:
 - Pedir aumento
 - Jogar carta fechada
-- Fechar o jogo no fim da partida
 - Novo layout de cartas (compatível com telas pequenas)
 
+Débito Técnico:
 - Decidir quais estratégias entram, e como  
 - Bug: Verificar evento de touch corretamente (qualquer evento tá descartando)
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - Bug: verificar tempos de piscada (acho que tá ok, mas...)
+- Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
+- Acertar ciclo de vida da Activity
+- Reintroduzir testes da parte visual (que não funcionam mais por
+  usarmos o Robolectric)
+
+Nice to have:
+- Opção de reinício no fim da partida (e talvez alguma firula extra)
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
 - Refactor: fazer Carta e CartaVisual serem uma coisa só (ou uma herdar a outra)
-- Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
-- Acertar ciclo de vida da Activity

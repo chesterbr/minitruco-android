@@ -225,7 +225,7 @@ public class JogoTest extends TestCase {
 	public void testTimingBalaoCorreto() throws InterruptedException {
 		Log.i("JogoTest", "Inicializa dates p/ nao atrapalhar o timing"
 				+ new Date());
-		mesa.diz("truco", 1, 1000);
+		mesa.diz("aumento_3", 1, 1000);
 		// Na primeira e segunda vez, algum desenho deve ser feito
 		try {
 			mesa.draw(null);
