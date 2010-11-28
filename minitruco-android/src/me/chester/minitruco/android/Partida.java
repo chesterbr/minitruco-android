@@ -149,9 +149,9 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
-		mesa.placar[0] = pontosEquipe[0];
-		mesa.placar[1] = pontosEquipe[1];
 		MesaView.aguardaFimAnimacoes();
+		mesa.atualizaPontosEquipe(pontosEquipe);
+		MesaView.aguardaFimAnimacoes();		
 		mesa.recolheMao();
 
 	}
@@ -171,8 +171,10 @@ public class Partida extends Activity implements Interessado {
 
 	public void rodadaFechada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
+		mesa.mostrarPerguntaMao11 = false;
+		mesa.mostrarPerguntaAumento = false;
 		MesaView.aguardaFimAnimacoes();
-		mesa.mostraPlacar(numRodada, resultado, jogadorQueTorna);
+		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {

@@ -456,42 +456,32 @@ public class MesaView extends View {
 			}
 		}
 
-		// // Desenha a carta destacada por cima das outras, com uma firula
-		// Carta cv = cartaVencedora;
-		// if (cv != null) {
-		// cv.desenhaCarta(g);
-		// cv.destacaVitoriosa(g);
-		// }
-
-		// for (CartaVisual[] cartasJogador : cartasJogadores) {
-		// for (CartaVisual carta : cartasJogador) {
-		// if (carta != null) {
-		// carta.draw(canvas);
-		// }
-		// }
-		// }
-
 		// Pontuação
+		long agora = System.currentTimeMillis();
 		Paint paint = new Paint();
 		paint.setColor(Color.BLACK);
 		paint.setTextAlign(Align.LEFT);
-		canvas.drawText("Nós: " + placar[0], MARGEM, getHeight() - MARGEM,
-				paint);
+
+		if (agora > nosPiscaAte || (agora % 250) % 2 == 0) {
+			canvas.drawText("Nós: " + placar[0], MARGEM, getHeight() - MARGEM,
+					paint);
+		}
 		paint.setTextAlign(Align.RIGHT);
-		canvas.drawText("Eles: " + placar[1], getWidth() - MARGEM, MARGEM
-				+ paint.getTextSize(), paint);
+		if (agora > elesPiscaAte || (agora % 250) % 2 == 0) {
+			canvas.drawText("Eles: " + placar[1], getWidth() - MARGEM, MARGEM
+					+ paint.getTextSize(), paint);
+		}
 
 		// Ícones das rodadas
-		long agora = System.currentTimeMillis();
 		if (agora > rodadaPiscaAte && cartaQueFez != null) {
 			cartaQueFez.destacada = false;
-			rodadaPiscando = 0;
+			numRodadaPiscando = 0;
 		}
 		if (iconesRodadas != null) {
 			for (int i = 0; i <= 2; i++) {
 				// Desenha se não for a rodada piscando, ou, se for, alterna o
 				// desenho a cada 250ms
-				if (i != (rodadaPiscando - 1) || (agora % 250) % 2 == 0) {
+				if (i != (numRodadaPiscando - 1) || (agora % 250) % 2 == 0) {
 					canvas.drawBitmap(iconesRodadas[resultadoRodada[i]], MARGEM
 							+ i * (2 + iconesRodadas[0].getWidth()),
 							MARGEM + 1, paint);
@@ -531,7 +521,7 @@ public class MesaView extends View {
 	/**
 	 * Placar atual do jogo
 	 */
-	int[] placar = new int[2];
+	private int[] placar = new int[2];
 
 	/**
 	 * Cache dos ícones que informam o resultado das rodadas
@@ -574,9 +564,13 @@ public class MesaView extends View {
 	 */
 	private Vector<CartaVisual> cartasJogadas = new Vector<CartaVisual>(12);
 
-	private int rodadaPiscando = 0;
+	private int numRodadaPiscando = 0;
 
 	private long rodadaPiscaAte = System.currentTimeMillis();
+
+	private long nosPiscaAte = System.currentTimeMillis();
+
+	private long elesPiscaAte = System.currentTimeMillis();
 
 	/**
 	 * Carta que "fez" a última rodada (para fins de destaque)
@@ -594,8 +588,8 @@ public class MesaView extends View {
 	private boolean aceitarAumento = false;
 
 	/**
-	 * Mostra o resultado de uma rodada, destacando a carta vencedora e animando
-	 * durante alguns segundos.
+	 * Atualiza o resultado de uma rodada, destacando a carta vencedora e
+	 * piscando a rodada atual por um instante.
 	 * 
 	 * @param numRodada
 	 *            rodada que finalizou
@@ -604,15 +598,35 @@ public class MesaView extends View {
 	 * @param jogadorQueTorna
 	 *            jogador cuja carta venceu a rodada
 	 */
-	public void mostraPlacar(int numRodada, int resultado,
+	public void atualizaResultadoRodada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
 		cartaQueFez = getCartaVisual(jogo.getCartasDaRodada(numRodada)[jogadorQueTorna
 				.getPosicao() - 1]);
 		cartaQueFez.destacada = true;
 		resultadoRodada[numRodada - 1] = resultado;
-		rodadaPiscando = numRodada;
+		numRodadaPiscando = numRodada;
 		rodadaPiscaAte = System.currentTimeMillis() + 1000;
 		notificaAnimacao(rodadaPiscaAte);
+	}
+
+	/**
+	 * Atualiza os pontos da equipe, piscando quem sofreu alteração por um
+	 * instante.
+	 * 
+	 * @param novoPlacar
+	 *            nova pontuação para "nós" (elemento 0) e "eles" (elemento 1)
+	 */
+	public void atualizaPontosEquipe(int[] novoPlacar) {
+		if (placar[0] != novoPlacar[0]) {
+			nosPiscaAte = System.currentTimeMillis() + 1000;
+			notificaAnimacao(nosPiscaAte);
+		}
+		if (placar[1] != novoPlacar[1]) {
+			elesPiscaAte = System.currentTimeMillis() + 1000;
+			notificaAnimacao(elesPiscaAte);
+		}
+		placar[0] = novoPlacar[0];
+		placar[1] = novoPlacar[1];
 	}
 
 }

@@ -12,7 +12,6 @@ Backlog
 -------
 
 - Mostrar as cartas do adversário na mão de 11
-- Piscar placar no final da mão
 - Introuduzir textos apropriados para seis/9/12
 - Introduzir textos aleatórios
 - Novo layout de cartas (compatível com telas pequenas)
@@ -22,5 +21,7 @@ Backlog
 - Fechar o jogo no fim da partida
 - Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
 - Acertar ciclo de vida da Activity
+- Decidir quais estratégias entram, e como  
+- Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - verificar tempos de piscada (acho que tá ok, mas...)
 - Big refactor: fazer Carta e CartaVisual serem uma coisa só (ou uma herdar a outra)
