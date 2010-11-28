@@ -1,13 +1,10 @@
 package me.chester.minitruco.android;
 
-import java.util.Date;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
 /**
  * Balãozinho que aparece para indicar que um jogador pediu truco, aceitou, etc.

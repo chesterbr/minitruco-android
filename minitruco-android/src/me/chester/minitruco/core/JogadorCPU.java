@@ -318,7 +318,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 	/**
 	 * Cartas que ainda não foram jogadas
 	 */
-	private Vector cartasRestantes = new Vector(3);
+	private Vector<Carta> cartasRestantes = new Vector<Carta>(3);
 
 	public void inicioPartida() {
 		// Avisa o estrategia

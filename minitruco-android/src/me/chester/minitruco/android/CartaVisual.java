@@ -1,12 +1,10 @@
 package me.chester.minitruco.android;
 
 import java.io.FileNotFoundException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import me.chester.minitruco.core.Carta;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

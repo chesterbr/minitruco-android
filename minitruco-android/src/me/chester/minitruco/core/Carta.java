@@ -1,6 +1,5 @@
 package me.chester.minitruco.core;
 
-import android.graphics.Canvas;
 
 
 /*
