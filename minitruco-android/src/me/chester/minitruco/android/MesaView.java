@@ -59,7 +59,7 @@ public class MesaView extends View {
 	/**
 	 * Coloca a thread chamante em sleep até que as animações acabem.
 	 */
-	public static void aguardaFimAnimacoes() {
+	public void aguardaFimAnimacoes() {
 		long milisecAteFimAnimacao;
 		while ((milisecAteFimAnimacao = animandoAte
 				- System.currentTimeMillis()) > 0) {
@@ -111,7 +111,7 @@ public class MesaView extends View {
 			// Inicializa, se necessário, as cartas em jogo
 			for (int i = 0; i < cartas.length; i++) {
 				if (cartas[i] == null) {
-					cartas[i] = new CartaVisual(leftBaralho, topBaralho);
+					cartas[i] = new CartaVisual(this, leftBaralho, topBaralho);
 					cartas[i].movePara(leftBaralho, topBaralho);
 				}
 			}
@@ -491,7 +491,7 @@ public class MesaView extends View {
 		}
 
 		// Balãozinho (se alguém estiver falando algo)
-		Balao.draw(canvas);
+		desenhaBalao(canvas);
 
 		// Caixa de diálogo (mão de 11 ou aumento)
 		if (mostrarPerguntaMao11 || mostrarPerguntaAumento) {
@@ -555,9 +555,9 @@ public class MesaView extends View {
 	private static boolean vezHumano = false;
 
 	/**
-	 * Jogo em que a mesa está interagindo
+	 * Jogo que a mesa está exibindo (deve ser setado externamente)
 	 */
-	public static Jogo jogo;
+	public Jogo jogo;
 
 	/**
 	 * Guarda as cartas que foram jogadas pelos jogadores (para saber em que
@@ -588,10 +588,11 @@ public class MesaView extends View {
 	private boolean recusarAumento = false;
 	private boolean aceitarAumento = false;
 
-	/**
-	 * Cartas do parceiro durante uma mão de 11 (para exibição)
-	 */
-	private Carta[] cartasMao11;
+	private int posicaoBalao = 1;
+
+	private long mostraBalaoAte = System.currentTimeMillis();
+
+	private String fraseBalao = null;
 
 	/**
 	 * Atualiza o resultado de uma rodada, destacando a carta vencedora e
@@ -645,6 +646,136 @@ public class MesaView extends View {
 		for (int i = 0; i <= 2; i++) {
 			cartas[10 + i].setCarta(cartasParceiro[i]);
 		}
+	}
+
+	/**
+	 * Faz com que o balão mostre uma frase por um tempo para um jogador
+	 * 
+	 * @param frase
+	 *            texto no balão
+	 * @param posicao
+	 *            posição (1 a 4) do jogador que "dirá" a frase
+	 * @param tempoMS
+	 *            tempo em que ela aparecerá
+	 */
+	public void diz(String frase, int posicao, int tempoMS) {
+		mostraBalaoAte = System.currentTimeMillis() + tempoMS;
+		fraseBalao = frase;
+		posicaoBalao = posicao;
+		notificaAnimacao(mostraBalaoAte);
+	}
+
+	/**
+	 * Desenha a parte gráfica do balão (sem o texto). É chamada várias vezes
+	 * para compor o contorno, antes de estampar o texto
+	 * 
+	 * @param canvas
+	 *            onde ele será desenhado
+	 * @param x
+	 *            esquerda
+	 * @param y
+	 *            topo
+	 * @param largBalao
+	 *            largura
+	 * @param altBalao
+	 *            altura
+	 * @param quadrantePonta
+	 *            Quadrante (cartesiano) onde aparece a ponta do balão (com
+	 *            relação a ele mesmo)
+	 */
+	private void desenhaElipseBalao(Canvas canvas, int x, int y, int largBalao,
+			int altBalao, int quadrantePonta, Paint paint) {
+		// Elipse principal
+		canvas.drawArc(new RectF(x, y, x + largBalao - 1, y + altBalao - 1), 0,
+				360, false, paint);
+		// Ponta (é um triângulo que desenhamos linha a linha)
+		int xi;
+		for (int i = 0; i < altBalao; i++) {
+			if (quadrantePonta == 2 || quadrantePonta == 3) {
+				xi = x + altBalao * 3 / 2 - i;
+			} else {
+				xi = x - altBalao * 3 / 2 + i + largBalao;
+			}
+			int sinaly = quadrantePonta < 3 ? -1 : 1;
+			canvas.drawLine(xi, y + altBalao / 2, xi, y + altBalao / 2 + i
+					* sinaly, paint);
+		}
+	}
+
+	/**
+	 * Desenha o balão no lugar certo, se ele estiver visível
+	 * 
+	 * @param canvas
+	 *            canvas onde ele será (ou não) desenhado.
+	 */
+	private void desenhaBalao(Canvas canvas) {
+		if (fraseBalao != null && mostraBalaoAte > System.currentTimeMillis()) {
+
+			// Determina o tamanho e a posição do balão e o quadrante da
+			// ponta
+			final int MARGEM_BALAO_LEFT = 10;
+			final int MARGEM_BALAO_TOP = 3;
+			Paint paintFonte = new Paint();
+			Rect bounds = new Rect();
+			paintFonte.setColor(Color.BLACK);
+			paintFonte
+					.getTextBounds(fraseBalao, 0, fraseBalao.length(), bounds);
+
+			int largBalao = bounds.width() + 2 * MARGEM_BALAO_LEFT;
+			int altBalao = bounds.height() + 2 * MARGEM_BALAO_TOP;
+			int x = 0, y = 0;
+			int quadrantePonta = 0;
+			switch (posicaoBalao) {
+			case 1:
+				x = (canvas.getWidth() - largBalao) / 2 - CartaVisual.largura;
+				y = canvas.getHeight() - altBalao - CartaVisual.altura - MARGEM
+						- 3;
+				quadrantePonta = 4;
+				break;
+			case 2:
+				x = canvas.getWidth() - largBalao - MARGEM - 3;
+				y = (canvas.getHeight() - altBalao) / 2;
+				quadrantePonta = 1;
+				break;
+			case 3:
+				x = (canvas.getWidth() - largBalao) / 2 + CartaVisual.largura;
+				y = MARGEM + 3 + altBalao / 2;
+				quadrantePonta = 2;
+				break;
+			case 4:
+				x = MARGEM + 3;
+				y = (canvas.getHeight() - altBalao) / 2 - CartaVisual.altura;
+				quadrantePonta = 3;
+				break;
+			}
+
+			// O balão tem que ser branco, com uma borda preta. Como
+			// ele só aparece em um refresh, vamos pela força bruta,
+			// desenhando ele deslocado em torno da posição final em
+			// preto e em seguida desenhando ele em branco na posição
+			Paint paint = new Paint();
+			paint.setStyle(Paint.Style.FILL);
+			paint.setColor(Color.BLACK);
+			for (int i = -1; i <= 1; i++) {
+				for (int j = -1; j <= 1; j++) {
+					if (i != 0 && j != 0) {
+						desenhaElipseBalao(canvas, x + i, y + j, largBalao,
+								altBalao, quadrantePonta, paint);
+					}
+				}
+			}
+			paint.setColor(Color.WHITE);
+			desenhaElipseBalao(canvas, x, y, largBalao, altBalao,
+					quadrantePonta, paint);
+
+			// Finalmente, escreve o texto do balão
+			canvas.drawText(fraseBalao, x + MARGEM_BALAO_LEFT, y + altBalao
+					- MARGEM_BALAO_TOP - 2, paintFonte);
+
+		} else {
+			fraseBalao = null;
+		}
+
 	}
 
 }

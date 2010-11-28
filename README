@@ -25,10 +25,6 @@ Backlog
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
-- Refactor: fazer CartaVisual saber a que mesa pertence, eliminando o 
-   parametro canvas do onDraw e tornando os métodos notificaAnimacao e
-   aguardaFimAnimacoes não-static.
-- Refactor: idem acima para balão (ou ainda, tornar Balão parte de mesaView)
 - Refactor: fazer Carta e CartaVisual serem uma coisa só (ou uma herdar a outra)
 - Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
 - Acertar ciclo de vida da Activity

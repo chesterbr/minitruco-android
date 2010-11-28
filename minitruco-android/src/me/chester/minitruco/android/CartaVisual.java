@@ -35,7 +35,8 @@ public class CartaVisual {
 	 * @param top
 	 *            posição em relação ao topo
 	 */
-	public CartaVisual(int left, int top) {
+	public CartaVisual(MesaView mesa, int left, int top) {
+		this.mesa = mesa;
 		movePara(left, top);
 		setCarta(null);
 	}
@@ -43,8 +44,8 @@ public class CartaVisual {
 	/**
 	 * Cria uma carta no canto superior esquerdo
 	 */
-	public CartaVisual() {
-		this(0, 0);
+	public CartaVisual(MesaView mesa) {
+		this(mesa, 0, 0);
 	}
 
 	/**
@@ -101,7 +102,7 @@ public class CartaVisual {
 	 *            quantidade de milissegundos que a animação deve durar.
 	 */
 	public void movePara(int left, int top, int tempoMS) {
-		MesaView.aguardaFimAnimacoes();
+		mesa.aguardaFimAnimacoes();
 		this.destLeft = left;
 		this.destTop = top;
 		ultimoTime = System.currentTimeMillis();
@@ -311,5 +312,10 @@ public class CartaVisual {
 	 * onDraw por uma Activity que tenha acesso a getResources())
 	 */
 	public static Resources resources;
+	
+	/**
+	 * Mesa à qual esta carta pertence
+	 */
+	private MesaView mesa;
 
 }
