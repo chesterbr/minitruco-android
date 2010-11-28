@@ -114,10 +114,12 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void informaMao11(Carta[] cartasParceiro) {
-		// TODO mostrar cartas do adversário
 		// MesaView.aguardaFimAnimacoes();
-		if (jogo.getJogadorHumano() != null && !decidiuMao11) {
-			mesa.mostrarPerguntaMao11 = true;
+		if (jogo.getJogadorHumano() != null) {
+			mesa.mostraCartasMao11(cartasParceiro);
+			if (!decidiuMao11) {
+				mesa.mostrarPerguntaMao11 = true;
+			}
 		}
 
 	}

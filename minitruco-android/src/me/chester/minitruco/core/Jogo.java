@@ -282,7 +282,7 @@ public abstract class Jogo implements Runnable {
 	 * <p>
 	 * As implementações devem atualizar (para se saber quando é mão de 11)
 	 */
-	protected int[] pontosEquipe = { 0, 0 };
+	protected int[] pontosEquipe = { 11, 0 };
 
 	/**
 	 * Indica que o jogo foi finalizado (para evitar que os jogadoresCPU fiquem

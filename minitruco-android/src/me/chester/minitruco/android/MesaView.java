@@ -414,7 +414,8 @@ public class MesaView extends View {
 			if (cvCandidata.descartada) {
 				continue;
 			}
-			// ...e, no caso de um humano, que corresponda à carta do jogo
+			// ...e, no caso de um humano (ou parceiro em mão de 11), que
+			// corresponda à carta do jogo
 			cv = cvCandidata;
 			if (c.equals(cvCandidata.getCarta())) {
 				break;
@@ -588,6 +589,11 @@ public class MesaView extends View {
 	private boolean aceitarAumento = false;
 
 	/**
+	 * Cartas do parceiro durante uma mão de 11 (para exibição)
+	 */
+	private Carta[] cartasMao11;
+
+	/**
 	 * Atualiza o resultado de uma rodada, destacando a carta vencedora e
 	 * piscando a rodada atual por um instante.
 	 * 
@@ -627,6 +633,18 @@ public class MesaView extends View {
 		}
 		placar[0] = novoPlacar[0];
 		placar[1] = novoPlacar[1];
+	}
+
+	/**
+	 * Torna as cartas da mão de 11 visíveis
+	 * 
+	 * @param cartasParceiro
+	 *            cartas do seu parceiro
+	 */
+	public void mostraCartasMao11(Carta[] cartasParceiro) {
+		for (int i = 0; i <= 2; i++) {
+			cartas[10 + i].setCarta(cartasParceiro[i]);
+		}
 	}
 
 }

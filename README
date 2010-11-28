@@ -11,17 +11,24 @@ A licença será GPLv3, pois trata-se de um "fork" do miniTruco original.
 Backlog
 -------
 
-- Mostrar as cartas do adversário na mão de 11
 - Introuduzir textos apropriados para seis/9/12
 - Introduzir textos aleatórios
-- Novo layout de cartas (compatível com telas pequenas)
-- Verificar evento de touch corretamente (qualquer evento tá descartando)
 - Pedir aumento
 - Jogar carta fechada
 - Fechar o jogo no fim da partida
+- Novo layout de cartas (compatível com telas pequenas)
+
+- Decidir quais estratégias entram, e como  
+- Bug: Verificar evento de touch corretamente (qualquer evento tá descartando)
+- Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
+- Bug: verificar tempos de piscada (acho que tá ok, mas...)
+- Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
+    automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
+    de Partida)
+- Refactor: fazer CartaVisual saber a que mesa pertence, eliminando o 
+   parametro canvas do onDraw e tornando os métodos notificaAnimacao e
+   aguardaFimAnimacoes não-static.
+- Refactor: idem acima para balão (ou ainda, tornar Balão parte de mesaView)
+- Refactor: fazer Carta e CartaVisual serem uma coisa só (ou uma herdar a outra)
 - Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
 - Acertar ciclo de vida da Activity
-- Decidir quais estratégias entram, e como  
-- Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
-- verificar tempos de piscada (acho que tá ok, mas...)
-- Big refactor: fazer Carta e CartaVisual serem uma coisa só (ou uma herdar a outra)
