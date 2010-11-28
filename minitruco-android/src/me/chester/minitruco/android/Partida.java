@@ -14,8 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * Exibe o andamento de um jogo. Futuramente irá permitir ao JogadorHumano
- * associado a ela interagir com o mesmo.
+ * Exibe o andamento de um jogo.
  * 
  * @author chester
  * 
@@ -45,6 +44,15 @@ public class Partida extends Activity implements Interessado {
 		if (CartaVisual.resources == null) {
 			CartaVisual.resources = getResources();
 		}
+
+		// Prepara diálogo da mão de 11
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				jogo.decideMao11(jogo.getJogadorHumano(),
+						which == DialogInterface.BUTTON_POSITIVE);
+			}
+		};
+
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.
@@ -93,7 +101,10 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void decidiuMao11(Jogador j, boolean aceita) {
+		if (j.getPosicao() != 1)
+			decidiuMao11 = aceita;
 		MesaView.aguardaFimAnimacoes();
+		mesa.mostrarPerguntaMao11 = false;
 		Balao.diz(aceita ? "Vamos jogar" : "Não quero", j.getPosicao(), 1500);
 	}
 
@@ -103,36 +114,18 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void informaMao11(Carta[] cartasParceiro) {
-		MesaView.aguardaFimAnimacoes();
 		// TODO mostrar cartas do adversário
-
-		final Partida partida = this;
-		final JogadorHumano jogadorHumano = jogo.getJogadorHumano();
-		if (jogadorHumano != null) {
-			// handler.dispatchMessage(handler.obtainMessage(valor));
-			runOnUiThread(new Runnable() {
-				public void run() {
-					DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							jogo.decideMao11(jogadorHumano,
-									which == DialogInterface.BUTTON_POSITIVE);
-
-						}
-					};
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							partida);
-					builder.setMessage("Aceita mão de 11?")
-							.setPositiveButton("Sim", dialogClickListener)
-							.setNegativeButton("Não", dialogClickListener)
-							.show();
-				}
-
-			});
+		// MesaView.aguardaFimAnimacoes();
+		if (jogo.getJogadorHumano() != null && !decidiuMao11) {
+			mesa.mostrarPerguntaMao11 = true;
 		}
 
 	}
 
+	private boolean decidiuMao11 = false;
+
 	public void inicioMao() {
+		decidiuMao11 = false;
 		MesaView.aguardaFimAnimacoes();
 		for (int i = 0; i <= 2; i++) {
 			mesa.resultadoRodada[i] = 0;
@@ -165,37 +158,15 @@ public class Partida extends Activity implements Interessado {
 
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		MesaView.aguardaFimAnimacoes();
-		Balao.diz("Truco!", j.getPosicao(), 1000 + 200 * (valor / 3));
-		MesaView.aguardaFimAnimacoes();
-		final Partida partida = this;
-		final JogadorHumano jogadorHumano = jogo.getJogadorHumano();
-		if (j.getEquipe() == 2 && jogadorHumano != null) {
-			// handler.dispatchMessage(handler.obtainMessage(valor));
-			runOnUiThread(new Runnable() {
-				public void run() {
-					DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							jogo.respondeAumento(jogadorHumano,
-									which == DialogInterface.BUTTON_POSITIVE);
-
-						}
-					};
-
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							partida);
-					builder.setMessage("Aceita?")
-							.setPositiveButton("Sim", dialogClickListener)
-							.setNegativeButton("Não", dialogClickListener)
-							.show();
-				}
-
-			});
+		Balao.diz("Truco!", j.getPosicao(), 1500 + 200 * (valor / 3));
+		if (j.getEquipe() == 2 && jogo.getJogadorHumano() != null) {
+			mesa.mostrarPerguntaAumento = true;
 		}
 	}
 
 	public void recusouAumentoAposta(Jogador j) {
 		MesaView.aguardaFimAnimacoes();
-		Balao.diz("não quero", j.getPosicao(), 800);
+		Balao.diz("não quero", j.getPosicao(), 1300);
 	}
 
 	public void rodadaFechada(int numRodada, int resultado,
@@ -205,6 +176,8 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {
+		mesa.mostrarPerguntaMao11 = false;
+		mesa.mostrarPerguntaAumento = false;
 		MesaView.setVezHumano(j instanceof JogadorHumano);
 	}
 

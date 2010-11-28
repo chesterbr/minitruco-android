@@ -11,10 +11,8 @@ A licença será GPLv3, pois trata-se de um "fork" do miniTruco original.
 Backlog
 -------
 
-- Big refactor: fazer Carta e CartaVisual serem uma coisa só (ou uma herdar a outra)
 - Mostrar as cartas do adversário na mão de 11
 - Piscar placar no final da mão
-- Fechar o diálogo de aceite de aumento (ou mão de 11) se o parceiro acertar
 - Introuduzir textos apropriados para seis/9/12
 - Introduzir textos aleatórios
 - Novo layout de cartas (compatível com telas pequenas)
@@ -25,3 +23,4 @@ Backlog
 - Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
 - Acertar ciclo de vida da Activity
 - verificar tempos de piscada (acho que tá ok, mas...)
+- Big refactor: fazer Carta e CartaVisual serem uma coisa só (ou uma herdar a outra)

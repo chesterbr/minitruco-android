@@ -10,7 +10,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Paint.Align;
+import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -90,6 +93,21 @@ public class MesaView extends View {
 			leftBaralho = this.getWidth() - CartaVisual.largura - MARGEM - 4;
 			topBaralho = this.getHeight() - CartaVisual.altura - MARGEM - 4;
 
+			// Define posição e tamanho da caixa de diálogo e seus botões
+			int alturaDialog = (int) (CartaVisual.altura * 1.5);
+			int larguraDialog = CartaVisual.largura * 3;
+			int topDialog = (getHeight() - alturaDialog) / 2;
+			int leftDialog = (getWidth() - larguraDialog) / 2;
+			rectDialog = new Rect(leftDialog, topDialog, leftDialog
+					+ larguraDialog, topDialog + alturaDialog);
+			int alturaBotao = CartaVisual.altura / 2;
+			rectBotaoSim = new Rect(leftDialog + 8, topDialog + alturaDialog
+					- alturaBotao - 8, leftDialog + larguraDialog / 2 - 8,
+					topDialog + alturaDialog - 8);
+			rectBotaoNao = new Rect(leftDialog + larguraDialog / 2 + 8,
+					rectBotaoSim.top, leftDialog + larguraDialog - 8,
+					rectBotaoSim.bottom);
+
 			// Inicializa, se necessário, as cartas em jogo
 			for (int i = 0; i < cartas.length; i++) {
 				if (cartas[i] == null) {
@@ -111,6 +129,7 @@ public class MesaView extends View {
 			// Inicia o jogo
 			Thread t = new Thread(MenuPrincipal.jogo);
 			t.start();
+			respondeDialogos.start();
 			// Balao.diz("rosquinha", 1, 100000);
 
 		}
@@ -138,6 +157,26 @@ public class MesaView extends View {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		if (mostrarPerguntaMao11) {
+			if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
+				mostrarPerguntaMao11 = false;
+				aceitarMao11 = true;
+			}
+			if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
+				mostrarPerguntaMao11 = false;
+				recusarMao11 = true;
+			}
+		}
+		if (mostrarPerguntaAumento) {
+			if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
+				mostrarPerguntaAumento = false;
+				aceitarAumento = true;
+			}
+			if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
+				mostrarPerguntaAumento = false;
+				recusarAumento = true;
+			}
+		}
 		if (vezHumano) {
 			for (int i = 6; i >= 4; i--) {
 				if ((!cartas[i].descartada)
@@ -185,6 +224,42 @@ public class MesaView extends View {
 
 		}
 	});
+
+	Thread respondeDialogos = new Thread() {
+		@Override
+		public void run() {
+			while (MenuPrincipal.jogo != null) {
+				try {
+					sleep(250);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (recusarMao11) {
+					recusarMao11 = false;
+					jogo.decideMao11(jogo.getJogadorHumano(), false);
+				}
+				if (aceitarMao11) {
+					aceitarMao11 = false;
+					jogo.decideMao11(jogo.getJogadorHumano(), true);
+				}
+				if (recusarAumento) {
+					recusarAumento = false;
+					jogo.respondeAumento(jogo.getJogadorHumano(), false);
+				}
+				if (aceitarAumento) {
+					aceitarAumento = false;
+					jogo.respondeAumento(jogo.getJogadorHumano(), true);
+				}
+			}
+		}
+
+	};
+
+	private Rect rectDialog;
+
+	private Rect rectBotaoSim;
+
+	private Rect rectBotaoNao;
 
 	/**
 	 * Permite à partida informar que (não) é a vez de deixar o humano jogar
@@ -397,13 +472,14 @@ public class MesaView extends View {
 		// }
 
 		// Pontuação
-		Paint p = new Paint();
-		p.setColor(Color.BLACK);
-		p.setTextAlign(Align.LEFT);
-		canvas.drawText("Nós: " + placar[0], MARGEM, getHeight() - MARGEM, p);
-		p.setTextAlign(Align.RIGHT);
+		Paint paint = new Paint();
+		paint.setColor(Color.BLACK);
+		paint.setTextAlign(Align.LEFT);
+		canvas.drawText("Nós: " + placar[0], MARGEM, getHeight() - MARGEM,
+				paint);
+		paint.setTextAlign(Align.RIGHT);
 		canvas.drawText("Eles: " + placar[1], getWidth() - MARGEM, MARGEM
-				+ p.getTextSize(), p);
+				+ paint.getTextSize(), paint);
 
 		// Ícones das rodadas
 		long agora = System.currentTimeMillis();
@@ -418,13 +494,37 @@ public class MesaView extends View {
 				if (i != (rodadaPiscando - 1) || (agora % 250) % 2 == 0) {
 					canvas.drawBitmap(iconesRodadas[resultadoRodada[i]], MARGEM
 							+ i * (2 + iconesRodadas[0].getWidth()),
-							MARGEM + 1, p);
+							MARGEM + 1, paint);
 				}
 			}
 		}
 
 		// Balãozinho (se alguém estiver falando algo)
 		Balao.draw(canvas);
+
+		// Caixa de diálogo (mão de 11 ou aumento)
+		if (mostrarPerguntaMao11 || mostrarPerguntaAumento) {
+			paint.setColor(Color.BLACK);
+			paint.setStyle(Style.FILL);
+			canvas.drawRect(rectDialog, paint);
+			paint.setColor(Color.WHITE);
+			paint.setStyle(Style.STROKE);
+			canvas.drawRect(rectDialog, paint);
+			paint.setStyle(Style.FILL);
+			canvas.drawRect(rectBotaoSim, paint);
+			canvas.drawRect(rectBotaoNao, paint);
+			paint.setTextAlign(Align.CENTER);
+			canvas.drawText(mostrarPerguntaMao11 ? "Aceita Mão de 11?"
+					: "Aceita Aumento?", rectDialog.centerX(), rectDialog.top
+					+ paint.getTextSize() + 2, paint);
+			paint.setColor(Color.BLACK);
+			// paint.setTextSize(rectBotaoSim.height() * 0.8f);
+			canvas.drawText("Sim", rectBotaoSim.centerX(), rectBotaoSim
+					.centerY(), paint);
+			canvas.drawText("Não", rectBotaoNao.centerX(), rectBotaoNao
+					.centerY(), paint);
+
+		}
 
 	}
 
@@ -482,6 +582,16 @@ public class MesaView extends View {
 	 * Carta que "fez" a última rodada (para fins de destaque)
 	 */
 	private CartaVisual cartaQueFez;
+
+	public boolean mostrarPerguntaMao11 = false;
+
+	private boolean recusarMao11 = false;
+	private boolean aceitarMao11 = false;
+
+	public boolean mostrarPerguntaAumento = false;
+
+	private boolean recusarAumento = false;
+	private boolean aceitarAumento = false;
 
 	/**
 	 * Mostra o resultado de uma rodada, destacando a carta vencedora e animando

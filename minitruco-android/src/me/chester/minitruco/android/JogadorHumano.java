@@ -6,12 +6,13 @@ import me.chester.minitruco.core.Jogador;
 /**
  * Representa um jogador controlado pelo celular que está rodando o jogo.
  * <p>
- * Esta classe trabalha em conjunto com 
+ * Esta classe trabalha em conjunto com a Partida
+ * 
  * @author chester
- *
+ * 
  */
 public class JogadorHumano extends Jogador {
-
+	
 	public void aceitouAumentoAposta(Jogador j, int valor) {
 		// TODO Auto-generated method stub
 
