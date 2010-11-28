@@ -209,18 +209,18 @@ public class JogoLocal extends Jogo {
 		}
 
 		if (pontosEquipe[0] == 11 ^ pontosEquipe[1] == 11) {
-			// TODO rever notificações aqui - teria que notificar todo mundo,
-			// passando a dupla beneficiada
-			//
-			// Se apenas uma das equipes tiver 11 pontos, verifica se eles
-			// querem realmente jogar (eles podem desistir);
+			// Se apenas uma das equipes tiver 11 pontos, estamos numa
+			// "mão de 11": os membros da equipe podem ver as cartas do parceiro
+			// e decidir se querem jogar (valendo 3 pontos) ou desistir
+			// (perdendo 1)
 			if (pontosEquipe[0] == 11) {
 				setEquipeAguardandoMao11(1);
 				getJogador(1).informaMao11(getJogador(3).getCartas());
 				getJogador(3).informaMao11(getJogador(1).getCartas());
 				for (Interessado interessado : interessados) {
-					//TODO consertar gambi
-					if(interessado instanceof Partida) {
+					// Interessados que não sejam Jogador (ex.: a Partida na
+					// versão Android) devem ser notificados também
+					if (!(interessado instanceof Jogador)) {
 						interessado.informaMao11(getJogador(3).getCartas());
 					}
 				}
@@ -500,7 +500,7 @@ public class JogoLocal extends Jogo {
 		int valor = calcValorAumento();
 
 		// Notifica os interessados
-		for (Interessado interessado: interessados) {
+		for (Interessado interessado : interessados) {
 			interessado.pediuAumentoAposta(j, valor);
 		}
 		Log.i("JogoLocal", "Jogadores notificados do aumento");
@@ -529,12 +529,12 @@ public class JogoLocal extends Jogo {
 			// o jogo da situtação de truco
 			valorMao = calcValorAumento();
 			jogadorPedindoAumento = null;
-			for (Interessado interessado: interessados) {			
+			for (Interessado interessado : interessados) {
 				interessado.aceitouAumentoAposta(j, valorMao);
 			}
 		} else {
 			// Primeiro notifica todo mundo
-			for (Interessado interessado: interessados) {
+			for (Interessado interessado : interessados) {
 				interessado.recusouAumentoAposta(j);
 			}
 			int posParceiro = (j.getPosicao() + 1) % 4 + 1;
@@ -601,9 +601,10 @@ public class JogoLocal extends Jogo {
 		boolean pf = isPodeFechada();
 
 		for (Interessado interessado : interessados) {
-//			Log.i("JogoLocal", "notificando interessado " + interessado + " da vez de "
-//					+ j.getPosicao());
-			interessado.vez(j, pf);		
+			// Log.i("JogoLocal", "notificando interessado " + interessado +
+			// " da vez de "
+			// + j.getPosicao());
+			interessado.vez(j, pf);
 		}
 
 	}
