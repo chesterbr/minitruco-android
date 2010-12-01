@@ -109,6 +109,9 @@ public class MesaView extends View {
 			rectBotaoNao = new Rect(leftDialog + larguraDialog / 2 + 8,
 					rectBotaoSim.top, leftDialog + larguraDialog - 8,
 					rectBotaoSim.bottom);
+			rectBotaoAumento = new Rect(MARGEM, alturaDialog
+					- rectBotaoSim.height() - MARGEM, MARGEM
+					+ rectBotaoSim.width(), alturaDialog - MARGEM);
 
 			// Inicializa, se necessário, as cartas em jogo
 			for (int i = 0; i < cartas.length; i++) {
@@ -338,6 +341,8 @@ public class MesaView extends View {
 	private Rect rectDialog;
 
 	private Rect rectBotaoSim;
+
+	private Rect rectBotaoAumento;
 
 	private Rect rectBotaoNao;
 
@@ -596,6 +601,16 @@ public class MesaView extends View {
 					.centerY(), paint);
 
 		}
+
+		// Botão de aumento
+		paint.setColor(Color.BLACK);
+		paint.setStyle(Style.FILL);
+		canvas.drawRect(rectBotaoAumento, paint);
+		paint.setColor(Color.WHITE);
+		paint.setStyle(Style.STROKE);
+		canvas.drawRect(rectBotaoAumento, paint);
+		canvas.drawText("Truco", rectBotaoSim.centerX(),
+				rectBotaoSim.centerY(), paint);
 
 	}
 
