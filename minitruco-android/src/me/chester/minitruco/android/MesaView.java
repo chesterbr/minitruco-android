@@ -558,6 +558,7 @@ public class MesaView extends View {
 		// Pontuação
 		long agora = System.currentTimeMillis();
 		Paint paint = new Paint();
+		paint.setAntiAlias(true);
 		paint.setColor(Color.BLACK);
 		paint.setTextAlign(Align.LEFT);
 
@@ -757,6 +758,7 @@ public class MesaView extends View {
 			final int MARGEM_BALAO_LEFT = 10;
 			final int MARGEM_BALAO_TOP = 3;
 			Paint paintFonte = new Paint();
+			paintFonte.setAntiAlias(true);
 			Rect bounds = new Rect();
 			paintFonte.setColor(Color.BLACK);
 			paintFonte
@@ -795,6 +797,7 @@ public class MesaView extends View {
 			// desenhando ele deslocado em torno da posição final em
 			// preto e em seguida desenhando ele em branco na posição
 			Paint paint = new Paint();
+			paint.setAntiAlias(true);
 			paint.setStyle(Paint.Style.FILL);
 			paint.setColor(Color.BLACK);
 			for (int i = -1; i <= 1; i++) {

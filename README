@@ -28,6 +28,7 @@ Débito Técnico:
 - Reintroduzir testes da parte visual (que não funcionam mais por
   usarmos o Robolectric)
 - Bug: throwIfRecycled aleatório [1]
+- Verificar se é possível consertar a ponta do balãozinho que ficou cinza com o anti-alias
 
 Nice to have:
 - Ícone

@@ -140,6 +140,7 @@ public class CartaVisual {
 		}
 		if (bitmap != null) {
 			Paint paint = new Paint();
+			paint.setAntiAlias(true);
 			Rect rect = new Rect(left, top, left + largura - 1, top + altura
 					- 1);
 			paint.setColor(Color.WHITE);
