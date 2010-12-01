@@ -140,14 +140,22 @@ public class CartaVisual {
 		}
 		if (bitmap != null) {
 			Paint paint = new Paint();
+			Rect rect = new Rect(left, top, left + largura - 1, top + altura
+					- 1);
+			paint.setColor(Color.WHITE);
+			paint.setStyle(Paint.Style.FILL);
+			canvas.drawRect(rect, paint);
 			paint.setColor(Color.GREEN);
 			paint.setStyle(Paint.Style.FILL);
 			canvas.drawBitmap(bitmap, left, top, paint);
-			Rect rect = new Rect(left, top, left + largura - 1, top + altura
-					- 1);
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.STROKE);
 			canvas.drawRect(rect, paint);
+			paint.setColor(Color.GREEN);
+			canvas.drawPoint(left, top, paint);
+			canvas.drawPoint(left + largura - 1, top, paint);
+			canvas.drawPoint(left, top + altura - 1, paint);
+			canvas.drawPoint(left + largura - 1, top + altura - 1, paint);
 
 			if (destacada) {
 				paint.setColor(Color.BLUE);
@@ -312,7 +320,7 @@ public class CartaVisual {
 	 * onDraw por uma Activity que tenha acesso a getResources())
 	 */
 	public static Resources resources;
-	
+
 	/**
 	 * Mesa à qual esta carta pertence
 	 */
