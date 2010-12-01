@@ -51,7 +51,7 @@ public class Partida extends Activity implements Interessado {
 		jogo = MenuPrincipal.jogo;
 		if (jogo != null) {
 			jogo.adiciona(this);
-			getMesa().jogo = jogo;
+			mesa.jogo = jogo;
 		} else {
 			Log.w("Activity.onCreate",
 					"Partida iniciada sem jogo (ok para testes)");
@@ -60,22 +60,23 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
-		getMesa().aguardaFimAnimacoes();
-		getMesa().diz("aumento_sim", j.getPosicao(), 1500);
+		mesa.aguardaFimAnimacoes();
+		mesa.diz("aumento_sim", j.getPosicao(), 1500);
+		mesa.aceitouAumentoAposta(j, valor);
 	}
 
 	public void cartaJogada(Jogador j, Carta c) {
-		getMesa().aguardaFimAnimacoes();
-		getMesa().descarta(c, j.getPosicao());
+		mesa.aguardaFimAnimacoes();
+		mesa.descarta(c, j.getPosicao());
 		Log.i("Partida", "Jogador " + j.getPosicao() + " jogou " + c);
 	}
 
 	public void decidiuMao11(Jogador j, boolean aceita) {
 		if (j.getPosicao() != 1)
 			decidiuMao11 = aceita;
-		getMesa().aguardaFimAnimacoes();
-		getMesa().mostrarPerguntaMao11 = false;
-		getMesa().diz(aceita ? "mao11_sim" : "mao11_nao", j.getPosicao(), 1500);
+		mesa.aguardaFimAnimacoes();
+		mesa.mostrarPerguntaMao11 = false;
+		mesa.diz(aceita ? "mao11_sim" : "mao11_nao", j.getPosicao(), 1500);
 	}
 
 	public void entrouNoJogo(Interessado i, Jogo j) {
@@ -85,9 +86,9 @@ public class Partida extends Activity implements Interessado {
 	public void informaMao11(Carta[] cartasParceiro) {
 		// mesa.aguardaFimAnimacoes();
 		if (jogo.getJogadorHumano() != null) {
-			getMesa().mostraCartasMao11(cartasParceiro);
+			mesa.mostraCartasMao11(cartasParceiro);
 			if (!decidiuMao11) {
-				getMesa().mostrarPerguntaMao11 = true;
+				mesa.mostrarPerguntaMao11 = true;
 			}
 		}
 
@@ -97,11 +98,11 @@ public class Partida extends Activity implements Interessado {
 
 	public void inicioMao() {
 		decidiuMao11 = false;
-		getMesa().aguardaFimAnimacoes();
+		mesa.aguardaFimAnimacoes();
 		for (int i = 0; i <= 2; i++) {
-			getMesa().resultadoRodada[i] = 0;
+			mesa.resultadoRodada[i] = 0;
 		}
-		getMesa().distribuiMao();
+		mesa.distribuiMao();
 	}
 
 	public void inicioPartida() {
@@ -118,39 +119,40 @@ public class Partida extends Activity implements Interessado {
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
-		getMesa().aguardaFimAnimacoes();
-		getMesa().atualizaPontosEquipe(pontosEquipe);
-		getMesa().aguardaFimAnimacoes();
-		getMesa().recolheMao();
+		mesa.aguardaFimAnimacoes();
+		mesa.atualizaPontosEquipe(pontosEquipe);
+		mesa.aguardaFimAnimacoes();
+		mesa.recolheMao();
 
 	}
 
 	public void pediuAumentoAposta(Jogador j, int valor) {
-		getMesa().aguardaFimAnimacoes();
-		getMesa().diz("aumento_" + valor, j.getPosicao(),
-				1500 + 200 * (valor / 3));
+		mesa.aguardaFimAnimacoes();
+		mesa.diz("aumento_" + valor, j.getPosicao(), 1500 + 200 * (valor / 3));
 		if (j.getEquipe() == 2 && jogo.getJogadorHumano() != null) {
-			getMesa().mostrarPerguntaAumento = true;
+			mesa.mostrarPerguntaAumento = true;
 		}
 	}
 
 	public void recusouAumentoAposta(Jogador j) {
-		getMesa().aguardaFimAnimacoes();
-		getMesa().diz("aumento_nao", j.getPosicao(), 1300);
+		mesa.aguardaFimAnimacoes();
+		mesa.diz("aumento_nao", j.getPosicao(), 1300);
 	}
 
 	public void rodadaFechada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
-		getMesa().mostrarPerguntaMao11 = false;
-		getMesa().mostrarPerguntaAumento = false;
-		getMesa().aguardaFimAnimacoes();
-		getMesa()
-				.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
+		mesa.mostrarPerguntaMao11 = false;
+		mesa.mostrarPerguntaAumento = false;
+		mesa.aguardaFimAnimacoes();
+		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {
-		getMesa().mostrarPerguntaMao11 = false;
-		getMesa().mostrarPerguntaAumento = false;
+		mesa.mostrarPerguntaMao11 = false;
+		mesa.mostrarPerguntaAumento = false;
+		if (j instanceof JogadorHumano) {
+			Log.i("Partida", "Partida percebeu que é vez do humano");
+		}
 		MesaView.setVezHumano(j instanceof JogadorHumano);
 	}
 
