@@ -109,9 +109,9 @@ public class MesaView extends View {
 			rectBotaoNao = new Rect(leftDialog + larguraDialog / 2 + 8,
 					rectBotaoSim.top, leftDialog + larguraDialog - 8,
 					rectBotaoSim.bottom);
-			rectBotaoAumento = new Rect(MARGEM, alturaDialog
+			rectBotaoAumento = new Rect(MARGEM, getHeight()
 					- rectBotaoSim.height() - MARGEM, MARGEM
-					+ rectBotaoSim.width(), alturaDialog - MARGEM);
+					+ rectBotaoSim.width(), getHeight() - MARGEM);
 
 			// Inicializa, se necessário, as cartas em jogo
 			for (int i = 0; i < cartas.length; i++) {
@@ -248,26 +248,37 @@ public class MesaView extends View {
 			if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
 				mostrarPerguntaMao11 = false;
 				recusarMao11 = true;
+				return true;
 			}
 		}
 		if (mostrarPerguntaAumento) {
 			if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
 				mostrarPerguntaAumento = false;
 				aceitarAumento = true;
+				return true;
 			}
 			if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
 				mostrarPerguntaAumento = false;
 				recusarAumento = true;
+				return true;
 			}
 		}
-		if (vezHumano) {
+		if (vezHumano == 1) {
 			for (int i = 6; i >= 4; i--) {
 				if ((!cartas[i].descartada)
 						&& cartas[i].isDentro(event.getX(), event.getY())) {
-					JogadorHumano jh = jogo.getJogadorHumano();
-					jogo.jogaCarta(jh, cartas[i].getCarta());
+					vezHumano = 0;
+					jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]
+							.getCarta());
 					return true;
 				}
+			}
+			if (valorProximaAposta > 0
+					&& rectBotaoAumento.contains((int) event.getX(),
+							(int) event.getY())) {
+				vezHumano = -1;
+				jogo.aumentaAposta(jogo.getJogadorHumano());
+				return true;
 			}
 		}
 		return false;
@@ -346,6 +357,8 @@ public class MesaView extends View {
 
 	private Rect rectBotaoNao;
 
+	public int valorProximaAposta = 0;
+
 	/**
 	 * Permite à partida informar que (não) é a vez de deixar o humano jogar
 	 * 
@@ -353,7 +366,7 @@ public class MesaView extends View {
 	 *            true se for a vez dele, false se não
 	 */
 	public static void setVezHumano(boolean vezHumano) {
-		MesaView.vezHumano = vezHumano;
+		MesaView.vezHumano = vezHumano ? 1 : 0;
 	}
 
 	/**
@@ -385,8 +398,8 @@ public class MesaView extends View {
 		// // Atualiza o placar
 		// mesa.atualizaPlacar(pontosNos, pontosEles);
 		//
-		// // Libera o jogador para pedir truco
-		// valorProximaAposta = 3;
+		// Libera o jogador para pedir truco
+		valorProximaAposta = 3;
 		//
 		// // Informa que ninguém aceitou mão de 11 (para não duplicar o balão)
 		// jaAceitou = false;
@@ -603,14 +616,17 @@ public class MesaView extends View {
 		}
 
 		// Botão de aumento
-		paint.setColor(Color.BLACK);
-		paint.setStyle(Style.FILL);
-		canvas.drawRect(rectBotaoAumento, paint);
-		paint.setColor(Color.WHITE);
-		paint.setStyle(Style.STROKE);
-		canvas.drawRect(rectBotaoAumento, paint);
-		canvas.drawText("Truco", rectBotaoSim.centerX(),
-				rectBotaoSim.centerY(), paint);
+		if (vezHumano == 1 && valorProximaAposta > 0) {
+			paint.setColor(Color.BLACK);
+			paint.setStyle(Style.FILL);
+			canvas.drawRect(rectBotaoAumento, paint);
+			paint.setColor(Color.WHITE);
+			paint.setStyle(Style.STROKE);
+			canvas.drawRect(rectBotaoAumento, paint);
+			paint.setTextAlign(Align.CENTER);
+			canvas.drawText("Truco", rectBotaoAumento.centerX(),
+					rectBotaoAumento.centerY(), paint);
+		}
 
 	}
 
@@ -645,9 +661,10 @@ public class MesaView extends View {
 	private static long animandoAte = System.currentTimeMillis();
 
 	/**
-	 * Diz se é a vez do jogador humano dessa mesa
+	 * Diz se é a vez do jogador humano dessa mesa (0=não, 1=sim, -1=sim mas
+	 * está esperando resultado de truco
 	 */
-	private static boolean vezHumano = false;
+	private static int vezHumano = 0;
 
 	/**
 	 * Jogo que a mesa está exibindo (deve ser setado externamente)
@@ -800,6 +817,27 @@ public class MesaView extends View {
 			fraseBalao = null;
 		}
 
+	}
+
+	public void aceitouAumentoAposta(Jogador j, int valor) {
+		if (jogo.getJogadorHumano() != null) {
+			if (j.getEquipe() == 1) {
+				// Nós aceitamos um truco, então podemos aumentar
+				// (i.e., se foi truco, podemos pedir 6, etc.) até o limite de
+				// 12
+				if (valor != 12) {
+					valorProximaAposta += 3;
+				}
+			} else {
+				// Eles aceitaram um truco, temos que esperar eles pedirem
+				valorProximaAposta = 0;
+				// Se era a minha vez (i.e., estava suspensa pelo pedido),
+				// retoma
+				if (vezHumano == -1) {
+					vezHumano = 1;
+				}
+			}
+		}
 	}
 
 }

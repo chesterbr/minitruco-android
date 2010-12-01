@@ -12,15 +12,14 @@ Backlog
 -------
 
 Features:
-- Pedir aumento
 - Jogar carta fechada
-- Novo layout de cartas (compatível com telas pequenas)
 
 Débito Técnico:
 - Decidir quais estratégias entram, e como  
+- Bug: Botão de aumento tem que mostrar texto certo no 6/9/12
+- Bug: desativar botão de truco na mão de 11
 - Bug: Verificar evento de touch corretamente (qualquer evento tá descartando)
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
-- Bug: verificar tempos de piscada (acho que tá ok, mas...)
 - Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
 - Acertar ciclo de vida da Activity - isso inclui acertar o evento de resize,
   dissociando init do jogo e resize da tela (que inclui limpar o cache de
