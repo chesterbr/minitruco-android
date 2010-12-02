@@ -12,11 +12,10 @@ Backlog
 -------
 
 Features:
-- Jogar carta fechada
-
-Débito Técnico:
 - Bitmap da tela de abertura
 - Decidir quais estratégias entram, e como  
+
+Débito Técnico:
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - acertar o evento de resize, dissociando init do jogo e resize da tela (que   
   inclui limpar o cache de bitmaps de cartas).
@@ -24,6 +23,12 @@ Débito Técnico:
   usarmos o Robolectric)
 - Bug: throwIfRecycled aleatório [1]
 - Bug: arrayindexoutofbounds quando fechou a partida [2]
+(obs: esses dois bugs podem ter sido resolvidos quando foi corrigido o lifecycle, é preciso ver se aparecem novamente)
+
+Features do miniTruco J2ME que (ainda) não tem nesse:
+- Jogar carta fechada
+- Opção de manilha velha
+- Jogos multiplayer
 
 Nice to have:
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
