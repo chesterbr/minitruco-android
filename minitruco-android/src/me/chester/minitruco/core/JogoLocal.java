@@ -1,6 +1,5 @@
 package me.chester.minitruco.core;
 
-import me.chester.minitruco.android.Partida;
 import android.util.Log;
 
 /*

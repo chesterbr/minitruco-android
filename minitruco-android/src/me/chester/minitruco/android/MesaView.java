@@ -110,8 +110,9 @@ public class MesaView extends View {
 					rectBotaoSim.top, leftDialog + larguraDialog - 8,
 					rectBotaoSim.bottom);
 			rectBotaoAumento = new Rect(MARGEM, getHeight()
-					- rectBotaoSim.height() - MARGEM, MARGEM
-					+ rectBotaoSim.width(), getHeight() - MARGEM);
+					- rectBotaoSim.height() * 2 - MARGEM, MARGEM
+					+ rectBotaoSim.width(), getHeight() - MARGEM
+					- rectBotaoSim.height());
 
 			// Inicializa, se necessário, as cartas em jogo
 			for (int i = 0; i < cartas.length; i++) {
@@ -135,7 +136,6 @@ public class MesaView extends View {
 			Thread t = new Thread(MenuPrincipal.jogo);
 			t.start();
 			respondeDialogos.start();
-			// Balao.diz("rosquinha", 1, 100000);
 
 		}
 	}
@@ -728,9 +728,11 @@ public class MesaView extends View {
 	private void desenhaElipseBalao(Canvas canvas, int x, int y, int largBalao,
 			int altBalao, int quadrantePonta, Paint paint) {
 		// Elipse principal
+		paint.setAntiAlias(true);
 		canvas.drawArc(new RectF(x, y, x + largBalao - 1, y + altBalao - 1), 0,
 				360, false, paint);
 		// Ponta (é um triângulo que desenhamos linha a linha)
+		paint.setAntiAlias(false);
 		int xi;
 		for (int i = 0; i < altBalao; i++) {
 			if (quadrantePonta == 2 || quadrantePonta == 3) {
@@ -798,7 +800,7 @@ public class MesaView extends View {
 			// preto e em seguida desenhando ele em branco na posição
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
-			paint.setStyle(Paint.Style.FILL);
+			paint.setStyle(Paint.Style.FILL_AND_STROKE);
 			paint.setColor(Color.BLACK);
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
