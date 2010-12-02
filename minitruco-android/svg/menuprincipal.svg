@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="240"
+   height="320"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="minitruco.svg"
+   inkscape:export-filename="/home/bani/Pictures/cartas/carta7p.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient4083">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop4085" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="1"
+         id="stop4087" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4083"
+       id="linearGradient4089"
+       x1="120"
+       y1="155.48027"
+       x2="120"
+       y2="219.33177"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4083"
+       id="linearGradient4116"
+       gradientUnits="userSpaceOnUse"
+       x1="120"
+       y1="155.48027"
+       x2="120"
+       y2="219.33177" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#1b8e3c"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.346875"
+     inkscape:cx="213.17865"
+     inkscape:cy="160"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer5"
+     showgrid="false"
+     inkscape:window-width="956"
+     inkscape:window-height="699"
+     inkscape:window-x="1"
+     inkscape:window-y="85"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-732.36218)"
+     style="display:inline" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer6"
+     inkscape:label="bg"
+     style="display:inline"
+     transform="translate(0,68)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="naipe"
+     style="display:inline"
+     transform="translate(0,68)">
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+       x="-23.879032"
+       y="-40.645161"
+       id="text3624"><tspan
+         sodipodi:role="line"
+         id="tspan3626"
+         x="-23.879032"
+         y="-40.645161" /><tspan
+         sodipodi:role="line"
+         id="tspan3628"
+         x="-23.879032"
+         y="-25.645161" /><tspan
+         sodipodi:role="line"
+         id="tspan3630"
+         x="-23.879032"
+         y="-10.645161" /></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3652"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"><flowRegion
+         id="flowRegion3654"><rect
+           id="rect3656"
+           width="459.29031"
+           height="300.7742"
+           x="-444.55646"
+           y="-126.50806" /></flowRegion><flowPara
+         id="flowPara3658" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3672"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"><flowRegion
+         id="flowRegion3674"><rect
+           id="rect3676"
+           width="142.26532"
+           height="43.110703"
+           x="-444.04025"
+           y="170.80818" /></flowRegion><flowPara
+         id="flowPara3678" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3792"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:DejaVu Sans;font-style:normal;font-weight:normal;font-size:12;-inkscape-font-specification:DejaVu Sans;font-stretch:normal;font-variant:normal"><flowRegion
+         id="flowRegion3794"><rect
+           id="rect3796"
+           width="389.04874"
+           height="180.41763"
+           x="-53.457077"
+           y="38.607887" /></flowRegion><flowPara
+         id="flowPara3798"></flowPara></flowRoot>    <g
+       id="g4023"
+       transform="matrix(0.72845031,0,0,0.72845031,14.891879,6.04708)">
+      <g
+         id="g3997">
+        <g
+           id="g3838"
+           transform="translate(20.742459,-0.7424594)">
+          <rect
+             style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.65012306;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+             id="rect3722"
+             width="58.189018"
+             height="81.593445"
+             x="63.56752"
+             y="-40.796722"
+             rx="10.236075" />
+          <text
+             xml:space="preserve"
+             style="font-size:6.76093531px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             x="82.748451"
+             y="-13.658857"
+             id="text3724"
+             inkscape:export-filename="/home/bani/Pictures/cartas/carta3c.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90"><tspan
+               sodipodi:role="line"
+               id="tspan3726"
+               x="82.748451"
+               y="-13.658857"
+               style="font-size:31.55102921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:LMRoman10;-inkscape-font-specification:LMRoman10 Bold">i</tspan></text>
+          <text
+             id="text3728"
+             y="35.904068"
+             x="71.668892"
+             style="font-size:3.90073848px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             xml:space="preserve"><tspan
+               style="font-size:46.80886078px;fill:#000000;fill-opacity:1"
+               y="35.904068"
+               x="71.668892"
+               id="tspan3730"
+               sodipodi:role="line">♠</tspan></text>
+        </g>
+        <g
+           id="g3845"
+           transform="translate(0.74247466,-0.7424594)">
+          <rect
+             rx="10.236075"
+             y="-40.796722"
+             x="207.10968"
+             height="81.593445"
+             width="58.189018"
+             id="rect3762"
+             style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.65012306;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
+          <text
+             inkscape:export-ydpi="90"
+             inkscape:export-xdpi="90"
+             inkscape:export-filename="/home/bani/Pictures/cartas/carta3c.png"
+             id="text3764"
+             y="-13.658856"
+             x="226.29062"
+             style="font-size:6.76093531px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             xml:space="preserve"><tspan
+               style="font-size:31.55102921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:LMRoman10;-inkscape-font-specification:LMRoman10 Bold"
+               y="-13.658856"
+               x="226.29062"
+               id="tspan3766"
+               sodipodi:role="line">i</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-size:3.90073848px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             x="215.21106"
+             y="35.904068"
+             id="text3768"><tspan
+               sodipodi:role="line"
+               id="tspan3770"
+               x="215.21106"
+               y="35.904068"
+               style="font-size:46.80886078px;fill:#000000;fill-opacity:1">♠</tspan></text>
+        </g>
+        <g
+           id="g3800"
+           transform="translate(24.742459,-35.419952)">
+          <rect
+             style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.65012306;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+             id="rect3772"
+             width="58.189018"
+             height="81.593445"
+             x="-2.2035601"
+             y="-6.1192293"
+             rx="10.236075" />
+          <text
+             xml:space="preserve"
+             style="font-size:6.76093531px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             x="16.977379"
+             y="21.018637"
+             id="text3774"
+             inkscape:export-filename="/home/bani/Pictures/cartas/carta3c.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90"><tspan
+               sodipodi:role="line"
+               id="tspan3776"
+               x="16.977379"
+               y="21.018637"
+               style="font-size:31.55102921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:LMRoman10;-inkscape-font-specification:LMRoman10 Bold">m</tspan></text>
+          <text
+             id="text3778"
+             y="70.581558"
+             x="5.897819"
+             style="font-size:3.90073848px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             xml:space="preserve"><tspan
+               style="font-size:46.80886078px;fill:#000000;fill-opacity:1"
+               y="70.581558"
+               x="5.897819"
+               id="tspan3780"
+               sodipodi:role="line">♣</tspan></text>
+        </g>
+        <g
+           id="g3814"
+           transform="translate(-0.20725101,-35.419952)">
+          <rect
+             rx="10.236075"
+             y="-6.1192293"
+             x="146.28831"
+             height="81.593445"
+             width="58.189018"
+             id="rect3782"
+             style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.65012306;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
+          <text
+             inkscape:export-ydpi="90"
+             inkscape:export-xdpi="90"
+             inkscape:export-filename="/home/bani/Pictures/cartas/carta3c.png"
+             id="text3784"
+             y="21.018637"
+             x="165.46925"
+             style="font-size:6.76093531px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             xml:space="preserve"><tspan
+               style="font-size:31.55102921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:1;font-family:LMRoman10;-inkscape-font-specification:LMRoman10 Bold"
+               y="21.018637"
+               x="165.46925"
+               id="tspan3786"
+               sodipodi:role="line">n</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-size:3.90073848px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             x="154.38969"
+             y="70.581558"
+             id="text3788"><tspan
+               sodipodi:role="line"
+               id="tspan3790"
+               x="154.38969"
+               y="70.581558"
+               style="font-size:46.80886078px;fill:#000000;fill-opacity:1">♣</tspan></text>
+        </g>
+      </g>
+      <g
+         transform="translate(1.491906,0)"
+         id="g3965">
+        <g
+           id="g3930"
+           transform="translate(0,-7.4895592)">
+          <rect
+             rx="10.236075"
+             y="58.692837"
+             x="-9.6884785"
+             height="81.593445"
+             width="58.189018"
+             id="rect3875"
+             style="fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:0.65012306;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
+          <text
+             inkscape:export-ydpi="90"
+             inkscape:export-xdpi="90"
+             inkscape:export-filename="/home/bani/Pictures/cartas/carta3c.png"
+             id="text3877"
+             y="85.830704"
+             x="9.4924603"
+             style="font-size:6.76093531px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             xml:space="preserve"><tspan
+               style="font-size:31.55102921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#ff0000;fill-opacity:1;font-family:LMRoman10;-inkscape-font-specification:LMRoman10 Bold"
+               y="85.830704"
+               x="9.4924603"
+               id="tspan3879"
+               sodipodi:role="line">T</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-size:3.90073848px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             x="-1.5870998"
+             y="135.39363"
+             id="text3881"><tspan
+               sodipodi:role="line"
+               id="tspan3883"
+               x="-1.5870998"
+               y="135.39363"
+               style="font-size:46.80886078px;fill:#ff0000;fill-opacity:1">♥</tspan></text>
+        </g>
+        <g
+           id="g3937"
+           transform="translate(-11.807428,-6.7471008)">
+          <rect
+             style="fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:0.65012306;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+             id="rect3890"
+             width="58.189018"
+             height="81.593445"
+             x="63.815002"
+             y="57.950378"
+             rx="10.236075" />
+          <text
+             xml:space="preserve"
+             style="font-size:6.76093531px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             x="82.995941"
+             y="85.088242"
+             id="text3892"
+             inkscape:export-filename="/home/bani/Pictures/cartas/carta3c.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90"><tspan
+               sodipodi:role="line"
+               id="tspan3894"
+               x="82.995941"
+               y="85.088242"
+               style="font-size:31.55102921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#ff0000;fill-opacity:1;font-family:LMRoman10;-inkscape-font-specification:LMRoman10 Bold">r</tspan></text>
+          <text
+             id="text3896"
+             y="134.65117"
+             x="71.916382"
+             style="font-size:3.90073848px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             xml:space="preserve"><tspan
+               style="font-size:46.80886078px;fill:#ff0000;fill-opacity:1"
+               y="134.65117"
+               x="71.916382"
+               id="tspan3898"
+               sodipodi:role="line">♦</tspan></text>
+        </g>
+        <g
+           id="g3944"
+           transform="translate(-31.781914,-7.4895592)">
+          <rect
+             rx="10.236075"
+             y="58.692837"
+             x="145.48553"
+             height="81.593445"
+             width="58.189018"
+             id="rect3900"
+             style="fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:0.65012306;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
+          <text
+             inkscape:export-ydpi="90"
+             inkscape:export-xdpi="90"
+             inkscape:export-filename="/home/bani/Pictures/cartas/carta3c.png"
+             id="text3902"
+             y="85.830704"
+             x="164.66647"
+             style="font-size:6.76093531px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             xml:space="preserve"><tspan
+               style="font-size:31.55102921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#ff0000;fill-opacity:1;font-family:LMRoman10;-inkscape-font-specification:LMRoman10 Bold"
+               y="85.830704"
+               x="164.66647"
+               id="tspan3904"
+               sodipodi:role="line">u</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-size:3.90073848px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             x="153.58691"
+             y="135.39363"
+             id="text3906"><tspan
+               sodipodi:role="line"
+               id="tspan3908"
+               x="153.58691"
+               y="135.39363"
+               style="font-size:46.80886078px;fill:#ff0000;fill-opacity:1">♥</tspan></text>
+        </g>
+        <g
+           id="g3951"
+           transform="translate(-48.044092,-8.2320175)">
+          <rect
+             style="fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:0.65012306;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
+             id="rect3910"
+             width="58.189018"
+             height="81.593445"
+             x="223.44377"
+             y="59.435295"
+             rx="10.236075" />
+          <text
+             xml:space="preserve"
+             style="font-size:6.76093531px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             x="242.62471"
+             y="86.573166"
+             id="text3912"
+             inkscape:export-filename="/home/bani/Pictures/cartas/carta3c.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90"><tspan
+               sodipodi:role="line"
+               id="tspan3914"
+               x="242.62471"
+               y="86.573166"
+               style="font-size:31.55102921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#ff0000;fill-opacity:1;font-family:LMRoman10;-inkscape-font-specification:LMRoman10 Bold">c</tspan></text>
+          <text
+             id="text3916"
+             y="136.13609"
+             x="231.54515"
+             style="font-size:3.90073848px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             xml:space="preserve"><tspan
+               style="font-size:46.80886078px;fill:#ff0000;fill-opacity:1"
+               y="136.13609"
+               x="231.54515"
+               id="tspan3918"
+               sodipodi:role="line">♦</tspan></text>
+        </g>
+        <g
+           id="g3958"
+           transform="translate(-53.169386,-8.2320175)">
+          <rect
+             rx="10.236075"
+             y="59.435295"
+             x="290.26511"
+             height="81.593445"
+             width="58.189018"
+             id="rect3920"
+             style="fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:0.65012306;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline" />
+          <text
+             inkscape:export-ydpi="90"
+             inkscape:export-xdpi="90"
+             inkscape:export-filename="/home/bani/Pictures/cartas/carta3c.png"
+             id="text3922"
+             y="86.573166"
+             x="309.44604"
+             style="font-size:6.76093531px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             xml:space="preserve"><tspan
+               style="font-size:31.55102921px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;fill:#ff0000;fill-opacity:1;font-family:LMRoman10;-inkscape-font-specification:LMRoman10 Bold"
+               y="86.573166"
+               x="309.44604"
+               id="tspan3924"
+               sodipodi:role="line">o</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-size:3.90073848px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+             x="298.36649"
+             y="136.13609"
+             id="text3926"><tspan
+               sodipodi:role="line"
+               id="tspan3928"
+               x="298.36649"
+               y="136.13609"
+               style="font-size:46.80886078px;fill:#ff0000;fill-opacity:1">♥</tspan></text>
+        </g>
+      </g>
+    </g>
+    <g
+       id="g4107"
+       transform="translate(0,0.30162)">
+      <rect
+         rx="10.236075"
+         y="155.48027"
+         x="33.132248"
+         height="37.865429"
+         width="173.7355"
+         id="rect4081"
+         style="fill:url(#linearGradient4116);fill-opacity:1;stroke:none" />
+      <text
+         id="text4091"
+         y="187.55298"
+         x="119.75756"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+         xml:space="preserve"><tspan
+           style="font-size:36px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:center;text-anchor:middle;font-family:Good Times;-inkscape-font-specification:Good Times Bold"
+           y="187.55298"
+           x="119.75756"
+           id="tspan4093"
+           sodipodi:role="line">iniciar</tspan></text>
+    </g>
+  </g>
+</svg>

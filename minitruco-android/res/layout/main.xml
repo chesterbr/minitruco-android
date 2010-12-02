@@ -5,6 +5,6 @@
 
 	<ImageView android:id="@+id/menuprincipal" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:src="@drawable/menuprincipal"
-		android:layout_gravity="center" android:background="#0F0"/>
+		android:layout_gravity="center" android:background="#1B8E3C"/>
 
 </LinearLayout>
