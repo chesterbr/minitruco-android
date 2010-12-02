@@ -834,6 +834,7 @@ public class MesaView extends View {
 					quadrantePonta, paint);
 
 			// Finalmente, escreve o texto do balão
+			paint.setAntiAlias(true);
 			canvas.drawText(fraseBalao, x + MARGEM_BALAO_LEFT, y + altBalao
 					- MARGEM_BALAO_TOP - 2, paintFonte);
 
