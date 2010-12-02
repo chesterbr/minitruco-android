@@ -16,6 +16,8 @@ Features:
 - Decidir quais estratégias entram, e como  
 
 Débito Técnico/Bugs:
+- Bug: troca de texto no botão de aumento não tá rolando 100%
+- Bug: carta da mesa tem que ter deslocamento relativo (senão fica ruim de ver em WVGA)
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - acertar o evento de resize, dissociando init do jogo e resize da tela (que   
   inclui limpar o cache de bitmaps de cartas).
