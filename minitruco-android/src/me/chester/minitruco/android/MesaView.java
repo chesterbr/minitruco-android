@@ -301,10 +301,17 @@ public class MesaView extends View {
 		// porque periga não ter dado tempo de redesenhar a tela entre um
 		// postInvalidate() e outro.
 		public void run() {
-			while (MenuPrincipal.jogo != null) {
+			// Aguarda o jogo começar
+			while (jogo == null) {
+				sleep(200);
+			}
+			// Fica em loop até o jogo acabar
+			while (!jogo.jogoFinalizado) {
 				sleep(200);
 				do {
-					postInvalidate();
+					if (visivel) {
+						postInvalidate();
+					}
 					sleep(50);
 				} while (calcTempoAteFimAnimacaoMS() >= 0);
 			}
@@ -323,7 +330,16 @@ public class MesaView extends View {
 	Thread respondeDialogos = new Thread() {
 		@Override
 		public void run() {
-			while (MenuPrincipal.jogo != null) {
+			// Aguarda o jogo começar
+			while (jogo==null) {
+				try {
+					sleep(250);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			// Roda até o jogo acabar
+			while (!jogo.jogoFinalizado) {
 				try {
 					sleep(250);
 				} catch (InterruptedException e) {
@@ -850,5 +866,11 @@ public class MesaView extends View {
 
 	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
 			"NOVE!", "DOZE!!!" };
+
+	private boolean visivel = false;
+	
+	public void setVisivel(boolean visivel) {
+		this.visivel = visivel;
+	}
 
 }

@@ -288,7 +288,7 @@ public abstract class Jogo implements Runnable {
 	 * Indica que o jogo foi finalizado (para evitar que os jogadoresCPU fiquem
 	 * "rodando em falso" caso o jogo seja abortado
 	 */
-	protected boolean jogoFinalizado = false;
+	public boolean jogoFinalizado = false;
 
 	/**
 	 * @return Letra correspondente à manilha, ou constante em caso de manilha

@@ -155,14 +155,18 @@ public class JogoLocal extends Jogo {
 			interessado.inicioPartida();
 		}
 
-		// Inicia a primeira rodada, usando o jogador na posição 1
+		// Inicia a primeira rodada, usando o jogador na posição 1, e processa
+		// as jogadas até alguém ganhar ou o jogo ser abortado (o que pode
+		// ocorrer em paralelo, daí os múltiplos checks a jogoFinalizado)
 		iniciaMao(getJogador(1));
-		while (pontosEquipe[0] < 12 && pontosEquipe[1] < 12) {
-			while (!alguemJogou) {
+		while (pontosEquipe[0] < 12 && pontosEquipe[1] < 12 && !jogoFinalizado) {
+			while ((!alguemJogou) && (!jogoFinalizado)) {
 				sleep(100);
 			}
-			processaJogada();
-			alguemJogou = false;
+			if (!jogoFinalizado) {
+				processaJogada();
+				alguemJogou = false;
+			}
 		}
 	}
 

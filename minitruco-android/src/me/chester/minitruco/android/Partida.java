@@ -59,6 +59,24 @@ public class Partida extends Activity implements Interessado {
 
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mesa.setVisivel(false);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mesa.setVisivel(true);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		jogo.abortaJogo(1);
+	}
+
 	public void aceitouAumentoAposta(Jogador j, int valor) {
 		mesa.aguardaFimAnimacoes();
 		mesa.diz("aumento_sim", j.getPosicao(), 1500);

@@ -15,12 +15,11 @@ Features:
 - Jogar carta fechada
 
 Débito Técnico:
+- Bitmap da tela de abertura
 - Decidir quais estratégias entram, e como  
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
-- Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
-- Acertar ciclo de vida da Activity - isso inclui acertar o evento de resize,
-  dissociando init do jogo e resize da tela (que inclui limpar o cache de
-  bitmaps de cartas).
+- acertar o evento de resize, dissociando init do jogo e resize da tela (que   
+  inclui limpar o cache de bitmaps de cartas).
 - Reduzir o requisito técnico para Android 1.5, se for viável
 - Reintroduzir testes da parte visual (que não funcionam mais por
   usarmos o Robolectric)
