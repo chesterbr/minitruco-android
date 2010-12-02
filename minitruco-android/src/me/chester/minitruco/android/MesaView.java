@@ -617,7 +617,8 @@ public class MesaView extends View {
 		}
 
 		// Botão de aumento
-		if (vezHumano == 1 && valorProximaAposta > 0) {
+		if (vezHumano == 1 && valorProximaAposta > 0 && placar[0] != 11
+				&& placar[1] != 11) {
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Style.FILL);
 			canvas.drawRect(rectBotaoAumento, paint);
@@ -625,8 +626,9 @@ public class MesaView extends View {
 			paint.setStyle(Style.STROKE);
 			canvas.drawRect(rectBotaoAumento, paint);
 			paint.setTextAlign(Align.CENTER);
-			canvas.drawText("Truco", rectBotaoAumento.centerX(),
-					rectBotaoAumento.centerY(), paint);
+			canvas.drawText(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1],
+					rectBotaoAumento.centerX(), rectBotaoAumento.centerY(),
+					paint);
 		}
 
 	}
@@ -844,5 +846,8 @@ public class MesaView extends View {
 			}
 		}
 	}
+
+	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
+			"NOVE!", "DOZE!!!" };
 
 }
