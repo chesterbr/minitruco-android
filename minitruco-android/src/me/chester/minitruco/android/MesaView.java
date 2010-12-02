@@ -240,48 +240,49 @@ public class MesaView extends View {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (mostrarPerguntaMao11) {
-			if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
-				mostrarPerguntaMao11 = false;
-				aceitarMao11 = true;
-			}
-			if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
-				mostrarPerguntaMao11 = false;
-				recusarMao11 = true;
-				return true;
-			}
-		}
-		if (mostrarPerguntaAumento) {
-			if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
-				mostrarPerguntaAumento = false;
-				aceitarAumento = true;
-				return true;
-			}
-			if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
-				mostrarPerguntaAumento = false;
-				recusarAumento = true;
-				return true;
-			}
-		}
-		if (vezHumano == 1) {
-			for (int i = 6; i >= 4; i--) {
-				if ((!cartas[i].descartada)
-						&& cartas[i].isDentro(event.getX(), event.getY())) {
-					vezHumano = 0;
-					jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]
-							.getCarta());
-					return true;
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+			if (mostrarPerguntaMao11) {
+				if (rectBotaoSim.contains((int) event.getX(), (int) event
+						.getY())) {
+					mostrarPerguntaMao11 = false;
+					aceitarMao11 = true;
+				}
+				if (rectBotaoNao.contains((int) event.getX(), (int) event
+						.getY())) {
+					mostrarPerguntaMao11 = false;
+					recusarMao11 = true;
 				}
 			}
-			if (valorProximaAposta > 0
-					&& rectBotaoAumento.contains((int) event.getX(),
-							(int) event.getY())) {
-				vezHumano = -1;
-				jogo.aumentaAposta(jogo.getJogadorHumano());
-				return true;
+			if (mostrarPerguntaAumento) {
+				if (rectBotaoSim.contains((int) event.getX(), (int) event
+						.getY())) {
+					mostrarPerguntaAumento = false;
+					aceitarAumento = true;
+				}
+				if (rectBotaoNao.contains((int) event.getX(), (int) event
+						.getY())) {
+					mostrarPerguntaAumento = false;
+					recusarAumento = true;
+				}
+			}
+			if (vezHumano == 1) {
+				for (int i = 6; i >= 4; i--) {
+					if ((!cartas[i].descartada)
+							&& cartas[i].isDentro(event.getX(), event.getY())) {
+						vezHumano = 0;
+						jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]
+								.getCarta());
+					}
+				}
+				if (valorProximaAposta > 0
+						&& rectBotaoAumento.contains((int) event.getX(),
+								(int) event.getY())) {
+					vezHumano = -1;
+					jogo.aumentaAposta(jogo.getJogadorHumano());
+				}
 			}
 		}
-		return false;
+		return super.onTouchEvent(event);
 	}
 
 	private long calcTempoAteFimAnimacaoMS() {

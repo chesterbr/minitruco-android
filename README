@@ -16,7 +16,6 @@ Features:
 
 Débito Técnico:
 - Decidir quais estratégias entram, e como  
-- Bug: Verificar evento de touch corretamente (qualquer evento tá descartando)
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - Tela de abertura (apenas botão iniciar? iniciar direto a partida?)
 - Acertar ciclo de vida da Activity - isso inclui acertar o evento de resize,
