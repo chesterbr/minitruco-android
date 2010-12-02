@@ -23,6 +23,8 @@ Débito Técnico/Bugs:
 - Bug: arrayindexoutofbounds quando fechou a partida [2]
 (obs: esses dois bugs podem ter sido resolvidos quando foi corrigido o lifecycle, é preciso ver se aparecem novamente)
 - Arrumar as licenças em todos os arquivos
+- (se der) diminuir e subir a caixa de diálogo pra não ficar em cima dos balões
+  (alternativa: colocar os balões num z-order acima dela)
 
 Features do miniTruco J2ME que (ainda) não tem nesse:
 - Jogar carta fechada
