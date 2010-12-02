@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 
 public class MenuPrincipal extends Activity implements OnClickListener {
 	/** Called when the activity is first created. */
@@ -17,9 +16,8 @@ public class MenuPrincipal extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		Button button = (Button) findViewById(R.id.button_iniciar);
-		System.out.println(button);
-		button.setOnClickListener(this);
+		View imgMenu = findViewById(R.id.menuprincipal);
+		imgMenu.setOnClickListener(this);
 	}
 	
 	public static Jogo jogo;

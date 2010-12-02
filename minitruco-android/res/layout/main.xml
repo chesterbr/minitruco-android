@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
-<Button android:id="@+id/button_iniciar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Iniciar Jogo" />
-    
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<ImageView android:id="@+id/menuprincipal" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:src="@drawable/menuprincipal"
+		android:layout_gravity="center" android:background="#0F0"/>
+
 </LinearLayout>
