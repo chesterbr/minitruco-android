@@ -550,7 +550,7 @@ public class MesaView extends View {
 		super.onDraw(canvas);
 
 		// Fundo verde - é um clássico do miniTruco
-		canvas.drawRGB(0, 255, 0);
+		canvas.drawRGB(27, 142, 60);
 
 		// Desenha as cartas na mesa (na mão ou no descarte)
 		// for (int i = cartas.length - 1; i >= 0; i--) {

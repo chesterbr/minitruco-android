@@ -26,6 +26,8 @@ import android.graphics.Rect;
  * 
  */
 public class CartaVisual {
+	
+	public static final int COR_MESA = Color.argb(255, 27, 142, 60);
 
 	/**
 	 * Cria uma nova carta na posição indicada
@@ -146,13 +148,13 @@ public class CartaVisual {
 			paint.setColor(Color.WHITE);
 			paint.setStyle(Paint.Style.FILL);
 			canvas.drawRect(rect, paint);
-			paint.setColor(Color.GREEN);
+			paint.setColor(COR_MESA);
 			paint.setStyle(Paint.Style.FILL);
 			canvas.drawBitmap(bitmap, left, top, paint);
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.STROKE);
 			canvas.drawRect(rect, paint);
-			paint.setColor(Color.GREEN);
+			paint.setColor(COR_MESA);
 			canvas.drawPoint(left, top, paint);
 			canvas.drawPoint(left + largura - 1, top, paint);
 			canvas.drawPoint(left, top + altura - 1, paint);
