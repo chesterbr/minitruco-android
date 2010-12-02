@@ -15,22 +15,23 @@ Features:
 - Bitmap da tela de abertura
 - Decidir quais estratégias entram, e como  
 
-Débito Técnico:
+Débito Técnico/Bugs:
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - acertar o evento de resize, dissociando init do jogo e resize da tela (que   
   inclui limpar o cache de bitmaps de cartas).
-- Reintroduzir testes da parte visual (que não funcionam mais por
-  usarmos o Robolectric)
 - Bug: throwIfRecycled aleatório [1]
 - Bug: arrayindexoutofbounds quando fechou a partida [2]
 (obs: esses dois bugs podem ter sido resolvidos quando foi corrigido o lifecycle, é preciso ver se aparecem novamente)
+- Arrumar as licenças em todos os arquivos
 
 Features do miniTruco J2ME que (ainda) não tem nesse:
 - Jogar carta fechada
 - Opção de manilha velha
 - Jogos multiplayer
 
-Nice to have:
+Débito Técnico "nice-to-have":
+- Reintroduzir testes da parte visual (que não funcionam mais por
+  usarmos o Robolectric)
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
