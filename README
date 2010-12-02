@@ -24,11 +24,8 @@ Débito Técnico:
   usarmos o Robolectric)
 - Bug: throwIfRecycled aleatório [1]
 - Bug: arrayindexoutofbounds quando fechou a partida [2]
-- Verificar se é possível consertar a ponta do balãozinho que ficou cinza com o anti-alias
 
 Nice to have:
-- Ícone
-- Opção de reinício no fim da partida (e talvez alguma firula extra)
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
