@@ -242,25 +242,25 @@ public class MesaView extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			if (mostrarPerguntaMao11) {
-				if (rectBotaoSim.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoSim.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaMao11 = false;
 					aceitarMao11 = true;
 				}
-				if (rectBotaoNao.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoNao.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaMao11 = false;
 					recusarMao11 = true;
 				}
 			}
 			if (mostrarPerguntaAumento) {
-				if (rectBotaoSim.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoSim.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaAumento = false;
 					aceitarAumento = true;
 				}
-				if (rectBotaoNao.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoNao.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaAumento = false;
 					recusarAumento = true;
 				}
@@ -270,8 +270,8 @@ public class MesaView extends View {
 					if ((!cartas[i].descartada)
 							&& cartas[i].isDentro(event.getX(), event.getY())) {
 						vezHumano = 0;
-						jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]
-								.getCarta());
+						jogo.jogaCarta(jogo.getJogadorHumano(),
+								cartas[i].getCarta());
 					}
 				}
 				if (valorProximaAposta > 0
@@ -331,7 +331,7 @@ public class MesaView extends View {
 		@Override
 		public void run() {
 			// Aguarda o jogo começar
-			while (jogo==null) {
+			while (jogo == null) {
 				try {
 					sleep(250);
 				} catch (InterruptedException e) {
@@ -578,15 +578,27 @@ public class MesaView extends View {
 		paint.setAntiAlias(true);
 		paint.setColor(Color.BLACK);
 		paint.setTextAlign(Align.LEFT);
+		Paint paintFundoPontos = new Paint();
+		paintFundoPontos.setColor(Color.GREEN);
+		float alturaPontos = paint.measureText("Eles: 12") * 0.3f;
 
 		if (agora > nosPiscaAte || (agora % 250) % 2 == 0) {
-			canvas.drawText("Nós: " + placar[0], MARGEM, getHeight() - MARGEM,
-					paint);
+			String pontos = "Nós: " + placar[0];
+			float larguraTexto = paint.measureText(pontos);
+			canvas.drawRect(MARGEM - 2, getHeight() - MARGEM + 2, MARGEM
+					+ larguraTexto + 2, getHeight() - MARGEM - alturaPontos,
+					paintFundoPontos);
+			canvas.drawText(pontos, MARGEM, getHeight() - MARGEM, paint);
 		}
 		paint.setTextAlign(Align.RIGHT);
 		if (agora > elesPiscaAte || (agora % 250) % 2 == 0) {
-			canvas.drawText("Eles: " + placar[1], getWidth() - MARGEM, MARGEM
-					+ paint.getTextSize(), paint);
+			String pontos = "Eles: " + placar[1];
+			float larguraTexto = paint.measureText(pontos);
+			canvas.drawRect(getWidth() - MARGEM - larguraTexto - 2, MARGEM - 2,
+					getWidth() - MARGEM + 2, MARGEM + alturaPontos + 2,
+					paintFundoPontos);
+			canvas.drawText(pontos, getWidth() - MARGEM,
+					MARGEM + paint.getTextSize(), paint);
 		}
 
 		// Ícones das rodadas
@@ -626,10 +638,10 @@ public class MesaView extends View {
 					+ paint.getTextSize() + 2, paint);
 			paint.setColor(Color.BLACK);
 			// paint.setTextSize(rectBotaoSim.height() * 0.8f);
-			canvas.drawText("Sim", rectBotaoSim.centerX(), rectBotaoSim
-					.centerY(), paint);
-			canvas.drawText("Não", rectBotaoNao.centerX(), rectBotaoNao
-					.centerY(), paint);
+			canvas.drawText("Sim", rectBotaoSim.centerX(),
+					rectBotaoSim.centerY(), paint);
+			canvas.drawText("Não", rectBotaoNao.centerX(),
+					rectBotaoNao.centerY(), paint);
 
 		}
 
@@ -869,7 +881,7 @@ public class MesaView extends View {
 			"NOVE!", "DOZE!!!" };
 
 	private boolean visivel = false;
-	
+
 	public void setVisivel(boolean visivel) {
 		this.visivel = visivel;
 	}
