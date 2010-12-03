@@ -50,8 +50,16 @@ public class Partida extends Activity implements Interessado {
 		// thread.
 		jogo = MenuPrincipal.jogo;
 		if (jogo != null) {
-			jogo.adiciona(this);
-			mesa.jogo = jogo;
+			if (jogo.jogoFinalizado) {
+				// Isso aqui é porque eu ainda não achei um jeito conveniente de
+				// processar o rotate, então eu simplesmente mato a atividade se
+				// ela voltar com um jogo já finalizado.
+				// TODO: consertar
+				finish();
+			} else {
+				jogo.adiciona(this);
+				mesa.jogo = jogo;
+			}
 		} else {
 			Log.w("Activity.onCreate",
 					"Partida iniciada sem jogo (ok para testes)");

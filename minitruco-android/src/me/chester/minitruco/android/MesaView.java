@@ -17,7 +17,6 @@ import android.graphics.RectF;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -82,61 +81,66 @@ public class MesaView extends View {
 	public CartaVisual[] cartas = new CartaVisual[16];
 
 	/**
-	 * Ajusta o tamanho das cartas e sua posição de acordo com a resolução
+	 * Ajusta o tamanho das cartas e sua posição de acordo com a resolução.
+	 * <p>
+	 * Na primeira chamada, incializa as cartas e dá início à partida (tem que
+	 * ser feito aqui porque não é uma boa idéia começar sem saber onde as
+	 * coisas vão aparecer)
 	 */
 	@Override
 	public void onSizeChanged(int w, int h, int oldw, int oldh) {
-		if (oldw == 0) {
-			// TODO tosco isso, não considera mudanças de tamanho
-			// no meio do caminho
 
-			// Define a posição e tamanho dos elementos da mesa
-			CartaVisual.ajustaTamanho(getWidth(), getHeight());
-			leftBaralho = this.getWidth() - CartaVisual.largura - MARGEM - 4;
-			topBaralho = this.getHeight() - CartaVisual.altura - MARGEM - 4;
+		// ARGH, descobri que num rotate de celular ele recria a view, fazendo
+		// com que esse código de inicialização rode novamente, essencialmente
+		// jogando o jogo fora. Solução provisória: essa app só roda em pé.
 
-			// Define posição e tamanho da caixa de diálogo e seus botões
-			int alturaDialog = (int) (CartaVisual.altura * 1.5);
-			int larguraDialog = CartaVisual.largura * 3;
-			int topDialog = (getHeight() - alturaDialog) / 2;
-			int leftDialog = (getWidth() - larguraDialog) / 2;
-			rectDialog = new Rect(leftDialog, topDialog, leftDialog
-					+ larguraDialog, topDialog + alturaDialog);
-			int alturaBotao = CartaVisual.altura / 2;
-			rectBotaoSim = new Rect(leftDialog + 8, topDialog + alturaDialog
-					- alturaBotao - 8, leftDialog + larguraDialog / 2 - 8,
-					topDialog + alturaDialog - 8);
-			rectBotaoNao = new Rect(leftDialog + larguraDialog / 2 + 8,
-					rectBotaoSim.top, leftDialog + larguraDialog - 8,
-					rectBotaoSim.bottom);
-			rectBotaoAumento = new Rect(MARGEM, getHeight()
-					- rectBotaoSim.height() * 2 - MARGEM, MARGEM
-					+ rectBotaoSim.width(), getHeight() - MARGEM
-					- rectBotaoSim.height());
+		// Ajusta o tamanho da carta (tudo depende dele) ao da mesa e posiciona
+		// o baralho decorativo (outra referência importante)
+		CartaVisual.ajustaTamanho(getWidth(), getHeight());
+		leftBaralho = this.getWidth() - CartaVisual.largura - MARGEM - 4;
+		topBaralho = this.getHeight() - CartaVisual.altura - MARGEM - 4;
 
-			// Inicializa, se necessário, as cartas em jogo
+		// Na primeira chamada (inicialização), instanciamos as cartas
+		boolean inicializando = (cartas[0] == null);
+		if (inicializando) {
 			for (int i = 0; i < cartas.length; i++) {
-				if (cartas[i] == null) {
-					cartas[i] = new CartaVisual(this, leftBaralho, topBaralho);
-					cartas[i].movePara(leftBaralho, topBaralho);
-				}
+				cartas[i] = new CartaVisual(this, leftBaralho, topBaralho);
+				cartas[i].movePara(leftBaralho, topBaralho);
 			}
-
-			// Posiciona as cartas decorativas do baralho e o vira
 			cartas[0].visible = false;
-			cartas[0].movePara(leftBaralho - CartaVisual.largura/2, topBaralho
-					- CartaVisual.altura / 4);
-			cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
-			cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
+		}
 
-			// Inicia a thread que vai cuidar das animações (acho)
+		// Define posição e tamanho da caixa de diálogo e seus botões
+		int alturaDialog = (int) (CartaVisual.altura * 1.5);
+		int larguraDialog = CartaVisual.largura * 3;
+		int topDialog = (getHeight() - alturaDialog) / 2;
+		int leftDialog = (getWidth() - larguraDialog) / 2;
+		rectDialog = new Rect(leftDialog, topDialog,
+				leftDialog + larguraDialog, topDialog + alturaDialog);
+		int alturaBotao = CartaVisual.altura / 2;
+		rectBotaoSim = new Rect(leftDialog + 8, topDialog + alturaDialog
+				- alturaBotao - 8, leftDialog + larguraDialog / 2 - 8,
+				topDialog + alturaDialog - 8);
+		rectBotaoNao = new Rect(leftDialog + larguraDialog / 2 + 8,
+				rectBotaoSim.top, leftDialog + larguraDialog - 8,
+				rectBotaoSim.bottom);
+		rectBotaoAumento = new Rect(MARGEM, getHeight() - rectBotaoSim.height()
+				* 2 - MARGEM, MARGEM + rectBotaoSim.width(), getHeight()
+				- MARGEM - rectBotaoSim.height());
+
+		// Posiciona as cartas decorativas do baralho e o vira, que são fixas
+		cartas[0].movePara(leftBaralho - CartaVisual.largura / 2, topBaralho
+				- CartaVisual.altura / 4);
+		cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
+		cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
+
+		if (inicializando) {
+
+			// Inicia as threads internas que cuidam de animações e de responder
+			// a diálogos, bem como a do jogo em si.
 			animacaoJogo.start();
-			Log.i("MesaView.onSizeChanged", "Inicializacao");
-
-			// Inicia o jogo
-			Thread t = new Thread(MenuPrincipal.jogo);
-			t.start();
 			respondeDialogos.start();
+			(new Thread(MenuPrincipal.jogo)).start();
 
 		}
 	}
