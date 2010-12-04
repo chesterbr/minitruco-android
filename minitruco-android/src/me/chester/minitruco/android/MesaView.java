@@ -94,11 +94,13 @@ public class MesaView extends View {
 		// com que esse código de inicialização rode novamente, essencialmente
 		// jogando o jogo fora. Solução provisória: essa app só roda em pé.
 
-		// Ajusta o tamanho da carta (tudo depende dele) ao da mesa e posiciona
-		// o baralho decorativo (outra referência importante)
+		// Ajusta o tamanho da carta (tudo depende dele) ao da mesa e os
+		// "pontos de referência" importantes (baralho decorativo, tamanho do
+		// texto, etc.)
 		CartaVisual.ajustaTamanho(getWidth(), getHeight());
 		leftBaralho = this.getWidth() - CartaVisual.largura - MARGEM - 4;
 		topBaralho = this.getHeight() - CartaVisual.altura - MARGEM - 4;
+		tamanhoFonte = 12.0f * (getHeight() / 270.0f);
 
 		// Na primeira chamada (inicialização), instanciamos as cartas
 		boolean inicializando = (cartas[0] == null);
@@ -127,11 +129,10 @@ public class MesaView extends View {
 		rectBotaoAumento = new Rect(MARGEM, getHeight() - rectBotaoSim.height()
 				* 2 - MARGEM, MARGEM + rectBotaoSim.width(), getHeight()
 				- MARGEM - rectBotaoSim.height());
-		tamanhoFonte = 12.0f * (getHeight() / 270.0f);
 
-		// Posiciona as cartas decorativas do baralho e o vira, que são fixas
-		cartas[0].movePara(leftBaralho - CartaVisual.largura / 2, topBaralho
-				- CartaVisual.altura / 4);
+		// Posiciona o vira e as cartas decorativas do baralho, que são fixos
+		cartas[0].movePara(leftBaralho - CartaVisual.largura * 7 / 20,
+				topBaralho - CartaVisual.altura / 4);
 		cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
 		cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
 
@@ -444,34 +445,41 @@ public class MesaView extends View {
 	private void distribui(int numJogador, int i, Carta carta) {
 
 		// Determina onde vamos colocar a carta (e se ela vem virada)
-		int topFinal, leftFinal;
+		int deslocamentoHorizontalEntreCartas = CartaVisual.largura * 6 / 7;
+		int deslocamentoVerticalEntreCartas = 4;
+		int leftFinal = 0;
 		switch (numJogador) {
 		case 1:
-			leftFinal = getWidth() / 2 - CartaVisual.largura + i
-					* (CartaVisual.largura * 2 / 3);
-			topFinal = getHeight() - (CartaVisual.altura + MARGEM);
-			// c.setVirada(true);
+		case 3:
+			leftFinal = getWidth() / 2
+					- (int) (deslocamentoHorizontalEntreCartas * 1.5) + i
+					* deslocamentoHorizontalEntreCartas;
 			break;
 		case 2:
 			leftFinal = getWidth() - CartaVisual.largura - MARGEM;
-			topFinal = getHeight() / 2 - CartaVisual.altura / 2 - (i - 1) * 4;
-			break;
-		case 3:
-			leftFinal = getWidth() / 2 - CartaVisual.largura + (2 - i)
-					* (CartaVisual.largura * 2 / 3);
-			topFinal = MARGEM;
 			break;
 		case 4:
 			leftFinal = MARGEM;
-			topFinal = getHeight() / 2 - CartaVisual.altura / 2 + (i - 1) * 4;
 			break;
-		default:
-			leftFinal = topFinal = 0;
+		}
+		int topFinal = 0;
+		switch (numJogador) {
+		case 1:
+			topFinal = getHeight() - (CartaVisual.altura + MARGEM);
+			break;
+		case 2:
+		case 4:
+			topFinal = getHeight() / 2 - CartaVisual.altura / 2 - (i - 1)
+					* deslocamentoVerticalEntreCartas;
+			break;
+		case 3:
+			topFinal = MARGEM;
+			break;
 		}
 
 		// Para o jogador da posição superior, inverte a ordem
 		// (senão a exibição na mão de 11 fica bagunçada)
-		if (numJogador == 3) {
+		if (numJogador == 3 || numJogador == 4) {
 			i = 2 - i;
 		}
 
@@ -798,7 +806,7 @@ public class MesaView extends View {
 			// Determina o tamanho e a posição do balão e o quadrante da
 			// ponta
 			final int MARGEM_BALAO_LEFT = (int) tamanhoFonte;
-			final int MARGEM_BALAO_TOP = (int) tamanhoFonte/2;
+			final int MARGEM_BALAO_TOP = (int) tamanhoFonte / 2;
 			Paint paintFonte = new Paint();
 			paintFonte.setAntiAlias(true);
 			paintFonte.setTextSize(tamanhoFonte);
