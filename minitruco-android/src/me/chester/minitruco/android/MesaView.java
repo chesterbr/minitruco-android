@@ -127,6 +127,7 @@ public class MesaView extends View {
 		rectBotaoAumento = new Rect(MARGEM, getHeight() - rectBotaoSim.height()
 				* 2 - MARGEM, MARGEM + rectBotaoSim.width(), getHeight()
 				- MARGEM - rectBotaoSim.height());
+		tamanhoFonte = 12.0f * (getHeight() / 270.0f);
 
 		// Posiciona as cartas decorativas do baralho e o vira, que são fixas
 		cartas[0].movePara(leftBaralho - CartaVisual.largura / 2, topBaralho
@@ -247,25 +248,25 @@ public class MesaView extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			if (mostrarPerguntaMao11) {
-				if (rectBotaoSim.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoSim.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaMao11 = false;
 					aceitarMao11 = true;
 				}
-				if (rectBotaoNao.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoNao.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaMao11 = false;
 					recusarMao11 = true;
 				}
 			}
 			if (mostrarPerguntaAumento) {
-				if (rectBotaoSim.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoSim.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaAumento = false;
 					aceitarAumento = true;
 				}
-				if (rectBotaoNao.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoNao.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaAumento = false;
 					recusarAumento = true;
 				}
@@ -275,8 +276,8 @@ public class MesaView extends View {
 					if ((!cartas[i].descartada)
 							&& cartas[i].isDentro(event.getX(), event.getY())) {
 						vezHumano = 0;
-						jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]
-								.getCarta());
+						jogo.jogaCarta(jogo.getJogadorHumano(),
+								cartas[i].getCarta());
 					}
 				}
 				if (valorProximaAposta > 0
@@ -380,6 +381,8 @@ public class MesaView extends View {
 	private Rect rectBotaoNao;
 
 	public int valorProximaAposta = 0;
+
+	private float tamanhoFonte;
 
 	/**
 	 * Permite à partida informar que (não) é a vez de deixar o humano jogar
@@ -582,6 +585,7 @@ public class MesaView extends View {
 		Paint paint = new Paint();
 		paint.setAntiAlias(true);
 		paint.setColor(Color.BLACK);
+		paint.setTextSize(tamanhoFonte);
 		paint.setTextAlign(Align.LEFT);
 		Paint paintFundoPontos = new Paint();
 		paintFundoPontos.setColor(Color.GREEN);
@@ -602,8 +606,8 @@ public class MesaView extends View {
 			canvas.drawRect(getWidth() - MARGEM - larguraTexto - 2, MARGEM - 2,
 					getWidth() - MARGEM + 2, MARGEM + alturaPontos + 2,
 					paintFundoPontos);
-			canvas.drawText(pontos, getWidth() - MARGEM, MARGEM
-					+ paint.getTextSize(), paint);
+			canvas.drawText(pontos, getWidth() - MARGEM,
+					MARGEM + paint.getTextSize(), paint);
 		}
 
 		// Ícones das rodadas
@@ -643,10 +647,10 @@ public class MesaView extends View {
 					+ paint.getTextSize() + 2, paint);
 			paint.setColor(Color.BLACK);
 			// paint.setTextSize(rectBotaoSim.height() * 0.8f);
-			canvas.drawText("Sim", rectBotaoSim.centerX(), rectBotaoSim
-					.centerY(), paint);
-			canvas.drawText("Não", rectBotaoNao.centerX(), rectBotaoNao
-					.centerY(), paint);
+			canvas.drawText("Sim", rectBotaoSim.centerX(),
+					rectBotaoSim.centerY(), paint);
+			canvas.drawText("Não", rectBotaoNao.centerX(),
+					rectBotaoNao.centerY(), paint);
 
 		}
 
@@ -793,10 +797,11 @@ public class MesaView extends View {
 
 			// Determina o tamanho e a posição do balão e o quadrante da
 			// ponta
-			final int MARGEM_BALAO_LEFT = 10;
-			final int MARGEM_BALAO_TOP = 3;
+			final int MARGEM_BALAO_LEFT = (int) tamanhoFonte;
+			final int MARGEM_BALAO_TOP = (int) tamanhoFonte/2;
 			Paint paintFonte = new Paint();
 			paintFonte.setAntiAlias(true);
+			paintFonte.setTextSize(tamanhoFonte);
 			Rect bounds = new Rect();
 			paintFonte.setColor(Color.BLACK);
 			paintFonte
