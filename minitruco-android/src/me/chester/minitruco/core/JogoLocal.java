@@ -3,11 +3,8 @@ package me.chester.minitruco.core;
 import android.util.Log;
 
 /*
- * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
+ * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
- *
- * Copyright © 2007 Sandro Gasparotto (sandro.gasparoto@gmail.com)
- * (modo confronto de estratégias)
  * 
  * Este programa é um software livre; você pode redistribui-lo e/ou 
  * modifica-lo dentro dos termos da Licença Pública Geral GNU como 
@@ -669,8 +666,8 @@ public class JogoLocal extends Jogo {
 				if (c == null) {
 					s.cartasJogadas[i][k] = null;
 				} else if (s.cartasJogadas[i][k] == null) {
-					s.cartasJogadas[i][k] = new Carta(c.getLetra(), c
-							.getNaipe());
+					s.cartasJogadas[i][k] = new Carta(c.getLetra(),
+							c.getNaipe());
 				} else {
 					s.cartasJogadas[i][k].setLetra(c.getLetra());
 					s.cartasJogadas[i][k].setNaipe(c.getNaipe());

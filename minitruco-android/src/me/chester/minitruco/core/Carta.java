@@ -1,9 +1,7 @@
 package me.chester.minitruco.core;
 
-
-
 /*
- * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
+ * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
  * 
  * Este programa é um software livre; você pode redistribui-lo e/ou 
@@ -20,7 +18,6 @@ package me.chester.minitruco.core;
  * junto com este programa, se não, escreva para a Fundação do Software
  * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
 
 /**
  * Representa uma carta do truco
@@ -68,7 +65,6 @@ public class Carta {
 
 	private static final String LETRAS_VALIDAS = "A23456789JQK";
 
-
 	private boolean cartaEmJogo = true;
 
 	private char letra = LETRA_NENHUMA;
@@ -99,7 +95,8 @@ public class Carta {
 	 * Cria uma carta baseado em sua representação string
 	 * 
 	 * @param sCarta
-	 *            letra e naipe da carta, conforme retornado por <code>toString()</code>
+	 *            letra e naipe da carta, conforme retornado por
+	 *            <code>toString()</code>
 	 * @see Carta#toString()
 	 */
 	public Carta(String sCarta) {
@@ -127,7 +124,6 @@ public class Carta {
 
 	}
 
-	
 	/**
 	 * Determina a letra (valor facial) da carta.
 	 * <p>
@@ -224,7 +220,6 @@ public class Carta {
 	public boolean isFechada() {
 		return fechada;
 	}
-
 
 	/*
 	 * (non-Javadoc)

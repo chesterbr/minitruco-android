@@ -1,7 +1,7 @@
 package me.chester.minitruco.core;
 
 /*
- * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
+ * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
  * 
  * Este programa é um software livre; você pode redistribui-lo e/ou 
@@ -232,8 +232,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 		situacaoJogo.cartasJogador = new Carta[numCartas];
 		for (int i = 0; i < numCartas; i++) {
 			Carta c = (Carta) cartasRestantes.elementAt(i);
-			situacaoJogo.cartasJogador[i] = new Carta(c.getLetra(), c
-					.getNaipe());
+			situacaoJogo.cartasJogador[i] = new Carta(c.getLetra(),
+					c.getNaipe());
 		}
 	}
 
@@ -333,8 +333,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 		// Pergunta ao estrategia se ele topa a mão de 11, devolvendo
 		// a resposta para o jogo
 		atualizaSituacaoJogo();
-		jogo.decideMao11(this, estrategia.aceitaMao11(cartasParceiro,
-				situacaoJogo));
+		jogo.decideMao11(this,
+				estrategia.aceitaMao11(cartasParceiro, situacaoJogo));
 
 	}
 

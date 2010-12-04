@@ -3,11 +3,8 @@ package me.chester.minitruco.core;
 import me.chester.minitruco.core.Carta;
 
 /*
- * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
+ * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
- * 
- * Copyright © 2007 Sandro Gasparotto (sandro.gasparoto@gmail.com)
- * (modo confronto de estratégias)
  * 
  * Este programa é um software livre; você pode redistribui-lo e/ou 
  * modifica-lo dentro dos termos da Licença Pública Geral GNU como 

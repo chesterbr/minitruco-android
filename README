@@ -19,10 +19,9 @@ Débito Técnico/Bugs:
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - acertar o evento de resize, dissociando init do jogo e resize da tela (que   
   inclui limpar o cache de bitmaps de cartas).
-- Bug: throwIfRecycled aleatório [1]
 - Bug: arrayindexoutofbounds quando fechou a partida [2]
 (obs: esses dois bugs podem ter sido resolvidos quando foi corrigido o lifecycle, é preciso ver se aparecem novamente)
-- Arrumar as licenças em todos os arquivos
+- Bobeira visual: A ponta do balãozinho não fecha por 1 pixel
 
 Features do miniTruco J2ME que (ainda) não tem nesse:
 - Jogar carta fechada
@@ -36,40 +35,6 @@ Débito Técnico "nice-to-have":
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
 - Refactor: fazer Carta e CartaVisual serem uma coisa só (ou uma herdar a outra)
-
-
-[1] (aconteceu no final da 1a. rodada de uma mão de 11 forçada pra equipe adversária):
-E/AndroidRuntime( 1104): Uncaught handler: thread main exiting due to uncaught exception
-E/AndroidRuntime( 1104): java.lang.NullPointerException
-E/AndroidRuntime( 1104):        at android.graphics.Canvas.throwIfRecycled(Canvas.java:954)
-E/AndroidRuntime( 1104):        at android.graphics.Canvas.drawBitmap(Canvas.java:980)
-E/AndroidRuntime( 1104):        at me.chester.minitruco.android.CartaVisual.draw(CartaVisual.java:145)
-E/AndroidRuntime( 1104):        at me.chester.minitruco.android.MesaView.onDraw(MesaView.java:536)
-E/AndroidRuntime( 1104):        at android.view.View.draw(View.java:6274)
-E/AndroidRuntime( 1104):        at android.view.ViewGroup.drawChild(ViewGroup.java:1526)
-E/AndroidRuntime( 1104):        at android.view.ViewGroup.dispatchDraw(ViewGroup.java:1256)
-E/AndroidRuntime( 1104):        at android.view.ViewGroup.drawChild(ViewGroup.java:1524)
-E/AndroidRuntime( 1104):        at android.view.ViewGroup.dispatchDraw(ViewGroup.java:1256)
-E/AndroidRuntime( 1104):        at android.view.View.draw(View.java:6277)
-E/AndroidRuntime( 1104):        at android.widget.FrameLayout.draw(FrameLayout.java:352)
-E/AndroidRuntime( 1104):        at android.view.ViewGroup.drawChild(ViewGroup.java:1526)
-E/AndroidRuntime( 1104):        at android.view.ViewGroup.dispatchDraw(ViewGroup.java:1256)
-E/AndroidRuntime( 1104):        at android.view.ViewGroup.drawChild(ViewGroup.java:1524)
-E/AndroidRuntime( 1104):        at android.view.ViewGroup.dispatchDraw(ViewGroup.java:1256)
-E/AndroidRuntime( 1104):        at android.view.View.draw(View.java:6277)
-E/AndroidRuntime( 1104):        at android.widget.FrameLayout.draw(FrameLayout.java:352)
-E/AndroidRuntime( 1104):        at com.android.internal.policy.impl.PhoneWindow$DecorView.draw(PhoneWindow.java:1883)
-E/AndroidRuntime( 1104):        at android.view.ViewRoot.draw(ViewRoot.java:1332)
-E/AndroidRuntime( 1104):        at android.view.ViewRoot.performTraversals(ViewRoot.java:1097)
-E/AndroidRuntime( 1104):        at android.view.ViewRoot.handleMessage(ViewRoot.java:1613)
-E/AndroidRuntime( 1104):        at android.os.Handler.dispatchMessage(Handler.java:99)
-E/AndroidRuntime( 1104):        at android.os.Looper.loop(Looper.java:123)
-E/AndroidRuntime( 1104):        at android.app.ActivityThread.main(ActivityThread.java:4203)
-E/AndroidRuntime( 1104):        at java.lang.reflect.Method.invokeNative(Native Method)
-E/AndroidRuntime( 1104):        at java.lang.reflect.Method.invoke(Method.java:521)
-E/AndroidRuntime( 1104):        at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:791)
-E/AndroidRuntime( 1104):        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:549)
-E/AndroidRuntime( 1104):        at dalvik.system.NativeStart.main(Native Method)
 
 
 [2] W/dalvikvm(  677): threadid=3: thread exiting with uncaught exception (group=0x4001aa28)

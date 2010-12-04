@@ -1,8 +1,7 @@
 package me.chester.minitruco.core;
 
-
 /*
- * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
+ * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
  * 
  * Este programa é um software livre; você pode redistribui-lo e/ou 
@@ -24,15 +23,16 @@ package me.chester.minitruco.core;
  * Base para as estratégias "plugáveis" que um jogador CPU pode utilizar.
  * <p>
  * Uma estratégia é uma classe que implementa os métodos <code>joga</code>,
- * <code>aceitaTruco</code> e <code>aceitaMao11</code>, que são chamados
- * pelo jogo quando for a vez do jogador, quando pedirem aumento para a dupla
- * dele e quando a dupla for decidir uma mão de 11, respectivamente.
+ * <code>aceitaTruco</code> e <code>aceitaMao11</code>, que são chamados pelo
+ * jogo quando for a vez do jogador, quando pedirem aumento para a dupla dele e
+ * quando a dupla for decidir uma mão de 11, respectivamente.
  * <p>
  * Eses métodos recebem uma "fotografia" do jogo (SituacaoJogo) no momento em
  * que a ação deles é demandada. Esta fotografia inclui todo o histórico da
  * mão/rodada, placares, etc. Se for desejado guardar estado, o tempo de vida de
- * uma estratégia é o mesmo de <code>Jogo</code>, ou seja, o estado (não-<code>static</code>)
- * persistirá ao longo de uma partida, mas não entre partidas.
+ * uma estratégia é o mesmo de <code>Jogo</code>, ou seja, o estado (não-
+ * <code>static</code>) persistirá ao longo de uma partida, mas não entre
+ * partidas.
  * <p>
  * Para que a estratégia apareça no jogo, adicione uma instância dela ao array
  * ESTRATEGIAS da classe Jogador.
@@ -51,7 +51,7 @@ public interface Estrategia {
 	 * Retorna o nome "copmpleto" da Estrategia
 	 */
 	public abstract String getNomeEstrategia();
-	
+
 	/**
 	 * Retorna informações de copyright e afins
 	 */

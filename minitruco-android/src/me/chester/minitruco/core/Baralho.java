@@ -1,6 +1,6 @@
 package me.chester.minitruco.core;
 /*
- * Copyright © 2005-2007 Carlos Duarte do Nascimento (Chester)
+ * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
  * 
  * Este programa é um software livre; você pode redistribui-lo e/ou 
