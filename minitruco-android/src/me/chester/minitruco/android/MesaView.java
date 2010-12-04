@@ -119,16 +119,22 @@ public class MesaView extends View {
 		int leftDialog = (getWidth() - larguraDialog) / 2;
 		rectDialog = new Rect(leftDialog, topDialog,
 				leftDialog + larguraDialog, topDialog + alturaDialog);
-		int alturaBotao = CartaVisual.altura / 2;
-		rectBotaoSim = new Rect(leftDialog + 8, topDialog + alturaDialog
+		int alturaBotao = (int) (tamanhoFonte * 1.8f);
+		rectBotaoSim = new RectF(leftDialog + 8, topDialog + alturaDialog
 				- alturaBotao - 8, leftDialog + larguraDialog / 2 - 8,
 				topDialog + alturaDialog - 8);
-		rectBotaoNao = new Rect(leftDialog + larguraDialog / 2 + 8,
+		rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8,
 				rectBotaoSim.top, leftDialog + larguraDialog - 8,
 				rectBotaoSim.bottom);
-		rectBotaoAumento = new Rect(MARGEM, getHeight() - rectBotaoSim.height()
-				* 2 - MARGEM, MARGEM + rectBotaoSim.width(), getHeight()
-				- MARGEM - rectBotaoSim.height());
+		rectBotaoAumento = new RectF(MARGEM, getHeight()
+				- rectBotaoSim.height() * 2 - MARGEM, MARGEM
+				+ rectBotaoSim.width(), getHeight() - MARGEM
+				- rectBotaoSim.height());
+		rectBotaoAumento.left = MARGEM;
+		rectBotaoAumento.top = getHeight() - CartaVisual.altura - MARGEM
+				+ (CartaVisual.altura - alturaBotao) / 2;
+		rectBotaoAumento.right = MARGEM + CartaVisual.largura * 1.5f;
+		rectBotaoAumento.bottom = rectBotaoAumento.top + alturaBotao;
 
 		// Posiciona o vira e as cartas decorativas do baralho, que são fixos
 		cartas[0].movePara(leftBaralho - CartaVisual.largura * 7 / 20,
@@ -375,11 +381,11 @@ public class MesaView extends View {
 
 	private Rect rectDialog;
 
-	private Rect rectBotaoSim;
+	private RectF rectBotaoSim;
 
-	private Rect rectBotaoAumento;
+	private RectF rectBotaoAumento;
 
-	private Rect rectBotaoNao;
+	private RectF rectBotaoNao;
 
 	public int valorProximaAposta = 0;
 
@@ -646,37 +652,45 @@ public class MesaView extends View {
 			paint.setColor(Color.WHITE);
 			paint.setStyle(Style.STROKE);
 			canvas.drawRect(rectDialog, paint);
-			paint.setStyle(Style.FILL);
-			canvas.drawRect(rectBotaoSim, paint);
-			canvas.drawRect(rectBotaoNao, paint);
 			paint.setTextAlign(Align.CENTER);
 			canvas.drawText(mostrarPerguntaMao11 ? "Aceita Mão de 11?"
 					: "Aceita Aumento?", rectDialog.centerX(), rectDialog.top
 					+ paint.getTextSize() + 2, paint);
-			paint.setColor(Color.BLACK);
-			// paint.setTextSize(rectBotaoSim.height() * 0.8f);
-			canvas.drawText("Sim", rectBotaoSim.centerX(),
-					rectBotaoSim.centerY(), paint);
-			canvas.drawText("Não", rectBotaoNao.centerX(),
-					rectBotaoNao.centerY(), paint);
+			desenhaBotao("Sim", canvas, rectBotaoSim);
+			desenhaBotao("Nao", canvas, rectBotaoNao);
 
 		}
 
 		// Botão de aumento
 		if (vezHumano == 1 && valorProximaAposta > 0 && placar[0] != 11
 				&& placar[1] != 11) {
-			paint.setColor(Color.BLACK);
-			paint.setStyle(Style.FILL);
-			canvas.drawRect(rectBotaoAumento, paint);
-			paint.setColor(Color.WHITE);
-			paint.setStyle(Style.STROKE);
-			canvas.drawRect(rectBotaoAumento, paint);
-			paint.setTextAlign(Align.CENTER);
-			canvas.drawText(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1],
-					rectBotaoAumento.centerX(), rectBotaoAumento.centerY(),
-					paint);
+			desenhaBotao(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1],
+					canvas, rectBotaoAumento);
 		}
 
+	}
+
+	private void desenhaBotao(String texto, Canvas canvas, RectF outerRect) {
+		Paint paint = new Paint();
+		paint.setStyle(Style.FILL);
+		paint.setAntiAlias(true);
+		paint.setTextSize(tamanhoFonte);
+		// Borda
+		paint.setColor(Color.WHITE);
+		canvas.drawRoundRect(outerRect, tamanhoFonte * 2 / 3,
+				tamanhoFonte * 2 / 3, paint);
+		// Interior
+		paint.setColor(Color.BLACK);
+		RectF innerRect = new RectF(outerRect.left + 1,
+				outerRect.top + 1, outerRect.right - 1,
+				outerRect.bottom - 1);
+		canvas.drawRoundRect(innerRect, tamanhoFonte * 2 / 3,
+				tamanhoFonte * 2 / 3, paint);
+		// Texto
+		paint.setColor(Color.WHITE);
+		paint.setTextAlign(Align.CENTER);
+		canvas.drawText(texto, outerRect.centerX(), outerRect.centerY()
+				+ tamanhoFonte * 0.3f, paint);
 	}
 
 	/**

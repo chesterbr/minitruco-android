@@ -25,7 +25,6 @@ Débito Técnico/Bugs:
 - Arrumar as licenças em todos os arquivos
 - (se der) diminuir e subir a caixa de diálogo pra não ficar em cima dos balões
   (alternativa: colocar os balões num z-order acima dela)
-- Botões menos feios (ex.: rounded, com o texto no centro)
 
 Features do miniTruco J2ME que (ainda) não tem nesse:
 - Jogar carta fechada
