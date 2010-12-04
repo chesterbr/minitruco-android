@@ -113,7 +113,7 @@ public class MesaView extends View {
 		}
 
 		// Define posição e tamanho da caixa de diálogo e seus botões
-		int alturaDialog = (int) (CartaVisual.altura * 1.5);
+		int alturaDialog = CartaVisual.altura;
 		int larguraDialog = CartaVisual.largura * 3;
 		int topDialog = (getHeight() - alturaDialog) / 2;
 		int leftDialog = (getWidth() - larguraDialog) / 2;
@@ -641,9 +641,6 @@ public class MesaView extends View {
 			}
 		}
 
-		// Balãozinho (se alguém estiver falando algo)
-		desenhaBalao(canvas);
-
 		// Caixa de diálogo (mão de 11 ou aumento)
 		if (mostrarPerguntaMao11 || mostrarPerguntaAumento) {
 			paint.setColor(Color.BLACK);
@@ -652,14 +649,18 @@ public class MesaView extends View {
 			paint.setColor(Color.WHITE);
 			paint.setStyle(Style.STROKE);
 			canvas.drawRect(rectDialog, paint);
+			paint.setTextSize(tamanhoFonte);
 			paint.setTextAlign(Align.CENTER);
 			canvas.drawText(mostrarPerguntaMao11 ? "Aceita Mão de 11?"
-					: "Aceita Aumento?", rectDialog.centerX(), rectDialog.top
-					+ paint.getTextSize() + 2, paint);
+					: "Aceita?", rectDialog.centerX(),
+					rectDialog.top + paint.getTextSize() * 1.2f, paint);
 			desenhaBotao("Sim", canvas, rectBotaoSim);
 			desenhaBotao("Nao", canvas, rectBotaoNao);
 
 		}
+
+		// Balãozinho (se alguém estiver falando algo)
+		desenhaBalao(canvas);
 
 		// Botão de aumento
 		if (vezHumano == 1 && valorProximaAposta > 0 && placar[0] != 11
@@ -681,9 +682,8 @@ public class MesaView extends View {
 				tamanhoFonte * 2 / 3, paint);
 		// Interior
 		paint.setColor(Color.BLACK);
-		RectF innerRect = new RectF(outerRect.left + 1,
-				outerRect.top + 1, outerRect.right - 1,
-				outerRect.bottom - 1);
+		RectF innerRect = new RectF(outerRect.left + 1, outerRect.top + 1,
+				outerRect.right - 1, outerRect.bottom - 1);
 		canvas.drawRoundRect(innerRect, tamanhoFonte * 2 / 3,
 				tamanhoFonte * 2 / 3, paint);
 		// Texto
