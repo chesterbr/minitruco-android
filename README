@@ -22,6 +22,7 @@ Débito Técnico/Bugs:
 - Bug: arrayindexoutofbounds quando fechou a partida [2]
 (obs: esses dois bugs podem ter sido resolvidos quando foi corrigido o lifecycle, é preciso ver se aparecem novamente)
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel
+- Fundo do "nós" não aparece em alguns emuladores/celulares
 
 Features do miniTruco J2ME que (ainda) não tem nesse:
 - Jogar carta fechada
