@@ -4,6 +4,7 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 import me.chester.minitruco.android.CartaVisual;
+import me.chester.minitruco.android.MenuPrincipal;
 import me.chester.minitruco.android.MesaView;
 import me.chester.minitruco.android.Partida;
 import me.chester.minitruco.core.Baralho;
@@ -48,6 +49,10 @@ public class JogoTest extends TestCase {
 	@Before
 	public void setUp() throws Exception {
 		partida = new Partida();
+		MenuPrincipal.jogo = new JogoLocal(false, false);
+		for (int i = 1; i <= 4; i++) {
+			MenuPrincipal.jogo.adiciona(new JogadorCPU());
+		}
 		partida.onCreate(null);
 		mesa = partida.getMesa();
 		mesa.onSizeChanged(240, 320, 0, 0);
@@ -106,13 +111,13 @@ public class JogoTest extends TestCase {
 			j.adiciona(jogador);
 		}
 		j.adiciona(this.getActivity());
-		// j.run();
-		// // Verifica que um dos dois realmente fez 12 pontos ou mais
-		// j.atualizaSituacao(situacao, jogador);
-		//
-		// assertTrue("Jogo deveria terminar com alguem ganhando: Jogo: "
-		// + situacao, Math.max(situacao.pontosEquipe[0],
-		// situacao.pontosEquipe[1]) >= 12);
+		j.run();
+		// Verifica que um dos dois realmente fez 12 pontos ou mais
+		j.atualizaSituacao(situacao, jogador);
+
+		assertTrue(
+				"Jogo deveria terminar com alguem ganhando: Jogo: " + situacao,
+				Math.max(situacao.pontosEquipe[0], situacao.pontosEquipe[1]) >= 12);
 
 		/*
 		 * String[][] cartas = { { "Kp", "Jo", "Ap", "2p", "2e", "2o", "Ke",
@@ -131,7 +136,7 @@ public class JogoTest extends TestCase {
 	@Test
 	public void testAnimacaoCartaNoTempo() throws InterruptedException {
 		CartaVisual.resources = getActivity().getResources();
-		CartaVisual cv = new CartaVisual(mesa, 33, 66);
+		CartaVisual cv = new CartaVisual(mesa, 33, 66, null);
 		assertEquals(33, cv.left);
 		assertEquals(66, cv.top);
 		Canvas canvas = new Canvas();
@@ -187,10 +192,9 @@ public class JogoTest extends TestCase {
 		canvas.drawColor(color);
 		assertEquals(color, bitmap.getPixel(10, 10));
 		assertEquals(color, bitmap.getPixel(40, 40));
-		CartaVisual cv = new CartaVisual(mesa, 5, 5);
+		CartaVisual cv = new CartaVisual(mesa, 5, 5, "Ap");
 		CartaVisual.largura = 30;
 		CartaVisual.altura = 30;
-		cv.setCarta(new Carta("Ap"));
 		cv.draw(canvas);
 		assertFalse(color == bitmap.getPixel(10, 10));
 		assertEquals(color, bitmap.getPixel(40, 40));
@@ -218,6 +222,35 @@ public class JogoTest extends TestCase {
 					CartaVisual.largura * 6 <= width);
 			assertTrue("Tem que caber 5 cartas na altura. " + result,
 					CartaVisual.altura * 5 <= height);
+		}
+	}
+
+	public void testEqualsEntreCartaECartaVisual() {
+		Carta[] cartas = { new Carta("Ap"), new Carta("5o") };
+		CartaVisual[] cartasvisuais = { new CartaVisual(null, 0, 0, "Ap"),
+				new CartaVisual(null, 0, 0, "5o"),
+				new CartaVisual(null, 0, 0, "5o") };
+		for (int i = 0; i < cartas.length; i++) {
+			for (int j = 0; j < cartasvisuais.length; j++) {
+				if (i == j) {
+					assertTrue("Carta " + cartas[i]
+							+ " devia ser equals a CartaVisual "
+							+ cartasvisuais[j],
+							cartas[i].equals(cartasvisuais[j]));
+					assertTrue("CartaVisual " + cartasvisuais[j]
+							+ " devia ser equals a Carta " + cartasvisuais[j],
+							cartasvisuais[j].equals(cartas[i]));
+				} else {
+					assertFalse("Carta " + cartas[i]
+							+ " não devia ser equals a CartaVisual "
+							+ cartasvisuais[j],
+							cartas[i].equals(cartasvisuais[j]));
+					assertFalse("CartaVisual " + cartasvisuais[j]
+							+ " não devia ser equals a Carta "
+							+ cartasvisuais[j],
+							cartasvisuais[j].equals(cartas[i]));
+				}
+			}
 		}
 	}
 

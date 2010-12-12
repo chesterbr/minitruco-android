@@ -23,9 +23,9 @@ Débito Técnico/Bugs:
 (obs: esses dois bugs podem ter sido resolvidos quando foi corrigido o lifecycle, é preciso ver se aparecem novamente)
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel
 - Fundo do "nós" não aparece em alguns emuladores/celulares
-
+- Colocar instruções pra rodar o teste do robolectric (setar o launcher do Eclipse e o Run Configurations
+ / Arguments / Working Directory para o diretório do minitruco-android)
 Features do miniTruco J2ME que (ainda) não tem nesse:
-- Jogar carta fechada
 - Opção de manilha velha
 - Jogos multiplayer
 
@@ -35,8 +35,6 @@ Débito Técnico "nice-to-have":
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
-- Refactor: fazer Carta e CartaVisual serem uma coisa só (ou uma herdar a outra)
-
 
 [2] W/dalvikvm(  677): threadid=3: thread exiting with uncaught exception (group=0x4001aa28)
 E/AndroidRuntime(  677): Uncaught handler: thread main exiting due to uncaught exception

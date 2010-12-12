@@ -125,7 +125,7 @@ public class MesaView extends View {
 		boolean inicializando = (cartas[0] == null);
 		if (inicializando) {
 			for (int i = 0; i < cartas.length; i++) {
-				cartas[i] = new CartaVisual(this, leftBaralho, topBaralho);
+				cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null);
 				cartas[i].movePara(leftBaralho, topBaralho);
 			}
 			cartas[0].visible = false;
@@ -154,6 +154,8 @@ public class MesaView extends View {
 				+ (CartaVisual.altura - alturaBotao) / 2;
 		rectBotaoAumento.right = MARGEM + CartaVisual.largura * 1.5f;
 		rectBotaoAumento.bottom = rectBotaoAumento.top + alturaBotao;
+		rectBotaoFechada = new RectF(rectBotaoAumento);
+		rectBotaoFechada.offset(0, -alturaBotao * 1.1f);
 
 		// Posiciona o vira e as cartas decorativas do baralho, que são fixos
 		cartas[0].movePara(leftBaralho - CartaVisual.largura * 7 / 20,
@@ -181,7 +183,7 @@ public class MesaView extends View {
 	 */
 	public CartaVisual getCartaVisual(Carta c) {
 		for (CartaVisual cv : cartas) {
-			if (c.equals(cv.getCarta())) {
+			if (c != null && c.equals(cv)) {
 				return cv;
 			}
 		}
@@ -267,8 +269,8 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Joga a carta tocada (se for a vez do jogador e ela não tiver sido
-	 * descartada)
+	 * Verifica qual elemento foi tocado (ex.: uma das cartas do jogador ou um
+	 * dos botões) e executa a ação associada a ele.
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -302,8 +304,9 @@ public class MesaView extends View {
 					if ((!cartas[i].descartada)
 							&& cartas[i].isDentro(event.getX(), event.getY())) {
 						vezHumano = 0;
+						cartas[i].setFechada(vaiJogarFechada);
 						jogo.jogaCarta(jogo.getJogadorHumano(),
-								cartas[i].getCarta());
+								cartas[i]);
 					}
 				}
 				if (valorProximaAposta > 0
@@ -311,6 +314,11 @@ public class MesaView extends View {
 								(int) event.getY())) {
 					vezHumano = -1;
 					jogo.aumentaAposta(jogo.getJogadorHumano());
+				}
+				if (podeFechada
+						&& rectBotaoFechada.contains((int) event.getX(),
+								(int) event.getY())) {
+					vaiJogarFechada = !vaiJogarFechada;
 				}
 			}
 		}
@@ -404,6 +412,8 @@ public class MesaView extends View {
 
 	private RectF rectBotaoAumento;
 
+	private RectF rectBotaoFechada;
+
 	private RectF rectBotaoNao;
 
 	public int valorProximaAposta = 0;
@@ -415,9 +425,13 @@ public class MesaView extends View {
 	 * 
 	 * @param vezHumano
 	 *            true se for a vez dele, false se não
+	 * @param podeFechada
+	 *            true se o jogador da vez pode jogar a carta fechada
 	 */
-	public static void setVezHumano(boolean vezHumano) {
+	public static void setVezHumano(boolean vezHumano, boolean podeFechada) {
 		MesaView.vezHumano = vezHumano ? 1 : 0;
+		MesaView.podeFechada = podeFechada;
+		vaiJogarFechada = false;
 	}
 
 	/**
@@ -573,7 +587,7 @@ public class MesaView extends View {
 			// ...e, no caso de um humano (ou parceiro em mão de 11), que
 			// corresponda à carta do jogo
 			cv = cvCandidata;
-			if (c.equals(cvCandidata.getCarta())) {
+			if (c.equals(cvCandidata)) {
 				break;
 			}
 		}
@@ -590,15 +604,8 @@ public class MesaView extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		// Fundo verde - é um clássico do miniTruco
+		// Fundo verde
 		canvas.drawRGB(27, 142, 60);
-
-		// Desenha as cartas na mesa (na mão ou no descarte)
-		// for (int i = cartas.length - 1; i >= 0; i--) {
-		// if (cartas[i] != null) {
-		// cartas[i].draw(canvas);
-		// }
-		// }
 
 		// Desenha as cartas que já foram jogadas (se houverem),
 		// na ordem em que foram jogadas
@@ -686,6 +693,12 @@ public class MesaView extends View {
 				&& placar[1] != 11) {
 			desenhaBotao(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1],
 					canvas, rectBotaoAumento);
+		}
+
+		// Botão de carta virada
+		if (vezHumano == 1 && podeFechada) {
+			desenhaBotao(vaiJogarFechada ? "Aberta" : "Fechada", canvas,
+					rectBotaoFechada);
 		}
 
 	}
@@ -932,6 +945,10 @@ public class MesaView extends View {
 			"NOVE!", "DOZE!!!" };
 
 	private boolean visivel = false;
+
+	private static boolean podeFechada;
+
+	private static boolean vaiJogarFechada;
 
 	public void setVisivel(boolean visivel) {
 		this.visivel = visivel;

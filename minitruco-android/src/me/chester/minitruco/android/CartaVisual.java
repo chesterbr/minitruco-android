@@ -1,6 +1,7 @@
 package me.chester.minitruco.android;
 
 import java.io.FileNotFoundException;
+import java.io.ObjectInputStream.GetField;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,18 +34,16 @@ import android.graphics.Rect;
  */
 
 /**
- * Uma carta "visual", isto é, o objeto estilo View (embora não seja uma View)
- * que aparece na mesa com o desenho da carta.
+ * Uma carta que está sendo exibida no celular. É uma subclasse separada de
+ * <code>Carta</code>para não gerar uma dependência não-Android no core do jogo.
  * <p>
- * Não confundir com a classe Carta, que representa uma carta que faz parte de
- * um Jogo, pertence a um Jogador, etc. Esta classe faz tanto o desenho da
- * carta, quanto sua animação e o ajuste da proporção para a resolução do
- * celular.
+ * Esta classe faz o desenho da carta, executa sua animação, e ajusta sua
+ * proporção para a resolução do celular.
  * 
  * @author chester
  * 
  */
-public class CartaVisual {
+public class CartaVisual extends Carta {
 
 	public static final int COR_MESA = Color.argb(255, 27, 142, 60);
 
@@ -55,18 +54,13 @@ public class CartaVisual {
 	 *            posição em relação à esquerda
 	 * @param top
 	 *            posição em relação ao topo
+	 * @param sCarta
+	 *            valor que esta carta terá (ex.: "Kc"). Se null, entra virada.
 	 */
-	public CartaVisual(MesaView mesa, int left, int top) {
+	public CartaVisual(MesaView mesa, int left, int top, String sCarta) {
+		super(sCarta == null ? LETRA_NENHUMA + "" + NAIPE_NENHUM : sCarta);
 		this.mesa = mesa;
 		movePara(left, top);
-		setCarta(null);
-	}
-
-	/**
-	 * Cria uma carta no canto superior esquerdo
-	 */
-	public CartaVisual(MesaView mesa) {
-		this(mesa, 0, 0);
 	}
 
 	/**
@@ -159,7 +153,7 @@ public class CartaVisual {
 				movePara(destLeft, destTop);
 			}
 		}
-		if (bitmap != null) {
+		if (getBitmap() != null) {
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
 			Rect rect = new Rect(left, top, left + largura - 1, top + altura
@@ -216,10 +210,32 @@ public class CartaVisual {
 			throw new IllegalStateException(
 					"CartaVisual tem que ter a propriedade resources inicializada");
 		}
-		this.carta = c;
-		String valor = carta == null ? "fundo" : c.toString();
-		this.bitmap = bitmapCache.get(valor);
+		if (c == null) {
+			this.setLetra(LETRA_NENHUMA);
+			this.setNaipe(NAIPE_NENHUM);
+			this.setFechada(true);
+		} else {
+			this.setLetra(c.getLetra());
+			this.setNaipe(c.getNaipe());
+			this.setFechada(c.isFechada());
+		}
+	}
+
+	/**
+	 * Recupera o bitmap correspondente a essa carta (levando em conta se ela
+	 * está "fechada" ou não, e se tem um valor atribuído). Pode ser chamado
+	 * múltiplas vezes, pois guarda referência do cache a cada mudança de estado
+	 * 
+	 * @return bitmap do cache.
+	 */
+	private Bitmap getBitmap() {
 		if (this.bitmap == null) {
+			String valor = "fundo";
+			if ((!isFechada()) && (getLetra() != LETRA_NENHUMA)
+					&& (getNaipe() != NAIPE_NENHUM)) {
+				valor = this.toString();
+			}
+			this.bitmap = bitmapCache.get(valor);
 			Bitmap bmpOrig = BitmapFactory.decodeResource(resources,
 					getCartaResourceByValor(valor));
 			Bitmap bmpFinal = Bitmap.createScaledBitmap(bmpOrig, largura,
@@ -227,15 +243,25 @@ public class CartaVisual {
 			bitmapCache.put(valor, bmpFinal);
 			this.bitmap = bmpFinal;
 		}
+		return this.bitmap;
 	}
 
-	/**
-	 * Recuper a carta do jogo associada a esse objeto visual
-	 * 
-	 * @return carta não-visual
-	 */
-	public Carta getCarta() {
-		return carta;
+	@Override
+	public void setLetra(char letra) {
+		super.setLetra(letra);
+		this.bitmap = null;
+	}
+
+	@Override
+	public void setNaipe(int naipe) {
+		super.setNaipe(naipe);
+		this.bitmap = null;
+	}
+
+	@Override
+	public void setFechada(boolean fechada) {
+		super.setFechada(fechada);
+		this.bitmap = null;
 	}
 
 	/**
@@ -267,12 +293,6 @@ public class CartaVisual {
 	 * Guarda os bitmaps em que fizemos resize para o tamanho da carta visual
 	 */
 	private static Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
-
-	/**
-	 * Carta do jogo que este objeto representa. Se for null, é uma carta
-	 * "fechada", isto é, que aparece virada para baixo na mesa
-	 */
-	private Carta carta;
 
 	/**
 	 * Bitmap (já no tamanho certo) para esta carta

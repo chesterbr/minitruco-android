@@ -80,8 +80,8 @@ public class Partida extends Activity implements Interessado {
 				mesa.jogo = jogo;
 			}
 		} else {
-			Log.w("Activity.onCreate",
-					"Partida iniciada sem jogo (ok para testes)");
+			throw new IllegalStateException(
+					"Activity.onCreate: Partida iniciada sem jogo");
 		}
 
 	}
@@ -198,7 +198,7 @@ public class Partida extends Activity implements Interessado {
 		if (j instanceof JogadorHumano) {
 			Log.i("Partida", "Partida percebeu que é vez do humano");
 		}
-		MesaView.setVezHumano(j instanceof JogadorHumano);
+		MesaView.setVezHumano(j instanceof JogadorHumano, podeFechada);
 	}
 
 	public MesaView getMesa() {

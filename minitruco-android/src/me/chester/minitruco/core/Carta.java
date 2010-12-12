@@ -26,6 +26,29 @@ package me.chester.minitruco.core;
  * 
  */
 public class Carta {
+	
+	/**
+	 * Cria uma carta com letra e naipe definidos
+	 * 
+	 * @param letra
+	 * @param naipe
+	 */
+	public Carta(char letra, int naipe) {
+		setLetra(letra);
+		setNaipe(naipe);
+	}
+
+	/**
+	 * Cria uma carta baseado em sua representação string
+	 * 
+	 * @param sCarta
+	 *            letra e naipe da carta, conforme retornado por
+	 *            <code>toString()</code>
+	 * @see Carta#toString()
+	 */
+	public Carta(String sCarta) {
+		this(sCarta.charAt(0), "coepx".indexOf(sCarta.charAt(1)));
+	}
 
 	/**
 	 * Constante que representa o naipe de copas
@@ -71,58 +94,7 @@ public class Carta {
 
 	private int naipe = NAIPE_NENHUM;
 
-	private int top;
-
-	private int left;
-
-	private boolean virada = false;
-
 	private boolean fechada = false;
-
-	/**
-	 * Cria uma carta com letra e naipe definidos, já "virada" (visível)
-	 * 
-	 * @param letra
-	 * @param naipe
-	 */
-	public Carta(char letra, int naipe) {
-		setLetra(letra);
-		setNaipe(naipe);
-		setVirada(true);
-	}
-
-	/**
-	 * Cria uma carta baseado em sua representação string
-	 * 
-	 * @param sCarta
-	 *            letra e naipe da carta, conforme retornado por
-	 *            <code>toString()</code>
-	 * @see Carta#toString()
-	 */
-	public Carta(String sCarta) {
-		this(sCarta.charAt(0), "coepx".indexOf(sCarta.charAt(1)));
-	}
-
-	/**
-	 * Cria uma carta vazia na posição especificada
-	 * <p>
-	 * Obs.: a carta aparece desvirada, e não pode ser virada enquanto não forem
-	 * atribuídos naipe e letra
-	 */
-	public Carta(int left, int top) {
-		setTop(top);
-		setLeft(left);
-	}
-
-	/**
-	 * Cria uma carta vazia, posicionada em 0,0
-	 * 
-	 * @see Carta#Carta(int, int)
-	 * 
-	 */
-	public Carta() {
-
-	}
 
 	/**
 	 * Determina a letra (valor facial) da carta.
@@ -161,47 +133,8 @@ public class Carta {
 		return naipe;
 	}
 
-	public void setTop(int top) {
-		this.top = top;
-	}
-
-	public int getTop() {
-		return top;
-	}
-
-	public void setLeft(int left) {
-		this.left = left;
-	}
-
-	public int getLeft() {
-		return left;
-	}
-
 	public int getValor() {
 		return LETRAS_VALIDAS.indexOf(letra);
-	}
-
-	/**
-	 * Determina se uma carta está virdada (mostrando o valor) ou não (mostrando
-	 * o desenho).
-	 * <p>
-	 * Obs.: cartas têm que ter uma letra e naipe para serem viradas, e cartas
-	 * fechadas não podem ser viradas
-	 * 
-	 * @param virada
-	 */
-	public void setVirada(boolean virada) {
-		this.virada = virada && (!fechada) && (letra != LETRA_NENHUMA)
-				&& (naipe != NAIPE_NENHUM);
-	}
-
-	/**
-	 * Determina se uma carta está virada (mostrando o valor)
-	 * 
-	 * @return True se a carta está mostrando o valor, false caso contrário
-	 */
-	public boolean isVirada() {
-		return virada;
 	}
 
 	/**
@@ -212,9 +145,6 @@ public class Carta {
 	 */
 	public void setFechada(boolean fechada) {
 		this.fechada = fechada;
-		// Se uma carta for fechada, não pode estar virada (visível)
-		if (fechada)
-			this.virada = false;
 	}
 
 	public boolean isFechada() {
