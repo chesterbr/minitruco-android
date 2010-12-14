@@ -276,25 +276,25 @@ public class MesaView extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			if (mostrarPerguntaMao11) {
-				if (rectBotaoSim.contains((int) event.getX(),
-						(int) event.getY())) {
+				if (rectBotaoSim.contains((int) event.getX(), (int) event
+						.getY())) {
 					mostrarPerguntaMao11 = false;
 					aceitarMao11 = true;
 				}
-				if (rectBotaoNao.contains((int) event.getX(),
-						(int) event.getY())) {
+				if (rectBotaoNao.contains((int) event.getX(), (int) event
+						.getY())) {
 					mostrarPerguntaMao11 = false;
 					recusarMao11 = true;
 				}
 			}
 			if (mostrarPerguntaAumento) {
-				if (rectBotaoSim.contains((int) event.getX(),
-						(int) event.getY())) {
+				if (rectBotaoSim.contains((int) event.getX(), (int) event
+						.getY())) {
 					mostrarPerguntaAumento = false;
 					aceitarAumento = true;
 				}
-				if (rectBotaoNao.contains((int) event.getX(),
-						(int) event.getY())) {
+				if (rectBotaoNao.contains((int) event.getX(), (int) event
+						.getY())) {
 					mostrarPerguntaAumento = false;
 					recusarAumento = true;
 				}
@@ -305,8 +305,7 @@ public class MesaView extends View {
 							&& cartas[i].isDentro(event.getX(), event.getY())) {
 						vezHumano = 0;
 						cartas[i].setFechada(vaiJogarFechada);
-						jogo.jogaCarta(jogo.getJogadorHumano(),
-								cartas[i]);
+						jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]);
 					}
 				}
 				if (valorProximaAposta > 0
@@ -646,8 +645,8 @@ public class MesaView extends View {
 			canvas.drawRect(getWidth() - MARGEM - larguraTexto - 2, MARGEM - 2,
 					getWidth() - MARGEM + 2, MARGEM + alturaPontos + 2,
 					paintFundoPontos);
-			canvas.drawText(pontos, getWidth() - MARGEM,
-					MARGEM + paint.getTextSize(), paint);
+			canvas.drawText(pontos, getWidth() - MARGEM, MARGEM
+					+ paint.getTextSize(), paint);
 		}
 
 		// Ícones das rodadas
@@ -678,8 +677,8 @@ public class MesaView extends View {
 			paint.setTextSize(tamanhoFonte);
 			paint.setTextAlign(Align.CENTER);
 			canvas.drawText(mostrarPerguntaMao11 ? "Aceita Mão de 11?"
-					: "Aceita?", rectDialog.centerX(),
-					rectDialog.top + paint.getTextSize() * 1.2f, paint);
+					: "Aceita?", rectDialog.centerX(), rectDialog.top
+					+ paint.getTextSize() * 1.2f, paint);
 			desenhaBotao("Sim", canvas, rectBotaoSim);
 			desenhaBotao("Nao", canvas, rectBotaoNao);
 
@@ -927,7 +926,7 @@ public class MesaView extends View {
 				// (i.e., se foi truco, podemos pedir 6, etc.) até o limite de
 				// 12
 				if (valor != 12) {
-					valorProximaAposta += 3;
+					valorProximaAposta = valor + 3;
 				}
 			} else {
 				// Eles aceitaram um truco, temos que esperar eles pedirem
