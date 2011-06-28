@@ -10,7 +10,6 @@ import me.chester.minitruco.android.Partida;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Estrategia;
-import me.chester.minitruco.core.EstrategiaSellani;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
@@ -26,116 +25,31 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import com.xtremelabs.robolectric.util.Implements;
+
+import static org.mockito.Mockito.*;
 
 @RunWith(RobolectricTestRunner.class)
 public class JogoTest extends TestCase {
 
-	// public JogoTest() {
-	// super("me.chester.minitruco", Partida.class);
-	// }
-
-	// Meta-testes (testam as classes de mock)
-
-	private Partida partida;
-
-	private MesaView mesa;
-
-	private Partida getActivity() {
-		return partida;
-	};
+	@Implements(Log.class)
+	public static class ShadowLog {
+		public static int i(java.lang.String tag, java.lang.String msg) {
+			System.out.println("[" + tag + "] " + msg);
+			return 0;
+		}
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		partida = new Partida();
-		MenuPrincipal.jogo = new JogoLocal(false, false);
-		for (int i = 1; i <= 4; i++) {
-			MenuPrincipal.jogo.adiciona(new JogadorCPU());
-		}
-		partida.onCreate(null);
-		mesa = partida.getMesa();
-		mesa.onSizeChanged(240, 320, 0, 0);
-	}
-
-	@Test
-	public void testBaralhoOrdenado() {
-		String[][] cartas = { { "Kp", "Jo" }, { "Ae" }, { "Kp" } };
-		Baralho b = new BaralhoOrdenado(cartas);
-		assertEquals("Kp", b.sorteiaCarta().toString());
-		assertEquals(new Carta("Jo"), b.sorteiaCarta());
-		assertEquals(null, b.sorteiaCarta());
-		b.embaralha();
-		assertEquals("Ae", b.sorteiaCarta().toString());
-		b.embaralha();
-		assertEquals("Kp", b.sorteiaCarta().toString());
-		// Repete com embaralhadas "em falso"
-		b = new BaralhoOrdenado(cartas);
-		b.embaralha();
-		assertEquals("Kp", b.sorteiaCarta().toString());
-		assertEquals(new Carta("Jo"), b.sorteiaCarta());
-		assertEquals(null, b.sorteiaCarta());
-		b.embaralha();
-		b.embaralha();
-		b.embaralha();
-		assertEquals("Ae", b.sorteiaCarta().toString());
-		b.embaralha();
-		assertEquals("Kp", b.sorteiaCarta().toString());
-	}
-
-	@Test
-	public void testEstrategiaSequencial() {
-		Carta[] r1 = { new Carta("Ke"), new Carta("Ac"), new Carta("3p") };
-		Carta[] r2 = { new Carta("Ac"), new Carta("3p") };
-		Carta[] r3 = { new Carta("3p") };
-		Estrategia e = new EstrategiaSequencial();
-		SituacaoJogo s = new SituacaoJogo();
-		s.cartasJogador = r1;
-		assertEquals(0, e.joga(s));
-		s.cartasJogador = r2;
-		assertEquals(0, e.joga(s));
-		s.cartasJogador = r3;
-		assertEquals(0, e.joga(s));
-	}
-
-	// Esses são os testes de verdade
-
-	@Test
-	public void testPartidaGeral() {
-		// Cria um jogo com 4 CPUs e roda ele
-		Jogo j = new JogoLocal(false, false);
-		Jogador jogador = null;
-		SituacaoJogo situacao = new SituacaoJogo();
-		for (int i = 0; i < 4; i++) {
-			jogador = new JogadorCPU(new EstrategiaSellani());
-			j.adiciona(jogador);
-		}
-		j.adiciona(this.getActivity());
-		j.run();
-		// Verifica que um dos dois realmente fez 12 pontos ou mais
-		j.atualizaSituacao(situacao, jogador);
-
-		assertTrue(
-				"Jogo deveria terminar com alguem ganhando: Jogo: " + situacao,
-				Math.max(situacao.pontosEquipe[0], situacao.pontosEquipe[1]) >= 12);
-
-		/*
-		 * String[][] cartas = { { "Kp", "Jo", "Ap", "2p", "2e", "2o", "Ke",
-		 * "Jp", "Ao", "3p", "4e", "5o", "7e" }, { "Qo", "Kp", "Jo", "Ap", "2p",
-		 * "2e", "2o", "Ke", "Jp", "Ao", "3p", "4e", "5o", "7e" }, { "Qp", "Kp",
-		 * "Jo", "Ap", "2p", "2e", "2o", "Ke", "Jp", "Ao", "3p", "4e", "5o",
-		 * "7e" } }; Baralho b = new BaralhoOrdenado(cartas); Jogo j = new
-		 * JogoLocal(b, false); Jogador jogador = null; SituacaoJogo situacao =
-		 * new SituacaoJogo(); for (int i = 0; i < 4; i++) { jogador = new
-		 * JogadorCPU(new EstrategiaSequencial()); j.adiciona(jogador); }
-		 * j.run(); j.atualizaSituacao(situacao, jogador); // assertEquals(11,
-		 * situacao.pontosEquipe[1]);
-		 */
+		Robolectric.bindShadowClass(ShadowLog.class);
 	}
 
 	@Test
 	public void testAnimacaoCartaNoTempo() throws InterruptedException {
-		CartaVisual.resources = getActivity().getResources();
+		MesaView mesa = mock(MesaView.class);
 		CartaVisual cv = new CartaVisual(mesa, 33, 66, null);
 		assertEquals(33, cv.left);
 		assertEquals(66, cv.top);
@@ -183,29 +97,6 @@ public class JogoTest extends TestCase {
 				cv.top, 0);
 	}
 
-	// TODO fix this test to run without a real Canvas (maybe by mocking it?)
-	public void testCartaDesenhadaNoLugarCerto() {
-		CartaVisual.resources = getActivity().getResources();
-		int color = Color.MAGENTA;
-		Bitmap bitmap = Bitmap.createBitmap(50, 50, Bitmap.Config.RGB_565);
-		Canvas canvas = new Canvas(bitmap);
-		canvas.drawColor(color);
-		assertEquals(color, bitmap.getPixel(10, 10));
-		assertEquals(color, bitmap.getPixel(40, 40));
-		CartaVisual cv = new CartaVisual(mesa, 5, 5, "Ap");
-		CartaVisual.largura = 30;
-		CartaVisual.altura = 30;
-		cv.draw(canvas);
-		assertFalse(color == bitmap.getPixel(10, 10));
-		assertEquals(color, bitmap.getPixel(40, 40));
-		canvas.drawColor(color);
-		assertEquals(color, bitmap.getPixel(10, 10));
-		cv.movePara(20, 20);
-		cv.draw(canvas);
-		assertEquals(color, bitmap.getPixel(10, 10));
-		assertFalse(color == bitmap.getPixel(40, 40));
-	}
-
 	@Test
 	public void testTamanhoDaCartaAutoAjustadoAoDoCanvas() {
 		int[][] telas = { { 320, 200 }, { 200, 320 }, { 640, 480 },
@@ -225,68 +116,47 @@ public class JogoTest extends TestCase {
 		}
 	}
 
+	@Test
+	public void testJogoSemNenhumAumento() {
+		Jogo jogo = new JogoLocal(false, false);
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertFalse(jogo.adiciona(new JogadorMock()));
+		jogo.run();
+	}
+
+	@Test
 	public void testEqualsEntreCartaECartaVisual() {
-		Carta[] cartas = { new Carta("Ap"), new Carta("5o") };
+		// Arrays contém a versão normal e visual das cartas a testar
+		Carta[] cartas = { new Carta("Ap"), new Carta("5o"), new Carta("3p") };
 		CartaVisual[] cartasvisuais = { new CartaVisual(null, 0, 0, "Ap"),
 				new CartaVisual(null, 0, 0, "5o"),
-				new CartaVisual(null, 0, 0, "5o") };
+				new CartaVisual(null, 0, 0, "3p") };
 		for (int i = 0; i < cartas.length; i++) {
 			for (int j = 0; j < cartasvisuais.length; j++) {
 				if (i == j) {
 					assertTrue("Carta " + cartas[i]
 							+ " devia ser equals a CartaVisual "
-							+ cartasvisuais[j],
-							cartas[i].equals(cartasvisuais[j]));
+							+ cartasvisuais[j], cartas[i]
+							.equals(cartasvisuais[j]));
 					assertTrue("CartaVisual " + cartasvisuais[j]
 							+ " devia ser equals a Carta " + cartasvisuais[j],
 							cartasvisuais[j].equals(cartas[i]));
 				} else {
 					assertFalse("Carta " + cartas[i]
 							+ " não devia ser equals a CartaVisual "
-							+ cartasvisuais[j],
-							cartas[i].equals(cartasvisuais[j]));
+							+ cartasvisuais[j], cartas[i]
+							.equals(cartasvisuais[j]));
 					assertFalse("CartaVisual " + cartasvisuais[j]
 							+ " não devia ser equals a Carta "
-							+ cartasvisuais[j],
-							cartasvisuais[j].equals(cartas[i]));
+							+ cartasvisuais[j], cartasvisuais[j]
+							.equals(cartas[i]));
 				}
 			}
 		}
 	}
 
-	// TODO este teste depende da parte visual, tem que ser repensado ou extinto
-	public void testTimingBalaoCorreto() throws InterruptedException {
-		Log.i("JogoTest", "Inicializa dates p/ nao atrapalhar o timing"
-				+ new Date());
-		mesa.diz("aumento_3", 1, 1000);
-		// Na primeira e segunda vez, algum desenho deve ser feito
-		try {
-			mesa.draw(null);
-			fail("Balao nao desenhou 1o. frame");
-		} catch (NullPointerException e) {
-		}
-		Thread.sleep(200);
-		try {
-			mesa.draw(null);
-			fail("Balao nao desenhou 2o. frame");
-		} catch (NullPointerException e) {
-		}
-		Thread.sleep(800);
-		// Nesse ponto, o tempo estourou, não deve ter desenho
-		try {
-			mesa.draw(null);
-		} catch (NullPointerException e) {
-			fail("Balao desenhou 3o. frame quando não devia");
-		}
-	}
-
-	// TODO fazer funcionar
-	@Implements(Log.class)
-	public static class ShadowLog {
-		public static int i(java.lang.String tag, java.lang.String msg) {
-			System.out.println("[" + tag + "] " + msg);
-			return 0;
-		}
-	}
 
 }
