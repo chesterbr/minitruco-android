@@ -228,7 +228,7 @@ public class CartaVisual extends Carta {
 	 * @return bitmap do cache.
 	 */
 	private Bitmap getBitmap() {
-		if (this.bitmap == null) {
+		if (this.bitmap == null || this.bitmap.isRecycled()) {
 			String valor = "fundo";
 			if ((!isFechada()) && (getLetra() != LETRA_NENHUMA)
 					&& (getNaipe() != NAIPE_NENHUM)) {
