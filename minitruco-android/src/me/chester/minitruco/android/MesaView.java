@@ -526,7 +526,7 @@ public class MesaView extends View {
 		CartaVisual c = cartas[4 + i + 3 * (numJogador - 1)];
 		c.setCarta(carta);
 		// c.movePara(topBaralho, leftBaralho);
-		c.movePara(leftFinal, topFinal, 100);
+		c.movePara(leftFinal, topFinal, 150);
 	}
 
 	/**
