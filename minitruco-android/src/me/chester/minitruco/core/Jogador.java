@@ -176,7 +176,7 @@ public abstract class Jogador implements Interessado {
 	 * Estratégias suportadas pelos jogadores automático (CPU e Bot)
 	 */
 	// TODO implementar alguma estrategia e adicionar aqui
-	static Estrategia[] ESTRATEGIAS = { new EstrategiaSellani() };
+	static Estrategia[] ESTRATEGIAS = { new EstrategiaGasparotto() };
 
 	/**
 	 * Lista de opções de estratégia para comboboxes (tem os nomes e a última

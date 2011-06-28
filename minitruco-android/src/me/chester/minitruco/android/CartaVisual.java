@@ -1,7 +1,6 @@
 package me.chester.minitruco.android;
 
 import java.io.FileNotFoundException;
-import java.io.ObjectInputStream.GetField;
 import java.util.HashMap;
 import java.util.Map;
 
