@@ -117,17 +117,6 @@ public class JogoTest extends TestCase {
 	}
 
 	@Test
-	public void testJogoSemNenhumAumento() {
-		Jogo jogo = new JogoLocal(false, false);
-		assertTrue(jogo.adiciona(new JogadorMock()));
-		assertTrue(jogo.adiciona(new JogadorMock()));
-		assertTrue(jogo.adiciona(new JogadorMock()));
-		assertTrue(jogo.adiciona(new JogadorMock()));
-		assertFalse(jogo.adiciona(new JogadorMock()));
-		jogo.run();
-	}
-
-	@Test
 	public void testEqualsEntreCartaECartaVisual() {
 		// Arrays contém a versão normal e visual das cartas a testar
 		Carta[] cartas = { new Carta("Ap"), new Carta("5o"), new Carta("3p") };
@@ -158,5 +147,40 @@ public class JogoTest extends TestCase {
 		}
 	}
 
+	@Test
+	public void testJogoSemNenhumAumento() {
+		Jogo jogo = new JogoLocal(false, false);
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertFalse(jogo.adiciona(new JogadorMock()));
+		jogo.run();
+	}
+
+	// TODO: externalizar o fator aleatório do JogadorCPU para testes mais
+	// consistentes
+
+	@Test
+	public void testJogoCom1CPUeOutrosSempreAceitamAumento() {
+		Jogo jogo = new JogoLocal(false, false);
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorCPU()));
+		assertFalse(jogo.adiciona(new JogadorMock()));
+		jogo.run();
+	}
+
+	@Test
+	public void testJogoCom4CPU() {
+		Jogo jogo = new JogoLocal(false, false);
+		assertTrue(jogo.adiciona(new JogadorCPU()));
+		assertTrue(jogo.adiciona(new JogadorCPU()));
+		assertTrue(jogo.adiciona(new JogadorCPU()));
+		assertTrue(jogo.adiciona(new JogadorCPU()));
+		assertFalse(jogo.adiciona(new JogadorCPU()));
+		jogo.run();
+	}
 
 }
