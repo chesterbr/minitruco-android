@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="me.chester.minitruco" android:versionCode="3"
-	android:versionName="0.3">
+	package="me.chester.minitruco" android:versionCode="4"
+	android:versionName="0.4">
 	<supports-screens android:smallScreens="true"
 		android:normalScreens="true" android:largeScreens="true"
 		android:anyDensity="true" />
