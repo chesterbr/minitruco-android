@@ -162,7 +162,7 @@ public class CartaVisual extends Carta {
 			canvas.drawRect(rect, paint);
 			paint.setColor(COR_MESA);
 			paint.setStyle(Paint.Style.FILL);
-			canvas.drawBitmap(bitmap, left, top, paint);
+			canvas.drawBitmap(getBitmap(), left, top, paint);
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.STROKE);
 			canvas.drawRect(rect, paint);
