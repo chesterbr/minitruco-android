@@ -9,15 +9,14 @@
 
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:debuggable="false">
-		<activity android:name=".android.MenuPrincipal"
-			android:label="@string/app_name" android:screenOrientation="portrait">
+		<activity android:name=".android.MenuPrincipalActivity"
+			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".android.Partida" android:label="@string/app_name"
-			android:screenOrientation="portrait">
+		<activity android:name=".android.PartidaActivity" android:label="@string/app_name">
 			<intent-filter>
 				<!--
 					<action android:name="android.intent.action.MAIN" /> <category

@@ -40,7 +40,7 @@ import android.util.Log;
  * @author chester
  * 
  */
-public class Partida extends Activity implements Interessado {
+public class PartidaActivity extends Activity implements Interessado {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class Partida extends Activity implements Interessado {
 		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
 		// inscreve a Mesa como interessado e inicia o jogo em sua própria
 		// thread.
-		jogo = MenuPrincipal.jogo;
+		jogo = MenuPrincipalActivity.jogo;
 		if (jogo != null) {
 			if (jogo.jogoFinalizado) {
 				// Isso aqui é porque eu ainda não achei um jeito conveniente de

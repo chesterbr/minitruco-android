@@ -170,7 +170,7 @@ public class MesaView extends View {
 			// a diálogos, bem como a do jogo em si.
 			animacaoJogo.start();
 			respondeDialogos.start();
-			(new Thread(MenuPrincipal.jogo)).start();
+			(new Thread(MenuPrincipalActivity.jogo)).start();
 
 		}
 	}

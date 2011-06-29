@@ -29,7 +29,7 @@ import android.view.View.OnClickListener;
  * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-public class MenuPrincipal extends Activity implements OnClickListener {
+public class MenuPrincipalActivity extends Activity implements OnClickListener {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class MenuPrincipal extends Activity implements OnClickListener {
 		for (int i = 2; i <= 4; i++) {
 			jogo.adiciona(new JogadorCPU());
 		}
-		Intent intent = new Intent(MenuPrincipal.this, Partida.class);
+		Intent intent = new Intent(MenuPrincipalActivity.this, PartidaActivity.class);
 		startActivity(intent);
 
 	}

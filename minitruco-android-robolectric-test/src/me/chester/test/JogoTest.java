@@ -4,9 +4,9 @@ import java.util.Date;
 
 import junit.framework.TestCase;
 import me.chester.minitruco.android.CartaVisual;
-import me.chester.minitruco.android.MenuPrincipal;
+import me.chester.minitruco.android.MenuPrincipalActivity;
 import me.chester.minitruco.android.MesaView;
-import me.chester.minitruco.android.Partida;
+import me.chester.minitruco.android.PartidaActivity;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Estrategia;
@@ -164,6 +164,34 @@ public class JogoTest extends TestCase {
 	@Test
 	public void testJogoCom1CPUeOutrosSempreAceitamAumento() {
 		Jogo jogo = new JogoLocal(false, false);
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorCPU()));
+		assertFalse(jogo.adiciona(new JogadorMock()));
+		jogo.run();
+	}
+
+	@Test
+	public void testMaoDe11Com1CPU() {
+		JogoLocal jogo = new JogoLocal(false, false);
+		jogo.setPlacar(0, 11);
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorCPU()));
+		assertFalse(jogo.adiciona(new JogadorMock()));
+		jogo.run();
+		jogo = new JogoLocal(false, false);
+		jogo.setPlacar(11, 0);
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorMock()));
+		assertTrue(jogo.adiciona(new JogadorCPU()));
+		assertFalse(jogo.adiciona(new JogadorMock()));
+		jogo.run();
+		jogo = new JogoLocal(false, false);
+		jogo.setPlacar(11, 11);
 		assertTrue(jogo.adiciona(new JogadorMock()));
 		assertTrue(jogo.adiciona(new JogadorMock()));
 		assertTrue(jogo.adiciona(new JogadorMock()));

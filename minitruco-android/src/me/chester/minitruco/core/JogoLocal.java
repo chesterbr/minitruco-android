@@ -666,8 +666,8 @@ public class JogoLocal extends Jogo {
 				if (c == null) {
 					s.cartasJogadas[i][k] = null;
 				} else if (s.cartasJogadas[i][k] == null) {
-					s.cartasJogadas[i][k] = new Carta(c.getLetra(),
-							c.getNaipe());
+					s.cartasJogadas[i][k] = new Carta(c.getLetra(), c
+							.getNaipe());
 				} else {
 					s.cartasJogadas[i][k].setLetra(c.getLetra());
 					s.cartasJogadas[i][k].setNaipe(c.getNaipe());
@@ -718,6 +718,17 @@ public class JogoLocal extends Jogo {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Seta o placar atual (apenas para fins de testes)
+	 * 
+	 * @param pontosEquipe1
+	 * @param pontosEquipe2
+	 */
+	public void setPlacar(int pontosEquipe1, int pontosEquipe2) {
+		pontosEquipe[0] = pontosEquipe1;
+		pontosEquipe[1] = pontosEquipe2;
 	}
 
 }

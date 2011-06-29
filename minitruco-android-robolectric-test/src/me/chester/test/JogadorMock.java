@@ -12,12 +12,14 @@ public class JogadorMock extends Jogador {
 
 	@Override
 	public void inicioMao() {
+		System.out.println("iniciomao"+this);
 		cartaAtual = 0;
 	}
 
 	@Override
 	public void vez(Jogador j, boolean podeFechada) {
 		final Jogador jogador = this;
+		System.out.println("vez "+j+","+jogador);
 		if (j.equals(this)) {
 			new Thread() {
 				@Override
