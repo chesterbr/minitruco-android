@@ -3,7 +3,7 @@ miniTruco Android
 
 Depois de muito tempo, finalmente comecei a versao Android do miniTruco.
 
-Ainda está em desenvolvimento - o backlog abaixo informa as tarefas que faltam para uma versão "0.1"
+Ainda está em desenvolvimento - o backlog abaixo informa as tarefas que faltam para uma versão "1.0"
 
 A licença será GPLv3, pois trata-se de um "fork" do miniTruco original.
 
@@ -12,57 +12,28 @@ Backlog
 -------
 
 Features:
-- Decidir quais estratégias entram, e como  
+- About/créditos/licença (A Bani desenhou as cartas e várias das telas; a
+  estratégia é do Sandro Gasparotto)
+- Opção de manilha velha
+- Jogos multiplayer
 
 Débito Técnico/Bugs:
+- Jogo atrelado à Activity/View faz com que seja impossível rodar o celular
+  (e possivelmente motiva alguns dos bugs abaixo)
+- Botões acionam no touch, e não no release
 - Bug: troca de texto no botão de aumento não tá rolando 100%
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - acertar o evento de resize, dissociando init do jogo e resize da tela (que   
   inclui limpar o cache de bitmaps de cartas).
-- Bug: arrayindexoutofbounds quando fechou a partida [2]
 (obs: esses dois bugs podem ter sido resolvidos quando foi corrigido o lifecycle, é preciso ver se aparecem novamente)
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel
 - Fundo do "nós" não aparece em alguns emuladores/celulares
 - Colocar instruções pra rodar o teste do robolectric (setar o launcher do Eclipse e o Run Configurations
  / Arguments / Working Directory para o diretório do minitruco-android)
 Features do miniTruco J2ME que (ainda) não tem nesse:
-- Opção de manilha velha
-- Jogos multiplayer
 
 Débito Técnico "nice-to-have":
-- Reintroduzir testes da parte visual (que não funcionam mais por
-  usarmos o Robolectric)
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
 
-[2] W/dalvikvm(  677): threadid=3: thread exiting with uncaught exception (group=0x4001aa28)
-E/AndroidRuntime(  677): Uncaught handler: thread main exiting due to uncaught exception
-E/AndroidRuntime(  677): java.lang.ArrayIndexOutOfBoundsException: Array index out of range: 9
-E/AndroidRuntime(  677):        at java.util.Vector.elementAt(Vector.java:351)
-E/AndroidRuntime(  677):        at me.chester.minitruco.android.MesaView.onDraw(MesaView.java:548)
-E/AndroidRuntime(  677):        at android.view.View.draw(View.java:6274)
-E/AndroidRuntime(  677):        at android.view.ViewGroup.drawChild(ViewGroup.java:1526)
-E/AndroidRuntime(  677):        at android.view.ViewGroup.dispatchDraw(ViewGroup.java:1256)
-E/AndroidRuntime(  677):        at android.view.ViewGroup.drawChild(ViewGroup.java:1524)
-E/AndroidRuntime(  677):        at android.view.ViewGroup.dispatchDraw(ViewGroup.java:1256)
-E/AndroidRuntime(  677):        at android.view.View.draw(View.java:6277)
-E/AndroidRuntime(  677):        at android.widget.FrameLayout.draw(FrameLayout.java:352)
-E/AndroidRuntime(  677):        at android.view.ViewGroup.drawChild(ViewGroup.java:1526)
-E/AndroidRuntime(  677):        at android.view.ViewGroup.dispatchDraw(ViewGroup.java:1256)
-E/AndroidRuntime(  677):        at android.view.ViewGroup.drawChild(ViewGroup.java:1524)
-E/AndroidRuntime(  677):        at android.view.ViewGroup.dispatchDraw(ViewGroup.java:1256)
-E/AndroidRuntime(  677):        at android.view.View.draw(View.java:6277)
-E/AndroidRuntime(  677):        at android.widget.FrameLayout.draw(FrameLayout.java:352)
-E/AndroidRuntime(  677):        at com.android.internal.policy.impl.PhoneWindow$DecorView.draw(PhoneWindow.java:1883)
-E/AndroidRuntime(  677):        at android.view.ViewRoot.draw(ViewRoot.java:1332)
-E/AndroidRuntime(  677):        at android.view.ViewRoot.performTraversals(ViewRoot.java:1097)
-E/AndroidRuntime(  677):        at android.view.ViewRoot.handleMessage(ViewRoot.java:1613)
-E/AndroidRuntime(  677):        at android.os.Handler.dispatchMessage(Handler.java:99)
-E/AndroidRuntime(  677):        at android.os.Looper.loop(Looper.java:123)
-E/AndroidRuntime(  677):        at android.app.ActivityThread.main(ActivityThread.java:4203)
-E/AndroidRuntime(  677):        at java.lang.reflect.Method.invokeNative(Native Method)
-E/AndroidRuntime(  677):        at java.lang.reflect.Method.invoke(Method.java:521)
-E/AndroidRuntime(  677):        at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:791)
-E/AndroidRuntime(  677):        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:549)
-E/AndroidRuntime(  677):        at dalvik.system.NativeStart.main(Native Method)
