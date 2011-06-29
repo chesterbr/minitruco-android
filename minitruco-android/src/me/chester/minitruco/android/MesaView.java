@@ -110,17 +110,13 @@ public class MesaView extends View {
 	@Override
 	public void onSizeChanged(int w, int h, int oldw, int oldh) {
 
-		// ARGH, descobri que num rotate de celular ele recria a view, fazendo
-		// com que esse código de inicialização rode novamente, essencialmente
-		// jogando o jogo fora. Solução provisória: essa app só roda em pé.
-
 		// Ajusta o tamanho da carta (tudo depende dele) ao da mesa e os
 		// "pontos de referência" importantes (baralho decorativo, tamanho do
 		// texto, etc.)
-		CartaVisual.ajustaTamanho(getWidth(), getHeight());
-		leftBaralho = this.getWidth() - CartaVisual.largura - MARGEM - 4;
-		topBaralho = this.getHeight() - CartaVisual.altura - MARGEM - 4;
-		tamanhoFonte = 12.0f * (getHeight() / 270.0f);
+		CartaVisual.ajustaTamanho(w, h);
+		leftBaralho = w - CartaVisual.largura - MARGEM - 4;
+		topBaralho = h - CartaVisual.altura - MARGEM - 4;
+		tamanhoFonte = 12.0f * (h / 270.0f);
 
 		// Na primeira chamada (inicialização), instanciamos as cartas
 		boolean inicializando = (cartas[0] == null);
@@ -135,8 +131,8 @@ public class MesaView extends View {
 		// Define posição e tamanho da caixa de diálogo e seus botões
 		int alturaDialog = CartaVisual.altura;
 		int larguraDialog = CartaVisual.largura * 3;
-		int topDialog = (getHeight() - alturaDialog) / 2;
-		int leftDialog = (getWidth() - larguraDialog) / 2;
+		int topDialog = (h - alturaDialog) / 2;
+		int leftDialog = (w - larguraDialog) / 2;
 		rectDialog = new Rect(leftDialog, topDialog,
 				leftDialog + larguraDialog, topDialog + alturaDialog);
 		int alturaBotao = (int) (tamanhoFonte * 1.8f);
@@ -146,12 +142,11 @@ public class MesaView extends View {
 		rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8,
 				rectBotaoSim.top, leftDialog + larguraDialog - 8,
 				rectBotaoSim.bottom);
-		rectBotaoAumento = new RectF(MARGEM, getHeight()
-				- rectBotaoSim.height() * 2 - MARGEM, MARGEM
-				+ rectBotaoSim.width(), getHeight() - MARGEM
+		rectBotaoAumento = new RectF(MARGEM, h - rectBotaoSim.height() * 2
+				- MARGEM, MARGEM + rectBotaoSim.width(), h - MARGEM
 				- rectBotaoSim.height());
 		rectBotaoAumento.left = MARGEM;
-		rectBotaoAumento.top = getHeight() - CartaVisual.altura - MARGEM
+		rectBotaoAumento.top = h - CartaVisual.altura - MARGEM
 				+ (CartaVisual.altura - alturaBotao) / 2;
 		rectBotaoAumento.right = MARGEM + CartaVisual.largura * 1.5f;
 		rectBotaoAumento.bottom = rectBotaoAumento.top + alturaBotao;
@@ -165,13 +160,30 @@ public class MesaView extends View {
 		cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
 
 		if (inicializando) {
-
 			// Inicia as threads internas que cuidam de animações e de responder
 			// a diálogos, bem como a do jogo em si.
 			animacaoJogo.start();
 			respondeDialogos.start();
 			(new Thread(MenuPrincipalActivity.jogo)).start();
-
+		} else {
+			for (int i = 0; i <= 15; i++) {
+				CartaVisual cv = cartas[i];
+				if (cv != null) {
+					cv.resetBitmap();
+					if (i >= 4) {
+						int numJogador = (i - 1) / 3;
+						if (cv.descartada) {
+							cv.movePara(getPosLeftDescartada(numJogador),
+									getPosTopDescartada(numJogador));
+						} else {
+							int pos = (i - 1) % 3;
+							cv.movePara(getPosLeftCarta(numJogador,
+									pos), getPosTopCarta(numJogador,
+									pos));
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -482,10 +494,28 @@ public class MesaView extends View {
 	 *        entrega fechada (sem valor)
 	 */
 	private void distribui(int numJogador, int i, Carta carta) {
+		// Para o jogador da posição superior, inverte a ordem
+		// (senão a exibição na mão de 11 fica bagunçada)
+		if (numJogador == 3 || numJogador == 4) {
+			i = 2 - i;
+		}
 
-		// Determina onde vamos colocar a carta (e se ela vem virada)
+		// Adiciona a carta na mesa, em cima do baralho, e anima até a posição
+		CartaVisual c = cartas[4 + i + 3 * (numJogador - 1)];
+		c.setCarta(carta);
+		// c.movePara(topBaralho, leftBaralho);
+		c.movePara(getPosLeftCarta(numJogador, i),
+				getPosTopCarta(numJogador, i), 150);
+	}
+
+	/**
+	 * 
+	 * @param numJogador
+	 * @param i
+	 * @return Posição (x) da i-ésima carta na mão do jogador em questão
+	 */
+	private int getPosLeftCarta(int numJogador, int i) {
 		int deslocamentoHorizontalEntreCartas = CartaVisual.largura * 6 / 7;
-		int deslocamentoVerticalEntreCartas = 4;
 		int leftFinal = 0;
 		switch (numJogador) {
 		case 1:
@@ -501,6 +531,17 @@ public class MesaView extends View {
 			leftFinal = MARGEM;
 			break;
 		}
+		return leftFinal;
+	}
+
+	/**
+	 * 
+	 * @param numJogador
+	 * @param i
+	 * @return Posição (y) da i-ésima carta na mão do jogador em questão
+	 */
+	private int getPosTopCarta(int numJogador, int i) {
+		int deslocamentoVerticalEntreCartas = 4;
 		int topFinal = 0;
 		switch (numJogador) {
 		case 1:
@@ -515,18 +556,7 @@ public class MesaView extends View {
 			topFinal = MARGEM;
 			break;
 		}
-
-		// Para o jogador da posição superior, inverte a ordem
-		// (senão a exibição na mão de 11 fica bagunçada)
-		if (numJogador == 3 || numJogador == 4) {
-			i = 2 - i;
-		}
-
-		// Adiciona a carta na mesa, em cima do baralho, e anima até a posição
-		CartaVisual c = cartas[4 + i + 3 * (numJogador - 1)];
-		c.setCarta(carta);
-		// c.movePara(topBaralho, leftBaralho);
-		c.movePara(leftFinal, topFinal, 150);
+		return topFinal;
 	}
 
 	/**
@@ -554,27 +584,8 @@ public class MesaView extends View {
 
 		// Coloca a carta no meio da tela, mas "puxando" na direção
 		// de quem jogou
-		int topFinal, leftFinal;
-		topFinal = getHeight() / 2 - CartaVisual.altura / 2;
-		leftFinal = getWidth() / 2 - CartaVisual.largura / 2;
-		switch (posicao) {
-		case 1:
-			topFinal += CartaVisual.altura / 2;
-			break;
-		case 2:
-			leftFinal += CartaVisual.largura;
-			break;
-		case 3:
-			topFinal -= CartaVisual.altura / 2;
-			break;
-		case 4:
-			leftFinal -= CartaVisual.largura;
-			break;
-		}
-
-		// Insere um ligeiro fator aleatório, para dar uma bagunçada na mesa
-		topFinal += System.currentTimeMillis() % 5 - 2;
-		leftFinal += System.currentTimeMillis() % 5 - 2;
+		int topFinal = getPosTopDescartada(posicao);
+		int leftFinal = getPosLeftDescartada(posicao);
 
 		// Pega uma carta visual naquela posição...
 		CartaVisual cv = null;
@@ -598,6 +609,47 @@ public class MesaView extends View {
 		cv.descartada = true;
 		cartasJogadas.addElement(cv);
 
+	}
+
+	/**
+	 * 
+	 * @param numJogador
+	 * @return posição (x) de uma carta descartada pelo jogador (no meio da
+	 *         tela, mas puxando para a direçãod dele com um breve distúrbio
+	 *         aleatório)
+	 */
+	private int getPosLeftDescartada(int numJogador) {
+		// Coloca a carta no meio da tela, mas "puxando" na direção
+		// de quem jogou
+		int leftFinal;
+		leftFinal = getWidth() / 2 - CartaVisual.largura / 2;
+		if (numJogador == 2) {
+			leftFinal += CartaVisual.largura;
+		} else if (numJogador == 4) {
+			leftFinal -= CartaVisual.largura;
+		}
+		// Insere um ligeiro fator aleatório, para dar uma bagunçada na mesa
+		leftFinal += System.currentTimeMillis() % 5 - 2;
+		return leftFinal;
+	}
+
+	/**
+	 * 
+	 * @param numJogador
+	 * @return posição (y) de uma carta descartada pelo jogador (no meio da
+	 *         tela, mas puxando para a direçãod dele com um breve distúrbio
+	 *         aleatório)
+	 */
+	private int getPosTopDescartada(int numJogador) {
+		int topFinal;
+		topFinal = getHeight() / 2 - CartaVisual.altura / 2;
+		if (numJogador == 1) {
+			topFinal += CartaVisual.altura / 2;
+		} else if (numJogador == 3) {
+			topFinal -= CartaVisual.altura / 2;
+		}
+		topFinal += System.currentTimeMillis() % 5 - 2;
+		return topFinal;
 	}
 
 	@Override

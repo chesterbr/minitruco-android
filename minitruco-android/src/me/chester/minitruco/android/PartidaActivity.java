@@ -6,6 +6,7 @@ import me.chester.minitruco.core.Interessado;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -84,6 +85,11 @@ public class PartidaActivity extends Activity implements Interessado {
 					"Activity.onCreate: Partida iniciada sem jogo");
 		}
 
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
 	}
 
 	@Override

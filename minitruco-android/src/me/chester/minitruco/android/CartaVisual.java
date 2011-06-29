@@ -244,6 +244,10 @@ public class CartaVisual extends Carta {
 		}
 		return this.bitmap;
 	}
+	
+	public void resetBitmap() {
+		this.bitmap = null;
+	}
 
 	@Override
 	public void setLetra(char letra) {
