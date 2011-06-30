@@ -14,23 +14,17 @@ Backlog
 Features:
 - About/créditos/licença (A Bani desenhou as cartas e várias das telas; a
   estratégia é do Sandro Gasparotto)
-- Opção de manilha velha
+- Opção de manilha velha / baralho limpo
 - Jogos multiplayer
 
 Débito Técnico/Bugs:
-- Jogo atrelado à Activity/View faz com que seja impossível rodar o celular
-  (e possivelmente motiva alguns dos bugs abaixo)
 - Botões acionam no touch, e não no release
 - Bug: troca de texto no botão de aumento não tá rolando 100%
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
-- acertar o evento de resize, dissociando init do jogo e resize da tela (que   
-  inclui limpar o cache de bitmaps de cartas).
-(obs: esses dois bugs podem ter sido resolvidos quando foi corrigido o lifecycle, é preciso ver se aparecem novamente)
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel
-- Fundo do "nós" não aparece em alguns emuladores/celulares
+- Fundo do "nós" não aparece em alguns emuladores/celulares (acho que em todos agora)
 - Colocar instruções pra rodar o teste do robolectric (setar o launcher do Eclipse e o Run Configurations
  / Arguments / Working Directory para o diretório do minitruco-android)
-Features do miniTruco J2ME que (ainda) não tem nesse:
 
 Débito Técnico "nice-to-have":
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
