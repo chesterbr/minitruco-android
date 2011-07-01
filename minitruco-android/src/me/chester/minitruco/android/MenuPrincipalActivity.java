@@ -29,19 +29,17 @@ import android.view.View.OnClickListener;
  * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-public class MenuPrincipalActivity extends Activity implements OnClickListener {
+public class MenuPrincipalActivity extends Activity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		View imgMenu = findViewById(R.id.menuprincipal);
-		imgMenu.setOnClickListener(this);
 	}
 
 	public static Jogo jogo;
 
-	public void onClick(View v) {
+	public void iniciarClickHandler(View v) {
 
 		jogo = new JogoLocal(false, false);
 		jogo.adiciona(new JogadorHumano());
@@ -52,4 +50,14 @@ public class MenuPrincipalActivity extends Activity implements OnClickListener {
 		startActivity(intent);
 
 	}
+	
+	public void sobreClickHandler(View v) {
+		
+	
+	}
+	
+	public void opcoesClickHandler(View v) {
+		//TODO implementar
+	}
+	
 }

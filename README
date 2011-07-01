@@ -18,7 +18,8 @@ Features:
 - Jogos multiplayer
 
 Débito Técnico/Bugs:
-- Botões acionam no touch, e não no release
+- Refatorar botão de carta virada, botão iniciar e outros que possam usar
+  UI do Android
 - Bug: troca de texto no botão de aumento não tá rolando 100%
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel
