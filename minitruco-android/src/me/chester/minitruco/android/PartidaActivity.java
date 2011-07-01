@@ -15,6 +15,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -93,36 +94,44 @@ public class PartidaActivity extends Activity implements Interessado {
 
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.menuitem_aumento:
+			mostrarBotaoAumento = false;
+			mesa.vezHumano = -1;
+			jogo.aumentaAposta(jogo.getJogadorHumano());
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.partida_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		MenuItem item = menu.findItem(R.id.menuitem_aumento);
+		if (mostrarBotaoAumento) {
+			item.setTitle(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1]);
+		}
+		item.setVisible(mostrarBotaoAumento);
+		return true;
+	}
 
 	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
 			"NOVE!", "DOZE!!!" };
 
-	private static final int MOSTRAR_BTN_AUMENTO = 1;
-	private static final int ESCONDER_BTN_AUMENTO = 2;
-
 	private int valorProximaAposta;
 
-	final Handler handler = new Handler() {
-		public void handleMessage(Message msg) {
-			Button btnAumento = (Button) findViewById(R.id.btnAumento);
-			switch (msg.what) {
-			case MOSTRAR_BTN_AUMENTO:
-				btnAumento
-						.setText(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1]);
-				btnAumento.setVisibility(Button.VISIBLE);
-				break;
-			case ESCONDER_BTN_AUMENTO:
-				btnAumento.setVisibility(Button.INVISIBLE);
-				break;
-			}
-		}
-	};
-
-	public void aumentoClickHandler(View v) {
-		handler.handleMessage(Message.obtain(handler, ESCONDER_BTN_AUMENTO));
-		mesa.vezHumano = -1;
-		jogo.aumentaAposta(jogo.getJogadorHumano());
-	}
+	private boolean mostrarBotaoAumento = false;
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -165,7 +174,7 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void cartaJogada(Jogador j, Carta c) {
-		handler.sendMessage(Message.obtain(handler, ESCONDER_BTN_AUMENTO));
+		mostrarBotaoAumento = false;
 		mesa.aguardaFimAnimacoes();
 		mesa.descarta(c, j.getPosicao());
 		Log.i("Partida", "Jogador " + j.getPosicao() + " jogou " + c);
@@ -220,7 +229,7 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
-		handler.sendMessage(Message.obtain(handler, ESCONDER_BTN_AUMENTO));
+		mostrarBotaoAumento = false;
 		mesa.aguardaFimAnimacoes();
 		mesa.atualizaPontosEquipe(pontosEquipe);
 		mesa.aguardaFimAnimacoes();
@@ -254,12 +263,9 @@ public class PartidaActivity extends Activity implements Interessado {
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
 		// TODO mão de 11
-		if ((j instanceof JogadorHumano) && (valorProximaAposta > 0)
-		/* && placar[0] != 11 && placar[1] != 11 */) {
-			handler.sendMessage(Message.obtain(handler, MOSTRAR_BTN_AUMENTO));
-		} else {
-			handler.sendMessage(Message.obtain(handler, ESCONDER_BTN_AUMENTO));
-		}
+		mostrarBotaoAumento = (j instanceof JogadorHumano)
+				&& (valorProximaAposta > 0);
+		/* && placar[0] != 11 && placar[1] != 11 */
 		MesaView.setVezHumano(j instanceof JogadorHumano, podeFechada);
 	}
 

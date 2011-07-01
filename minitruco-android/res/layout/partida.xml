@@ -6,18 +6,4 @@
 		android:id="@+id/MesaView01" android:layout_height="wrap_content"
 		android:layout_width="fill_parent" />
 
-	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<Button android:id="@+id/btnAumento" android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true" android:text="Truco"
-			android:visibility="invisible" android:onClick="aumentoClickHandler" />
-
-	</RelativeLayout>
-
-	<!--
-		<ScrollView android:id="@+id/ScrollView01"
-		android:layout_height="fill_parent"
-		android:layout_width="fill_parent"> </ScrollView>
-	-->
 </FrameLayout>
