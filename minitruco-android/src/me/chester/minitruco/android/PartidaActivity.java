@@ -10,7 +10,11 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 /*
  * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
@@ -87,6 +91,36 @@ public class PartidaActivity extends Activity implements Interessado {
 
 	}
 
+	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
+			"NOVE!", "DOZE!!!" };
+
+	private static final int MOSTRAR_BTN_AUMENTO = 1;
+	private static final int ESCONDER_BTN_AUMENTO = 2;
+
+	private int valorProximaAposta;
+
+	final Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			Button btnAumento = (Button) findViewById(R.id.btnAumento);
+			switch (msg.what) {
+			case MOSTRAR_BTN_AUMENTO:
+				btnAumento
+						.setText(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1]);
+				btnAumento.setVisibility(Button.VISIBLE);
+				break;
+			case ESCONDER_BTN_AUMENTO:
+				btnAumento.setVisibility(Button.INVISIBLE);
+				break;
+			}
+		}
+	};
+
+	public void aumentoClickHandler(View v) {
+		handler.handleMessage(Message.obtain(handler, ESCONDER_BTN_AUMENTO));
+		mesa.vezHumano = -1;
+		jogo.aumentaAposta(jogo.getJogadorHumano());
+	}
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -111,12 +145,24 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
+		if (jogo.getJogadorHumano() != null) {
+			if (j.getEquipe() == 1) {
+				// Nós aceitamos um truco, então podemos pedir 6, 9 ou 12
+				if (valor != 12) {
+					valorProximaAposta = valor + 3;
+				}
+			} else {
+				// Eles aceitaram um truco, temos que esperar eles pedirem
+				valorProximaAposta = 0;
+			}
+		}
 		mesa.aguardaFimAnimacoes();
 		mesa.diz("aumento_sim", j.getPosicao(), 1500);
 		mesa.aceitouAumentoAposta(j, valor);
 	}
 
 	public void cartaJogada(Jogador j, Carta c) {
+		handler.sendMessage(Message.obtain(handler, ESCONDER_BTN_AUMENTO));
 		mesa.aguardaFimAnimacoes();
 		mesa.descarta(c, j.getPosicao());
 		Log.i("Partida", "Jogador " + j.getPosicao() + " jogou " + c);
@@ -149,6 +195,7 @@ public class PartidaActivity extends Activity implements Interessado {
 
 	public void inicioMao() {
 		decidiuMao11 = false;
+		valorProximaAposta = 3;
 		mesa.aguardaFimAnimacoes();
 		for (int i = 0; i <= 2; i++) {
 			mesa.resultadoRodada[i] = 0;
@@ -170,6 +217,7 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
+		handler.sendMessage(Message.obtain(handler, ESCONDER_BTN_AUMENTO));
 		mesa.aguardaFimAnimacoes();
 		mesa.atualizaPontosEquipe(pontosEquipe);
 		mesa.aguardaFimAnimacoes();
@@ -199,10 +247,15 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {
+		mesa.aguardaFimAnimacoes();
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
-		if (j instanceof JogadorHumano) {
-			Log.i("Partida", "Partida percebeu que é vez do humano");
+		// TODO mão de 11
+		if ((j instanceof JogadorHumano) && (valorProximaAposta > 0)
+		/* && placar[0] != 11 && placar[1] != 11 */) {
+			handler.sendMessage(Message.obtain(handler, MOSTRAR_BTN_AUMENTO));
+		} else {
+			handler.sendMessage(Message.obtain(handler, ESCONDER_BTN_AUMENTO));
 		}
 		MesaView.setVezHumano(j instanceof JogadorHumano, podeFechada);
 	}

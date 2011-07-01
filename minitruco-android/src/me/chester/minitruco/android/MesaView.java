@@ -17,7 +17,6 @@ import android.graphics.RectF;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -142,15 +141,7 @@ public class MesaView extends View {
 		rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8,
 				rectBotaoSim.top, leftDialog + larguraDialog - 8,
 				rectBotaoSim.bottom);
-		rectBotaoAumento = new RectF(MARGEM, h - rectBotaoSim.height() * 2
-				- MARGEM, MARGEM + rectBotaoSim.width(), h - MARGEM
-				- rectBotaoSim.height());
-		rectBotaoAumento.left = MARGEM;
-		rectBotaoAumento.top = h - CartaVisual.altura - MARGEM
-				+ (CartaVisual.altura - alturaBotao) / 2;
-		rectBotaoAumento.right = MARGEM + CartaVisual.largura * 1.5f;
-		rectBotaoAumento.bottom = rectBotaoAumento.top + alturaBotao;
-		rectBotaoFechada = new RectF(rectBotaoAumento);
+		rectBotaoFechada = new RectF();
 		rectBotaoFechada.offset(0, -alturaBotao * 1.1f);
 
 		// Posiciona o vira e as cartas decorativas do baralho, que são fixos
@@ -177,9 +168,8 @@ public class MesaView extends View {
 									getPosTopDescartada(numJogador));
 						} else {
 							int pos = (i - 1) % 3;
-							cv.movePara(getPosLeftCarta(numJogador,
-									pos), getPosTopCarta(numJogador,
-									pos));
+							cv.movePara(getPosLeftCarta(numJogador, pos),
+									getPosTopCarta(numJogador, pos));
 						}
 					}
 				}
@@ -321,12 +311,6 @@ public class MesaView extends View {
 						jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]);
 					}
 				}
-				if (valorProximaAposta > 0
-						&& rectBotaoAumento.contains((int) event.getX(),
-								(int) event.getY())) {
-					vezHumano = -1;
-					jogo.aumentaAposta(jogo.getJogadorHumano());
-				}
 				if (podeFechada
 						&& rectBotaoFechada.contains((int) event.getX(),
 								(int) event.getY())) {
@@ -422,13 +406,9 @@ public class MesaView extends View {
 
 	private RectF rectBotaoSim;
 
-	private RectF rectBotaoAumento;
-
 	private RectF rectBotaoFechada;
 
 	private RectF rectBotaoNao;
-
-	public int valorProximaAposta = 0;
 
 	private float tamanhoFonte;
 
@@ -471,15 +451,7 @@ public class MesaView extends View {
 			cartas[0].setCarta(jogo.cartaDaMesa);
 			cartas[0].visible = true;
 		}
-		//
-		// // Atualiza o placar
-		// mesa.atualizaPlacar(pontosNos, pontosEles);
-		//
-		// Libera o jogador para pedir truco
-		valorProximaAposta = 3;
-		//
-		// // Informa que ninguém aceitou mão de 11 (para não duplicar o balão)
-		// jaAceitou = false;
+
 	}
 
 	/**
@@ -740,13 +712,6 @@ public class MesaView extends View {
 		// Balãozinho (se alguém estiver falando algo)
 		desenhaBalao(canvas);
 
-		// Botão de aumento
-		if (vezHumano == 1 && valorProximaAposta > 0 && placar[0] != 11
-				&& placar[1] != 11) {
-			desenhaBotao(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1],
-					canvas, rectBotaoAumento);
-		}
-
 		// Botão de carta virada
 		if (vezHumano == 1 && podeFechada) {
 			desenhaBotao(vaiJogarFechada ? "Aberta" : "Fechada", canvas,
@@ -809,9 +774,11 @@ public class MesaView extends View {
 
 	/**
 	 * Diz se é a vez do jogador humano dessa mesa (0=não, 1=sim, -1=sim mas
-	 * está esperando resultado de truco
+	 * está esperando resultado de truco.
+	 * 
+	 * TODO encapsular melhor isso.
 	 */
-	private static int vezHumano = 0;
+	public static int vezHumano = 0;
 
 	/**
 	 * Jogo que a mesa está exibindo (deve ser setado externamente)
@@ -973,28 +940,10 @@ public class MesaView extends View {
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
-		if (jogo.getJogadorHumano() != null) {
-			if (j.getEquipe() == 1) {
-				// Nós aceitamos um truco, então podemos aumentar
-				// (i.e., se foi truco, podemos pedir 6, etc.) até o limite de
-				// 12
-				if (valor != 12) {
-					valorProximaAposta = valor + 3;
-				}
-			} else {
-				// Eles aceitaram um truco, temos que esperar eles pedirem
-				valorProximaAposta = 0;
-				// Se era a minha vez (i.e., estava suspensa pelo pedido),
-				// retoma
-				if (vezHumano == -1) {
-					vezHumano = 1;
-				}
-			}
+		if (vezHumano == -1) {
+			vezHumano = 1;
 		}
 	}
-
-	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
-			"NOVE!", "DOZE!!!" };
 
 	private boolean visivel = false;
 
