@@ -12,21 +12,16 @@
 		android:layout_height="fill_parent" android:gravity="center_horizontal|bottom">
 
 
-		<Button android:id="@+id/btnIniciar" android:layout_width="100px"
+		<Button android:id="@+id/btnJogar" android:layout_width="100px"
 			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true" android:text="Iniciar"
-			android:onClick="iniciarClickHandler" />
-
-		<Button android:id="@+id/btnOpcoes" android:layout_width="100px"
+			android:layout_alignParentBottom="true" android:text="Jogar"
+			android:onClick="jogarClickHandler" />
+<!-- 
+		<Button android:id="@+id/btnMultiplayer" android:layout_width="100px"
 			android:layout_height="wrap_content"
-			android:layout_below="@id/btnIniciar" android:text="Opções"
-			android:onClick="opcoesClickHandler" />
-
-		<Button android:id="@+id/btnSobre" android:layout_width="100px"
-			android:layout_height="wrap_content"
-			android:layout_below="@id/btnOpcoes" android:text="Sobre"
-			android:onClick="sobreClickHandler" />
-
+			android:layout_below="@id/btnJogar" android:text="Opções"
+			android:onClick="multiplayerClickHandler" />
+ -->
 	</RelativeLayout>
 
 </FrameLayout>

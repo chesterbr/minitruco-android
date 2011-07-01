@@ -7,8 +7,10 @@ import me.chester.minitruco.core.JogoLocal;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 /*
  * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
@@ -30,16 +32,38 @@ import android.view.View.OnClickListener;
  */
 
 public class MenuPrincipalActivity extends Activity {
-	/** Called when the activity is first created. */
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 	}
-
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.main_menu, menu);
+	    return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+	    switch (item.getItemId()) {
+	    case R.id.quit:
+	        finish();
+	        return true;
+//	    case R.id.help:
+//	        showHelp();
+//	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	}
+	
 	public static Jogo jogo;
 
-	public void iniciarClickHandler(View v) {
+	public void jogarClickHandler(View v) {
 
 		jogo = new JogoLocal(false, false);
 		jogo.adiciona(new JogadorHumano());
@@ -49,15 +73,6 @@ public class MenuPrincipalActivity extends Activity {
 		Intent intent = new Intent(MenuPrincipalActivity.this, PartidaActivity.class);
 		startActivity(intent);
 
-	}
-	
-	public void sobreClickHandler(View v) {
-		
-	
-	}
-	
-	public void opcoesClickHandler(View v) {
-		//TODO implementar
 	}
 	
 }
