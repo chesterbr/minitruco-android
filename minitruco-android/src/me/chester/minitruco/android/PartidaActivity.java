@@ -315,10 +315,9 @@ public class PartidaActivity extends Activity implements Interessado {
 		mesa.aguardaFimAnimacoes();
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
-		// TODO mão de 11
 		mostrarBotaoAumento = (j instanceof JogadorHumano)
-				&& (valorProximaAposta > 0);
-		/* && placar[0] != 11 && placar[1] != 11 */
+				&& (valorProximaAposta > 0) && (placar[0] != 11)
+				&& (placar[1] != 11);
 		mostrarBotaoAbertaFechada = (j instanceof JogadorHumano) && podeFechada;
 		mesa.vaiJogarFechada = false;
 		MesaView.setVezHumano(j instanceof JogadorHumano, podeFechada);
