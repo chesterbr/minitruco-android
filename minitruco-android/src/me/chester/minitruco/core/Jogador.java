@@ -2,6 +2,8 @@ package me.chester.minitruco.core;
 
 import java.util.Random;
 
+import android.util.Log;
+
 /*
  * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
@@ -176,7 +178,7 @@ public abstract class Jogador implements Interessado {
 	 * Estratégias suportadas pelos jogadores automático (CPU e Bot)
 	 */
 	// TODO implementar alguma estrategia e adicionar aqui
-	static Estrategia[] ESTRATEGIAS = { new EstrategiaGasparotto() };
+	static Estrategia[] ESTRATEGIAS = { new EstrategiaGasparotto(), new EstrategiaSellani() };
 
 	/**
 	 * Lista de opções de estratégia para comboboxes (tem os nomes e a última
@@ -212,11 +214,12 @@ public abstract class Jogador implements Interessado {
 		}
 		// Se não houver nenhuma, sorteia
 		if (numEstrategia == -1) {
-			numEstrategia = (random.nextInt() >>> 1) % ESTRATEGIAS.length;
+			numEstrategia = random.nextInt(ESTRATEGIAS.length);
 		}
 
 		// Cria uma nova instância
 		try {
+			Log.i("Jogador","Criando estrategia: "+ESTRATEGIAS[numEstrategia].getNomeEstrategia());
 			return (Estrategia) ESTRATEGIAS[numEstrategia].getClass()
 					.newInstance();
 		} catch (InstantiationException e) {

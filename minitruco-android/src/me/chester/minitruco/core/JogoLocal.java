@@ -601,9 +601,6 @@ public class JogoLocal extends Jogo {
 		boolean pf = isPodeFechada();
 
 		for (Interessado interessado : interessados) {
-			// Log.i("JogoLocal", "notificando interessado " + interessado +
-			// " da vez de "
-			// + j.getPosicao());
 			interessado.vez(j, pf);
 		}
 

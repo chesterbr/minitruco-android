@@ -1,7 +1,7 @@
 package me.chester.minitruco.core;
 
 /*
- * Copyright (c) 2007-2009 Sandro Gasparotto (sandro.gasparoto@gmail.com)
+ * Copyright (c) 2007-2010 Sandro Gasparotto (sandro.gasparoto@gmail.com)
  *
  * Nota 1: parte do código (métodos de suporte) adaptada
  * da Estratégia Sellani (Copyright (c) 2006 Leonardo Sellani)
@@ -43,6 +43,28 @@ public class EstrategiaGasparotto implements Estrategia {
 	private static int ESPADILHA = 5;
 	private static int ESCOPETA = 6;
 	private static int ZAP = 7;
+	
+	// game level
+	// each game level is associated with various different names
+	// so we can create different playing levels and messages for each name...
+	// 0: regular play (HAL)
+	// 1: professional balanced play [Nero(HAL_PRO)]
+	// 2: professional conservative play [Eliza(HAL_PRO)]
+	// 3: professional balanced play [Alex(HAL_PRO)]
+	// 4: professional agressive play [Constantine(HAL_PRO)]
+	private int gameLevel = 0; // default
+	
+	private String[] nicks_estrategia = {"HAL",
+			"nero(HAL_PRO)",
+			"eliza(HAL_PRO)",
+			"alex(HAL_PRO)",
+			"constantine(HAL_PRO)"};
+	
+	private String nick = nicks_estrategia[gameLevel];
+	
+	// chat message
+	// this for some "psychological" play and entertainment as well
+	private String chatMsg = "";
 
 	/**
 	 * Retorna o nome "de tela" da Estrategia
@@ -50,12 +72,27 @@ public class EstrategiaGasparotto implements Estrategia {
 	public String getNomeEstrategia() {
 		return "HAL";
 	}
+	
+	/**
+	 * Retorna o nick da Estrategia
+	 */
+	public String getNickEstrategia() {
+		return this.nick;
+	}
+	
+	/**
+	 * Seta o nick da Estrategia
+	 */
+	public void setNickEstrategia() {
+		this.nick = nicks_estrategia[this.gameLevel];
+		return;
+	}
 
 	/**
 	 * Retorna informações de copyright e afins
 	 */
 	public String getInfoEstrategia() {
-		return "v1.9 (c) 2007-2009 Sandro Gasparotto";
+		return "v2.1 (c) 2007-2010 Sandro Gasparotto";
 	}
 
     /**
@@ -70,7 +107,10 @@ public class EstrategiaGasparotto implements Estrategia {
      */
             private boolean mandaBala(int fatorDeDuvida)
             {
-                    if(fatorDeDuvida>100) fatorDeDuvida=100;
+                // this is where we adjust agressiveness as per the different "personas" 
+            	if (gameLevel==2) fatorDeDuvida = fatorDeDuvida - 15; 
+                if (gameLevel==4) fatorDeDuvida = fatorDeDuvida + 15;
+            		if(fatorDeDuvida>100) fatorDeDuvida=100;
                     if(fatorDeDuvida<0) fatorDeDuvida=0;
                     return (Math.abs(rand.nextInt())%100 + 1 <= fatorDeDuvida)?true:false;
             }
@@ -188,6 +228,49 @@ public class EstrategiaGasparotto implements Estrategia {
     }
 
     /**
+     *  Retorna o índice da maior carta possível da mesa na rodada atual, com
+     *  preferência para o índice (pos. do jogador) apontar para nós em
+     *  caso verdadeiro
+     */
+    private int maiorCartaPossivelMesa(SituacaoJogo s)
+    {
+            int maiorCarta=-1;
+
+            boolean m12=false,m13=false,m14=false;
+
+            //procura pelas manilhas que já sairam nas rodadas anteriores
+            for(int rodada=0;rodada<(s.numRodadaAtual-1);rodada++)
+                    for(int jogador=0;jogador<=3;jogador++)
+                    {
+                            if(s.cartasJogadas[rodada][jogador]!=null)
+                            {
+                                    switch(s.cartasJogadas[rodada][jogador].getValorTruco(s.manilha))
+                                    {
+                                            case 12: m12=true; break; //espadilha já saiu
+                                            case 13: m13=true; break; //copas já saiu
+                                            case 14: m14=true; break; //zap já saiu
+                                    }
+                            }
+                    }
+            
+            for(int i=0;i<=3;i++)
+            {
+                    if(s.cartasJogadas[s.numRodadaAtual-1][i]==null)
+                            continue;
+                    if( (eu(s) == i || parceiro(s) == i ) && s.cartasJogadas[s.numRodadaAtual-1][i].getValorTruco(s.manilha) == 14)
+                        maiorCarta=i;
+                    if( (eu(s) == i || parceiro(s) == i ) && m14 && s.cartasJogadas[s.numRodadaAtual-1][i].getValorTruco(s.manilha) == 13)
+                            maiorCarta=i;
+                    if( (eu(s) == i || parceiro(s) == i ) && m14 && m13 && s.cartasJogadas[s.numRodadaAtual-1][i].getValorTruco(s.manilha) == 12)
+                        maiorCarta=i;
+                    if( (eu(s) == i || parceiro(s) == i ) && m14 && m13 && m12 && s.cartasJogadas[s.numRodadaAtual-1][i].getValorTruco(s.manilha) == 11)
+                        maiorCarta=i;
+            }
+            
+            return maiorCarta;
+    }
+    
+    /**
      * Retorna se a maior carta da mesa é a do meu parceiro ou não,
      * e sem considerar empate
      */
@@ -215,6 +298,16 @@ public class EstrategiaGasparotto implements Estrategia {
     private boolean maiorCartaENossa(SituacaoJogo s)
     {
             if((eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s)) && !taAmarrado(s))
+                    return true;
+            return false;
+    }
+    
+    /**
+     * Retorna se a maior carta da mesa é minha ou do meu parceiro ou não
+     */
+    private boolean maiorCartaPossivelENossa(SituacaoJogo s)
+    {
+            if((eu(s) == maiorCartaPossivelMesa(s) || parceiro(s) == maiorCartaPossivelMesa(s)))
                     return true;
             return false;
     }
@@ -249,6 +342,16 @@ public class EstrategiaGasparotto implements Estrategia {
                             return C[i]; //é essa!
             //se não encontrou nenhuma, joga a menor
             return C[2];
+    }
+    
+    private int menorCartaParaMatarNaSegunda(SituacaoJogo s)
+    {
+            //procura pela primeira carta que mata
+            for(int i=(s.cartasJogador.length-1);i>=0;i--)
+                    if(s.cartasJogador[C[i]].getValorTruco( s.manilha) > s.cartasJogadas[s.numRodadaAtual-1][maiorCartaMesa(s)].getValorTruco(s.manilha))
+                            return C[i]; //é essa!
+            //se não encontrou nenhuma, joga a menor
+            return C[1];
     }
 
     /**
@@ -319,10 +422,14 @@ public class EstrategiaGasparotto implements Estrategia {
     {
             if(s.numRodadaAtual==1 && s.cartasJogador.length>=2 && s.cartasJogador[C[0]].getValorTruco(s.manilha)==14 && s.cartasJogador[C[1]].getValorTruco(s.manilha)==13)
                     return true;
-            if(s.numRodadaAtual==2 && primeiraENossa(s) && tenhoMaiorCartaSemContarRodadaAtual(s) && qualidadeMinhaMaior(s)>qualidadeMaiorMesa(s))
-                    return true;
-            if(s.numRodadaAtual==3 && tenhoMaiorCartaSemContarRodadaAtual(s) && qualidadeMinhaMaior(s)>qualidadeMaiorMesa(s))
-                    return true;
+            if(s.numRodadaAtual==2 && (primeiraENossa(s) && tenhoMaiorCartaSemContarRodadaAtual(s) &&
+            		(qualidadeMinhaMaior(s)>qualidadeMaiorMesa(s) || maiorCartaENossa(s))) ||
+            		maiorCartaPossivelENossa(s))
+                    	return true;
+            if(s.numRodadaAtual==3 && (tenhoMaiorCartaSemContarRodadaAtual(s) && // pos. 0, 1 , 2 
+            		(qualidadeMinhaMaior(s)>qualidadeMaiorMesa(s) || maiorCartaENossa(s))) || // pos. 3
+            		maiorCartaPossivelENossa(s)) // já jogou
+                   	return true; // fechamos todas as possibilidades considerando todas as posições do jogador na rodada
             return false;
     }
 
@@ -485,8 +592,9 @@ public class EstrategiaGasparotto implements Estrategia {
      */
     private int qualidadeMinhaMaior(SituacaoJogo s)
     {
-            if(s.cartasJogador[C[0]]==null)
-                    return 0;
+            try {if(s.cartasJogador[C[0]]==null)
+                    return 0; }
+            catch (Exception e) {return 0; }
             return qualidadeCarta(s.cartasJogador[C[0]],s);
     }
 
@@ -561,14 +669,17 @@ public class EstrategiaGasparotto implements Estrategia {
      */
     private boolean valeAPenaAceitar(SituacaoJogo s, int fatorF)
     {
-    		if((s.pontosEquipe [adversario1(s)%2] - s.pontosEquipe[eu(s)%2]) >= 6) {
+    		if(((s.pontosEquipe [adversario1(s)%2] - s.pontosEquipe[eu(s)%2]) >= 6) &&
+    				(fatorF!=0)) {
                     fatorF = fatorF + 25; //25% de aumento na probabilidade...
             }
-            if((s.pontosEquipe[eu(s)%2] - s.pontosEquipe [adversario1(s)%2]) >= 6) {
+            if(((s.pontosEquipe[eu(s)%2] - s.pontosEquipe [adversario1(s)%2]) >= 6) &&
+            		(fatorF!=100)) {
                     fatorF = fatorF - 25; //25% de diminuição na probabilidade...
             }
-            if(s.pontosEquipe[adversario1(s)%2]==10 && s.pontosEquipe[eu(s)%2] <= 5 &&
-            		podeEValeAPenaAumentar(s,100,100,100,100)) {
+            if((s.pontosEquipe[adversario1(s)%2]==10 && s.pontosEquipe[eu(s)%2] <= 5 &&
+            		podeEValeAPenaAumentar(s,100,100,100,100)) &&
+            		(fatorF>0)) {
             			fatorF = 100;
             }
             // o jogo já vai terminar de qualquer forma?
@@ -609,7 +720,6 @@ public class EstrategiaGasparotto implements Estrategia {
             return false;
     }
 
-    // Cérebro da estratégia (sem álcool no sangue!...)
     private int joga_primeira_rodada_mao(SituacaoJogo s)
     {
             // Esta é a pior posição da mesa
@@ -622,7 +732,22 @@ public class EstrategiaGasparotto implements Estrategia {
             // E o zap é sempre melhor guardar neste caso...
     		
     		//Jogo.log("Checkpoint");
-            if (mandaBala(75)) {
+            
+    		//truco sem ver...
+    		if(s.pontosEquipe[adversario1(s)%2] < 6 && s.pontosEquipe[eu(s)%2] < 6 &&
+        		podeEValeAPenaAumentar(s,100,100,100,100)) {
+    			if (gameLevel!=0 && mandaBala(5)) {
+    				// frases
+        			if (mandaBala(80)) {
+        				String[] m = new String[]{"Trucando sem ver...", "Trucando sem ver as cartas!", "Truco de primeira!"};
+        				int i = Math.abs(rand.nextInt())%2 + 1;
+        				chatMsg = m[i];
+        			}
+    				return -1;
+    			}
+    		}
+    		
+    		if (mandaBala(75)) {
                     // Checa se temos zap e três
                     if(qualidadeCarta(s.cartasJogador[C[0]],s)==ZAP &&
                             qualidadeCarta(s.cartasJogador[C[1]],s)==TRES)
@@ -644,8 +769,14 @@ public class EstrategiaGasparotto implements Estrategia {
                                     return C[0];
                     return C[2]; // retorna a menor então
             } else {
+            		// frases
+            		if (mandaBala(40)) {
+            			String[] m = new String[]{"N&atilde;o tenho absolutamente nada!", "Maravilha, estou com tudo!", "Vamos come&ccedil;ar de leve..."};
+            			int i = Math.abs(rand.nextInt())%2 + 1;
+            			chatMsg = m[i];
+            		}
                     // jogar a menor carta
-                    return C[2];
+            		return C[2];
             }
     }
 
@@ -670,7 +801,7 @@ public class EstrategiaGasparotto implements Estrategia {
             // Jogar a menor manilha (menos o zap)
             // Ou um três somente caso tenhamos o zap
             // Senão deixar para o parceiro, ele deve se virar (c/ média probabilidade, afinal, ele é pé)
-    	
+    		
             if(qualidadeMaiorMesa(s)>=PICAFUMO)
                     return menorCartaParaMatar(s);
             if(qualidadeMaiorMesa(s)==TRES) {
@@ -687,7 +818,7 @@ public class EstrategiaGasparotto implements Estrategia {
                                     return C[2];
                     return menorCartaParaMatar(s);
             }
-            if(qualidadeMaiorMesa(s)==DOIS && mandaBala(80)) {
+            if(qualidadeMaiorMesa(s)==DOIS && mandaBala(90)) {
             		// Checa se temos zap e três
                     if(qualidadeCarta( s.cartasJogador[C[0]],s)==ZAP &&
                             qualidadeCarta(s.cartasJogador[C[1]],s)==TRES)
@@ -735,7 +866,7 @@ public class EstrategiaGasparotto implements Estrategia {
                     return C[2]; // retorna a menor então
             }
 
-            if(qualidadeMaiorMesa(s)==AS && mandaBala(70)) {
+            if(qualidadeMaiorMesa(s)==AS && mandaBala(80)) {
             		// Checa se temos zap e três
                     if(qualidadeCarta(s.cartasJogador[C[0]],s)==ZAP &&
                             qualidadeCarta(s.cartasJogador[C[1]],s)==TRES)
@@ -825,6 +956,12 @@ public class EstrategiaGasparotto implements Estrategia {
                                     return C[2];
                     return C[2]; // retorna a menor então
             }
+			// frases
+    		if (mandaBala(25)) {
+    			String[] m = new String[]{"Deixando para o p&eacute;...", "Vamos deixar para o p&eacute;!...", "Melhor guardar minha carta e deixar para o p&eacute;..."};
+    			int i = Math.abs(rand.nextInt())%2 + 1;
+    			chatMsg = m[i];
+    		}
             return C[2]; // retorna a menor então
     }
 
@@ -933,6 +1070,12 @@ public class EstrategiaGasparotto implements Estrategia {
                             return C[0];
                     return C[2];            }
             if (qualidadeMaiorMesa(s) <= AS) {
+    			// frases
+        		if (mandaBala(5)) {
+        			String[] m = new String[]{"Essa rodada vai ficar interessante!", "Hummmm....", "Vamos ver o que vai acontecer daqui para a frente..."};
+        			int i = Math.abs(rand.nextInt())%2 + 1;
+        			chatMsg = m[i];
+        		}
                     // Checa se temos zap e três
                     if(qualidadeCarta(s.cartasJogador [C[0]],s)==ZAP &&
                             qualidadeCarta(s.cartasJogador[C[1]],s)==TRES)
@@ -1001,10 +1144,26 @@ public class EstrategiaGasparotto implements Estrategia {
     {
             // Aqui é fácil, tudo que o pé tem a fazer é garantir a primeira,
     		// ou pelo menos tentar amarrar.
-    		// Se já estiver amarrado, manter assim para ver o que vai dar.
+    		// Se já estiver amarrado, manter assim se tiver o zap.
 
-            if(maiorCartaEDoParceiro(s) || taAmarrado(s))
-                    return C[2];
+            if(maiorCartaEDoParceiro(s)) {
+    			// frases
+        		if (mandaBala(10)) {
+        			String[] m = new String[]{"Boa parceiro!", "&Eacute; assim que se faz, parceiro!", "Agora pode relaxar e deixar a segunda comigo, parceiro!"};
+        			int i = Math.abs(rand.nextInt())%2 + 1;
+        			chatMsg = m[i];
+        		}
+                return C[2];
+            }
+            if(taAmarrado(s) && qualidadeCarta(s.cartasJogador[C[0]],s)==ZAP)
+                return C[2];
+            // emoção ao jogo
+            if(s.pontosEquipe[adversario1(s)%2] < 6 && s.pontosEquipe[eu(s)%2] < 6 &&
+            		podeEValeAPenaAumentar(s,100,100,100,100)) {
+            	if (gameLevel!=0 && mandaBala(5)) {
+            		return -1;
+            	}
+            }
             return menorCartaParaMatarOuAmarrar(s);
     }
 
@@ -1017,6 +1176,12 @@ public class EstrategiaGasparotto implements Estrategia {
             // Se estiver com uma carta acima ou igual a um ás e um lixo, jogo o lixo encoberto (com média-baixa probabilidade).
             // Se estiver com dois lixos, jogo o lixo mais lixo encoberto (com baixa probabilidade).
 
+			// frases
+			if (mandaBala(5)) {
+				String[] m = new String[]{"Quem pode mais chora menos...", "Agora acabaram minhas cartas...", "Gastei tudo na primeira rsrsrs..."};
+				int i = Math.abs(rand.nextInt())%2 + 1;
+				chatMsg = m[i];
+			}
             // Se a 1a amarrou, jogar a maior
             if(rodadaAmarrou(s, 0)) {
                     if(qualidadeCarta(s.cartasJogador[C[0]],s)==ZAP && podeEValeAPenaAumentar(s,100,100,100,100))
@@ -1080,7 +1245,13 @@ public class EstrategiaGasparotto implements Estrategia {
                             return C[0];
                     return C[1];
             }
-
+    		
+			// frases
+    		if (mandaBala(5)) {
+    			String[] m = new String[]{"Parceiro, &eacute; com voc&ecirc; agora...", "A gente n&atilde;o conseguiu fazer a primeira, assim fica dif&iacute;cil...", "Firme parceiro, ainda h&aacute; esperan&ccedil;a..."};
+    			int i = Math.abs(rand.nextInt())%2 + 1;
+    			chatMsg = m[i];
+    		}
             return C[1];
     }
 
@@ -1120,9 +1291,17 @@ public class EstrategiaGasparotto implements Estrategia {
                     return C[1]+10;
 
             if(qualidadeCarta( s.cartasJogador[C[0]],s)>=TRES && qualidadeCarta( s.cartasJogador[C[0]],s)>=qualidadeMaiorMesa(s)) {
-                            if(podeEValeAPenaAumentar(s,90,30,1,0) && !partidaGanhaParaAdversario(s))
-                                    return -1;
-                            return C[0];
+                            if(podeEValeAPenaAumentar(s,90,30,1,0) && !partidaGanhaParaAdversario(s)) {
+                    			// frases
+                        		if (mandaBala(15)) {
+                        			String[] m = new String[]{"E agora José?", "Fechando o pé mais uma vez...", "O pé não é de nada!"};
+                        			int i = Math.abs(rand.nextInt())%2 + 1;
+                        			chatMsg = m[i];
+                        		}
+                            	
+                            	return -1;
+            	}
+            	return C[0];
             }
             if(maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s)==DOIS)
                     return C[1]+10;
@@ -1141,13 +1320,28 @@ public class EstrategiaGasparotto implements Estrategia {
 
             if(qualidadeCarta(s.cartasJogador[C[0]],s)==LIXO) {
                 // facão    
-            	if(podeEValeAPenaAumentar(s,20,5,1,0) && !partidaGanhaParaAdversario(s))
+            	if(podeEValeAPenaAumentar(s,20,5,1,0) && !partidaGanhaParaAdversario(s)) {
+            		// frases
+            		if (mandaBala(20)) {
+            			String[] m = new String[]{"E agora Jos&eacute;?", "Fechando o p&eacute; mais uma vez...", "O p&eacute n&atilde;o &eacute; de nada, posso sentir!"};
+            			int i = Math.abs(rand.nextInt())%2 + 1;
+            			chatMsg = m[i];
+            		}
+            		
             		return -1;
-                if(qualidadeCarta( s.cartasJogador[C[0]],s)>=qualidadeMaiorMesa(s))
+            	}
+            	if(qualidadeCarta( s.cartasJogador[C[0]],s)>=qualidadeMaiorMesa(s))
                     return C[0];
                 return C[1];
             }
-            return C[0]; // para satisfazer o corretor do método (Eclipse)...
+            // vamos fechar (se der...)
+            if(qualidadeCarta(s.cartasJogador[C[0]],s) > qualidadeMaiorMesa(s)) 
+            	return C[0];          
+            if(qualidadeCarta(s.cartasJogador[C[0]],s) == qualidadeMaiorMesa(s) && !maiorCartaEDoParceiro(s))
+            	return C[0];
+            
+            // não dá para fazer nada, vamos jogar a menor e guardar a maior para a última
+            return C[1];
     }
 
     private int joga_segunda_rodada_pe(SituacaoJogo s)
@@ -1164,9 +1358,15 @@ public class EstrategiaGasparotto implements Estrategia {
                     return C[1];
             }
 
-            if(maiorCartaEDoParceiro(s))
+            if(maiorCartaEDoParceiro(s)) 
                     return C[1]+10; //é isso aí parceiro! Retornar encoberto...
-            return menorCartaParaMatar(s); //deixa comigo
+            // frases
+    		if (mandaBala(15)) {
+    			String[] m = new String[]{"Boa.", ":-)", "Hummmmmmm...."};
+    			int i = Math.abs(rand.nextInt())%2 + 1;
+    			chatMsg = m[i];
+    		}
+            return menorCartaParaMatarNaSegunda(s); //deixa comigo
     }
 
     private int joga_terceira_rodada_mao(SituacaoJogo s)
@@ -1174,16 +1374,28 @@ public class EstrategiaGasparotto implements Estrategia {
             // Eles fizeram a primeira, eu fiz a segunda
             // Se estiver com a partida ganha, arregaçar os caras!
             // Se estiver com manilha, jogar aumentando a aposta (com média probabilidade).
-            // Se estiver com três ou menos, jogar quieto.
-
+            // Se estiver com três ou menos, jogar quieto
+		
     		if(rodadaAmarrou(s, 1)) return C[0];
-            
-    		if(partidaGanha(s) && podeEValeAPenaAumentar(s,100,100,100,100))
-                    return -1;
+    		
+    		if(partidaGanha(s) && podeEValeAPenaAumentar(s,100,100,100,100)) {
+    			// frases
+    			if (mandaBala(15)) {
+    				String[] m = new String[]{"N&atilde;o tenho mais nada rsrsrs...", "Gastei tudo na segunda rsrsrs...", "Vamos ter que tirar leite de pedra rsrsrs..."};
+    				int i = Math.abs(rand.nextInt())%2 + 1;
+    				chatMsg = m[i];
+    			}    
+    			return -1; }
 
             if(qualidadeCarta( s.cartasJogador[C[0]],s)>TRES &&
-                    podeEValeAPenaAumentar(s,45,5,1,0))
-                            return -1;
+                    podeEValeAPenaAumentar(s,45,5,1,0)) {
+            	// frases
+    			if (mandaBala(20)) {
+    				String[] m = new String[]{"N&atilde;o tenho mais nada rsrsrs...", "Gastei tudo na segunda rsrsrs...", "Vamos ter que tirar leite de pedra rsrsrs..."};
+    				int i = Math.abs(rand.nextInt())%2 + 1;
+    				chatMsg = m[i];
+    			}            
+            	return -1;}
 
             return C[0];
     }
@@ -1198,15 +1410,27 @@ public class EstrategiaGasparotto implements Estrategia {
 
     		if(rodadaAmarrou(s, 1)) return C[0];
     		
-    		if(partidaGanha(s) && podeEValeAPenaAumentar(s,100,100,100,100))
-                    return -1;
+    		if(partidaGanha(s) && podeEValeAPenaAumentar(s,100,100,100,100)) {
+    			// frases
+    			if (mandaBala(20)) {
+    				String[] m = new String[]{"Jogo psicol&oacute;gico?...", "Bom, vamos ver... a primeira foi nossa...", "Voc%ecirc;s deveriam correr, estou avisando..."};
+    				int i = Math.abs(rand.nextInt())%2 + 1;
+    				chatMsg = m[i];
+    			}
+                return -1;}
 
             if(qualidadeCarta(s.cartasJogador[C[0]],s)<qualidadeMaiorMesa(s))
                     return C[0]+10;
 
             if(qualidadeCarta(s.cartasJogador [C[0]],s)>=TRES &&
-                    podeEValeAPenaAumentar(s,45,10,1,0) && !partidaGanhaParaAdversario(s))
-                            return -1;
+                    podeEValeAPenaAumentar(s,45,10,1,0) && !partidaGanhaParaAdversario(s)) {
+            		// frases
+    				if (mandaBala(20)) {
+    					String[] m = new String[]{"Jogo psicol&oacute;gico?...", "Bom, vamos ver... a primeira foi nossa...", "Voc%ecirc;s deveriam correr, estou avisando..."};
+    					int i = Math.abs(rand.nextInt())%2 + 1;
+    					chatMsg = m[i];
+    				}
+                    return -1;}
 
             return C[0];
     }
@@ -1225,8 +1449,14 @@ public class EstrategiaGasparotto implements Estrategia {
     	
     		if(rodadaAmarrou(s, 1)) return C[0];
     	
-            if(partidaGanha(s) && podeEValeAPenaAumentar(s,100,100,100,100))
-                    return -1;
+            if(partidaGanha(s) && podeEValeAPenaAumentar(s,100,100,100,100)) {
+               	// frases
+    			if (mandaBala(20)) {
+    				String[] m = new String[]{"A jurupoca est&aacute; piando!...", "Agora &eacute; a hora da verdade!", "Essa partida j&aacute; &eacute; nossa..."};
+    				int i = Math.abs(rand.nextInt())%2 + 1;
+    				chatMsg = m[i];
+    			}                    
+            	return -1;}
 
             if(maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s)>=TRES) {
                     if(podeEValeAPenaAumentar(s,10,2,1,0))
@@ -1251,6 +1481,12 @@ public class EstrategiaGasparotto implements Estrategia {
             if(s.pontosEquipe[adversario1(s)%2]==10 && s.pontosEquipe[eu(s)%2] <= 5 &&
             		!partidaGanhaParaAdversario(s) &&
             		podeEValeAPenaAumentar(s,100,100,100,100)) {
+            	// frases
+    			if (mandaBala(20)) {
+    				String[] m = new String[]{"A jurupoca est&aacute; piando!...", "Agora &eacute; a hora da verdade!", "Essa partida j&aacute; &eacute; nossa..."};
+    				int i = Math.abs(rand.nextInt())%2 + 1;
+    				chatMsg = m[i];
+    			}
             			return -1;
             }
             
@@ -1265,21 +1501,45 @@ public class EstrategiaGasparotto implements Estrategia {
             // Se puder com a que estiver vindo (pelo menos amarrar), arregaçar os caras!
     		// Se adversário estiver com 10 e nós com 5 ou menos, aumentar aposta! (ia ficar difícil ganhar mesmo...)
     	
-    		if(rodadaAmarrou(s, 1) && matoAdversario(s,false) && podeEValeAPenaAumentar(s,100,100,100,100))
-    			return -1; 		
+    		if(rodadaAmarrou(s, 1) && matoAdversario(s,false) && podeEValeAPenaAumentar(s,100,100,100,100)) {
+               	// frases
+    			if (mandaBala(15)) {
+    				String[] m = new String[]{"Rsrsrsrsrs...", "A força cibern&eacute;tica derrota a for&ccedil;a humana mais uma vez...", "HAL n&atilde;o brinca em servi&ccedil;o!..."};
+    				int i = Math.abs(rand.nextInt())%2 + 1;
+    				chatMsg = m[i];
+    			}
+    			return -1; }		
                         		
     		if(qualidadeCarta(s.cartasJogador[C[0]],s)<qualidadeMaiorMesa(s) &&
-                    podeEValeAPenaAumentar(s,15,3,1,0) && !partidaGanhaParaAdversario(s) && parceiro(s) != maiorCartaMesa(s))
-                            return -1; // esse é o espírito do jogo!!!!!
+                    podeEValeAPenaAumentar(s,15,3,1,0) && !partidaGanhaParaAdversario(s) && parceiro(s) != maiorCartaMesa(s)) {
+               	// frases
+    			if (mandaBala(20)) {
+    				String[] m = new String[]{"Rsrsrsrsrs...", "A força cibern&eacute;tica derrota a for&ccedil;a humana mais uma vez...", "HAL n&atilde;o brinca em servi&ccedil;o!..."};
+    				int i = Math.abs(rand.nextInt())%2 + 1;
+    				chatMsg = m[i];
+    			}
+    			return -1; }// esse é o espírito do jogo!!!!!
 
             if(qualidadeCarta(s.cartasJogador[C[0]],s)>=qualidadeMaiorMesa(s) &&
-                    podeEValeAPenaAumentar(s,100,100,100,100) && parceiro(s) != maiorCartaMesa(s))
-                            return -1;
+                    podeEValeAPenaAumentar(s,100,100,100,100) && parceiro(s) != maiorCartaMesa(s)) {
+               	// frases
+    			if (mandaBala(20)) {
+    				String[] m = new String[]{"Rsrsrsrsrs...", "A força cibern&eacute;tica derrota a for&ccedil;a humana mais uma vez...", "HAL n&atilde;o brinca em servi&ccedil;o!..."};
+    				int i = Math.abs(rand.nextInt())%2 + 1;
+    				chatMsg = m[i];
+    			}
+    			return -1;}
             
             if(s.pontosEquipe[adversario1(s)%2]==10 && s.pontosEquipe[eu(s)%2] <= 5 &&
             		!partidaGanhaParaAdversario(s) &&
             		podeEValeAPenaAumentar(s,100,100,100,100)) {
-            			return -1;
+               	// frases
+    			if (mandaBala(20)) {
+    				String[] m = new String[]{"Rsrsrsrsrs...", "A força cibern&eacute;tica derrota a for&ccedil;a humana mais uma vez...", "HAL n&atilde;o brinca em servi&ccedil;o!..."};
+    				int i = Math.abs(rand.nextInt())%2 + 1;
+    				chatMsg = m[i];
+    			}		
+            	return -1;
             }
             
             return C[0];
@@ -1369,7 +1629,7 @@ public class EstrategiaGasparotto implements Estrategia {
      */
     public int joga(SituacaoJogo s)
     {
-            // Classifica as cartas que tenho na mão, da maior para a menor,
+         	// Classifica as cartas que tenho na mão, da maior para a menor,
             // de maneira que vamos ter:
             // C[0] = maior carta (1a, 2a e 3a mão);
             // C[1] = carta intermediária (1a mão) OU
@@ -1469,6 +1729,7 @@ public class EstrategiaGasparotto implements Estrategia {
                     if(qualidadeCarta(s.cartasJogador[C[0]],s)==TRES &&
                             valeAPenaAceitar(s,20))
                                     return true;
+                    if (valeAPenaAceitar(s, 0)) return true; // last check if there are any relevant cases we should call before refuse it
                     return false;
 
             //segunda rodada
@@ -1476,18 +1737,22 @@ public class EstrategiaGasparotto implements Estrategia {
 
                     //se a primeira for nossa:
                     if(primeiraENossa(s)) {
-                            //se na mesa já estiver pelo menos um 3 nosso, aceito
-                            if(maiorCartaENossaPodendoEstarAmarrado(s) &&
-                                            qualidadeMaiorMesa(s)>=TRES)
-                                            return true;
-                            //se na mesa já estiver um 2 nosso, aceito com média probabilidade
-                            if(maiorCartaENossaPodendoEstarAmarrado(s) &&
-                                            qualidadeMaiorMesa(s)==DOIS &&
-                                            valeAPenaAceitar(s,50))
-                                            return true;
-                            //se eu tiver pelo menos um dois, aceito
-                            if(qualidadeCarta(s.cartasJogador[C[0]],s)>=DOIS)
-                                    return true;
+                    	//partida ganha?
+                    	if(partidaGanha(s))
+                            return true;
+                    	
+                    	//se na mesa já estiver pelo menos um 3 nosso, aceito
+                        if(maiorCartaENossaPodendoEstarAmarrado(s) &&
+                                        qualidadeMaiorMesa(s)>=TRES)
+                                        return true;
+                        //se na mesa já estiver um 2 nosso, aceito com média-alta probabilidade
+                        if(maiorCartaENossaPodendoEstarAmarrado(s) &&
+                                        qualidadeMaiorMesa(s)==DOIS &&
+                                        valeAPenaAceitar(s,75))
+                                        return true;
+                        //se eu tiver pelo menos um dois, aceito
+                        if(qualidadeCarta(s.cartasJogador[C[0]],s)>=DOIS)
+                                        return true;
                     } else {
                             //se a primeira NÃO for nossa:
                         	//se já está tudo decidido, somente estão trucando de bobeira
@@ -1497,6 +1762,9 @@ public class EstrategiaGasparotto implements Estrategia {
                             if(rodadaAmarrou(s, 0) &&
                                     qualidadeCarta(s.cartasJogador[C[0]],s)==ZAP)
                                             return true;
+                            //se eu já joguei, e meu parceiro ainda não, vou deixar para ele decidir
+                            if(minhaVez(s)==1 && vezTrucador(s)==2)
+                                            return false;
                             // Se a 1a amarrou e tenho manilha/três, aceito
                             if(rodadaAmarrou(s, 0) &&
                                     qualidadeCarta(s.cartasJogador [C[0]],s)>=TRES &&
@@ -1522,19 +1790,20 @@ public class EstrategiaGasparotto implements Estrategia {
                                             return true;
                             //se eu tenho o zap, aceito (média prob.)
                             if(qualidadeCarta(s.cartasJogador[C[0]],s)==ZAP &&
-                                            valeAPenaAceitar(s,40))
+                                            valeAPenaAceitar(s,80))
                                             return true;
                             //se eu tenho uma manilha seca, aceito (média prob.)
                             if(qualidadeCarta(s.cartasJogador[C[0]],s)>TRES &&
                                             !partidaGanhaParaAdversario(s) &&
-                                            valeAPenaAceitar(s,30))
+                                            valeAPenaAceitar(s,40))
                                             return true;
                             //se eu tenho uma três seco, aceito (baixa prob.)
                             if(qualidadeCarta(s.cartasJogador[C[0]],s)==TRES &&
                                             !partidaGanhaParaAdversario(s) &&
-                                            valeAPenaAceitar(s,15))
+                                            valeAPenaAceitar(s,10))
                                             return true;
                     }
+                    if (valeAPenaAceitar(s, 0)) return true; // last check if there are any relevant cases we should call before refuse it
                     return false;
 
             //terceira rodada
@@ -1546,12 +1815,12 @@ public class EstrategiaGasparotto implements Estrategia {
                 
                 	//já está tudo decidido a nosso favor
                 	if (partidaGanha(s)) return true;
-                
-                    //se eu já joguei, e meu parceiro ainda não, vou deixar para ele decidir
+            		
+            		//se eu já joguei, e meu parceiro ainda não, vou deixar para ele decidir
                     if((minhaVez(s)==0 && vezTrucador(s)==1) ||
                             (minhaVez(s)==1 && vezTrucador(s)==2))
                                     return false;
-                    
+                	
                     //se a primeira for nossa:
                     if(primeiraENossa(s)) {
                             //se na mesa já estiver uma manilha nossa, aceito com alta prob.
@@ -1571,7 +1840,7 @@ public class EstrategiaGasparotto implements Estrategia {
                                             return true;
                             //checar se ainda tenho cartas na mão...
                             if(minhaVez(s)>vezTrucador(s) && !partidaGanhaParaAdversario(s)) {
-                            		//se eu tenho uma manilha, aceito com alta prob.
+                               		//se eu tenho uma manilha, aceito com alta prob.
                                     if(qualidadeCarta(s.cartasJogador[C[0]],s)>TRES &&
                                             valeAPenaAceitar(s,80))
                                                     return true;
@@ -1625,6 +1894,7 @@ public class EstrategiaGasparotto implements Estrategia {
                                                     return true;
                             }
                     }
+                    if (valeAPenaAceitar(s, 0)) return true; // last check if there are any relevant cases we should call before refuse it
                     return false;
 
             }
@@ -1688,4 +1958,14 @@ public class EstrategiaGasparotto implements Estrategia {
     public void pediuAumentoAposta(int posJogador, int valor) {}
     public void aceitouAumentoAposta(int posJogador, int valor) {}
     public void recusouAumentoAposta(int posJogador) {}
+    
+    public void setGameLevel(int gameLevel) {
+    	this.gameLevel = gameLevel;
+    }
+    
+    public String getChatMsg() {
+    	String s = this.chatMsg;
+    	this.chatMsg = ""; // erase this now to avoid keep repeating the same message over and over
+    	return s;
+    }
 }

@@ -17,7 +17,6 @@ Features:
 - Botão Reiniciar no final da partida
 
 Débito Técnico/Bugs:
-- Reintroduzir Sellani.
 - Refatorar caixa de "Aceita truco" para um díalgo Android. Ex.: http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel
