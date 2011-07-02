@@ -13,12 +13,11 @@ Backlog
 
 Features:
 - Opção de manilha velha / baralho limpo
-- Jogos multiplayer
 - Quando o usuário ficar algum tempo parado (ou no 1o. uso), mostrar que dá pra pedir truco/jogar as cartas com o menu/toque
 - Botão Reiniciar no final da partida
 
 Débito Técnico/Bugs:
-- Proteger contra falhas na estratégia (catch com ação default); Reintroduzir Sellani.
+- Reintroduzir Sellani.
 - Refatorar caixa de "Aceita truco" para um díalgo Android. Ex.: http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel
@@ -26,8 +25,11 @@ Débito Técnico/Bugs:
  / Arguments / Working Directory para o diretório do minitruco-android)
 - Colocar cópia do texto da GPLv3 e revisar novamente todos os fontes para garantir inclusão
 
-Débito Técnico "nice-to-have":
+Débitos "nice-to-have":
+- Cartas com bordas redondas e fundo transparente
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
 
+Features 2.0:
+- Jogos multiplayer

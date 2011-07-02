@@ -134,7 +134,13 @@ public class JogadorCPU extends Jogador implements Runnable {
 				situacaoJogo.podeFechada = podeFechada;
 
 				// Solicita que o estrategia jogue
-				int posCarta = estrategia.joga(situacaoJogo);
+				int posCarta;
+				try {
+					posCarta = estrategia.joga(situacaoJogo);
+				} catch (Exception e) {
+					Log.w("JogadorCPU", "Erro em joga", e);
+					posCarta = 0;
+				}
 
 				// Se a estratégia pediu truco, processa e desencana de jogar
 				// agora
@@ -186,7 +192,12 @@ public class JogadorCPU extends Jogador implements Runnable {
 				// conosulta inútil, ele receberia infos desatualizadas)
 				synchronized (jogo) {
 					if (situacaoJogo.posJogadorPedindoAumento != 0) {
-						boolean resposta = estrategia.aceitaTruco(situacaoJogo);
+						boolean resposta = false;
+						try {
+							resposta = estrategia.aceitaTruco(situacaoJogo);
+						} catch (Exception e) {
+							Log.d("JogadorCPU", "Erro em aceite-aumento", e);
+						}
 						jogo.respondeAumento(this, resposta);
 					}
 				}
@@ -232,8 +243,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 		situacaoJogo.cartasJogador = new Carta[numCartas];
 		for (int i = 0; i < numCartas; i++) {
 			Carta c = (Carta) cartasRestantes.elementAt(i);
-			situacaoJogo.cartasJogador[i] = new Carta(c.getLetra(),
-					c.getNaipe());
+			situacaoJogo.cartasJogador[i] = new Carta(c.getLetra(), c
+					.getNaipe());
 		}
 	}
 
@@ -333,8 +344,15 @@ public class JogadorCPU extends Jogador implements Runnable {
 		// Pergunta ao estrategia se ele topa a mão de 11, devolvendo
 		// a resposta para o jogo
 		atualizaSituacaoJogo();
-		jogo.decideMao11(this,
-				estrategia.aceitaMao11(cartasParceiro, situacaoJogo));
+		boolean respostaMao11;
+		try {
+			respostaMao11 = estrategia
+					.aceitaMao11(cartasParceiro, situacaoJogo);
+		} catch (Exception e) {
+			Log.d("JogadorCPU", "Erro em aceite-11", e);
+			respostaMao11 = random.nextBoolean();
+		}
+		jogo.decideMao11(this, respostaMao11);
 
 	}
 
