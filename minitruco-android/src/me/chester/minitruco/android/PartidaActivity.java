@@ -8,12 +8,17 @@ import me.chester.minitruco.core.Jogo;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 /*
  * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
@@ -58,6 +63,38 @@ public class PartidaActivity extends Activity implements Interessado {
 	private MesaView mesa;
 
 	private Jogo jogo;
+
+	private int[] placar = new int[2];
+
+	private static final int MSG_ATUALIZA_PLACAR = 0;
+	private static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
+
+	private Handler handler = new Handler() {
+		public void handleMessage(Message msg) {
+			TextView tvNos = (TextView) findViewById(R.id.textview_nos);
+			TextView tvEles = (TextView) findViewById(R.id.textview_eles);
+			switch (msg.what) {
+			case MSG_ATUALIZA_PLACAR:
+				if (placar[0] != msg.arg1) {
+					tvNos.setBackgroundColor(Color.YELLOW);
+				}
+				if (placar[1] != msg.arg2) {
+					tvEles.setBackgroundColor(Color.YELLOW);
+				}
+				tvNos.setText("Nós: " + msg.arg1);
+				tvEles.setText("Eles: " + msg.arg2);
+				placar[0] = msg.arg1;
+				placar[1] = msg.arg2;
+				break;
+			case MSG_TIRA_DESTAQUE_PLACAR:
+				tvNos.setBackgroundColor(Color.TRANSPARENT);
+				tvEles.setBackgroundColor(Color.TRANSPARENT);
+				break;
+			default:
+				break;
+			}
+		}
+	};
 
 	// Eventos da Activity (chamados pelo Android)
 
@@ -227,6 +264,7 @@ public class PartidaActivity extends Activity implements Interessado {
 			mesa.resultadoRodada[i] = 0;
 		}
 		mesa.distribuiMao();
+		handler.sendMessage(Message.obtain(handler, MSG_TIRA_DESTAQUE_PLACAR));
 	}
 
 	public void inicioPartida() {
@@ -245,7 +283,8 @@ public class PartidaActivity extends Activity implements Interessado {
 	public void maoFechada(int[] pontosEquipe) {
 		mostrarBotaoAumento = false;
 		mesa.aguardaFimAnimacoes();
-		mesa.atualizaPontosEquipe(pontosEquipe);
+		handler.sendMessage(Message.obtain(handler, MSG_ATUALIZA_PLACAR,
+				pontosEquipe[0], pontosEquipe[1]));
 		mesa.aguardaFimAnimacoes();
 		mesa.recolheMao();
 

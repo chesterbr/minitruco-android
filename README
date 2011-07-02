@@ -18,13 +18,13 @@ Features:
 - Jogos multiplayer
 - Escurecer as cartas da rodada anterior
 - Quando o usuário ficar algum tempo parado (ou no 1o. uso), mostrar que dá pra pedir truco/jogar as cartas com o menu/toque
+- Botão Reiniciar no final da partida
 
 Débito Técnico/Bugs:
 - Proteger contra falhas na estratégia (catch com ação default); Reintroduzir Sellani.
 - Refatorar caixa de "Aceita truco" para um díalgo Android. Ex.: http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
 - Bug: quando J2 anuncia truco, a resposta e o diálogo vêm antes do anúncio
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel
-- Fundo do "nós" não aparece em alguns emuladores/celulares (acho que em todos agora)
 - Colocar instruções pra rodar o teste do robolectric (setar o launcher do Eclipse e o Run Configurations
  / Arguments / Working Directory para o diretório do minitruco-android)
 - Colocar cópia do texto da GPLv3 e revisar novamente todos os fontes para garantir inclusão

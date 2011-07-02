@@ -5,5 +5,17 @@
 	<me.chester.minitruco.android.MesaView
 		android:id="@+id/MesaView01" android:layout_height="wrap_content"
 		android:layout_width="fill_parent" />
+	<RelativeLayout android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<TextView android:id="@+id/textview_eles" android:textColor="#000000"
+			android:textSize="20dp" android:typeface="sans" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_alignParentRight="true"
+			android:text="Eles: 0" android:layout_marginRight="4dp" />
+		<TextView android:id="@+id/textview_nos" android:textColor="#000000"
+			android:textSize="20dp" android:typeface="sans" android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentBottom="true" android:text="Nós: 0" android:layout_marginLeft="4dp" />
+
+	</RelativeLayout>
 
 </FrameLayout>
