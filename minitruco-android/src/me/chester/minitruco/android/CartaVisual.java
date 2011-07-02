@@ -177,6 +177,11 @@ public class CartaVisual extends Carta {
 				canvas.drawRect(rect, paint);
 				rect.set(left + 1, top + 1, left + largura, top + altura);
 				canvas.drawRect(rect, paint);
+			} else if (escura) {
+				Paint paintEscura = new Paint();
+				paintEscura.setColor(Color.BLACK);
+				paintEscura.setAlpha(128);
+				canvas.drawRect(rect, paintEscura);
 			}
 
 		}
@@ -244,7 +249,7 @@ public class CartaVisual extends Carta {
 		}
 		return this.bitmap;
 	}
-	
+
 	public void resetBitmap() {
 		this.bitmap = null;
 	}
@@ -353,6 +358,12 @@ public class CartaVisual extends Carta {
 	 * Se false, não mostra a carta
 	 */
 	public boolean visible = true;
+
+	/**
+	 * Se true, mostra a carta mais escura (para simbolizar que ela é de uma
+	 * rodada anterior)
+	 */
+	public boolean escura = false;
 
 	/**
 	 * Se true, desenha uma borda de destaque na carta (ex.: quando ela vence a

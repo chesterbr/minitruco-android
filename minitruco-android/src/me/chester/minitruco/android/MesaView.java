@@ -63,6 +63,14 @@ public class MesaView extends View {
 		super(context);
 	}
 
+	private Rect rectDialog;
+
+	private RectF rectBotaoSim;
+
+	private RectF rectBotaoNao;
+
+	private float tamanhoFonte;
+
 	/**
 	 * Informa à mesa que uma animação começou (garantindo refreshes da tela
 	 * enquanto ela durar).
@@ -208,12 +216,14 @@ public class MesaView extends View {
 		cartaQueFez = getCartaVisual(jogo.getCartasDaRodada(numRodada)[jogadorQueTorna
 				.getPosicao() - 1]);
 		cartaQueFez.destacada = true;
+		for (CartaVisual c : cartas) {
+			c.escura = c.descartada;
+		}
 		resultadoRodada[numRodada - 1] = resultado;
 		numRodadaPiscando = numRodada;
-		rodadaPiscaAte = System.currentTimeMillis() + 1000;
+		rodadaPiscaAte = System.currentTimeMillis() + 1600;
 		notificaAnimacao(rodadaPiscaAte);
 	}
-
 
 	/**
 	 * Torna as cartas da mão de 11 visíveis
@@ -377,14 +387,6 @@ public class MesaView extends View {
 
 	};
 
-	private Rect rectDialog;
-
-	private RectF rectBotaoSim;
-
-	private RectF rectBotaoNao;
-
-	private float tamanhoFonte;
-
 	/**
 	 * Permite à partida informar que (não) é a vez de deixar o humano jogar
 	 * 
@@ -510,16 +512,17 @@ public class MesaView extends View {
 		for (int i = 4; i <= 15; i++) {
 			CartaVisual c = cartas[i];
 			if ((c.top != topBaralho) || (c.left != leftBaralho)) {
-				c.movePara(leftBaralho, topBaralho, 100);
+				c.movePara(leftBaralho, topBaralho, 130);
 				c.setCarta(null);
 				c.descartada = false;
+				c.escura = false;
 				cartasJogadas.remove(c);
 			}
 		}
 	}
 
 	/**
-	 * Joga a carta no meio da mesa, // TODO marcando-a como jogada.
+	 * Joga a carta no meio da mesa
 	 * 
 	 * @param c
 	 */
@@ -615,12 +618,16 @@ public class MesaView extends View {
 			}
 		}
 
-		// Ícones das rodadas
+		// Desliga o destaque da carta que fez a rodada e escurece as cartas já
+		// descartadas (para não confundir com as próximas)
 		long agora = System.currentTimeMillis();
-		if (agora > rodadaPiscaAte && cartaQueFez != null) {
+		if (agora > rodadaPiscaAte && cartaQueFez != null
+				&& cartaQueFez.destacada) {
 			cartaQueFez.destacada = false;
 			numRodadaPiscando = 0;
 		}
+
+		// Ícones das rodadas
 		if (iconesRodadas != null) {
 			for (int i = 0; i <= 2; i++) {
 				// Desenha se não for a rodada piscando, ou, se for, alterna o
