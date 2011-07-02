@@ -311,11 +311,6 @@ public class MesaView extends View {
 						jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]);
 					}
 				}
-				if (podeFechada
-						&& rectBotaoFechada.contains((int) event.getX(),
-								(int) event.getY())) {
-					vaiJogarFechada = !vaiJogarFechada;
-				}
 			}
 		}
 		return super.onTouchEvent(event);
@@ -422,8 +417,6 @@ public class MesaView extends View {
 	 */
 	public static void setVezHumano(boolean vezHumano, boolean podeFechada) {
 		MesaView.vezHumano = vezHumano ? 1 : 0;
-		MesaView.podeFechada = podeFechada;
-		vaiJogarFechada = false;
 	}
 
 	/**
@@ -712,12 +705,6 @@ public class MesaView extends View {
 		// Balãozinho (se alguém estiver falando algo)
 		desenhaBalao(canvas);
 
-		// Botão de carta virada
-		if (vezHumano == 1 && podeFechada) {
-			desenhaBotao(vaiJogarFechada ? "Aberta" : "Fechada", canvas,
-					rectBotaoFechada);
-		}
-
 	}
 
 	private void desenhaBotao(String texto, Canvas canvas, RectF outerRect) {
@@ -947,9 +934,7 @@ public class MesaView extends View {
 
 	private boolean visivel = false;
 
-	private static boolean podeFechada;
-
-	private static boolean vaiJogarFechada;
+	public boolean vaiJogarFechada;
 
 	public void setVisivel(boolean visivel) {
 		this.visivel = visivel;

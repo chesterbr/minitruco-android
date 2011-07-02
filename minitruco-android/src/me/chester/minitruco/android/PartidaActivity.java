@@ -10,14 +10,10 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 /*
  * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
@@ -50,6 +46,21 @@ import android.widget.Button;
  */
 public class PartidaActivity extends Activity implements Interessado {
 
+	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
+			"NOVE!", "DOZE!!!" };
+
+	private int valorProximaAposta;
+
+	private boolean mostrarBotaoAumento = false;
+
+	private boolean mostrarBotaoAbertaFechada = false;
+
+	private MesaView mesa;
+
+	private Jogo jogo;
+
+	// Eventos da Activity (chamados pelo Android)
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,10 +89,6 @@ public class PartidaActivity extends Activity implements Interessado {
 		jogo = MenuPrincipalActivity.jogo;
 		if (jogo != null) {
 			if (jogo.jogoFinalizado) {
-				// Isso aqui é porque eu ainda não achei um jeito conveniente de
-				// processar o rotate, então eu simplesmente mato a atividade se
-				// ela voltar com um jogo já finalizado.
-				// TODO: consertar
 				finish();
 			} else {
 				jogo.adiciona(this);
@@ -103,6 +110,12 @@ public class PartidaActivity extends Activity implements Interessado {
 			mesa.vezHumano = -1;
 			jogo.aumentaAposta(jogo.getJogadorHumano());
 			return true;
+		case R.id.menuitem_aberta:
+			mesa.vaiJogarFechada = false;
+			return true;
+		case R.id.menuitem_fechada:
+			mesa.vaiJogarFechada = true;
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -118,20 +131,19 @@ public class PartidaActivity extends Activity implements Interessado {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		MenuItem item = menu.findItem(R.id.menuitem_aumento);
+		MenuItem miAumento = menu.findItem(R.id.menuitem_aumento);
+		MenuItem miAberta = menu.findItem(R.id.menuitem_aberta);
+		MenuItem miFechada = menu.findItem(R.id.menuitem_fechada);
 		if (mostrarBotaoAumento) {
-			item.setTitle(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1]);
+			miAumento
+					.setTitle(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1]);
 		}
-		item.setVisible(mostrarBotaoAumento);
+		miAumento.setVisible(mostrarBotaoAumento);
+		miAberta.setVisible(mostrarBotaoAbertaFechada && mesa.vaiJogarFechada);
+		miFechada
+				.setVisible(mostrarBotaoAbertaFechada && !mesa.vaiJogarFechada);
 		return true;
 	}
-
-	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
-			"NOVE!", "DOZE!!!" };
-
-	private int valorProximaAposta;
-
-	private boolean mostrarBotaoAumento = false;
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -155,6 +167,8 @@ public class PartidaActivity extends Activity implements Interessado {
 		super.onDestroy();
 		jogo.abortaJogo(1);
 	}
+
+	// Eventos de Interessado (chamados pelo jogo)
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
 		if (jogo.getJogadorHumano() != null) {
@@ -266,15 +280,9 @@ public class PartidaActivity extends Activity implements Interessado {
 		mostrarBotaoAumento = (j instanceof JogadorHumano)
 				&& (valorProximaAposta > 0);
 		/* && placar[0] != 11 && placar[1] != 11 */
+		mostrarBotaoAbertaFechada = (j instanceof JogadorHumano) && podeFechada;
+		mesa.vaiJogarFechada = false;
 		MesaView.setVezHumano(j instanceof JogadorHumano, podeFechada);
 	}
-
-	public MesaView getMesa() {
-		return mesa;
-	}
-
-	private MesaView mesa;
-
-	private Jogo jogo;
 
 }

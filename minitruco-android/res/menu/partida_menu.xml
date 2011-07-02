@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/menuitem_aumento"
-		android:icon="@drawable/ic_menu_aumento" android:visible="false" android:title="(definido na partida)"/>
+	<item android:id="@+id/menuitem_aumento" android:icon="@drawable/ic_menu_aumento"
+		android:visible="false" android:title="(definido na partida)" />
+	<item android:id="@+id/menuitem_aberta" android:icon="@drawable/ic_menu_aberta"
+		android:visible="false" android:title="Joga Aberta" />
+	<item android:id="@+id/menuitem_fechada" android:icon="@drawable/ic_menu_fechada"
+		android:visible="false" android:title="Joga Fechada" />
 </menu>

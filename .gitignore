@@ -6,3 +6,4 @@ minitruco-android-test/gen
 minitruco-android-robolectric-test/bin
 minitruco-android-robolectric-test/gen
 minitruco-android-robolectric-test/tmp
+.DS_Store
