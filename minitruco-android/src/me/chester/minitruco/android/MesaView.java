@@ -291,11 +291,11 @@ public class MesaView extends View {
 					recusarAumento = true;
 				}
 			}
-			if (vezHumano == 1) {
+			if (statusVez == STATUS_VEZ_HUMANO_OK) {
 				for (int i = 6; i >= 4; i--) {
 					if ((!cartas[i].descartada)
 							&& cartas[i].isDentro(event.getX(), event.getY())) {
-						vezHumano = 0;
+						statusVez = STATUS_VEZ_OUTRO;
 						cartas[i].setFechada(vaiJogarFechada);
 						jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]);
 					}
@@ -390,12 +390,10 @@ public class MesaView extends View {
 	 * Permite à partida informar que (não) é a vez de deixar o humano jogar
 	 * 
 	 * @param vezHumano
-	 *            true se for a vez dele, false se não
-	 * @param podeFechada
-	 *            true se o jogador da vez pode jogar a carta fechada
+	 *            um entre VEZ_HUMANO, VEZ_CPU e VEZ_HUMANO_AGUARDANDO_RESPOSTA
 	 */
-	public static void setVezHumano(boolean vezHumano, boolean podeFechada) {
-		MesaView.vezHumano = vezHumano ? 1 : 0;
+	public void setStatusVez(int vezHumano) {
+		this.statusVez = vezHumano;
 	}
 
 	/**
@@ -713,12 +711,26 @@ public class MesaView extends View {
 	private static long animandoAte = System.currentTimeMillis();
 
 	/**
-	 * Diz se é a vez do jogador humano dessa mesa (0=não, 1=sim, -1=sim mas
-	 * está esperando resultado de truco.
-	 * 
-	 * TODO encapsular melhor isso.
+	 * Indica que é a vez do humano, e ele pode jogar
 	 */
-	public static int vezHumano = 0;
+	public static final int STATUS_VEZ_HUMANO_OK = 1;
+
+	/**
+	 * Indica que é a vez de outro jogador
+	 */
+	public static final int STATUS_VEZ_OUTRO = 0;
+
+	/**
+	 * Indica que é a vez do humano, e ele está aguardando resposta (ex.: de
+	 * aumento) para jogar
+	 */
+	public static final int STATUS_VEZ_HUMANO_AGUARDANDO = -1;
+
+	/**
+	 * Diz se é a vez do jogador humano dessa mesa ou de outro, e, no primeiro
+	 * caso se está aguardando resposta de truco
+	 */
+	private int statusVez = 0;
 
 	/**
 	 * Jogo que a mesa está exibindo (deve ser setado externamente)
@@ -876,8 +888,8 @@ public class MesaView extends View {
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
-		if (vezHumano == -1) {
-			vezHumano = 1;
+		if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
+			statusVez = STATUS_VEZ_HUMANO_OK;
 		}
 	}
 

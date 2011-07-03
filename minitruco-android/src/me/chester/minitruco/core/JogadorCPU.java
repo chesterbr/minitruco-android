@@ -186,6 +186,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 			if (recebiPedidoDeAumento) {
 				recebiPedidoDeAumento = false;
 				atualizaSituacaoJogo();
+				sleep(1000 + random.nextInt(1000));
 				// O if e o synchronzied garantem que, se um jogador aceitar
 				// o
 				// truco, o estrategia do outro não é consultado (além de
@@ -364,9 +365,9 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	private void sleep(int i) {
 		try {
-			Thread.sleep(100);
+			Thread.sleep(i);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.i("JogadorCPU", "Interrupted during sleep", e);
 		}
 	}
 

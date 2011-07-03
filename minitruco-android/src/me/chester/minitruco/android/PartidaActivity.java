@@ -143,7 +143,7 @@ public class PartidaActivity extends Activity implements Interessado {
 		switch (item.getItemId()) {
 		case R.id.menuitem_aumento:
 			mostrarBotaoAumento = false;
-			mesa.vezHumano = -1;
+			mesa.setStatusVez(MesaView.STATUS_VEZ_HUMANO_AGUARDANDO);
 			jogo.aumentaAposta(jogo.getJogadorHumano());
 			return true;
 		case R.id.menuitem_aberta:
@@ -322,7 +322,8 @@ public class PartidaActivity extends Activity implements Interessado {
 				&& (placar[1] != 11);
 		mostrarBotaoAbertaFechada = (j instanceof JogadorHumano) && podeFechada;
 		mesa.vaiJogarFechada = false;
-		MesaView.setVezHumano(j instanceof JogadorHumano, podeFechada);
+		mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
+				: MesaView.STATUS_VEZ_OUTRO);
 	}
 
 }
