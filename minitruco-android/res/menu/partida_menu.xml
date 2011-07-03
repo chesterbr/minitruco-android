@@ -6,4 +6,7 @@
 		android:visible="false" android:title="Joga Aberta" />
 	<item android:id="@+id/menuitem_fechada" android:icon="@drawable/ic_menu_fechada"
 		android:visible="false" android:title="Joga Fechada" />
+    <item android:id="@+id/menuitem_sair_jogo"
+          android:icon="@android:drawable/ic_menu_close_clear_cancel"
+          android:title="Encerrar Jogo" />		
 </menu>

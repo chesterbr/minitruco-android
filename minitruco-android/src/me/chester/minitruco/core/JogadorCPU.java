@@ -113,6 +113,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	public void run() {
 
+		Log.i("JogadorCPU", "JogadorCPU " + this + " (.run) iniciado");
 		while (jogo == null || !jogo.jogoFinalizado) {
 			sleep(100);
 
@@ -214,6 +215,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 			}
 
 		}
+		Log.i("JogadorCPU", "JogadorCPU " + this + " (.run) finalizado");
 
 	}
 

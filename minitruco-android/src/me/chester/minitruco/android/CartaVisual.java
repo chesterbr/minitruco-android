@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 /*
  * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
@@ -84,6 +85,8 @@ public class CartaVisual extends Carta {
 		double ratioCarta = Math.min(ratioLargura, ratioAltura);
 		largura = (int) (180 * ratioCarta);
 		altura = (int) (252 * ratioCarta);
+		Log.d("CartaVisual", "Tamanho (largura x altura):" + largura + ","
+				+ altura);
 	}
 
 	/**

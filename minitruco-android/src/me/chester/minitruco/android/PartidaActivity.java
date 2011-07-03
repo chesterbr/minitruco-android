@@ -152,6 +152,9 @@ public class PartidaActivity extends Activity implements Interessado {
 		case R.id.menuitem_fechada:
 			mesa.vaiJogarFechada = true;
 			return true;
+		case R.id.menuitem_sair_jogo:
+			finish();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}

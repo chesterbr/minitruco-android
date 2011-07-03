@@ -151,8 +151,7 @@ public class MesaView extends View {
 				rectBotaoSim.bottom);
 
 		// Posiciona o vira e as cartas decorativas do baralho, que são fixos
-		cartas[0].movePara(leftBaralho - CartaVisual.largura * 7 / 20,
-				topBaralho - CartaVisual.altura / 4);
+		cartas[0].movePara(leftBaralho, topBaralho);
 		cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
 		cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
 
@@ -460,13 +459,12 @@ public class MesaView extends View {
 	 * @return Posição (x) da i-ésima carta na mão do jogador em questão
 	 */
 	private int getPosLeftCarta(int numJogador, int i) {
-		int deslocamentoHorizontalEntreCartas = CartaVisual.largura * 6 / 7;
+		int deslocamentoHorizontalEntreCartas = CartaVisual.largura * 7 / 8;
 		int leftFinal = 0;
 		switch (numJogador) {
 		case 1:
 		case 3:
-			leftFinal = getWidth() / 2
-					- (int) (deslocamentoHorizontalEntreCartas * 1.5) + i
+			leftFinal = (getWidth() / 2) - (CartaVisual.largura / 2) + (i - 1)
 					* deslocamentoHorizontalEntreCartas;
 			break;
 		case 2:
@@ -611,12 +609,14 @@ public class MesaView extends View {
 			cartasJogadas.elementAt(i).draw(canvas);
 		}
 
-		// Desenha as cartas restantes.
+		// Desenha as cartas restantes, e o vira por cima de todas
 		for (CartaVisual carta : cartas) {
-			if (carta != null && !cartasJogadas.contains(carta)) {
+			if (carta != null && !cartasJogadas.contains(carta)
+					&& carta != cartas[0]) {
 				carta.draw(canvas);
 			}
 		}
+		cartas[0].draw(canvas);
 
 		// Desliga o destaque da carta que fez a rodada e escurece as cartas já
 		// descartadas (para não confundir com as próximas)

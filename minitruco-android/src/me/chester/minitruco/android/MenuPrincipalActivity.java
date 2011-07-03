@@ -8,7 +8,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,10 +39,22 @@ import android.view.View;
 
 public class MenuPrincipalActivity extends Activity {
 
+	SharedPreferences preferences;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean mostraInstrucoes = preferences.getBoolean("mostraInstrucoes",
+				true);
+		if (mostraInstrucoes) {
+			Editor e = preferences.edit();
+			e.putBoolean("mostraInstrucoes", false);
+			e.commit();
+			alert(this.getString(R.string.titulo_ajuda), this
+					.getString(R.string.texto_ajuda));
+		}
 	}
 
 	@Override
@@ -52,11 +68,21 @@ public class MenuPrincipalActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.quit:
-			finish();
+		case R.id.menuitem_opcoes:
+			Intent settingsActivity = new Intent(getBaseContext(),
+					OpcoesActivity.class);
+			startActivity(settingsActivity);
 			return true;
-		case R.id.sobre:
-			alert("Sobre o miniTruco", this.getString(R.string.texto_about));
+		case R.id.menuitem_ajuda:
+			alert(this.getString(R.string.titulo_ajuda), this
+					.getString(R.string.texto_ajuda));
+			return true;
+		case R.id.menuitem_sobre:
+			alert(this.getString(R.string.titulo_sobre), this
+					.getString(R.string.texto_sobre));
+			return true;
+		case R.id.menuitem_quit:
+			finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -66,7 +92,11 @@ public class MenuPrincipalActivity extends Activity {
 	public static Jogo jogo;
 
 	public void jogarClickHandler(View v) {
-		jogo = new JogoLocal(false, false);
+		boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
+		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
+				&& !baralhoLimpo;
+		Log.d("opcoes_bl_mv", baralhoLimpo + "," + manilhaVelha);
+		jogo = new JogoLocal(baralhoLimpo, manilhaVelha);
 		jogo.adiciona(new JogadorHumano());
 		for (int i = 2; i <= 4; i++) {
 			jogo.adiciona(new JogadorCPU());
@@ -77,12 +107,10 @@ public class MenuPrincipalActivity extends Activity {
 	}
 
 	private void alert(String titulo, String texto) {
-		new AlertDialog.Builder(this).setTitle(titulo)
-				.setMessage(texto).setNeutralButton("Ok",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-							}
-						}).show();
+		new AlertDialog.Builder(this).setTitle(titulo).setMessage(texto)
+				.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				}).show();
 	}
 }
