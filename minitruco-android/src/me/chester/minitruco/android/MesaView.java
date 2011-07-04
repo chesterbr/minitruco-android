@@ -17,6 +17,7 @@ import android.graphics.RectF;
 import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -393,6 +394,7 @@ public class MesaView extends View {
 	 *            um entre VEZ_HUMANO, VEZ_CPU e VEZ_HUMANO_AGUARDANDO_RESPOSTA
 	 */
 	public void setStatusVez(int vezHumano) {
+		Log.d("MesaView", "StatusVez:" + vezHumano);
 		this.statusVez = vezHumano;
 	}
 
@@ -888,6 +890,8 @@ public class MesaView extends View {
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
+		Log.d("MesaView", "Jogador " + j.getPosicao()
+				+ " aceitou aumento para " + valor + ", liberando");
 		if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
 			statusVez = STATUS_VEZ_HUMANO_OK;
 		}

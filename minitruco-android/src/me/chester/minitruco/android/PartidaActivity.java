@@ -227,6 +227,8 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void cartaJogada(Jogador j, Carta c) {
+		mesa.mostrarPerguntaMao11 = false;
+		mesa.mostrarPerguntaAumento = false;
 		mostrarBotaoAumento = false;
 		mesa.aguardaFimAnimacoes();
 		mesa.descarta(c, j.getPosicao());
@@ -295,7 +297,10 @@ public class PartidaActivity extends Activity implements Interessado {
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		mesa.aguardaFimAnimacoes();
 		mesa.diz("aumento_" + valor, j.getPosicao(), 1500 + 200 * (valor / 3));
+		Log.d("PartidaActivity", "Jogador " + j.getPosicao()
+				+ " pediu aumento ");
 		if (j.getEquipe() == 2 && jogo.getJogadorHumano() != null) {
+			Log.d("PartidaActivity", "pedindo para mostrar pergunta aumento");
 			mesa.mostrarPerguntaAumento = true;
 		}
 	}
@@ -314,16 +319,16 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {
+		Log.d("PartidaActivity", "vez do jogador "+j.getPosicao());
 		mesa.aguardaFimAnimacoes();
-		mesa.mostrarPerguntaMao11 = false;
-		mesa.mostrarPerguntaAumento = false;
 		mostrarBotaoAumento = (j instanceof JogadorHumano)
 				&& (valorProximaAposta > 0) && (placar[0] != 11)
 				&& (placar[1] != 11);
 		mostrarBotaoAbertaFechada = (j instanceof JogadorHumano) && podeFechada;
 		mesa.vaiJogarFechada = false;
-		mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
-				: MesaView.STATUS_VEZ_OUTRO);
+		mesa
+				.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
+						: MesaView.STATUS_VEZ_OUTRO);
 	}
 
 }

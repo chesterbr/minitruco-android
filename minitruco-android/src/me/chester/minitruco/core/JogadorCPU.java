@@ -142,7 +142,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					Log.w("JogadorCPU", "Erro em joga", e);
 					posCarta = 0;
 				}
-
+				
 				// Se a estratégia pediu truco, processa e desencana de jogar
 				// agora
 				if ((posCarta == -1) && (situacaoJogo.valorProximaAposta != 0)) {
@@ -352,7 +352,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 			respostaMao11 = estrategia
 					.aceitaMao11(cartasParceiro, situacaoJogo);
 		} catch (Exception e) {
-			Log.d("JogadorCPU", "Erro em aceite-11", e);
+			Log.d("JogadorCPU", "Erro em aceite-11 no jogador"
+					+ this.getPosicao(), e);
 			respostaMao11 = random.nextBoolean();
 		}
 		jogo.decideMao11(this, respostaMao11);
