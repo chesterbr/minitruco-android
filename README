@@ -34,6 +34,7 @@ Débito Técnico/Bugs:
 - Fazer a carta ser jogada no release e nào no toque
 - Bug: Verificar por que a caixa de aceite some com o cara falando não (é muuuito eventual)
 - Bug: quando empata ele tá destacando a carta errada (ao invés das cartas que empataram)
+- Bug: ao girar com a partida encerrada, as cartas reaparecem magicamente.
 - Refatorar caixa de "Aceita truco" para um díalgo Android. Ex.: http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
 
 Débitos "nice-to-have":
