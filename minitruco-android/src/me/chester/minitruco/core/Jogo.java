@@ -12,7 +12,7 @@ import me.chester.minitruco.android.JogadorHumano;
  * Este programa é um software livre; você pode redistribui-lo e/ou 
  * modifica-lo dentro dos termos da Licença Pública Geral GNU como 
  * publicada pela Fundação do Software Livre (FSF); na versão 3 da 
- * Licença, ou (na sua opnião) qualquer versão.
+ * Licença.
  *
  * Este programa é distribuido na esperança que possa ser util, 
  * mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO
