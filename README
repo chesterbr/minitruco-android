@@ -33,6 +33,7 @@ Débito Técnico/Bugs:
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel; balão do J1 fica mais pra baixo em resoluções maiores/landscape
 - Fazer a carta ser jogada no release e nào no toque
 - Bug: Verificar por que a caixa de aceite some com o cara falando não (é muuuito eventual)
+- Bug: quando empata ele tá destacando a carta errada (ao invés das cartas que empataram)
 - Refatorar caixa de "Aceita truco" para um díalgo Android. Ex.: http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
 
 Débitos "nice-to-have":
