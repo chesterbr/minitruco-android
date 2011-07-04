@@ -32,8 +32,6 @@ Features:
 
 Débito Técnico/Bugs:
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel; balão do J1 fica mais pra baixo em resoluções maiores/landscape
-- Colocar instruções pra rodar o teste do robolectric (setar o launcher do Eclipse e o Run Configurations
- / Arguments / Working Directory para o diretório do minitruco-android)
 - Refatorar caixa de "Aceita truco" para um díalgo Android. Ex.: http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android
 
 Débitos "nice-to-have":
