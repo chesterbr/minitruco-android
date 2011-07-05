@@ -142,7 +142,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					Log.w("JogadorCPU", "Erro em joga", e);
 					posCarta = 0;
 				}
-				
+
 				// Se a estratégia pediu truco, processa e desencana de jogar
 				// agora
 				if ((posCarta == -1) && (situacaoJogo.valorProximaAposta != 0)) {
@@ -187,11 +187,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 				recebiPedidoDeAumento = false;
 				atualizaSituacaoJogo();
 				sleep(1000 + random.nextInt(1000));
-				// O if e o synchronzied garantem que, se um jogador aceitar
-				// o
-				// truco, o estrategia do outro não é consultado (além de
-				// ser uma
-				// conosulta inútil, ele receberia infos desatualizadas)
+				// O sync/if é só pra evitar resposta dupla entre 2 CPUs
 				synchronized (jogo) {
 					if (situacaoJogo.posJogadorPedindoAumento != 0) {
 						boolean resposta = false;
@@ -203,6 +199,22 @@ public class JogadorCPU extends Jogador implements Runnable {
 						jogo.respondeAumento(this, resposta);
 					}
 				}
+			}
+
+			if (recebiPedidoDeMaoDe11) {
+				recebiPedidoDeMaoDe11 = false;
+				atualizaSituacaoJogo();
+				sleep(1000 + random.nextInt(1000));
+				boolean respostaMao11 = false;
+				try {
+					respostaMao11 = estrategia.aceitaMao11(cartasDoParceiroDaMaoDe11,
+							situacaoJogo);
+				} catch (Exception e) {
+					Log.d("JogadorCPU", "Erro em aceite-11 no jogador"
+							+ this.getPosicao(), e);
+					respostaMao11 = random.nextBoolean();
+				}
+				jogo.decideMao11(this, respostaMao11);
 			}
 
 			if (estouAguardandoRepostaAumento && (numRespostasAguardando == 0)) {
@@ -222,6 +234,10 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	private boolean recebiPedidoDeAumento = false;
 	private boolean estouAguardandoRepostaAumento = false;
+
+	private boolean recebiPedidoDeMaoDe11 = false;
+
+	private Carta[] cartasDoParceiroDaMaoDe11;
 
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		// Notifica a estrategia
@@ -344,20 +360,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 	}
 
 	public void informaMao11(Carta[] cartasParceiro) {
-		// Pergunta ao estrategia se ele topa a mão de 11, devolvendo
-		// a resposta para o jogo
-		atualizaSituacaoJogo();
-		boolean respostaMao11;
-		try {
-			respostaMao11 = estrategia
-					.aceitaMao11(cartasParceiro, situacaoJogo);
-		} catch (Exception e) {
-			Log.d("JogadorCPU", "Erro em aceite-11 no jogador"
-					+ this.getPosicao(), e);
-			respostaMao11 = random.nextBoolean();
-		}
-		jogo.decideMao11(this, respostaMao11);
-
+		cartasDoParceiroDaMaoDe11 = cartasParceiro;
+		recebiPedidoDeMaoDe11 = true;
 	}
 
 	public void jogoAbortado(int posicao) {

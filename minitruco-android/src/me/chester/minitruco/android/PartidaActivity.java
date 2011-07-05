@@ -236,10 +236,10 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void decidiuMao11(Jogador j, boolean aceita) {
-		if (j.getPosicao() != 1)
-			decidiuMao11 = aceita;
+		if (j.getPosicao() == 3 && aceita) {
+			mesa.mostrarPerguntaMao11 = false;
+		}
 		mesa.aguardaFimAnimacoes();
-		mesa.mostrarPerguntaMao11 = false;
 		mesa.diz(aceita ? "mao11_sim" : "mao11_nao", j.getPosicao(), 1500);
 	}
 
@@ -251,17 +251,12 @@ public class PartidaActivity extends Activity implements Interessado {
 		// mesa.aguardaFimAnimacoes();
 		if (jogo.getJogadorHumano() != null) {
 			mesa.mostraCartasMao11(cartasParceiro);
-			if (!decidiuMao11) {
-				mesa.mostrarPerguntaMao11 = true;
-			}
+			mesa.mostrarPerguntaMao11 = true;
 		}
 
 	}
 
-	private boolean decidiuMao11 = false;
-
 	public void inicioMao() {
-		decidiuMao11 = false;
 		valorProximaAposta = 3;
 		mesa.aguardaFimAnimacoes();
 		for (int i = 0; i <= 2; i++) {
@@ -319,7 +314,7 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {
-		Log.d("PartidaActivity", "vez do jogador "+j.getPosicao());
+		Log.d("PartidaActivity", "vez do jogador " + j.getPosicao());
 		mesa.aguardaFimAnimacoes();
 		mostrarBotaoAumento = (j instanceof JogadorHumano)
 				&& (valorProximaAposta > 0) && (placar[0] != 11)
