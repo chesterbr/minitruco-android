@@ -168,8 +168,7 @@ public class CartaVisual extends Carta {
 			canvas.drawRoundRect(rectf, raio_canto, raio_canto, paint);
 			paint.setColor(COR_MESA);
 			paint.setStyle(Paint.Style.FILL);
-			canvas.drawBitmap(getBitmap(), left + raio_canto, top + raio_canto,
-					paint);
+			canvas.drawBitmap(getBitmap(), left, top, paint);
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.STROKE);
 			paint.setStrokeWidth(1);
@@ -250,10 +249,8 @@ public class CartaVisual extends Carta {
 			this.bitmap = bitmapCache.get(valor);
 			Bitmap bmpOrig = BitmapFactory.decodeResource(resources,
 					getCartaResourceByValor(valor));
-			Bitmap bmpFinal = Bitmap
-					.createScaledBitmap(bmpOrig, largura - 2
-							* calculaRaioCanto(), altura - 2
-							* calculaRaioCanto(), true);
+			Bitmap bmpFinal = Bitmap.createScaledBitmap(bmpOrig, largura,
+					altura, true);
 			bitmapCache.put(valor, bmpFinal);
 			this.bitmap = bmpFinal;
 		}
