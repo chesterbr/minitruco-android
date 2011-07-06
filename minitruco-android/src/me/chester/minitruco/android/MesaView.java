@@ -267,7 +267,10 @@ public class MesaView extends View {
 	 */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			return true;
+		case MotionEvent.ACTION_UP:
 			if (mostrarPerguntaMao11) {
 				if (rectBotaoSim.contains((int) event.getX(), (int) event
 						.getY())) {
@@ -302,8 +305,10 @@ public class MesaView extends View {
 					}
 				}
 			}
+			return true;
+		default:
+			return super.onTouchEvent(event);
 		}
-		return super.onTouchEvent(event);
 	}
 
 	private long calcTempoAteFimAnimacaoMS() {

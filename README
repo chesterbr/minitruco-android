@@ -29,8 +29,6 @@ Features:
 
 Débito Técnico/Bugs:
 - balão do J1 fica mais pra baixo em resoluções maiores/landscape
-- Cartas com bordas redondas e fundo transparente
-- Fazer a carta ser jogada no release e não no toque
 - Bug: na 1a. mão da 1a. partida do jogo, às vezes uma carta do jogador vem virada pra baixo.
 - Bug: quando empata ele tá destacando a carta errada (ao invés das cartas que empataram)
 - Bug: ao girar com a partida encerrada, as cartas reaparecem magicamente.
