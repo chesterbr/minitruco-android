@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 /*
@@ -67,6 +69,7 @@ public class PartidaActivity extends Activity implements Interessado {
 
 	private static final int MSG_ATUALIZA_PLACAR = 0;
 	private static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
+	private static final int MSG_MOSTRA_BTN_NOVA_PARTIDA = 2;
 
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -88,6 +91,10 @@ public class PartidaActivity extends Activity implements Interessado {
 			case MSG_TIRA_DESTAQUE_PLACAR:
 				tvNos.setBackgroundColor(Color.TRANSPARENT);
 				tvEles.setBackgroundColor(Color.TRANSPARENT);
+				break;
+			case MSG_MOSTRA_BTN_NOVA_PARTIDA:
+				Button btnNovaPartida = (Button) findViewById(R.id.btnNovaPartida);
+				btnNovaPartida.setVisibility(Button.VISIBLE);
 				break;
 			default:
 				break;
@@ -184,6 +191,11 @@ public class PartidaActivity extends Activity implements Interessado {
 		return true;
 	}
 
+	public void novaPartidaClickHandler(View v) {
+		MenuPrincipalActivity.reiniciarJogo = true;
+		finish();
+	}
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -277,6 +289,8 @@ public class PartidaActivity extends Activity implements Interessado {
 	public void jogoFechado(int numEquipeVencedora) {
 		mesa.aguardaFimAnimacoes();
 		mesa.diz(numEquipeVencedora == 1 ? "vitoria" : "derrota", 1, 10000);
+		handler.sendMessage(Message.obtain(handler,
+				MSG_MOSTRA_BTN_NOVA_PARTIDA));
 	}
 
 	public void maoFechada(int[] pontosEquipe) {

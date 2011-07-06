@@ -26,8 +26,6 @@ Backlog
 -------
 
 Features:
-- Opção de manilha velha / baralho limpo
-- Botão Reiniciar no final da partida
 
 Débito Técnico/Bugs:
 - Bobeira visual: A ponta do balãozinho não fecha por 1 pixel; balão do J1 fica mais pra baixo em resoluções maiores/landscape
@@ -36,6 +34,7 @@ Débito Técnico/Bugs:
 - Bug: na 1a. mão da 1a. partida do jogo, às vezes uma carta do jogador vem virada pra baixo.
 - Bug: quando empata ele tá destacando a carta errada (ao invés das cartas que empataram)
 - Bug: ao girar com a partida encerrada, as cartas reaparecem magicamente.
+- Bug? mão de ferro (11x11) tá deixando trucar
 
 Débitos "nice-to-have":
 - Refatorar caixa de "Aceita truco" para um díalgo Android. Ex.: http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android - ou usar balões como botões, ou desencanar e deixar como está

@@ -12,7 +12,7 @@
 		android:layout_height="fill_parent" android:gravity="center_horizontal|bottom">
 
 
-		<Button android:id="@+id/btnJogar" android:layout_width="100px"
+		<Button android:id="@+id/btnJogar" android:layout_width="200sp"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true" android:text="Jogar"
 			android:onClick="jogarClickHandler" />
