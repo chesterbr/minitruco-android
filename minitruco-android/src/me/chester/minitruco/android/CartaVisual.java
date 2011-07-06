@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 
 /*
@@ -156,39 +157,43 @@ public class CartaVisual extends Carta {
 			}
 		}
 		if (getBitmap() != null) {
+			int raio_canto = calculaRaioCanto();
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
 			Rect rect = new Rect(left, top, left + largura - 1, top + altura
 					- 1);
+			RectF rectf = new RectF(rect);
 			paint.setColor(Color.WHITE);
 			paint.setStyle(Paint.Style.FILL);
-			canvas.drawRect(rect, paint);
+			canvas.drawRoundRect(rectf, raio_canto, raio_canto, paint);
 			paint.setColor(COR_MESA);
 			paint.setStyle(Paint.Style.FILL);
-			canvas.drawBitmap(getBitmap(), left, top, paint);
+			canvas.drawBitmap(getBitmap(), left + raio_canto, top + raio_canto,
+					paint);
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.STROKE);
-			canvas.drawRect(rect, paint);
-			paint.setColor(COR_MESA);
-			canvas.drawPoint(left, top, paint);
-			canvas.drawPoint(left + largura - 1, top, paint);
-			canvas.drawPoint(left, top + altura - 1, paint);
-			canvas.drawPoint(left + largura - 1, top + altura - 1, paint);
+			paint.setStrokeWidth(1);
+			canvas.drawRoundRect(rectf, raio_canto, raio_canto, paint);
 
 			if (destacada) {
+				paint.setStrokeWidth(2);
 				paint.setColor(Color.BLUE);
-				canvas.drawRect(rect, paint);
-				rect.set(left + 1, top + 1, left + largura, top + altura);
-				canvas.drawRect(rect, paint);
+				canvas.drawRoundRect(rectf, raio_canto, raio_canto, paint);
 			} else if (escura) {
 				Paint paintEscura = new Paint();
 				paintEscura.setColor(Color.BLACK);
 				paintEscura.setAlpha(128);
-				canvas.drawRect(rect, paintEscura);
+				canvas
+						.drawRoundRect(rectf, raio_canto, raio_canto,
+								paintEscura);
 			}
 
 		}
 
+	}
+
+	private int calculaRaioCanto() {
+		return altura / 12;
 	}
 
 	/**
@@ -245,8 +250,10 @@ public class CartaVisual extends Carta {
 			this.bitmap = bitmapCache.get(valor);
 			Bitmap bmpOrig = BitmapFactory.decodeResource(resources,
 					getCartaResourceByValor(valor));
-			Bitmap bmpFinal = Bitmap.createScaledBitmap(bmpOrig, largura,
-					altura, true);
+			Bitmap bmpFinal = Bitmap
+					.createScaledBitmap(bmpOrig, largura - 2
+							* calculaRaioCanto(), altura - 2
+							* calculaRaioCanto(), true);
 			bitmapCache.put(valor, bmpFinal);
 			this.bitmap = bmpFinal;
 		}

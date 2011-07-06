@@ -771,8 +771,9 @@ public class MesaView extends View {
 	private String fraseBalao = null;
 
 	/**
-	 * Desenha a parte gráfica do balão (sem o texto). É chamada várias vezes
-	 * para compor o contorno, antes de estampar o texto
+	 * Desenha a parte gráfica do balão (sem o texto). O nome é meio mentiroso,
+	 * porque também desenha a ponta. É chamada várias vezes para compor o
+	 * contorno, antes de estampar o texto
 	 * 
 	 * @param canvas
 	 *            onde ele será desenhado
@@ -868,10 +869,8 @@ public class MesaView extends View {
 			paint.setColor(Color.BLACK);
 			for (int i = -1; i <= 1; i++) {
 				for (int j = -1; j <= 1; j++) {
-					if (i != 0 && j != 0) {
-						desenhaElipseBalao(canvas, x + i, y + j, largBalao,
-								altBalao, quadrantePonta, paint);
-					}
+					desenhaElipseBalao(canvas, x + i, y + j, largBalao,
+							altBalao, quadrantePonta, paint);
 				}
 			}
 			paint.setColor(Color.WHITE);
