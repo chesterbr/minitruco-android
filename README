@@ -28,13 +28,11 @@ Backlog
 Features:
 
 Débito Técnico/Bugs:
-- balão do J1 fica mais pra baixo em resoluções maiores/landscape
 - Bug: na 1a. mão da 1a. partida do jogo, às vezes uma carta do jogador vem virada pra baixo.
 - Bug: quando empata ele tá destacando a carta errada (ao invés das cartas que empataram)
 - Bug: ao girar com a partida encerrada, as cartas reaparecem magicamente.
 
 Débitos "nice-to-have":
-- Refatorar caixa de "Aceita truco" para um díalgo Android. Ex.: http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android - ou usar balões como botões, ou desencanar e deixar como está
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)

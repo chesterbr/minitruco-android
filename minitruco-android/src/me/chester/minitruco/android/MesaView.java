@@ -854,8 +854,8 @@ public class MesaView extends View {
 			switch (posicaoBalao) {
 			case 1:
 				x = (canvas.getWidth() - largBalao) / 2 - CartaVisual.largura;
-				y = canvas.getHeight() - altBalao - CartaVisual.altura - MARGEM
-						- 3;
+				y = canvas.getHeight() - altBalao * 4 - MARGEM - 3;
+				Log.d("balao", y + "," + altBalao + "," + fraseBalao);
 				quadrantePonta = 4;
 				break;
 			case 2:
