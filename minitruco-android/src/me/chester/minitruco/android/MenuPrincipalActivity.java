@@ -1,9 +1,6 @@
 package me.chester.minitruco.android;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.core.JogadorCPU;
-import me.chester.minitruco.core.Jogo;
-import me.chester.minitruco.core.JogoLocal;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
