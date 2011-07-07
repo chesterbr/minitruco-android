@@ -459,10 +459,11 @@ public class MesaView extends View {
 	 *        entrega fechada (sem valor)
 	 */
 	private void distribui(int numJogador, int i, Carta carta) {
-		// Para o jogador da posição superior, inverte a ordem
-		// (senão a exibição na mão de 11 fica bagunçada)
 		if (numJogador == 3 || numJogador == 4) {
+			// Inverte a ordem para fins estéticos
 			i = 2 - i;
+		} else if (numJogador == 1) {
+			carta.setFechada(false);
 		}
 
 		// Adiciona a carta na mesa, em cima do baralho, e anima até a posição
@@ -855,7 +856,6 @@ public class MesaView extends View {
 			case 1:
 				x = (canvas.getWidth() - largBalao) / 2 - CartaVisual.largura;
 				y = canvas.getHeight() - altBalao * 4 - MARGEM - 3;
-				Log.d("balao", y + "," + altBalao + "," + fraseBalao);
 				quadrantePonta = 4;
 				break;
 			case 2:
