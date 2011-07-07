@@ -168,6 +168,7 @@ public class MesaView extends View {
 		cartas[0].movePara(leftBaralho, topBaralho);
 		cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
 		cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
+		cartas[3].movePara(leftBaralho, topBaralho);
 
 		if (!inicializada) {
 			// Inicia as threads internas que cuidam de animações e de responder
