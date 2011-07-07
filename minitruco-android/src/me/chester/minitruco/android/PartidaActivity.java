@@ -353,15 +353,17 @@ public class PartidaActivity extends Activity implements Interessado {
 	public void vez(Jogador j, boolean podeFechada) {
 		Log.d("PartidaActivity", "vez do jogador " + j.getPosicao());
 		mesa.aguardaFimAnimacoes();
+		mesa.vaiJogarFechada = false;
 		boolean mostraBtnAumento = (j instanceof JogadorHumano)
 				&& (valorProximaAposta > 0) && (placar[0] != 11)
 				&& (placar[1] != 11);
-		mesa.vaiJogarFechada = false;
+		boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
+				&& podeFechada;
 		handler.sendMessage(Message.obtain(handler,
 				mostraBtnAumento ? MSG_MOSTRA_BOTAO_AUMENTO
 						: MSG_ESCONDE_BOTAO_AUMENTO));
 		handler.sendMessage(Message.obtain(handler,
-				podeFechada ? MSG_MOSTRA_BOTAO_ABERTA_FECHADA
+				mostraBtnAbertaFechada ? MSG_MOSTRA_BOTAO_ABERTA_FECHADA
 						: MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa
 				.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
