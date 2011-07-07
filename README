@@ -26,7 +26,6 @@ Backlog
 -------
 
 Features/bugs:
-- Bug: quando empata ele tá destacando a carta errada (ao invés das cartas que empataram)
 - Bug: ao girar com a partida encerrada, as cartas reaparecem magicamente.
 - Adicionar opção para mostrar os botões Truco/esconder com UI Android? (não sei se é uma boa, pra ser sincero)
 

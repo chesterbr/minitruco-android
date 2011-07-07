@@ -225,9 +225,11 @@ public class MesaView extends View {
 	 */
 	public void atualizaResultadoRodada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
-		cartaQueFez = getCartaVisual(partidaActivity.jogo
-				.getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
-		cartaQueFez.destacada = true;
+		if (resultado != 3) {
+			cartaQueFez = getCartaVisual(partidaActivity.jogo
+					.getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
+			cartaQueFez.destacada = true;
+		}
 		for (CartaVisual c : cartas) {
 			c.escura = c.descartada;
 		}
