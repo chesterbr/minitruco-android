@@ -26,14 +26,17 @@ Backlog
 -------
 
 Features/bugs:
-- Bug: ao girar com a partida encerrada, as cartas reaparecem magicamente.
-- Adicionar opção para mostrar os botões Truco/esconder com UI Android? (não sei se é uma boa, pra ser sincero)
+- Bug: placar piscando direto quando jogo empata na 1a. rodada
+- Bug: botão "fechada/aberta" piscando durante o jogo
+- Issue: dá pra entender o fechada/aberta?
 
 Débito Técnico:
+- Remover os menus aumento e aberta/fechada que ficaram sem função
 - Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
 - Refactor: desencanar desse lance de "interessado" e fazer com que a mesa seja sempre um jogadorHumano? e se quiser jogo só de CPUs no futuro?
+- Bug(?): ainda aparece a carta fechada de vez em quando para o J1
 
 Features 2.0:
 - Jogos multiplayer

@@ -61,10 +61,6 @@ public class PartidaActivity extends Activity implements Interessado {
 
 	private int valorProximaAposta;
 
-	private boolean mostrarBotaoAumento = false;
-
-	private boolean mostrarBotaoAbertaFechada = false;
-
 	private MesaView mesa;
 
 	Jogo jogo;
@@ -75,11 +71,17 @@ public class PartidaActivity extends Activity implements Interessado {
 	private static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
 	private static final int MSG_MOSTRA_BTN_NOVA_PARTIDA = 2;
 	private static final int MSG_ESCONDE_BTN_NOVA_PARTIDA = 3;
+	private static final int MSG_MOSTRA_BOTAO_AUMENTO = 4;
+	private static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
+	private static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
+	private static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
 
 	public Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			TextView tvNos = (TextView) findViewById(R.id.textview_nos);
 			TextView tvEles = (TextView) findViewById(R.id.textview_eles);
+			Button btnAumento = (Button) findViewById(R.id.btnAumento);
+			Button btnAbertaFechada = (Button) findViewById(R.id.btnAbertaFechada);
 			switch (msg.what) {
 			case MSG_ATUALIZA_PLACAR:
 				if (placar[0] != msg.arg1) {
@@ -103,6 +105,22 @@ public class PartidaActivity extends Activity implements Interessado {
 				btnNovaPartida
 						.setVisibility(msg.what == MSG_MOSTRA_BTN_NOVA_PARTIDA ? Button.VISIBLE
 								: Button.INVISIBLE);
+				break;
+			case MSG_MOSTRA_BOTAO_AUMENTO:
+				btnAumento
+						.setText(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1]);
+				btnAumento.setVisibility(Button.VISIBLE);
+				break;
+			case MSG_ESCONDE_BOTAO_AUMENTO:
+				btnAumento.setVisibility(Button.GONE);
+				break;
+			case MSG_MOSTRA_BOTAO_ABERTA_FECHADA:
+				btnAbertaFechada.setText(mesa.vaiJogarFechada ? "Aberta"
+						: "Fechada");
+				btnAbertaFechada.setVisibility(Button.VISIBLE);
+				break;
+			case MSG_ESCONDE_BOTAO_ABERTA_FECHADA:
+				btnAbertaFechada.setVisibility(Button.GONE);
 				break;
 			default:
 				break;
@@ -159,19 +177,7 @@ public class PartidaActivity extends Activity implements Interessado {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.menuitem_aumento:
-			mostrarBotaoAumento = false;
-			mesa.setStatusVez(MesaView.STATUS_VEZ_HUMANO_AGUARDANDO);
-			jogo.aumentaAposta(jogo.getJogadorHumano());
-			return true;
-		case R.id.menuitem_aberta:
-			mesa.vaiJogarFechada = false;
-			return true;
-		case R.id.menuitem_fechada:
-			mesa.vaiJogarFechada = true;
-			return true;
 		case R.id.menuitem_sair_jogo:
 			finish();
 			return true;
@@ -187,27 +193,22 @@ public class PartidaActivity extends Activity implements Interessado {
 		return true;
 	}
 
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		MenuItem miAumento = menu.findItem(R.id.menuitem_aumento);
-		MenuItem miAberta = menu.findItem(R.id.menuitem_aberta);
-		MenuItem miFechada = menu.findItem(R.id.menuitem_fechada);
-		if (mostrarBotaoAumento) {
-			miAumento
-					.setTitle(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1]);
-		}
-		miAumento.setVisible(mostrarBotaoAumento);
-		miAberta.setVisible(mostrarBotaoAbertaFechada && mesa.vaiJogarFechada);
-		miFechada
-				.setVisible(mostrarBotaoAbertaFechada && !mesa.vaiJogarFechada);
-		return true;
-	}
-
 	public void novaPartidaClickHandler(View v) {
 		handler.sendMessage(Message.obtain(handler,
 				MSG_ESCONDE_BTN_NOVA_PARTIDA));
 		criaNovoJogo();
+	}
+
+	public void aumentoClickHandler(View v) {
+		handler.sendMessage(Message.obtain(handler, MSG_ESCONDE_BOTAO_AUMENTO));
+		mesa.setStatusVez(MesaView.STATUS_VEZ_HUMANO_AGUARDANDO);
+		jogo.aumentaAposta(jogo.getJogadorHumano());
+	}
+
+	public void abertaFechadaClickHandler(View v) {
+		mesa.vaiJogarFechada = !mesa.vaiJogarFechada;
+		handler.sendMessage(Message.obtain(handler,
+				MSG_MOSTRA_BOTAO_ABERTA_FECHADA));
 	}
 
 	@Override
@@ -255,7 +256,9 @@ public class PartidaActivity extends Activity implements Interessado {
 	public void cartaJogada(Jogador j, Carta c) {
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
-		mostrarBotaoAumento = false;
+		handler.sendMessage(Message.obtain(handler, MSG_ESCONDE_BOTAO_AUMENTO));
+		handler.sendMessage(Message.obtain(handler,
+				MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa.aguardaFimAnimacoes();
 		mesa.descarta(c, j.getPosicao());
 		Log.i("Partida", "Jogador " + j.getPosicao() + " jogou " + c);
@@ -295,7 +298,8 @@ public class PartidaActivity extends Activity implements Interessado {
 	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
 		placar[0] = placarEquipe1;
 		placar[1] = placarEquipe2;
-		handler.sendMessage(Message.obtain(handler, MSG_ATUALIZA_PLACAR, placarEquipe1, placarEquipe2));
+		handler.sendMessage(Message.obtain(handler, MSG_ATUALIZA_PLACAR,
+				placarEquipe1, placarEquipe2));
 	}
 
 	public void jogoAbortado(int posicao) {
@@ -311,8 +315,10 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
-		mostrarBotaoAumento = false;
 		mesa.aguardaFimAnimacoes();
+		handler.sendMessage(Message.obtain(handler, MSG_ESCONDE_BOTAO_AUMENTO));
+		handler.sendMessage(Message.obtain(handler,
+				MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		handler.sendMessage(Message.obtain(handler, MSG_ATUALIZA_PLACAR,
 				pontosEquipe[0], pontosEquipe[1]));
 		mesa.aguardaFimAnimacoes();
@@ -347,11 +353,16 @@ public class PartidaActivity extends Activity implements Interessado {
 	public void vez(Jogador j, boolean podeFechada) {
 		Log.d("PartidaActivity", "vez do jogador " + j.getPosicao());
 		mesa.aguardaFimAnimacoes();
-		mostrarBotaoAumento = (j instanceof JogadorHumano)
+		boolean mostraBtnAumento = (j instanceof JogadorHumano)
 				&& (valorProximaAposta > 0) && (placar[0] != 11)
 				&& (placar[1] != 11);
-		mostrarBotaoAbertaFechada = (j instanceof JogadorHumano) && podeFechada;
 		mesa.vaiJogarFechada = false;
+		handler.sendMessage(Message.obtain(handler,
+				mostraBtnAumento ? MSG_MOSTRA_BOTAO_AUMENTO
+						: MSG_ESCONDE_BOTAO_AUMENTO));
+		handler.sendMessage(Message.obtain(handler,
+				podeFechada ? MSG_MOSTRA_BOTAO_ABERTA_FECHADA
+						: MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa
 				.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
 						: MesaView.STATUS_VEZ_OUTRO);

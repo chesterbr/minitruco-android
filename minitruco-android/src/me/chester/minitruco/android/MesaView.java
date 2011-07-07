@@ -135,7 +135,9 @@ public class MesaView extends View {
 		// texto, etc.)
 		CartaVisual.ajustaTamanho(w, h);
 		leftBaralho = w - CartaVisual.largura - MARGEM - 4;
-		topBaralho = h - CartaVisual.altura - MARGEM - 4;
+		// topBaralho = h - CartaVisual.altura - MARGEM - 4;
+		// leftBaralho = MARGEM+4;
+		topBaralho = MARGEM + 4;
 		tamanhoFonte = 12.0f * (h / 270.0f);
 
 		// Na primeira chamada (inicialização), instanciamos as cartas
@@ -659,9 +661,10 @@ public class MesaView extends View {
 				// Desenha se não for a rodada piscando, ou, se for, alterna o
 				// desenho a cada 250ms
 				if (i != (numRodadaPiscando - 1) || (agora % 250) % 2 == 0) {
-					canvas.drawBitmap(iconesRodadas[resultadoRodada[i]], MARGEM
-							+ i * (2 + iconesRodadas[0].getWidth()),
-							MARGEM + 1, new Paint());
+					canvas.drawBitmap(iconesRodadas[resultadoRodada[i]],
+							MARGEM, MARGEM + i
+									* (1 + iconesRodadas[0].getHeight()),
+							new Paint());
 				}
 			}
 		}
