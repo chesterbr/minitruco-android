@@ -182,7 +182,9 @@ public class MesaView extends View {
 					cv.resetBitmap();
 					if (i >= 4) {
 						int numJogador = (i - 1) / 3;
-						if (cv.descartada) {
+						if (partidaActivity.jogo.jogoFinalizado) {
+							cv.movePara(leftBaralho, topBaralho);
+						} else if (cv.descartada) {
 							cv.movePara(getPosLeftDescartada(numJogador),
 									getPosTopDescartada(numJogador));
 						} else {

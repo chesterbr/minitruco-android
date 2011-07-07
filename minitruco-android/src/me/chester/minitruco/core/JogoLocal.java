@@ -397,8 +397,10 @@ public class JogoLocal extends Jogo {
 			interessado.maoFechada(pontosEquipe);
 			if (pontosEquipe[0] > 11) {
 				interessado.jogoFechado(1);
+				jogoFinalizado = true;
 			} else if (pontosEquipe[1] > 11) {
 				interessado.jogoFechado(2);
+				jogoFinalizado = true;
 			}
 		}
 
