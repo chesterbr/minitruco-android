@@ -66,7 +66,7 @@ public interface Interessado {
 	 * Informa que uma partida começou. Não é obrigatório tratar - até porque o
 	 * inicioMao será chamado logo em seguida.
 	 */
-	public abstract void inicioPartida();
+	public abstract void inicioPartida(int placarEquipe1, int placarEquipe2);
 
 	/**
 	 * Informa que é a vez de um jogador jogar.

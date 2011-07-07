@@ -89,20 +89,7 @@ public class MenuPrincipalActivity extends Activity {
 		}
 	}
 
-	public static Jogo jogo;
-
-	public static boolean reiniciarJogo = false;
-
 	public void jogarClickHandler(View v) {
-		boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
-		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
-				&& !baralhoLimpo;
-		Log.d("opcoes_bl_mv", baralhoLimpo + "," + manilhaVelha);
-		jogo = new JogoLocal(baralhoLimpo, manilhaVelha);
-		jogo.adiciona(new JogadorHumano());
-		for (int i = 2; i <= 4; i++) {
-			jogo.adiciona(new JogadorCPU());
-		}
 		Intent intent = new Intent(MenuPrincipalActivity.this,
 				PartidaActivity.class);
 		startActivity(intent);
@@ -111,10 +98,6 @@ public class MenuPrincipalActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (reiniciarJogo) {
-			reiniciarJogo = false;
-			jogarClickHandler(null);
-		}
 	}
 
 	private void alert(String titulo, String texto) {

@@ -54,7 +54,7 @@ public class JogadorHumano extends Jogador {
 
 	}
 
-	public void inicioPartida() {
+	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
 
 	}
 

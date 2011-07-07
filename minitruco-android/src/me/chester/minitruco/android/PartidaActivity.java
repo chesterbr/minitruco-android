@@ -4,8 +4,11 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Interessado;
 import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.JogoLocal;
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -13,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,15 +67,16 @@ public class PartidaActivity extends Activity implements Interessado {
 
 	private MesaView mesa;
 
-	private Jogo jogo;
+	Jogo jogo;
 
 	private int[] placar = new int[2];
 
 	private static final int MSG_ATUALIZA_PLACAR = 0;
 	private static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
 	private static final int MSG_MOSTRA_BTN_NOVA_PARTIDA = 2;
+	private static final int MSG_ESCONDE_BTN_NOVA_PARTIDA = 3;
 
-	private Handler handler = new Handler() {
+	public Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			TextView tvNos = (TextView) findViewById(R.id.textview_nos);
 			TextView tvEles = (TextView) findViewById(R.id.textview_eles);
@@ -93,14 +98,38 @@ public class PartidaActivity extends Activity implements Interessado {
 				tvEles.setBackgroundColor(Color.TRANSPARENT);
 				break;
 			case MSG_MOSTRA_BTN_NOVA_PARTIDA:
+			case MSG_ESCONDE_BTN_NOVA_PARTIDA:
 				Button btnNovaPartida = (Button) findViewById(R.id.btnNovaPartida);
-				btnNovaPartida.setVisibility(Button.VISIBLE);
+				btnNovaPartida
+						.setVisibility(msg.what == MSG_MOSTRA_BTN_NOVA_PARTIDA ? Button.VISIBLE
+								: Button.INVISIBLE);
 				break;
 			default:
 				break;
 			}
 		}
 	};
+
+	/**
+	 * Cria e inicia um novo jogo. É chamada pela primeira vez a partir da
+	 * MesaView (para garantir que o jogo só role quando ela estiver
+	 * inicializada) e dali em diante pelo botão de nova partida.
+	 */
+	public void criaNovoJogo() {
+		SharedPreferences preferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
+		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
+				&& !baralhoLimpo;
+		Log.d("opcoes_bl_mv", baralhoLimpo + "," + manilhaVelha);
+		jogo = new JogoLocal(baralhoLimpo, manilhaVelha);
+		jogo.adiciona(new JogadorHumano());
+		for (int i = 2; i <= 4; i++) {
+			jogo.adiciona(new JogadorCPU());
+		}
+		jogo.adiciona(this);
+		(new Thread(jogo)).start();
+	}
 
 	// Eventos da Activity (chamados pelo Android)
 
@@ -109,6 +138,7 @@ public class PartidaActivity extends Activity implements Interessado {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.partida);
 		mesa = ((MesaView) findViewById(R.id.MesaView01));
+		mesa.setPartidaActivity(this);
 		// Inicializa componentes das classes visuais que dependem de métodos
 		// disponíveis exclusivamente na Activity
 		if (MesaView.iconesRodadas == null) {
@@ -125,23 +155,6 @@ public class PartidaActivity extends Activity implements Interessado {
 		if (CartaVisual.resources == null) {
 			CartaVisual.resources = getResources();
 		}
-
-		// Assumindo que o menu principal já adicionou os jogadores ao jogo,
-		// inscreve a Mesa como interessado e inicia o jogo em sua própria
-		// thread.
-		jogo = MenuPrincipalActivity.jogo;
-		if (jogo != null) {
-			if (jogo.jogoFinalizado) {
-				finish();
-			} else {
-				jogo.adiciona(this);
-				mesa.jogo = jogo;
-			}
-		} else {
-			throw new IllegalStateException(
-					"Activity.onCreate: Partida iniciada sem jogo");
-		}
-
 	}
 
 	@Override
@@ -192,8 +205,9 @@ public class PartidaActivity extends Activity implements Interessado {
 	}
 
 	public void novaPartidaClickHandler(View v) {
-		MenuPrincipalActivity.reiniciarJogo = true;
-		finish();
+		handler.sendMessage(Message.obtain(handler,
+				MSG_ESCONDE_BTN_NOVA_PARTIDA));
+		criaNovoJogo();
 	}
 
 	@Override
@@ -278,8 +292,10 @@ public class PartidaActivity extends Activity implements Interessado {
 		handler.sendMessage(Message.obtain(handler, MSG_TIRA_DESTAQUE_PLACAR));
 	}
 
-	public void inicioPartida() {
-
+	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
+		placar[0] = placarEquipe1;
+		placar[1] = placarEquipe2;
+		handler.sendMessage(Message.obtain(handler, MSG_ATUALIZA_PLACAR, placarEquipe1, placarEquipe2));
 	}
 
 	public void jogoAbortado(int posicao) {
@@ -288,9 +304,10 @@ public class PartidaActivity extends Activity implements Interessado {
 
 	public void jogoFechado(int numEquipeVencedora) {
 		mesa.aguardaFimAnimacoes();
-		mesa.diz(numEquipeVencedora == 1 ? "vitoria" : "derrota", 1, 10000);
-		handler.sendMessage(Message.obtain(handler,
-				MSG_MOSTRA_BTN_NOVA_PARTIDA));
+		mesa.diz(numEquipeVencedora == 1 ? "vitoria" : "derrota", 1, 1000);
+		mesa.aguardaFimAnimacoes();
+		handler.sendMessage(Message
+				.obtain(handler, MSG_MOSTRA_BTN_NOVA_PARTIDA));
 	}
 
 	public void maoFechada(int[] pontosEquipe) {

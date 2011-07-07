@@ -350,7 +350,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 	 */
 	private Vector<Carta> cartasRestantes = new Vector<Carta>(3);
 
-	public void inicioPartida() {
+	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
 		// Avisa o estrategia
 		estrategia.inicioPartida();
 	}

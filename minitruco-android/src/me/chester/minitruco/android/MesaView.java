@@ -64,6 +64,12 @@ public class MesaView extends View {
 		super(context);
 	}
 
+	private PartidaActivity partidaActivity;
+
+	public void setPartidaActivity(PartidaActivity partidaActivity) {
+		this.partidaActivity = partidaActivity;
+	}
+
 	private Rect rectDialog;
 
 	private RectF rectBotaoSim;
@@ -109,6 +115,12 @@ public class MesaView extends View {
 	public CartaVisual[] cartas = new CartaVisual[16];
 
 	/**
+	 * É true se a view já está pronta para responder a solicitações do jogo
+	 * (mover cartas, acionar balões, etc)
+	 */
+	private boolean inicializada = false;
+
+	/**
 	 * Ajusta o tamanho das cartas e sua posição de acordo com a resolução.
 	 * <p>
 	 * Na primeira chamada, incializa as cartas e dá início à partida (tem que
@@ -127,8 +139,7 @@ public class MesaView extends View {
 		tamanhoFonte = 12.0f * (h / 270.0f);
 
 		// Na primeira chamada (inicialização), instanciamos as cartas
-		boolean inicializando = (cartas[0] == null);
-		if (inicializando) {
+		if (!inicializada) {
 			for (int i = 0; i < cartas.length; i++) {
 				cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null);
 				cartas[i].movePara(leftBaralho, topBaralho);
@@ -156,12 +167,13 @@ public class MesaView extends View {
 		cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
 		cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
 
-		if (inicializando) {
+		if (!inicializada) {
 			// Inicia as threads internas que cuidam de animações e de responder
-			// a diálogos, bem como a do jogo em si.
+			// a diálogos e faz a activity começar o jogo
 			animacaoJogo.start();
 			respondeDialogos.start();
-			(new Thread(MenuPrincipalActivity.jogo)).start();
+			inicializada = true;
+			this.partidaActivity.criaNovoJogo();
 		} else {
 			// Rolou um resize, reposiciona as cartas não-decorativas
 			for (int i = 0; i <= 15; i++) {
@@ -213,8 +225,8 @@ public class MesaView extends View {
 	 */
 	public void atualizaResultadoRodada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
-		cartaQueFez = getCartaVisual(jogo.getCartasDaRodada(numRodada)[jogadorQueTorna
-				.getPosicao() - 1]);
+		cartaQueFez = getCartaVisual(partidaActivity.jogo
+				.getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
 		cartaQueFez.destacada = true;
 		for (CartaVisual c : cartas) {
 			c.escura = c.descartada;
@@ -301,7 +313,8 @@ public class MesaView extends View {
 							&& cartas[i].isDentro(event.getX(), event.getY())) {
 						statusVez = STATUS_VEZ_OUTRO;
 						cartas[i].setFechada(vaiJogarFechada);
-						jogo.jogaCarta(jogo.getJogadorHumano(), cartas[i]);
+						partidaActivity.jogo.jogaCarta(partidaActivity.jogo
+								.getJogadorHumano(), cartas[i]);
 					}
 				}
 			}
@@ -327,12 +340,12 @@ public class MesaView extends View {
 		// porque periga não ter dado tempo de redesenhar a tela entre um
 		// postInvalidate() e outro.
 		public void run() {
-			// Aguarda o jogo começar
-			while (jogo == null) {
+			// Aguarda o jogo existir
+			while (partidaActivity.jogo == null) {
 				sleep(200);
 			}
-			// Fica em loop até o jogo acabar
-			while (!jogo.jogoFinalizado) {
+			// Roda até a activity-mãe se encerrar
+			while (!partidaActivity.isFinishing()) {
 				sleep(200);
 				do {
 					if (visivel) {
@@ -341,6 +354,7 @@ public class MesaView extends View {
 					sleep(50);
 				} while (calcTempoAteFimAnimacaoMS() >= 0);
 			}
+			Log.d("MesaView", "Fim thread animacao");
 		}
 
 		private void sleep(int tempoMS) {
@@ -356,21 +370,22 @@ public class MesaView extends View {
 	Thread respondeDialogos = new Thread() {
 		@Override
 		public void run() {
-			// Aguarda o jogo começar
-			while (jogo == null) {
+			// Aguarda o jogo existir
+			while (partidaActivity.jogo == null) {
 				try {
 					sleep(250);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			// Roda até o jogo acabar
-			while (!jogo.jogoFinalizado) {
+			// Roda até a activity-mãe se encerrar
+			while (!partidaActivity.isFinishing()) {
 				try {
 					sleep(250);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				Jogo jogo = partidaActivity.jogo;
 				if (recusarMao11) {
 					recusarMao11 = false;
 					jogo.decideMao11(jogo.getJogadorHumano(), false);
@@ -388,6 +403,7 @@ public class MesaView extends View {
 					jogo.respondeAumento(jogo.getJogadorHumano(), true);
 				}
 			}
+			Log.d("MesaView", "Fim thread diálogos");
 		}
 
 	};
@@ -415,7 +431,7 @@ public class MesaView extends View {
 		for (int i = 0; i <= 2; i++) {
 			for (int j = 1; j <= 4; j++) {
 				Carta c = null;
-				JogadorHumano jh = jogo.getJogadorHumano();
+				JogadorHumano jh = partidaActivity.jogo.getJogadorHumano();
 				if (j == 1 && jh != null) {
 					c = jh.getCartas()[i];
 				}
@@ -424,8 +440,8 @@ public class MesaView extends View {
 		}
 
 		// Abre o vira, se for manilha nova
-		if (!jogo.isManilhaVelha()) {
-			cartas[0].setCarta(jogo.cartaDaMesa);
+		if (!partidaActivity.jogo.isManilhaVelha()) {
+			cartas[0].setCarta(partidaActivity.jogo.cartaDaMesa);
 			cartas[0].visible = true;
 		}
 
@@ -738,11 +754,6 @@ public class MesaView extends View {
 	 * caso se está aguardando resposta de truco
 	 */
 	private int statusVez = 0;
-
-	/**
-	 * Jogo que a mesa está exibindo (deve ser setado externamente)
-	 */
-	public Jogo jogo;
 
 	/**
 	 * Guarda as cartas que foram jogadas pelos jogadores (para saber em que

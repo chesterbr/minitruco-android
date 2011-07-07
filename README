@@ -32,7 +32,6 @@ Débito Técnico/Bugs:
 - Bug: na 1a. mão da 1a. partida do jogo, às vezes uma carta do jogador vem virada pra baixo.
 - Bug: quando empata ele tá destacando a carta errada (ao invés das cartas que empataram)
 - Bug: ao girar com a partida encerrada, as cartas reaparecem magicamente.
-- Bug? mão de ferro (11x11) tá deixando trucar
 
 Débitos "nice-to-have":
 - Refatorar caixa de "Aceita truco" para um díalgo Android. Ex.: http://stackoverflow.com/questions/2478517/how-to-display-a-yes-no-dialog-box-in-android - ou usar balões como botões, ou desencanar e deixar como está
@@ -40,6 +39,7 @@ Débitos "nice-to-have":
     automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
     de Partida)
 - Refactor: desencanar desse lance de "interessado" e fazer com que a mesa seja sempre um jogadorHumano? e se quiser jogo só de CPUs no futuro?
+- Adicionar opção para mostrar os botões Truco/esconder com UI Android? (não sei se é uma boa, pra ser sincero)
 
 Features 2.0:
 - Jogos multiplayer

@@ -148,9 +148,9 @@ public class JogoLocal extends Jogo {
 	public void run() {
 
 		// Avisa os jogadores que o jogo vai começar
-		Log.i("Jogo","Jogo (.run) iniciado");
+		Log.i("Jogo", "Jogo (.run) iniciado");
 		for (Interessado interessado : interessados) {
-			interessado.inicioPartida();
+			interessado.inicioPartida(pontosEquipe[0], pontosEquipe[1]);
 		}
 
 		// Inicia a primeira rodada, usando o jogador na posição 1, e processa
@@ -166,7 +166,7 @@ public class JogoLocal extends Jogo {
 				alguemJogou = false;
 			}
 		}
-		Log.i("Jogo","Jogo (.run) finalizado");
+		Log.i("Jogo", "Jogo (.run) finalizado");
 	}
 
 	/**
