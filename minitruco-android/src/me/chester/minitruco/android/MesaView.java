@@ -320,8 +320,8 @@ public class MesaView extends View {
 							&& cartas[i].isDentro(event.getX(), event.getY())) {
 						statusVez = STATUS_VEZ_OUTRO;
 						cartas[i].setFechada(vaiJogarFechada);
-						partidaActivity.jogo.jogaCarta(partidaActivity.jogo
-								.getJogadorHumano(), cartas[i]);
+						partidaActivity.jogo.jogaCarta(
+								partidaActivity.jogadorHumano, cartas[i]);
 					}
 				}
 			}
@@ -395,19 +395,19 @@ public class MesaView extends View {
 				Jogo jogo = partidaActivity.jogo;
 				if (recusarMao11) {
 					recusarMao11 = false;
-					jogo.decideMao11(jogo.getJogadorHumano(), false);
+					jogo.decideMao11(partidaActivity.jogadorHumano, false);
 				}
 				if (aceitarMao11) {
 					aceitarMao11 = false;
-					jogo.decideMao11(jogo.getJogadorHumano(), true);
+					jogo.decideMao11(partidaActivity.jogadorHumano, true);
 				}
 				if (recusarAumento) {
 					recusarAumento = false;
-					jogo.respondeAumento(jogo.getJogadorHumano(), false);
+					jogo.respondeAumento(partidaActivity.jogadorHumano, false);
 				}
 				if (aceitarAumento) {
 					aceitarAumento = false;
-					jogo.respondeAumento(jogo.getJogadorHumano(), true);
+					jogo.respondeAumento(partidaActivity.jogadorHumano, true);
 				}
 			}
 			Log.d("MesaView", "Fim thread diálogos");
@@ -434,13 +434,12 @@ public class MesaView extends View {
 	 */
 	public void distribuiMao() {
 
-		// Distribui as cartas em círculo
+		// Distribui as cartas em círculo, com o humano (1) aberto
 		for (int i = 0; i <= 2; i++) {
 			for (int j = 1; j <= 4; j++) {
 				Carta c = null;
-				JogadorHumano jh = partidaActivity.jogo.getJogadorHumano();
-				if (j == 1 && jh != null) {
-					c = jh.getCartas()[i];
+				if (j == 1) {
+					c = partidaActivity.jogadorHumano.getCartas()[i];
 				}
 				distribui(j, i, c);
 			}

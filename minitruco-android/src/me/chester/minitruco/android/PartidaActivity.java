@@ -1,9 +1,6 @@
 package me.chester.minitruco.android;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.core.Carta;
-import me.chester.minitruco.core.Interessado;
-import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
@@ -17,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -54,29 +50,29 @@ import android.widget.TextView;
  * @author chester
  * 
  */
-public class PartidaActivity extends Activity implements Interessado {
+public class PartidaActivity extends Activity {
 
 	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
 			"NOVE!", "DOZE!!!" };
 
-	private int valorProximaAposta;
-
 	private MesaView mesa;
+
+	JogadorHumano jogadorHumano;
 
 	Jogo jogo;
 
-	private int[] placar = new int[2];
+	int[] placar = new int[2];
 
-	private static final int MSG_ATUALIZA_PLACAR = 0;
-	private static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
-	private static final int MSG_MOSTRA_BTN_NOVA_PARTIDA = 2;
-	private static final int MSG_ESCONDE_BTN_NOVA_PARTIDA = 3;
-	private static final int MSG_MOSTRA_BOTAO_AUMENTO = 4;
-	private static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
-	private static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
-	private static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
+	static final int MSG_ATUALIZA_PLACAR = 0;
+	static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
+	static final int MSG_MOSTRA_BTN_NOVA_PARTIDA = 2;
+	static final int MSG_ESCONDE_BTN_NOVA_PARTIDA = 3;
+	static final int MSG_MOSTRA_BOTAO_AUMENTO = 4;
+	static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
+	static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
+	static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
 
-	public Handler handler = new Handler() {
+	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			TextView tvNos = (TextView) findViewById(R.id.textview_nos);
 			TextView tvEles = (TextView) findViewById(R.id.textview_eles);
@@ -108,7 +104,7 @@ public class PartidaActivity extends Activity implements Interessado {
 				break;
 			case MSG_MOSTRA_BOTAO_AUMENTO:
 				btnAumento
-						.setText(TEXTO_BOTAO_AUMENTO[(valorProximaAposta / 3) - 1]);
+						.setText(TEXTO_BOTAO_AUMENTO[(jogadorHumano.valorProximaAposta / 3) - 1]);
 				btnAumento.setVisibility(Button.VISIBLE);
 				break;
 			case MSG_ESCONDE_BOTAO_AUMENTO:
@@ -139,17 +135,14 @@ public class PartidaActivity extends Activity implements Interessado {
 		boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
 		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
 				&& !baralhoLimpo;
-		Log.d("opcoes_bl_mv", baralhoLimpo + "," + manilhaVelha);
 		jogo = new JogoLocal(baralhoLimpo, manilhaVelha);
-		jogo.adiciona(new JogadorHumano());
+		jogadorHumano = new JogadorHumano(this, mesa);
+		jogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
 			jogo.adiciona(new JogadorCPU());
 		}
-		jogo.adiciona(this);
 		(new Thread(jogo)).start();
 	}
-
-	// Eventos da Activity (chamados pelo Android)
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -202,7 +195,7 @@ public class PartidaActivity extends Activity implements Interessado {
 	public void aumentoClickHandler(View v) {
 		handler.sendMessage(Message.obtain(handler, MSG_ESCONDE_BOTAO_AUMENTO));
 		mesa.setStatusVez(MesaView.STATUS_VEZ_HUMANO_AGUARDANDO);
-		jogo.aumentaAposta(jogo.getJogadorHumano());
+		jogo.aumentaAposta(jogadorHumano);
 	}
 
 	public void abertaFechadaClickHandler(View v) {
@@ -232,142 +225,6 @@ public class PartidaActivity extends Activity implements Interessado {
 	protected void onDestroy() {
 		super.onDestroy();
 		jogo.abortaJogo(1);
-	}
-
-	// Eventos de Interessado (chamados pelo jogo)
-
-	public void aceitouAumentoAposta(Jogador j, int valor) {
-		if (jogo.getJogadorHumano() != null) {
-			if (j.getEquipe() == 1) {
-				// Nós aceitamos um truco, então podemos pedir 6, 9 ou 12
-				if (valor != 12) {
-					valorProximaAposta = valor + 3;
-				}
-			} else {
-				// Eles aceitaram um truco, temos que esperar eles pedirem
-				valorProximaAposta = 0;
-			}
-		}
-		mesa.aguardaFimAnimacoes();
-		mesa.diz("aumento_sim", j.getPosicao(), 1500);
-		mesa.aceitouAumentoAposta(j, valor);
-	}
-
-	public void cartaJogada(Jogador j, Carta c) {
-		mesa.mostrarPerguntaMao11 = false;
-		mesa.mostrarPerguntaAumento = false;
-		handler.sendMessage(Message.obtain(handler, MSG_ESCONDE_BOTAO_AUMENTO));
-		handler.sendMessage(Message.obtain(handler,
-				MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		mesa.aguardaFimAnimacoes();
-		mesa.descarta(c, j.getPosicao());
-		Log.i("Partida", "Jogador " + j.getPosicao() + " jogou " + c);
-	}
-
-	public void decidiuMao11(Jogador j, boolean aceita) {
-		if (j.getPosicao() == 3 && aceita) {
-			mesa.mostrarPerguntaMao11 = false;
-		}
-		mesa.aguardaFimAnimacoes();
-		mesa.diz(aceita ? "mao11_sim" : "mao11_nao", j.getPosicao(), 1500);
-	}
-
-	public void entrouNoJogo(Interessado i, Jogo j) {
-
-	}
-
-	public void informaMao11(Carta[] cartasParceiro) {
-		// mesa.aguardaFimAnimacoes();
-		if (jogo.getJogadorHumano() != null) {
-			mesa.mostraCartasMao11(cartasParceiro);
-			mesa.mostrarPerguntaMao11 = true;
-		}
-
-	}
-
-	public void inicioMao() {
-		valorProximaAposta = 3;
-		mesa.aguardaFimAnimacoes();
-		for (int i = 0; i <= 2; i++) {
-			mesa.resultadoRodada[i] = 0;
-		}
-		mesa.distribuiMao();
-		handler.sendMessage(Message.obtain(handler, MSG_TIRA_DESTAQUE_PLACAR));
-	}
-
-	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
-		placar[0] = placarEquipe1;
-		placar[1] = placarEquipe2;
-		handler.sendMessage(Message.obtain(handler, MSG_ATUALIZA_PLACAR,
-				placarEquipe1, placarEquipe2));
-	}
-
-	public void jogoAbortado(int posicao) {
-
-	}
-
-	public void jogoFechado(int numEquipeVencedora) {
-		mesa.aguardaFimAnimacoes();
-		mesa.diz(numEquipeVencedora == 1 ? "vitoria" : "derrota", 1, 1000);
-		mesa.aguardaFimAnimacoes();
-		handler.sendMessage(Message
-				.obtain(handler, MSG_MOSTRA_BTN_NOVA_PARTIDA));
-	}
-
-	public void maoFechada(int[] pontosEquipe) {
-		mesa.aguardaFimAnimacoes();
-		handler.sendMessage(Message.obtain(handler, MSG_ESCONDE_BOTAO_AUMENTO));
-		handler.sendMessage(Message.obtain(handler,
-				MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		handler.sendMessage(Message.obtain(handler, MSG_ATUALIZA_PLACAR,
-				pontosEquipe[0], pontosEquipe[1]));
-		mesa.aguardaFimAnimacoes();
-		mesa.recolheMao();
-
-	}
-
-	public void pediuAumentoAposta(Jogador j, int valor) {
-		mesa.aguardaFimAnimacoes();
-		mesa.diz("aumento_" + valor, j.getPosicao(), 1500 + 200 * (valor / 3));
-		Log.d("PartidaActivity", "Jogador " + j.getPosicao()
-				+ " pediu aumento ");
-		if (j.getEquipe() == 2 && jogo.getJogadorHumano() != null) {
-			Log.d("PartidaActivity", "pedindo para mostrar pergunta aumento");
-			mesa.mostrarPerguntaAumento = true;
-		}
-	}
-
-	public void recusouAumentoAposta(Jogador j) {
-		mesa.aguardaFimAnimacoes();
-		mesa.diz("aumento_nao", j.getPosicao(), 1300);
-	}
-
-	public void rodadaFechada(int numRodada, int resultado,
-			Jogador jogadorQueTorna) {
-		mesa.mostrarPerguntaMao11 = false;
-		mesa.mostrarPerguntaAumento = false;
-		mesa.aguardaFimAnimacoes();
-		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
-	}
-
-	public void vez(Jogador j, boolean podeFechada) {
-		Log.d("PartidaActivity", "vez do jogador " + j.getPosicao());
-		mesa.aguardaFimAnimacoes();
-		mesa.vaiJogarFechada = false;
-		boolean mostraBtnAumento = (j instanceof JogadorHumano)
-				&& (valorProximaAposta > 0) && (placar[0] != 11)
-				&& (placar[1] != 11);
-		boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
-				&& podeFechada;
-		handler.sendMessage(Message.obtain(handler,
-				mostraBtnAumento ? MSG_MOSTRA_BOTAO_AUMENTO
-						: MSG_ESCONDE_BOTAO_AUMENTO));
-		handler.sendMessage(Message.obtain(handler,
-				mostraBtnAbertaFechada ? MSG_MOSTRA_BOTAO_ABERTA_FECHADA
-						: MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		mesa
-				.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
-						: MesaView.STATUS_VEZ_OUTRO);
 	}
 
 }

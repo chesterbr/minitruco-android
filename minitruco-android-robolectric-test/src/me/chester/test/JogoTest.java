@@ -1,35 +1,24 @@
 package me.chester.test;
 
-import java.util.Date;
-
+import static org.mockito.Mockito.mock;
 import junit.framework.TestCase;
 import me.chester.minitruco.android.CartaVisual;
-import me.chester.minitruco.android.MenuPrincipalActivity;
 import me.chester.minitruco.android.MesaView;
-import me.chester.minitruco.android.PartidaActivity;
-import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
-import me.chester.minitruco.core.Estrategia;
-import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
-import me.chester.minitruco.core.SituacaoJogo;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.util.Log;
 
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import com.xtremelabs.robolectric.util.Implements;
-
-import static org.mockito.Mockito.*;
 
 @RunWith(RobolectricTestRunner.class)
 public class JogoTest extends TestCase {

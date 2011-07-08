@@ -1,10 +1,5 @@
 package me.chester.minitruco.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import me.chester.minitruco.android.JogadorHumano;
-
 /*
  * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
@@ -32,9 +27,6 @@ import me.chester.minitruco.android.JogadorHumano;
  * remota (<code>JogoRemoto</code>). Em qualquer caso, os objetos Jogador não
  * terão ciência de onde o jogo está se passando.
  * <p>
- * A classe também faz o log (para fins de debug). Idealmente haveria uma classe
- * para isso, mas economizamos uns Ks deixando aqui (não pode ser na classe
- * principal porque esta depende das classes MIDP, que o servidor não tem).
  * 
  * @see JogoLocal
  * @author Chester
@@ -107,7 +99,7 @@ public abstract class Jogo implements Runnable {
 	/**
 	 * Jogadores adicionados a este jogo
 	 */
-	private Jogador[] jogadores = new Jogador[4];
+	protected Jogador[] jogadores = new Jogador[4];
 
 	/**
 	 * Número de jogadores adicionados até agora
@@ -224,26 +216,21 @@ public abstract class Jogo implements Runnable {
 	}
 
 	/**
-	 * Objetos interessados em receber notificações deste jogo
-	 */
-	protected List<Interessado> interessados = new ArrayList<Interessado>();
-
-	/**
-	 * Adiciona um interessado (isto é, um jogador ou uma mesa) neste jogo.
+	 * Adiciona um jogador a este jogo.
 	 * <p>
-	 * Se for um Jogador, será colocado na próxima posição disponível. Se for
-	 * uma mesa, ficará num local à parte. Em qualquer caso, o interessado passa
-	 * a receber eventos do jogo.
+	 * Ele será colocado na próxima posição disponível, e passa a receber
+	 * eventos do jogo.
 	 * 
-	 * @param i
-	 *            Objeto interessado em ser adicionado ao jogo
-	 * @return true se adicionou o jogador, false se não conseguiu
+	 * @param jogador
+	 *            Jogador que será adicionado (CPU, humano, etc)
+	 * @return true se adicionou o jogador, false se não conseguiu (ex.: mesa
+	 *         lotada)
 	 */
-	public synchronized boolean adiciona(Interessado i) {
+	public synchronized boolean adiciona(Jogador jogador) {
 
 		// Se for jogador, só entra se a mesa ainda tiver vaga.
-		if (i instanceof Jogador) {
-			Jogador j = (Jogador) i;
+		if (jogador instanceof Jogador) {
+			Jogador j = (Jogador) jogador;
 			if (numJogadores == 4) {
 				return false;
 			}
@@ -253,9 +240,10 @@ public abstract class Jogo implements Runnable {
 		}
 
 		// Adiciona na lista e notifica a todos (incluindo ele) de sua presença
-		interessados.add(i);
-		for (Interessado interessado : interessados) {
-			interessado.entrouNoJogo(i, this);
+		for (Jogador j : jogadores) {
+			if (j != null) {
+				j.entrouNoJogo(jogador, this);
+			}
 		}
 		return true;
 
@@ -350,21 +338,10 @@ public abstract class Jogo implements Runnable {
 	 */
 	public void abortaJogo(int posicao) {
 		jogoFinalizado = true;
-		for (Interessado interessado : interessados) {
-			interessado.jogoAbortado(posicao);
-		}
-	}
-
-	/**
-	 * Recupera, se existir, o jogador humano deste jogo na posição 1
-	 * 
-	 * @return o JogadorHumano, ou <code>null</code> se não houver nenhum
-	 */
-	public JogadorHumano getJogadorHumano() {
-		if (jogadores[0] instanceof JogadorHumano) {
-			return (JogadorHumano) jogadores[0];
-		} else {
-			return null;
+		for (Jogador j : jogadores) {
+			if (j != null) {
+				j.jogoAbortado(posicao);
+			}
 		}
 	}
 
