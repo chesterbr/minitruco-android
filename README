@@ -28,14 +28,13 @@ Backlog
 Features/bugs:
 - Bug: placar piscando direto quando jogo empata na 1a. rodada
 - Issue: dá pra entender o fechada/aberta?
+- Atualizar o texto da ajuda
+- Novas frases?
 
 Débito Técnico:
-- Remover os menus aumento e aberta/fechada que ficaram sem função
-- Refactor: fazer os métodos de Mesa e Balão aguardarem o fim das animações
-    automaticamente (tirando as referências a MesaView.aguardaFimAnimacoes
-    de Partida)
-- Refactor: nomes melhores para as classes
 - Bug(?): ainda aparece a carta fechada de vez em quando para o J1
+- Refactor: Renomear o Jogo e descendentes para Partida (fazer isso quando tiver tempo, para arrumar comentários, etc.)
+- Mover strings (ex.: frases do botão de truco) para strings.xml
 
 Features 2.0:
 - Jogos multiplayer

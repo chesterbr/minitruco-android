@@ -230,6 +230,7 @@ public class MesaView extends View {
 	 */
 	public void atualizaResultadoRodada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
+		aguardaFimAnimacoes();
 		if (resultado != 3) {
 			cartaQueFez = getCartaVisual(trucoActivity.jogo
 					.getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
@@ -271,6 +272,7 @@ public class MesaView extends View {
 	 *            tempo em que ela aparecerá
 	 */
 	public void diz(String chave, int posicao, int tempoMS) {
+		aguardaFimAnimacoes();
 		mostraBalaoAte = System.currentTimeMillis() + tempoMS;
 		Resources res = getResources();
 		String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_"
@@ -422,6 +424,7 @@ public class MesaView extends View {
 	 *            um entre VEZ_HUMANO, VEZ_CPU e VEZ_HUMANO_AGUARDANDO_RESPOSTA
 	 */
 	public void setStatusVez(int vezHumano) {
+		aguardaFimAnimacoes();
 		Log.d("MesaView", "StatusVez:" + vezHumano);
 		this.statusVez = vezHumano;
 	}
@@ -434,6 +437,8 @@ public class MesaView extends View {
 	 */
 	public void distribuiMao() {
 
+		aguardaFimAnimacoes();
+		
 		// Distribui as cartas em círculo, com o humano (1) aberto
 		for (int i = 0; i <= 2; i++) {
 			for (int j = 1; j <= 4; j++) {
@@ -534,6 +539,7 @@ public class MesaView extends View {
 	 * Recolhe o vira e as cartas jogadas de volta para o baralho
 	 */
 	public void recolheMao() {
+		aguardaFimAnimacoes();
 		cartas[0].visible = false;
 		for (int i = 4; i <= 15; i++) {
 			CartaVisual c = cartas[i];
@@ -554,6 +560,8 @@ public class MesaView extends View {
 	 */
 	public void descarta(Carta c, int posicao) {
 
+		aguardaFimAnimacoes();
+		
 		// Coloca a carta no meio da tela, mas "puxando" na direção
 		// de quem jogou
 		int topFinal = getPosTopDescartada(posicao);

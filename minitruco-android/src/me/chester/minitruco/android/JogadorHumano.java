@@ -58,7 +58,6 @@ public class JogadorHumano extends Jogador {
 			// Eles aceitaram um truco, temos que esperar eles pedirem
 			valorProximaAposta = 0;
 		}
-		mesa.aguardaFimAnimacoes();
 		mesa.diz("aumento_sim", j.getPosicao(), 1500);
 		mesa.aceitouAumentoAposta(j, valor);
 	}
@@ -70,7 +69,6 @@ public class JogadorHumano extends Jogador {
 				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
 		partida.handler.sendMessage(Message.obtain(partida.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		mesa.aguardaFimAnimacoes();
 		mesa.descarta(c, j.getPosicao());
 		Log.i("Partida", "Jogador " + j.getPosicao() + " jogou " + c);
 	}
@@ -79,7 +77,6 @@ public class JogadorHumano extends Jogador {
 		if (j.getPosicao() == 3 && aceita) {
 			mesa.mostrarPerguntaMao11 = false;
 		}
-		mesa.aguardaFimAnimacoes();
 		mesa.diz(aceita ? "mao11_sim" : "mao11_nao", j.getPosicao(), 1500);
 	}
 
@@ -89,14 +86,12 @@ public class JogadorHumano extends Jogador {
 	}
 
 	public void informaMao11(Carta[] cartasParceiro) {
-		// mesa.aguardaFimAnimacoes();
 		mesa.mostraCartasMao11(cartasParceiro);
 		mesa.mostrarPerguntaMao11 = true;
 	}
 
 	public void inicioMao() {
 		valorProximaAposta = 3;
-		mesa.aguardaFimAnimacoes();
 		for (int i = 0; i <= 2; i++) {
 			mesa.resultadoRodada[i] = 0;
 		}
@@ -118,7 +113,6 @@ public class JogadorHumano extends Jogador {
 	}
 
 	public void jogoFechado(int numEquipeVencedora) {
-		mesa.aguardaFimAnimacoes();
 		mesa.diz(numEquipeVencedora == 1 ? "vitoria" : "derrota", 1, 1000);
 		mesa.aguardaFimAnimacoes();
 		partida.handler.sendMessage(Message.obtain(partida.handler,
@@ -128,7 +122,6 @@ public class JogadorHumano extends Jogador {
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
-		mesa.aguardaFimAnimacoes();
 		partida.handler.sendMessage(Message.obtain(partida.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
 		partida.handler.sendMessage(Message.obtain(partida.handler,
@@ -136,13 +129,11 @@ public class JogadorHumano extends Jogador {
 		partida.handler.sendMessage(Message.obtain(partida.handler,
 				TrucoActivity.MSG_ATUALIZA_PLACAR, pontosEquipe[0],
 				pontosEquipe[1]));
-		mesa.aguardaFimAnimacoes();
 		mesa.recolheMao();
 
 	}
 
 	public void pediuAumentoAposta(Jogador j, int valor) {
-		mesa.aguardaFimAnimacoes();
 		mesa.diz("aumento_" + valor, j.getPosicao(), 1500 + 200 * (valor / 3));
 		Log.d("TrucoActivity", "Jogador " + j.getPosicao()
 				+ " pediu aumento ");
@@ -153,7 +144,6 @@ public class JogadorHumano extends Jogador {
 	}
 
 	public void recusouAumentoAposta(Jogador j) {
-		mesa.aguardaFimAnimacoes();
 		mesa.diz("aumento_nao", j.getPosicao(), 1300);
 	}
 
@@ -161,13 +151,11 @@ public class JogadorHumano extends Jogador {
 			Jogador jogadorQueTorna) {
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
-		mesa.aguardaFimAnimacoes();
 		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {
 		Log.d("TrucoActivity", "vez do jogador " + j.getPosicao());
-		mesa.aguardaFimAnimacoes();
 		mesa.vaiJogarFechada = false;
 		boolean mostraBtnAumento = (j instanceof JogadorHumano)
 				&& (valorProximaAposta > 0) && (partida.placar[0] != 11)
