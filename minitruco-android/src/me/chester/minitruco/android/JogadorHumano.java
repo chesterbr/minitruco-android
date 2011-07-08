@@ -28,7 +28,7 @@ import android.util.Log;
 /**
  * Jogador que controla o celular.
  * <p>
- * Esta classe trabalha em conjunto com uma <code>PartidaActivity</code> e uma
+ * Esta classe trabalha em conjunto com uma <code>TrucoActivity</code> e uma
  * <code>MesaView</code>, que mostram o jogo ao usuário, capturam seu input e
  * executam as jogadas.
  * 
@@ -37,13 +37,13 @@ import android.util.Log;
  */
 public class JogadorHumano extends Jogador {
 
-	private PartidaActivity partida;
+	private TrucoActivity partida;
 
 	private MesaView mesa;
 
 	int valorProximaAposta;
 
-	public JogadorHumano(PartidaActivity partida, MesaView mesa) {
+	public JogadorHumano(TrucoActivity partida, MesaView mesa) {
 		this.partida = partida;
 		this.mesa = mesa;
 	}
@@ -67,9 +67,9 @@ public class JogadorHumano extends Jogador {
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
 		partida.handler.sendMessage(Message.obtain(partida.handler,
-				PartidaActivity.MSG_ESCONDE_BOTAO_AUMENTO));
+				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
 		partida.handler.sendMessage(Message.obtain(partida.handler,
-				PartidaActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
+				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa.aguardaFimAnimacoes();
 		mesa.descarta(c, j.getPosicao());
 		Log.i("Partida", "Jogador " + j.getPosicao() + " jogou " + c);
@@ -102,14 +102,14 @@ public class JogadorHumano extends Jogador {
 		}
 		mesa.distribuiMao();
 		partida.handler.sendMessage(Message.obtain(partida.handler,
-				PartidaActivity.MSG_TIRA_DESTAQUE_PLACAR));
+				TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
 	}
 
 	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
 		partida.placar[0] = placarEquipe1;
 		partida.placar[1] = placarEquipe2;
 		partida.handler.sendMessage(Message.obtain(partida.handler,
-				PartidaActivity.MSG_ATUALIZA_PLACAR, placarEquipe1,
+				TrucoActivity.MSG_ATUALIZA_PLACAR, placarEquipe1,
 				placarEquipe2));
 	}
 
@@ -122,7 +122,7 @@ public class JogadorHumano extends Jogador {
 		mesa.diz(numEquipeVencedora == 1 ? "vitoria" : "derrota", 1, 1000);
 		mesa.aguardaFimAnimacoes();
 		partida.handler.sendMessage(Message.obtain(partida.handler,
-				PartidaActivity.MSG_MOSTRA_BTN_NOVA_PARTIDA));
+				TrucoActivity.MSG_MOSTRA_BTN_NOVA_PARTIDA));
 		mesa = null;
 		partida = null;
 	}
@@ -130,11 +130,11 @@ public class JogadorHumano extends Jogador {
 	public void maoFechada(int[] pontosEquipe) {
 		mesa.aguardaFimAnimacoes();
 		partida.handler.sendMessage(Message.obtain(partida.handler,
-				PartidaActivity.MSG_ESCONDE_BOTAO_AUMENTO));
+				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
 		partida.handler.sendMessage(Message.obtain(partida.handler,
-				PartidaActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
+				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		partida.handler.sendMessage(Message.obtain(partida.handler,
-				PartidaActivity.MSG_ATUALIZA_PLACAR, pontosEquipe[0],
+				TrucoActivity.MSG_ATUALIZA_PLACAR, pontosEquipe[0],
 				pontosEquipe[1]));
 		mesa.aguardaFimAnimacoes();
 		mesa.recolheMao();
@@ -144,10 +144,10 @@ public class JogadorHumano extends Jogador {
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		mesa.aguardaFimAnimacoes();
 		mesa.diz("aumento_" + valor, j.getPosicao(), 1500 + 200 * (valor / 3));
-		Log.d("PartidaActivity", "Jogador " + j.getPosicao()
+		Log.d("TrucoActivity", "Jogador " + j.getPosicao()
 				+ " pediu aumento ");
 		if (j.getEquipe() == 2) {
-			Log.d("PartidaActivity", "pedindo para mostrar pergunta aumento");
+			Log.d("TrucoActivity", "pedindo para mostrar pergunta aumento");
 			mesa.mostrarPerguntaAumento = true;
 		}
 	}
@@ -166,7 +166,7 @@ public class JogadorHumano extends Jogador {
 	}
 
 	public void vez(Jogador j, boolean podeFechada) {
-		Log.d("PartidaActivity", "vez do jogador " + j.getPosicao());
+		Log.d("TrucoActivity", "vez do jogador " + j.getPosicao());
 		mesa.aguardaFimAnimacoes();
 		mesa.vaiJogarFechada = false;
 		boolean mostraBtnAumento = (j instanceof JogadorHumano)
@@ -175,14 +175,14 @@ public class JogadorHumano extends Jogador {
 		boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
 				&& podeFechada;
 		partida.handler.sendMessage(Message.obtain(partida.handler,
-				mostraBtnAumento ? PartidaActivity.MSG_MOSTRA_BOTAO_AUMENTO
-						: PartidaActivity.MSG_ESCONDE_BOTAO_AUMENTO));
+				mostraBtnAumento ? TrucoActivity.MSG_MOSTRA_BOTAO_AUMENTO
+						: TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
 		partida.handler
 				.sendMessage(Message
 						.obtain(
 								partida.handler,
-								mostraBtnAbertaFechada ? PartidaActivity.MSG_MOSTRA_BOTAO_ABERTA_FECHADA
-										: PartidaActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
+								mostraBtnAbertaFechada ? TrucoActivity.MSG_MOSTRA_BOTAO_ABERTA_FECHADA
+										: TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa
 				.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
 						: MesaView.STATUS_VEZ_OUTRO);

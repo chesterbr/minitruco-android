@@ -20,13 +20,17 @@ package me.chester.minitruco.core;
  */
 
 /**
- * Jogo em andamento (independente de estar rodando local ou remotamente).
+ * Jogo (partida) em andamento (independente de estar rodando local ou
+ * remotamente).
  * <p>
  * As implementações desta classe irão cuidar de executar o jogo (no caso de
  * <code>JogoLocal</code>) ou manter a comunicação com um jogo em execução
  * remota (<code>JogoRemoto</code>). Em qualquer caso, os objetos Jogador não
  * terão ciência de onde o jogo está se passando.
  * <p>
+ * A classe é um Runnable para permitir tanto a execução em Thread (que "viverá"
+ * o tempo de uma partida completa) quanto a chamada direta ao método run()
+ * (para rodar um teste, por exemplo).
  * 
  * @see JogoLocal
  * @author Chester

@@ -5,31 +5,21 @@
 	<supports-screens android:smallScreens="true"
 		android:normalScreens="true" android:largeScreens="true"
 		android:anyDensity="true" />
-
-
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:debuggable="false">
-		<activity android:name=".android.MenuPrincipalActivity"
+		<activity android:name=".android.TituloActivity"
 			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".android.PartidaActivity"
+		<activity android:name=".android.TrucoActivity"
 			android:label="@string/app_name" android:configChanges="keyboardHidden|orientation">
-			<intent-filter>
-				<!--
-					<action android:name="android.intent.action.MAIN" /> <category
-					android:name="android.intent.category.LAUNCHER" />
-				-->
-			</intent-filter>
 		</activity>
-
-
-		<activity android:name=".android.OpcoesActivity">
+		<activity android:name=".android.OpcoesActivity"
+			android:label="@string/app_name">
 		</activity>
 	</application>
 	<uses-sdk android:minSdkVersion="4" />
-
 </manifest> 

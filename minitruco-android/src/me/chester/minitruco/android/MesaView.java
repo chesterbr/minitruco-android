@@ -64,10 +64,10 @@ public class MesaView extends View {
 		super(context);
 	}
 
-	private PartidaActivity partidaActivity;
+	private TrucoActivity trucoActivity;
 
-	public void setPartidaActivity(PartidaActivity partidaActivity) {
-		this.partidaActivity = partidaActivity;
+	public void setTrucoActivity(TrucoActivity trucoActivity) {
+		this.trucoActivity = trucoActivity;
 	}
 
 	private Rect rectDialog;
@@ -176,7 +176,7 @@ public class MesaView extends View {
 			animacaoJogo.start();
 			respondeDialogos.start();
 			inicializada = true;
-			this.partidaActivity.criaNovoJogo();
+			this.trucoActivity.criaNovoJogo();
 		} else {
 			// Rolou um resize, reposiciona as cartas não-decorativas
 			for (int i = 0; i <= 15; i++) {
@@ -185,7 +185,7 @@ public class MesaView extends View {
 					cv.resetBitmap();
 					if (i >= 4) {
 						int numJogador = (i - 1) / 3;
-						if (partidaActivity.jogo.jogoFinalizado) {
+						if (trucoActivity.jogo.jogoFinalizado) {
 							cv.movePara(leftBaralho, topBaralho);
 						} else if (cv.descartada) {
 							cv.movePara(getPosLeftDescartada(numJogador),
@@ -231,7 +231,7 @@ public class MesaView extends View {
 	public void atualizaResultadoRodada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
 		if (resultado != 3) {
-			cartaQueFez = getCartaVisual(partidaActivity.jogo
+			cartaQueFez = getCartaVisual(trucoActivity.jogo
 					.getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
 			cartaQueFez.destacada = true;
 		}
@@ -320,8 +320,8 @@ public class MesaView extends View {
 							&& cartas[i].isDentro(event.getX(), event.getY())) {
 						statusVez = STATUS_VEZ_OUTRO;
 						cartas[i].setFechada(vaiJogarFechada);
-						partidaActivity.jogo.jogaCarta(
-								partidaActivity.jogadorHumano, cartas[i]);
+						trucoActivity.jogo.jogaCarta(
+								trucoActivity.jogadorHumano, cartas[i]);
 					}
 				}
 			}
@@ -348,11 +348,11 @@ public class MesaView extends View {
 		// postInvalidate() e outro.
 		public void run() {
 			// Aguarda o jogo existir
-			while (partidaActivity.jogo == null) {
+			while (trucoActivity.jogo == null) {
 				sleep(200);
 			}
 			// Roda até a activity-mãe se encerrar
-			while (!partidaActivity.isFinishing()) {
+			while (!trucoActivity.isFinishing()) {
 				sleep(200);
 				do {
 					if (visivel) {
@@ -378,7 +378,7 @@ public class MesaView extends View {
 		@Override
 		public void run() {
 			// Aguarda o jogo existir
-			while (partidaActivity.jogo == null) {
+			while (trucoActivity.jogo == null) {
 				try {
 					sleep(250);
 				} catch (InterruptedException e) {
@@ -386,28 +386,28 @@ public class MesaView extends View {
 				}
 			}
 			// Roda até a activity-mãe se encerrar
-			while (!partidaActivity.isFinishing()) {
+			while (!trucoActivity.isFinishing()) {
 				try {
 					sleep(250);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				Jogo jogo = partidaActivity.jogo;
+				Jogo jogo = trucoActivity.jogo;
 				if (recusarMao11) {
 					recusarMao11 = false;
-					jogo.decideMao11(partidaActivity.jogadorHumano, false);
+					jogo.decideMao11(trucoActivity.jogadorHumano, false);
 				}
 				if (aceitarMao11) {
 					aceitarMao11 = false;
-					jogo.decideMao11(partidaActivity.jogadorHumano, true);
+					jogo.decideMao11(trucoActivity.jogadorHumano, true);
 				}
 				if (recusarAumento) {
 					recusarAumento = false;
-					jogo.respondeAumento(partidaActivity.jogadorHumano, false);
+					jogo.respondeAumento(trucoActivity.jogadorHumano, false);
 				}
 				if (aceitarAumento) {
 					aceitarAumento = false;
-					jogo.respondeAumento(partidaActivity.jogadorHumano, true);
+					jogo.respondeAumento(trucoActivity.jogadorHumano, true);
 				}
 			}
 			Log.d("MesaView", "Fim thread diálogos");
@@ -416,7 +416,7 @@ public class MesaView extends View {
 	};
 
 	/**
-	 * Permite à partida informar que (não) é a vez de deixar o humano jogar
+	 * Permite à Activity informar que (não) é a vez de deixar o humano jogar
 	 * 
 	 * @param vezHumano
 	 *            um entre VEZ_HUMANO, VEZ_CPU e VEZ_HUMANO_AGUARDANDO_RESPOSTA
@@ -439,15 +439,15 @@ public class MesaView extends View {
 			for (int j = 1; j <= 4; j++) {
 				Carta c = null;
 				if (j == 1) {
-					c = partidaActivity.jogadorHumano.getCartas()[i];
+					c = trucoActivity.jogadorHumano.getCartas()[i];
 				}
 				distribui(j, i, c);
 			}
 		}
 
 		// Abre o vira, se for manilha nova
-		if (!partidaActivity.jogo.isManilhaVelha()) {
-			cartas[0].setCarta(partidaActivity.jogo.cartaDaMesa);
+		if (!trucoActivity.jogo.isManilhaVelha()) {
+			cartas[0].setCarta(trucoActivity.jogo.cartaDaMesa);
 			cartas[0].visible = true;
 		}
 

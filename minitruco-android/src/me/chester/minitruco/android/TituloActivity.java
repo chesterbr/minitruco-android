@@ -33,14 +33,14 @@ import android.view.View;
  * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-public class MenuPrincipalActivity extends Activity {
+public class TituloActivity extends Activity {
 
 	SharedPreferences preferences;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.titulo);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean mostraInstrucoes = preferences.getBoolean("mostraInstrucoes",
 				true);
@@ -56,7 +56,7 @@ public class MenuPrincipalActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main_menu, menu);
+		inflater.inflate(R.menu.titulo, menu);
 		return true;
 	}
 
@@ -86,8 +86,8 @@ public class MenuPrincipalActivity extends Activity {
 	}
 
 	public void jogarClickHandler(View v) {
-		Intent intent = new Intent(MenuPrincipalActivity.this,
-				PartidaActivity.class);
+		Intent intent = new Intent(TituloActivity.this,
+				TrucoActivity.class);
 		startActivity(intent);
 	}
 

@@ -41,16 +41,15 @@ import android.widget.TextView;
  */
 
 /**
- * Activity que efetivamente permite jogar uma partida.
+ * Activity onde os jogos (partidas) efetivamente acontecem..
  * <p>
- * A partida é exibida através de uma <code>MesaView</code>. Ela descobre o jogo
- * que tem que jogar lendo a propriedade jogo da classe
- * <code>MenuPrincipal</code>.
+ * Ela inicializa o jogo e exibe sa cartas, "balões" de texto e diálogos através
+ * de uma <code>MesaView</code>.
  * 
  * @author chester
  * 
  */
-public class PartidaActivity extends Activity {
+public class TrucoActivity extends Activity {
 
 	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
 			"NOVE!", "DOZE!!!" };
@@ -147,9 +146,9 @@ public class PartidaActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.partida);
+		setContentView(R.layout.truco);
 		mesa = ((MesaView) findViewById(R.id.MesaView01));
-		mesa.setPartidaActivity(this);
+		mesa.setTrucoActivity(this);
 		// Inicializa componentes das classes visuais que dependem de métodos
 		// disponíveis exclusivamente na Activity
 		if (MesaView.iconesRodadas == null) {
@@ -182,7 +181,7 @@ public class PartidaActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.partida_menu, menu);
+		inflater.inflate(R.menu.truco, menu);
 		return true;
 	}
 
