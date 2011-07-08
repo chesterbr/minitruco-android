@@ -438,7 +438,7 @@ public class MesaView extends View {
 	public void distribuiMao() {
 
 		aguardaFimAnimacoes();
-		
+
 		// Distribui as cartas em círculo, com o humano (1) aberto
 		for (int i = 0; i <= 2; i++) {
 			for (int j = 1; j <= 4; j++) {
@@ -561,7 +561,7 @@ public class MesaView extends View {
 	public void descarta(Carta c, int posicao) {
 
 		aguardaFimAnimacoes();
-		
+
 		// Coloca a carta no meio da tela, mas "puxando" na direção
 		// de quem jogou
 		int topFinal = getPosTopDescartada(posicao);
@@ -657,9 +657,10 @@ public class MesaView extends View {
 		// Desliga o destaque da carta que fez a rodada e escurece as cartas já
 		// descartadas (para não confundir com as próximas)
 		long agora = System.currentTimeMillis();
-		if (agora > rodadaPiscaAte && cartaQueFez != null
-				&& cartaQueFez.destacada) {
-			cartaQueFez.destacada = false;
+		if ((agora > rodadaPiscaAte) && (numRodadaPiscando > 0)) {
+			if (cartaQueFez != null) {
+				cartaQueFez.destacada = false;
+			}
 			numRodadaPiscando = 0;
 		}
 
