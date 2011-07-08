@@ -26,7 +26,6 @@ Backlog
 -------
 
 Features/bugs:
-- Bug: placar piscando direto quando jogo empata na 1a. rodada
 - Issue: dá pra entender o fechada/aberta?
 - Atualizar o texto da ajuda
 - Novas frases?
@@ -51,7 +50,7 @@ Estratégias da CPU: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto
 
 Código-fonte: http://github.com/chesterbr/minitruco-android
 
-miniTruco-android é um software livre; você pode redistribui-lo e/ou modifica-lo dentro dos termos da Licença Pública Geral GNU como publicada pela Fundação do Software Livre (FSF); na versão 3 da Licença, ou (na sua opnião) qualquer versão.
+miniTruco-android é um software livre; você pode redistribui-lo e/ou modifica-lo dentro dos termos da Licença Pública Geral GNU como publicada pela Fundação do Software Livre (FSF); na versão 3 da Licença.
 
 miniTruco-android é distribuido na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU para maiores detalhes.
 
