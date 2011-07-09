@@ -4,6 +4,8 @@ import me.chester.minitruco.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,8 +54,15 @@ public abstract class BaseActivity extends Activity {
 					.getString(R.string.texto_ajuda));
 			return true;
 		case R.id.menuitem_sobre:
-			mostraAlertBox(this.getString(R.string.titulo_sobre), this
-					.getString(R.string.texto_sobre));
+			SharedPreferences preferences = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			int partidas = preferences.getInt("statPartidas", 0);
+			int vitorias = preferences.getInt("statVitorias", 0);
+			int derrotas = preferences.getInt("statDerrotas", 0);
+			String stats = "Você já iniciou " + partidas + " partidas, ganhou "
+					+ vitorias + " e perdeu " + derrotas + ".<br/><br/>";
+			mostraAlertBox(this.getString(R.string.titulo_sobre), stats
+					+ this.getString(R.string.texto_sobre));
 			return true;
 		case R.id.menuitem_sair_titulo:
 		case R.id.menuitem_sair_truco:

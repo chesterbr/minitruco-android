@@ -3,7 +3,10 @@ package me.chester.minitruco.android;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /*
@@ -37,17 +40,18 @@ import android.util.Log;
  */
 public class JogadorHumano extends Jogador {
 
-	private TrucoActivity partida;
+	private TrucoActivity activity;
 
 	private MesaView mesa;
 
 	int valorProximaAposta;
 
 	public JogadorHumano(TrucoActivity partida, MesaView mesa) {
-		this.partida = partida;
+		this.activity = partida;
 		this.mesa = mesa;
 	}
 
+	@Override
 	public void aceitouAumentoAposta(Jogador j, int valor) {
 		if (j.getEquipe() == 1) {
 			// Nós aceitamos um truco, então podemos pedir 6, 9 ou 12
@@ -62,17 +66,19 @@ public class JogadorHumano extends Jogador {
 		mesa.aceitouAumentoAposta(j, valor);
 	}
 
+	@Override
 	public void cartaJogada(Jogador j, Carta c) {
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
-		partida.handler.sendMessage(Message.obtain(partida.handler,
+		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-		partida.handler.sendMessage(Message.obtain(partida.handler,
+		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa.descarta(c, j.getPosicao());
 		Log.i("Partida", "Jogador " + j.getPosicao() + " jogou " + c);
 	}
 
+	@Override
 	public void decidiuMao11(Jogador j, boolean aceita) {
 		if (j.getPosicao() == 3 && aceita) {
 			mesa.mostrarPerguntaMao11 = false;
@@ -85,68 +91,79 @@ public class JogadorHumano extends Jogador {
 
 	}
 
+	@Override
 	public void informaMao11(Carta[] cartasParceiro) {
 		mesa.mostraCartasMao11(cartasParceiro);
 		mesa.mostrarPerguntaMao11 = true;
 	}
 
+	@Override
 	public void inicioMao() {
 		valorProximaAposta = 3;
 		for (int i = 0; i <= 2; i++) {
 			mesa.resultadoRodada[i] = 0;
 		}
 		mesa.distribuiMao();
-		partida.handler.sendMessage(Message.obtain(partida.handler,
+		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
 	}
 
+	@Override
 	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
-		partida.placar[0] = placarEquipe1;
-		partida.placar[1] = placarEquipe2;
-		partida.handler.sendMessage(Message.obtain(partida.handler,
-				TrucoActivity.MSG_ATUALIZA_PLACAR, placarEquipe1,
-				placarEquipe2));
+		incrementaEstatistica("statPartidas");
+		activity.placar[0] = placarEquipe1;
+		activity.placar[1] = placarEquipe2;
+		activity.handler.sendMessage(Message
+				.obtain(activity.handler, TrucoActivity.MSG_ATUALIZA_PLACAR,
+						placarEquipe1, placarEquipe2));
 	}
 
+	@Override
 	public void jogoAbortado(int posicao) {
 
 	}
 
+	@Override
 	public void jogoFechado(int numEquipeVencedora) {
-		mesa.diz(numEquipeVencedora == 1 ? "vitoria" : "derrota", 1, 1000);
+		boolean ganhei = (numEquipeVencedora == 1);
+		incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
+		mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000);
 		mesa.aguardaFimAnimacoes();
-		partida.handler.sendMessage(Message.obtain(partida.handler,
+		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_MOSTRA_BTN_NOVA_PARTIDA));
 		mesa = null;
-		partida = null;
+		activity = null;
 	}
 
+	@Override
 	public void maoFechada(int[] pontosEquipe) {
-		partida.handler.sendMessage(Message.obtain(partida.handler,
+		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-		partida.handler.sendMessage(Message.obtain(partida.handler,
+		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		partida.handler.sendMessage(Message.obtain(partida.handler,
+		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ATUALIZA_PLACAR, pontosEquipe[0],
 				pontosEquipe[1]));
 		mesa.recolheMao();
 
 	}
 
+	@Override
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		mesa.diz("aumento_" + valor, j.getPosicao(), 1500 + 200 * (valor / 3));
-		Log.d("TrucoActivity", "Jogador " + j.getPosicao()
-				+ " pediu aumento ");
+		Log.d("TrucoActivity", "Jogador " + j.getPosicao() + " pediu aumento ");
 		if (j.getEquipe() == 2) {
 			Log.d("TrucoActivity", "pedindo para mostrar pergunta aumento");
 			mesa.mostrarPerguntaAumento = true;
 		}
 	}
 
+	@Override
 	public void recusouAumentoAposta(Jogador j) {
 		mesa.diz("aumento_nao", j.getPosicao(), 1300);
 	}
 
+	@Override
 	public void rodadaFechada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
 		mesa.mostrarPerguntaMao11 = false;
@@ -154,26 +171,44 @@ public class JogadorHumano extends Jogador {
 		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
 	}
 
+	@Override
 	public void vez(Jogador j, boolean podeFechada) {
 		Log.d("TrucoActivity", "vez do jogador " + j.getPosicao());
 		mesa.vaiJogarFechada = false;
 		boolean mostraBtnAumento = (j instanceof JogadorHumano)
-				&& (valorProximaAposta > 0) && (partida.placar[0] != 11)
-				&& (partida.placar[1] != 11);
+				&& (valorProximaAposta > 0) && (activity.placar[0] != 11)
+				&& (activity.placar[1] != 11);
 		boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
 				&& podeFechada;
-		partida.handler.sendMessage(Message.obtain(partida.handler,
+		activity.handler.sendMessage(Message.obtain(activity.handler,
 				mostraBtnAumento ? TrucoActivity.MSG_MOSTRA_BOTAO_AUMENTO
 						: TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-		partida.handler
+		activity.handler
 				.sendMessage(Message
 						.obtain(
-								partida.handler,
+								activity.handler,
 								mostraBtnAbertaFechada ? TrucoActivity.MSG_MOSTRA_BOTAO_ABERTA_FECHADA
 										: TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa
 				.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
 						: MesaView.STATUS_VEZ_OUTRO);
+	}
+
+	/**
+	 * Soma um a uma estatística (no. de partidas jogadas, no. de vitórias,
+	 * etc.)
+	 * 
+	 * @param chave
+	 *            identificador da estatística (ex.: "statPartidas" para número
+	 *            de partidas jogadas)
+	 */
+	private void incrementaEstatistica(String chave) {
+		SharedPreferences preferences = PreferenceManager
+				.getDefaultSharedPreferences(activity);
+		int partidas = preferences.getInt(chave, 0);
+		Editor editor = preferences.edit();
+		editor.putInt(chave, ++partidas);
+		editor.commit();
 	}
 
 }
