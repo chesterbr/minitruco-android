@@ -4,7 +4,6 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -16,7 +15,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -49,7 +47,7 @@ import android.widget.TextView;
  * @author chester
  * 
  */
-public class TrucoActivity extends Activity {
+public class TrucoActivity extends BaseActivity {
 
 	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
 			"NOVE!", "DOZE!!!" };
@@ -168,18 +166,8 @@ public class TrucoActivity extends Activity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menuitem_sair_jogo:
-			finish();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.truco, menu);
 		return true;

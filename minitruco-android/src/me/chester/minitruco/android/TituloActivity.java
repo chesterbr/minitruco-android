@@ -1,15 +1,11 @@
 package me.chester.minitruco.android;
 
 import me.chester.minitruco.R;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,7 +30,11 @@ import android.view.View;
  * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-public class TituloActivity extends Activity {
+/**
+ * Tela inicial do jogo. Permite mudar opções e inciar uma partida (
+ * <code>TrucoActivity</code>).
+ */
+public class TituloActivity extends BaseActivity {
 
 	SharedPreferences preferences;
 
@@ -56,6 +56,7 @@ public class TituloActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.titulo, menu);
 		return true;
@@ -63,23 +64,11 @@ public class TituloActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.menuitem_opcoes:
 			Intent settingsActivity = new Intent(getBaseContext(),
 					OpcoesActivity.class);
 			startActivity(settingsActivity);
-			return true;
-		case R.id.menuitem_ajuda:
-			mostraAlertBox(this.getString(R.string.titulo_ajuda), this
-					.getString(R.string.texto_ajuda));
-			return true;
-		case R.id.menuitem_sobre:
-			mostraAlertBox(this.getString(R.string.titulo_sobre), this
-					.getString(R.string.texto_sobre));
-			return true;
-		case R.id.menuitem_quit:
-			finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -94,14 +83,5 @@ public class TituloActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-	}
-
-	private void mostraAlertBox(String titulo, String texto) {
-		new AlertDialog.Builder(this).setTitle(titulo).setMessage(
-				Html.fromHtml(texto)).setNeutralButton("Ok",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).show();
 	}
 }

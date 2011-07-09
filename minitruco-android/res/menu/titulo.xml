@@ -3,13 +3,7 @@
     <item android:id="@+id/menuitem_opcoes"
           android:icon="@android:drawable/ic_menu_preferences"
           android:title="Opções" />
-    <item android:id="@+id/menuitem_ajuda"
-          android:icon="@android:drawable/ic_menu_help"
-          android:title="Ajuda" />
-    <item android:id="@+id/menuitem_sobre"
-          android:icon="@android:drawable/ic_menu_info_details"
-          android:title="Sobre" />
-    <item android:id="@+id/menuitem_quit"
+    <item android:id="@+id/menuitem_sair_titulo"
           android:icon="@android:drawable/ic_menu_close_clear_cancel"
           android:title="Sair" />
 </menu>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menuitem_sair_jogo"
-          android:icon="@android:drawable/ic_menu_close_clear_cancel"
-          android:title="Encerrar Jogo" />		
+	<item android:id="@+id/menuitem_sair_truco" android:icon="@android:drawable/ic_menu_close_clear_cancel"
+		android:title="Encerrar Jogo" />
 </menu>
