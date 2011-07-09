@@ -207,8 +207,18 @@ public class JogadorCPU extends Jogador implements Runnable {
 				sleep(1000 + random.nextInt(1000));
 				boolean respostaMao11 = false;
 				try {
-					respostaMao11 = estrategia.aceitaMao11(cartasDoParceiroDaMaoDe11,
-							situacaoJogo);
+					respostaMao11 = estrategia.aceitaMao11(
+							cartasDoParceiroDaMaoDe11, situacaoJogo);
+					// Atendendo a pedidos no Market, o parceiro do humano vai
+					// ignorar a estratégia com 90% de chance e recusar,
+					// deixando a decisão na mão do humano.
+					if (getPosicao() == 3) {
+						boolean aceitaEstrategia = random.nextInt(10) == 5;
+						Log.i("JogadorCPU",
+								"Mão de 11 do parceiro do humano. AceitaEstrategia="
+										+ aceitaEstrategia);
+						respostaMao11 = respostaMao11 && aceitaEstrategia;
+					}
 				} catch (Exception e) {
 					Log.d("JogadorCPU", "Erro em aceite-11 no jogador"
 							+ this.getPosicao(), e);
