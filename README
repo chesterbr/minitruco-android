@@ -26,12 +26,8 @@ Backlog
 -------
 
 Features/bugs:
-- Issue: dá pra entender o fechada/aberta?
-- Atualizar o texto da ajuda
-- Novas frases?
 
 Débito Técnico:
-- Bug(?): ainda aparece a carta fechada de vez em quando para o J1
 - Refactor: Renomear o Jogo e descendentes para Partida (fazer isso quando tiver tempo, para arrumar comentários, etc.)
 - Mover strings (ex.: frases do botão de truco) para strings.xml
 

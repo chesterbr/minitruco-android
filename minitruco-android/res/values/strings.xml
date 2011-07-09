@@ -9,10 +9,16 @@
 		<item>Truuuco!</item>
 		<item>Truco na cabeça!</item>
 		<item>É truco!</item>
+		<item>Truco marreco!</item>
+		<item>Truquei e tá trucado!</item>
+		<item>Truco! Pede seis!</item>
 	</string-array>
 	<string-array name="balao_aumento_6">
 		<item>Seis!</item>
 		<item>Meio-pau!</item>
+		<item>Meio-saco!</item>
+		<item>Meia-vara!</item>
+		<item>Meia-arroba!</item>
 		<item>Seeeeeis!</item>
 		<item>Seeeeis na lata!</item>
 		<item>Toma seis!</item>
@@ -22,10 +28,12 @@
 		<item>Nove!</item>
 		<item>Nooooove!</item>
 		<item>Nove na cabeça!</item>
+		<item>Ah, vem pra nove!</item>
 		<item>É nove!</item>
 	</string-array>
 	<string-array name="balao_aumento_12">
 		<item>Doze!</item>
+		<item>Doze pra acabar!</item>
 		<item>É doze!</item>
 		<item>Doze sem piedade!</item>
 	</string-array>
@@ -33,7 +41,12 @@
 		<item>Desce!</item>
 		<item>Manda bala!</item>
 		<item>Vamos nessa!</item>
+		<item>Cai.</item>
+		<item>Vem que tem!</item>
+		<item>Manda.</item>
+		<item>É facão, quero ver!</item>
 		<item>Vamos ver.</item>
+		<item>Aceito.</item>
 		<item>Quero ver.</item>
 		<item>Desce ladrão!</item>
 	</string-array>
@@ -41,16 +54,25 @@
 		<item>Tô fora.</item>
 		<item>Não quero.</item>
 		<item>Não.</item>
+		<item>Esquece.</item>
+		<item>Tá louco? Não!</item>
+		<item>Nem a pau.</item>
+		<item>Só porque você quer.</item>
 		<item>Nem pensar.</item>
 	</string-array>
 	<string-array name="balao_vitoria">
 		<item>Foi fácil demais!!!</item>
 		<item>Toooooomem!</item>
 		<item>Que lavada!</item>
+		<item>Volta pra casa!</item>
+		<item>Toma marreco!</item>
 	</string-array>
 	<string-array name="balao_derrota">
 		<item>:-(</item>
+		<item>Malditos!</item>
+		<item>Nem queria ganhar...</item>
 		<item>Ok...</item>
+		<item>A próxima é nossa.</item>
 		<item>Raios!</item>
 	</string-array>
 	<string-array name="balao_mao11_sim">
@@ -64,9 +86,29 @@
 		<item>Não.</item>
 		<item>Nem pensar.</item>
 		<item>Tô fora.</item>
+		<item>Sai fora.</item>
+		<item>Nem, manda outras.</item>
 	</string-array>
 	<string name="titulo_ajuda">Bem-vindo!</string>
-	<string name="texto_ajuda">O miniTruco é um jogo de truco em duplas. Toque a carta que quer jogar e use o menu do celular para trucar, jogar fechada, configurar baralho/manilha e ver esta tela de ajuda.\n\nVocê só pede truco na sua vez, e não pode jogar fechada na primeira rodada da mão.\n\nO truco e a mão de 11 são aceitos se qualquer membro da dupla aceitar (mesmo que o outro recuse). Se o seu parceiro aceitar, já era.\n\nBoa sorte!</string>
+	<string name="texto_ajuda">O miniTruco é um jogo de truco em duplas. \n\nVocê
+		só pede truco na sua vez, e não pode jogar fechada na primeira rodada
+		da mão.\n\nO truco e a mão de 11 são aceitos se qualquer membro da
+		dupla aceitar (mesmo que o outro recuse). Se o parceiro topar, já
+		era.\n\nBoa sorte!</string>
 	<string name="titulo_sobre">Sobre o miniTruco</string>
-	<string name="texto_sobre">miniTruco-android: Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester) - cd@pobox.com\n\nImagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)\n\nEstratégias da CPU: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto\n\nCódigo-fonte: http://github.com/chesterbr/minitruco-android\n\nminiTruco-android é um software livre; você pode redistribui-lo e/ou modifica-lo dentro dos termos da Licença Pública Geral GNU como publicada pela Fundação do Software Livre (FSF); na versão 3 da Licença.\n\nminiTruco-android é distribuido na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU para maiores detalhes.\n\nVocê deve ter recebido uma cópia da Licença Pública Geral GNU junto com miniTruco-android. Se não, veja http://www.gnu.org/licenses/licenses.pt.html\n\n</string>
+	<string name="texto_sobre">miniTruco-android: Copyright © 2005-2011 Carlos
+		Duarte do Nascimento (Chester) - cd@pobox.com\n\nImagens de carta,
+		fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino
+		(Bani)\n\nEstratégias da CPU: Copyright © 2006-2011 Leonardo Sellani,
+		Sandro Gasparotto\n\nCódigo-fonte:
+		http://github.com/chesterbr/minitruco-android\n\nminiTruco-android é
+		um software livre; você pode redistribui-lo e/ou modifica-lo dentro
+		dos termos da Licença Pública Geral GNU como publicada pela Fundação
+		do Software Livre (FSF); na versão 3 da Licença.\n\nminiTruco-android
+		é distribuido na esperança que possa ser útil, mas SEM NENHUMA
+		GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer MERCADO
+		ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU para
+		maiores detalhes.\n\nVocê deve ter recebido uma cópia da Licença
+		Pública Geral GNU junto com miniTruco-android. Se não, veja
+		http://www.gnu.org/licenses/licenses.pt.html\n\n</string>
 </resources>

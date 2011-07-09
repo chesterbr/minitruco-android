@@ -11,17 +11,24 @@
 		android:orientation="vertical" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:gravity="center_horizontal|bottom">
 
-
 		<Button android:id="@+id/btnJogar" android:layout_width="200sp"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true" android:text="Jogar"
 			android:onClick="jogarClickHandler" />
-<!-- 
-		<Button android:id="@+id/btnMultiplayer" android:layout_width="100px"
+		<TextView android:id="@+id/url_site" android:textColor="#000000"
+			android:textColorLink="#000000" android:textStyle="bold"
+			android:layout_above="@id/btnJogar" android:paddingBottom="8sp"
+			android:layout_height="wrap_content" android:layout_width="200sp"
+			android:gravity="center" android:text="http://chester.blog.br"
+			android:autoLink="web" android:linksClickable="true" />
+
+		<!--
+			<Button android:id="@+id/btnMultiplayer" android:layout_width="100px"
 			android:layout_height="wrap_content"
 			android:layout_below="@id/btnJogar" android:text="Opções"
 			android:onClick="multiplayerClickHandler" />
- -->
+		-->
 	</RelativeLayout>
+
 
 </FrameLayout>
