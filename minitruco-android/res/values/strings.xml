@@ -90,25 +90,56 @@
 		<item>Nem, manda outras.</item>
 	</string-array>
 	<string name="titulo_ajuda">Bem-vindo!</string>
-	<string name="texto_ajuda">O miniTruco é um jogo de truco em duplas. \n\nVocê
-		só pede truco na sua vez, e não pode jogar fechada na primeira rodada
-		da mão.\n\nO truco e a mão de 11 são aceitos se qualquer membro da
-		dupla aceitar (mesmo que o outro recuse). Se o parceiro topar, já
-		era.\n\nBoa sorte!</string>
+	<string name="texto_ajuda"><![CDATA[O miniTruco é jogado em duplas, com os parceiros
+		frente a frente. O objetivo é fazer a sua dupla de jogadores alcançar
+		12 pontos antes da dupla adversária.
+		<br/><br/>Cada jogador começa com uma "mão" de três cartas e, na sua vez, escolhe
+		uma para jogar. A dupla que jogou a maior carta ganha a rodada, e o
+		vencedor da rodada inicia a rodada seguinte. A dupla que vencer a
+		"melhor-de-três" entre essas rodadas ganha um ponto, e uma nova mão é
+		distribuída.
+		<br/><br/><b><u>Valor das Cartas</u></b>: Dentre as cartas normais, 4 é a menor carta, seguida de
+		5, 6, 7, Q, J, K, A, 2, e 3 é a maior de todas, sendo os naipes
+		indiferentes. No início de cada mão, uma carta é virada sobre o
+		baralho para escolher as manilhas - cartas especiais que valem mais
+		que as normais, e cujos naipes dão mais ou menos valor: o pica-fumo
+		(♦) é a menor manilha, seguida da espadilha (♠), da escopeta (♥), e do
+		zap (♣). O zap (manilha de paus) é, portanto, a carta de maior valor
+		do jogo.
+		<br/><br/><b><u>Aumento</u></b>: Na sua vez, um jogador pode pedir "truco". Se os dois adversários
+		recusarem, perdem a mão, mas se pelo menos um aceitar, a mão passa a
+		valer 3 pontos. Um adversário pode, na sua vez, pedir "seis", "nove"
+		ou "doze", aumentando a aposta da mesma forma para estes valores.<br/><br/>
+		<b><u>Empate</u></b>: Um empate na primeira ou segunda rodada é decidido pela rodada
+		seguinte. Um empate após a primeira é decidido pelo resultado da
+		primeira.
+		<br/><br/><b><u>Mão de 11</u></b>: Se uma das duplas fizer 11 pontos (mas a outra não), seus
+		membros podem ver as cartas do parceiro antes de começar o jogo. Se um
+		deles aceitar jogar, a mão vale 3 pontos. Se os dois recusarem, a
+		equipe adversária ganha um ponto, e uma nova mão é distribuída,
+		valendo as mesmas regras.
+		<br/><br/><b><u>Opções</u></b>: neste menu, você pode optar por jogar com manilha velha, isto é, as
+		manilhas são sempre 7♦ (menor), A♠, 7♥ e 4♣ (maior). Também é possível
+		jogar com baralho limpo (removendo as cartas 4, 5, 6 e 7), mas não
+		ambas as opções.<br/><br/>]]>
+	</string>
 	<string name="titulo_sobre">Sobre o miniTruco</string>
-	<string name="texto_sobre">miniTruco-android: Copyright © 2005-2011 Carlos
-		Duarte do Nascimento (Chester) - cd@pobox.com\n\nImagens de carta,
-		fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino
-		(Bani)\n\nEstratégias da CPU: Copyright © 2006-2011 Leonardo Sellani,
-		Sandro Gasparotto\n\nCódigo-fonte:
-		http://github.com/chesterbr/minitruco-android\n\nminiTruco-android é
+	<string name="texto_sobre"><![CDATA[miniTruco-android: Copyright © 2005-2011 Carlos
+		Duarte do Nascimento (Chester) - cd@pobox.com
+		<br/><br/>Imagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)
+		<br/><br/>Estratégias da CPU: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/><br/>
+		Código-fonte: http://github.com/chesterbr/minitruco-android
+		<br/><br/>miniTruco-android é
 		um software livre; você pode redistribui-lo e/ou modifica-lo dentro
 		dos termos da Licença Pública Geral GNU como publicada pela Fundação
-		do Software Livre (FSF); na versão 3 da Licença.\n\nminiTruco-android
-		é distribuido na esperança que possa ser útil, mas SEM NENHUMA
-		GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer MERCADO
-		ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU para
-		maiores detalhes.\n\nVocê deve ter recebido uma cópia da Licença
+		do Software Livre (FSF); na versão 3 da
+		Licença.
+		<br/><br/>miniTruco-android é distribuido na esperança
+		que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia
+		implicita de ADEQUAÇÂO a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR.
+		Veja a Licença Pública Geral GNU para maiores detalhes.
+		<br/><br/>Você deve ter recebido uma cópia da Licença
 		Pública Geral GNU junto com miniTruco-android. Se não, veja
-		http://www.gnu.org/licenses/licenses.pt.html\n\n</string>
+		http://www.gnu.org/licenses/licenses.pt.html<br/><br/>]]>
+	</string>
 </resources>

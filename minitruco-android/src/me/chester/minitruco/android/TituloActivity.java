@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,7 +49,7 @@ public class TituloActivity extends Activity {
 			Editor e = preferences.edit();
 			e.putBoolean("mostraInstrucoes", false);
 			e.commit();
-			alert(this.getString(R.string.titulo_ajuda), this
+			mostraAlertBox(this.getString(R.string.titulo_ajuda), this
 					.getString(R.string.texto_ajuda));
 		}
 	}
@@ -70,11 +71,11 @@ public class TituloActivity extends Activity {
 			startActivity(settingsActivity);
 			return true;
 		case R.id.menuitem_ajuda:
-			alert(this.getString(R.string.titulo_ajuda), this
+			mostraAlertBox(this.getString(R.string.titulo_ajuda), this
 					.getString(R.string.texto_ajuda));
 			return true;
 		case R.id.menuitem_sobre:
-			alert(this.getString(R.string.titulo_sobre), this
+			mostraAlertBox(this.getString(R.string.titulo_sobre), this
 					.getString(R.string.texto_sobre));
 			return true;
 		case R.id.menuitem_quit:
@@ -86,8 +87,7 @@ public class TituloActivity extends Activity {
 	}
 
 	public void jogarClickHandler(View v) {
-		Intent intent = new Intent(TituloActivity.this,
-				TrucoActivity.class);
+		Intent intent = new Intent(TituloActivity.this, TrucoActivity.class);
 		startActivity(intent);
 	}
 
@@ -96,9 +96,10 @@ public class TituloActivity extends Activity {
 		super.onResume();
 	}
 
-	private void alert(String titulo, String texto) {
-		new AlertDialog.Builder(this).setTitle(titulo).setMessage(texto)
-				.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+	private void mostraAlertBox(String titulo, String texto) {
+		new AlertDialog.Builder(this).setTitle(titulo).setMessage(
+				Html.fromHtml(texto)).setNeutralButton("Ok",
+				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 					}
 				}).show();
