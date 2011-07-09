@@ -28,9 +28,6 @@ Backlog
 Features/bugs:
 - Nenhum! \o/
 
-Sugestões a considerar:
-- Estatísitcas/score
-
 Débito Técnico:
 - Refactor: Renomear o Jogo e descendentes para Partida (fazer isso quando tiver tempo, para arrumar comentários, etc.)
 - Refactor: Trocar os loops de thread baseados em sleep por um esquema wait/notify (JogadorCPU e JogoLocal). Ou pelo menos fazer algo melhor com as InterruptedException (vide http://bit.ly/172PUX)

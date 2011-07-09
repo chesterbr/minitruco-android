@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.Menu;
@@ -59,9 +60,18 @@ public abstract class BaseActivity extends Activity {
 			int partidas = preferences.getInt("statPartidas", 0);
 			int vitorias = preferences.getInt("statVitorias", 0);
 			int derrotas = preferences.getInt("statDerrotas", 0);
-			String stats = "Você já iniciou " + partidas + " partidas, ganhou "
-					+ vitorias + " e perdeu " + derrotas + ".<br/><br/>";
-			mostraAlertBox(this.getString(R.string.titulo_sobre), stats
+			String versao;
+			try {
+				versao = getPackageManager()
+						.getPackageInfo(getPackageName(), 0).versionName;
+			} catch (NameNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+			String stats_versao = "Esta é a versão " + versao
+					+ " do jogo. Você já iniciou " + partidas
+					+ " partidas, ganhou " + vitorias + " e perdeu " + derrotas
+					+ ".<br/><br/>";
+			mostraAlertBox(this.getString(R.string.titulo_sobre), stats_versao
 					+ this.getString(R.string.texto_sobre));
 			return true;
 		case R.id.menuitem_sair_titulo:
