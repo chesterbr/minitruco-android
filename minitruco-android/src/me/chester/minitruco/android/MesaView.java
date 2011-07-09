@@ -64,19 +64,9 @@ public class MesaView extends View {
 		super(context);
 	}
 
-	private TrucoActivity trucoActivity;
-
 	public void setTrucoActivity(TrucoActivity trucoActivity) {
 		this.trucoActivity = trucoActivity;
 	}
-
-	private Rect rectDialog;
-
-	private RectF rectBotaoSim;
-
-	private RectF rectBotaoNao;
-
-	private float tamanhoFonte;
 
 	/**
 	 * Informa à mesa que uma animação começou (garantindo refreshes da tela
@@ -107,20 +97,6 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Cartas que estão na mesa, na ordem de empilhamento. cartas[0] é o vira,
-	 * cartas[1..3] são o baralho decorativo, cartas[4..6] são as do jogador na
-	 * posição 1 (inferior), cartas[7..9] o jogador 2 e assim por diante para os
-	 * jogadores 3 e 4.
-	 */
-	public CartaVisual[] cartas = new CartaVisual[16];
-
-	/**
-	 * É true se a view já está pronta para responder a solicitações do jogo
-	 * (mover cartas, acionar balões, etc)
-	 */
-	private boolean inicializada = false;
-
-	/**
 	 * Ajusta o tamanho das cartas e sua posição de acordo com a resolução.
 	 * <p>
 	 * Na primeira chamada, incializa as cartas e dá início à partida (tem que
@@ -129,17 +105,15 @@ public class MesaView extends View {
 	 */
 	@Override
 	public void onSizeChanged(int w, int h, int oldw, int oldh) {
-
+	
 		// Ajusta o tamanho da carta (tudo depende dele) ao da mesa e os
 		// "pontos de referência" importantes (baralho decorativo, tamanho do
 		// texto, etc.)
 		CartaVisual.ajustaTamanho(w, h);
 		leftBaralho = w - CartaVisual.largura - MARGEM - 4;
-		// topBaralho = h - CartaVisual.altura - MARGEM - 4;
-		// leftBaralho = MARGEM+4;
 		topBaralho = MARGEM + 4;
 		tamanhoFonte = 12.0f * (h / 270.0f);
-
+	
 		// Na primeira chamada (inicialização), instanciamos as cartas
 		if (!inicializada) {
 			for (int i = 0; i < cartas.length; i++) {
@@ -148,7 +122,7 @@ public class MesaView extends View {
 			}
 			cartas[0].visible = false;
 		}
-
+	
 		// Define posição e tamanho da caixa de diálogo e seus botões
 		int alturaDialog = CartaVisual.altura;
 		int larguraDialog = CartaVisual.largura * 3;
@@ -163,13 +137,13 @@ public class MesaView extends View {
 		rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8,
 				rectBotaoSim.top, leftDialog + larguraDialog - 8,
 				rectBotaoSim.bottom);
-
+	
 		// Posiciona o vira e as cartas decorativas do baralho, que são fixos
 		cartas[0].movePara(leftBaralho, topBaralho);
 		cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
 		cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
 		cartas[3].movePara(leftBaralho, topBaralho);
-
+	
 		if (!inicializada) {
 			// Inicia as threads internas que cuidam de animações e de responder
 			// a diálogos e faz a activity começar o jogo
@@ -188,12 +162,12 @@ public class MesaView extends View {
 						if (trucoActivity.jogo.jogoFinalizado) {
 							cv.movePara(leftBaralho, topBaralho);
 						} else if (cv.descartada) {
-							cv.movePara(getPosLeftDescartada(numJogador),
-									getPosTopDescartada(numJogador));
+							cv.movePara(calcPosLeftDescartada(numJogador),
+									calcPosTopDescartada(numJogador));
 						} else {
 							int pos = (i - 1) % 3;
-							cv.movePara(getPosLeftCarta(numJogador, pos),
-									getPosTopCarta(numJogador, pos));
+							cv.movePara(calcPosLeftCarta(numJogador, pos),
+									calcPosTopCarta(numJogador, pos));
 						}
 					}
 				}
@@ -333,6 +307,32 @@ public class MesaView extends View {
 		}
 	}
 
+	private TrucoActivity trucoActivity;
+
+	private Rect rectDialog;
+
+	private RectF rectBotaoSim;
+
+	private RectF rectBotaoNao;
+
+	private float tamanhoFonte;
+
+	/**
+	 * Cartas que estão na mesa, na ordem de empilhamento. cartas[0] é o vira,
+	 * cartas[1..3] são o baralho decorativo, cartas[4..6] são as do jogador na
+	 * posição 1 (inferior), cartas[7..9] o jogador 2 e assim por diante para os
+	 * jogadores 3 e 4.
+	 * 
+	 * TODO: refatorar esses magic numbers para algo melhor.
+	 */
+	public CartaVisual[] cartas = new CartaVisual[16];
+
+	/**
+	 * É true se a view já está pronta para responder a solicitações do jogo
+	 * (mover cartas, acionar balões, etc)
+	 */
+	private boolean inicializada = false;
+
 	private long calcTempoAteFimAnimacaoMS() {
 		return animandoAte - System.currentTimeMillis();
 	}
@@ -430,24 +430,26 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Entrega as cartas iniciais na mão de cada jogador
-	 * 
-	 * @cartas array com as três cartas do jogador na posição 1. Se
-	 *         <code>null</code>, elas vêm fechadas como as dos outros
+	 * Entrega as cartas iniciais na mão de cada jogador.
 	 */
 	public void distribuiMao() {
 
 		aguardaFimAnimacoes();
 
-		// Distribui as cartas em círculo, com o humano (1) aberto
+		// Distribui as cartas em círculo
 		for (int i = 0; i <= 2; i++) {
 			for (int j = 1; j <= 4; j++) {
-				Carta c = null;
-				if (j == 1) {
-					c = trucoActivity.jogadorHumano.getCartas()[i];
-				}
-				distribui(j, i, c);
+				CartaVisual c = cartas[4 + i + 3 * (j - 1)];
+				c.setFechada(true);
+				entregaCarta(c, j, i);
 			}
+		}
+
+		// Atribui o valor correto às cartas do jogador e exibe
+		for (int i = 0; i <= 2; i++) {
+			CartaVisual c = cartas[4 + i];
+			c.setCarta(trucoActivity.jogadorHumano.getCartas()[i]);
+			c.setFechada(false);
 		}
 
 		// Abre o vira, se for manilha nova
@@ -458,81 +460,12 @@ public class MesaView extends View {
 
 	}
 
-	/**
-	 * Entrega uma carta na posição apropriada
-	 * <p>
-	 * 
-	 * @param numJogador
-	 *            Posição do jogador, de 1 a 4 (1 = humano).
-	 * @param i
-	 *            posição da carta na mão do jogador (0 a 2)
-	 * @valor Carta (do jogo, não visual) que foi jogada. Se <code>null</code>,
-	 *        entrega fechada (sem valor)
-	 */
-	private void distribui(int numJogador, int i, Carta carta) {
-		if (numJogador == 3 || numJogador == 4) {
-			// Inverte a ordem para fins estéticos
-			i = 2 - i;
-		} else if (numJogador == 1) {
-			carta.setFechada(false);
+	public void aceitouAumentoAposta(Jogador j, int valor) {
+		Log.d("MesaView", "Jogador " + j.getPosicao()
+				+ " aceitou aumento para " + valor + ", liberando");
+		if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
+			statusVez = STATUS_VEZ_HUMANO_OK;
 		}
-
-		// Adiciona a carta na mesa, em cima do baralho, e anima até a posição
-		CartaVisual c = cartas[4 + i + 3 * (numJogador - 1)];
-		c.setCarta(carta);
-		// c.movePara(topBaralho, leftBaralho);
-		c.movePara(getPosLeftCarta(numJogador, i),
-				getPosTopCarta(numJogador, i), 150);
-	}
-
-	/**
-	 * 
-	 * @param numJogador
-	 * @param i
-	 * @return Posição (x) da i-ésima carta na mão do jogador em questão
-	 */
-	private int getPosLeftCarta(int numJogador, int i) {
-		int deslocamentoHorizontalEntreCartas = CartaVisual.largura * 7 / 8;
-		int leftFinal = 0;
-		switch (numJogador) {
-		case 1:
-		case 3:
-			leftFinal = (getWidth() / 2) - (CartaVisual.largura / 2) + (i - 1)
-					* deslocamentoHorizontalEntreCartas;
-			break;
-		case 2:
-			leftFinal = getWidth() - CartaVisual.largura - MARGEM;
-			break;
-		case 4:
-			leftFinal = MARGEM;
-			break;
-		}
-		return leftFinal;
-	}
-
-	/**
-	 * 
-	 * @param numJogador
-	 * @param i
-	 * @return Posição (y) da i-ésima carta na mão do jogador em questão
-	 */
-	private int getPosTopCarta(int numJogador, int i) {
-		int deslocamentoVerticalEntreCartas = 4;
-		int topFinal = 0;
-		switch (numJogador) {
-		case 1:
-			topFinal = getHeight() - (CartaVisual.altura + MARGEM);
-			break;
-		case 2:
-		case 4:
-			topFinal = getHeight() / 2 - CartaVisual.altura / 2 - (i - 1)
-					* deslocamentoVerticalEntreCartas;
-			break;
-		case 3:
-			topFinal = MARGEM;
-			break;
-		}
-		return topFinal;
 	}
 
 	/**
@@ -564,8 +497,8 @@ public class MesaView extends View {
 
 		// Coloca a carta no meio da tela, mas "puxando" na direção
 		// de quem jogou
-		int topFinal = getPosTopDescartada(posicao);
-		int leftFinal = getPosLeftDescartada(posicao);
+		int topFinal = calcPosTopDescartada(posicao);
+		int leftFinal = calcPosLeftDescartada(posicao);
 
 		// Pega uma carta visual naquela posição...
 		CartaVisual cv = null;
@@ -591,6 +524,10 @@ public class MesaView extends View {
 
 	}
 
+	public void setVisivel(boolean visivel) {
+		this.visivel = visivel;
+	}
+
 	/**
 	 * 
 	 * @param numJogador
@@ -598,9 +535,7 @@ public class MesaView extends View {
 	 *         tela, mas puxando para a direçãod dele com um breve distúrbio
 	 *         aleatório)
 	 */
-	private int getPosLeftDescartada(int numJogador) {
-		// Coloca a carta no meio da tela, mas "puxando" na direção
-		// de quem jogou
+	private int calcPosLeftDescartada(int numJogador) {
 		int leftFinal;
 		leftFinal = getWidth() / 2 - CartaVisual.largura / 2;
 		if (numJogador == 2) {
@@ -608,9 +543,77 @@ public class MesaView extends View {
 		} else if (numJogador == 4) {
 			leftFinal -= CartaVisual.largura;
 		}
-		// Insere um ligeiro fator aleatório, para dar uma bagunçada na mesa
 		leftFinal += System.currentTimeMillis() % 5 - 2;
 		return leftFinal;
+	}
+
+	/**
+	 * Exibe uma carta na posição apropriada, animando
+	 * <p>
+	 * 
+	 * @param numJogador
+	 *            Posição do jogador, de 1 a 4 (1 = humano).
+	 * @param posicao
+	 *            posição da carta na mão do jogador (0 a 2)
+	 * 
+	 * @carta Carta a distribuir
+	 */
+	private void entregaCarta(CartaVisual carta, int numJogador, int posicao) {
+		if (numJogador == 3 || numJogador == 4) {
+			posicao = 2 - posicao;
+		}
+		carta.movePara(calcPosLeftCarta(numJogador, posicao), calcPosTopCarta(
+				numJogador, posicao), 150);
+	}
+
+	/**
+	 * 
+	 * @param numJogador
+	 * @param i
+	 * @return Posição (x) da i-ésima carta na mão do jogador em questão
+	 */
+	private int calcPosLeftCarta(int numJogador, int i) {
+		int deslocamentoHorizontalEntreCartas = CartaVisual.largura * 7 / 8;
+		int leftFinal = 0;
+		switch (numJogador) {
+		case 1:
+		case 3:
+			leftFinal = (getWidth() / 2) - (CartaVisual.largura / 2) + (i - 1)
+					* deslocamentoHorizontalEntreCartas;
+			break;
+		case 2:
+			leftFinal = getWidth() - CartaVisual.largura - MARGEM;
+			break;
+		case 4:
+			leftFinal = MARGEM;
+			break;
+		}
+		return leftFinal;
+	}
+
+	/**
+	 * 
+	 * @param numJogador
+	 * @param i
+	 * @return Posição (y) da i-ésima carta na mão do jogador em questão
+	 */
+	private int calcPosTopCarta(int numJogador, int i) {
+		int deslocamentoVerticalEntreCartas = 4;
+		int topFinal = 0;
+		switch (numJogador) {
+		case 1:
+			topFinal = getHeight() - (CartaVisual.altura + MARGEM);
+			break;
+		case 2:
+		case 4:
+			topFinal = getHeight() / 2 - CartaVisual.altura / 2 - (i - 1)
+					* deslocamentoVerticalEntreCartas;
+			break;
+		case 3:
+			topFinal = MARGEM;
+			break;
+		}
+		return topFinal;
 	}
 
 	/**
@@ -620,7 +623,7 @@ public class MesaView extends View {
 	 *         tela, mas puxando para a direçãod dele com um breve distúrbio
 	 *         aleatório)
 	 */
-	private int getPosTopDescartada(int numJogador) {
+	private int calcPosTopDescartada(int numJogador) {
 		int topFinal;
 		topFinal = getHeight() / 2 - CartaVisual.altura / 2;
 		if (numJogador == 1) {
@@ -920,20 +923,8 @@ public class MesaView extends View {
 
 	}
 
-	public void aceitouAumentoAposta(Jogador j, int valor) {
-		Log.d("MesaView", "Jogador " + j.getPosicao()
-				+ " aceitou aumento para " + valor + ", liberando");
-		if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
-			statusVez = STATUS_VEZ_HUMANO_OK;
-		}
-	}
-
 	private boolean visivel = false;
 
 	public boolean vaiJogarFechada;
-
-	public void setVisivel(boolean visivel) {
-		this.visivel = visivel;
-	}
 
 }
