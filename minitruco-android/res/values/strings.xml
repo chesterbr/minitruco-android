@@ -118,10 +118,11 @@
 		deles aceitar jogar, a mão vale 3 pontos. Se os dois recusarem, a
 		equipe adversária ganha um ponto, e uma nova mão é distribuída,
 		valendo as mesmas regras.
-		<br/><br/><b><u>Opções</u></b>: neste menu, você pode optar por jogar com manilha velha, isto é, as
-		manilhas são sempre 7♦ (menor), A♠, 7♥ e 4♣ (maior). Também é possível
-		jogar com baralho limpo (removendo as cartas 4, 5, 6 e 7), mas não
-		ambas as opções.<br/><br/>]]>
+		<br/><br/><b><u>Opções</u></b>: neste menu, você pode optar por um baralho "limpo"
+		 (sem as cartas 4, 5, 6 e 7) ou pela manilha velha, isto é, as
+		manilhas sendo sempre 7♦ (menor), A♠, 7♥ e 4♣ (maior). A manilha velha também
+		permite acionar a contagem de pontos (tentos) do truco mineiro (4, 8, 10 e 12 pontos
+		nos aumentos e "mão de 11" nos 10 pontos).<br/><br/>]]>
 	</string>
 	<string name="titulo_sobre">Sobre o miniTruco</string>
 	<string name="texto_sobre"><![CDATA[miniTruco-android: Copyright © 2005-2011 Carlos
