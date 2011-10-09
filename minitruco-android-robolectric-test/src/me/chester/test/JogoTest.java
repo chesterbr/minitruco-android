@@ -138,7 +138,7 @@ public class JogoTest extends TestCase {
 
 	@Test
 	public void testJogoSemNenhumAumento() {
-		Jogo jogo = new JogoLocal(false, false);
+		Jogo jogo = new JogoLocal(false, false, false);
 		assertTrue(jogo.adiciona(new JogadorMock()));
 		assertTrue(jogo.adiciona(new JogadorMock()));
 		assertTrue(jogo.adiciona(new JogadorMock()));
@@ -152,7 +152,7 @@ public class JogoTest extends TestCase {
 
 	@Test
 	public void testJogoCom1CPUeOutrosSempreAceitamAumento() {
-		Jogo jogo = new JogoLocal(false, false);
+		Jogo jogo = new JogoLocal(false, false, false);
 		assertTrue(jogo.adiciona(new JogadorMock()));
 		assertTrue(jogo.adiciona(new JogadorMock()));
 		assertTrue(jogo.adiciona(new JogadorMock()));
@@ -163,7 +163,7 @@ public class JogoTest extends TestCase {
 
 	@Test
 	public void testMaoDe11Com1CPU() {
-		JogoLocal jogo = new JogoLocal(false, false);
+		JogoLocal jogo = new JogoLocal(false, false, false);
 		jogo.setPlacar(0, 11);
 		assertTrue(jogo.adiciona(new JogadorMock()));
 		assertTrue(jogo.adiciona(new JogadorMock()));
@@ -171,7 +171,7 @@ public class JogoTest extends TestCase {
 		assertTrue(jogo.adiciona(new JogadorCPU()));
 		assertFalse(jogo.adiciona(new JogadorMock()));
 		jogo.run();
-		jogo = new JogoLocal(false, false);
+		jogo = new JogoLocal(false, false, false);
 		jogo.setPlacar(11, 0);
 		assertTrue(jogo.adiciona(new JogadorMock()));
 		assertTrue(jogo.adiciona(new JogadorMock()));
@@ -179,7 +179,7 @@ public class JogoTest extends TestCase {
 		assertTrue(jogo.adiciona(new JogadorCPU()));
 		assertFalse(jogo.adiciona(new JogadorMock()));
 		jogo.run();
-		jogo = new JogoLocal(false, false);
+		jogo = new JogoLocal(false, false, false);
 		jogo.setPlacar(11, 11);
 		assertTrue(jogo.adiciona(new JogadorMock()));
 		assertTrue(jogo.adiciona(new JogadorMock()));
@@ -191,7 +191,7 @@ public class JogoTest extends TestCase {
 
 	@Test
 	public void testJogoCom4CPU() {
-		Jogo jogo = new JogoLocal(false, false);
+		Jogo jogo = new JogoLocal(false, false, false);
 		assertTrue(jogo.adiciona(new JogadorCPU()));
 		assertTrue(jogo.adiciona(new JogadorCPU()));
 		assertTrue(jogo.adiciona(new JogadorCPU()));
