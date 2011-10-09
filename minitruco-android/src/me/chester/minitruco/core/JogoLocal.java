@@ -54,8 +54,7 @@ public class JogoLocal extends Jogo {
 			boolean tentoMineiro) {
 		this.manilhaVelha = manilhaVelha;
 		this.baralhoLimpo = baralhoLimpo;
-		this.tentoMineiro = tentoMineiro;
-		if(tentoMineiro)
+		if (tentoMineiro && manilhaVelha)
 			this.tento = new TentoMineiro();
 		else
 			this.tento = new TentoPaulista();
@@ -78,12 +77,11 @@ public class JogoLocal extends Jogo {
 		this.baralho = baralho;
 	}
 
-
 	/**
 	 * Forma de tento que será usado durante esse jogo
 	 */
 	private Tento tento;
-	
+
 	/**
 	 * Baralho que será usado durante esse jogo
 	 */
@@ -150,7 +148,7 @@ public class JogoLocal extends Jogo {
 	 */
 	private Carta cartaJogada;
 
-	private boolean manilhaVelha, baralhoLimpo, tentoMineiro;
+	private boolean manilhaVelha, baralhoLimpo;
 
 	/*
 	 * (non-Javadoc)
@@ -209,7 +207,7 @@ public class JogoLocal extends Jogo {
 
 		// Inicializa a mão
 		valorMao = tento.inicializaMao();
-		
+
 		jogadorPedindoAumento = null;
 		numRodadaAtual = 1;
 		jogadorAbriuMao = jogadorAbriuRodada = jogadorQueAbre;
@@ -223,7 +221,8 @@ public class JogoLocal extends Jogo {
 			interessado.inicioMao();
 		}
 
-		if (pontosEquipe[0] == tento.valorPenultimaMao() ^ pontosEquipe[1] == tento.valorPenultimaMao()) {
+		if (pontosEquipe[0] == tento.valorPenultimaMao()
+				^ pontosEquipe[1] == tento.valorPenultimaMao()) {
 			// Se apenas uma das equipes tiver 11 pontos, estamos numa
 			// "mão de 11": os membros da equipe podem ver as cartas do parceiro
 			// e decidir se querem jogar (valendo 3 pontos) ou desistir
@@ -418,7 +417,8 @@ public class JogoLocal extends Jogo {
 		}
 
 		// Se ainda estivermos em jogo, incia a nova mao
-		if (pontosEquipe[0] <= tento.valorPenultimaMao() && pontosEquipe[1] <= tento.valorPenultimaMao()) {
+		if (pontosEquipe[0] <= tento.valorPenultimaMao()
+				&& pontosEquipe[1] <= tento.valorPenultimaMao()) {
 			int posAbre = jogadorAbriuMao.getPosicao() + 1;
 			if (posAbre == 5)
 				posAbre = 1;
@@ -485,7 +485,8 @@ public class JogoLocal extends Jogo {
 			// Se recusou (e o parceiro também), a equipe perde um ponto e
 			// recomeça a mao
 			if (!aguardandoRespostaMaoDe11[j.getParceiro() - 1]) {
-				pontosEquipe[j.getEquipeAdversaria() - 1] += tento.inicializaMao();
+				pontosEquipe[j.getEquipeAdversaria() - 1] += tento
+						.inicializaMao();
 				fechaMao();
 			}
 		}
@@ -578,7 +579,6 @@ public class JogoLocal extends Jogo {
 		aguardandoRespostaMaoDe11[0] = aguardandoRespostaMaoDe11[2] = (i == 1);
 		aguardandoRespostaMaoDe11[1] = aguardandoRespostaMaoDe11[3] = (i == 2);
 	}
-
 
 	private int getResultadoRodada(int mao) {
 		return resultadoRodada[mao - 1];
