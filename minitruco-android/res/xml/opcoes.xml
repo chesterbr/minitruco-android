@@ -5,5 +5,6 @@
 		android:key="baralhoLimpo" />
 	<CheckBoxPreference android:title="Manilha Velha" android:dependency="baralhoLimpo"
 		android:defaultValue="false" android:summary="Usa manilhas fixas no lugar do &quot;vira&quot; (só vale em baralho sujo)"
-		android:key="manilhaVelha" />
+		android:key="manilhaVelha" android:disableDependentsState="false"/>
+	<CheckBoxPreference android:title="Tento Mineiro" android:key="tentoMineiro" android:dependency="manilhaVelha" android:defaultValue="false" android:summary="Usa os valores 2, 4, 6, 8, 10, 12 (só vale com manilha velha)"/>
 </PreferenceScreen>

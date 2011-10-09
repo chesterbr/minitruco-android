@@ -50,9 +50,15 @@ public class JogoLocal extends Jogo {
 	 *            true para baralho sem os 4, 5, 6, 7, false para baralho
 	 *            completo (sujo)
 	 */
-	public JogoLocal(boolean baralhoLimpo, boolean manilhaVelha) {
+	public JogoLocal(boolean baralhoLimpo, boolean manilhaVelha,
+			boolean tentoMineiro) {
 		this.manilhaVelha = manilhaVelha;
 		this.baralhoLimpo = baralhoLimpo;
+		this.tentoMineiro = tentoMineiro;
+		if(tentoMineiro)
+			this.tento = new TentoMineiro();
+		else
+			this.tento = new TentoPaulista();
 		this.baralho = new Baralho(baralhoLimpo);
 	}
 
@@ -72,6 +78,12 @@ public class JogoLocal extends Jogo {
 		this.baralho = baralho;
 	}
 
+
+	/**
+	 * Forma de tento que será usado durante esse jogo
+	 */
+	private Tento tento;
+	
 	/**
 	 * Baralho que será usado durante esse jogo
 	 */
@@ -138,7 +150,7 @@ public class JogoLocal extends Jogo {
 	 */
 	private Carta cartaJogada;
 
-	private boolean manilhaVelha, baralhoLimpo;
+	private boolean manilhaVelha, baralhoLimpo, tentoMineiro;
 
 	/*
 	 * (non-Javadoc)
@@ -196,7 +208,8 @@ public class JogoLocal extends Jogo {
 		setManilha(cartaDaMesa);
 
 		// Inicializa a mão
-		valorMao = 1;
+		valorMao = tento.inicializaMao();
+		
 		jogadorPedindoAumento = null;
 		numRodadaAtual = 1;
 		jogadorAbriuMao = jogadorAbriuRodada = jogadorQueAbre;
@@ -210,12 +223,12 @@ public class JogoLocal extends Jogo {
 			interessado.inicioMao();
 		}
 
-		if (pontosEquipe[0] == 11 ^ pontosEquipe[1] == 11) {
+		if (pontosEquipe[0] == tento.valorPenultimaMao() ^ pontosEquipe[1] == tento.valorPenultimaMao()) {
 			// Se apenas uma das equipes tiver 11 pontos, estamos numa
 			// "mão de 11": os membros da equipe podem ver as cartas do parceiro
 			// e decidir se querem jogar (valendo 3 pontos) ou desistir
 			// (perdendo 1)
-			if (pontosEquipe[0] == 11) {
+			if (pontosEquipe[0] == tento.valorPenultimaMao()) {
 				setEquipeAguardandoMao11(1);
 				getJogador(1).informaMao11(getJogador(3).getCartas());
 				getJogador(3).informaMao11(getJogador(1).getCartas());
@@ -395,17 +408,17 @@ public class JogoLocal extends Jogo {
 
 		for (Jogador interessado : jogadores) {
 			interessado.maoFechada(pontosEquipe);
-			if (pontosEquipe[0] > 11) {
+			if (pontosEquipe[0] > tento.valorPenultimaMao()) {
 				interessado.jogoFechado(1);
 				jogoFinalizado = true;
-			} else if (pontosEquipe[1] > 11) {
+			} else if (pontosEquipe[1] > tento.valorPenultimaMao()) {
 				interessado.jogoFechado(2);
 				jogoFinalizado = true;
 			}
 		}
 
 		// Se ainda estivermos em jogo, incia a nova mao
-		if (pontosEquipe[0] <= 11 && pontosEquipe[1] <= 11) {
+		if (pontosEquipe[0] <= tento.valorPenultimaMao() && pontosEquipe[1] <= tento.valorPenultimaMao()) {
 			int posAbre = jogadorAbriuMao.getPosicao() + 1;
 			if (posAbre == 5)
 				posAbre = 1;
@@ -466,13 +479,13 @@ public class JogoLocal extends Jogo {
 			// Se aceitou, desencana da resposta do parceiro e pode tocar o
 			// jogo, valendo 3
 			aguardandoRespostaMaoDe11[j.getParceiro() - 1] = false;
-			valorMao = 3;
+			valorMao = tento.inicializaPenultimaMao();
 			notificaVez();
 		} else {
 			// Se recusou (e o parceiro também), a equipe perde um ponto e
 			// recomeça a mao
 			if (!aguardandoRespostaMaoDe11[j.getParceiro() - 1]) {
-				pontosEquipe[j.getEquipeAdversaria() - 1]++;
+				pontosEquipe[j.getEquipeAdversaria() - 1] += tento.inicializaMao();
 				fechaMao();
 			}
 		}
@@ -501,7 +514,8 @@ public class JogoLocal extends Jogo {
 		jogadorPedindoAumento = j;
 		for (int i = 0; i <= 3; i++)
 			recusouAumento[i] = false;
-		int valor = calcValorAumento();
+
+		int valor = tento.calcValorMao(valorMao);
 
 		// Notifica os interessados
 		for (Jogador interessado : jogadores) {
@@ -531,7 +545,7 @@ public class JogoLocal extends Jogo {
 		if (aceitou) {
 			// Se o jogador aceitou, seta o novo valor, notifica a galera e tira
 			// o jogo da situtação de truco
-			valorMao = calcValorAumento();
+			valorMao = tento.calcValorTento(valorMao);
 			jogadorPedindoAumento = null;
 			for (Jogador interessado : jogadores) {
 				interessado.aceitouAumentoAposta(j, valorMao);
@@ -565,25 +579,6 @@ public class JogoLocal extends Jogo {
 		aguardandoRespostaMaoDe11[1] = aguardandoRespostaMaoDe11[3] = (i == 2);
 	}
 
-	/**
-	 * Calcula para quanto vai a rodada se for pedido aumento de aposta (truco,
-	 * seis, etc.)
-	 * 
-	 * @return valor numérico da rodada se for aceito o pedido
-	 */
-	private int calcValorAumento() {
-		switch (valorMao) {
-		case 1:
-			return 3;
-		case 3:
-			return 6;
-		case 6:
-			return 9;
-		case 9:
-			return 12;
-		}
-		return 0;
-	}
 
 	private int getResultadoRodada(int mao) {
 		return resultadoRodada[mao - 1];
@@ -667,8 +662,8 @@ public class JogoLocal extends Jogo {
 				if (c == null) {
 					s.cartasJogadas[i][k] = null;
 				} else if (s.cartasJogadas[i][k] == null) {
-					s.cartasJogadas[i][k] = new Carta(c.getLetra(), c
-							.getNaipe());
+					s.cartasJogadas[i][k] = new Carta(c.getLetra(),
+							c.getNaipe());
 				} else {
 					s.cartasJogadas[i][k].setLetra(c.getLetra());
 					s.cartasJogadas[i][k].setNaipe(c.getNaipe());

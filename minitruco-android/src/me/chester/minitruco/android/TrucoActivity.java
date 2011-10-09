@@ -129,10 +129,11 @@ public class TrucoActivity extends BaseActivity {
 	public void criaNovoJogo() {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
+		boolean tentoMineiro = preferences.getBoolean("tentoMineiro", false);
 		boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
 		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
 				&& !baralhoLimpo;
-		jogo = new JogoLocal(baralhoLimpo, manilhaVelha);
+		jogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro);
 		jogadorHumano = new JogadorHumano(this, mesa);
 		jogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {

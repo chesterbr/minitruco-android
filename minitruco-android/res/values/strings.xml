@@ -2,7 +2,7 @@
 <resources>
 	<string name="hello">Use o log (adb logcat no SDK) para debugar</string>
 	<string name="app_name">miniTruco</string>
-	<string-array name="balao_aumento_3">
+	<string-array name="balao_aumento_1">
 		<item>Truco!</item>
 		<item>Truco ladrão!</item>
 		<item>É truco mesmo!</item>
@@ -13,7 +13,7 @@
 		<item>Truquei e tá trucado!</item>
 		<item>Truco! Pede seis!</item>
 	</string-array>
-	<string-array name="balao_aumento_6">
+	<string-array name="balao_aumento_2">
 		<item>Seis!</item>
 		<item>Meio-pau!</item>
 		<item>Meio-saco!</item>
@@ -24,14 +24,14 @@
 		<item>Toma seis!</item>
 		<item>SEEEEEEEEIS</item>
 	</string-array>
-	<string-array name="balao_aumento_9">
+	<string-array name="balao_aumento_3">
 		<item>Nove!</item>
 		<item>Nooooove!</item>
 		<item>Nove na cabeça!</item>
 		<item>Ah, vem pra nove!</item>
 		<item>É nove!</item>
 	</string-array>
-	<string-array name="balao_aumento_12">
+	<string-array name="balao_aumento_4">
 		<item>Doze!</item>
 		<item>Doze pra acabar!</item>
 		<item>É doze!</item>
@@ -126,6 +126,7 @@
 	<string name="titulo_sobre">Sobre o miniTruco</string>
 	<string name="texto_sobre"><![CDATA[miniTruco-android: Copyright © 2005-2011 Carlos
 		Duarte do Nascimento (Chester) - cd@pobox.com
+		<br/><br/>Tento mineiro: Copyright © 2011-2011 Guilherme Caram
 		<br/><br/>Imagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)
 		<br/><br/>Estratégias da CPU: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/><br/>
 		Código-fonte: http://github.com/chesterbr/minitruco-android
