@@ -286,7 +286,7 @@ public class CartaVisual extends Carta {
 	 *            string que representa o bitmap. Ex.: "Ko" para rei de ouros.
 	 * @return ID de resource do bitmap
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private static int getCartaResourceByValor(String valor) {
 		valor = valor.toLowerCase();
 		try {
