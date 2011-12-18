@@ -1,9 +1,18 @@
-minitruco-android/bin
-minitruco-android/gen
-minitruco-android/tmp
-minitruco-android-test/bin
-minitruco-android-test/gen
-minitruco-android-robolectric-test/bin
-minitruco-android-robolectric-test/gen
-minitruco-android-robolectric-test/tmp
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+tmp/
+
+# Local configuration file (sdk path, etc)
+local.properties
 .DS_Store

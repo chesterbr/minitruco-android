@@ -1,11 +1,13 @@
 package me.chester.minitruco.android;
 
 import me.chester.minitruco.R;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,11 +39,13 @@ import android.view.View;
 public class TituloActivity extends BaseActivity {
 
 	SharedPreferences preferences;
+	private Class<?> classeBluetoothActivity;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.titulo);
+		habilitaBluetoothSeExistir();
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean mostraInstrucoes = preferences.getBoolean("mostraInstrucoes",
 				true);
@@ -49,9 +53,21 @@ public class TituloActivity extends BaseActivity {
 			Editor e = preferences.edit();
 			e.putBoolean("mostraInstrucoes", false);
 			e.commit();
-			mostraAlertBox(this.getString(R.string.titulo_ajuda), this
-					.getString(R.string.texto_ajuda));
+			mostraAlertBox(this.getString(R.string.titulo_ajuda),
+					this.getString(R.string.texto_ajuda));
 		}
+	}
+
+	private void habilitaBluetoothSeExistir() {
+		try {
+			if (BluetoothAdapter.getDefaultAdapter() != null) {
+				classeBluetoothActivity = Class
+						.forName("me.chester.minitruco.android.bluetooth.BluetoothActivity");
+			}
+		} catch (Exception e) {
+			return;
+		}
+
 	}
 
 	@Override
@@ -63,12 +79,24 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.findItem(R.id.menuitem_bluetooth).setVisible(
+				classeBluetoothActivity != null);
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menuitem_opcoes:
 			Intent settingsActivity = new Intent(getBaseContext(),
 					OpcoesActivity.class);
 			startActivity(settingsActivity);
+			return true;
+		case R.id.menuitem_bluetooth:
+			Intent bluetoothActivity = new Intent(getBaseContext(),
+					classeBluetoothActivity);
+			startActivity(bluetoothActivity);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
