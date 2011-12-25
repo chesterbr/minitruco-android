@@ -1,6 +1,5 @@
 package me.chester.minitruco.core;
 
-import me.chester.minitruco.core.Carta;
 
 /*
  * Copyright © 2005-2011 Carlos Duarte do Nascimento (Chester)

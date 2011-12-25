@@ -1,13 +1,17 @@
 package me.chester.minitruco.android;
 
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.bluetooth.ServidorActivity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,7 +43,7 @@ import android.view.View;
 public class TituloActivity extends BaseActivity {
 
 	SharedPreferences preferences;
-	private Class<?> classeBluetoothActivity;
+	Boolean mostrarMenuBluetooth;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,15 +63,7 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	private void habilitaBluetoothSeExistir() {
-		try {
-			if (BluetoothAdapter.getDefaultAdapter() != null) {
-				classeBluetoothActivity = Class
-						.forName("me.chester.minitruco.android.bluetooth.BluetoothActivity");
-			}
-		} catch (Exception e) {
-			return;
-		}
-
+		mostrarMenuBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
 	}
 
 	@Override
@@ -80,8 +76,7 @@ public class TituloActivity extends BaseActivity {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.findItem(R.id.menuitem_bluetooth).setVisible(
-				classeBluetoothActivity != null);
+		menu.findItem(R.id.menuitem_bluetooth).setVisible(mostrarMenuBluetooth);
 		return true;
 	}
 
@@ -94,13 +89,34 @@ public class TituloActivity extends BaseActivity {
 			startActivity(settingsActivity);
 			return true;
 		case R.id.menuitem_bluetooth:
-			Intent bluetoothActivity = new Intent(getBaseContext(),
-					classeBluetoothActivity);
-			startActivity(bluetoothActivity);
+			perguntaCriarOuProcurarBluetooth();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void perguntaCriarOuProcurarBluetooth() {
+		OnClickListener listener = new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case AlertDialog.BUTTON_POSITIVE:
+					startActivity(new Intent(TituloActivity.this,
+							ServidorActivity.class));
+					break;
+				case AlertDialog.BUTTON_NEGATIVE:
+					// TODO
+				}
+			}
+		};
+		new AlertDialog.Builder(this).setTitle("Bluetooth")
+				.setPositiveButton("Criar Jogo", listener)
+				.setNegativeButton("Procurar Jogo", listener)
+				.setOnCancelListener(new OnCancelListener() {
+					public void onCancel(DialogInterface dialog) {
+						finish();
+					}
+				}).show();
 	}
 
 	public void jogarClickHandler(View v) {
