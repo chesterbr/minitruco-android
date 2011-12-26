@@ -5,7 +5,10 @@ import java.util.UUID;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.BaseActivity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 /**
@@ -15,9 +18,8 @@ import android.os.Bundle;
 public abstract class BluetoothActivity extends BaseActivity implements
 		Runnable {
 
-	private static final int REQUEST_ENABLE_BT = 1;
+	protected static final byte[] SEPARADOR_ENV = "**".getBytes();
 	protected BluetoothAdapter btAdapter;
-	private Thread threadConexao;
 	/**
 	 * Identificadores Bluetooth do "serviço miniTruco"
 	 */
@@ -30,40 +32,6 @@ public abstract class BluetoothActivity extends BaseActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.bluetooth);
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
-	}
-
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		ensureBluetoothAndStartThread();
-	}
-
-	private void ensureBluetoothAndStartThread() {
-		if (!btAdapter.isEnabled()) {
-			Intent discoverableIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-			discoverableIntent.putExtra(
-					BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-			startActivityForResult(discoverableIntent,REQUEST_ENABLE_BT);
-
-//			Intent enableBtIntent = new Intent(
-//					BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//			startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-		} else {
-			threadConexao = new Thread(this);
-			threadConexao.start();
-		}
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == REQUEST_ENABLE_BT) {
-			if (resultCode == RESULT_CANCELED) {
-				finish();
-			} else {
-				ensureBluetoothAndStartThread();
-			}
-		}
 	}
 
 }
