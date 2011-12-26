@@ -73,16 +73,20 @@
         android:gravity="center"
         android:orientation="vertical" >
 
-       <!--  <ProgressBar
+        <!--
+             <ProgressBar
             android:id="@+id/progressBar1"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" /> -->
+            android:layout_height="wrap_content" />
+        -->
+
         <Button
-            android:id="@+id/buttonIniciar"
+            android:id="@+id/btnIniciarBluetooth"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:text="Iniciar Jogo" />
+            android:text="Iniciar Jogo"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

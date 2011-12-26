@@ -1,6 +1,7 @@
 package me.chester.minitruco.android;
 
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.bluetooth.ServidorActivity;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
@@ -122,11 +123,19 @@ public class TrucoActivity extends BaseActivity {
 	};
 
 	/**
-	 * Cria e inicia um novo jogo. É chamada pela primeira vez a partir da
-	 * MesaView (para garantir que o jogo só role quando ela estiver
-	 * inicializada) e dali em diante pelo botão de nova partida.
+	 * Este método é chamada pela primeira vez a partir da MesaView (para
+	 * garantir que o jogo só role quando ela estiver inicializada) e dali em
+	 * diante pelo botão de nova partida.
 	 */
-	public void criaNovoJogo() {
+	public void criaEIniciaNovoJogo() {
+		jogadorHumano = new JogadorHumano(this, mesa);
+		if (getIntent().hasExtra("servidorBluetooth")) {
+			jogo = ServidorActivity.criaNovoJogo(jogadorHumano);
+			(new Thread(jogo)).start();
+			return;
+		}
+		// TODO: dar defer disso para outro local (um método ou o próprio menu
+		// principal), só ter um starter da thread
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		boolean tentoMineiro = preferences.getBoolean("tentoMineiro", false);
@@ -134,7 +143,6 @@ public class TrucoActivity extends BaseActivity {
 		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
 				&& !baralhoLimpo;
 		jogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro);
-		jogadorHumano = new JogadorHumano(this, mesa);
 		jogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
 			jogo.adiciona(new JogadorCPU());
@@ -177,7 +185,7 @@ public class TrucoActivity extends BaseActivity {
 	public void novaPartidaClickHandler(View v) {
 		handler.sendMessage(Message.obtain(handler,
 				MSG_ESCONDE_BTN_NOVA_PARTIDA));
-		criaNovoJogo();
+		criaEIniciaNovoJogo();
 	}
 
 	public void aumentoClickHandler(View v) {

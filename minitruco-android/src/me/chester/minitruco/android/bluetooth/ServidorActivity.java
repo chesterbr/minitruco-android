@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.TrucoActivity;
+import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 import android.bluetooth.BluetoothAdapter;
@@ -17,27 +20,28 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class ServidorActivity extends BluetoothActivity {
 
 	private static final char STATUS_LOTADO = 'L';
-
 	private static final char STATUS_EM_JOGO = 'J';
-
 	private static final char STATUS_BLUETOOTH_ENCERRADO = 'X';
-
-	protected static final String[] APELIDOS_CPU = { "CPU1", "CPU2", "CPU3" };
-
+	private static final String[] APELIDOS_CPU = { "CPU1", "CPU2", "CPU3" };
 	private static final int REQUEST_ENABLE_DISCOVERY = 1;
 
+	private static ServidorActivity currentInstance;
+
+	private boolean aguardandoDiscoverable = false;
 	private BroadcastReceiver receiverMantemDiscoverable;
 	private Thread threadAguardaConexoes;
 	private BluetoothServerSocket serverSocket;
 	private String[] apelidos = new String[4];
 	private String regras;
-	BluetoothSocket[] connClientes = new BluetoothSocket[3];
+	private BluetoothSocket[] connClientes = new BluetoothSocket[3];
 	private OutputStream[] outClientes = new OutputStream[3];
 
 	private char status;
@@ -45,28 +49,32 @@ public class ServidorActivity extends BluetoothActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		currentInstance = this;
 		// TODO Usa as regras escolhidas pelo usuário
 		this.regras = "FF";
-		// (midlet.cgRegras.isSelected(0) ? "T" : "F")
-		// + (midlet.cgRegras.isSelected(1) ? "T" : "F");
-
+		btnIniciar = (Button) findViewById(R.id.btnIniciarBluetooth);
+		btnIniciar.setVisibility(View.VISIBLE);
+		btnIniciar.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(ServidorActivity.this,
+						TrucoActivity.class);
+				intent.putExtra("servidorBluetooth", true);
+				startActivity(intent);
+			}
+		});
 		receiverMantemDiscoverable = new BroadcastReceiver() {
+
 			public void onReceive(Context context, Intent intent) {
 				int currentScanMode = intent.getExtras().getInt(
 						BluetoothAdapter.EXTRA_SCAN_MODE);
-				if (currentScanMode != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+				if ((!aguardandoDiscoverable)
+						&& currentScanMode != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
 					pedePraHabilitarDiscoverable();
 				}
 			}
 		};
 		registerReceiver(receiverMantemDiscoverable, new IntentFilter(
 				BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
-		iniciaThreadAguardaConexoes();
-	}
-
-	private void iniciaThreadAguardaConexoes() {
-		threadAguardaConexoes = new Thread(this);
-		threadAguardaConexoes.start();
 	}
 
 	@Override
@@ -81,14 +89,18 @@ public class ServidorActivity extends BluetoothActivity {
 		discoverableIntent.putExtra(
 				BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
 		startActivityForResult(discoverableIntent, REQUEST_ENABLE_DISCOVERY);
+		aguardandoDiscoverable = true;
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_ENABLE_DISCOVERY) {
+			aguardandoDiscoverable = false;
 			if (resultCode == RESULT_CANCELED) {
 				// Sem discoverable, sem servidor
 				finish();
+			} else {
+				iniciaThreadsSeNecessario();
 			}
 		}
 	}
@@ -97,7 +109,7 @@ public class ServidorActivity extends BluetoothActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(receiverMantemDiscoverable);
-		status = STATUS_BLUETOOTH_ENCERRADO;
+		encerraConexoes();
 	}
 
 	public void run() {
@@ -111,7 +123,6 @@ public class ServidorActivity extends BluetoothActivity {
 			Log.w("MINITRUCO", e);
 			return;
 		}
-		iniciaThreadMonitoradoraDeClientes();
 		while (status != STATUS_BLUETOOTH_ENCERRADO) {
 			while (status == STATUS_EM_JOGO) {
 				sleep(500);
@@ -135,33 +146,50 @@ public class ServidorActivity extends BluetoothActivity {
 				Log.w("MINITRUCO", e);
 			}
 		}
-		try {
-			serverSocket.close();
-		} catch (IOException e) {
-			Log.w("MINITRUCO", e);
-		}
+		encerraConexoes();
 		Log.w("MINITRUCO", "finalizou atividade server");
 	}
 
-	private void iniciaThreadMonitoradoraDeClientes() {
-		threadMonitoraClientes = new Thread() {
-			public void run() {
-				// Executa enquanto o servidor não for encerrado
-				while (status != STATUS_BLUETOOTH_ENCERRADO) {
-					// Envia um comando vazio (apenas para testar a conexão, e
-					// processar qualquer desconexão que tenha ocorrido)
-					for (int i = 0; i <= 2; i++) {
-						enviaMensagem(i, "");
-					}
-					try {
-						sleep(2000);
-					} catch (InterruptedException e) {
-						// não precisa tratar
+	private void encerraConexoes() {
+		status = STATUS_BLUETOOTH_ENCERRADO;
+		for (int slot = 0; slot <= 2; slot++) {
+			desconecta(slot);
+		}
+		if (serverSocket != null) {
+			try {
+				serverSocket.close();
+			} catch (IOException e) {
+				Log.w("MINITRUCO", e);
+			}
+		}
+
+	}
+
+	private void iniciaThreadsSeNecessario() {
+		if (threadAguardaConexoes == null) {
+			threadAguardaConexoes = new Thread(this);
+			threadAguardaConexoes.start();
+		}
+		if (threadMonitoraClientes == null) {
+			threadMonitoraClientes = new Thread() {
+				public void run() {
+					// Executa enquanto o servidor não for encerrado
+					while (status != STATUS_BLUETOOTH_ENCERRADO) {
+						// Envia um comando vazio (apenas para testar a conexão,
+						// processar qualquer desconexão que tenha ocorrido)
+						for (int i = 0; i <= 2; i++) {
+							enviaMensagem(i, "");
+						}
+						try {
+							sleep(2000);
+						} catch (InterruptedException e) {
+							// não precisa tratar
+						}
 					}
 				}
-			}
-		};
-		threadMonitoraClientes.start();
+			};
+			threadMonitoraClientes.start();
+		}
 	}
 
 	private synchronized void encaixaEmUmSlot(BluetoothSocket socket)
@@ -172,7 +200,8 @@ public class ServidorActivity extends BluetoothActivity {
 			if (connClientes[i] == null) {
 				connClientes[i] = socket;
 				outClientes[i] = socket.getOutputStream();
-				apelidos[i + 1] = socket.getRemoteDevice().getName().replace(' ', '_');
+				apelidos[i + 1] = socket.getRemoteDevice().getName()
+						.replace(' ', '_');
 				break;
 			}
 		}
@@ -207,12 +236,13 @@ public class ServidorActivity extends BluetoothActivity {
 					.setText(apelidos[2]);
 			((TextView) findViewById(R.id.textViewJogador4))
 					.setText(apelidos[3]);
-			((Button) findViewById(R.id.buttonIniciar))
-					.setEnabled(getNumClientes() > 0);
+			btnIniciar.setEnabled(getNumClientes() > 0);
 		}
 	};
 
 	private Thread threadMonitoraClientes;
+
+	private Button btnIniciar;
 
 	public int getNumClientes() {
 		int numClientes = 0;
@@ -258,38 +288,16 @@ public class ServidorActivity extends BluetoothActivity {
 		}
 	}
 
-	private void iniciaJogo() {
-		Jogo jogo = new JogoLocal(regras.charAt(0) == 'T',
-				regras.charAt(1) == 'T', false);
-
-		// TODO completar
-		// midlet.jogadorHumano = new JogadorHumano(display, midlet.mesa);
-		// jogo.adiciona(midlet.jogadorHumano);
-		// // Adiciona jogadores para os outros slots
-		// for (int i = 0; i <= 2; i++) {
-		// if (connClientes[i] != null) {
-		// // Se há alguém neste slot, cria um JogadorBT para
-		// // representá-lo
-		// jogo.adiciona(new JogadorBT(this));
-		// } else {
-		// // Se não há, preenche com um JogadorCPU
-		//					jogo.adiciona(new JogadorCPU()); //$NON-NLS-1$
-		// }
-		// }
-		// midlet.iniciaJogo(jogo);
-	}
-
 	void desconecta(int slot) {
 		Log.w("MINITRUCO", "desconecta() " + slot);
-		// Processa desconexão
 		try {
 			outClientes[slot].close();
-		} catch (IOException ioe) {
+		} catch (Exception e) {
 			// No prob, já deve ter morrido
 		}
 		try {
 			connClientes[slot].close();
-		} catch (IOException ioe) {
+		} catch (Exception e) {
 			// No prob, já deve ter morrido
 		}
 		if (slot >= 0) {
@@ -303,6 +311,24 @@ public class ServidorActivity extends BluetoothActivity {
 		// midlet.encerraJogo(slot + 2, false);
 		atualizaDisplay();
 		atualizaClientes();
+	}
+
+	public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
+		return currentInstance._criaNovoJogo(jogadorHumano);
+	}
+
+	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
+		Jogo jogo = new JogoLocal(regras.charAt(0) == 'T',
+				regras.charAt(1) == 'T', false);
+		jogo.adiciona(jogadorHumano);
+		for (int i = 0; i <= 2; i++) {
+			if (connClientes[i] != null) {
+				jogo.adiciona(new JogadorBluetooth(connClientes[i], this));
+			} else {
+				jogo.adiciona(new JogadorCPU());
+			}
+		}
+		return jogo;
 	}
 
 }
