@@ -150,8 +150,10 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void pediuAumentoAposta(Jogador j, int valor) {
-		mesa.diz("aumento_" + valor, j.getPosicao(), 1500 + 200 * (valor / 3));
-		Log.d("TrucoActivity", "Jogador " + j.getPosicao() + " pediu aumento ");
+		// TODO so funciona para tento paulista
+		int ordem_valor = valor / 3;
+		mesa.diz("aumento_" + ordem_valor, j.getPosicao(),
+				1500 + 200 * (valor / 3));
 		if (j.getEquipe() == 2) {
 			Log.d("TrucoActivity", "pedindo para mostrar pergunta aumento");
 			mesa.mostrarPerguntaAumento = true;
@@ -185,13 +187,11 @@ public class JogadorHumano extends Jogador {
 						: TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
 		activity.handler
 				.sendMessage(Message
-						.obtain(
-								activity.handler,
+						.obtain(activity.handler,
 								mostraBtnAbertaFechada ? TrucoActivity.MSG_MOSTRA_BOTAO_ABERTA_FECHADA
 										: TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		mesa
-				.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
-						: MesaView.STATUS_VEZ_OUTRO);
+		mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
+				: MesaView.STATUS_VEZ_OUTRO);
 	}
 
 	/**

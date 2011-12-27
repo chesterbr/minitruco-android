@@ -208,7 +208,6 @@ public class ServidorActivity extends BluetoothActivity {
 	}
 
 	private void inicializaDisplay() {
-		apelidos[0] = btAdapter.getName();
 		for (int i = 0; i <= 2; i++) {
 			apelidos[i + 1] = APELIDOS_CPU[i];
 		}
@@ -223,6 +222,7 @@ public class ServidorActivity extends BluetoothActivity {
 	}
 
 	private void atualizaDisplay() {
+		apelidos[0] = btAdapter.getName();
 		Message.obtain(handlerAtualizaServidor).sendToTarget();
 	}
 

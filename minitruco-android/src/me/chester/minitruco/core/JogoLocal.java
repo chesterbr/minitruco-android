@@ -516,7 +516,7 @@ public class JogoLocal extends Jogo {
 		for (int i = 0; i <= 3; i++)
 			recusouAumento[i] = false;
 
-		int valor = tento.calcValorMao(valorMao);
+		int valor = tento.calcValorTento(valorMao);
 
 		// Notifica os interessados
 		for (Jogador interessado : jogadores) {
