@@ -57,6 +57,7 @@ public class ServidorActivity extends BluetoothActivity {
 		btnIniciar.setVisibility(View.VISIBLE);
 		btnIniciar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				status = STATUS_EM_JOGO;
 				Intent intent = new Intent(ServidorActivity.this,
 						TrucoActivity.class);
 				intent.putExtra("servidorBluetooth", true);

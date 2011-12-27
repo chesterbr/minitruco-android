@@ -104,16 +104,6 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 	 * Encerra a thread principal, efetivamente finalizando o JogadorBT
 	 */
 	void finaliza() {
-		// O in.close "does nothing", segundo a especificação (
-		// http://tinyurl.com/2r59cp#close() ), então eu anulo o objeto e
-		// monitoro isso no loop (mas fecho anyway)
-		if (in != null) {
-			try {
-				in.close();
-			} catch (IOException e) {
-				// nao tratar
-			}
-		}
 		in = null;
 	}
 
@@ -131,9 +121,6 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 	// Os métodos restantes convertem as notificações do JogoLocal em mensagens
 	// de texto, que serão reconvertidas em solicitações no cliente para o
 	// JogadorHumano.
-	//
-	// As únicas exceções são os eventos de fim-de-jogo, que finalizam o
-	// JogadorBT
 
 	public void cartaJogada(Jogador j, Carta c) {
 		String param;
