@@ -147,6 +147,9 @@ public class ServidorActivity extends BluetoothActivity {
 			} catch (IOException e) {
 				Log.w("MINITRUCO", e);
 			}
+			if (isFinishing()) {
+				status = STATUS_BLUETOOTH_ENCERRADO;
+			}
 		}
 		encerraConexoes();
 		Log.w("MINITRUCO", "finalizou atividade server");
