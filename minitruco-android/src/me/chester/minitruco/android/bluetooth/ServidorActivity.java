@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 public class ServidorActivity extends BluetoothActivity {
 
+	private static final char STATUS_AGUARDANDO = 'A';
 	private static final char STATUS_LOTADO = 'L';
 	private static final char STATUS_EM_JOGO = 'J';
 	private static final char STATUS_BLUETOOTH_ENCERRADO = 'X';
@@ -63,33 +64,26 @@ public class ServidorActivity extends BluetoothActivity {
 			}
 		});
 		receiverMantemDiscoverable = new BroadcastReceiver() {
-
 			public void onReceive(Context context, Intent intent) {
-				int currentScanMode = intent.getExtras().getInt(
-						BluetoothAdapter.EXTRA_SCAN_MODE);
-				if ((!aguardandoDiscoverable)
-						&& currentScanMode != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-					pedePraHabilitarDiscoverable();
-				}
+				pedePraHabilitarDiscoverableSePreciso();
 			}
 		};
 		registerReceiver(receiverMantemDiscoverable, new IntentFilter(
 				BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
 	}
 
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		pedePraHabilitarDiscoverable();
-	}
-
-	private void pedePraHabilitarDiscoverable() {
+	private void pedePraHabilitarDiscoverableSePreciso() {
+		if (aguardandoDiscoverable
+				|| status == STATUS_EM_JOGO
+				|| btAdapter.getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+			return;
+		}
+		aguardandoDiscoverable = true;
 		Intent discoverableIntent = new Intent(
 				BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
 		discoverableIntent.putExtra(
 				BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
 		startActivityForResult(discoverableIntent, REQUEST_ENABLE_DISCOVERY);
-		aguardandoDiscoverable = true;
 	}
 
 	@Override
@@ -114,6 +108,7 @@ public class ServidorActivity extends BluetoothActivity {
 
 	public void run() {
 		Log.w("MINITRUCO", "iniciou atividade server");
+		pedePraHabilitarDiscoverableSePreciso();
 		inicializaDisplay();
 		atualizaDisplay();
 		try {
@@ -131,10 +126,8 @@ public class ServidorActivity extends BluetoothActivity {
 			atualizaDisplay();
 			atualizaClientes();
 			if (status == STATUS_LOTADO) {
-				do {
-					sleep(1000);
-				} while (status == STATUS_LOTADO);
-				continue; // Checa se não começou um jogo
+				sleep(1000);
+				continue;
 			}
 			// Se chegamos aqui, estamos fora de jogo e com vagas
 			try {
@@ -202,7 +195,8 @@ public class ServidorActivity extends BluetoothActivity {
 				outClientes[i] = socket.getOutputStream();
 				apelidos[i + 1] = socket.getRemoteDevice().getName()
 						.replace(' ', '_');
-				break;
+				status = i == 2 ? STATUS_LOTADO : STATUS_AGUARDANDO;
+				return;
 			}
 		}
 	}
@@ -309,6 +303,7 @@ public class ServidorActivity extends BluetoothActivity {
 		// -2 não notifica ninguém (posição -2+2=0)
 		// TODO ver o que faz com isso
 		// midlet.encerraJogo(slot + 2, false);
+		status = STATUS_AGUARDANDO;
 		atualizaDisplay();
 		atualizaClientes();
 	}
