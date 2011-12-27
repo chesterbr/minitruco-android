@@ -120,7 +120,9 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void jogoAbortado(int posicao) {
-
+		mesa.diz("abortou", posicao, 1000);
+		mesa.aguardaFimAnimacoes();
+		activity.finish();
 	}
 
 	@Override

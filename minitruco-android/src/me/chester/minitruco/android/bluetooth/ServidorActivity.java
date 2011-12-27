@@ -72,6 +72,15 @@ public class ServidorActivity extends BluetoothActivity {
 				BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
 	}
 
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		pedePraHabilitarDiscoverableSePreciso();
+		if (!aguardandoDiscoverable) {
+			iniciaThreadsSeNecessario();
+		}
+	}
+
 	private void pedePraHabilitarDiscoverableSePreciso() {
 		if (aguardandoDiscoverable
 				|| status == STATUS_EM_JOGO
@@ -108,7 +117,6 @@ public class ServidorActivity extends BluetoothActivity {
 
 	public void run() {
 		Log.w("MINITRUCO", "iniciou atividade server");
-		pedePraHabilitarDiscoverableSePreciso();
 		inicializaDisplay();
 		atualizaDisplay();
 		try {
@@ -237,6 +245,7 @@ public class ServidorActivity extends BluetoothActivity {
 	private Thread threadMonitoraClientes;
 
 	private Button btnIniciar;
+	private Jogo jogo;
 
 	public int getNumClientes() {
 		int numClientes = 0;
@@ -278,6 +287,9 @@ public class ServidorActivity extends BluetoothActivity {
 				Log.w("MINITRUCO", e);
 				// Libera o slot e encerra o jogo em andamento
 				desconecta(slot);
+				if (jogo != null) {
+					jogo.abortaJogo(slot + 2);
+				}
 			}
 		}
 	}
@@ -323,6 +335,7 @@ public class ServidorActivity extends BluetoothActivity {
 				jogo.adiciona(new JogadorCPU());
 			}
 		}
+		this.jogo = jogo;
 		return jogo;
 	}
 

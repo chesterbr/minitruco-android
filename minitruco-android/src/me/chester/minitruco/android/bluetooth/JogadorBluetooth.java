@@ -94,6 +94,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 				}
 			} while (in != null);
 		} catch (IOException e) {
+			Log.w("MINITRUCO", e);
 			// Não precisa tratar - ou é fim de jogo, ou o servidor cuida
 		}
 		Log.w("MINITRUCO", "encerrando loop JogadorBT");

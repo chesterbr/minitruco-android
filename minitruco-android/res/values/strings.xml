@@ -89,6 +89,9 @@
 		<item>Sai fora.</item>
 		<item>Nem, manda outras.</item>
 	</string-array>
+	<string-array name="balao_abortou">
+	    <item>Tchau...</item>
+	</string-array>
 	<string name="titulo_ajuda">Bem-vindo!</string>
 	<string name="texto_ajuda"><![CDATA[O miniTruco é jogado em duplas, com os parceiros
 		frente a frente. O objetivo é fazer a sua dupla de jogadores alcançar
