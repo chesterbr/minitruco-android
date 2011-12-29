@@ -3,7 +3,6 @@ package me.chester.minitruco.android.bluetooth;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.core.JogadorCPU;
@@ -17,58 +16,52 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
 
-public class ServidorActivity extends BluetoothActivity {
+public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	private static final char STATUS_AGUARDANDO = 'A';
 	private static final char STATUS_LOTADO = 'L';
 	private static final char STATUS_EM_JOGO = 'J';
 	private static final char STATUS_BLUETOOTH_ENCERRADO = 'X';
-	private static final String[] APELIDOS_CPU = { "CPU1", "CPU2", "CPU3" };
 	private static final int REQUEST_ENABLE_DISCOVERY = 1;
+	private static final String[] APELIDOS_CPU = { "CPU1", "CPU2", "CPU3" };
 
-	private static ServidorActivity currentInstance;
+	private static ServidorBluetoothActivity currentInstance;
 
 	private boolean aguardandoDiscoverable = false;
-	private BroadcastReceiver receiverMantemDiscoverable;
 	private Thread threadAguardaConexoes;
 	private BluetoothServerSocket serverSocket;
-	private String[] apelidos = new String[4];
 	private String regras;
 	private BluetoothSocket[] connClientes = new BluetoothSocket[3];
 	private OutputStream[] outClientes = new OutputStream[3];
-
 	private char status;
 
+	private BroadcastReceiver receiverMantemDiscoverable = new BroadcastReceiver() {
+		public void onReceive(Context context, Intent intent) {
+			pedePraHabilitarDiscoverableSePreciso();
+		}
+	};
+
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		currentInstance = this;
 		// TODO Usa as regras escolhidas pelo usuário
 		this.regras = "FF";
-		btnIniciar = (Button) findViewById(R.id.btnIniciarBluetooth);
 		btnIniciar.setVisibility(View.VISIBLE);
 		btnIniciar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				status = STATUS_EM_JOGO;
-				Intent intent = new Intent(ServidorActivity.this,
+				Intent intent = new Intent(ServidorBluetoothActivity.this,
 						TrucoActivity.class);
 				intent.putExtra("servidorBluetooth", true);
 				startActivity(intent);
 			}
 		});
-		receiverMantemDiscoverable = new BroadcastReceiver() {
-			public void onReceive(Context context, Intent intent) {
-				pedePraHabilitarDiscoverableSePreciso();
-			}
-		};
 		registerReceiver(receiverMantemDiscoverable, new IntentFilter(
 				BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
 	}
@@ -227,30 +220,14 @@ public class ServidorActivity extends BluetoothActivity {
 		}
 	}
 
-	private void atualizaDisplay() {
-		apelidos[0] = btAdapter.getName();
-		Message.obtain(handlerAtualizaServidor).sendToTarget();
-	}
 
-	Handler handlerAtualizaServidor = new Handler() {
-		public void handleMessage(Message msg) {
-			((TextView) findViewById(R.id.textViewJogador1))
-					.setText(apelidos[0]);
-			((TextView) findViewById(R.id.textViewJogador2))
-					.setText(apelidos[1]);
-			((TextView) findViewById(R.id.textViewJogador3))
-					.setText(apelidos[2]);
-			((TextView) findViewById(R.id.textViewJogador4))
-					.setText(apelidos[3]);
-			btnIniciar.setEnabled(getNumClientes() > 0);
-		}
-	};
 
 	private Thread threadMonitoraClientes;
 
-	private Button btnIniciar;
+
 	private Jogo jogo;
 
+	@Override
 	public int getNumClientes() {
 		int numClientes = 0;
 		for (int i = 0; i <= 2; i++) {

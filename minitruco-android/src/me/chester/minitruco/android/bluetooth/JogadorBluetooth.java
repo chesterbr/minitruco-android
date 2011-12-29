@@ -12,10 +12,10 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 
 	private InputStream in;
 	private BluetoothSocket socket;
-	private ServidorActivity servidor;
+	private ServidorBluetoothActivity servidor;
 	private Thread threadProcessaMensagens;
 
-	public JogadorBluetooth(BluetoothSocket socket, ServidorActivity servidor) {
+	public JogadorBluetooth(BluetoothSocket socket, ServidorBluetoothActivity servidor) {
 		this.socket = socket;
 		this.servidor = servidor;
 		threadProcessaMensagens = new Thread(this);
@@ -53,7 +53,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 					break;
 				// Lê o próximo caractre
 				c = in.read();
-				if (c != BluetoothActivity.SEPARADOR_REC) {
+				if (c != BluetoothBaseActivity.SEPARADOR_REC) {
 					// Acumula caracteres até formar uma linha
 					sbLinha.append((char) c);
 				} else {

@@ -1,7 +1,7 @@
 package me.chester.minitruco.android;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.bluetooth.ServidorActivity;
+import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
@@ -130,7 +130,7 @@ public class TrucoActivity extends BaseActivity {
 	public void criaEIniciaNovoJogo() {
 		jogadorHumano = new JogadorHumano(this, mesa);
 		if (getIntent().hasExtra("servidorBluetooth")) {
-			jogo = ServidorActivity.criaNovoJogo(jogadorHumano);
+			jogo = ServidorBluetoothActivity.criaNovoJogo(jogadorHumano);
 			(new Thread(jogo)).start();
 			return;
 		}

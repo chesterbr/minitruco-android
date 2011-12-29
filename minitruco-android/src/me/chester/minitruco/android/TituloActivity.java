@@ -1,7 +1,8 @@
 package me.chester.minitruco.android;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.bluetooth.ServidorActivity;
+import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
+import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
@@ -102,10 +103,12 @@ public class TituloActivity extends BaseActivity {
 				switch (which) {
 				case AlertDialog.BUTTON_POSITIVE:
 					startActivity(new Intent(TituloActivity.this,
-							ServidorActivity.class));
+							ServidorBluetoothActivity.class));
 					break;
 				case AlertDialog.BUTTON_NEGATIVE:
-					// TODO
+					startActivity(new Intent(TituloActivity.this,
+							ClienteBluetoothActivity.class));
+					break;
 				}
 			}
 		};
