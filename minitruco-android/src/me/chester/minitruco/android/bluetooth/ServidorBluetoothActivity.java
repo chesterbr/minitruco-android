@@ -207,6 +207,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	}
 
 	private void inicializaDisplay() {
+		apelidos[0] = btAdapter.getName();
 		for (int i = 0; i <= 2; i++) {
 			apelidos[i + 1] = APELIDOS_CPU[i];
 		}

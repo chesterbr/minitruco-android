@@ -32,7 +32,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private Set<BluetoothDevice> devicesEncontrados;
 	private Thread threadConsultaDevicesEncontrados;
 	private BluetoothServerSocket serverSocket;
-	private String[] apelidos = new String[4];
 	private String regras;
 
 	private BroadcastReceiver receiverDescobreServidor = new BroadcastReceiver() {
@@ -143,6 +142,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 						switch (tipoNotificacao) {
 						case 'I':
 							// Encerra qualquer jogo em andamento
+							Log.w("MINITRUCO",parametros);
 							if (jogo != null) {
 								// TODO
 								// midlet.encerraJogo(jogo.getJogadorHumano()
@@ -153,7 +153,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 							// Exibe as informações recebidas fora do jogo
 							// TODO arrumar lance do nome com espaços
 							String[] tokens = parametros.split(" ");
-							apelidos = tokens[0].split(" ");
+							apelidos = tokens[0].split("\\|");
+							Log.w("MINITRUCO",tokens[0]);
+							Log.w("MINITRUCO",tokens[0].split("\\|")[0]);
 							regras = tokens[1];
 							posJogador = Integer.parseInt(tokens[2]);
 							atualizaDisplay();

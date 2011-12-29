@@ -53,7 +53,6 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	}
 
 	protected void atualizaDisplay() {
-		apelidos[0] = btAdapter.getName();
 		Message.obtain(handlerAtualizaDisplay).sendToTarget();
 	}
 	
