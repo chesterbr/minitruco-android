@@ -31,8 +31,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private boolean estaVivo;
 	private Set<BluetoothDevice> devicesEncontrados;
 	private Thread threadConsultaDevicesEncontrados;
-	private BluetoothServerSocket serverSocket;
-	private String regras;
 
 	private BroadcastReceiver receiverDescobreServidor = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
@@ -141,8 +139,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 						String parametros = sbLinha.delete(0, 2).toString();
 						switch (tipoNotificacao) {
 						case 'I':
+							parametros = tiraEspacoDosNomes(parametros);
 							// Encerra qualquer jogo em andamento
-							Log.w("MINITRUCO",parametros);
 							if (jogo != null) {
 								// TODO
 								// midlet.encerraJogo(jogo.getJogadorHumano()
@@ -151,13 +149,10 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 								// jogo = null;
 							}
 							// Exibe as informações recebidas fora do jogo
-							// TODO arrumar lance do nome com espaços
 							String[] tokens = parametros.split(" ");
-							apelidos = tokens[0].split("\\|");
-							Log.w("MINITRUCO",tokens[0]);
-							Log.w("MINITRUCO",tokens[0].split("\\|")[0]);
-							regras = tokens[1];
 							posJogador = Integer.parseInt(tokens[2]);
+							regras = tokens[1];
+							encaixaApelidosNaMesa(tokens[0].split("\\|"));
 							atualizaDisplay();
 							break;
 						case 'P':
@@ -206,6 +201,19 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		}
 	}
 
+	private void encaixaApelidosNaMesa(String[] apelidosOriginais) {
+		for (int n = 1; n <= 4; n++) {
+			apelidos[getPosicaoMesa(n) - 1] = apelidosOriginais[n - 1];
+		}
+	}
+
+	private String tiraEspacoDosNomes(String parametros) {
+		while (parametros.split(" ").length > 3) {
+			parametros = parametros.replaceFirst(" ", "_");
+		}
+		return parametros;
+	}
+
 	private void sleep(int ms) {
 		try {
 			Thread.sleep(ms);
@@ -219,6 +227,24 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	@Override
 	public int getNumClientes() {
 		return 0;
+	}
+
+	/**
+	 * Recupera a posição "visual" correspondente a uma posição de jogo (i.e.,
+	 * uma posição no servidor)
+	 * <p>
+	 * A idéia é que o jogador local fique sempre na parte inferior da tela,
+	 * então o método retorna 1 para o jogador local, 2 para quem está à direita
+	 * dele, etc.
+	 * 
+	 * @param i
+	 *            posição (no servidor) do jogador que queremos consultar
+	 */
+	public int getPosicaoMesa(int i) {
+		int retorno = i - posJogador + 1;
+		if (retorno < 1)
+			retorno += 4;
+		return retorno;
 	}
 
 	public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {

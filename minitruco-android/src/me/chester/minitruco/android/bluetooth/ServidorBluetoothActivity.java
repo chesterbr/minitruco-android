@@ -34,7 +34,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	private boolean aguardandoDiscoverable = false;
 	private Thread threadAguardaConexoes;
 	private BluetoothServerSocket serverSocket;
-	private String regras;
 	private BluetoothSocket[] connClientes = new BluetoothSocket[3];
 	private OutputStream[] outClientes = new OutputStream[3];
 	private char status;

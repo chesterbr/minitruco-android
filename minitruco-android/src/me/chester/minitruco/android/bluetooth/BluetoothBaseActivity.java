@@ -42,8 +42,9 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 
 	protected BluetoothAdapter btAdapter;
 	protected String[] apelidos = new String[4];
+	protected String regras;
 	protected Button btnIniciar;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,7 +56,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	protected void atualizaDisplay() {
 		Message.obtain(handlerAtualizaDisplay).sendToTarget();
 	}
-	
+
 	protected abstract int getNumClientes();
 
 	Handler handlerAtualizaDisplay = new Handler() {
@@ -71,6 +72,5 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			btnIniciar.setEnabled(getNumClientes() > 0);
 		}
 	};
-
 
 }
