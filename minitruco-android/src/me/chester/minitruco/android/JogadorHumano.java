@@ -34,6 +34,9 @@ import android.util.Log;
  * Esta classe trabalha em conjunto com uma <code>TrucoActivity</code> e uma
  * <code>MesaView</code>, que mostram o jogo ao usuário, capturam seu input e
  * executam as jogadas.
+ * <p>
+ * Num jogo remoto, esta carta "traduz" as posicoes recebidas pelo jogo para as
+ * posicoes corretas da mesa
  * 
  * @author chester
  * 
@@ -53,7 +56,7 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void aceitouAumentoAposta(Jogador j, int valor) {
-		if (j.getEquipe() == 1) {
+		if (j.getEquipe() == this.getEquipe()) {
 			// Nós aceitamos um truco, então podemos pedir 6, 9 ou 12
 			if (valor != 12) {
 				valorProximaAposta = valor + 3;
@@ -62,7 +65,7 @@ public class JogadorHumano extends Jogador {
 			// Eles aceitaram um truco, temos que esperar eles pedirem
 			valorProximaAposta = 0;
 		}
-		mesa.diz("aumento_sim", j.getPosicao(), 1500);
+		mesa.diz("aumento_sim", posicaoNaTela(j), 1500);
 		mesa.aceitouAumentoAposta(j, valor);
 	}
 
@@ -74,16 +77,17 @@ public class JogadorHumano extends Jogador {
 				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		mesa.descarta(c, j.getPosicao());
-		Log.i("Partida", "Jogador " + j.getPosicao() + " jogou " + c);
+		mesa.descarta(c, posicaoNaTela(j));
+		Log.i("Partida", "Jogador na posicao de tela " + posicaoNaTela(j)
+				+ " jogou " + c);
 	}
 
 	@Override
 	public void decidiuMao11(Jogador j, boolean aceita) {
-		if (j.getPosicao() == 3 && aceita) {
+		if (posicaoNaTela(j) == 3 && aceita) {
 			mesa.mostrarPerguntaMao11 = false;
 		}
-		mesa.diz(aceita ? "mao11_sim" : "mao11_nao", j.getPosicao(), 1500);
+		mesa.diz(aceita ? "mao11_sim" : "mao11_nao", posicaoNaTela(j), 1500);
 	}
 
 	@Override
@@ -120,14 +124,15 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void jogoAbortado(int posicao) {
-		mesa.diz("abortou", posicao, 1000);
+		mesa.diz("abortou", convertePosicaoJogadorParaPosicaoTela(posicao),
+				1000);
 		mesa.aguardaFimAnimacoes();
 		activity.finish();
 	}
 
 	@Override
 	public void jogoFechado(int numEquipeVencedora) {
-		boolean ganhei = (numEquipeVencedora == 1);
+		boolean ganhei = (numEquipeVencedora == this.getEquipe());
 		incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
 		mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000);
 		mesa.aguardaFimAnimacoes();
@@ -139,13 +144,14 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void maoFechada(int[] pontosEquipe) {
+		int pontosNos = pontosEquipe[getEquipe() - 1];
+		int pontosEles = pontosEquipe[getEquipeAdversaria() - 1];
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_ATUALIZA_PLACAR, pontosEquipe[0],
-				pontosEquipe[1]));
+				TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
 		mesa.recolheMao();
 
 	}
@@ -154,9 +160,9 @@ public class JogadorHumano extends Jogador {
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		// TODO so funciona para tento paulista
 		int ordem_valor = valor / 3;
-		mesa.diz("aumento_" + ordem_valor, j.getPosicao(),
+		mesa.diz("aumento_" + ordem_valor, posicaoNaTela(j),
 				1500 + 200 * (valor / 3));
-		if (j.getEquipe() == 2) {
+		if (j.getEquipe() != this.getEquipe()) {
 			Log.d("TrucoActivity", "pedindo para mostrar pergunta aumento");
 			mesa.mostrarPerguntaAumento = true;
 		}
@@ -164,12 +170,20 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void recusouAumentoAposta(Jogador j) {
-		mesa.diz("aumento_nao", j.getPosicao(), 1300);
+		mesa.diz("aumento_nao", posicaoNaTela(j), 1300);
 	}
 
 	@Override
 	public void rodadaFechada(int numRodada, int resultado,
 			Jogador jogadorQueTorna) {
+		if (getEquipe() == 2) {
+			// Se o humano nao é equipe 1 e não for empate, troca o resultado
+			if (resultado == 1) {
+				resultado = 2;
+			} else if (resultado == 2) {
+				resultado = 1;
+			}
+		}
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
 		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
@@ -177,7 +191,7 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void vez(Jogador j, boolean podeFechada) {
-		Log.d("TrucoActivity", "vez do jogador " + j.getPosicao());
+		Log.d("TrucoActivity", "vez do jogador " + posicaoNaTela(j));
 		mesa.vaiJogarFechada = false;
 		boolean mostraBtnAumento = (j instanceof JogadorHumano)
 				&& (valorProximaAposta > 0) && (activity.placar[0] != 11)
@@ -211,6 +225,34 @@ public class JogadorHumano extends Jogador {
 		Editor editor = preferences.edit();
 		editor.putInt(chave, ++partidas);
 		editor.commit();
+	}
+
+	/**
+	 * Retorna a posição do jogador na tela.
+	 * <p>
+	 * Num jogo local, o 1 é o humano *e* a posição inferior da tela. Em jogos
+	 * remotos, o jogador 1 pode não ser o inferior, e esta função calcula a
+	 * posição que aquele jogador ocupa na tela sob o ponto de vista local.
+	 * <p>
+	 * 
+	 * @param j
+	 * @return 1 para a posição inferior, 2 para a direita, 3 para cima, 4 para
+	 *         esquerda
+	 */
+	private int posicaoNaTela(Jogador j) {
+		int pos = j.getPosicao() - this.getPosicao() + 1;
+		if (pos < 1) {
+			pos = pos + 4;
+		}
+		return pos;
+	}
+
+	private int convertePosicaoJogadorParaPosicaoTela(int posicaoJogador) {
+		int pos = posicaoJogador - this.getPosicao() + 1;
+		if (pos < 1) {
+			pos = pos + 4;
+		}
+		return pos;
 	}
 
 }

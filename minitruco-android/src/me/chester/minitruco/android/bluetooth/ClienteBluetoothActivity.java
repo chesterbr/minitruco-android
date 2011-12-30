@@ -7,11 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.core.Jogo;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -91,7 +91,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		Log.w("MINITRUCO", "iniciou atividade cliente");
 		atualizaDisplay();
 
-		BluetoothSocket socket = null;
+		socket = null;
 		for (BluetoothDevice device : devicesEncontrados) {
 			try {
 				Log.w("MINITRUCO", "Tentando conectar em" + device.getName());
@@ -100,6 +100,11 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 				break;
 			} catch (IOException e) {
 				Log.w("MINITRUCO", e);
+				try {
+					socket.close();
+				} catch (Exception e1) {
+					// Ok
+				}
 			}
 		}
 		if (socket == null) {
@@ -119,6 +124,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 									finish();
 								}
 							}).show();
+			return;
 		}
 		Log.w("MINITRUCO", "Achou serviço e conectou: ");
 
@@ -142,7 +148,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 							parametros = tiraEspacoDosNomes(parametros);
 							// Encerra qualquer jogo em andamento
 							if (jogo != null) {
-								// TODO
+								jogo = null;
+								// TODO ver se isso ai em cima basta
 								// midlet.encerraJogo(jogo.getJogadorHumano()
 								// .getPosicao(), false);
 								// display.setCurrent(this);
@@ -156,29 +163,17 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 							atualizaDisplay();
 							break;
 						case 'P':
-							// // TODO Cria um o jogo remoto
-							// jogo = new JogoBT(this);
-							// // Adiciona o jogador na posição correta
-							// // (preenchendo as outras com dummies)
-							// for (int i = 1; i <= 4; i++) {
-							// if (i == posJogador) {
-							// midlet.jogadorHumano = new JogadorHumano(
-							// display, midlet.mesa);
-							// jogo.adiciona(midlet.jogadorHumano);
-							//
-							// } else {
-							// jogo.adiciona(new JogadorDummy());
-							// }
-							// }
-							// midlet.iniciaJogo(jogo);
+							Intent intent = new Intent(this,
+									TrucoActivity.class);
+							intent.putExtra("clienteBluetooth", true);
+							startActivity(intent);
 							break;
 						// Os outros eventos ocorrem durante o jogo,
 						// i.e., quando o Jogador local já existe, logo,
 						// vamos encaminhar para o objeto JogoRemoto
 						default:
-							// TODO
-							// jogo.processaNotificacao(tipoNotificacao,
-							// parametros);
+							jogo.processaNotificacao(tipoNotificacao,
+						 parametros);
 						}
 						sbLinha.setLength(0);
 					}
@@ -222,7 +217,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		}
 	}
 
-	private Jogo jogo;
+	private JogoBluetooth jogo;
+
+	private BluetoothSocket socket;
 
 	@Override
 	public int getNumClientes() {
@@ -252,19 +249,17 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	}
 
 	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-		// Jogo jogo = new JogoLocal(regras.charAt(0) == 'T',
-		// regras.charAt(1) == 'T', false);
-		// jogo.adiciona(jogadorHumano);
-		// for (int i = 0; i <= 2; i++) {
-		// if (connClientes[i] != null) {
-		// jogo.adiciona(new JogadorBluetooth(connClientes[i], this));
-		// } else {
-		// jogo.adiciona(new JogadorCPU());
-		// }
-		// }
-		// this.jogo = jogo;
-		// return jogo;
-		return null;
+		jogo = new JogoBluetooth(socket, this);
+		// Adiciona o jogador na posição correta
+		// (preenchendo as outras com dummies)
+		for (int i = 1; i <= 4; i++) {
+			if (i == posJogador) {
+				jogo.adiciona(jogadorHumano);
+			} else {
+				jogo.adiciona(new JogadorDummy());
+			}
+		}
+		return jogo;
 	}
 
 }

@@ -91,4 +91,12 @@ public class Baralho {
 		return (random.nextInt() >>> 1) % (limiteSuperior + 1);
 	}
 
+	/**
+	 * Tira uma carta do baralho, evitando que ela seja sorteada
+	 * @param c Carta a retirar
+	 */
+	public void tiraDoBaralho(Carta c) {
+		sorteadas.addElement(c);
+	}
+
 }

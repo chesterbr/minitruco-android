@@ -1,6 +1,7 @@
 package me.chester.minitruco.android;
 
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
@@ -133,7 +134,12 @@ public class TrucoActivity extends BaseActivity {
 			jogo = ServidorBluetoothActivity.criaNovoJogo(jogadorHumano);
 			(new Thread(jogo)).start();
 			return;
+		} else if (getIntent().hasExtra("clienteBluetooth")) {
+			jogo = ClienteBluetoothActivity.criaNovoJogo(jogadorHumano);
+			(new Thread(jogo)).start();
+			return;
 		}
+
 		// TODO: dar defer disso para outro local (um método ou o próprio menu
 		// principal), só ter um starter da thread
 		SharedPreferences preferences = PreferenceManager
