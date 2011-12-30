@@ -2,33 +2,28 @@ package me.chester.minitruco.android.bluetooth;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
 import me.chester.minitruco.android.JogadorHumano;
-import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.core.Jogo;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 
 public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		Runnable {
 
+	private static final int REQUEST_ENABLE_BT = 1;
+
 	private static ClienteBluetoothActivity currentInstance;
 
-	private boolean estaVivo;
 	private Set<BluetoothDevice> devicesEncontrados;
 	private Thread threadConsultaDevicesEncontrados;
 	private JogoBluetooth jogo;
@@ -71,8 +66,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		estaVivo = true;
-		btAdapter.startDiscovery();
+		iniciaProcuraDeCelulares();
 	}
 
 	@Override
@@ -80,17 +74,39 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		super.onDestroy();
 		unregisterReceiver(receiverDescobreServidor);
 		btAdapter.cancelDiscovery();
+	}
 
+	private void iniciaProcuraDeCelulares() {
+		if (btAdapter.isEnabled()) {
+			btAdapter.startDiscovery();
+			return;
+		}
+		Intent enableBtIntent = new Intent(
+				BluetoothAdapter.ACTION_REQUEST_ENABLE);
+		startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == REQUEST_ENABLE_BT) {
+			if (resultCode == RESULT_CANCELED) {
+				// Sem bluetooth, sem cliente
+				finish();
+			} else {
+				iniciaProcuraDeCelulares();
+			}
+		}
 	}
 
 	public void run() {
-		Log.w("MINITRUCO", "iniciou atividade cliente");
 		atualizaDisplay();
 		socket = procuraServidorNosDevicesEncontrados();
 		if (socket == null) {
 			msgErroFatal("Jogo não encontrado. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
 			return;
 		}
+		sleep(500);
+		setMensagem(null);
 		// Loop principal: decodifica as notificações recebidas e as
 		// processa (ou encaminha ao JogoBT, se estivermos em jogo)
 		int c;
@@ -98,7 +114,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		InputStream in;
 		try {
 			in = socket.getInputStream();
-			while (estaVivo && (c = in.read()) != -1) {
+			while ((c = in.read()) != -1) {
 				if (c == SEPARADOR_REC) {
 					if (sbLinha.length() > 0) {
 						Log.w("MINITRUCO", "Recebeu:" + sbLinha.toString());
@@ -123,17 +139,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 				}
 			}
 		} catch (IOException e) {
-			if (estaVivo) {
-				mostraAlertBox("Erro", e.getMessage());
-				estaVivo = false;
-			}
-		} finally {
-			Log.w("MINITRUCO", "saiu do loop");
-			// Se a desconexão foi forçada, avisa e sai
-			if (estaVivo) {
-				mostraAlertBox("Desconectado", "Você foi desconectado do jogo");
-			}
-			finish();
+			msgErroFatal("Você foi desconectado");
 		}
 	}
 

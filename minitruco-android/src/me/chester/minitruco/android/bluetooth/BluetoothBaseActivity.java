@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -132,6 +131,14 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			intent.putExtra("servidorBluetooth", true);
 		}
 		startActivity(intent);
+	}
+
+	protected void sleep(int ms) {
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			// não precisa tratar
+		}
 	}
 
 }

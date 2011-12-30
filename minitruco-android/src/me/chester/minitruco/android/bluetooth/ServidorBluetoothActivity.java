@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import me.chester.minitruco.android.JogadorHumano;
-import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
@@ -207,14 +206,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		apelidos[0] = btAdapter.getName();
 		for (int i = 0; i <= 2; i++) {
 			apelidos[i + 1] = APELIDOS_CPU[i];
-		}
-	}
-
-	private void sleep(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {
-			// não precisa tratar
 		}
 	}
 
