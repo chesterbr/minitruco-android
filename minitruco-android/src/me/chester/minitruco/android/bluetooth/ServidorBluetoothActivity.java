@@ -31,12 +31,14 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	private static ServidorBluetoothActivity currentInstance;
 
+	private char status;
+	private Thread threadMonitoraClientes;
+	private Jogo jogo;
 	private boolean aguardandoDiscoverable = false;
 	private Thread threadAguardaConexoes;
 	private BluetoothServerSocket serverSocket;
 	private BluetoothSocket[] connClientes = new BluetoothSocket[3];
 	private OutputStream[] outClientes = new OutputStream[3];
-	private char status;
 
 	private BroadcastReceiver receiverMantemDiscoverable = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
@@ -44,21 +46,17 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		}
 	};
 
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		currentInstance = this;
 		// TODO Usa as regras escolhidas pelo usuário
 		this.regras = "FF";
-		btnIniciar.setVisibility(View.VISIBLE);
+		layoutIniciar.setVisibility(View.VISIBLE);
 		btnIniciar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				status = STATUS_EM_JOGO;
-				Intent intent = new Intent(ServidorBluetoothActivity.this,
-						TrucoActivity.class);
-				intent.putExtra("servidorBluetooth", true);
-				startActivity(intent);
+				iniciaPartida();
 			}
 		});
 		registerReceiver(receiverMantemDiscoverable, new IntentFilter(
@@ -70,7 +68,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		super.onPostCreate(savedInstanceState);
 		pedePraHabilitarDiscoverableSePreciso();
 		if (!aguardandoDiscoverable) {
-			iniciaThreadsSeNecessario();
+			iniciaThreads();
 		}
 	}
 
@@ -96,7 +94,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				// Sem discoverable, sem servidor
 				finish();
 			} else {
-				iniciaThreadsSeNecessario();
+				iniciaThreads();
 			}
 		}
 	}
@@ -162,7 +160,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	}
 
-	private void iniciaThreadsSeNecessario() {
+	private void iniciaThreads() {
 		if (threadAguardaConexoes == null) {
 			threadAguardaConexoes = new Thread(this);
 			threadAguardaConexoes.start();
@@ -219,13 +217,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 			// não precisa tratar
 		}
 	}
-
-
-
-	private Thread threadMonitoraClientes;
-
-
-	private Jogo jogo;
 
 	@Override
 	public int getNumClientes() {

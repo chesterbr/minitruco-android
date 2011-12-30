@@ -40,6 +40,19 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/textViewMensagem"
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:background="#000000"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="mensagem"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
                 android:id="@+id/textViewJogador2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -62,11 +75,12 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutProgresso"
+        android:id="@+id/layoutIniciar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="2"
         android:gravity="center"
+        android:visibility="gone"
         android:orientation="vertical" >
 
         <!--
@@ -81,8 +95,7 @@
             android:id="@+id/btnIniciarBluetooth"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:text="Iniciar Jogo"
-            android:visibility="gone" />
+            android:text="Iniciar Jogo" />
     </LinearLayout>
 
 </LinearLayout>

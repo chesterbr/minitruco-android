@@ -209,6 +209,7 @@ public class JogoBluetooth extends Jogo {
 		case 'G':
 			// Fim de jogo
 			getJogadorHumano().jogoFechado(Integer.parseInt(parametros));
+			
 			break;
 		case 'A':
 			// Jogo abortado por alguém

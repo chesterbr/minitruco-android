@@ -31,19 +31,21 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private boolean estaVivo;
 	private Set<BluetoothDevice> devicesEncontrados;
 	private Thread threadConsultaDevicesEncontrados;
+	private JogoBluetooth jogo;
+	private BluetoothSocket socket = null;
+	private int posJogador;
 
 	private BroadcastReceiver receiverDescobreServidor = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
 				devicesEncontrados = new HashSet<BluetoothDevice>();
-				Log.w("MINITRUCO", "Iniciou Discovery");
+				setMensagem("Procurando celulares...");
 			} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				BluetoothDevice device = intent
 						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				setMensagem("Achou " + device.getName());
 				devicesEncontrados.add(device);
-				Log.w("MINITRUCO",
-						"Achou:" + device.getName() + "," + device.getAddress());
 			} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED
 					.equals(action)) {
 				if (!isFinishing()) {
@@ -54,8 +56,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			}
 		}
 	};
-
-	private int posJogador;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +73,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		super.onPostCreate(savedInstanceState);
 		estaVivo = true;
 		btAdapter.startDiscovery();
-		// pedePraHabilitarDiscoverableSePreciso();
-		// if (!aguardandoDiscoverable) {
-		// iniciaThreadsSeNecessario();
-		// }
 	}
 
 	@Override
@@ -90,53 +86,18 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	public void run() {
 		Log.w("MINITRUCO", "iniciou atividade cliente");
 		atualizaDisplay();
-
-		socket = null;
-		for (BluetoothDevice device : devicesEncontrados) {
-			try {
-				Log.w("MINITRUCO", "Tentando conectar em" + device.getName());
-				socket = device.createRfcommSocketToServiceRecord(UUID_BT);
-				socket.connect();
-				break;
-			} catch (IOException e) {
-				Log.w("MINITRUCO", e);
-				try {
-					socket.close();
-				} catch (Exception e1) {
-					// Ok
-				}
-			}
-		}
+		socket = procuraServidorNosDevicesEncontrados();
 		if (socket == null) {
-			new AlertDialog.Builder(this)
-					.setTitle("Erro")
-					.setMessage(
-							Html.fromHtml("Nenhum servidor foi encontrado. Tente parear (autorizar) os celulares e repita a operação."))
-					.setOnCancelListener(new OnCancelListener() {
-						public void onCancel(DialogInterface dialog) {
-							finish();
-						}
-					})
-					.setNeutralButton("Ok",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int which) {
-									finish();
-								}
-							}).show();
+			msgErroFatal("Jogo não encontrado. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
 			return;
 		}
-		Log.w("MINITRUCO", "Achou serviço e conectou: ");
-
 		// Loop principal: decodifica as notificações recebidas e as
 		// processa (ou encaminha ao JogoBT, se estivermos em jogo)
 		int c;
 		StringBuffer sbLinha = new StringBuffer();
 		InputStream in;
-		OutputStream out;
 		try {
 			in = socket.getInputStream();
-			out = socket.getOutputStream();
 			while (estaVivo && (c = in.read()) != -1) {
 				if (c == SEPARADOR_REC) {
 					if (sbLinha.length() > 0) {
@@ -145,35 +106,15 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 						String parametros = sbLinha.delete(0, 2).toString();
 						switch (tipoNotificacao) {
 						case 'I':
-							parametros = tiraEspacoDosNomes(parametros);
-							// Encerra qualquer jogo em andamento
-							if (jogo != null) {
-								jogo = null;
-								// TODO ver se isso ai em cima basta
-								// midlet.encerraJogo(jogo.getJogadorHumano()
-								// .getPosicao(), false);
-								// display.setCurrent(this);
-								// jogo = null;
-							}
-							// Exibe as informações recebidas fora do jogo
-							String[] tokens = parametros.split(" ");
-							posJogador = Integer.parseInt(tokens[2]);
-							regras = tokens[1];
-							encaixaApelidosNaMesa(tokens[0].split("\\|"));
-							atualizaDisplay();
+							exibeMesaForaDoJogo(parametros);
 							break;
 						case 'P':
-							Intent intent = new Intent(this,
-									TrucoActivity.class);
-							intent.putExtra("clienteBluetooth", true);
-							startActivity(intent);
+							iniciaPartida();
 							break;
 						// Os outros eventos ocorrem durante o jogo,
-						// i.e., quando o Jogador local já existe, logo,
-						// vamos encaminhar para o objeto JogoRemoto
 						default:
 							jogo.processaNotificacao(tipoNotificacao,
-						 parametros);
+									parametros);
 						}
 						sbLinha.setLength(0);
 					}
@@ -196,6 +137,47 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		}
 	}
 
+	private BluetoothSocket procuraServidorNosDevicesEncontrados() {
+		for (BluetoothDevice device : devicesEncontrados) {
+			BluetoothSocket candidato = null;
+			try {
+				setMensagem("Consultando " + device.getName());
+				candidato = device.createRfcommSocketToServiceRecord(UUID_BT);
+				candidato.connect();
+				setMensagem("Conectado!");
+				return candidato;
+			} catch (IOException e) {
+				Log.w("MINITRUCO", e);
+				try {
+					candidato.close();
+				} catch (Exception e1) {
+					// Sem problemas, era só pra garantir
+				}
+			}
+		}
+		setMensagem(null);
+		return null;
+	}
+
+	private void exibeMesaForaDoJogo(String parametros) {
+		parametros = tiraEspacoDosNomes(parametros);
+		// Encerra qualquer jogo em andamento
+		if (jogo != null) {
+			jogo = null;
+			// TODO ver se isso ai em cima basta
+			// midlet.encerraJogo(jogo.getJogadorHumano()
+			// .getPosicao(), false);
+			// display.setCurrent(this);
+			// jogo = null;
+		}
+		// Exibe as informações recebidas fora do jogo
+		String[] tokens = parametros.split(" ");
+		posJogador = Integer.parseInt(tokens[2]);
+		regras = tokens[1];
+		encaixaApelidosNaMesa(tokens[0].split("\\|"));
+		atualizaDisplay();
+	}
+
 	private void encaixaApelidosNaMesa(String[] apelidosOriginais) {
 		for (int n = 1; n <= 4; n++) {
 			apelidos[getPosicaoMesa(n) - 1] = apelidosOriginais[n - 1];
@@ -208,18 +190,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		}
 		return parametros;
 	}
-
-	private void sleep(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {
-			// não precisa tratar
-		}
-	}
-
-	private JogoBluetooth jogo;
-
-	private BluetoothSocket socket;
 
 	@Override
 	public int getNumClientes() {
