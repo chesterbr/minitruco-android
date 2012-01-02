@@ -56,21 +56,6 @@ public class JogadorHumano extends Jogador {
 	}
 
 	@Override
-	public void aceitouAumentoAposta(Jogador j, int valor) {
-		if (j.getEquipe() == this.getEquipe()) {
-			// Nós aceitamos um truco, então podemos pedir 6, 9 ou 12
-			if (valor != 12) {
-				valorProximaAposta = valor + 3;
-			}
-		} else {
-			// Eles aceitaram um truco, temos que esperar eles pedirem
-			valorProximaAposta = 0;
-		}
-		mesa.diz("aumento_sim", posicaoNaTela(j), 1500);
-		mesa.aceitouAumentoAposta(j, valor);
-	}
-
-	@Override
 	public void cartaJogada(Jogador j, Carta c) {
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
@@ -175,6 +160,24 @@ public class JogadorHumano extends Jogador {
 			mesa.mostrarPerguntaAumento = true;
 		}
 	}
+	
+	@Override
+	public void aceitouAumentoAposta(Jogador j, int valor) {
+		if (j.getEquipe() == this.getEquipe()) {
+			// Nós aceitamos um truco, então podemos pedir 6, 9 ou 12
+			if (valor != 12) {
+				valorProximaAposta = valor + 3;
+			}
+		} else {
+			// Eles aceitaram um truco, temos que esperar eles pedirem
+			valorProximaAposta = 0;
+		}
+		mesa.mostrarPerguntaAumento = false;
+		mesa.diz("aumento_sim", posicaoNaTela(j), 1500);
+		mesa.aceitouAumentoAposta(j, valor);
+	}
+
+
 
 	@Override
 	public void recusouAumentoAposta(Jogador j) {

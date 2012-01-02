@@ -246,8 +246,10 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	public synchronized void enviaMensagem(int slot, String comando) {
 		if (outClientes[slot] != null) {
-			Log.w("MINITRUCO", "enviando comando " + comando + " para slot "
-					+ slot);
+			if (comando.length() > 0) {
+				Log.w("MINITRUCO", "enviando comando " + comando
+						+ " para slot " + slot);
+			}
 			try {
 				outClientes[slot].write(comando.getBytes());
 				outClientes[slot].write(SEPARADOR_ENV);
