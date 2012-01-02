@@ -148,7 +148,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			}
 		} catch (IOException e) {
 			if (!isFinishing()) {
-				if (jogo!=null) {
+				if (jogo != null) {
 					jogo.abortaJogo(0);
 				}
 				msgErroFatal("Você foi desconectado");
@@ -232,15 +232,15 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	}
 
 	/**
-	 * Manda um comando para o celular do servidor.
-	 * <p>
-	 * Este comando é originado de alguma ação do JogadorCPU local (jogar uma
-	 * carta, pedir truco, etc.).
+	 * Manda um comando para o celular do servidor (se houver um conectado).
 	 * 
 	 * @param linha
 	 */
 	public synchronized void enviaLinha(String linha) {
 		try {
+			if (out == null) {
+				return;
+			}
 			Log.w("MINITRUCO", "Enviando:" + linha);
 			out.write(linha.getBytes());
 			out.write(ClienteBluetoothActivity.SEPARADOR_ENV);
