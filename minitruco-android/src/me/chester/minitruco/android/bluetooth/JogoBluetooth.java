@@ -19,16 +19,12 @@ package me.chester.minitruco.android.bluetooth;
  * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.SituacaoJogo;
-import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
 /**
@@ -49,7 +45,6 @@ public class JogoBluetooth extends Jogo {
 
 	private JogadorHumano jogadorHumano;
 
-	private BluetoothSocket socket;
 	private ClienteBluetoothActivity clienteBT;
 
 	/**
@@ -58,9 +53,7 @@ public class JogoBluetooth extends Jogo {
 	 * @param clienteBT
 	 *            Cliente que se conectou no jogo remoto
 	 */
-	public JogoBluetooth(BluetoothSocket socket,
-			ClienteBluetoothActivity clienteBT) {
-		this.socket = socket;
+	public JogoBluetooth(ClienteBluetoothActivity clienteBT) {
 		this.clienteBT = clienteBT;
 	}
 
@@ -209,7 +202,7 @@ public class JogoBluetooth extends Jogo {
 		case 'G':
 			// Fim de jogo
 			getJogadorHumano().jogoFechado(Integer.parseInt(parametros));
-			
+
 			break;
 		case 'A':
 			// Jogo abortado por alguém
@@ -239,44 +232,25 @@ public class JogoBluetooth extends Jogo {
 		getJogadorHumano().inicioPartida(0, 0);
 	}
 
-	/**
-	 * Manda um comando para o celular do servidor.
-	 * <p>
-	 * Este comando é originado de alguma ação do JogadorCPU local (jogar uma
-	 * carta, pedir truco, etc.).
-	 * 
-	 * @param linha
-	 */
-	public synchronized void enviaLinha(String linha) {
-		try {
-			OutputStream out = socket.getOutputStream();
-			out.write(linha.getBytes());
-			out.write(ClienteBluetoothActivity.SEPARADOR_ENV);
-			out.flush();
-		} catch (IOException e) {
-			// Não preciso tratar, desconexões são identificadas no loop do in
-		}
-	}
-
 	public void jogaCarta(Jogador j, Carta c) {
-		enviaLinha("J " + c + (c.isFechada() ? " T" : ""));
+		clienteBT.enviaLinha("J " + c + (c.isFechada() ? " T" : ""));
 	}
 
 	public void decideMao11(Jogador j, boolean aceita) {
-		enviaLinha("H " + (aceita ? "T" : "F"));
+		clienteBT.enviaLinha("H " + (aceita ? "T" : "F"));
 	}
 
 	public void aumentaAposta(Jogador j) {
 		if (j.equals(getJogadorHumano()))
-			enviaLinha("T");
+			clienteBT.enviaLinha("T");
 	}
 
 	public void respondeAumento(Jogador j, boolean aceitou) {
 		if (j.equals(getJogadorHumano())) {
 			if (aceitou)
-				enviaLinha("D");
+				clienteBT.enviaLinha("D");
 			else
-				enviaLinha("C");
+				clienteBT.enviaLinha("C");
 		}
 	}
 

@@ -2,6 +2,7 @@ package me.chester.minitruco.android.bluetooth;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +29,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private Thread threadConsultaDevicesEncontrados;
 	private JogoBluetooth jogo;
 	private BluetoothSocket socket = null;
+	private InputStream in;
+	private OutputStream out;
 	private int posJogador;
 
 	private BroadcastReceiver receiverDescobreServidor = new BroadcastReceiver() {
@@ -74,12 +77,13 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		super.onDestroy();
 		unregisterReceiver(receiverDescobreServidor);
 		btAdapter.cancelDiscovery();
+		finalizaThreadFechandoConexoes();
 	}
 
 	private void iniciaProcuraDeCelulares() {
 		if (btAdapter.isEnabled()) {
 			boolean result = btAdapter.startDiscovery();
-			Log.w("MINITRUCO", "discovery: "+result);
+			Log.w("MINITRUCO", "discovery: " + result);
 			return;
 		}
 		Intent enableBtIntent = new Intent(
@@ -112,9 +116,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		// processa (ou encaminha ao JogoBT, se estivermos em jogo)
 		int c;
 		StringBuffer sbLinha = new StringBuffer();
-		InputStream in;
 		try {
 			in = socket.getInputStream();
+			out = socket.getOutputStream();
 			while ((c = in.read()) != -1) {
 				if (c == SEPARADOR_REC) {
 					if (sbLinha.length() > 0) {
@@ -130,8 +134,10 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 							break;
 						// Os outros eventos ocorrem durante o jogo,
 						default:
-							jogo.processaNotificacao(tipoNotificacao,
-									parametros);
+							if (jogo != null) {
+								jogo.processaNotificacao(tipoNotificacao,
+										parametros);
+							}
 						}
 						sbLinha.setLength(0);
 					}
@@ -140,7 +146,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 				}
 			}
 		} catch (IOException e) {
-			msgErroFatal("Você foi desconectado");
+			if (!isFinishing()) {
+				msgErroFatal("Você foi desconectado");
+			}
 		}
 	}
 
@@ -171,14 +179,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 
 	private void exibeMesaForaDoJogo(String parametros) {
 		parametros = tiraEspacoDosNomes(parametros);
-		// Encerra qualquer jogo em andamento
 		if (jogo != null) {
+			jogo.abortaJogo(0);
 			jogo = null;
-			// TODO ver se isso ai em cima basta
-			// midlet.encerraJogo(jogo.getJogadorHumano()
-			// .getPosicao(), false);
-			// display.setCurrent(this);
-			// jogo = null;
 		}
 		// Exibe as informações recebidas fora do jogo
 		String[] tokens = parametros.split(" ");
@@ -207,6 +210,26 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	}
 
 	/**
+	 * Manda um comando para o celular do servidor.
+	 * <p>
+	 * Este comando é originado de alguma ação do JogadorCPU local (jogar uma
+	 * carta, pedir truco, etc.).
+	 * 
+	 * @param linha
+	 */
+	public synchronized void enviaLinha(String linha) {
+		try {
+			Log.w("MINITRUCO", "Enviando:" + linha);
+			out.write(linha.getBytes());
+			out.write(ClienteBluetoothActivity.SEPARADOR_ENV);
+			out.flush();
+		} catch (IOException e) {
+			Log.w("MINITRUCO", e);
+			// Não preciso tratar, desconexões são identificadas no loop do in
+		}
+	}
+
+	/**
 	 * Recupera a posição "visual" correspondente a uma posição de jogo (i.e.,
 	 * uma posição no servidor)
 	 * <p>
@@ -224,12 +247,31 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		return retorno;
 	}
 
+	private void finalizaThreadFechandoConexoes() {
+		if (in != null) {
+			try {
+				in.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (socket != null) {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
 		return currentInstance._criaNovoJogo(jogadorHumano);
 	}
 
 	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-		jogo = new JogoBluetooth(socket, this);
+		jogo = new JogoBluetooth(this);
 		// Adiciona o jogador na posição correta
 		// (preenchendo as outras com dummies)
 		for (int i = 1; i <= 4; i++) {

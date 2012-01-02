@@ -3,6 +3,7 @@ package me.chester.minitruco.android;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.JogoLocal;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Message;
@@ -125,10 +126,14 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void jogoAbortado(int posicao) {
-		mesa.diz("abortou", convertePosicaoJogadorParaPosicaoTela(posicao),
-				1000);
-		mesa.aguardaFimAnimacoes();
-		activity.finish();
+		if (posicao != 0 && mesa != null) {
+			mesa.diz("abortou", convertePosicaoJogadorParaPosicaoTela(posicao),
+					1000);
+			mesa.aguardaFimAnimacoes();
+		}
+		if (activity != null) {
+			activity.finish();
+		}
 	}
 
 	@Override
@@ -137,10 +142,10 @@ public class JogadorHumano extends Jogador {
 		incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
 		mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000);
 		mesa.aguardaFimAnimacoes();
-		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_MOSTRA_BTN_NOVA_PARTIDA));
-		mesa = null;
-		activity = null;
+		if (jogo instanceof JogoLocal) {
+			activity.handler.sendMessage(Message.obtain(activity.handler,
+					TrucoActivity.MSG_MOSTRA_BTN_NOVA_PARTIDA));
+		}
 	}
 
 	@Override
