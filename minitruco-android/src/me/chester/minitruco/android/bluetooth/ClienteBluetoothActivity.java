@@ -241,7 +241,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			if (out == null) {
 				return;
 			}
-			Log.w("MINITRUCO", "Enviando:" + linha);
+			if (linha.length()>0) {
+				Log.w("MINITRUCO", "Enviando:" + linha);
+			}
 			out.write(linha.getBytes());
 			out.write(ClienteBluetoothActivity.SEPARADOR_ENV);
 			out.flush();
