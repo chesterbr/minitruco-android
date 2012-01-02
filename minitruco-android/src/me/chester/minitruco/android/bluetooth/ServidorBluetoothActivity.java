@@ -14,7 +14,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,8 +51,10 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		currentInstance = this;
-		// TODO Usa as regras escolhidas pelo usuário
-		this.regras = "FF";
+		SharedPreferences preferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		regras = (preferences.getBoolean("baralhoLimpo", false) ? "T" : "F")
+				+ (preferences.getBoolean("manilhaVelha", false) ? "T" : "F");
 		layoutIniciar.setVisibility(View.VISIBLE);
 		btnIniciar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -124,9 +128,11 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 			atualizaDisplay();
 			atualizaClientes();
 			if (status == STATUS_LOTADO) {
+				setMensagem(null);
 				sleep(1000);
 				continue;
 			}
+			setMensagem("Aguardando conexões...");
 			// Se chegamos aqui, estamos fora de jogo e com vagas
 			try {
 				BluetoothSocket socket = serverSocket.accept();

@@ -124,6 +124,9 @@ public class TrucoActivity extends BaseActivity {
 	};
 
 	/**
+	 * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
+	 * a criação é terceirizada para a classe apropriada.
+	 * <p>
 	 * Este método é chamada pela primeira vez a partir da MesaView (para
 	 * garantir que o jogo só role quando ela estiver inicializada) e dali em
 	 * diante pelo botão de nova partida.
@@ -132,28 +135,27 @@ public class TrucoActivity extends BaseActivity {
 		jogadorHumano = new JogadorHumano(this, mesa);
 		if (getIntent().hasExtra("servidorBluetooth")) {
 			jogo = ServidorBluetoothActivity.criaNovoJogo(jogadorHumano);
-			(new Thread(jogo)).start();
-			return;
 		} else if (getIntent().hasExtra("clienteBluetooth")) {
 			jogo = ClienteBluetoothActivity.criaNovoJogo(jogadorHumano);
-			(new Thread(jogo)).start();
-			return;
+		} else {
+			jogo = criaNovoJogoSinglePlayer(jogadorHumano);
 		}
+		(new Thread(jogo)).start();
+	}
 
-		// TODO: dar defer disso para outro local (um método ou o próprio menu
-		// principal), só ter um starter da thread
+	private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		boolean tentoMineiro = preferences.getBoolean("tentoMineiro", false);
 		boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
 		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
 				&& !baralhoLimpo;
-		jogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro);
-		jogo.adiciona(jogadorHumano);
+		Jogo novoJogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro);
+		novoJogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
-			jogo.adiciona(new JogadorCPU());
+			novoJogo.adiciona(new JogadorCPU());
 		}
-		(new Thread(jogo)).start();
+		return novoJogo;
 	}
 
 	@Override

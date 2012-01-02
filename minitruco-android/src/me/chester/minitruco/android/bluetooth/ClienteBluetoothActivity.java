@@ -78,7 +78,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 
 	private void iniciaProcuraDeCelulares() {
 		if (btAdapter.isEnabled()) {
-			btAdapter.startDiscovery();
+			boolean result = btAdapter.startDiscovery();
+			Log.w("MINITRUCO", "discovery: "+result);
 			return;
 		}
 		Intent enableBtIntent = new Intent(
@@ -149,10 +150,13 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			try {
 				setMensagem("Consultando " + device.getName());
 				candidato = device.createRfcommSocketToServiceRecord(UUID_BT);
+				sleep(1000);
 				candidato.connect();
 				setMensagem("Conectado!");
 				return candidato;
-			} catch (IOException e) {
+			} catch (Exception e) {
+				Log.w("MINITRUCO",
+						"Falhou conexao com device " + device.getName());
 				Log.w("MINITRUCO", e);
 				try {
 					candidato.close();

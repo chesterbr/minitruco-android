@@ -55,6 +55,8 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	protected Button btnIniciar;
 	protected View layoutIniciar;
 	private TextView textViewMensagem;
+	private TextView textViewRegras;
+	private TextView[] textViewsJogadores;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,12 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 		layoutIniciar = (View) findViewById(R.id.layoutIniciar);
 		btnIniciar = (Button) findViewById(R.id.btnIniciarBluetooth);
 		textViewMensagem = ((TextView) findViewById(R.id.textViewMensagem));
+		textViewRegras = (TextView) findViewById(R.id.textViewRegras);
+		textViewsJogadores = new TextView[4];
+		textViewsJogadores[0] = (TextView) findViewById(R.id.textViewJogador1);
+		textViewsJogadores[1] = (TextView) findViewById(R.id.textViewJogador2);
+		textViewsJogadores[2] = (TextView) findViewById(R.id.textViewJogador3);
+		textViewsJogadores[3] = (TextView) findViewById(R.id.textViewJogador4);
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 	}
 
@@ -83,6 +91,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	protected abstract int getNumClientes();
 
 	Handler handlerAtualizaDisplay = new Handler() {
+
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case MSG_MOSTRA_MENSAGEM:
@@ -111,16 +120,13 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 								}).show();
 				break;
 			}
-			((TextView) findViewById(R.id.textViewJogador1))
-					.setText(apelidos[0]);
-			((TextView) findViewById(R.id.textViewJogador2))
-					.setText(apelidos[1]);
-			((TextView) findViewById(R.id.textViewJogador3))
-					.setText(apelidos[2]);
-			((TextView) findViewById(R.id.textViewJogador4))
-					.setText(apelidos[3]);
+			for (int i = 0; i < 4; i++) {
+				textViewsJogadores[i].setText(apelidos[i]);
+			}
+			textViewRegras.setText(getTextoRegras());
 			btnIniciar.setEnabled(getNumClientes() > 0);
 		}
+
 	};
 
 	protected void iniciaPartida() {
@@ -131,6 +137,15 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			intent.putExtra("servidorBluetooth", true);
 		}
 		startActivity(intent);
+	}
+
+	protected String getTextoRegras() {
+		if (regras == null || regras.length() < 2) {
+			return "";
+		}
+		return (regras.charAt(0) == 'T' ? "Baralho Limpo" : "Baralho Sujo")
+				+ " / "
+				+ (regras.charAt(1) == 'T' ? "Manilha Velha" : "Manilha Nova");
 	}
 
 	protected void sleep(int ms) {

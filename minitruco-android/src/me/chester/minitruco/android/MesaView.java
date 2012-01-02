@@ -52,6 +52,8 @@ import android.view.View;
  */
 public class MesaView extends View {
 
+	private int posicaoVez;
+
 	public MesaView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
@@ -105,7 +107,7 @@ public class MesaView extends View {
 	 */
 	@Override
 	public void onSizeChanged(int w, int h, int oldw, int oldh) {
-	
+
 		// Ajusta o tamanho da carta (tudo depende dele) ao da mesa e os
 		// "pontos de referência" importantes (baralho decorativo, tamanho do
 		// texto, etc.)
@@ -113,7 +115,7 @@ public class MesaView extends View {
 		leftBaralho = w - CartaVisual.largura - MARGEM - 4;
 		topBaralho = MARGEM + 4;
 		tamanhoFonte = 12.0f * (h / 270.0f);
-	
+
 		// Na primeira chamada (inicialização), instanciamos as cartas
 		if (!inicializada) {
 			for (int i = 0; i < cartas.length; i++) {
@@ -122,7 +124,7 @@ public class MesaView extends View {
 			}
 			cartas[0].visible = false;
 		}
-	
+
 		// Define posição e tamanho da caixa de diálogo e seus botões
 		int alturaDialog = CartaVisual.altura;
 		int larguraDialog = CartaVisual.largura * 3;
@@ -137,13 +139,13 @@ public class MesaView extends View {
 		rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8,
 				rectBotaoSim.top, leftDialog + larguraDialog - 8,
 				rectBotaoSim.bottom);
-	
+
 		// Posiciona o vira e as cartas decorativas do baralho, que são fixos
 		cartas[0].movePara(leftBaralho, topBaralho);
 		cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
 		cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
 		cartas[3].movePara(leftBaralho, topBaralho);
-	
+
 		if (!inicializada) {
 			// Inicia as threads internas que cuidam de animações e de responder
 			// a diálogos e faz a activity começar o jogo
@@ -267,25 +269,25 @@ public class MesaView extends View {
 			return true;
 		case MotionEvent.ACTION_UP:
 			if (mostrarPerguntaMao11) {
-				if (rectBotaoSim.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoSim.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaMao11 = false;
 					aceitarMao11 = true;
 				}
-				if (rectBotaoNao.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoNao.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaMao11 = false;
 					recusarMao11 = true;
 				}
 			}
 			if (mostrarPerguntaAumento) {
-				if (rectBotaoSim.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoSim.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaAumento = false;
 					aceitarAumento = true;
 				}
-				if (rectBotaoNao.contains((int) event.getX(), (int) event
-						.getY())) {
+				if (rectBotaoNao.contains((int) event.getX(),
+						(int) event.getY())) {
 					mostrarPerguntaAumento = false;
 					recusarAumento = true;
 				}
@@ -562,8 +564,8 @@ public class MesaView extends View {
 		if (numJogador == 3 || numJogador == 4) {
 			posicao = 2 - posicao;
 		}
-		carta.movePara(calcPosLeftCarta(numJogador, posicao), calcPosTopCarta(
-				numJogador, posicao), 150);
+		carta.movePara(calcPosLeftCarta(numJogador, posicao),
+				calcPosTopCarta(numJogador, posicao), 150);
 	}
 
 	/**
@@ -674,8 +676,8 @@ public class MesaView extends View {
 				// desenho a cada 250ms
 				if (i != (numRodadaPiscando - 1) || (agora % 250) % 2 == 0) {
 					canvas.drawBitmap(iconesRodadas[resultadoRodada[i]],
-							MARGEM, MARGEM + i
-									* (1 + iconesRodadas[0].getHeight()),
+							MARGEM,
+							MARGEM + i * (1 + iconesRodadas[0].getHeight()),
 							new Paint());
 				}
 			}
@@ -694,15 +696,15 @@ public class MesaView extends View {
 			paint.setTextSize(tamanhoFonte);
 			paint.setTextAlign(Align.CENTER);
 			canvas.drawText(mostrarPerguntaMao11 ? "Aceita Mão de 11?"
-					: "Aceita?", rectDialog.centerX(), rectDialog.top
-					+ paint.getTextSize() * 1.2f, paint);
+					: "Aceita?", rectDialog.centerX(),
+					rectDialog.top + paint.getTextSize() * 1.2f, paint);
 			desenhaBotao("Sim", canvas, rectBotaoSim);
 			desenhaBotao("Nao", canvas, rectBotaoNao);
 
 		}
 
-		// Balãozinho (se alguém estiver falando algo)
 		desenhaBalao(canvas);
+		desenhaIndicadorDeVez(canvas);
 
 	}
 
@@ -805,6 +807,34 @@ public class MesaView extends View {
 	private long mostraBalaoAte = System.currentTimeMillis();
 
 	private String fraseBalao = null;
+
+	private void desenhaIndicadorDeVez(Canvas canvas) {
+		if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
+			return;
+		}
+		Paint paintSetaVez = new Paint();
+		paintSetaVez.setColor(Color.YELLOW);
+		paintSetaVez.setTextAlign(Align.CENTER);
+		paintSetaVez.setTextSize(CartaVisual.altura / 3);
+		switch (posicaoVez) {
+		case 1:
+			canvas.drawText("\u21E9", getWidth() / 2, getHeight()
+					- CartaVisual.altura * 14 / 12, paintSetaVez);
+			break;
+		case 2:
+			canvas.drawText("\u21E8", getWidth() - CartaVisual.largura * 15
+					/ 12, getHeight() / 2, paintSetaVez);
+			break;
+		case 3:
+			canvas.drawText("\u21E7", getWidth() / 2,
+					CartaVisual.altura * 16 / 12, paintSetaVez);
+			break;
+		case 4:
+			canvas.drawText("\u21E6", CartaVisual.largura * 15 / 12,
+					getHeight() / 2, paintSetaVez);
+			break;
+		}
+	}
 
 	/**
 	 * Desenha a parte gráfica do balão (sem o texto). O nome é meio mentiroso,
@@ -926,5 +956,9 @@ public class MesaView extends View {
 	private boolean visivel = false;
 
 	public boolean vaiJogarFechada;
+
+	public void setPosicaoVez(int posicaoVez) {
+		this.posicaoVez = posicaoVez;
+	}
 
 }

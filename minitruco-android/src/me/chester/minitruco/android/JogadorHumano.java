@@ -73,6 +73,7 @@ public class JogadorHumano extends Jogador {
 	public void cartaJogada(Jogador j, Carta c) {
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
+		mesa.setPosicaoVez(0);
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
 		activity.handler.sendMessage(Message.obtain(activity.handler,
@@ -186,6 +187,7 @@ public class JogadorHumano extends Jogador {
 		}
 		mesa.mostrarPerguntaMao11 = false;
 		mesa.mostrarPerguntaAumento = false;
+		mesa.setPosicaoVez(0);
 		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
 	}
 
@@ -208,6 +210,7 @@ public class JogadorHumano extends Jogador {
 										: TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
 				: MesaView.STATUS_VEZ_OUTRO);
+		mesa.setPosicaoVez(posicaoNaTela(j));
 	}
 
 	/**
