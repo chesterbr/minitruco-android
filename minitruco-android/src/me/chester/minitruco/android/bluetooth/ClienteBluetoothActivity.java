@@ -26,7 +26,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private static ClienteBluetoothActivity currentInstance;
 
 	private Set<BluetoothDevice> devicesEncontrados;
-	private Thread threadConsultaDevicesEncontrados;
+	private Thread threadConexao;
+	private Thread threadMonitoraConexao;
 	private JogoBluetooth jogo;
 	private BluetoothSocket socket = null;
 	private InputStream in;
@@ -47,9 +48,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED
 					.equals(action)) {
 				if (!isFinishing()) {
-					threadConsultaDevicesEncontrados = new Thread(
-							ClienteBluetoothActivity.this);
-					threadConsultaDevicesEncontrados.start();
+					threadConexao = new Thread(ClienteBluetoothActivity.this);
+					threadConexao.start();
 				}
 			}
 		}
@@ -112,6 +112,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		}
 		sleep(500);
 		setMensagem(null);
+		iniciaMonitorConexao();
 		// Loop principal: decodifica as notificações recebidas e as
 		// processa (ou encaminha ao JogoBT, se estivermos em jogo)
 		int c;
@@ -147,8 +148,29 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			}
 		} catch (IOException e) {
 			if (!isFinishing()) {
+				if (jogo!=null) {
+					jogo.abortaJogo(0);
+				}
 				msgErroFatal("Você foi desconectado");
 			}
+		}
+	}
+
+	private void iniciaMonitorConexao() {
+		if (threadMonitoraConexao == null) {
+			threadMonitoraConexao = new Thread() {
+				public void run() {
+					while (threadConexao.isAlive()) {
+						// Envia comando vazio, apenas para garantir desbloqueio
+						// de I/O na thread principal se o servidor sumir
+						for (int i = 0; i <= 2; i++) {
+							enviaLinha("");
+						}
+						ClienteBluetoothActivity.this.sleep(2000);
+					}
+				}
+			};
+			threadMonitoraConexao.start();
 		}
 	}
 

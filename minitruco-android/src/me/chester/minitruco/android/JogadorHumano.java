@@ -145,6 +145,8 @@ public class JogadorHumano extends Jogador {
 		if (jogo instanceof JogoLocal) {
 			activity.handler.sendMessage(Message.obtain(activity.handler,
 					TrucoActivity.MSG_MOSTRA_BTN_NOVA_PARTIDA));
+		} else {
+			activity.finish();
 		}
 	}
 
