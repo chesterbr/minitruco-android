@@ -115,7 +115,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="manilha / aaa"
             android:textColor="#000000"
             android:textStyle="italic" />
     </LinearLayout>
