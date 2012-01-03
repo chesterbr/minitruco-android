@@ -68,6 +68,11 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		});
 		registerReceiver(receiverMantemDiscoverable, new IntentFilter(
 				BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
+		if (preferences.getBoolean("tentoMineiro", false)) {
+			mostraAlertBox(
+					"Aviso",
+					"O Tento Mineiro ainda não está disponível para jogos Bluetooth. Esta opção será ignorada.");
+		}
 	}
 
 	@Override
