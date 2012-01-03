@@ -3,6 +3,7 @@ package me.chester.minitruco.android.bluetooth;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
@@ -18,6 +19,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -64,6 +68,59 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		});
 		registerReceiver(receiverMantemDiscoverable, new IntentFilter(
 				BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.servidorbluetooth, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO limpar essa sujeira, herança do Java ME
+		// (e ver se é uma boa fazer isso na UI thread mesmo)
+		switch (item.getItemId()) {
+		case R.id.menuitem_troca_parceiro:
+			synchronized (this) {
+				Object temp;
+				temp = connClientes[2];
+				connClientes[2] = connClientes[1];
+				connClientes[1] = connClientes[0];
+				connClientes[0] = (BluetoothSocket) temp;
+				temp = outClientes[2];
+				outClientes[2] = outClientes[1];
+				outClientes[1] = outClientes[0];
+				outClientes[0] = (OutputStream) temp;
+				temp = apelidos[3];
+				apelidos[3] = apelidos[2];
+				apelidos[2] = apelidos[1];
+				apelidos[1] = (String) temp;
+				atualizaDisplay();
+				atualizaClientes();
+			}
+			return true;
+		case R.id.menuitem_inverte_adversarios:
+			synchronized (this) {
+				Object temp;
+				temp = connClientes[0];
+				connClientes[0] = connClientes[2];
+				connClientes[2] = (BluetoothSocket) temp;
+				temp = outClientes[0];
+				outClientes[0] = outClientes[2];
+				outClientes[2] = (OutputStream) temp;
+				temp = apelidos[1];
+				apelidos[1] = apelidos[3];
+				apelidos[3] = (String) temp;
+				atualizaDisplay();
+				atualizaClientes();
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	@Override

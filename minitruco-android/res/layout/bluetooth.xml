@@ -72,7 +72,7 @@
 
             <TextView
                 android:id="@+id/textViewMensagem"
-                android:layout_width="220sp"
+                android:layout_width="200sp"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="#000000"
