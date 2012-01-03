@@ -339,10 +339,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 			outClientes[slot] = null;
 			apelidos[slot + 1] = APELIDOS_CPU[slot];
 		}
-		// -1 vai notificar que o servidor (posição -1+2=1) desistiu
-		// -2 não notifica ninguém (posição -2+2=0)
-		// TODO ver o que faz com isso
-		// midlet.encerraJogo(slot + 2, false);
 		status = STATUS_AGUARDANDO;
 		atualizaDisplay();
 		atualizaClientes();

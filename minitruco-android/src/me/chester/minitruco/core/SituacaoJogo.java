@@ -34,8 +34,6 @@ public class SituacaoJogo {
 
 	@Override
 	public String toString() {
-		// TODO transformar em algo semi-serializável e desserializar para
-		// debug/regressão
 		return "pos:" + posJogador + ",pontos:" + pontosEquipe[0] + ","
 				+ pontosEquipe[1] + ",rodada:" + numRodadaAtual + ",results:"
 				+ resultadoRodada[0] + "," + resultadoRodada[1] + ","

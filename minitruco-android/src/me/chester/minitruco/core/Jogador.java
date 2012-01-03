@@ -177,7 +177,6 @@ public abstract class Jogador {
 	/**
 	 * Estratégias suportadas pelos jogadores automático (CPU e Bot)
 	 */
-	// TODO implementar alguma estrategia e adicionar aqui
 	static Estrategia[] ESTRATEGIAS = { new EstrategiaGasparotto(),
 			new EstrategiaSellani() };
 

@@ -241,7 +241,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			if (out == null) {
 				return;
 			}
-			if (linha.length()>0) {
+			if (linha.length() > 0) {
 				Log.w("MINITRUCO", "Enviando:" + linha);
 			}
 			out.write(linha.getBytes());
@@ -276,16 +276,12 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			try {
 				in.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 		if (socket != null) {
 			try {
 				socket.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 	}
