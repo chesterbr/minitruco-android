@@ -152,7 +152,9 @@ public class MesaView extends View {
 			animacaoJogo.start();
 			respondeDialogos.start();
 			inicializada = true;
-			this.trucoActivity.criaEIniciaNovoJogo();
+			if (this.trucoActivity != null) {
+				this.trucoActivity.criaEIniciaNovoJogo();
+			}
 		} else {
 			// Rolou um resize, reposiciona as cartas não-decorativas
 			for (int i = 0; i <= 15; i++) {

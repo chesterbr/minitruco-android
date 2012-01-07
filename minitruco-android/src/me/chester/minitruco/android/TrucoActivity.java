@@ -15,10 +15,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /*
@@ -55,6 +57,9 @@ public class TrucoActivity extends BaseActivity {
 			"NOVE!", "DOZE!!!" };
 
 	private MesaView mesa;
+	private TextView textViewAnuncio;
+	private View layoutAnuncio;
+	private View layoutFimDeJogo;
 
 	JogadorHumano jogadorHumano;
 
@@ -70,6 +75,7 @@ public class TrucoActivity extends BaseActivity {
 	static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
 	static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
 	static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
+	static final int MSG_ESCONDE_PATROCINIO = 8;
 
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -94,12 +100,20 @@ public class TrucoActivity extends BaseActivity {
 				tvNos.setBackgroundColor(Color.TRANSPARENT);
 				tvEles.setBackgroundColor(Color.TRANSPARENT);
 				break;
+			case MSG_ESCONDE_PATROCINIO:
+				layoutAnuncio.setVisibility(View.INVISIBLE);
+				break;
 			case MSG_MOSTRA_BTN_NOVA_PARTIDA:
+				textViewAnuncio.setText(Publicidade.getMensagem());
+				layoutFimDeJogo.setVisibility(View.VISIBLE);
+				Log.w("MINITRUCO",
+						"mostrar na activity " + Publicidade.podeMostrar());
+				layoutAnuncio
+						.setVisibility(Publicidade.podeMostrar() ? View.VISIBLE
+								: View.INVISIBLE);
+				break;
 			case MSG_ESCONDE_BTN_NOVA_PARTIDA:
-				Button btnNovaPartida = (Button) findViewById(R.id.btnNovaPartida);
-				btnNovaPartida
-						.setVisibility(msg.what == MSG_MOSTRA_BTN_NOVA_PARTIDA ? Button.VISIBLE
-								: Button.INVISIBLE);
+				layoutFimDeJogo.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_MOSTRA_BOTAO_AUMENTO:
 				btnAumento
@@ -163,6 +177,10 @@ public class TrucoActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.truco);
 		mesa = ((MesaView) findViewById(R.id.MesaView01));
+		textViewAnuncio = (TextView) findViewById(R.id.textViewAnuncio);
+		layoutAnuncio = (LinearLayout) findViewById(R.id.layoutAnuncio);
+		layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
+
 		mesa.setTrucoActivity(this);
 		// Inicializa componentes das classes visuais que dependem de métodos
 		// disponíveis exclusivamente na Activity
@@ -191,9 +209,13 @@ public class TrucoActivity extends BaseActivity {
 	}
 
 	public void novaPartidaClickHandler(View v) {
-		handler.sendMessage(Message.obtain(handler,
-				MSG_ESCONDE_BTN_NOVA_PARTIDA));
+		Message.obtain(handler, MSG_ESCONDE_BTN_NOVA_PARTIDA).sendToTarget();
 		criaEIniciaNovoJogo();
+	}
+
+	public void publicidadeClickHandler(View v) {
+		Message.obtain(handler, MSG_ESCONDE_PATROCINIO).sendToTarget();
+		Publicidade.click();
 	}
 
 	public void aumentoClickHandler(View v) {

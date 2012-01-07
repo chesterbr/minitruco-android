@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,6 +52,7 @@ public class TituloActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.titulo);
 		habilitaBluetoothSeExistir();
+		Publicidade.inicializa(this);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean mostraInstrucoes = preferences.getBoolean("mostraInstrucoes",
 				true);

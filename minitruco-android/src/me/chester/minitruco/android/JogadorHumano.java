@@ -127,12 +127,8 @@ public class JogadorHumano extends Jogador {
 		incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
 		mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000);
 		mesa.aguardaFimAnimacoes();
-		if (jogo instanceof JogoLocal) {
-			activity.handler.sendMessage(Message.obtain(activity.handler,
-					TrucoActivity.MSG_MOSTRA_BTN_NOVA_PARTIDA));
-		} else {
-			activity.finish();
-		}
+		activity.handler.sendMessage(Message.obtain(activity.handler,
+				TrucoActivity.MSG_MOSTRA_BTN_NOVA_PARTIDA));
 	}
 
 	@Override
@@ -160,7 +156,7 @@ public class JogadorHumano extends Jogador {
 			mesa.mostrarPerguntaAumento = true;
 		}
 	}
-	
+
 	@Override
 	public void aceitouAumentoAposta(Jogador j, int valor) {
 		if (j.getEquipe() == this.getEquipe()) {
@@ -176,8 +172,6 @@ public class JogadorHumano extends Jogador {
 		mesa.diz("aumento_sim", posicaoNaTela(j), 1500);
 		mesa.aceitouAumentoAposta(j, valor);
 	}
-
-
 
 	@Override
 	public void recusouAumentoAposta(Jogador j) {
