@@ -117,6 +117,7 @@ public class JogadorHumano extends Jogador {
 			mesa.aguardaFimAnimacoes();
 		}
 		if (activity != null) {
+			activity.jogoAbortado = true;
 			activity.finish();
 		}
 	}

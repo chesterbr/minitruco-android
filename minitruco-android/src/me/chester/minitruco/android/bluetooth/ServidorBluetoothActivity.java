@@ -63,7 +63,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		btnIniciar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				status = STATUS_EM_JOGO;
-				iniciaPartida();
+				iniciaTrucoActivitySePreciso();
 			}
 		});
 		registerReceiver(receiverMantemDiscoverable, new IntentFilter(

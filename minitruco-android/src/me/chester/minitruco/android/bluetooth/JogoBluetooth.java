@@ -256,4 +256,15 @@ public class JogoBluetooth extends Jogo {
 
 	public void enviaMensagem(Jogador j, String s) {
 	}
+
+	/**
+	 * Se o jogador humano aborta, encaminha para o jogo "de verdade"
+	 */
+	@Override
+	public void abortaJogo(int posicao) {
+		if (posicao == 1) {
+			clienteBT.enviaLinha("A");
+		}
+	}
+
 }

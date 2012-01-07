@@ -129,14 +129,16 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 
 	};
 
-	protected void iniciaPartida() {
-		Intent intent = new Intent(this, TrucoActivity.class);
-		if (this instanceof ClienteBluetoothActivity) {
-			intent.putExtra("clienteBluetooth", true);
-		} else {
-			intent.putExtra("servidorBluetooth", true);
+	protected void iniciaTrucoActivitySePreciso() {
+		if (!TrucoActivity.isViva()) {
+			Intent intent = new Intent(this, TrucoActivity.class);
+			if (this instanceof ClienteBluetoothActivity) {
+				intent.putExtra("clienteBluetooth", true);
+			} else {
+				intent.putExtra("servidorBluetooth", true);
+			}
+			startActivity(intent);
 		}
-		startActivity(intent);
 	}
 
 	protected String getTextoRegras() {

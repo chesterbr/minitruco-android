@@ -15,7 +15,8 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 	private ServidorBluetoothActivity servidor;
 	private Thread threadProcessaMensagens;
 
-	public JogadorBluetooth(BluetoothSocket socket, ServidorBluetoothActivity servidor) {
+	public JogadorBluetooth(BluetoothSocket socket,
+			ServidorBluetoothActivity servidor) {
 		this.socket = socket;
 		this.servidor = servidor;
 		threadProcessaMensagens = new Thread(this);
@@ -84,6 +85,9 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 							break;
 						case 'D':
 							jogo.respondeAumento(this, true);
+							break;
+						case 'A':
+							jogo.abortaJogo(getPosicao());
 							break;
 						case 'C':
 							jogo.respondeAumento(this, false);

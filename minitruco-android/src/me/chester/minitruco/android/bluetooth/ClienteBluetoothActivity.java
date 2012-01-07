@@ -131,7 +131,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 							exibeMesaForaDoJogo(parametros);
 							break;
 						case 'P':
-							iniciaPartida();
+							iniciaTrucoActivitySePreciso();
 							break;
 						// Os outros eventos ocorrem durante o jogo,
 						default:

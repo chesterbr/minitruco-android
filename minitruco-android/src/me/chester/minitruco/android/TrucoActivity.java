@@ -60,6 +60,8 @@ public class TrucoActivity extends BaseActivity {
 	private TextView textViewAnuncio;
 	private View layoutAnuncio;
 	private View layoutFimDeJogo;
+	private static boolean mIsViva = false;
+	boolean jogoAbortado = false;
 
 	JogadorHumano jogadorHumano;
 
@@ -176,6 +178,7 @@ public class TrucoActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.truco);
+		mIsViva = true;
 		mesa = ((MesaView) findViewById(R.id.MesaView01));
 		textViewAnuncio = (TextView) findViewById(R.id.textViewAnuncio);
 		layoutAnuncio = (LinearLayout) findViewById(R.id.layoutAnuncio);
@@ -250,7 +253,14 @@ public class TrucoActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		jogo.abortaJogo(1);
+		mIsViva = false;
+		if (!jogoAbortado) {
+			jogo.abortaJogo(1);
+		}
+	}
+
+	public static boolean isViva() {
+		return mIsViva;
 	}
 
 }
