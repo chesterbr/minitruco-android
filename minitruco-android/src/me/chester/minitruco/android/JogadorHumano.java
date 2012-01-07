@@ -1,5 +1,6 @@
 package me.chester.minitruco.android;
 
+import me.chester.minitruco.android.bluetooth.JogoBluetooth;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
@@ -129,7 +130,7 @@ public class JogadorHumano extends Jogador {
 		mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000);
 		mesa.aguardaFimAnimacoes();
 		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_MOSTRA_BTN_NOVA_PARTIDA));
+				TrucoActivity.MSG_OFERECE_NOVA_PARTIDA));
 	}
 
 	@Override

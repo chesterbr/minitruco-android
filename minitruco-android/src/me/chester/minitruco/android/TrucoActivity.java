@@ -71,8 +71,8 @@ public class TrucoActivity extends BaseActivity {
 
 	static final int MSG_ATUALIZA_PLACAR = 0;
 	static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
-	static final int MSG_MOSTRA_BTN_NOVA_PARTIDA = 2;
-	static final int MSG_ESCONDE_BTN_NOVA_PARTIDA = 3;
+	static final int MSG_OFERECE_NOVA_PARTIDA = 2;
+	static final int MSG_REMOVE_NOVA_PARTIDA = 3;
 	static final int MSG_MOSTRA_BOTAO_AUMENTO = 4;
 	static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
 	static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
@@ -105,16 +105,17 @@ public class TrucoActivity extends BaseActivity {
 			case MSG_ESCONDE_PATROCINIO:
 				layoutAnuncio.setVisibility(View.INVISIBLE);
 				break;
-			case MSG_MOSTRA_BTN_NOVA_PARTIDA:
+			case MSG_OFERECE_NOVA_PARTIDA:
+				if (getIntent().hasExtra("clienteBluetooth")) {
+					break;
+				}
 				textViewAnuncio.setText(Publicidade.getMensagem());
 				layoutFimDeJogo.setVisibility(View.VISIBLE);
-				Log.w("MINITRUCO",
-						"mostrar na activity " + Publicidade.podeMostrar());
 				layoutAnuncio
 						.setVisibility(Publicidade.podeMostrar() ? View.VISIBLE
 								: View.INVISIBLE);
 				break;
-			case MSG_ESCONDE_BTN_NOVA_PARTIDA:
+			case MSG_REMOVE_NOVA_PARTIDA:
 				layoutFimDeJogo.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_MOSTRA_BOTAO_AUMENTO:
@@ -212,7 +213,7 @@ public class TrucoActivity extends BaseActivity {
 	}
 
 	public void novaPartidaClickHandler(View v) {
-		Message.obtain(handler, MSG_ESCONDE_BTN_NOVA_PARTIDA).sendToTarget();
+		Message.obtain(handler, MSG_REMOVE_NOVA_PARTIDA).sendToTarget();
 		criaEIniciaNovoJogo();
 	}
 
