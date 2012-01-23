@@ -4,9 +4,9 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="lib/bcfads-2.0.3.jar">
+	<classpathentry kind="lib" path="lib/bcfads-2.0.4.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/minitruco-android/lib/bcfads-2.0.3-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/minitruco-android/lib/bcfads-2.0.4-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin/classes"/>

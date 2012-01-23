@@ -1,10 +1,8 @@
 package me.chester.minitruco.android;
 
-import me.chester.minitruco.android.bluetooth.JogoBluetooth;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
-import me.chester.minitruco.core.JogoLocal;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Message;

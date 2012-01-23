@@ -89,39 +89,10 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		// (e ver se é uma boa fazer isso na UI thread mesmo)
 		switch (item.getItemId()) {
 		case R.id.menuitem_troca_parceiro:
-			synchronized (this) {
-				Object temp;
-				temp = connClientes[2];
-				connClientes[2] = connClientes[1];
-				connClientes[1] = connClientes[0];
-				connClientes[0] = (BluetoothSocket) temp;
-				temp = outClientes[2];
-				outClientes[2] = outClientes[1];
-				outClientes[1] = outClientes[0];
-				outClientes[0] = (OutputStream) temp;
-				temp = apelidos[3];
-				apelidos[3] = apelidos[2];
-				apelidos[2] = apelidos[1];
-				apelidos[1] = (String) temp;
-				atualizaDisplay();
-				atualizaClientes();
-			}
+			trocaParceiro();
 			return true;
 		case R.id.menuitem_inverte_adversarios:
-			synchronized (this) {
-				Object temp;
-				temp = connClientes[0];
-				connClientes[0] = connClientes[2];
-				connClientes[2] = (BluetoothSocket) temp;
-				temp = outClientes[0];
-				outClientes[0] = outClientes[2];
-				outClientes[2] = (OutputStream) temp;
-				temp = apelidos[1];
-				apelidos[1] = apelidos[3];
-				apelidos[3] = (String) temp;
-				atualizaDisplay();
-				atualizaClientes();
-			}
+			inverteAdversarios();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -194,10 +165,12 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				sleep(1000);
 				continue;
 			}
+			pedePraHabilitarDiscoverableSePreciso();
 			setMensagem("Aguardando conexões...");
 			// Se chegamos aqui, estamos fora de jogo e com vagas
 			try {
 				BluetoothSocket socket = serverSocket.accept();
+				setMensagem(null);
 				if (socket != null) {
 					encaixaEmUmSlot(socket);
 				}
@@ -237,8 +210,8 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				public void run() {
 					// Executa enquanto o servidor não for encerrado
 					while (status != STATUS_BLUETOOTH_ENCERRADO) {
-						// Envia um comando vazio (apenas para testar a conexão,
-						// processar qualquer desconexão que tenha ocorrido)
+						// Envia um comando vazio (apenas para testar a conexão
+						// e processar qualquer desconexão que tenha ocorrido)
 						for (int i = 0; i <= 2; i++) {
 							enviaMensagem(i, "");
 						}
@@ -251,22 +224,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				}
 			};
 			threadMonitoraClientes.start();
-		}
-	}
-
-	private synchronized void encaixaEmUmSlot(BluetoothSocket socket)
-			throws IOException {
-		// synchronized para evitar encaixes enquanto um jogador é trocado de
-		// lugar (que ainda vai ser implementado)
-		for (int i = 0; i <= 2; i++) {
-			if (connClientes[i] == null) {
-				connClientes[i] = socket;
-				outClientes[i] = socket.getOutputStream();
-				apelidos[i + 1] = socket.getRemoteDevice().getName()
-						.replace(' ', '_');
-				status = i == 2 ? STATUS_LOTADO : STATUS_AGUARDANDO;
-				return;
-			}
 		}
 	}
 
@@ -303,27 +260,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		// Envia a notificação para cada jogador (com sua posição)
 		for (int i = 0; i <= 2; i++) {
 			enviaMensagem(i, comando + (i + 2));
-		}
-	}
-
-	public synchronized void enviaMensagem(int slot, String comando) {
-		if (outClientes[slot] != null) {
-			if (comando.length() > 0) {
-				Log.w("MINITRUCO", "enviando comando " + comando
-						+ " para slot " + slot);
-			}
-			try {
-				outClientes[slot].write(comando.getBytes());
-				outClientes[slot].write(SEPARADOR_ENV);
-				outClientes[slot].flush();
-			} catch (IOException e) {
-				Log.w("MINITRUCO", e);
-				// Libera o slot e encerra o jogo em andamento
-				desconecta(slot);
-				if (jogo != null) {
-					jogo.abortaJogo(slot + 2);
-				}
-			}
 		}
 	}
 
@@ -366,6 +302,78 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		}
 		this.jogo = jogo;
 		return jogo;
+	}
+
+	// Os métodos abaixo são synchronized para evitar trocas na mesa enquanto um
+	// jogador está entrando no jogo (ou uma desconexão é descoberta por envio
+	// de mensagem)
+
+	public synchronized void enviaMensagem(int slot, String comando) {
+		if (outClientes[slot] != null) {
+			if (comando.length() > 0) {
+				Log.w("MINITRUCO", "enviando comando " + comando
+						+ " para slot " + slot);
+			}
+			try {
+				outClientes[slot].write(comando.getBytes());
+				outClientes[slot].write(SEPARADOR_ENV);
+				outClientes[slot].flush();
+			} catch (IOException e) {
+				Log.w("MINITRUCO", e);
+				// Libera o slot e encerra o jogo em andamento
+				desconecta(slot);
+				if (jogo != null) {
+					jogo.abortaJogo(slot + 2);
+				}
+			}
+		}
+	}
+
+	private synchronized void encaixaEmUmSlot(BluetoothSocket socket)
+			throws IOException {
+		for (int i = 0; i <= 2; i++) {
+			if (connClientes[i] == null) {
+				connClientes[i] = socket;
+				outClientes[i] = socket.getOutputStream();
+				apelidos[i + 1] = socket.getRemoteDevice().getName()
+						.replace(' ', '_');
+				status = i == 2 ? STATUS_LOTADO : STATUS_AGUARDANDO;
+				return;
+			}
+		}
+	}
+
+	private synchronized void inverteAdversarios() {
+		Object temp;
+		temp = connClientes[0];
+		connClientes[0] = connClientes[2];
+		connClientes[2] = (BluetoothSocket) temp;
+		temp = outClientes[0];
+		outClientes[0] = outClientes[2];
+		outClientes[2] = (OutputStream) temp;
+		temp = apelidos[1];
+		apelidos[1] = apelidos[3];
+		apelidos[3] = (String) temp;
+		atualizaDisplay();
+		atualizaClientes();
+	}
+
+	private synchronized void trocaParceiro() {
+		Object temp;
+		temp = connClientes[2];
+		connClientes[2] = connClientes[1];
+		connClientes[1] = connClientes[0];
+		connClientes[0] = (BluetoothSocket) temp;
+		temp = outClientes[2];
+		outClientes[2] = outClientes[1];
+		outClientes[1] = outClientes[0];
+		outClientes[0] = (OutputStream) temp;
+		temp = apelidos[3];
+		apelidos[3] = apelidos[2];
+		apelidos[2] = apelidos[1];
+		apelidos[1] = (String) temp;
+		atualizaDisplay();
+		atualizaClientes();
 	}
 
 }

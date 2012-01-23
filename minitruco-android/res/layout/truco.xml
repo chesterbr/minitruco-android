@@ -119,13 +119,29 @@
                     android:onClick="publicidadeClickHandler"
                     android:text="Sjljiw lwaf flewijf lorum ipsen wefwe fwelwefl jwewfljefwj laafjlwf jlwelf w elaefjl fwe laf w lejfjlw  wlejf few l" />
 
-                <Button
-                    android:id="@+id/btnAnuncioClick"
-                    android:layout_width="200sp"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:onClick="publicidadeClickHandler"
-                    android:text="Yes, sure!" />
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/btnAnuncioClick"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="publicidadeYesClickHandler"
+                        android:text="No, thanks." />
+
+                    <Button
+                        android:id="@+id/btnAnuncioClick"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="publicidadeNoClickHandler"
+                        android:text="Yes, sure!"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
 

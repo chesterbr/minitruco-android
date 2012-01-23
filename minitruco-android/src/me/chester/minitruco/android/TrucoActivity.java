@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -106,14 +105,10 @@ public class TrucoActivity extends BaseActivity {
 				layoutAnuncio.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_OFERECE_NOVA_PARTIDA:
-				if (getIntent().hasExtra("clienteBluetooth")) {
-					break;
+				if (jogo instanceof JogoLocal) {
+					layoutFimDeJogo.setVisibility(View.VISIBLE);
+					mostraPublicidadeSeHouver();
 				}
-				textViewAnuncio.setText(Publicidade.getMensagem());
-				layoutFimDeJogo.setVisibility(View.VISIBLE);
-				layoutAnuncio
-						.setVisibility(Publicidade.podeMostrar() ? View.VISIBLE
-								: View.INVISIBLE);
 				break;
 			case MSG_REMOVE_NOVA_PARTIDA:
 				layoutFimDeJogo.setVisibility(View.INVISIBLE);
@@ -140,6 +135,8 @@ public class TrucoActivity extends BaseActivity {
 		}
 	};
 
+	private Publicidade publicidade;
+
 	/**
 	 * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
 	 * a criação é terceirizada para a classe apropriada.
@@ -161,6 +158,9 @@ public class TrucoActivity extends BaseActivity {
 	}
 
 	private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
+		if (publicidade == null) {
+			publicidade = new Publicidade(this);
+		}
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		boolean tentoMineiro = preferences.getBoolean("tentoMineiro", false);
@@ -217,9 +217,15 @@ public class TrucoActivity extends BaseActivity {
 		criaEIniciaNovoJogo();
 	}
 
-	public void publicidadeClickHandler(View v) {
+	public void publicidadeYesClickHandler(View v) {
 		Message.obtain(handler, MSG_ESCONDE_PATROCINIO).sendToTarget();
-		Publicidade.click();
+		publicidade.click();
+		publicidade = null;
+	}
+
+	public void publicidadeNoClickHandler(View v) {
+		Message.obtain(handler, MSG_ESCONDE_PATROCINIO).sendToTarget();
+		publicidade = null;
 	}
 
 	public void aumentoClickHandler(View v) {
@@ -264,4 +270,12 @@ public class TrucoActivity extends BaseActivity {
 		return mIsViva;
 	}
 
+	private void mostraPublicidadeSeHouver() {
+		if (publicidade != null && publicidade.podeMostrar()) {
+			textViewAnuncio.setText(publicidade.getMensagem());
+			layoutAnuncio.setVisibility(View.VISIBLE);
+		} else {
+			layoutAnuncio.setVisibility(View.INVISIBLE);
+		}
+	}
 }
