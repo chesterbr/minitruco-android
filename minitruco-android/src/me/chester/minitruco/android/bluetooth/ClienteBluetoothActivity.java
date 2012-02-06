@@ -132,8 +132,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 							break;
 						case 'P':
 							iniciaTrucoActivitySePreciso();
-							break;
-						// Os outros eventos ocorrem durante o jogo,
+							// Não tem mesmo um break aqui, o início de partida
+							// também precisa ser processado pelo jogo anterior
+							// (para limpar o placar)
 						default:
 							if (jogo != null) {
 								jogo.processaNotificacao(tipoNotificacao,

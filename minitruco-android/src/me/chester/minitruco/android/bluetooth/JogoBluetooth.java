@@ -95,6 +95,11 @@ public class JogoBluetooth extends Jogo {
 		Jogador j;
 
 		switch (tipoNotificacao) {
+		case 'P':
+			// Início de partida
+			pontosEquipe[0] = pontosEquipe[1] = 0;
+			getJogadorHumano().maoFechada(pontosEquipe);
+			break;
 		case 'M':
 			// Início da mão
 			numRodadaAtual = 1;
