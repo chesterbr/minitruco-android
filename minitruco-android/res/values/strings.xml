@@ -96,7 +96,7 @@
     </string-array>
 
     <string name="titulo_ajuda">Bem-vindo!</string>
-    <string name="texto_ajuda">        <![CDATA[Estas instruções podem ser lidas a qualquer momento no <b>menu Ajuda</b>. Role a tela, tem bastante coisa! <br/><br/>O miniTruco é jogado em duplas, com os parceiros
+    <string name="texto_ajuda">        <![CDATA[Estas instruções podem ser lidas a qualquer momento no <b>menu Ajuda</b>. Role a tela, tem bastante coisa! <br/><br/>O miniTruco é um <u>software livre</u> de truco, jogado em duplas, com os parceiros
 		frente a frente. O objetivo é fazer a sua dupla de jogadores alcançar
 		12 pontos antes da dupla adversária.
 		<br/><br/>Cada jogador começa com uma \"mão\" de três cartas e, na sua vez, escolhe
@@ -122,7 +122,7 @@
 		deles aceitar jogar, a mão vale 3 pontos. Se os dois recusarem, a
 		equipe adversária ganha um ponto, e uma nova mão é distribuída,
 		valendo as mesmas regras.
-		<br/><br/><b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram este jogo. É recomendável parear os celulares antes. Quem criou o jogo pode reconfigurar a mesa, inciar e interromper o jogo a qualquer hora.
+		<br/><br/><b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram ele. É recomendável parear os celulares antes. Quem criou o jogo pode rearranjar as posições antes de começar. Mão de 11 ainda não é suportada, e celulares Java ME ainda não conectam 100%.
 		<br/><br/><b><u>Opções</u></b>: neste menu, você pode optar por um baralho \"limpo\"
 		 (sem as cartas 4, 5, 6 e 7) ou pela manilha velha, isto é, as
 		manilhas sendo sempre 7♦ (menor), A♠, 7♥ e 4♣ (maior). A manilha velha também
