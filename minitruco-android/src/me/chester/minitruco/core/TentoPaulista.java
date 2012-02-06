@@ -2,26 +2,43 @@ package me.chester.minitruco.core;
 
 /*
  * Copyright © 2011 Guilherme Caram <gcaram@gmail.com>
+ * Todos os direitos reservados.
  *
- * Este programa é um software livre; você pode redistribuí-lo e/ou
- * modificá-lo dentro dos termos da Licença Pública Geral GNU como
- * publicada pela Fundação do Software Livre (FSF); na versão 3 da
- * Licença, ou (na sua opinião) qualquer versão.
- *
- * Este programa é distribuído na esperança que possa ser útil,
- * mas SEM NENHUMA GARANTIA; sem uma garantia implícita de ADEQUAÇÂO
- * a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença
- * Pública Geral GNU para maiores detalhes.
- *
- * Você deve ter recebido uma cópia da Licença Pública Geral GNU
- * junto com este programa, se não, escreva para a Fundação do Software
- * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * A redistribuição e o uso nas formas binária e código fonte, com ou sem
+ * modificações, são permitidos contanto que as condições abaixo sejam
+ * cumpridas:
+ * 
+ * - Redistribuições do código fonte devem conter o aviso de direitos
+ *   autorais acima, esta lista de condições e o aviso de isenção de
+ *   garantias subseqüente.
+ * 
+ * - Redistribuições na forma binária devem reproduzir o aviso de direitos
+ *   autorais acima, esta lista de condições e o aviso de isenção de
+ *   garantias subseqüente na documentação e/ou materiais fornecidos com
+ *   a distribuição.
+ *   
+ * - Nem o nome do Chester, nem o nome dos contribuidores podem ser
+ *   utilizados para endossar ou promover produtos derivados deste
+ *   software sem autorização prévia específica por escrito.
+ * 
+ * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
+ * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
+ * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
+ * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS. EM NENHUMA
+ * HIPÓTESE OS TITULARES DE DIREITOS AUTORAIS E CONTRIBUIDORES SERÃO
+ * RESPONSÁVEIS POR QUAISQUER DANOS, DIRETOS, INDIRETOS, INCIDENTAIS,
+ * ESPECIAIS, EXEMPLARES OU CONSEQUENTES, (INCLUINDO, SEM LIMITAÇÃO,
+ * FORNECIMENTO DE BENS OU SERVIÇOS SUBSTITUTOS, PERDA DE USO OU DADOS,
+ * LUCROS CESSANTES, OU INTERRUPÇÃO DE ATIVIDADES), CAUSADOS POR QUAISQUER
+ * MOTIVOS E SOB QUALQUER TEORIA DE RESPONSABILIDADE, SEJA RESPONSABILIDADE
+ * CONTRATUAL, RESTRITA, ILÍCITO CIVIL, OU QUALQUER OUTRA, COMO DECORRÊNCIA
+ * DE USO DESTE SOFTWARE, MESMO QUE HOUVESSEM SIDO AVISADOS DA
+ * POSSIBILIDADE DE TAIS DANOS.
+ * 
  */
 
 /**
  * Forma de pontuação dos tentos
- * 
- * @author Guilherme Caram
  * 
  */
 public class TentoPaulista implements Tento {
@@ -39,7 +56,7 @@ public class TentoPaulista implements Tento {
 		}
 		return 0;
 	}
-	
+
 	public int calcValorMao(int valorMao) {
 		switch (valorMao) {
 		case 1:
@@ -53,16 +70,16 @@ public class TentoPaulista implements Tento {
 		}
 		return 0;
 	}
-	
-	public int inicializaMao(){
+
+	public int inicializaMao() {
 		return 1;
 	}
-	
-	public int inicializaPenultimaMao(){
+
+	public int inicializaPenultimaMao() {
 		return 3;
 	}
-	
-	public int valorPenultimaMao(){
+
+	public int valorPenultimaMao() {
 		return 11;
 	}
 }

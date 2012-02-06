@@ -1,106 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="hello">Use o log (adb logcat no SDK) para debugar</string>
-	<string name="app_name">miniTruco</string>
-	<string-array name="balao_aumento_1">
-		<item>Truco!</item>
-		<item>Truco ladrão!</item>
-		<item>É truco mesmo!</item>
-		<item>Truuuco!</item>
-		<item>Truco na cabeça!</item>
-		<item>É truco!</item>
-		<item>Truco marreco!</item>
-		<item>Truquei e tá trucado!</item>
-		<item>Truco! Pede seis!</item>
-	</string-array>
-	<string-array name="balao_aumento_2">
-		<item>Seis!</item>
-		<item>Meio-pau!</item>
-		<item>Meio-saco!</item>
-		<item>Meia-vara!</item>
-		<item>Meia-arroba!</item>
-		<item>Seeeeeis!</item>
-		<item>Seeeeis na lata!</item>
-		<item>Toma seis!</item>
-		<item>SEEEEEEEEIS</item>
-	</string-array>
-	<string-array name="balao_aumento_3">
-		<item>Nove!</item>
-		<item>Nooooove!</item>
-		<item>Nove na cabeça!</item>
-		<item>Ah, vem pra nove!</item>
-		<item>É nove!</item>
-	</string-array>
-	<string-array name="balao_aumento_4">
-		<item>Doze!</item>
-		<item>Doze pra acabar!</item>
-		<item>É doze!</item>
-		<item>Doze sem piedade!</item>
-	</string-array>
-	<string-array name="balao_aumento_sim">
-		<item>Desce!</item>
-		<item>Manda bala!</item>
-		<item>Vamos nessa!</item>
-		<item>Cai.</item>
-		<item>Vem que tem!</item>
-		<item>Manda.</item>
-		<item>É facão, quero ver!</item>
-		<item>Vamos ver.</item>
-		<item>Aceito.</item>
-		<item>Quero ver.</item>
-		<item>Desce ladrão!</item>
-	</string-array>
-	<string-array name="balao_aumento_nao">
-		<item>Tô fora.</item>
-		<item>Não quero.</item>
-		<item>Não.</item>
-		<item>Esquece.</item>
-		<item>Tá louco? Não!</item>
-		<item>Nem a pau.</item>
-		<item>Só porque você quer.</item>
-		<item>Nem pensar.</item>
-	</string-array>
-	<string-array name="balao_vitoria">
-		<item>Foi fácil demais!!!</item>
-		<item>Toooooomem!</item>
-		<item>Que lavada!</item>
-		<item>Volta pra casa!</item>
-		<item>Toma marreco!</item>
-	</string-array>
-	<string-array name="balao_derrota">
-		<item>:-(</item>
-		<item>Malditos!</item>
-		<item>Nem queria ganhar...</item>
-		<item>Ok...</item>
-		<item>A próxima é nossa.</item>
-		<item>Raios!</item>
-	</string-array>
-	<string-array name="balao_mao11_sim">
-		<item>Vamos jogar!</item>
-		<item>Vamos nessa!</item>
-		<item>Tô dentro.</item>
-	</string-array>
-	<string-array name="balao_mao11_nao">
-		<item>Não quero.</item>
-		<item>Que lixo!</item>
-		<item>Não.</item>
-		<item>Nem pensar.</item>
-		<item>Tô fora.</item>
-		<item>Sai fora.</item>
-		<item>Nem, manda outras.</item>
-	</string-array>
-	<string-array name="balao_abortou">
-	    <item>Tchau...</item>
-	</string-array>
-	<string name="titulo_ajuda">Bem-vindo!</string>
-	<string name="texto_ajuda"><![CDATA[O miniTruco é jogado em duplas, com os parceiros
+
+    <string name="hello">Use o log (adb logcat no SDK) para debugar</string>
+    <string name="app_name">miniTruco</string>
+
+    <string-array name="balao_aumento_1">
+        <item>Truco!</item>
+        <item>Truco ladrão!</item>
+        <item>É truco mesmo!</item>
+        <item>Truuuco!</item>
+        <item>Truco na cabeça!</item>
+        <item>É truco!</item>
+        <item>Truco marreco!</item>
+        <item>Truquei e tá trucado!</item>
+        <item>Truco! Pede seis!</item>
+    </string-array>
+    <string-array name="balao_aumento_2">
+        <item>Seis!</item>
+        <item>Meio-pau!</item>
+        <item>Meio-saco!</item>
+        <item>Meia-vara!</item>
+        <item>Meia-arroba!</item>
+        <item>Seeeeeis!</item>
+        <item>Seeeeis na lata!</item>
+        <item>Toma seis!</item>
+        <item>SEEEEEEEEIS</item>
+    </string-array>
+    <string-array name="balao_aumento_3">
+        <item>Nove!</item>
+        <item>Nooooove!</item>
+        <item>Nove na cabeça!</item>
+        <item>Ah, vem pra nove!</item>
+        <item>É nove!</item>
+    </string-array>
+    <string-array name="balao_aumento_4">
+        <item>Doze!</item>
+        <item>Doze pra acabar!</item>
+        <item>É doze!</item>
+        <item>Doze sem piedade!</item>
+    </string-array>
+    <string-array name="balao_aumento_sim">
+        <item>Desce!</item>
+        <item>Manda bala!</item>
+        <item>Vamos nessa!</item>
+        <item>Cai.</item>
+        <item>Vem que tem!</item>
+        <item>Manda.</item>
+        <item>É facão, quero ver!</item>
+        <item>Vamos ver.</item>
+        <item>Aceito.</item>
+        <item>Quero ver.</item>
+        <item>Desce ladrão!</item>
+    </string-array>
+    <string-array name="balao_aumento_nao">
+        <item>Tô fora.</item>
+        <item>Não quero.</item>
+        <item>Não.</item>
+        <item>Esquece.</item>
+        <item>Tá louco? Não!</item>
+        <item>Nem a pau.</item>
+        <item>Só porque você quer.</item>
+        <item>Nem pensar.</item>
+    </string-array>
+    <string-array name="balao_vitoria">
+        <item>Foi fácil demais!!!</item>
+        <item>Toooooomem!</item>
+        <item>Que lavada!</item>
+        <item>Volta pra casa!</item>
+        <item>Toma marreco!</item>
+    </string-array>
+    <string-array name="balao_derrota">
+        <item>:-(</item>
+        <item>Malditos!</item>
+        <item>Nem queria ganhar...</item>
+        <item>Ok...</item>
+        <item>A próxima é nossa.</item>
+        <item>Raios!</item>
+    </string-array>
+    <string-array name="balao_mao11_sim">
+        <item>Vamos jogar!</item>
+        <item>Vamos nessa!</item>
+        <item>Tô dentro.</item>
+    </string-array>
+    <string-array name="balao_mao11_nao">
+        <item>Não quero.</item>
+        <item>Que lixo!</item>
+        <item>Não.</item>
+        <item>Nem pensar.</item>
+        <item>Tô fora.</item>
+        <item>Sai fora.</item>
+        <item>Nem, manda outras.</item>
+    </string-array>
+    <string-array name="balao_abortou">
+        <item>Tchau...</item>
+    </string-array>
+
+    <string name="titulo_ajuda">Bem-vindo!</string>
+    <string name="texto_ajuda">        <![CDATA[Estas instruções podem ser lidas a qualquer momento no <b>menu Ajuda</b>. Role a tela, tem bastante coisa! <br/><br/>O miniTruco é jogado em duplas, com os parceiros
 		frente a frente. O objetivo é fazer a sua dupla de jogadores alcançar
 		12 pontos antes da dupla adversária.
-		<br/><br/>Cada jogador começa com uma "mão" de três cartas e, na sua vez, escolhe
+		<br/><br/>Cada jogador começa com uma \"mão\" de três cartas e, na sua vez, escolhe
 		uma para jogar. A dupla que jogou a maior carta ganha a rodada, e o
-		vencedor da rodada inicia a rodada seguinte. A dupla que vencer a
-		"melhor-de-três" entre essas rodadas ganha um ponto, e uma nova mão é
-		distribuída.
+		vencedor inicia a rodada seguinte. Duas rodadas ganha um ponto, encerrando a mão.
 		<br/><br/><b><u>Valor das Cartas</u></b>: Dentre as cartas normais, 4 é a menor carta, seguida de
 		5, 6, 7, Q, J, K, A, 2, e 3 é a maior de todas, sendo os naipes
 		indiferentes. No início de cada mão, uma carta é virada sobre o
@@ -109,10 +110,10 @@
 		(♦) é a menor manilha, seguida da espadilha (♠), da escopeta (♥), e do
 		zap (♣). O zap (manilha de paus) é, portanto, a carta de maior valor
 		do jogo.
-		<br/><br/><b><u>Aumento</u></b>: Na sua vez, um jogador pode pedir "truco". Se os dois adversários
+		<br/><br/><b><u>Aumento</u></b>: Na sua vez, um jogador pode pedir \"truco\". Se os dois adversários
 		recusarem, perdem a mão, mas se pelo menos um aceitar, a mão passa a
-		valer 3 pontos. Um adversário pode, na sua vez, pedir "seis", "nove"
-		ou "doze", aumentando a aposta da mesma forma para estes valores.<br/><br/>
+		valer 3 pontos. Um adversário pode, na sua vez, pedir \"seis\", \"nove\"
+		ou \"doze\", aumentando a aposta da mesma forma para estes valores.<br/><br/>
 		<b><u>Empate</u></b>: Um empate na primeira ou segunda rodada é decidido pela rodada
 		seguinte. Um empate após a primeira é decidido pelo resultado da
 		primeira.
@@ -121,30 +122,26 @@
 		deles aceitar jogar, a mão vale 3 pontos. Se os dois recusarem, a
 		equipe adversária ganha um ponto, e uma nova mão é distribuída,
 		valendo as mesmas regras.
-		<br/><br/><b><u>Opções</u></b>: neste menu, você pode optar por um baralho "limpo"
+		<br/><br/><b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram este jogo. É recomendável parear os celulares antes. Quem criou o jogo pode reconfigurar a mesa, inciar e interromper o jogo a qualquer hora.
+		<br/><br/><b><u>Opções</u></b>: neste menu, você pode optar por um baralho \"limpo\"
 		 (sem as cartas 4, 5, 6 e 7) ou pela manilha velha, isto é, as
 		manilhas sendo sempre 7♦ (menor), A♠, 7♥ e 4♣ (maior). A manilha velha também
 		permite acionar a contagem de pontos (tentos) do truco mineiro (4, 8, 10 e 12 pontos
 		nos aumentos e "mão de 11" nos 10 pontos).<br/><br/>]]>
-	</string>
-	<string name="titulo_sobre">Sobre o miniTruco</string>
-	<string name="texto_sobre"><![CDATA[miniTruco-android: Copyright © 2005-2011 Carlos
+    </string>
+    <string name="titulo_sobre">Sobre o miniTruco</string>
+    <string name="texto_sobre">        <![CDATA[miniTruco-android: Copyright © 2005-2012 Carlos
 		Duarte do Nascimento (Chester) - cd@pobox.com
 		<br/><br/>Tento mineiro: Copyright © 2011-2011 Guilherme Caram
 		<br/><br/>Imagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)
 		<br/><br/>Estratégias da CPU: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/><br/>
 		Código-fonte: http://github.com/chesterbr/minitruco-android
-		<br/><br/>miniTruco-android é
-		um software livre; você pode redistribui-lo e/ou modifica-lo dentro
-		dos termos da Licença Pública Geral GNU como publicada pela Fundação
-		do Software Livre (FSF); na versão 3 da
-		Licença.
-		<br/><br/>miniTruco-android é distribuido na esperança
-		que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia
-		implicita de ADEQUAÇÂO a qualquer MERCADO ou APLICAÇÃO EM PARTICULAR.
-		Veja a Licença Pública Geral GNU para maiores detalhes.
-		<br/><br/>Você deve ter recebido uma cópia da Licença
-		Pública Geral GNU junto com miniTruco-android. Se não, veja
-		http://www.gnu.org/licenses/licenses.pt.html<br/><br/>]]>
-	</string>
+		<br/><br/>Todos os direitos reservados.
+		<br/><br/>A redistribuiçã̃o e o uso nas formas binária e código fonte, com ou sem modificações, são permitidos contanto que as condições abaixo sejam cumpridas:
+		<br/><br/>- Redistribuições do código fonte devem conter o aviso de direitos autorais acima, esta lista de condições e o aviso de isenção de garantias subsequente.
+		<br/><br/>- Redistribuições na forma binária devem reproduzir o aviso de direitos autorais acima, esta lista de condições e o aviso de isenção de garantias subsequente na documentação e/ou materiais fornecidos com a distribuição.
+		<br/><br/>- Nem o nome do Chester nem o nome dos contribuidores podem ser utilizados para endossar ou promover produtos derivados deste software sem autorização prévia específica por escrito.
+		<br/><br/>]]>
+    </string>
+
 </resources>
