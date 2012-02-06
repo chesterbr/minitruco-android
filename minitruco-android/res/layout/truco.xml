@@ -92,14 +92,6 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/textViewTituloAnuncio"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="4dp"
-                        android:layout_marginRight="8dp"
-                        android:src="@drawable/bcfads_logo" />
                 </RelativeLayout>
 
                 <View
@@ -130,7 +122,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="publicidadeYesClickHandler"
+                        android:onClick="publicidadeNoClickHandler"
                         android:text="No, thanks." />
 
                     <Button
@@ -138,7 +130,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:onClick="publicidadeNoClickHandler"
+                        android:onClick="publicidadeYesClickHandler"
                         android:text="Yes, sure!"
                         android:textStyle="bold" />
                 </LinearLayout>
