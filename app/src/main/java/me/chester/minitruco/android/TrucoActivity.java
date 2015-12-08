@@ -207,17 +207,6 @@ public class TrucoActivity extends BaseActivity {
 		mesa.setTrucoActivity(this);
 		// Inicializa componentes das classes visuais que dependem de métodos
 		// disponíveis exclusivamente na Activity
-		if (MesaView.iconesRodadas == null) {
-			MesaView.iconesRodadas = new Bitmap[4];
-			MesaView.iconesRodadas[0] = ((BitmapDrawable) getResources()
-					.getDrawable(R.drawable.placarrodada0)).getBitmap();
-			MesaView.iconesRodadas[1] = ((BitmapDrawable) getResources()
-					.getDrawable(R.drawable.placarrodada1)).getBitmap();
-			MesaView.iconesRodadas[2] = ((BitmapDrawable) getResources()
-					.getDrawable(R.drawable.placarrodada2)).getBitmap();
-			MesaView.iconesRodadas[3] = ((BitmapDrawable) getResources()
-					.getDrawable(R.drawable.placarrodada3)).getBitmap();
-		}
 		if (CartaVisual.resources == null) {
 			CartaVisual.resources = getResources();
 		}
