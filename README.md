@@ -13,13 +13,7 @@ Este software é livre, e você é encorajado a usar e modificar seu código com
 Requisitos do Código-Fonte
 --------------------------
 
-O código tem como plataforma-alvo o Android 1.6. Para a compilação é necessário apenas o Android SDK, mas é fortemente recomendado que se use o Eclipse 3.5 ou superior com os plugins do Google. Neste caso, basta importar a sub-pasta minitruco-android como projeto e testar diretament no emulador.
-
-A pasta minitruco-android-roboelectric-test contém um projeto de teste que usa o Roboletric[2], um framework que permite rodar os testes JUnit fora do emulador. A cobertura de testes é maior na parte não-visual, e limitada pelo fato de o código original não ter sido pensado para testes - pode ser preciso refatorar bastante para incluir testes, e ajuda é muito bem-vinda.
-
-Para rodar este projeto de teste, importe-o "lado a lado" com o projeto principal, certifique-se de usar o Eclipse JUnit Launcher (e não o Android Launcher, que vai rodar no emulador) e de acrescentar o projeto original no Source Lookup Path (dentro do Run Configurations para este teste).
-
-[2] http://pivotal.github.com/robolectric/
+O código tem como plataforma-alvo o Android 2.2. Para a compilação é necessário apenas o Android Studio. Neste caso, basta importar a sub-pasta minitruco-android como projeto e testar diretament no emulador.
 
 
 Backlog
