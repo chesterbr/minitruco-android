@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.chester.minitruco"
-    android:versionCode="20003"
-    android:versionName="2.00.03" >
+    android:versionCode="20004"
+    android:versionName="2.00.04" >
 
     <supports-screens
         android:anyDensity="true"
