@@ -145,6 +145,10 @@ public class TituloActivity extends BaseActivity {
 		startActivity(intent);
 	}
 
+	public void menuButtonClickHandler(View v) {
+		openOptionsMenu();
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();

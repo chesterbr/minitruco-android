@@ -197,6 +197,19 @@ public class MesaView extends View {
 			}
 		}
 
+		// Se o tamanho da tela mudou (ex.: rotação), precisamos recalcular
+		// estes bitmaps
+		int lado = getHeight() / 18;
+		iconesRodadas = new Bitmap[4];
+		iconesRodadas[0] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
+		iconesRodadas[1] =  Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.placarrodada1)).getBitmap(), lado, lado, true);
+		iconesRodadas[2] =  Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
+		iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
+
 	}
 
 	/**
