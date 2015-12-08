@@ -13,7 +13,7 @@ Este software é livre, e você é encorajado a usar e modificar seu código com
 Requisitos do Código-Fonte
 --------------------------
 
-O código tem como plataforma-alvo o Android 2.2. Para a compilação é necessário apenas o Android Studio. Neste caso, basta importar a sub-pasta minitruco-android como projeto e testar diretament no emulador.
+O código tem como plataforma-alvo o Android 2.2. Para a compilação é necessário apenas o Android Studio. Neste caso, basta importar a sub-pasta minitruco-android como projeto e testar diretamente no emulador.
 
 
 Backlog
