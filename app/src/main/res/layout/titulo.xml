@@ -32,20 +32,31 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnJogar"
-            android:layout_width="200sp"
-            android:layout_height="wrap_content"
-            android:onClick="jogarClickHandler"
-            android:layout_margin="24sp"
-            android:text="Jogar" />
 
-        <!--
-			<Button android:id="@+id/btnMultiplayer" android:layout_width="100px"
-			android:layout_height="wrap_content"
-			android:layout_below="@id/btnJogar" android:text="Opções"
-			android:onClick="multiplayerClickHandler" />
-        -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnJogar"
+                android:layout_width="120sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="jogarClickHandler"
+                android:text="Jogar" />
+
+
+            <Button android:id="@+id/btnMultiplayer"
+                android:layout_width="120sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Menu"
+                android:onClick="menuButtonClickHandler" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>
