@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menuitem_opcoes"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="Opções"/>
+    <item
+        android:id="@+id/menuitem_bluetooth"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="Bluetooth"
+        android:visible="false"/>
+    <item
+        android:id="@+id/menuitem_sair_titulo"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="Sair"/>
+
+</menu>
