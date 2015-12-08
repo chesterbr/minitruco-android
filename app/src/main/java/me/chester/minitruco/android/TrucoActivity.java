@@ -126,7 +126,6 @@ public class TrucoActivity extends BaseActivity {
 			case MSG_OFERECE_NOVA_PARTIDA:
 				if (jogo instanceof JogoLocal) {
 					layoutFimDeJogo.setVisibility(View.VISIBLE);
-					mostraPublicidadeSeHouver();
 				}
 				break;
 			case MSG_REMOVE_NOVA_PARTIDA:
@@ -154,8 +153,6 @@ public class TrucoActivity extends BaseActivity {
 		}
 	};
 
-	private Publicidade publicidade;
-
 	/**
 	 * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
 	 * a criação é terceirizada para a classe apropriada.
@@ -177,9 +174,6 @@ public class TrucoActivity extends BaseActivity {
 	}
 
 	private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
-		if (publicidade == null) {
-			publicidade = new Publicidade(this);
-		}
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		boolean tentoMineiro = preferences.getBoolean("tentoMineiro", false);
@@ -200,8 +194,6 @@ public class TrucoActivity extends BaseActivity {
 		setContentView(R.layout.truco);
 		mIsViva = true;
 		mesa = ((MesaView) findViewById(R.id.MesaView01));
-		textViewAnuncio = (TextView) findViewById(R.id.textViewAnuncio);
-		layoutAnuncio = (LinearLayout) findViewById(R.id.layoutAnuncio);
 		layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
 		mesa.setTrucoActivity(this);
@@ -223,17 +215,6 @@ public class TrucoActivity extends BaseActivity {
 	public void novaPartidaClickHandler(View v) {
 		Message.obtain(handler, MSG_REMOVE_NOVA_PARTIDA).sendToTarget();
 		criaEIniciaNovoJogo();
-	}
-
-	public void publicidadeYesClickHandler(View v) {
-		Message.obtain(handler, MSG_ESCONDE_PATROCINIO).sendToTarget();
-		publicidade.click();
-		publicidade = null;
-	}
-
-	public void publicidadeNoClickHandler(View v) {
-		Message.obtain(handler, MSG_ESCONDE_PATROCINIO).sendToTarget();
-		publicidade = null;
 	}
 
 	public void aumentoClickHandler(View v) {
@@ -276,14 +257,5 @@ public class TrucoActivity extends BaseActivity {
 
 	public static boolean isViva() {
 		return mIsViva;
-	}
-
-	private void mostraPublicidadeSeHouver() {
-		if (publicidade != null && publicidade.podeMostrar()) {
-			textViewAnuncio.setText(publicidade.getMensagem());
-			layoutAnuncio.setVisibility(View.VISIBLE);
-		} else {
-			layoutAnuncio.setVisibility(View.INVISIBLE);
-		}
 	}
 }
