@@ -83,6 +83,7 @@ public class TituloActivity extends BaseActivity {
 
 	private void habilitaBluetoothSeExistir() {
 		mostrarMenuBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
+		findViewById(R.id.btnBluetooth).setVisibility(mostrarMenuBluetooth ? View.VISIBLE : View.GONE);
 	}
 
 	@Override
@@ -103,9 +104,7 @@ public class TituloActivity extends BaseActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menuitem_opcoes:
-			Intent settingsActivity = new Intent(getBaseContext(),
-					OpcoesActivity.class);
-			startActivity(settingsActivity);
+			opcoesButtonClickHandler(null);
 			return true;
 		case R.id.menuitem_bluetooth:
 			perguntaCriarOuProcurarBluetooth();
@@ -145,8 +144,14 @@ public class TituloActivity extends BaseActivity {
 		startActivity(intent);
 	}
 
-	public void menuButtonClickHandler(View v) {
-		openOptionsMenu();
+	public void bluetoothButtonClickHandler(View v) {
+		perguntaCriarOuProcurarBluetooth();
+	}
+
+	public void opcoesButtonClickHandler(View v) {
+		Intent settingsActivity = new Intent(getBaseContext(),
+				OpcoesActivity.class);
+		startActivity(settingsActivity);
 	}
 
 	@Override

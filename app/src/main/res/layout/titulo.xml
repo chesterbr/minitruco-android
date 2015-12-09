@@ -44,16 +44,24 @@
                 android:layout_width="120sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textStyle="bold"
                 android:onClick="jogarClickHandler"
                 android:text="Jogar" />
 
 
-            <Button android:id="@+id/btnMultiplayer"
+            <Button android:id="@+id/btnBluetooth"
                 android:layout_width="120sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Menu"
-                android:onClick="menuButtonClickHandler" />
+                android:text="Bluetooth"
+                android:onClick="bluetoothButtonClickHandler" />
+
+            <Button android:id="@+id/btnOpcoes"
+                android:layout_width="120sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Opções"
+                android:onClick="opcoesButtonClickHandler" />
 
         </LinearLayout>
 
