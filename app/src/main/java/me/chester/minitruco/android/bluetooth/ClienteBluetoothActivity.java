@@ -80,8 +80,11 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 				BluetoothDevice device = intent
 						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				devicesEncontrados.add(device);
-				setMensagem("Achou " + devicesEncontrados.size() + "...");
+				if (device.getBondState() == BluetoothDevice.BOND_BONDED)
+				{
+					devicesEncontrados.add(device);
+					setMensagem("Achou " + devicesEncontrados.size() + "...");
+				}
 			} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED
 					.equals(action)) {
 				if (!isFinishing()) {
