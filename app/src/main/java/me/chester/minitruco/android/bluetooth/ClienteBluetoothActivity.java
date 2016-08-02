@@ -1,22 +1,22 @@
 package me.chester.minitruco.android.bluetooth;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.HashSet;
-import java.util.Set;
-
-import me.chester.minitruco.android.JogadorHumano;
-import me.chester.minitruco.core.Jogo;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.core.Jogo;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -62,7 +62,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 
 	private static ClienteBluetoothActivity currentInstance;
 
-	private Set<BluetoothDevice> devicesEncontrados;
+	private List<BluetoothDevice> dispositivosPareados;
 	private Thread threadConexao;
 	private Thread threadMonitoraConexao;
 	private JogoBluetooth jogo;
@@ -71,64 +71,23 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private OutputStream out;
 	private int posJogador;
 
-	private BroadcastReceiver receiverDescobreServidor = new BroadcastReceiver() {
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-				devicesEncontrados = new HashSet<BluetoothDevice>();
-				setMensagem("Procurando aparelhos...");
-			} else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-				BluetoothDevice device = intent
-						.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				if (device.getBondState() == BluetoothDevice.BOND_BONDED)
-				{
-					devicesEncontrados.add(device);
-					setMensagem("Achou " + devicesEncontrados.size() + "...");
-				}
-			} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED
-					.equals(action)) {
-				if (!isFinishing()) {
-					threadConexao = new Thread(ClienteBluetoothActivity.this);
-					threadConexao.start();
-				}
-			}
-		}
-	};
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		currentInstance = this;
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(BluetoothDevice.ACTION_FOUND);
-		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-		filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-		registerReceiver(receiverDescobreServidor, filter);
 	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		iniciaProcuraDeCelulares();
+		listaDispositivosPareados();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(receiverDescobreServidor);
-		btAdapter.cancelDiscovery();
+		dispositivosPareados.clear();
 		finalizaThreadFechandoConexoes();
-	}
-
-	private void iniciaProcuraDeCelulares() {
-		if (btAdapter.isEnabled()) {
-			boolean result = btAdapter.startDiscovery();
-			Log.w("MINITRUCO", "discovery: " + result);
-			return;
-		}
-		Intent enableBtIntent = new Intent(
-				BluetoothAdapter.ACTION_REQUEST_ENABLE);
-		startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
 	}
 
 	@Override
@@ -138,14 +97,14 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 				// Sem bluetooth, sem cliente
 				finish();
 			} else {
-				iniciaProcuraDeCelulares();
+				listaDispositivosPareados();
 			}
 		}
 	}
 
 	public void run() {
 		atualizaDisplay();
-		socket = procuraServidorNosDevicesEncontrados();
+
 		if (socket == null) {
 			msgErroFatal("Jogo não encontrado. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
 			return;
@@ -215,31 +174,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		}
 	}
 
-	private BluetoothSocket procuraServidorNosDevicesEncontrados() {
-		for (BluetoothDevice device : devicesEncontrados) {
-			BluetoothSocket candidato = null;
-			try {
-				setMensagem("Consultando " + device.getName());
-				candidato = device.createRfcommSocketToServiceRecord(UUID_BT);
-				sleep(1000);
-				candidato.connect();
-				setMensagem("Conectado!");
-				return candidato;
-			} catch (Exception e) {
-				Log.w("MINITRUCO",
-						"Falhou conexao com device " + device.getName());
-				Log.w("MINITRUCO", e);
-				try {
-					candidato.close();
-				} catch (Exception e1) {
-					// Sem problemas, era só pra garantir
-				}
-			}
-		}
-		setMensagem(null);
-		return null;
-	}
-
 	private void exibeMesaForaDoJogo(String parametros) {
 		parametros = tiraEspacoDosNomes(parametros);
 		if (jogo != null) {
@@ -274,7 +208,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 
 	/**
 	 * Manda um comando para o celular do servidor (se houver um conectado).
-	 * 
+	 *
 	 * @param linha
 	 */
 	public synchronized void enviaLinha(String linha) {
@@ -301,7 +235,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	 * A idéia é que o jogador local fique sempre na parte inferior da tela,
 	 * então o método retorna 1 para o jogador local, 2 para quem está à direita
 	 * dele, etc.
-	 * 
+	 *
 	 * @param i
 	 *            posição (no servidor) do jogador que queremos consultar
 	 */
@@ -344,5 +278,97 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		}
 		return jogo;
 	}
+
+    /**
+     * Verifica se o bluetooh está ativo e caso não esteja pede para habilitar
+     *
+     * @return true caso o blutooh esteja ativo
+     */
+    private boolean habilitaBluetooh() {
+        if (!btAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Tenta conectar no servidor recebido e, caso consiga, inicia o jogo
+     *
+     * @param device Servidor do Mni Truco
+     */
+    private void conectaNoServidor(BluetoothDevice device) {
+        try {
+            setMensagem("Consultando " + device.getName());
+            socket = device.createRfcommSocketToServiceRecord(UUID_BT);
+            sleep(1000);
+            socket.connect();
+            setMensagem("Conectado!");
+
+            threadConexao = new Thread(ClienteBluetoothActivity.this);
+            threadConexao.start();
+
+        } catch (Exception e) {
+            Log.w("MINITRUCO",
+                    "Falhou conexao com device " + device.getName());
+            Log.w("MINITRUCO", e);
+            msgErroFatal("Falhou conexao com device " + device.getName() + ". Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
+            try {
+                socket.close();
+            } catch (Exception e1) {
+                // Sem problemas, era só pra garantir
+            }
+        }
+    }
+
+    /**
+     * Cria um array somente com os nomes dos aparelhos que serão apresentados na lista
+     *
+     * @return array com o nomes dos aparelhos pareados
+     */
+    private CharSequence[] criaArrayComNomeDosAparelhosPareados() {
+        // monta um array com o nome dos possíveis servidores
+        CharSequence[] serverNameArray = new String[dispositivosPareados.size()];
+        int i = 0;
+        for (BluetoothDevice device : dispositivosPareados) {
+            serverNameArray[i] = device.getName();
+            i++;
+        }
+
+        return serverNameArray;
+    }
+
+    /**
+     * Mostra um dialog com uma lista com os aparelhos pareados.
+     * Caso o bluetooth não esteja habilidado, dispara o dialog que permite habilitar.
+     * Caso não tenha nenhum aparelho pareado, mostra uma mensagem de erro.
+     */
+    private void listaDispositivosPareados() {
+
+        setMensagem(null);
+
+        if (!habilitaBluetooh()) {
+            return;
+        }
+
+        dispositivosPareados = new ArrayList<BluetoothDevice>();
+        dispositivosPareados.addAll(btAdapter.getBondedDevices());
+
+        if (dispositivosPareados.size() == 0) {
+            msgErroFatal("Não existem aparelhos pareados. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
+            return;
+        }
+
+        new AlertDialog.Builder(this).setTitle("Escolha o Servidor")
+                .setItems(criaArrayComNomeDosAparelhosPareados(), new AlertDialog.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int posicaoNaLista) {
+
+                        conectaNoServidor(dispositivosPareados.get(posicaoNaLista));
+                    }
+                }).show();
+    }
 
 }
