@@ -1,5 +1,13 @@
 package me.chester.minitruco.android.bluetooth;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.core.Jogo;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,14 +17,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import me.chester.minitruco.android.JogadorHumano;
-import me.chester.minitruco.core.Jogo;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
