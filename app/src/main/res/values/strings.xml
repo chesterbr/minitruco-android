@@ -130,12 +130,16 @@
 		nos aumentos e "mão de 11" nos 10 pontos).<br/><br/>]]>
     </string>
     <string name="titulo_sobre">Sobre o miniTruco</string>
-    <string name="texto_sobre">        <![CDATA[miniTruco-android: Copyright © 2005-2012 Carlos
+    <string name="texto_sobre">        <![CDATA[miniTruco-android: Copyright © 2005-2016 Carlos
 		Duarte do Nascimento (Chester) - cd@pobox.com
-		<br/><br/>Tento mineiro: Copyright © 2011-2011 Guilherme Caram
+        <br/><br/>Seleção manual de servidor Bluetooth: Copyright © 2016 Rodolfo Vasconcelos
+		<br/><br/>Tento mineiro: Copyright © 2011 Guilherme Caram
 		<br/><br/>Imagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)
-		<br/><br/>Estratégias da CPU: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/><br/>
+		<br/><br/>Estratégias da CPU: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/>
+        <br/><br/>Estratégia da CPU (antiga): Copyright © 2006-2011 Willian Gigliotti<br/>
+        <br/>
 		Código-fonte: http://github.com/chesterbr/minitruco-android
+        <br/>
 		<br/><br/>Todos os direitos reservados.
 		<br/><br/>A redistribuiçã̃o e o uso nas formas binária e código fonte, com ou sem modificações, são permitidos contanto que as condições abaixo sejam cumpridas:
 		<br/><br/>- Redistribuições do código fonte devem conter o aviso de direitos autorais acima, esta lista de condições e o aviso de isenção de garantias subsequente.
