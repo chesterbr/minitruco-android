@@ -142,7 +142,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 				// Dá um tempinho, pra fingir que está "pensando"
 				try {
-					Thread.sleep(Math.abs(random.nextInt()) % 250 + 200);
+					Thread.sleep(Math.abs(Util.PRNG.nextInt()) % 250 + 200);
 				} catch (InterruptedException e) {
 					// Nada, apenas timing...
 				}
@@ -203,7 +203,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 			if (recebiPedidoDeAumento) {
 				recebiPedidoDeAumento = false;
 				atualizaSituacaoJogo();
-				sleep(1000 + random.nextInt(1000));
+				sleep(1000 + Util.PRNG.nextInt(1000));
 				// O sync/if é só pra evitar resposta dupla entre 2 CPUs
 				synchronized (jogo) {
 					if (situacaoJogo.posJogadorPedindoAumento != 0) {
@@ -221,7 +221,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 			if (recebiPedidoDeMaoDe11) {
 				recebiPedidoDeMaoDe11 = false;
 				atualizaSituacaoJogo();
-				sleep(1000 + random.nextInt(1000));
+				sleep(1000 + Util.PRNG.nextInt(1000));
 				boolean respostaMao11 = false;
 				try {
 					respostaMao11 = estrategia.aceitaMao11(
@@ -230,7 +230,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// ignorar a estratégia com 90% de chance e recusar,
 					// deixando a decisão na mão do humano.
 					if (getPosicao() == 3) {
-						boolean aceitaEstrategia = random.nextInt(10) == 5;
+						boolean aceitaEstrategia = Util.PRNG.nextInt(10) == 5;
 						Log.i("JogadorCPU",
 								"Mão de 11 do parceiro do humano. AceitaEstrategia="
 										+ aceitaEstrategia);
@@ -240,7 +240,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					Log.d("JogadorCPU",
 							"Erro em aceite-11 no jogador" + this.getPosicao(),
 							e);
-					respostaMao11 = random.nextBoolean();
+					respostaMao11 = Util.PRNG.nextBoolean();
 				}
 				jogo.decideMao11(this, respostaMao11);
 			}

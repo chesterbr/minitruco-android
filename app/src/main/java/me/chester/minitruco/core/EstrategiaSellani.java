@@ -37,14 +37,11 @@ package me.chester.minitruco.core;
  * 
  */
 
-import java.util.Random;
-
 /**
  * Estratégia inteligente para jogadores CPU
  * 
  */
 public class EstrategiaSellani implements Estrategia {
-	private static Random rand = new Random();
 	private static int CARTA_RUIM = 0;
 	private static int CARTA_MEDIA = 1;
 	private static int CARTA_BOA = 2;
@@ -65,7 +62,7 @@ public class EstrategiaSellani implements Estrategia {
 	 * assim o jogador fica mais dinâmico.
 	 */
 	private boolean vouOuNaoVou(int Porcentagem) {
-		return (Math.abs(rand.nextInt()) % 100 < Porcentagem) ? true : false;
+		return (Math.abs(Util.PRNG.nextInt()) % 100 < Porcentagem) ? true : false;
 	}
 
 	/**

@@ -1,12 +1,13 @@
 package me.chester.minitruco.android;
 
-import java.util.Random;
 import java.util.Vector;
 
 import me.chester.minitruco.R;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.Util;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -72,8 +73,6 @@ import android.view.View;
 public class MesaView extends View {
 
 	private int posicaoVez;
-
-	private static Random rand = new Random();
 
 	public MesaView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -290,7 +289,7 @@ public class MesaView extends View {
 		Resources res = getResources();
 		String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_"
 				+ chave, "array", "me.chester.minitruco"));
-		fraseBalao = frasesBalao[rand.nextInt(frasesBalao.length)];
+		fraseBalao = frasesBalao[Util.PRNG.nextInt(frasesBalao.length)];
 		posicaoBalao = posicao;
 		notificaAnimacao(mostraBalaoAte);
 	}
