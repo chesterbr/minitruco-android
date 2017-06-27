@@ -55,6 +55,8 @@ public abstract class Jogador {
 
 	// Variáveis / Métodos úteis
 
+	protected static Random random = new Random();
+
 	private int posicao = 0;
 
 	private Carta[] cartas;
@@ -229,7 +231,7 @@ public abstract class Jogador {
 		}
 		// Se não houver nenhuma, sorteia
 		if (numEstrategia == -1) {
-			numEstrategia = Util.PRNG.nextInt(ESTRATEGIAS.length);
+			numEstrategia = random.nextInt(ESTRATEGIAS.length);
 		}
 
 		// Cria uma nova instância

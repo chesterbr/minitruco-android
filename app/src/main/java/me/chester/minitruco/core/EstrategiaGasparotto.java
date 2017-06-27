@@ -41,11 +41,14 @@ package me.chester.minitruco.core;
  * 
  */
 
+import java.util.Random;
+
 /**
  * Estratégia inteligente para jogadores CPU
  * 
  */
 public class EstrategiaGasparotto implements Estrategia {
+	private static Random rand = new Random();
 
 	int[] C = new int[3];
 
@@ -124,7 +127,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			fatorDeDuvida = 100;
 		if (fatorDeDuvida < 0)
 			fatorDeDuvida = 0;
-		return (Math.abs(Util.PRNG.nextInt()) % 100 + 1 <= fatorDeDuvida) ? true
+		return (Math.abs(rand.nextInt()) % 100 + 1 <= fatorDeDuvida) ? true
 				: false;
 	}
 
@@ -760,7 +763,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			fatorF = 100;
 		if (fatorF < 0)
 			fatorF = 0;
-		return (Math.abs(Util.PRNG.nextInt()) % 100 + 1 <= fatorF) ? true : false;
+		return (Math.abs(rand.nextInt()) % 100 + 1 <= fatorF) ? true : false;
 	}
 
 	/**
@@ -812,7 +815,7 @@ public class EstrategiaGasparotto implements Estrategia {
 				if (mandaBala(80)) {
 					String[] m = new String[] { "Trucando sem ver...",
 							"Trucando sem ver as cartas!", "Truco de primeira!" };
-					int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+					int i = Math.abs(rand.nextInt()) % 2 + 1;
 					chatMsg = m[i];
 				}
 				return -1;
@@ -848,7 +851,7 @@ public class EstrategiaGasparotto implements Estrategia {
 						"N&atilde;o tenho absolutamente nada!",
 						"Maravilha, estou com tudo!",
 						"Vamos come&ccedil;ar de leve..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			// jogar a menor carta
@@ -1048,7 +1051,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			String[] m = new String[] { "Deixando para o p&eacute;...",
 					"Vamos deixar para o p&eacute;!...",
 					"Melhor guardar minha carta e deixar para o p&eacute;..." };
-			int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+			int i = Math.abs(rand.nextInt()) % 2 + 1;
 			chatMsg = m[i];
 		}
 		return C[2]; // retorna a menor então
@@ -1170,7 +1173,7 @@ public class EstrategiaGasparotto implements Estrategia {
 				String[] m = new String[] {
 						"Essa rodada vai ficar interessante!", "Hummmm....",
 						"Vamos ver o que vai acontecer daqui para a frente..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			// Checa se temos zap e três
@@ -1254,7 +1257,7 @@ public class EstrategiaGasparotto implements Estrategia {
 				String[] m = new String[] { "Boa parceiro!",
 						"&Eacute; assim que se faz, parceiro!",
 						"Agora pode relaxar e deixar a segunda comigo, parceiro!" };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return C[2];
@@ -1287,9 +1290,8 @@ public class EstrategiaGasparotto implements Estrategia {
 		if (mandaBala(5)) {
 			String[] m = new String[] { "Quem pode mais chora menos...",
 					"Agora acabaram minhas cartas...",
-					"Agora acabaram minhas cartas...",
 					"Gastei tudo na primeira rsrsrs..." };
-			int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+			int i = Math.abs(rand.nextInt()) % 2 + 1;
 			chatMsg = m[i];
 		}
 		// Se a 1a amarrou, jogar a maior
@@ -1366,7 +1368,7 @@ public class EstrategiaGasparotto implements Estrategia {
 					"Parceiro, &eacute; com voc&ecirc; agora...",
 					"A gente n&atilde;o conseguiu fazer a primeira, assim fica dif&iacute;cil...",
 					"Firme parceiro, ainda h&aacute; esperan&ccedil;a..." };
-			int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+			int i = Math.abs(rand.nextInt()) % 2 + 1;
 			chatMsg = m[i];
 		}
 		return C[1];
@@ -1422,7 +1424,7 @@ public class EstrategiaGasparotto implements Estrategia {
 					String[] m = new String[] { "E agora José?",
 							"Fechando o pé mais uma vez...",
 							"O pé não é de nada!" };
-					int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+					int i = Math.abs(rand.nextInt()) % 2 + 1;
 					chatMsg = m[i];
 				}
 
@@ -1458,7 +1460,7 @@ public class EstrategiaGasparotto implements Estrategia {
 					String[] m = new String[] { "E agora Jos&eacute;?",
 							"Fechando o p&eacute; mais uma vez...",
 							"O p&eacute n&atilde;o &eacute; de nada, posso sentir!" };
-					int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+					int i = Math.abs(rand.nextInt()) % 2 + 1;
 					chatMsg = m[i];
 				}
 
@@ -1501,7 +1503,7 @@ public class EstrategiaGasparotto implements Estrategia {
 		// frases
 		if (mandaBala(15)) {
 			String[] m = new String[] { "Boa.", ":-)", "Hummmmmmm...." };
-			int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+			int i = Math.abs(rand.nextInt()) % 2 + 1;
 			chatMsg = m[i];
 		}
 		return menorCartaParaMatarNaSegunda(s); // deixa comigo
@@ -1524,7 +1526,7 @@ public class EstrategiaGasparotto implements Estrategia {
 						"N&atilde;o tenho mais nada rsrsrs...",
 						"Gastei tudo na segunda rsrsrs...",
 						"Vamos ter que tirar leite de pedra rsrsrs..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
@@ -1538,7 +1540,7 @@ public class EstrategiaGasparotto implements Estrategia {
 						"N&atilde;o tenho mais nada rsrsrs...",
 						"Gastei tudo na segunda rsrsrs...",
 						"Vamos ter que tirar leite de pedra rsrsrs..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
@@ -1564,7 +1566,7 @@ public class EstrategiaGasparotto implements Estrategia {
 				String[] m = new String[] { "Jogo psicol&oacute;gico?...",
 						"Bom, vamos ver... a primeira foi nossa...",
 						"Voc%ecirc;s deveriam correr, estou avisando..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
@@ -1581,7 +1583,7 @@ public class EstrategiaGasparotto implements Estrategia {
 				String[] m = new String[] { "Jogo psicol&oacute;gico?...",
 						"Bom, vamos ver... a primeira foi nossa...",
 						"Voc%ecirc;s deveriam correr, estou avisando..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
@@ -1616,7 +1618,7 @@ public class EstrategiaGasparotto implements Estrategia {
 						"A jurupoca est&aacute; piando!...",
 						"Agora &eacute; a hora da verdade!",
 						"Essa partida j&aacute; &eacute; nossa..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
@@ -1652,7 +1654,7 @@ public class EstrategiaGasparotto implements Estrategia {
 						"A jurupoca est&aacute; piando!...",
 						"Agora &eacute; a hora da verdade!",
 						"Essa partida j&aacute; &eacute; nossa..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
@@ -1679,7 +1681,7 @@ public class EstrategiaGasparotto implements Estrategia {
 						"Rsrsrsrsrs...",
 						"A força cibern&eacute;tica derrota a for&ccedil;a humana mais uma vez...",
 						"HAL n&atilde;o brinca em servi&ccedil;o!..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
@@ -1695,7 +1697,7 @@ public class EstrategiaGasparotto implements Estrategia {
 						"Rsrsrsrsrs...",
 						"A força cibern&eacute;tica derrota a for&ccedil;a humana mais uma vez...",
 						"HAL n&atilde;o brinca em servi&ccedil;o!..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
@@ -1710,7 +1712,7 @@ public class EstrategiaGasparotto implements Estrategia {
 						"Rsrsrsrsrs...",
 						"A força cibern&eacute;tica derrota a for&ccedil;a humana mais uma vez...",
 						"HAL n&atilde;o brinca em servi&ccedil;o!..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
@@ -1726,7 +1728,7 @@ public class EstrategiaGasparotto implements Estrategia {
 						"Rsrsrsrsrs...",
 						"A força cibern&eacute;tica derrota a for&ccedil;a humana mais uma vez...",
 						"HAL n&atilde;o brinca em servi&ccedil;o!..." };
-				int i = Math.abs(Util.PRNG.nextInt()) % 2 + 1;
+				int i = Math.abs(rand.nextInt()) % 2 + 1;
 				chatMsg = m[i];
 			}
 			return -1;
