@@ -30,20 +30,20 @@ import android.view.View;
  * A redistribuição e o uso nas formas binária e código fonte, com ou sem
  * modificações, são permitidos contanto que as condições abaixo sejam
  * cumpridas:
- * 
+ *
  * - Redistribuições do código fonte devem conter o aviso de direitos
  *   autorais acima, esta lista de condições e o aviso de isenção de
  *   garantias subseqüente.
- * 
+ *
  * - Redistribuições na forma binária devem reproduzir o aviso de direitos
  *   autorais acima, esta lista de condições e o aviso de isenção de
  *   garantias subseqüente na documentação e/ou materiais fornecidos com
  *   a distribuição.
- *   
+ *
  * - Nem o nome do Chester, nem o nome dos contribuidores podem ser
  *   utilizados para endossar ou promover produtos derivados deste
  *   software sem autorização prévia específica por escrito.
- * 
+ *
  * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
  * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
  * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
@@ -57,7 +57,7 @@ import android.view.View;
  * CONTRATUAL, RESTRITA, ILÍCITO CIVIL, OU QUALQUER OUTRA, COMO DECORRÊNCIA
  * DE USO DESTE SOFTWARE, MESMO QUE HOUVESSEM SIDO AVISADOS DA
  * POSSIBILIDADE DE TAIS DANOS.
- * 
+ *
  */
 
 /**
@@ -66,12 +66,14 @@ import android.view.View;
  * <p>
  * Para simplificar o acesso, alguns métodos/propriedades são static - o que só
  * reitera que só deve existir uma instância desta View.
- * 
- * 
+ *
+ *
  */
 public class MesaView extends View {
 
 	private int posicaoVez;
+
+	private static Random rand = new Random();
 
 	public MesaView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -92,7 +94,7 @@ public class MesaView extends View {
 	/**
 	 * Informa à mesa que uma animação começou (garantindo refreshes da tela
 	 * enquanto ela durar).
-	 * 
+	 *
 	 * @param fim
 	 *            timestamp de quando a animação vai acabar
 	 */
@@ -214,7 +216,7 @@ public class MesaView extends View {
 
 	/**
 	 * Recupera a carta visual correspondente a uma carta do jogo.
-	 * 
+	 *
 	 * @param c
 	 *            carta do jogo
 	 * @return Carta visual com o valor desta, ou <code>null</code> se não achar
@@ -231,7 +233,7 @@ public class MesaView extends View {
 	/**
 	 * Atualiza o resultado de uma rodada, destacando a carta vencedora e
 	 * piscando a rodada atual por um instante.
-	 * 
+	 *
 	 * @param numRodada
 	 *            rodada que finalizou
 	 * @param resultado
@@ -258,7 +260,7 @@ public class MesaView extends View {
 
 	/**
 	 * Torna as cartas da mão de 11 visíveis
-	 * 
+	 *
 	 * @param cartasParceiro
 	 *            cartas do seu parceiro
 	 */
@@ -273,7 +275,7 @@ public class MesaView extends View {
 	 * <p>
 	 * As frases estão no strings.xml no formato balao_<chave>, e são arrays de
 	 * strings (das quais uma será sorteada para exibição).
-	 * 
+	 *
 	 * @param chave
 	 *            diz o tipo de texto que aparece no balão. Ex.: "aumento_3"
 	 *            para pedido de truco.
@@ -288,7 +290,7 @@ public class MesaView extends View {
 		Resources res = getResources();
 		String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_"
 				+ chave, "array", "me.chester.minitruco"));
-		fraseBalao = frasesBalao[(new Random()).nextInt(frasesBalao.length)];
+		fraseBalao = frasesBalao[rand.nextInt(frasesBalao.length)];
 		posicaoBalao = posicao;
 		notificaAnimacao(mostraBalaoAte);
 	}
@@ -359,7 +361,7 @@ public class MesaView extends View {
 	 * cartas[1..3] são o baralho decorativo, cartas[4..6] são as do jogador na
 	 * posição 1 (inferior), cartas[7..9] o jogador 2 e assim por diante para os
 	 * jogadores 3 e 4.
-	 * 
+	 *
 	 * TODO: refatorar esses magic numbers para algo melhor.
 	 */
 	public CartaVisual[] cartas = new CartaVisual[16];
@@ -456,7 +458,7 @@ public class MesaView extends View {
 
 	/**
 	 * Permite à Activity informar que (não) é a vez de deixar o humano jogar
-	 * 
+	 *
 	 * @param vezHumano
 	 *            um entre VEZ_HUMANO, VEZ_CPU e VEZ_HUMANO_AGUARDANDO_RESPOSTA
 	 */
@@ -525,7 +527,7 @@ public class MesaView extends View {
 
 	/**
 	 * Joga a carta no meio da mesa
-	 * 
+	 *
 	 * @param c
 	 */
 	public void descarta(Carta c, int posicao) {
@@ -566,7 +568,7 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param numJogador
 	 * @return posição (x) de uma carta descartada pelo jogador (no meio da
 	 *         tela, mas puxando para a direçãod dele com um breve distúrbio
@@ -587,12 +589,12 @@ public class MesaView extends View {
 	/**
 	 * Exibe uma carta na posição apropriada, animando
 	 * <p>
-	 * 
+	 *
 	 * @param numJogador
 	 *            Posição do jogador, de 1 a 4 (1 = humano).
 	 * @param posicao
 	 *            posição da carta na mão do jogador (0 a 2)
-	 * 
+	 *
 	 * @carta Carta a distribuir
 	 */
 	private void entregaCarta(CartaVisual carta, int numJogador, int posicao) {
@@ -604,7 +606,7 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param numJogador
 	 * @param i
 	 * @return Posição (x) da i-ésima carta na mão do jogador em questão
@@ -629,7 +631,7 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param numJogador
 	 * @param i
 	 * @return Posição (y) da i-ésima carta na mão do jogador em questão
@@ -654,7 +656,7 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param numJogador
 	 * @return posição (y) de uma carta descartada pelo jogador (no meio da
 	 *         tela, mas puxando para a direçãod dele com um breve distúrbio
@@ -875,7 +877,7 @@ public class MesaView extends View {
 	 * Desenha a parte gráfica do balão (sem o texto). O nome é meio mentiroso,
 	 * porque também desenha a ponta. É chamada várias vezes para compor o
 	 * contorno, antes de estampar o texto
-	 * 
+	 *
 	 * @param canvas
 	 *            onde ele será desenhado
 	 * @param x
@@ -913,7 +915,7 @@ public class MesaView extends View {
 
 	/**
 	 * Desenha o balão no lugar certo, se ele estiver visível
-	 * 
+	 *
 	 * @param canvas
 	 *            canvas onde ele será (ou não) desenhado.
 	 */
