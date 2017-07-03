@@ -55,6 +55,24 @@ public class Carta {
 		setNaipe(naipe);
 	}
 
+	private enum Naipe {
+		COPAS(0),
+		OUROS(1),
+		ESPADAS(2),
+		PAUS(3),
+		NENHUM(4);
+
+		private int val;
+
+		private Naipe(int val) {
+			this.val = val;
+		}
+
+		public int value() {
+			return val;
+		}
+	};
+
 	/**
 	 * Cria uma carta baseado em sua representação string
 	 * 
@@ -68,37 +86,6 @@ public class Carta {
 	}
 
 	/**
-	 * Constante que representa o naipe de copas
-	 */
-	public static final int NAIPE_COPAS = 0;
-
-	/**
-	 * Constante que representa o naipe de ouros
-	 */
-	public static final int NAIPE_OUROS = 1;
-
-	/**
-	 * Constante que representa o naipe de espadas
-	 */
-	public static final int NAIPE_ESPADAS = 2;
-
-	/**
-	 * Constante que representa o naipe de paus
-	 */
-	public static final int NAIPE_PAUS = 3;
-
-	/**
-	 * Lista ordenada dos naipes
-	 */
-	public static final int[] NAIPES = { NAIPE_COPAS, NAIPE_ESPADAS,
-			NAIPE_OUROS, NAIPE_PAUS };
-
-	/**
-	 * Indica que o naipe da carta não foi escolhido
-	 */
-	public static final int NAIPE_NENHUM = 4;
-
-	/**
 	 * Indica que a letra da carta não foi escolhida
 	 */
 	public static final char LETRA_NENHUMA = 'X';
@@ -109,7 +96,7 @@ public class Carta {
 
 	private char letra = LETRA_NENHUMA;
 
-	private int naipe = NAIPE_NENHUM;
+	private int naipe = Naipe.NENHUM.value();
 
 	private boolean fechada = false;
 
@@ -140,8 +127,8 @@ public class Carta {
 	 *            Naipe de acordo com as constantes
 	 */
 	public void setNaipe(int naipe) {
-		if (naipe == NAIPE_COPAS || naipe == NAIPE_OUROS || naipe == NAIPE_PAUS
-				|| naipe == NAIPE_ESPADAS || naipe == NAIPE_NENHUM) {
+		if (naipe == Naipe.COPAS.value() || naipe == Naipe.OUROS.value() || naipe == Naipe.PAUS.value()
+				|| naipe == Naipe.ESPADAS.value() || naipe == Naipe.NENHUM.value()) {
 			this.naipe = naipe;
 		}
 	}
