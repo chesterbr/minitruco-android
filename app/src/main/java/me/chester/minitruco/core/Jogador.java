@@ -1,5 +1,7 @@
 package me.chester.minitruco.core;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import android.util.Log;
@@ -59,7 +61,10 @@ public abstract class Jogador {
 
 	private int posicao = 0;
 
-	private Carta[] cartas;
+	/**
+	 * List of cards.
+	 */
+	private List<Carta> cartas = new ArrayList<Carta>();
 
 	/**
 	 * Jogo que está sendo jogado por este jogador
@@ -172,19 +177,19 @@ public abstract class Jogador {
 	}
 
 	public void setCartas(Carta[] cartas) {
-		this.cartas = cartas;
+		this.cartas.clear();
+		for(Carta c: cartas) {
+			this.cartas.add(c);
+		}
 	}
 
 	public Carta[] getCartas() {
-		return cartas;
+		return (Carta[]) this.cartas.toArray();
 	}
 
 	public boolean possuiCarta(Carta c) {
-		if (cartas == null) {
-			return false;
-		}
-		for (int i = 0; i < cartas.length; i++) {
-			if (cartas[i].equals(c)) {
+		for (Carta d: cartas) {
+			if (d.equals(c)) {
 				return true;
 			}
 		}
