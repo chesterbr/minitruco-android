@@ -37,49 +37,55 @@ package me.chester.minitruco.core;
  * 
  */
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Forma de pontuação dos tentos
- * 
  */
 public class TentoPaulista implements Tento {
 
-	public int calcValorTento(int valorMao) {
-		switch (valorMao) {
-		case 1:
-			return 3;
-		case 3:
-			return 6;
-		case 6:
-			return 9;
-		case 9:
-			return 12;
-		}
-		return 0;
-	}
+    /**
+     *
+     */
+    private static Map<Integer, Integer> valorTento = new HashMap<Integer, Integer>();
 
-	public int calcValorMao(int valorMao) {
-		switch (valorMao) {
-		case 1:
-			return 1;
-		case 3:
-			return 2;
-		case 6:
-			return 3;
-		case 9:
-			return 4;
-		}
-		return 0;
-	}
+    /**
+     *
+     */
+    private static Map<Integer, Integer> valorMao = new HashMap<Integer, Integer>();
 
-	public int inicializaMao() {
-		return 1;
-	}
+    static {
+        valorTento.put(1, 3);
+        valorTento.put(3, 6);
+        valorTento.put(6, 9);
+        valorTento.put(9, 12);
 
-	public int inicializaPenultimaMao() {
-		return 3;
-	}
+        valorMao.put(1, 1);
+        valorMao.put(3, 2);
+        valorMao.put(6, 3);
+        valorMao.put(9, 4);
+    }
 
-	public int valorPenultimaMao() {
-		return 11;
-	}
+    public int calcValorTento(int valorT) {
+        Integer result = valorTento.get(valorT);
+        return (result == null ? 0 : result);
+    }
+
+    public int calcValorMao(int valorM) {
+        Integer result = valorMao.get(valorM);
+        return (result == null ? 0 : result);
+    }
+
+    public int inicializaMao() {
+        return 1;
+    }
+
+    public int inicializaPenultimaMao() {
+        return 3;
+    }
+
+    public int valorPenultimaMao() {
+        return 11;
+    }
 }
