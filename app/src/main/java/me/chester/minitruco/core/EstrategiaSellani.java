@@ -65,7 +65,7 @@ public class EstrategiaSellani implements Estrategia {
 	 * assim o jogador fica mais dinâmico.
 	 */
 	private boolean vouOuNaoVou(int Porcentagem) {
-		return (rand.nextInt(100) < Porcentagem) ? true : false;
+		return (rand.nextInt(100) < Porcentagem);
 	}
 
 	/**
