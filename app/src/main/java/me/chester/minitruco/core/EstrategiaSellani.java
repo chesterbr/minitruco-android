@@ -188,19 +188,15 @@ public class EstrategiaSellani implements Estrategia {
 	 * Retorna se a maior carta da mesa é a do meu parceiro ou não.
 	 */
 	private boolean maiorCartaEDoParceiro(SituacaoJogo s) {
-		if (parceiro(s) == maiorCartaMesa(s) && !taMelado(s))
-			return true;
-		return false;
+		return (parceiro(s) == maiorCartaMesa(s) && !taMelado(s));
 	}
 
 	/**
 	 * Retorna se a maior carta da mesa é minha ou do meu parceiro ou não.
 	 */
 	private boolean maiorCartaENossa(SituacaoJogo s) {
-		if ((eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s))
-				&& !taMelado(s))
-			return true;
-		return false;
+		return ((eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s))
+				&& !taMelado(s));
 	}
 
 	/**
