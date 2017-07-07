@@ -691,7 +691,7 @@ public class JogoLocal extends Jogo {
 				if (c != null && c.isFechada()) {
 					s.cartasJogadas[i][k].setFechada(true);
 					s.cartasJogadas[i][k].setLetra(Carta.LETRA_NENHUMA);
-					s.cartasJogadas[i][k].setNaipe(Carta.Naipe.NENHUM.value());
+					s.cartasJogadas[i][k].setNaipe(Carta.Naipe.NENHUM);
 				}
 			}
 

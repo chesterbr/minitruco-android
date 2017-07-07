@@ -620,8 +620,8 @@ public class EstrategiaGasparotto implements Estrategia {
 		// utilizada diretamente
 		// Estas são cartas fictícias somente para os testes condicionais logo
 		// abaixo
-		Carta tres_testedemanilha = new Carta('3', 3);
-		Carta dois_testedemanilha = new Carta('2', 3);
+		Carta tres_testedemanilha = new Carta('3', Carta.Naipe.get(3));
+		Carta dois_testedemanilha = new Carta('2', Carta.Naipe.get(3));
 		if (qcarta == DOIS
 				&& tres_testedemanilha.getValorTruco(s.manilha) == 14)
 			qcarta = TRES;

@@ -76,7 +76,7 @@ public class CartaVisual extends Carta {
 	 *            valor que esta carta terá (ex.: "Kc"). Se null, entra virada.
 	 */
 	public CartaVisual(MesaView mesa, int left, int top, String sCarta) {
-		super(sCarta == null ? LETRA_NENHUMA + "" + NAIPE_NENHUM : sCarta);
+		super(sCarta == null ? LETRA_NENHUMA + "" + Naipe.NENHUM : sCarta);
 		this.mesa = mesa;
 		movePara(left, top);
 	}
@@ -238,7 +238,7 @@ public class CartaVisual extends Carta {
 		}
 		if (c == null) {
 			this.setLetra(LETRA_NENHUMA);
-			this.setNaipe(NAIPE_NENHUM);
+			this.setNaipe(Naipe.NENHUM);
 			this.setFechada(true);
 		} else {
 			this.setLetra(c.getLetra());
@@ -258,7 +258,7 @@ public class CartaVisual extends Carta {
 		if (this.bitmap == null || this.bitmap.isRecycled()) {
 			String valor = "fundo";
 			if ((!isFechada()) && (getLetra() != LETRA_NENHUMA)
-					&& (getNaipe() != NAIPE_NENHUM)) {
+					&& (getNaipe() != Naipe.NENHUM)) {
 				valor = this.toString();
 			}
 			this.bitmap = bitmapCache.get(valor);
@@ -283,7 +283,7 @@ public class CartaVisual extends Carta {
 	}
 
 	@Override
-	public void setNaipe(int naipe) {
+	public void setNaipe(Naipe naipe) {
 		super.setNaipe(naipe);
 		this.bitmap = null;
 	}
