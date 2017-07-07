@@ -272,9 +272,9 @@ public class JogoLocal extends Jogo {
 	 * Processa uma jogada e passa a vez para o próximo jogador (ou finaliza a
 	 * rodoada/mão/jogo), notificando os jogadores apropriadamente
 	 * 
-	 * @param j
+	 *
 	 *            Jogador que efetuou a jogada
-	 * @param c
+	 *
 	 *            Carta que foi jogada
 	 */
 	private void processaJogada() {
@@ -411,7 +411,7 @@ public class JogoLocal extends Jogo {
 	/**
 	 * Conclui a mão atual, e, se o jogo não acabou, inicia uma nova.
 	 * 
-	 * @param jogadorQueTorna
+	 *
 	 *            Jogador que irá abrir a próxima mão, se houver
 	 */
 	private void fechaMao() {
@@ -691,7 +691,7 @@ public class JogoLocal extends Jogo {
 				if (c != null && c.isFechada()) {
 					s.cartasJogadas[i][k].setFechada(true);
 					s.cartasJogadas[i][k].setLetra(Carta.LETRA_NENHUMA);
-					s.cartasJogadas[i][k].setNaipe(Carta.NAIPE_NENHUM);
+					s.cartasJogadas[i][k].setNaipe(Carta.Naipe.NENHUM.value());
 				}
 			}
 

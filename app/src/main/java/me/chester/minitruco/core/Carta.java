@@ -50,12 +50,12 @@ public class Carta {
 	 * @param letra
 	 * @param naipe
 	 */
-	public Carta(char letra, int naipe) {
+	public Carta(char letra, Naipe naipe) {
 		setLetra(letra);
 		setNaipe(naipe);
 	}
 
-	private enum Naipe {
+	public enum Naipe {
 		COPAS(0),
 		OUROS(1),
 		ESPADAS(2),
@@ -66,6 +66,23 @@ public class Carta {
 
 		private Naipe(int val) {
 			this.val = val;
+		}
+
+		public static Naipe get(int val) throws RuntimeException {
+                switch (val) {
+                    case 0:
+                        return COPAS;
+                    case 1:
+                        return OUROS;
+                    case 2:
+                        return ESPADAS;
+                    case 3:
+                        return PAUS;
+                    case 4:
+                        return NENHUM;
+                    default:
+                        throw new RuntimeException("Incorrect suit");
+                }
 		}
 
 		public int value() {
@@ -82,7 +99,7 @@ public class Carta {
 	 * @see Carta#toString()
 	 */
 	public Carta(String sCarta) {
-		this(sCarta.charAt(0), "coepx".indexOf(sCarta.charAt(1)));
+		this(sCarta.charAt(0), Naipe.get("coepx".indexOf(sCarta.charAt(1))));
 	}
 
 	/**
@@ -96,7 +113,7 @@ public class Carta {
 
 	private char letra = LETRA_NENHUMA;
 
-	private int naipe = Naipe.NENHUM.value();
+	private Naipe naipe = Naipe.NENHUM;
 
 	private boolean fechada = false;
 
@@ -126,14 +143,14 @@ public class Carta {
 	 * @param naipe
 	 *            Naipe de acordo com as constantes
 	 */
-	public void setNaipe(int naipe) {
-		if (naipe == Naipe.COPAS.value() || naipe == Naipe.OUROS.value() || naipe == Naipe.PAUS.value()
-				|| naipe == Naipe.ESPADAS.value() || naipe == Naipe.NENHUM.value()) {
+	public void setNaipe(Naipe naipe) {
+		if (naipe == Naipe.COPAS || naipe == Naipe.OUROS || naipe == Naipe.PAUS
+				|| naipe == Naipe.ESPADAS || naipe == Naipe.NENHUM) {
 			this.naipe = naipe;
 		}
 	}
 
-	public int getNaipe() {
+	public Naipe getNaipe() {
 		return naipe;
 	}
 
@@ -175,7 +192,7 @@ public class Carta {
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
-		return getLetra() * 256 + getNaipe();
+		return getLetra() * 256 + getNaipe().value();
 	}
 
 	/**
@@ -199,7 +216,7 @@ public class Carta {
 	 * alterado de acordo).
 	 */
 	public String toString() {
-		return letra + "" + ("coepx").charAt(naipe);
+		return letra + "" + ("coepx").charAt(naipe.value());
 	}
 
 	/**

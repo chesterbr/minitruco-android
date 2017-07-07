@@ -85,14 +85,14 @@ public abstract class Jogo implements Runnable {
 		}
 
 		if (letraManilha == SituacaoJogo.MANILHA_INDETERMINADA) {
-			if (c.getLetra() == '7' && c.getNaipe() == Carta.NAIPE_OUROS) {
+			if (c.getLetra() == '7' && c.getNaipe() == Carta.Naipe.OUROS) {
 				return 11;
 			} else if (c.getLetra() == 'A'
-					&& c.getNaipe() == Carta.NAIPE_ESPADAS) {
+					&& c.getNaipe() == Carta.Naipe.ESPADAS) {
 				return 12;
-			} else if (c.getLetra() == '7' && c.getNaipe() == Carta.NAIPE_COPAS) {
+			} else if (c.getLetra() == '7' && c.getNaipe() == Carta.Naipe.COPAS) {
 				return 13;
-			} else if (c.getLetra() == '4' && c.getNaipe() == Carta.NAIPE_PAUS) {
+			} else if (c.getLetra() == '4' && c.getNaipe() == Carta.Naipe.PAUS) {
 				return 14;
 			}
 		}
@@ -100,13 +100,13 @@ public abstract class Jogo implements Runnable {
 		if (c.getLetra() == letraManilha) {
 			// Valor de 11 a 14, conforme o naipe
 			switch (c.getNaipe()) {
-			case Carta.NAIPE_OUROS:
+			case OUROS:
 				return 11;
-			case Carta.NAIPE_ESPADAS:
+			case ESPADAS:
 				return 12;
-			case Carta.NAIPE_COPAS:
+			case COPAS:
 				return 13;
-			case Carta.NAIPE_PAUS:
+			case PAUS:
 				return 14;
 			default:
 				return 0;

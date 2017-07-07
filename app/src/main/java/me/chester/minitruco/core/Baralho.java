@@ -84,7 +84,7 @@ public class Baralho {
 		String cartas = limpo ? "A23JQK" : "A234567JQK";
 		do {
 			char letra = cartas.charAt(sorteiaDeZeroA(cartas.length() - 1));
-			int naipe = Carta.NAIPES[sorteiaDeZeroA(3)];
+			Carta.Naipe naipe = Carta.Naipe.get(sorteiaDeZeroA(3));
 			c = new Carta(letra, naipe);
 		} while (sorteadas.contains(c));
 		sorteadas.addElement(c);
@@ -105,7 +105,7 @@ public class Baralho {
 	 */
 	private int sorteiaDeZeroA(int limiteSuperior) {
 		// O >>> é pra evitar nos. negativos, cf: http://tinyurl.com/dgjxp
-		return (random.nextInt() >>> 1) % (limiteSuperior + 1);
+		return (random.nextInt(limiteSuperior + 1));
 	}
 
 	/**
