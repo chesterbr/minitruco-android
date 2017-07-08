@@ -26,9 +26,9 @@ package me.chester.minitruco.core;
  *   software sem autorização prévia específica por escrito.
  * 
  * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
- * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
- * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
- * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS. EM NENHUMA
+ * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS.value() EXPRESSAS.value() OU TÁCITAS.value(),
+ * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS.value() IMPLÍCITAS.value() DE
+ * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS.value(). EM NENHUMA
  * HIPÓTESE OS TITULARES DE DIREITOS AUTORAIS E CONTRIBUIDORES SERÃO
  * RESPONSÁVEIS POR QUAISQUER DANOS, DIRETOS, INDIRETOS, INCIDENTAIS,
  * ESPECIAIS, EXEMPLARES OU CONSEQUENTES, (INCLUINDO, SEM LIMITAÇÃO,
@@ -52,14 +52,29 @@ public class EstrategiaGasparotto implements Estrategia {
 
 	int[] C = new int[3];
 
-	private static int LIXO = 0;
-	private static int AS = 1;
-	private static int DOIS = 2;
-	private static int TRES = 3;
-	private static int PICAFUMO = 4;
-	private static int ESPADILHA = 5;
-	private static int ESCOPETA = 6;
-	private static int ZAP = 7;
+	/**
+	 *
+	 */
+	private enum Qualificacao {
+		LIXO(0),
+		AS(1),
+		DOIS(2),
+		TRES(3),
+		PICAFUMO(4),
+		ESPADILHA(5),
+		ESCOPETA(6),
+		ZAP(7);
+
+		private int value;
+
+		private Qualificacao(int value) {
+			this.value = value;
+		}
+
+		public int value() {
+			return value;
+		}
+	};
 
 	// game level
 	// each game level is associated with various different names
@@ -301,18 +316,14 @@ public class EstrategiaGasparotto implements Estrategia {
 	 * considerar empate
 	 */
 	private boolean maiorCartaEDoParceiro(SituacaoJogo s) {
-		if (parceiro(s) == maiorCartaMesa(s) && !taAmarrado(s))
-			return true;
-		return false;
+		return (parceiro(s) == maiorCartaMesa(s) && !taAmarrado(s));
 	}
 
 	/**
 	 * Retorna se a maior carta da mesa é minha ou do meu parceiro ou não
 	 */
 	private boolean maiorCartaENossaPodendoEstarAmarrado(SituacaoJogo s) {
-		if (eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s))
-			return true;
-		return false;
+		return (eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s));
 	}
 
 	/**
@@ -320,19 +331,15 @@ public class EstrategiaGasparotto implements Estrategia {
 	 * considerar empate
 	 */
 	private boolean maiorCartaENossa(SituacaoJogo s) {
-		if ((eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s))
-				&& !taAmarrado(s))
-			return true;
-		return false;
+		return (((eu(s) == maiorCartaMesa(s)) || (parceiro(s) == maiorCartaMesa(s)))
+				&& !taAmarrado(s));
 	}
 
 	/**
 	 * Retorna se a maior carta da mesa é minha ou do meu parceiro ou não
 	 */
 	private boolean maiorCartaPossivelENossa(SituacaoJogo s) {
-		if ((eu(s) == maiorCartaPossivelMesa(s) || parceiro(s) == maiorCartaPossivelMesa(s)))
-			return true;
-		return false;
+		return ((eu(s) == maiorCartaPossivelMesa(s) || parceiro(s) == maiorCartaPossivelMesa(s)));
 	}
 
 	/**
@@ -483,16 +490,16 @@ public class EstrategiaGasparotto implements Estrategia {
 							.getValorTruco(s.manilha)) {
 					case 11:
 						PICAFUMOJaSaiu = true;
-						break; // PICAFUMO já saiu
+						break; // PICAFUMO.value() já saiu
 					case 12:
 						ESPADILHAJaSaiu = true;
-						break; // ESPADILHA já saiu
+						break; // ESPADILHA.value() já saiu
 					case 13:
 						ESCOPETAJaSaiu = true;
-						break; // ESCOPETA já saiu
+						break; // ESCOPETA.value() já saiu
 					case 14:
 						ZAPJaSaiu = true;
-						break; // ZAP já saiu
+						break; // ZAP.value() já saiu
 					}
 				}
 			}
@@ -500,42 +507,42 @@ public class EstrategiaGasparotto implements Estrategia {
 		// Análise para 2a rodada
 		if (s.numRodadaAtual == 2 && !primeiraENossa(s)
 				&& !maiorCartaENossaPodendoEstarAmarrado(s)) {
-			if (qualidadeMaiorMesa(s) == ZAP)
+			if (qualidadeMaiorMesa(s) == Qualificacao.ZAP.value())
 				return true;
 
-			if (qualidadeMaiorMesa(s) == ESCOPETA && ZAPJaSaiu)
+			if (qualidadeMaiorMesa(s) == Qualificacao.ESCOPETA.value() && ZAPJaSaiu)
 				return true;
 
-			if (qualidadeMaiorMesa(s) == ESPADILHA && ZAPJaSaiu
+			if (qualidadeMaiorMesa(s) == Qualificacao.ESPADILHA.value() && ZAPJaSaiu
 					&& ESCOPETAJaSaiu)
 				return true;
 
-			if (qualidadeMaiorMesa(s) == PICAFUMO && ZAPJaSaiu
+			if (qualidadeMaiorMesa(s) == Qualificacao.PICAFUMO.value() && ZAPJaSaiu
 					&& ESCOPETAJaSaiu && ESPADILHAJaSaiu)
 				return true;
 
-			if (qualidadeMaiorMesa(s) == TRES && ZAPJaSaiu && ESCOPETAJaSaiu
+			if (qualidadeMaiorMesa(s) == Qualificacao.TRES.value() && ZAPJaSaiu && ESCOPETAJaSaiu
 					&& ESPADILHAJaSaiu && PICAFUMOJaSaiu)
 				return true;
 		}
 
 		// Análise para 3a rodada
 		if (s.numRodadaAtual == 3 && !maiorCartaENossaPodendoEstarAmarrado(s)) {
-			if (qualidadeMaiorMesa(s) == ZAP)
+			if (qualidadeMaiorMesa(s) == Qualificacao.ZAP.value())
 				return true;
 
-			if (qualidadeMaiorMesa(s) == ESCOPETA && ZAPJaSaiu)
+			if (qualidadeMaiorMesa(s) == Qualificacao.ESCOPETA.value() && ZAPJaSaiu)
 				return true;
 
-			if (qualidadeMaiorMesa(s) == ESPADILHA && ZAPJaSaiu
+			if (qualidadeMaiorMesa(s) == Qualificacao.ESPADILHA.value() && ZAPJaSaiu
 					&& ESCOPETAJaSaiu)
 				return true;
 
-			if (qualidadeMaiorMesa(s) == PICAFUMO && ZAPJaSaiu
+			if (qualidadeMaiorMesa(s) == Qualificacao.PICAFUMO.value() && ZAPJaSaiu
 					&& ESCOPETAJaSaiu && ESPADILHAJaSaiu)
 				return true;
 
-			if (qualidadeMaiorMesa(s) == TRES && ZAPJaSaiu && ESCOPETAJaSaiu
+			if (qualidadeMaiorMesa(s) == Qualificacao.TRES.value() && ZAPJaSaiu && ESCOPETAJaSaiu
 					&& ESPADILHAJaSaiu && PICAFUMOJaSaiu && !primeiraENossa(s))
 				return true;
 
@@ -586,31 +593,31 @@ public class EstrategiaGasparotto implements Estrategia {
 	private int qualidadeCarta(Carta carta, SituacaoJogo s) {
 		// Declarações
 		int qcarta; // return do método
-		qcarta = LIXO; // apenas para ter a variável inicializada com algo
+		qcarta = Qualificacao.LIXO.value(); // apenas para ter a variável inicializada com algo
 		// 4, 5, 6, 7, Q, J, K
 		if (carta.getValorTruco(s.manilha) <= 7)
-			qcarta = LIXO;
+			qcarta = Qualificacao.LIXO.value();
 		// A
 		else if (carta.getValorTruco(s.manilha) == 8)
-			qcarta = AS;
+			qcarta = Qualificacao.AS.value();
 		// 2
 		else if (carta.getValorTruco(s.manilha) == 9)
-			qcarta = DOIS;
+			qcarta = Qualificacao.DOIS.value();
 		// 3
 		else if (carta.getValorTruco(s.manilha) == 10)
-			qcarta = TRES;
+			qcarta = Qualificacao.TRES.value();
 		// Picafumo
 		else if (carta.getValorTruco(s.manilha) == 11)
-			qcarta = PICAFUMO;
+			qcarta = Qualificacao.PICAFUMO.value();
 		// Espadilha
 		else if (carta.getValorTruco(s.manilha) == 12)
-			qcarta = ESPADILHA;
+			qcarta = Qualificacao.ESPADILHA.value();
 		// Escopeta
 		else if (carta.getValorTruco(s.manilha) == 13)
-			qcarta = ESCOPETA;
+			qcarta = Qualificacao.ESCOPETA.value();
 		// Zap
 		else if (carta.getValorTruco(s.manilha) == 14)
-			qcarta = ZAP;
+			qcarta = Qualificacao.ZAP.value();
 
 		// caso a manilha seja um 3, o 2 passa a ter qualidade de 3!
 		// e o A passa a ter valor de 2!
@@ -622,14 +629,14 @@ public class EstrategiaGasparotto implements Estrategia {
 		// abaixo
 		Carta tres_testedemanilha = new Carta('3', 3);
 		Carta dois_testedemanilha = new Carta('2', 3);
-		if (qcarta == DOIS
+		if (qcarta == Qualificacao.DOIS.value()
 				&& tres_testedemanilha.getValorTruco(s.manilha) == 14)
-			qcarta = TRES;
-		if (qcarta == AS && tres_testedemanilha.getValorTruco(s.manilha) == 14)
-			qcarta = DOIS;
+			qcarta = Qualificacao.TRES.value();
+		if (qcarta == Qualificacao.AS.value() && tres_testedemanilha.getValorTruco(s.manilha) == 14)
+			qcarta = Qualificacao.DOIS.value();
 		// caso a manilha seja um 2, o A passa a ter valor de 2!
-		if (qcarta == AS && dois_testedemanilha.getValorTruco(s.manilha) == 14)
-			qcarta = DOIS;
+		if (qcarta == Qualificacao.AS.value() && dois_testedemanilha.getValorTruco(s.manilha) == 14)
+			qcarta = Qualificacao.DOIS.value();
 
 		return qcarta;
 	}
@@ -823,23 +830,23 @@ public class EstrategiaGasparotto implements Estrategia {
 
 		if (mandaBala(75)) {
 			// Checa se temos zap e três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outro três),
 			// mesmo assim vamos jogar o três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[2];
 			// Checa se temos o picafumo, espadilha ou escopeta
 			// Mas somente jogar caso não tenhamos o zap também
 			// Isto quer dizer que uma dessas tem que ser a maior carta na
 			// mão...
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == PICAFUMO
-					|| qualidadeCarta(s.cartasJogador[C[0]], s) == ESPADILHA
-					|| qualidadeCarta(s.cartasJogador[C[0]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.PICAFUMO.value()
+					|| qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESPADILHA.value()
+					|| qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESCOPETA.value())
 				// Jogar então
 				return C[0];
 			return C[2]; // retorna a menor então
@@ -876,171 +883,171 @@ public class EstrategiaGasparotto implements Estrategia {
 		// Senão tentar matar com a menor manilha (menos o zap) ou um três ou
 		// dois pelo menos
 		// Senão deixar para o parceiro, ele deve se virar
-		// Caso esteja vindo lixo:
+		// Caso esteja vindo LIXO.value():
 		// Jogar a menor manilha (menos o zap)
 		// Ou um três somente caso tenhamos o zap
 		// Senão deixar para o parceiro, ele deve se virar (c/ média
 		// probabilidade, afinal, ele é pé)
 
-		if (qualidadeMaiorMesa(s) >= PICAFUMO)
+		if (qualidadeMaiorMesa(s) >= Qualificacao.PICAFUMO.value())
 			return menorCartaParaMatar(s);
-		if (qualidadeMaiorMesa(s) == TRES) {
+		if (qualidadeMaiorMesa(s) == Qualificacao.TRES.value()) {
 			// Checa se temos zap e três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outro três),
 			// mesmo assim vamos jogar o três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[2];
 			return menorCartaParaMatar(s);
 		}
-		if (qualidadeMaiorMesa(s) == DOIS && mandaBala(90)) {
+		if (qualidadeMaiorMesa(s) == Qualificacao.DOIS.value() && mandaBala(90)) {
 			// Checa se temos zap e três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outro três),
 			// mesmo assim vamos jogar o três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[2];
 			// Checa se temos zap e dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.DOIS.value())
 				// Jogar o dois
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outros
 			// três/dois),
 			// mesmo assim vamos jogar o dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.DOIS.value())
 				// Jogar o dois
 				return C[2];
 			// Aqui vamos jogar a menor manilha (menos o zap)
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.PICAFUMO.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.PICAFUMO.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.PICAFUMO.value())
 				return C[2];
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESPADILHA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESPADILHA.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.ESPADILHA.value())
 				return C[0]; // hummmm... podemos jogar o zap para tentar
 								// enganar os adversários...
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESCOPETA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESCOPETA.value())
 				return C[0]; // hummmm.. podemos jogar o zap para tentar enganar
 								// os adversários...
 			// Aqui vamos jogar o três ou dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.DOIS.value())
 				return C[0]; // ok se amarrar
 			return C[2]; // retorna a menor então
 		}
 
-		if (qualidadeMaiorMesa(s) == AS && mandaBala(80)) {
+		if (qualidadeMaiorMesa(s) == Qualificacao.AS.value() && mandaBala(80)) {
 			// Checa se temos zap e três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outro três),
 			// mesmo assim vamos jogar o três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[2];
 			// Checa se temos zap e dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.DOIS.value())
 				// Jogar o dois
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outros
 			// três/dois),
 			// mesmo assim vamos jogar o dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.DOIS.value())
 				// Jogar o dois
 				return C[2];
 			// Checa se temos zap e ás
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == AS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.AS.value())
 				// Jogar o ás
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outos
 			// três/dois/ás),
 			// mesmo assim vamos jogar o ás
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == AS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.AS.value())
 				// Jogar o ás
 				return C[2];
 			// Aqui vamos jogar a menor manilha (menos o zap)
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.PICAFUMO.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.PICAFUMO.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.PICAFUMO.value())
 				return C[2];
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESPADILHA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESPADILHA.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.ESPADILHA.value())
 				return C[0]; // hummmm... podemos jogar o zap para tentar
 								// enganar os adversários...
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESCOPETA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESCOPETA.value())
 				return C[0]; // hummmm... podemos jogar o zap para tentar
 								// enganar os adversários...
 			// Aqui vamos jogar o três ou dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.DOIS.value())
 				return C[0];
 			return C[2]; // retorna a menor então
 		}
 
-		if (qualidadeMaiorMesa(s) == LIXO && mandaBala(60)) {
+		if (qualidadeMaiorMesa(s) == Qualificacao.LIXO.value() && mandaBala(60)) {
 			// Aqui vamos jogar a menor manilha (menos o zap)
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.PICAFUMO.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.PICAFUMO.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.PICAFUMO.value())
 				return C[2];
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESPADILHA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESPADILHA.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.ESPADILHA.value())
 				return C[0]; // hummmm... podemos jogar o zap para tentar
 								// enganar os adversários...
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESCOPETA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESCOPETA.value())
 				return C[0]; // hummmm... podemos jogar o zap para tentar
 								// enganar os adversários...
 			// Checa se temos zap e três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outro três),
 			// mesmo assim vamos jogar o três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[2];
 			return C[2]; // retorna a menor então
@@ -1063,7 +1070,7 @@ public class EstrategiaGasparotto implements Estrategia {
 		// caso tenhamos uma manilha (menos o zap) para tentar fazer
 		// e não dar chance ao pé de amarrar...
 		// assim como outros casos... mas tudo bem...
-		// Se for lixo (menor que ás), vamos reforçar.
+		// Se for LIXO.value() (menor que ás), vamos reforçar.
 		// 2) Caso a maior que esteja vindo não seja a do parceiro:
 		// Caso esteja vindo manilha:
 		// Tentar primeiro matar com o zap, e depois
@@ -1075,33 +1082,33 @@ public class EstrategiaGasparotto implements Estrategia {
 		// Caso tenhamos zap e dois, jogar o dois
 		// Caso tenhamos zap e três, jogar o três
 		// Senão tentar matar com a menor manilha, um três ou pelo menos amarrar
-		// Caso esteja vindo um ás/lixo:
+		// Caso esteja vindo um ás/LIXO.value():
 		// Caso tenhamos zap e ás, jogar o ás
 		// Caso tenhamos zap e dois, jogar o dois
 		// Caso tenhamos zap e três, jogar o três
 		// Senão tentar matar com a menor manilha, um três/dois/ás/... ou pelo
 		// menos amarrar
 
-		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) >= AS)
+		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) >= Qualificacao.AS.value())
 			return C[2];
 
 		// A maior carta que está vindo é do adversário portanto:
 
-		if (qualidadeMaiorMesa(s) >= PICAFUMO) {
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP)
+		if (qualidadeMaiorMesa(s) >= Qualificacao.PICAFUMO.value()) {
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value())
 				return C[0];
 			return menorCartaParaMatar(s);
 		}
-		if (qualidadeMaiorMesa(s) == TRES) {
+		if (qualidadeMaiorMesa(s) == Qualificacao.TRES.value()) {
 			// Checa se temos zap e três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outro três),
 			// mesmo assim vamos jogar o três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[2];
 			// Aqui jogamos a melhor que temos então desde que não seja menor
@@ -1111,53 +1118,53 @@ public class EstrategiaGasparotto implements Estrategia {
 				return C[0];
 			return C[2];
 		}
-		if (qualidadeMaiorMesa(s) == DOIS) {
+		if (qualidadeMaiorMesa(s) == Qualificacao.DOIS.value()) {
 			// Checa se temos zap e três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outro três),
 			// mesmo assim vamos jogar o três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[2];
 			// Checa se temos zap e dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.DOIS.value())
 				// Jogar o dois
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outros
 			// três/dois),
 			// mesmo assim vamos jogar o dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.DOIS.value())
 				// Jogar o dois
 				return C[2];
 			// Aqui vamos primeiro tentar matar com a menor manilha
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.PICAFUMO.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.PICAFUMO.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.PICAFUMO.value())
 				return C[2];
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESPADILHA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESPADILHA.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.ESPADILHA.value())
 				return C[0]; // jogar o zap para tentar ludibriar os
 								// adversários...
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESCOPETA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESCOPETA.value())
 				if (mandaBala(50))
 					return C[0]; // hummmm... podemos jogar o zap para tentar
 									// ludibriar os adversários...
 				else
 					return C[2]; // ou fazer "cama"...
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value())
 				return C[0];
 			// Aqui jogamos a melhor que temos então desde que não seja menor
 			// que a que está já na mesa
@@ -1166,7 +1173,7 @@ public class EstrategiaGasparotto implements Estrategia {
 				return C[0];
 			return C[2];
 		}
-		if (qualidadeMaiorMesa(s) <= AS) {
+		if (qualidadeMaiorMesa(s) <= Qualificacao.AS.value()) {
 			// frases
 			if (mandaBala(5)) {
 				String[] m = new String[] {
@@ -1176,63 +1183,63 @@ public class EstrategiaGasparotto implements Estrategia {
 				chatMsg = m[i];
 			}
 			// Checa se temos zap e três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outro três),
 			// mesmo assim vamos jogar o três
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.TRES.value())
 				// Jogar o três
 				return C[2];
 			// Checa se temos zap e dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.DOIS.value())
 				// Jogar o dois
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outros
 			// três/dois),
 			// mesmo assim vamos jogar o dois
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.DOIS.value())
 				// Jogar o dois
 				return C[2];
 			// Checa se temos zap e ás
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == AS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.AS.value())
 				// Jogar o ás
 				return C[1];
 			// Vai que temos uma manilha também (C[1]) (ou mesmo outros
 			// três/dois/ás),
 			// mesmo assim vamos jogar o ás
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-					&& qualidadeCarta(s.cartasJogador[C[2]], s) == AS)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+					&& qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.AS.value())
 				// Jogar o ás
 				return C[2];
 			// Aqui vamos jogar a menor manilha
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.PICAFUMO.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.PICAFUMO.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == PICAFUMO)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.PICAFUMO.value())
 				return C[2];
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESPADILHA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESPADILHA.value())
 				return C[1];
-			if (qualidadeCarta(s.cartasJogador[C[2]], s) == ESPADILHA)
+			if (qualidadeCarta(s.cartasJogador[C[2]], s) == Qualificacao.ESPADILHA.value())
 				return C[0]; // jogar o zap para tentar ludibriar os
 								// adversários...
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ESCOPETA.value())
 				return C[0];
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) == ESCOPETA)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESCOPETA.value())
 				if (mandaBala(50))
 					return C[0]; // hummmm... podemos jogar o zap para tentar
 									// ludibriar os adversários...
 				else
 					return C[2]; // ou fazer "cama"...
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value())
 				return C[1]; // carta intermediária para tentar fazer a
 								// primeira...
 			// Aqui jogamos a melhor que temos então desde que não seja menor
@@ -1261,7 +1268,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			}
 			return C[2];
 		}
-		if (taAmarrado(s) && qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP)
+		if (taAmarrado(s) && qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value())
 			return C[2];
 		// emoção ao jogo
 		if (s.pontosEquipe[adversario1(s) % 2] < 6
@@ -1280,9 +1287,9 @@ public class EstrategiaGasparotto implements Estrategia {
 		// Se estiver com duas cartas acima ou igual a um três, jogar a menor
 		// aumentando a aposta (com alta probabilidade).
 		// Se estiver com duas cartas acima ou igual a um ás, jogar a menor.
-		// Se estiver com uma carta acima ou igual a um ás e um lixo, jogo o
-		// lixo encoberto (com média-baixa probabilidade).
-		// Se estiver com dois lixos, jogo o lixo mais lixo encoberto (com baixa
+		// Se estiver com uma carta acima ou igual a um ás e um LIXO.value(), jogo o
+		// LIXO.value() encoberto (com média-baixa probabilidade).
+		// Se estiver com dois LIXO.value()s, jogo o LIXO.value() mais LIXO.value() encoberto (com baixa
 		// probabilidade).
 
 		// frases
@@ -1295,10 +1302,10 @@ public class EstrategiaGasparotto implements Estrategia {
 		}
 		// Se a 1a amarrou, jogar a maior
 		if (rodadaAmarrou(s, 0)) {
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
 					&& podeEValeAPenaAumentar(s, 100, 100, 100, 100))
 				return -1;
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) >= PICAFUMO
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.PICAFUMO.value()
 					&& podeEValeAPenaAumentar(s, 30, 10, 3, 1))
 				return -1;
 			return C[0];
@@ -1306,7 +1313,7 @@ public class EstrategiaGasparotto implements Estrategia {
 
 		if (partidaGanha(s)) {
 			// "cama": jogar encoberto para não fechar o adversário
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) >= AS)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) >= Qualificacao.AS.value())
 				return C[1] + 10;
 			// para não ficar muito evidente toda hora a mesma jogada:
 			if (mandaBala(50))
@@ -1314,27 +1321,27 @@ public class EstrategiaGasparotto implements Estrategia {
 			return C[1];
 		}
 
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= TRES
-				&& qualidadeCarta(s.cartasJogador[C[1]], s) >= TRES) {
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.TRES.value()
+				&& qualidadeCarta(s.cartasJogador[C[1]], s) >= Qualificacao.TRES.value()) {
 			if (podeEValeAPenaAumentar(s, 80, 10, 1, 0))
 				return -1;
 			return C[1];
 		}
 
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= AS
-				&& qualidadeCarta(s.cartasJogador[C[1]], s) >= AS) {
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.AS.value()
+				&& qualidadeCarta(s.cartasJogador[C[1]], s) >= Qualificacao.AS.value()) {
 			return C[1];
 		}
 
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= AS
-				&& qualidadeCarta(s.cartasJogador[C[1]], s) == LIXO) {
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.AS.value()
+				&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.LIXO.value()) {
 			if (mandaBala(25))
 				return C[1] + 10;
 			return C[1];
 		}
 
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) == LIXO
-				&& qualidadeCarta(s.cartasJogador[C[1]], s) == LIXO) {
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.LIXO.value()
+				&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.LIXO.value()) {
 			if (mandaBala(10))
 				return C[1] + 10;
 			return C[1];
@@ -1349,10 +1356,10 @@ public class EstrategiaGasparotto implements Estrategia {
 
 		// Se a 1a amarrou, jogar a maior
 		if (rodadaAmarrou(s, 0)) {
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
 					&& podeEValeAPenaAumentar(s, 100, 100, 100, 100))
 				return -1;
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) >= PICAFUMO
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.PICAFUMO.value()
 					&& qualidadeCarta(s.cartasJogador[C[0]], s) > qualidadeMaiorMesa(s)
 					&& podeEValeAPenaAumentar(s, 50, 15, 5, 1))
 				return -1;
@@ -1380,15 +1387,15 @@ public class EstrategiaGasparotto implements Estrategia {
 		// A não ser que esteja vindo carta boa do parceiro...
 		// Se estiver com uma carta acima ou igual a um ás, jogar aumentando a
 		// aposta (com alta probabilidade).
-		// Se estiver com lixos, jogar aumentando a aposta (com baixa
+		// Se estiver com LIXO.value()s, jogar aumentando a aposta (com baixa
 		// probabilidade - facão).
 
 		// Se a 1a amarrou, jogar a maior
 		if (rodadaAmarrou(s, 0)) {
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
 					&& podeEValeAPenaAumentar(s, 100, 100, 100, 100))
 				return -1;
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) >= PICAFUMO
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.PICAFUMO.value()
 					&& qualidadeCarta(s.cartasJogador[C[0]], s) > qualidadeMaiorMesa(s)
 					&& podeEValeAPenaAumentar(s, 50, 15, 5, 1))
 				return -1;
@@ -1403,7 +1410,7 @@ public class EstrategiaGasparotto implements Estrategia {
 
 		if (partidaGanha(s)) {
 			// "cama": jogar encoberto para não fechar o pé
-			if (qualidadeCarta(s.cartasJogador[C[1]], s) >= AS)
+			if (qualidadeCarta(s.cartasJogador[C[1]], s) >= Qualificacao.AS.value())
 				return C[1] + 10;
 			// para não ficar muito evidente toda hora a mesma jogada:
 			if (mandaBala(50))
@@ -1411,10 +1418,10 @@ public class EstrategiaGasparotto implements Estrategia {
 			return C[1];
 		}
 
-		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) >= TRES)
+		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) >= Qualificacao.TRES.value())
 			return C[1] + 10;
 
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= TRES
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.TRES.value()
 				&& qualidadeCarta(s.cartasJogador[C[0]], s) >= qualidadeMaiorMesa(s)) {
 			if (podeEValeAPenaAumentar(s, 90, 30, 1, 0)
 					&& !partidaGanhaParaAdversario(s)) {
@@ -1431,18 +1438,18 @@ public class EstrategiaGasparotto implements Estrategia {
 			}
 			return C[0];
 		}
-		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) == DOIS)
+		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) == Qualificacao.DOIS.value())
 			return C[1] + 10;
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) == DOIS
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.DOIS.value()
 				&& qualidadeCarta(s.cartasJogador[C[0]], s) >= qualidadeMaiorMesa(s)) {
 			if (podeEValeAPenaAumentar(s, 75, 20, 1, 0)
 					&& !partidaGanhaParaAdversario(s))
 				return -1;
 			return C[0];
 		}
-		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) == AS)
+		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) == Qualificacao.AS.value())
 			return C[1] + 10;
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) == AS
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.AS.value()
 				&& qualidadeCarta(s.cartasJogador[C[0]], s) >= qualidadeMaiorMesa(s)) {
 			if (podeEValeAPenaAumentar(s, 60, 10, 1, 0)
 					&& !partidaGanhaParaAdversario(s))
@@ -1450,7 +1457,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			return C[0];
 		}
 
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) == LIXO) {
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.LIXO.value()) {
 			// facão
 			if (podeEValeAPenaAumentar(s, 20, 5, 1, 0)
 					&& !partidaGanhaParaAdversario(s)) {
@@ -1531,7 +1538,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			return -1;
 		}
 
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) > TRES
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) > Qualificacao.TRES.value()
 				&& podeEValeAPenaAumentar(s, 45, 5, 1, 0)) {
 			// frases
 			if (mandaBala(20)) {
@@ -1574,7 +1581,7 @@ public class EstrategiaGasparotto implements Estrategia {
 		if (qualidadeCarta(s.cartasJogador[C[0]], s) < qualidadeMaiorMesa(s))
 			return C[0] + 10;
 
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= TRES
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.TRES.value()
 				&& podeEValeAPenaAumentar(s, 45, 10, 1, 0)
 				&& !partidaGanhaParaAdversario(s)) {
 			// frases
@@ -1623,21 +1630,21 @@ public class EstrategiaGasparotto implements Estrategia {
 			return -1;
 		}
 
-		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) >= TRES) {
+		if (maiorCartaEDoParceiro(s) && qualidadeMaiorMesa(s) >= Qualificacao.TRES.value()) {
 			if (podeEValeAPenaAumentar(s, 10, 2, 1, 0))
 				return -1;
 		} else {
 			if (qualidadeCarta(s.cartasJogador[C[0]], s) <= qualidadeMaiorMesa(s)) {
 				if (podeEValeAPenaAumentar(s, 20, 5, 1, 0)
-						&& qualidadeMaiorMesa(s) != ZAP
+						&& qualidadeMaiorMesa(s) != Qualificacao.ZAP.value()
 						&& !partidaGanhaParaAdversario(s))
 					return -1;
 			} else {
-				if (qualidadeCarta(s.cartasJogador[C[0]], s) > TRES
+				if (qualidadeCarta(s.cartasJogador[C[0]], s) > Qualificacao.TRES.value()
 						&& podeEValeAPenaAumentar(s, 50, 5, 1, 0))
 					return -1;
 
-				if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES
+				if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value()
 						&& podeEValeAPenaAumentar(s, 25, 8, 1, 0))
 					return -1;
 			}
@@ -1740,8 +1747,8 @@ public class EstrategiaGasparotto implements Estrategia {
 	private int joga_primeira_rodada(SituacaoJogo s) {
 
 		// se temos casal maior, vamos fazer "cama"
-		if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
-				&& qualidadeCarta(s.cartasJogador[C[1]], s) == ESCOPETA)
+		if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
+				&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.ESCOPETA.value())
 			return C[2];
 
 		switch (minhaPosicao(s)) {
@@ -1852,8 +1859,10 @@ public class EstrategiaGasparotto implements Estrategia {
 				if ((partidaGanha(s) && podeEValeAPenaAumentar(s, 100, 100,
 						100, 100))
 						|| (matoAdversario(s, false)
-								&& (qualidadeMinhaMaior(s) == PICAFUMO
-										|| qualidadeMinhaMaior(s) == ESPADILHA || qualidadeMinhaMaior(s) == ESCOPETA) && podeEValeAPenaAumentar(
+								&& (qualidadeMinhaMaior(s) == Qualificacao.PICAFUMO.value()
+										|| qualidadeMinhaMaior(s) == Qualificacao.ESPADILHA.value()
+										|| qualidadeMinhaMaior(s) == Qualificacao.ESCOPETA.value())
+										&& podeEValeAPenaAumentar(
 									s, 50, 10, 1, 0)))
 					return -1; // Aumentar aposta
 			}
@@ -1881,47 +1890,47 @@ public class EstrategiaGasparotto implements Estrategia {
 
 			// se eu tenho uma manilha e na mesa já estiver pelo menos um 3
 			// nosso, aceito
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) >= TRES
-					&& maiorCartaENossa(s) && qualidadeMaiorMesa(s) >= TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.TRES.value()
+					&& maiorCartaENossa(s) && qualidadeMaiorMesa(s) >= Qualificacao.TRES.value())
 				return true;
 			// se eu tenho um três e na mesa já estiver pelo menos um 3 nosso,
 			// aceito
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES
-					&& maiorCartaENossa(s) && qualidadeMaiorMesa(s) >= TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value()
+					&& maiorCartaENossa(s) && qualidadeMaiorMesa(s) >= Qualificacao.TRES.value())
 				return true;
 			// se na mesa já estiver vindo uma manilha nossa, e eu tenho um 2
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == DOIS
-					&& maiorCartaENossa(s) && qualidadeMaiorMesa(s) > TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.DOIS.value()
+					&& maiorCartaENossa(s) && qualidadeMaiorMesa(s) > Qualificacao.TRES.value())
 				return true;
 			// se eu tenho manilha e três pelo menos, aceito sem pensar
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) > TRES
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) >= TRES)
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) > Qualificacao.TRES.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) >= Qualificacao.TRES.value())
 				return true;
 			// se na mesa já estiver vindo uma manilha nossa, aceito com
 			// media para alta prob.
-			if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) > TRES
+			if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) > Qualificacao.TRES.value()
 					&& valeAPenaAceitar(s, 70))
 				return true;
 			// se na mesa já estiver vindo um tres nosso, aceito com
 			// media para alta prob.
-			if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) >= TRES
+			if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) >= Qualificacao.TRES.value()
 					&& valeAPenaAceitar(s, 75))
 				return true;
 			// se eu tenho uma manilha seca, aceito (alta prob.)
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) > TRES
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) > Qualificacao.TRES.value()
 					&& valeAPenaAceitar(s, 90))
 				return true;
 			// se eu tenho dois três, aceito (alta prob.)
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES
-					&& qualidadeCarta(s.cartasJogador[C[1]], s) == TRES
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value()
+					&& qualidadeCarta(s.cartasJogador[C[1]], s) == Qualificacao.TRES.value()
 					&& valeAPenaAceitar(s, 80))
 				return true;
 			// se eu tenho um três, aceito (média p/ alta prob.)
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value()
 					&& valeAPenaAceitar(s, 60))
 				return true;
 			// se eu tenho um dois, aceito (baixa prob.)
-			if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES
+			if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value()
 					&& valeAPenaAceitar(s, 20))
 				return true;
 			if (valeAPenaAceitar(s, 0))
@@ -1940,16 +1949,16 @@ public class EstrategiaGasparotto implements Estrategia {
 
 				// se na mesa já estiver pelo menos um 3 nosso, aceito
 				if (maiorCartaENossaPodendoEstarAmarrado(s)
-						&& qualidadeMaiorMesa(s) >= TRES)
+						&& qualidadeMaiorMesa(s) >= Qualificacao.TRES.value())
 					return true;
 				// se na mesa já estiver um 2 nosso, aceito com média-alta
 				// probabilidade
 				if (maiorCartaENossaPodendoEstarAmarrado(s)
-						&& qualidadeMaiorMesa(s) == DOIS
+						&& qualidadeMaiorMesa(s) == Qualificacao.DOIS.value()
 						&& valeAPenaAceitar(s, 75))
 					return true;
 				// se eu tiver pelo menos um dois, aceito
-				if (qualidadeCarta(s.cartasJogador[C[0]], s) >= DOIS)
+				if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.DOIS.value())
 					return true;
 			} else {
 				// se a primeira NÃO for nossa:
@@ -1958,7 +1967,7 @@ public class EstrategiaGasparotto implements Estrategia {
 					return false;
 				// Se a 1a amarrou e tenho zap, aceito
 				if (rodadaAmarrou(s, 0)
-						&& qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP)
+						&& qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value())
 					return true;
 				// se eu já joguei, e meu parceiro ainda não, vou deixar para
 				// ele decidir
@@ -1966,38 +1975,38 @@ public class EstrategiaGasparotto implements Estrategia {
 					return false;
 				// Se a 1a amarrou e tenho manilha/três, aceito
 				if (rodadaAmarrou(s, 0)
-						&& qualidadeCarta(s.cartasJogador[C[0]], s) >= TRES
+						&& qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.TRES.value()
 						&& qualidadeCarta(s.cartasJogador[C[0]], s) >= qualidadeMaiorMesa(s)
 						&& valeAPenaAceitar(s, 70))
 					return true;
 				// Se a 1a amarrou e na mesa já está vindo pelo menos um três
 				// nosso, aceito
 				if (rodadaAmarrou(s, 0) && maiorCartaENossa(s)
-						&& qualidadeMaiorMesa(s) >= TRES
+						&& qualidadeMaiorMesa(s) >= Qualificacao.TRES.value()
 						&& valeAPenaAceitar(s, 50))
 					return true;
 
 				// se eu tenho uma manilha e na mesa já estiver pelo menos um 3
 				// nosso, aceito
-				if (qualidadeCarta(s.cartasJogador[C[0]], s) >= TRES
-						&& maiorCartaENossa(s) && qualidadeMaiorMesa(s) >= TRES)
+				if (qualidadeCarta(s.cartasJogador[C[0]], s) >= Qualificacao.TRES.value()
+						&& maiorCartaENossa(s) && qualidadeMaiorMesa(s) >= Qualificacao.TRES.value())
 					return true;
 				// se eu tenho manilha e três pelo menos, aceito
-				if (qualidadeCarta(s.cartasJogador[C[0]], s) > TRES
-						&& qualidadeCarta(s.cartasJogador[C[1]], s) >= TRES
+				if (qualidadeCarta(s.cartasJogador[C[0]], s) > Qualificacao.TRES.value()
+						&& qualidadeCarta(s.cartasJogador[C[1]], s) >= Qualificacao.TRES.value()
 						&& !partidaGanhaParaAdversario(s))
 					return true;
 				// se eu tenho o zap, aceito (média prob.)
-				if (qualidadeCarta(s.cartasJogador[C[0]], s) == ZAP
+				if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.ZAP.value()
 						&& valeAPenaAceitar(s, 80))
 					return true;
 				// se eu tenho uma manilha seca, aceito (média prob.)
-				if (qualidadeCarta(s.cartasJogador[C[0]], s) > TRES
+				if (qualidadeCarta(s.cartasJogador[C[0]], s) > Qualificacao.TRES.value()
 						&& !partidaGanhaParaAdversario(s)
 						&& valeAPenaAceitar(s, 40))
 					return true;
 				// se eu tenho uma três seco, aceito (baixa prob.)
-				if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES
+				if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value()
 						&& !partidaGanhaParaAdversario(s)
 						&& valeAPenaAceitar(s, 10))
 					return true;
@@ -2029,33 +2038,33 @@ public class EstrategiaGasparotto implements Estrategia {
 				// se na mesa já estiver uma manilha nossa, aceito com alta
 				// prob.
 				if (maiorCartaENossaPodendoEstarAmarrado(s)
-						&& qualidadeMaiorMesa(s) > TRES
+						&& qualidadeMaiorMesa(s) > Qualificacao.TRES.value()
 						&& valeAPenaAceitar(s, 80))
 					return true;
 				// se na mesa já estiver um 3 nosso, aceito com média-alta prob.
 				if (maiorCartaENossaPodendoEstarAmarrado(s)
-						&& qualidadeMaiorMesa(s) == TRES
+						&& qualidadeMaiorMesa(s) == Qualificacao.TRES.value()
 						&& valeAPenaAceitar(s, 60))
 					return true;
 				// se na mesa já estiver um 2 nosso, aceito com média-baixa
 				// prob.
 				if (maiorCartaENossaPodendoEstarAmarrado(s)
-						&& qualidadeMaiorMesa(s) == DOIS
+						&& qualidadeMaiorMesa(s) == Qualificacao.DOIS.value()
 						&& valeAPenaAceitar(s, 40))
 					return true;
 				// checar se ainda tenho cartas na mão...
 				if (minhaVez(s) > vezTrucador(s)
 						&& !partidaGanhaParaAdversario(s)) {
 					// se eu tenho uma manilha, aceito com alta prob.
-					if (qualidadeCarta(s.cartasJogador[C[0]], s) > TRES
+					if (qualidadeCarta(s.cartasJogador[C[0]], s) > Qualificacao.TRES.value()
 							&& valeAPenaAceitar(s, 80))
 						return true;
 					// se eu tenho um três, aceito com média-alta prob.
-					if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES
+					if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value()
 							&& valeAPenaAceitar(s, 60))
 						return true;
 					// se eu tenho um dois, aceito com média-baixa prob.
-					if (qualidadeCarta(s.cartasJogador[C[0]], s) == DOIS
+					if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.DOIS.value()
 							&& valeAPenaAceitar(s, 30))
 						return true;
 				}
@@ -2066,36 +2075,36 @@ public class EstrategiaGasparotto implements Estrategia {
 					return true;
 				// se na mesa já estiver uma manilha nossa, aceito com alta
 				// prob.
-				if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) > TRES
+				if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) > Qualificacao.TRES.value()
 						&& valeAPenaAceitar(s, 75))
 					return true;
 				// se na mesa já estiver um 3 nosso, aceito com média prob.
-				if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) == TRES
+				if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) == Qualificacao.TRES.value()
 						&& valeAPenaAceitar(s, 50))
 					return true;
 				// se na mesa já estiver um 2 nosso, aceito com média-baixa
 				// prob.
-				if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) == DOIS
+				if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) == Qualificacao.DOIS.value()
 						&& valeAPenaAceitar(s, 20))
 					return true;
-				// se na mesa estiver um lixo nosso, aceito com baixa prob. -
+				// se na mesa estiver um LIXO.value() nosso, aceito com baixa prob. -
 				// devem estar blefando...
-				if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) <= AS
+				if (maiorCartaENossa(s) && qualidadeMaiorMesa(s) <= Qualificacao.AS.value()
 						&& valeAPenaAceitar(s, 8))
 					return true;
 				// checar se ainda tenho cartas na mão...
 				if (minhaVez(s) > vezTrucador(s)
 						&& !partidaGanhaParaAdversario(s)) {
 					// se eu tenho uma manilha, aceito com alta prob.
-					if (qualidadeCarta(s.cartasJogador[C[0]], s) > TRES
+					if (qualidadeCarta(s.cartasJogador[C[0]], s) > Qualificacao.TRES.value()
 							&& valeAPenaAceitar(s, 70))
 						return true;
 					// se eu tenho um três, aceito com média-alta prob.
-					if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES
+					if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.TRES.value()
 							&& valeAPenaAceitar(s, 50))
 						return true;
 					// se eu tenho um dois, aceito com média-baixa prob.
-					if (qualidadeCarta(s.cartasJogador[C[0]], s) == DOIS
+					if (qualidadeCarta(s.cartasJogador[C[0]], s) == Qualificacao.DOIS.value()
 							&& valeAPenaAceitar(s, 20))
 						return true;
 				}
@@ -2119,22 +2128,22 @@ public class EstrategiaGasparotto implements Estrategia {
 
 		for (int i = 0; i <= 2; i++) {
 			// quantidade de manilhas
-			if (qualidadeCarta(s.cartasJogador[i], s) > TRES)
+			if (qualidadeCarta(s.cartasJogador[i], s) > Qualificacao.TRES.value())
 				qManilhas++;
 			// quantidade de 3
-			if (qualidadeCarta(s.cartasJogador[i], s) == TRES)
+			if (qualidadeCarta(s.cartasJogador[i], s) == Qualificacao.TRES.value())
 				q3++;
 			// quantidade de 2
-			if (qualidadeCarta(s.cartasJogador[i], s) == DOIS)
+			if (qualidadeCarta(s.cartasJogador[i], s) == Qualificacao.DOIS.value())
 				q2++;
 			// quantidade de manilhas do parceiro
-			if (qualidadeCarta(cartasParceiro[i], s) > TRES)
+			if (qualidadeCarta(cartasParceiro[i], s) > Qualificacao.TRES.value())
 				qManilhas++;
 			// quantidade de 3 do parceiro
-			if (qualidadeCarta(cartasParceiro[i], s) == TRES)
+			if (qualidadeCarta(cartasParceiro[i], s) == Qualificacao.TRES.value())
 				q3++;
 			// quantidade de 2 do parceiro
-			if (qualidadeCarta(cartasParceiro[i], s) == DOIS)
+			if (qualidadeCarta(cartasParceiro[i], s) == Qualificacao.DOIS.value())
 				q2++;
 		}
 
