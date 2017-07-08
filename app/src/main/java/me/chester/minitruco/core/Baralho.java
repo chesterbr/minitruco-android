@@ -104,8 +104,7 @@ public class Baralho {
 	 * @param limiteSuperior
 	 */
 	private int sorteiaDeZeroA(int limiteSuperior) {
-		// O >>> é pra evitar nos. negativos, cf: http://tinyurl.com/dgjxp
-		return (random.nextInt() >>> 1) % (limiteSuperior + 1);
+		return (random.nextInt(limiteSuperior + 1));
 	}
 
 	/**

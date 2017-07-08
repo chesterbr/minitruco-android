@@ -142,7 +142,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 				// Dá um tempinho, pra fingir que está "pensando"
 				try {
-					Thread.sleep(Math.abs(random.nextInt()) % 250 + 200);
+					Thread.sleep(random.nextInt(250) + 200);
 				} catch (InterruptedException e) {
 					// Nada, apenas timing...
 				}

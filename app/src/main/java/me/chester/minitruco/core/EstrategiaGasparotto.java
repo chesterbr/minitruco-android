@@ -142,8 +142,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			fatorDeDuvida = 100;
 		if (fatorDeDuvida < 0)
 			fatorDeDuvida = 0;
-		return (Math.abs(rand.nextInt()) % 100 + 1 <= fatorDeDuvida) ? true
-				: false;
+		return (rand.nextInt(100) + 1 <= fatorDeDuvida);
 	}
 
 	/**
@@ -778,7 +777,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			fatorF = 100;
 		if (fatorF < 0)
 			fatorF = 0;
-		return (Math.abs(rand.nextInt()) % 100 + 1 <= fatorF) ? true : false;
+		return (rand.nextInt(100) + 1 <= fatorF);
 	}
 
 	/**
