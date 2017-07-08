@@ -316,18 +316,14 @@ public class EstrategiaGasparotto implements Estrategia {
 	 * considerar empate
 	 */
 	private boolean maiorCartaEDoParceiro(SituacaoJogo s) {
-		if (parceiro(s) == maiorCartaMesa(s) && !taAmarrado(s))
-			return true;
-		return false;
+		return (parceiro(s) == maiorCartaMesa(s) && !taAmarrado(s));
 	}
 
 	/**
 	 * Retorna se a maior carta da mesa é minha ou do meu parceiro ou não
 	 */
 	private boolean maiorCartaENossaPodendoEstarAmarrado(SituacaoJogo s) {
-		if (eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s))
-			return true;
-		return false;
+		return (eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s));
 	}
 
 	/**
@@ -335,19 +331,15 @@ public class EstrategiaGasparotto implements Estrategia {
 	 * considerar empate
 	 */
 	private boolean maiorCartaENossa(SituacaoJogo s) {
-		if ((eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s))
-				&& !taAmarrado(s))
-			return true;
-		return false;
+		return (((eu(s) == maiorCartaMesa(s)) || (parceiro(s) == maiorCartaMesa(s)))
+				&& !taAmarrado(s));
 	}
 
 	/**
 	 * Retorna se a maior carta da mesa é minha ou do meu parceiro ou não
 	 */
 	private boolean maiorCartaPossivelENossa(SituacaoJogo s) {
-		if ((eu(s) == maiorCartaPossivelMesa(s) || parceiro(s) == maiorCartaPossivelMesa(s)))
-			return true;
-		return false;
+		return ((eu(s) == maiorCartaPossivelMesa(s) || parceiro(s) == maiorCartaPossivelMesa(s)));
 	}
 
 	/**
