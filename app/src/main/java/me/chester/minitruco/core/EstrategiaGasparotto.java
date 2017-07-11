@@ -26,9 +26,9 @@ package me.chester.minitruco.core;
  *   software sem autorização prévia específica por escrito.
  * 
  * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
- * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS.value() EXPRESSAS.value() OU TÁCITAS.value(),
- * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS.value() IMPLÍCITAS.value() DE
- * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS.value(). EM NENHUMA
+ * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
+ * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
+ * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS. EM NENHUMA
  * HIPÓTESE OS TITULARES DE DIREITOS AUTORAIS E CONTRIBUIDORES SERÃO
  * RESPONSÁVEIS POR QUAISQUER DANOS, DIRETOS, INDIRETOS, INCIDENTAIS,
  * ESPECIAIS, EXEMPLARES OU CONSEQUENTES, (INCLUINDO, SEM LIMITAÇÃO,
@@ -490,16 +490,16 @@ public class EstrategiaGasparotto implements Estrategia {
 							.getValorTruco(s.manilha)) {
 					case 11:
 						PICAFUMOJaSaiu = true;
-						break; // PICAFUMO.value() já saiu
+						break; // PICAFUMO já saiu
 					case 12:
 						ESPADILHAJaSaiu = true;
-						break; // ESPADILHA.value() já saiu
+						break; // ESPADILHA já saiu
 					case 13:
 						ESCOPETAJaSaiu = true;
-						break; // ESCOPETA.value() já saiu
+						break; // ESCOPETA já saiu
 					case 14:
 						ZAPJaSaiu = true;
-						break; // ZAP.value() já saiu
+						break; // ZAP já saiu
 					}
 				}
 			}
@@ -592,32 +592,32 @@ public class EstrategiaGasparotto implements Estrategia {
 	 */
 	private int qualidadeCarta(Carta carta, SituacaoJogo s) {
 		// Declarações
-		int qcarta; // return do método
-		qcarta = Qualificacao.LIXO.value(); // apenas para ter a variável inicializada com algo
+		Qualificacao qcarta; // return do método
+		qcarta = Qualificacao.LIXO; // apenas para ter a variável inicializada com algo
 		// 4, 5, 6, 7, Q, J, K
 		if (carta.getValorTruco(s.manilha) <= 7)
-			qcarta = Qualificacao.LIXO.value();
+			qcarta = Qualificacao.LIXO;
 		// A
 		else if (carta.getValorTruco(s.manilha) == 8)
-			qcarta = Qualificacao.AS.value();
+			qcarta = Qualificacao.AS;
 		// 2
 		else if (carta.getValorTruco(s.manilha) == 9)
-			qcarta = Qualificacao.DOIS.value();
+			qcarta = Qualificacao.DOIS;
 		// 3
 		else if (carta.getValorTruco(s.manilha) == 10)
-			qcarta = Qualificacao.TRES.value();
+			qcarta = Qualificacao.TRES;
 		// Picafumo
 		else if (carta.getValorTruco(s.manilha) == 11)
-			qcarta = Qualificacao.PICAFUMO.value();
+			qcarta = Qualificacao.PICAFUMO;
 		// Espadilha
 		else if (carta.getValorTruco(s.manilha) == 12)
-			qcarta = Qualificacao.ESPADILHA.value();
+			qcarta = Qualificacao.ESPADILHA;
 		// Escopeta
 		else if (carta.getValorTruco(s.manilha) == 13)
-			qcarta = Qualificacao.ESCOPETA.value();
+			qcarta = Qualificacao.ESCOPETA;
 		// Zap
 		else if (carta.getValorTruco(s.manilha) == 14)
-			qcarta = Qualificacao.ZAP.value();
+			qcarta = Qualificacao.ZAP;
 
 		// caso a manilha seja um 3, o 2 passa a ter qualidade de 3!
 		// e o A passa a ter valor de 2!
@@ -629,16 +629,16 @@ public class EstrategiaGasparotto implements Estrategia {
 		// abaixo
 		Carta tres_testedemanilha = new Carta('3', 3);
 		Carta dois_testedemanilha = new Carta('2', 3);
-		if (qcarta == Qualificacao.DOIS.value()
+		if (qcarta == Qualificacao.DOIS
 				&& tres_testedemanilha.getValorTruco(s.manilha) == 14)
-			qcarta = Qualificacao.TRES.value();
-		if (qcarta == Qualificacao.AS.value() && tres_testedemanilha.getValorTruco(s.manilha) == 14)
-			qcarta = Qualificacao.DOIS.value();
+			qcarta = Qualificacao.TRES;
+		if (qcarta == Qualificacao.AS && tres_testedemanilha.getValorTruco(s.manilha) == 14)
+			qcarta = Qualificacao.DOIS;
 		// caso a manilha seja um 2, o A passa a ter valor de 2!
-		if (qcarta == Qualificacao.AS.value() && dois_testedemanilha.getValorTruco(s.manilha) == 14)
-			qcarta = Qualificacao.DOIS.value();
+		if (qcarta == Qualificacao.AS && dois_testedemanilha.getValorTruco(s.manilha) == 14)
+			qcarta = Qualificacao.DOIS;
 
-		return qcarta;
+		return qcarta.value();
 	}
 
 	/**
@@ -1070,7 +1070,7 @@ public class EstrategiaGasparotto implements Estrategia {
 		// caso tenhamos uma manilha (menos o zap) para tentar fazer
 		// e não dar chance ao pé de amarrar...
 		// assim como outros casos... mas tudo bem...
-		// Se for LIXO.value() (menor que ás), vamos reforçar.
+		// Se for LIXO (menor que ás), vamos reforçar.
 		// 2) Caso a maior que esteja vindo não seja a do parceiro:
 		// Caso esteja vindo manilha:
 		// Tentar primeiro matar com o zap, e depois
@@ -1082,7 +1082,7 @@ public class EstrategiaGasparotto implements Estrategia {
 		// Caso tenhamos zap e dois, jogar o dois
 		// Caso tenhamos zap e três, jogar o três
 		// Senão tentar matar com a menor manilha, um três ou pelo menos amarrar
-		// Caso esteja vindo um ás/LIXO.value():
+		// Caso esteja vindo um ás/LIXO:
 		// Caso tenhamos zap e ás, jogar o ás
 		// Caso tenhamos zap e dois, jogar o dois
 		// Caso tenhamos zap e três, jogar o três
