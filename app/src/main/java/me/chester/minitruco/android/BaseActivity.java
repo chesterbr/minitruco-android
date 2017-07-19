@@ -84,12 +84,9 @@ public abstract class BaseActivity extends Activity {
 			} catch (NameNotFoundException e) {
 				throw new RuntimeException(e);
 			}
-			String stats_versao = "Esta é a versão " + versao
-					+ " do jogo. Você já iniciou " + partidas
-					+ " partidas, ganhou " + vitorias + " e perdeu " + derrotas
-					+ ".<br/><br/>";
-			mostraAlertBox(this.getString(R.string.titulo_sobre), stats_versao
-					+ this.getString(R.string.texto_sobre));
+
+			String stats_versao = String.format(getString(R.string.stats_versao)+"<br/><br/>", versao, partidas, vitorias, derrotas);
+			mostraAlertBox(getString(R.string.titulo_sobre), stats_versao + getString(R.string.texto_sobre));
 			return true;
 		case R.id.menuitem_sair_titulo:
 		case R.id.menuitem_sair_truco:

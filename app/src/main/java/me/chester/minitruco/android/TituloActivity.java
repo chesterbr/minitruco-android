@@ -129,9 +129,9 @@ public class TituloActivity extends BaseActivity {
 				}
 			}
 		};
-		new AlertDialog.Builder(this).setTitle("Bluetooth")
-				.setPositiveButton("Criar Jogo", listener)
-				.setNegativeButton("Procurar Jogo", listener)
+		new AlertDialog.Builder(this).setTitle(R.string.bluetooth)
+				.setPositiveButton(R.string.criar_jogo, listener)
+				.setNegativeButton(R.string.procurar_jogo, listener)
 				.setOnCancelListener(new OnCancelListener() {
 					public void onCancel(DialogInterface dialog) {
 						finish();

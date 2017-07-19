@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -79,9 +80,9 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	/**
 	 * Identificadores Bluetooth do "serviço miniTruco"
 	 */
-	public static final String NOME_BT = "miniTruco";
+	public static final String NOME_BT = Resources.getSystem().getString(R.string.nome_bt);
 	public static final UUID UUID_BT = UUID
-			.fromString("3B175368-ABB4-11DB-A508-C2B155D89593");
+			.fromString(Resources.getSystem().getString(R.string.uuid_bt));
 
 	private static final int MSG_MOSTRA_MENSAGEM = 1;
 	private static final int MSG_ERRO_FATAL = 2;
@@ -141,14 +142,14 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 				break;
 			case MSG_ERRO_FATAL:
 				new AlertDialog.Builder(BluetoothBaseActivity.this)
-						.setTitle("Erro")
+						.setTitle(R.string.erro)
 						.setMessage((String) msg.obj)
 						.setOnCancelListener(new OnCancelListener() {
 							public void onCancel(DialogInterface dialog) {
 								finish();
 							}
 						})
-						.setNeutralButton("Ok",
+						.setNeutralButton(R.string.ok,
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
 											int which) {
@@ -182,9 +183,9 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 		if (regras == null || regras.length() < 2) {
 			return "";
 		}
-		return (regras.charAt(0) == 'T' ? "Baralho Limpo" : "Baralho Sujo")
+		return (regras.charAt(0) == 'T' ? getString(R.string.baralho_limpo) : getString(R.string.baralho_sujo))
 				+ " / "
-				+ (regras.charAt(1) == 'T' ? "Manilha Velha" : "Manilha Nova");
+				+ (regras.charAt(1) == 'T' ? getString(R.string.manilha_velha) : getString(R.string.manilha_nova));
 	}
 
 	protected void sleep(int ms) {
