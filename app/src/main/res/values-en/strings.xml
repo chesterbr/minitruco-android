@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Use the log (adb logcat in SDK) to debug</string>
+    <string name="app_name">miniTruco</string>
+
+    <string-array name="balao_aumento_1">
+        <item>Truco!</item>
+        <item>Truco thief!</item>
+        <item>Truco identical!</item>
+        <item>Truuuco!</item>
+        <item>Truco in the head!</item>
+        <item>Truco!</item>
+        <item>Truco mallard!</item>
+        <item>Tricks and tricks!</item>
+        <item>Truco! Ask six!</item>
+    </string-array>
+    <string-array name="balao_aumento_2">
+        <item>Six!</item>
+        <item>Midfielder!</item>
+        <item>Half-bag!</item>
+        <item>Half-stick!</item>
+        <item>Half-arroba!</item>
+        <item>Seeeeeis!</item>
+        <item>Seeeeis na lata!</item>
+        <item>Take six!</item>
+        <item>SEEEEEEEEIS</item>
+    </string-array>
+    <string-array name="balao_aumento_3">
+        <item>Nine!</item>
+        <item>Nooooove!</item>
+        <item>Nine in the head!</item>
+        <item>Ah, come to nine!</item>
+        <item>It\'s nine!</item>
+    </string-array>
+    <string-array name="balao_aumento_4">
+        <item>Twelve!</item>
+        <item>Twelve to finish!</item>
+        <item>It is twelve!</item>
+        <item>Twelve without mercy!</item>
+    </string-array>
+    <string-array name="balao_aumento_sim">
+        <item>Descends!</item>
+        <item>Send bullet!</item>
+        <item>Here we go!</item>
+        <item>Falls.</item>
+        <item>Come what has!</item>
+        <item>Sends.</item>
+        <item>It\'s cheesy, I want to see!</item>
+        <item>We will see.</item>
+        <item>I accept.</item>
+        <item>I want to see.</item>
+        <item>Thief descends!</item>
+    </string-array>
+    <string-array name="balao_aumento_nao">
+	    <item>I\'m out.</item>
+         <item>I do not want to.</item>
+         <item>No.</item>
+         <item>Forget.</item>
+         <item>Are you crazy? No!</item>
+         <item>Neither the stick.</item>
+         <item>Just because you want it.</item>
+         <item>No way.</item>
+    </string-array>
+    <string-array name="balao_vitoria">
+         <item>It was too easy !!!</item>
+         <item>Toooooomem!</item>
+         <item>What washed!</item>
+         <item>Come home!</item>
+         <item>Take duck!</item>
+    </string-array>
+    <string-array name="balao_derrota">
+        <item>:-(</item>
+		<item>Damn!</item>
+         <item>I did not want to win ...</item>
+         <item>Ok ...</item>
+         <item>Next is ours.</item>
+         <item>Rays!</item>
+    </string-array>
+    <string-array name="balao_mao11_sim">
+		<item>Let\'s play!</item>
+         <item>Let\'s do it!</item>
+         <item>I\'m in.</item>
+    </string-array>
+    <string-array name="balao_mao11_nao">
+         <item>I do not want to.</item>
+         <item>What rubbish!</item>
+         <item>No.</item>
+         <item>No way.</item>
+         <item>I\'m out.</item>
+         <item>Get out.</item>
+         <item>Neither, send others.</item>
+    </string-array>
+    <string-array name="balao_abortou">
+        <item>Goodbye...</item>
+    </string-array>
+
+    <string name="titulo_ajuda">Welcome!</string>
+    <string name="texto_ajuda">        <![CDATA[These instructions can be read at any time in the <b>help menu</b>. Roll the screen, there\'s enough! <br/><br/>miniTruco is a <u> free software </u> trick, played in pairs, with partners
+		face to face. The goal is to make your pair of players reach
+		12 points before the opponents.
+		<br/><br/>Each player starts with a \"hand\" of three cards and, in turn, choose
+		one to play. The pair that played the highest card wins the round, and the
+		winner starts the next round. Two rounds wins a point by closing the hand.
+		<br/><br/><b><u>Value of Cards</u></b>: Among normal cards, 4 is the lowest card, followed by
+		5, 6, 7, Q, J, K, A, 2, and 3 is the largest of all, with the suits being
+		indifferent. At the beginning of each hand, a card is turned over
+		pack to choose the shackles - special cards that are worth more
+		that the normal ones, and whose suipes give more or less value: the pica-fumo
+		(♦) is the smallest shackle, followed by sprat (♠), shotgun (♥), and
+		zap (♣). The zap (club shank) is therefore the highest value card
+		about the game.
+		<br/><br/><b><u>Increase</u></b>: In turn, a player may ask \"truco\". If the two opponents
+		They lose their hand, but if at least one accepts, the hand
+		Worth 3 points. An opponent may, in turn, request \"six\", \"nine\"
+		or \"twelve\", increasing the bet in the same way for these values.<br/><br/>
+		<b><u>Draw</u></b>: A tie in the first or second round is decided by the round
+		following. A tie after the first is decided by the result of the
+		first.
+		<br/><br/><b><u>Hand of 11</u></b>: If one of the doubles makes 11 points (but the other does not), his
+		members can view their partner\'s cards before starting the game. If one
+		of them accept to play, the hand is worth 3 points. If they both refuse, the
+		the opposing team wins a point, and a new hand is dealt,
+		using the same rules.
+		<br/><br/><b><u>Bluetooth</u></b>: A cell phone should create the game, and up to three look for it. It is advisable to pair the mobiles first. Who created the game can rearrange the positions before starting. Hand of 11 is not yet supported, and Java ME phones still do not connect 100%.
+		<br/><br/><b><u>Options </u></b>: n this menu, you can choose a "clean"
+		 (without cards 4, 5, 6 and 7) or by the old shackle, that is, the
+		shackles being always 7 ♦ (lower), A ♠, 7 ♥ and 4 ♣ (higher). The old shackle also
+		allows the counting of points (goals) of the mining trick (4, 8, 10 and 12 points
+		in the increases and "hand of 11" in the 10 points).<br/><br/>]]>
+    </string>
+    <string name="titulo_sobre">About miniTruco</string>
+    <string name="texto_sobre">        <![CDATA[miniTruco-android: Copyright © 2005-2016 Carlos
+		Duarte do Nascimento (Chester) - cd@pobox.com
+        <br/><br/>Manual Server Selection Bluetooth: Copyright © 2016 Rodolfo Vasconcelos
+		<br/><br/>I try mine: Copyright © 2011 Guilherme Caram
+		<br/><br/>Cards, background and logo images: Copyright © 2010-2011 Vanessa Sabino (Bani)
+		<br/><br/>CPU Strategies: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/>
+        <br/><br/>CPU Strategy (old): Copyright © 2006-2011 Willian Gigliotti<br/>
+        <br/>
+		Source code: http://github.com/chesterbr/minitruco-android
+        <br/>
+		<br/><br/>All rights reserved.
+		<br/><br/>Redistribution and use in binary forms and source code, with or without modifications, are permitted provided that the following conditions are met:
+		<br/><br/>- Redistribution of source code must contain the above copyright notice, this list of conditions, and the subsequent disclaimer of warranties.
+		<br/><br/>- Redistributions in binary form must reproduce the above copyright notice, this list of conditions, and the subsequent disclaimer in the documentation and / or materials provided with the distribution.
+		<br/><br/>- Neither Chester\'s name nor the name of contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+		<br/><br/>]]>
+    </string>
+    <string name="jogar_bold"><b>Play</b></string>
+    <string name="stats_versao"><![CDATA[This is version %1$s of the game. You\'ve already started %2$d matches, won %3$d, and lost %4$d.]]></string>
+    <string name="initialize_resources_failed">CartaVisual must have the resources property initialized</string>
+    <string name="carta_nao_encontrada">Card not found. Value:</string>
+    <string name="obter_carta_pelo_valor">Unrecoverable error getting a card by value. Value:</string>
+    <string name="aceita_mao_de_11">Accepts Hand of 11?</string>
+    <string name="aceita">Accepted?</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="criar_jogo">Create Game</string>
+    <string name="procurar_jogo">Search Game</string>
+    <string name="truco">Truco</string>
+    <string name="seis">Six!</string>
+    <string name="nove">NINE!</string>
+    <string name="doze">TWELVE!!!</string>
+    <string name="nos">WE:</string>
+    <string name="eles">They:</string>
+    <string name="aberta">Open</string>
+    <string name="fechada">Closed</string>
+    <string name="nome_bt">miniTruco</string>
+    <string name="uuid_bt">3B175368-ABB4-11DB-A508-C2B155D89593</string>
+    <string name="erro">Error</string>
+    <string name="ok">Ok</string>
+    <string name="baralho_limpo">Clean Deck</string>
+    <string name="baralho_sujo">Dirty Deck</string>
+    <string name="manilha_velha">Old Manilha</string>
+    <string name="manilha_nova">New Shackle</string>
+    <string name="socket_jogo_nao_encontrado">Game not found. See if your device is paired / authoritative with what you created the game and try again.</string>
+    <string name="voce_foi_desconectado">You have been logged out</string>
+    <string name="consultando">Consulting</string>
+    <string name="conectado">Connected!</string>
+    <string name="escolha_o_servidor">Choose the Server</string>
+    <string name="nao_existem_aparelhos_pareados">There are no paired devices. See if your device is paired / authoritative with what you created the game and try again.</string>
+    <string name="falhou_conexao_com_device">Failed to connect to device %1$s. See if your device is paired / authoritative with what you created the game and try again.</string>
+    <string name="aviso">Notice</string>
+    <string name="tento_mineiro_ainda">Tento Mineiro is not yet available for Bluetooth games. This option will be ignored.</string>
+    <string name="aguardando_conexoes">Waiting for connections ...</string>
+
+</resources>

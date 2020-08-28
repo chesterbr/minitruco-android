@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Jogo;
 import android.app.AlertDialog;
@@ -106,7 +107,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		atualizaDisplay();
 
 		if (socket == null) {
-			msgErroFatal("Jogo não encontrado. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
+			msgErroFatal(getString(R.string.socket_jogo_nao_encontrado));
 			return;
 		}
 		sleep(500);
@@ -151,7 +152,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 				if (jogo != null) {
 					jogo.abortaJogo(0);
 				}
-				msgErroFatal("Você foi desconectado");
+				msgErroFatal(getString(R.string.voce_foi_desconectado));
 			}
 		}
 	}
@@ -301,11 +302,11 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
      */
     private void conectaNoServidor(BluetoothDevice device) {
         try {
-            setMensagem("Consultando " + device.getName());
+            setMensagem(getString(R.string.consultando) + device.getName());
             socket = device.createRfcommSocketToServiceRecord(UUID_BT);
             sleep(1000);
             socket.connect();
-            setMensagem("Conectado!");
+            setMensagem(getString(R.string.conectado));
 
             threadConexao = new Thread(ClienteBluetoothActivity.this);
             threadConexao.start();
@@ -314,7 +315,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             Log.w("MINITRUCO",
                     "Falhou conexao com device " + device.getName());
             Log.w("MINITRUCO", e);
-            msgErroFatal("Falhou conexao com device " + device.getName() + ". Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
+
+			  String message = String.format(getString(R.string.falhou_conexao_com_device), device.getName());
+			  msgErroFatal(message);
             try {
                 socket.close();
             } catch (Exception e1) {
@@ -357,11 +360,11 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
         dispositivosPareados.addAll(btAdapter.getBondedDevices());
 
         if (dispositivosPareados.size() == 0) {
-            msgErroFatal("Não existem aparelhos pareados. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
+            msgErroFatal(getString(R.string.nao_existem_aparelhos_pareados));
             return;
         }
 
-        new AlertDialog.Builder(this).setTitle("Escolha o Servidor")
+        new AlertDialog.Builder(this).setTitle(R.string.escolha_o_servidor)
                 .setItems(criaArrayComNomeDosAparelhosPareados(), new AlertDialog.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int posicaoNaLista) {

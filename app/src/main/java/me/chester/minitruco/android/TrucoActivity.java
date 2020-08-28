@@ -2,6 +2,7 @@ package me.chester.minitruco.android;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -71,8 +72,8 @@ import me.chester.minitruco.core.JogoLocal;
  */
 public class TrucoActivity extends BaseActivity {
 
-	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
-			"NOVE!", "DOZE!!!" };
+	private static final String[] TEXTO_BOTAO_AUMENTO = { Resources.getSystem().getString(R.string.truco), Resources.getSystem().getString(R.string.seis),
+			  Resources.getSystem().getString(R.string.nove), Resources.getSystem().getString(R.string.doze) };
 
 	private MesaView mesa;
 	private TextView textViewAnuncio;
@@ -111,8 +112,8 @@ public class TrucoActivity extends BaseActivity {
 				if (placar[1] != msg.arg2) {
 					tvEles.setBackgroundColor(Color.YELLOW);
 				}
-				tvNos.setText("Nós: " + msg.arg1);
-				tvEles.setText("Eles: " + msg.arg2);
+				tvNos.setText(getString(R.string.nos) + msg.arg1);
+				tvEles.setText(getString(R.string.eles) + msg.arg2);
 				placar[0] = msg.arg1;
 				placar[1] = msg.arg2;
 				break;
@@ -140,8 +141,8 @@ public class TrucoActivity extends BaseActivity {
 				btnAumento.setVisibility(Button.GONE);
 				break;
 			case MSG_MOSTRA_BOTAO_ABERTA_FECHADA:
-				btnAbertaFechada.setText(mesa.vaiJogarFechada ? "Aberta"
-						: "Fechada");
+				btnAbertaFechada.setText(mesa.vaiJogarFechada ? getString(R.string.aberta)
+						: getString(R.string.fechada));
 				btnAbertaFechada.setVisibility(Button.VISIBLE);
 				break;
 			case MSG_ESCONDE_BOTAO_ABERTA_FECHADA:

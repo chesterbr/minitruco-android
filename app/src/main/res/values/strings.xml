@@ -148,5 +148,40 @@
 		<br/><br/>]]>
     </string>
     <string name="jogar_bold"><b>Jogar</b></string>
+    <string name="stats_versao"><![CDATA[Esta é a versão %1$s do jogo. Você já iniciou %2$d partidas, ganhou %3$d e perdeu %4$d.]]></string>
+    <string name="initialize_resources_failed">CartaVisual tem que ter a propriedade resources inicializada</string>
+    <string name="carta_nao_encontrada">Carta não encontrada. Valor:</string>
+    <string name="obter_carta_pelo_valor">Erro irrecuperável ao obter carta pelo valor. Valor:</string>
+    <string name="aceita_mao_de_11">Aceita Mão de 11?</string>
+    <string name="aceita">Aceita?</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="criar_jogo">Criar Jogo</string>
+    <string name="procurar_jogo">Procurar Jogo</string>
+    <string name="truco">Truco</string>
+    <string name="seis">Seis!</string>
+    <string name="nove">NOVE!</string>
+    <string name="doze">DOZE!!!</string>
+    <string name="nos">Nós:</string>
+    <string name="eles">Eles:</string>
+    <string name="aberta">Aberta</string>
+    <string name="fechada">Fechada</string>
+    <string name="nome_bt">miniTruco</string>
+    <string name="uuid_bt">3B175368-ABB4-11DB-A508-C2B155D89593</string>
+    <string name="erro">Erro</string>
+    <string name="ok">Ok</string>
+    <string name="baralho_limpo">Baralho Limpo</string>
+    <string name="baralho_sujo">Baralho Sujo</string>
+    <string name="manilha_velha">Manilha Velha</string>
+    <string name="manilha_nova">Manilha Nova</string>
+    <string name="socket_jogo_nao_encontrado">Jogo não encontrado. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.</string>
+    <string name="voce_foi_desconectado">Você foi desconectado</string>
+    <string name="consultando">Consultando</string>
+    <string name="conectado">Conectado!</string>
+    <string name="escolha_o_servidor">Escolha o Servidor</string>
+    <string name="nao_existem_aparelhos_pareados">Não existem aparelhos pareados. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.</string>
+    <string name="falhou_conexao_com_device">Falhou conexao com device %1$s. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.</string>
+    <string name="aviso">Aviso</string>
+    <string name="tento_mineiro_ainda">O Tento Mineiro ainda não está disponível para jogos Bluetooth. Esta opção será ignorada.</string>
+    <string name="aguardando_conexoes">Aguardando conexões...</string>
 
 </resources>

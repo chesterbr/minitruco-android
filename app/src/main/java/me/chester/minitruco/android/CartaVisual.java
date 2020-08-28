@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.chester.minitruco.R;
 import me.chester.minitruco.core.Carta;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -233,8 +234,7 @@ public class CartaVisual extends Carta {
 	 */
 	public void setCarta(Carta c) {
 		if (resources == null) {
-			throw new IllegalStateException(
-					"CartaVisual tem que ter a propriedade resources inicializada");
+			throw new IllegalStateException(Resources.getSystem().getString(R.string.initialize_resources_failed));
 		}
 		if (c == null) {
 			this.setLetra(LETRA_NENHUMA);
@@ -310,11 +310,11 @@ public class CartaVisual extends Carta {
 					return c.getField("carta" + valor).getInt(null);
 				}
 			}
-			throw new FileNotFoundException("Carta não encontrada. Valor: "
+			throw new FileNotFoundException(Resources.getSystem().getString(R.string.carta_nao_encontrada)
 					+ valor);
 		} catch (Exception e) {
 			throw new RuntimeException(
-					"Erro irrecuperável ao obter carta pelo valor. Valor: "
+					  Resources.getSystem().getString(R.string.obter_carta_pelo_valor)
 							+ valor, e);
 		}
 	}

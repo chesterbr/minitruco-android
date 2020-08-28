@@ -107,8 +107,8 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
 		if (preferences.getBoolean("tentoMineiro", false)) {
 			mostraAlertBox(
-					"Aviso",
-					"O Tento Mineiro ainda não está disponível para jogos Bluetooth. Esta opção será ignorada.");
+					getString(R.string.aviso),
+					getString(R.string.tento_mineiro_ainda));
 		}
 	}
 
@@ -203,7 +203,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				continue;
 			}
 			pedePraHabilitarDiscoverableSePreciso();
-			setMensagem("Aguardando conexões...");
+			setMensagem(getString(R.string.aguardando_conexoes));
 			// Se chegamos aqui, estamos fora de jogo e com vagas
 			try {
 				BluetoothSocket socket = serverSocket.accept();
