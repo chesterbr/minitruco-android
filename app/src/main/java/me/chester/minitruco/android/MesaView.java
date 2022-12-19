@@ -153,10 +153,10 @@ public class MesaView extends View {
 		int leftDialog = (w - larguraDialog) / 2;
 		rectDialog = new Rect(leftDialog, topDialog,
 				leftDialog + larguraDialog, topDialog + alturaDialog);
-		int alturaBotao = (int) (tamanhoFonte * 1.8f);
+		int alturaBotao = (int) (tamanhoFonte * 0.6f);
 		rectBotaoSim = new RectF(leftDialog + 8, topDialog + alturaDialog
-				- alturaBotao - 8, leftDialog + larguraDialog / 2 - 8,
-				topDialog + alturaDialog - 8);
+				- alturaBotao - 32, leftDialog + larguraDialog / 2 - 8,
+				topDialog + alturaDialog - 16);
 		rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8,
 				rectBotaoSim.top, leftDialog + larguraDialog - 8,
 				rectBotaoSim.bottom);
@@ -730,11 +730,12 @@ public class MesaView extends View {
 			paint.setColor(Color.WHITE);
 			paint.setStyle(Style.STROKE);
 			canvas.drawRect(rectDialog, paint);
-			paint.setTextSize(tamanhoFonte);
+			paint.setTextSize(tamanhoFonte * 0.5f);
 			paint.setTextAlign(Align.CENTER);
+			paint.setStyle(Style.FILL);
 			canvas.drawText(mostrarPerguntaMao11 ? "Aceita Mão de 11?"
 					: "Aceita?", rectDialog.centerX(),
-					rectDialog.top + paint.getTextSize() * 1.2f, paint);
+					rectDialog.top + paint.getTextSize() * 1.5f, paint);
 			desenhaBotao("Sim", canvas, rectBotaoSim);
 			desenhaBotao("Nao", canvas, rectBotaoNao);
 
@@ -747,24 +748,25 @@ public class MesaView extends View {
 
 	private void desenhaBotao(String texto, Canvas canvas, RectF outerRect) {
 		Paint paint = new Paint();
-		paint.setStyle(Style.FILL);
+		paint.setStyle(Style.STROKE);
 		paint.setAntiAlias(true);
-		paint.setTextSize(tamanhoFonte);
+		paint.setTextSize(tamanhoFonte * 0.75f);
 		// Borda
 		paint.setColor(Color.WHITE);
-		canvas.drawRoundRect(outerRect, tamanhoFonte * 2 / 3,
-				tamanhoFonte * 2 / 3, paint);
+		canvas.drawRoundRect(outerRect, tamanhoFonte * 4 / 5,
+				tamanhoFonte * 4 / 5, paint);
 		// Interior
 		paint.setColor(Color.BLACK);
-		RectF innerRect = new RectF(outerRect.left + 1, outerRect.top + 1,
-				outerRect.right - 1, outerRect.bottom - 1);
-		canvas.drawRoundRect(innerRect, tamanhoFonte * 2 / 3,
-				tamanhoFonte * 2 / 3, paint);
+		RectF innerRect = new RectF(outerRect.left + 4, outerRect.top + 4,
+				outerRect.right - 4, outerRect.bottom - 4);
+		canvas.drawRoundRect(innerRect, tamanhoFonte * 4 / 5,
+				tamanhoFonte * 4 / 5, paint);
 		// Texto
+		paint.setStyle(Style.FILL);
 		paint.setColor(Color.WHITE);
 		paint.setTextAlign(Align.CENTER);
-		canvas.drawText(texto, outerRect.centerX(), outerRect.centerY()
-				+ tamanhoFonte * 0.3f, paint);
+		canvas.drawText(texto, outerRect.centerX(), outerRect.centerY() - tamanhoFonte * 0.2f
+				+ tamanhoFonte * 0.5f, paint);
 	}
 
 	/**
