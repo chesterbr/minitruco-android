@@ -43,6 +43,7 @@
             android:layout_above="@id/textview_nos"
             android:onClick="aumentoClickHandler"
             android:text="yyyy"
+            android:textSize="14sp"
             android:visibility="gone" />
 
         <Button
@@ -53,6 +54,7 @@
             android:layout_alignParentRight="true"
             android:onClick="abertaFechadaClickHandler"
             android:text="xxxxx"
+            android:textSize="12sp"
             android:visibility="gone" />
     </RelativeLayout>
 
