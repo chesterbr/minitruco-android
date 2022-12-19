@@ -71,6 +71,10 @@ import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
 public class TituloActivity extends BaseActivity {
 
 	public static final String[] BLUETOOTH_PERMISSIONS = new String[] {
+		// Permissões que nem deveriam estar aqui, vide callback abaixo
+		Manifest.permission.BLUETOOTH,
+		Manifest.permission.BLUETOOTH_ADMIN,
+		// Permissões runtime
 		Manifest.permission.BLUETOOTH_CONNECT,
 		Manifest.permission.BLUETOOTH_SCAN
 	};
@@ -138,12 +142,20 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	@Override
-	@SuppressLint("MissingSuperCall")
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		if (requestCode == 1) {
-			if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+			// Normalmente a gente só pediria as duas permissões novas e checaria se foi dado grant
+			// aqui; mas alguns aparelhos (mesmo com Android relativamente novo) simplesmente pulam
+			// a fase de perguntar, então eu resolvi pular a checagem aqui, porque das três uma:
+			// - Pessoa autorizou; vai dar tudo certo
+			// - Pergunta não foi feita; vai dar tudo certo (as permissões básicas aparecem)
+			// - Pessoa não autorizou (mesmo depois de clicar o botão Bluetooth): vai crashar,
+			//   e eu não me importo. Como você quer jogar no Bluetooth sem Bluetooth? Abre a app
+			//   e tenta de novo.
+			//			if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 				perguntaCriarOuProcurarBluetooth();
-			}
+			//			}
 		}
 	}
 
