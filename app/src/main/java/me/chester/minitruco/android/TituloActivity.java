@@ -1,8 +1,7 @@
 package me.chester.minitruco.android;
 
-import me.chester.minitruco.R;
-import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
-import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
@@ -11,12 +10,22 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import java.util.Arrays;
+
+import me.chester.minitruco.R;
+import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
+import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -61,6 +70,10 @@ import android.view.View;
  */
 public class TituloActivity extends BaseActivity {
 
+	public static final String[] BLUETOOTH_PERMISSIONS = new String[] {
+		Manifest.permission.BLUETOOTH_CONNECT,
+		Manifest.permission.BLUETOOTH_SCAN
+	};
 	SharedPreferences preferences;
 	Boolean mostrarMenuBluetooth;
 
@@ -107,10 +120,30 @@ public class TituloActivity extends BaseActivity {
 			opcoesButtonClickHandler(null);
 			return true;
 		case R.id.menuitem_bluetooth:
-			perguntaCriarOuProcurarBluetooth();
+			bluetoothButtonClickHandler(null);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private boolean verificaEPedePermissoesDeBluetooth(){
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED &&
+			ContextCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+			return true;
+		} else {
+			ActivityCompat.requestPermissions(this, BLUETOOTH_PERMISSIONS, 1);
+			return false;
+		}
+	}
+
+	@Override
+	@SuppressLint("MissingSuperCall")
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		if (requestCode == 1) {
+			if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+				perguntaCriarOuProcurarBluetooth();
+			}
 		}
 	}
 
@@ -145,7 +178,9 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	public void bluetoothButtonClickHandler(View v) {
-		perguntaCriarOuProcurarBluetooth();
+		if (verificaEPedePermissoesDeBluetooth()) {
+			perguntaCriarOuProcurarBluetooth();
+		}
 	}
 
 	public void opcoesButtonClickHandler(View v) {

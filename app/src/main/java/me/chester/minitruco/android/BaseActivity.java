@@ -11,6 +11,7 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import androidx.activity.ComponentActivity;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -55,7 +56,7 @@ import android.view.MenuItem;
  * 
  * 
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends ComponentActivity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);

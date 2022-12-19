@@ -1,13 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 8
-    buildToolsVersion "23.0.2"
+    compileSdk 33
 
     defaultConfig {
         applicationId "me.chester.minitruco"
-        minSdkVersion 8
-        targetSdkVersion 8
+        minSdkVersion 14
+        targetSdkVersion 33
+    }
+
+    dependencies {
+        implementation 'androidx.appcompat:appcompat:1.5.1'
+        implementation 'androidx.activity:activity:1.6.1'
+        implementation 'androidx.fragment:fragment:1.5.5'
     }
 
     buildTypes {
