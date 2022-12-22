@@ -48,18 +48,18 @@ import java.util.Random;
  * 
  */
 public class EstrategiaGasparotto implements Estrategia {
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	int[] C = new int[3];
 
-	private static int LIXO = 0;
-	private static int AS = 1;
-	private static int DOIS = 2;
-	private static int TRES = 3;
-	private static int PICAFUMO = 4;
-	private static int ESPADILHA = 5;
-	private static int ESCOPETA = 6;
-	private static int ZAP = 7;
+	private static final int LIXO = 0;
+	private static final int AS = 1;
+	private static final int DOIS = 2;
+	private static final int TRES = 3;
+	private static final int PICAFUMO = 4;
+	private static final int ESPADILHA = 5;
+	private static final int ESCOPETA = 6;
+	private static final int ZAP = 7;
 
 	// game level
 	// each game level is associated with various different names
@@ -71,7 +71,7 @@ public class EstrategiaGasparotto implements Estrategia {
 	// 4: professional agressive play [Constantine(HAL_PRO)]
 	private int gameLevel = 0; // default
 
-	private String[] nicks_estrategia = { "HAL", "nero(HAL_PRO)",
+	private final String[] nicks_estrategia = { "HAL", "nero(HAL_PRO)",
 			"eliza(HAL_PRO)", "alex(HAL_PRO)", "constantine(HAL_PRO)" };
 
 	private String nick = nicks_estrategia[gameLevel];
@@ -301,18 +301,14 @@ public class EstrategiaGasparotto implements Estrategia {
 	 * considerar empate
 	 */
 	private boolean maiorCartaEDoParceiro(SituacaoJogo s) {
-		if (parceiro(s) == maiorCartaMesa(s) && !taAmarrado(s))
-			return true;
-		return false;
+		return parceiro(s) == maiorCartaMesa(s) && !taAmarrado(s);
 	}
 
 	/**
 	 * Retorna se a maior carta da mesa é minha ou do meu parceiro ou não
 	 */
 	private boolean maiorCartaENossaPodendoEstarAmarrado(SituacaoJogo s) {
-		if (eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s))
-			return true;
-		return false;
+		return eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s);
 	}
 
 	/**
@@ -320,19 +316,15 @@ public class EstrategiaGasparotto implements Estrategia {
 	 * considerar empate
 	 */
 	private boolean maiorCartaENossa(SituacaoJogo s) {
-		if ((eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s))
-				&& !taAmarrado(s))
-			return true;
-		return false;
+		return (eu(s) == maiorCartaMesa(s) || parceiro(s) == maiorCartaMesa(s))
+				&& !taAmarrado(s);
 	}
 
 	/**
 	 * Retorna se a maior carta da mesa é minha ou do meu parceiro ou não
 	 */
 	private boolean maiorCartaPossivelENossa(SituacaoJogo s) {
-		if ((eu(s) == maiorCartaPossivelMesa(s) || parceiro(s) == maiorCartaPossivelMesa(s)))
-			return true;
-		return false;
+		return eu(s) == maiorCartaPossivelMesa(s) || parceiro(s) == maiorCartaPossivelMesa(s);
 	}
 
 	/**
@@ -435,12 +427,10 @@ public class EstrategiaGasparotto implements Estrategia {
 				}
 			}
 		// checa se estou com a maior manilha do jogo na mão
-		if ((s.cartasJogador[C[0]].getValorTruco(s.manilha) == 13 && m14)
+		return (s.cartasJogador[C[0]].getValorTruco(s.manilha) == 13 && m14)
 				|| (s.cartasJogador[C[0]].getValorTruco(s.manilha) == 12 && m14 && m13)
 				|| (s.cartasJogador[C[0]].getValorTruco(s.manilha) == 11 && m14
-						&& m13 && m12))
-			return true; // ha!!!
-		return false;
+				&& m13 && m12); // ha!!!
 	}
 
 	/**
@@ -456,14 +446,13 @@ public class EstrategiaGasparotto implements Estrategia {
 				&& (primeiraENossa(s) && tenhoMaiorCartaSemContarRodadaAtual(s) && (qualidadeMinhaMaior(s) > qualidadeMaiorMesa(s) || maiorCartaENossa(s)))
 				|| maiorCartaPossivelENossa(s))
 			return true;
-		if (s.numRodadaAtual == 3
+		// já jogou
+		return s.numRodadaAtual == 3
 				&& (tenhoMaiorCartaSemContarRodadaAtual(s) && // pos. 0, 1 , 2
 				(qualidadeMinhaMaior(s) > qualidadeMaiorMesa(s) || maiorCartaENossa(s)))
 				|| // pos. 3
-				maiorCartaPossivelENossa(s)) // já jogou
-			return true; // fechamos todas as possibilidades considerando todas
+				maiorCartaPossivelENossa(s); // fechamos todas as possibilidades considerando todas
 							// as posições do jogador na rodada
-		return false;
 	}
 
 	/**
@@ -535,9 +524,8 @@ public class EstrategiaGasparotto implements Estrategia {
 					&& ESCOPETAJaSaiu && ESPADILHAJaSaiu)
 				return true;
 
-			if (qualidadeMaiorMesa(s) == TRES && ZAPJaSaiu && ESCOPETAJaSaiu
-					&& ESPADILHAJaSaiu && PICAFUMOJaSaiu && !primeiraENossa(s))
-				return true;
+			return qualidadeMaiorMesa(s) == TRES && ZAPJaSaiu && ESCOPETAJaSaiu
+					&& ESPADILHAJaSaiu && PICAFUMOJaSaiu && !primeiraENossa(s);
 
 			// o correto seria checar se todos os 3s e manilhas sairam também,
 			// mas isso seria (quase que) impossível, e também não significaria
@@ -569,13 +557,11 @@ public class EstrategiaGasparotto implements Estrategia {
 						.getValorTruco(s.manilha) == s.cartasJogadas[s.numRodadaAtual - 1][adversario1(s)]
 						.getValorTruco(s.manilha))
 			return true;
-		if (s.cartasJogadas[s.numRodadaAtual - 1][adversario2(s)] != null
+		return s.cartasJogadas[s.numRodadaAtual - 1][adversario2(s)] != null
 				&& s.cartasJogadas[s.numRodadaAtual - 1][eu(s)] != null
 				&& s.cartasJogadas[s.numRodadaAtual - 1][eu(s)]
-						.getValorTruco(s.manilha) == s.cartasJogadas[s.numRodadaAtual - 1][adversario2(s)]
-						.getValorTruco(s.manilha))
-			return true;
-		return false;
+				.getValorTruco(s.manilha) == s.cartasJogadas[s.numRodadaAtual - 1][adversario2(s)]
+				.getValorTruco(s.manilha);
 
 	}
 
@@ -726,9 +712,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			return true;
 		if (s.valorProximaAposta == 9 && mandaBala(fator9))
 			return true;
-		if (s.valorProximaAposta == 12 && mandaBala(fator12))
-			return true;
-		return false;
+		return s.valorProximaAposta == 12 && mandaBala(fator12);
 	}
 
 	/**
@@ -775,9 +759,7 @@ public class EstrategiaGasparotto implements Estrategia {
 		int pj = s.posJogador;
 		if (res == 1 && (pj == 1 || pj == 3))
 			return true;
-		if (res == 2 && (pj == 2 || pj == 4))
-			return true;
-		return false;
+		return res == 2 && (pj == 2 || pj == 4);
 	}
 
 	/**
@@ -786,9 +768,7 @@ public class EstrategiaGasparotto implements Estrategia {
 	private boolean rodadaAmarrou(SituacaoJogo s, int numRod) {
 		if (s.numRodadaAtual == 0)
 			return false;
-		if (s.resultadoRodada[numRod] == 3)
-			return true;
-		return false;
+		return s.resultadoRodada[numRod] == 3;
 	}
 
 	private int joga_primeira_rodada_mao(SituacaoJogo s) {
@@ -1924,10 +1904,8 @@ public class EstrategiaGasparotto implements Estrategia {
 			if (qualidadeCarta(s.cartasJogador[C[0]], s) == TRES
 					&& valeAPenaAceitar(s, 20))
 				return true;
-			if (valeAPenaAceitar(s, 0))
-				return true; // last check if there are any relevant cases we
+			return valeAPenaAceitar(s, 0); // last check if there are any relevant cases we
 								// should call before refuse it
-			return false;
 
 			// segunda rodada
 		case 2:
@@ -2002,10 +1980,8 @@ public class EstrategiaGasparotto implements Estrategia {
 						&& valeAPenaAceitar(s, 10))
 					return true;
 			}
-			if (valeAPenaAceitar(s, 0))
-				return true; // last check if there are any relevant cases we
+			return valeAPenaAceitar(s, 0); // last check if there are any relevant cases we
 								// should call before refuse it
-			return false;
 
 			// terceira rodada
 		case 3:
@@ -2100,10 +2076,8 @@ public class EstrategiaGasparotto implements Estrategia {
 						return true;
 				}
 			}
-			if (valeAPenaAceitar(s, 0))
-				return true; // last check if there are any relevant cases we
+			return valeAPenaAceitar(s, 0); // last check if there are any relevant cases we
 								// should call before refuse it
-			return false;
 
 		}
 		return false;
@@ -2147,11 +2121,8 @@ public class EstrategiaGasparotto implements Estrategia {
 				&& (qManilhas >= 1 && q2 >= 1) || q3 >= 2) {
 			return true;
 		}
-		if (s.pontosEquipe[adversario1(s) % 2] <= 6
-				&& (qManilhas >= 1 || q3 >= 1 || q2 >= 2)) {
-			return true;
-		}
-		return false;
+		return s.pontosEquipe[adversario1(s) % 2] <= 6
+				&& (qManilhas >= 1 || q3 >= 1 || q2 >= 2);
 	}
 
 	public void inicioPartida() {

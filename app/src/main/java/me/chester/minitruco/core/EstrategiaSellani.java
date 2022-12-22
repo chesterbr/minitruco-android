@@ -44,11 +44,11 @@ import java.util.Random;
  * 
  */
 public class EstrategiaSellani implements Estrategia {
-	private static Random rand = new Random();
-	private static int CARTA_RUIM = 0;
-	private static int CARTA_MEDIA = 1;
-	private static int CARTA_BOA = 2;
-	private static int CARTA_EXCELENTE = 3;
+	private static final Random rand = new Random();
+	private static final int CARTA_RUIM = 0;
+	private static final int CARTA_MEDIA = 1;
+	private static final int CARTA_BOA = 2;
+	private static final int CARTA_EXCELENTE = 3;
 	int[] C = new int[3];
 
 	public String getNomeEstrategia() {
@@ -292,12 +292,10 @@ public class EstrategiaSellani implements Estrategia {
 				}
 			}
 		// será que estou com a maior manilha do jogo na mão
-		if ((s.cartasJogador[C[0]].getValorTruco(s.manilha) == 13 && m14)
+		return (s.cartasJogador[C[0]].getValorTruco(s.manilha) == 13 && m14)
 				|| (s.cartasJogador[C[0]].getValorTruco(s.manilha) == 12 && m14 && m13)
 				|| (s.cartasJogador[C[0]].getValorTruco(s.manilha) == 11 && m14
-						&& m13 && m12))
-			return true; // ha!!!
-		return false;
+				&& m13 && m12); // ha!!!
 	}
 
 	/**
@@ -311,9 +309,7 @@ public class EstrategiaSellani implements Estrategia {
 			return true;
 		if (s.numRodadaAtual == 2 && primeiraENossa(s) && tenhoMaiorCarta(s))
 			return true;
-		if (s.numRodadaAtual == 3 && tenhoMaiorCarta(s))
-			return true;
-		return false;
+		return s.numRodadaAtual == 3 && tenhoMaiorCarta(s);
 	}
 
 	/**
@@ -327,12 +323,10 @@ public class EstrategiaSellani implements Estrategia {
 						.getValorTruco(s.manilha) == s.cartasJogadas[s.numRodadaAtual - 1][adversario1(s)]
 						.getValorTruco(s.manilha))
 			return true;
-		else if (s.cartasJogadas[s.numRodadaAtual - 1][adversario2(s)] != null
+		else return s.cartasJogadas[s.numRodadaAtual - 1][adversario2(s)] != null
 				&& s.cartasJogadas[s.numRodadaAtual - 1][parceiro(s)]
-						.getValorTruco(s.manilha) == s.cartasJogadas[s.numRodadaAtual - 1][adversario2(s)]
-						.getValorTruco(s.manilha))
-			return true;
-		return false;
+				.getValorTruco(s.manilha) == s.cartasJogadas[s.numRodadaAtual - 1][adversario2(s)]
+				.getValorTruco(s.manilha);
 	}
 
 	/**
@@ -396,9 +390,7 @@ public class EstrategiaSellani implements Estrategia {
 			return false;
 		if (s.valorProximaAposta == 6 && vouOuNaoVou(30) && consideraSorte)
 			return false;
-		if (s.valorProximaAposta == 9 && vouOuNaoVou(50) && consideraSorte)
-			return false;
-		return true;
+		return s.valorProximaAposta != 9 || !vouOuNaoVou(50) || !consideraSorte;
 	}
 
 	/**
@@ -806,9 +798,7 @@ public class EstrategiaSellani implements Estrategia {
 		// System.out.println("aceitaMao11()\n  Qtd Boa:" + qBoa +
 		// "  Qtd Excelente:" + qExcelente);
 		// vamos analisar!
-		if (qExcelente >= 2 || qBoa >= 3 || (qExcelente >= 1 && qBoa >= 1))
-			return true;
-		return false;
+		return qExcelente >= 2 || qBoa >= 3 || (qExcelente >= 1 && qBoa >= 1);
 	}
 
 	public void inicioPartida() {

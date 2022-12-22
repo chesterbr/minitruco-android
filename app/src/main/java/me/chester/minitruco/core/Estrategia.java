@@ -67,12 +67,12 @@ public interface Estrategia {
 	/**
 	 * Retorna o nome "copmpleto" da Estrategia
 	 */
-	public abstract String getNomeEstrategia();
+	String getNomeEstrategia();
 
 	/**
 	 * Retorna informações de copyright e afins
 	 */
-	public abstract String getInfoEstrategia();
+	String getInfoEstrategia();
 
 	/**
 	 * Executa uma jogada.
@@ -90,7 +90,7 @@ public interface Estrategia {
 	 * @return posição da carta na mão a jogar (em letrasCartasJogador), ou -1
 	 *         para pedir truco
 	 */
-	public abstract int joga(SituacaoJogo s);
+	int joga(SituacaoJogo s);
 
 	/**
 	 * Decide se aceita um pedido de aumento.
@@ -102,7 +102,7 @@ public interface Estrategia {
 	 *            Situação do jogo no momento
 	 * @return true para aceitar, false para desistir
 	 */
-	public abstract boolean aceitaTruco(SituacaoJogo s);
+	boolean aceitaTruco(SituacaoJogo s);
 
 	/**
 	 * Decide se aceita iniciar uma "mão de 11"
@@ -112,17 +112,17 @@ public interface Estrategia {
 	 * @return true para iniciar valendo 3 pontos, false para desistir e perder
 	 *         1 ponto
 	 */
-	public abstract boolean aceitaMao11(Carta[] cartasParceiro, SituacaoJogo s);
+	boolean aceitaMao11(Carta[] cartasParceiro, SituacaoJogo s);
 
 	/**
 	 * Notifica que uma partida está começando.
 	 */
-	public abstract void inicioPartida();
+	void inicioPartida();
 
 	/**
 	 * Notifica que uma mão está começando
 	 */
-	public abstract void inicioMao();
+	void inicioMao();
 
 	/**
 	 * Informa que um jogador pediu aumento de aposta (truco, seis, etc.).
@@ -132,7 +132,7 @@ public interface Estrategia {
 	 * @param valor
 	 *            Quanto a rodada passará a valar se algum adversário aceitar
 	 */
-	public abstract void pediuAumentoAposta(int posJogador, int valor);
+	void pediuAumentoAposta(int posJogador, int valor);
 
 	/**
 	 * Informa que o jogador aceitou um pedido de aumento de aposta.
@@ -142,7 +142,7 @@ public interface Estrategia {
 	 * @param valor
 	 *            Quanto a rodada está valendo agora
 	 */
-	public abstract void aceitouAumentoAposta(int posJogador, int valor);
+	void aceitouAumentoAposta(int posJogador, int valor);
 
 	/**
 	 * Informa que o jogador recusou um pedido de aumento de aposta.
@@ -154,6 +154,6 @@ public interface Estrategia {
 	 * @param posJogador
 	 *            Jogador que recusou o pedido.
 	 */
-	public abstract void recusouAumentoAposta(int posJogador);
+	void recusouAumentoAposta(int posJogador);
 
 }

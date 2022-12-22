@@ -1,13 +1,5 @@
 package me.chester.minitruco.android.bluetooth;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import me.chester.minitruco.R;
-import me.chester.minitruco.android.JogadorHumano;
-import me.chester.minitruco.core.JogadorCPU;
-import me.chester.minitruco.core.Jogo;
-import me.chester.minitruco.core.JogoLocal;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
@@ -24,6 +16,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
+import me.chester.minitruco.R;
+import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.core.JogadorCPU;
+import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.JogoLocal;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -79,10 +80,10 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	private boolean aguardandoDiscoverable = false;
 	private Thread threadAguardaConexoes;
 	private BluetoothServerSocket serverSocket;
-	private BluetoothSocket[] connClientes = new BluetoothSocket[3];
-	private OutputStream[] outClientes = new OutputStream[3];
+	private final BluetoothSocket[] connClientes = new BluetoothSocket[3];
+	private final OutputStream[] outClientes = new OutputStream[3];
 
-	private BroadcastReceiver receiverMantemDiscoverable = new BroadcastReceiver() {
+	private final BroadcastReceiver receiverMantemDiscoverable = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
 			pedePraHabilitarDiscoverableSePreciso();
 		}
@@ -266,9 +267,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	private void inicializaDisplay() {
 		apelidos[0] = btAdapter.getName();
-		for (int i = 0; i <= 2; i++) {
-			apelidos[i + 1] = APELIDOS_CPU[i];
-		}
+		System.arraycopy(APELIDOS_CPU, 0, apelidos, 1, 3);
 	}
 
 	@Override

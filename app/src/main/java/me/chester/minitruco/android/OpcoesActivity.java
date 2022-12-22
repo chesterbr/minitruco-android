@@ -1,8 +1,9 @@
 package me.chester.minitruco.android;
 
-import me.chester.minitruco.R;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+
+import me.chester.minitruco.R;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>

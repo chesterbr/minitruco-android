@@ -48,9 +48,9 @@ import java.util.Vector;
  */
 public class Baralho {
 
-	private boolean limpo;
+	private final boolean limpo;
 
-	private Random random = new Random();
+	private final Random random = new Random();
 
 	private Vector<Carta> sorteadas = new Vector<Carta>();
 

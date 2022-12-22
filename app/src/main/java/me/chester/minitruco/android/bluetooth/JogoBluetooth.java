@@ -37,13 +37,14 @@ package me.chester.minitruco.android.bluetooth;
  * 
  */
 
+import android.util.Log;
+
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.SituacaoJogo;
-import android.util.Log;
 
 /**
  * Representa, no cliente, o <code>Jogo</code> que está executando no servidor.
@@ -61,7 +62,7 @@ public class JogoBluetooth extends Jogo {
 
 	private JogadorHumano jogadorHumano;
 
-	private ClienteBluetoothActivity clienteBT;
+	private final ClienteBluetoothActivity clienteBT;
 
 	/**
 	 * Cria um novo proxy de jogo remoto associado a um cliente

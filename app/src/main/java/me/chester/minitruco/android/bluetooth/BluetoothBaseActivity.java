@@ -1,10 +1,5 @@
 package me.chester.minitruco.android.bluetooth;
 
-import java.util.UUID;
-
-import me.chester.minitruco.R;
-import me.chester.minitruco.android.BaseActivity;
-import me.chester.minitruco.android.TrucoActivity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
@@ -16,6 +11,12 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.UUID;
+
+import me.chester.minitruco.R;
+import me.chester.minitruco.android.BaseActivity;
+import me.chester.minitruco.android.TrucoActivity;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>

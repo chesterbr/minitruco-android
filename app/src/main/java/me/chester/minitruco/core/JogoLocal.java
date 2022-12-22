@@ -102,13 +102,13 @@ public class JogoLocal extends Jogo {
 	/**
 	 * Baralho que será usado durante esse jogo
 	 */
-	private Baralho baralho;
+	private final Baralho baralho;
 
 	/**
 	 * Resultados de cada rodada (1 para vitória da equipe 1/3, 2 para vitória
 	 * da equipe 2/4 e 3 para empate)
 	 */
-	private int resultadoRodada[] = new int[3];
+	private final int[] resultadoRodada = new int[3];
 
 	/**
 	 * Valor atual da mão (1, 3, 6, 9 ou 12)
@@ -127,7 +127,7 @@ public class JogoLocal extends Jogo {
 	 * <p>
 	 * false signfica que não respondeu ainda, true que respondeu recusando
 	 */
-	private boolean[] recusouAumento = new boolean[4];
+	private final boolean[] recusouAumento = new boolean[4];
 
 	/**
 	 * Posição (1 a 4) do jogador da vez
@@ -148,7 +148,7 @@ public class JogoLocal extends Jogo {
 	 * Indica, para cada jogador, se estamos aguardando a resposta para uma mão
 	 * de 11
 	 */
-	private boolean[] aguardandoRespostaMaoDe11 = new boolean[4];
+	private final boolean[] aguardandoRespostaMaoDe11 = new boolean[4];
 
 	/**
 	 * Sinaliza para o loop principal que alguém jogou uma carta
@@ -165,7 +165,8 @@ public class JogoLocal extends Jogo {
 	 */
 	private Carta cartaJogada;
 
-	private boolean manilhaVelha, baralhoLimpo;
+	private final boolean manilhaVelha;
+	private final boolean baralhoLimpo;
 
 	/*
 	 * (non-Javadoc)
@@ -186,7 +187,7 @@ public class JogoLocal extends Jogo {
 		iniciaMao(getJogador(1));
 		while (pontosEquipe[0] < 12 && pontosEquipe[1] < 12 && !jogoFinalizado) {
 			while ((!alguemJogou) && (!jogoFinalizado)) {
-				sleep(100);
+				sleep();
 			}
 			if (!jogoFinalizado) {
 				processaJogada();
@@ -271,11 +272,7 @@ public class JogoLocal extends Jogo {
 	/**
 	 * Processa uma jogada e passa a vez para o próximo jogador (ou finaliza a
 	 * rodoada/mão/jogo), notificando os jogadores apropriadamente
-	 * 
-	 * @param j
-	 *            Jogador que efetuou a jogada
-	 * @param c
-	 *            Carta que foi jogada
+	 *
 	 */
 	private void processaJogada() {
 
@@ -410,9 +407,7 @@ public class JogoLocal extends Jogo {
 
 	/**
 	 * Conclui a mão atual, e, se o jogo não acabou, inicia uma nova.
-	 * 
-	 * @param jogadorQueTorna
-	 *            Jogador que irá abrir a próxima mão, se houver
+	 *
 	 */
 	private void fechaMao() {
 
@@ -442,7 +437,6 @@ public class JogoLocal extends Jogo {
 			iniciaMao(getJogador(posAbre));
 		}
 
-		return;
 	}
 
 	// /// NOTIFICAÇÕES RECEBIDAS DOS JOGADORES
@@ -541,8 +535,6 @@ public class JogoLocal extends Jogo {
 		}
 		Log.i("JogoLocal", "Jogadores notificados do aumento");
 
-		return;
-
 	}
 
 	/*
@@ -628,8 +620,7 @@ public class JogoLocal extends Jogo {
 	 * <p>
 	 * Regra atual: só vale carta fechada se não for a 1a. rodada e se o
 	 * parceiro não tiver jogado fechada também
-	 * 
-	 * @return
+	 *
 	 */
 	private boolean isPodeFechada() {
 		Carta cartaParceiro = cartasJogadasPorRodada[numRodadaAtual - 1][getJogadorDaVez()
@@ -640,8 +631,7 @@ public class JogoLocal extends Jogo {
 
 	/**
 	 * Recupera o jogador cuja vez é a atual
-	 * 
-	 * @return
+	 *
 	 */
 	private Jogador getJogadorDaVez() {
 		return getJogador(posJogadorDaVez);
@@ -667,11 +657,8 @@ public class JogoLocal extends Jogo {
 					.getPosicao();
 		s.valorMao = this.valorMao;
 
-		for (int i = 0; i <= 1; i++) {
-			s.pontosEquipe[i] = this.pontosEquipe[i];
-		}
-		for (int i = 0; i <= 2; i++)
-			s.resultadoRodada[i] = this.resultadoRodada[i];
+		System.arraycopy(this.pontosEquipe, 0, s.pontosEquipe, 0, 2);
+		System.arraycopy(this.resultadoRodada, 0, s.resultadoRodada, 0, 3);
 
 		for (int i = 0; i <= 2; i++)
 			for (int k = 0; k <= 3; k++) {
@@ -725,23 +712,12 @@ public class JogoLocal extends Jogo {
 		return false;
 	}
 
-	private void sleep(int i) {
+	private void sleep() {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Seta o placar atual (apenas para fins de testes)
-	 * 
-	 * @param pontosEquipe1
-	 * @param pontosEquipe2
-	 */
-	public void setPlacar(int pontosEquipe1, int pontosEquipe2) {
-		pontosEquipe[0] = pontosEquipe1;
-		pontosEquipe[1] = pontosEquipe2;
 	}
 
 }

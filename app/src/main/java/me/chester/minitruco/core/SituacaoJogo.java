@@ -71,7 +71,7 @@ public class SituacaoJogo {
 	 * Resultados de cada rodada (1 para vitória da equipe 1/3, 2 para vitória
 	 * da equipe 2/4 e 3 para empate)
 	 */
-	public int resultadoRodada[] = new int[3];
+	public int[] resultadoRodada = new int[3];
 
 	/**
 	 * Valor atual da mão (1, 3, 6, 9 ou 12)

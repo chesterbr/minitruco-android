@@ -1,13 +1,14 @@
 package me.chester.minitruco.android;
 
-import me.chester.minitruco.core.Carta;
-import me.chester.minitruco.core.Jogador;
-import me.chester.minitruco.core.Jogo;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import me.chester.minitruco.core.Carta;
+import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.Jogo;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -60,9 +61,9 @@ import android.util.Log;
  */
 public class JogadorHumano extends Jogador {
 
-	private TrucoActivity activity;
+	private final TrucoActivity activity;
 
-	private MesaView mesa;
+	private final MesaView mesa;
 
 	int valorProximaAposta;
 

@@ -1,10 +1,5 @@
 package me.chester.minitruco.android;
 
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-
-import me.chester.minitruco.core.Carta;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +9,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
+
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
+
+import me.chester.minitruco.core.Carta;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -322,7 +323,7 @@ public class CartaVisual extends Carta {
 	/**
 	 * Guarda os bitmaps em que fizemos resize para o tamanho da carta visual
 	 */
-	private static Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
+	private static final Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
 
 	/**
 	 * Bitmap (já no tamanho certo) para esta carta
@@ -402,6 +403,6 @@ public class CartaVisual extends Carta {
 	/**
 	 * Mesa à qual esta carta pertence
 	 */
-	private MesaView mesa;
+	private final MesaView mesa;
 
 }

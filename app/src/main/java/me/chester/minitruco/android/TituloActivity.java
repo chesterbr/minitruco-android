@@ -1,7 +1,6 @@
 package me.chester.minitruco.android;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
@@ -20,8 +19,6 @@ import android.view.View;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import java.util.Arrays;
 
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;

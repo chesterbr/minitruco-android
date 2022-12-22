@@ -37,9 +37,9 @@ package me.chester.minitruco.core;
  * 
  */
 
-import java.util.Vector;
-
 import android.util.Log;
+
+import java.util.Vector;
 
 /**
  * Jogador controlado pelo celular ou pelo servidor.
@@ -91,7 +91,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 	/**
 	 * Estrategia que está controlando este jogador
 	 */
-	private Estrategia estrategia;
+	private final Estrategia estrategia;
 
 	/**
 	 * Situação atual do jogo (para o estrategia)
@@ -376,7 +376,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 	/**
 	 * Cartas que ainda não foram jogadas
 	 */
-	private Vector<Carta> cartasRestantes = new Vector<Carta>(3);
+	private final Vector<Carta> cartasRestantes = new Vector<Carta>(3);
 
 	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
 		// Avisa o estrategia

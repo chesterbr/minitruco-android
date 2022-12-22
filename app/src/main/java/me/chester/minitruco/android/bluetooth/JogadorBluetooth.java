@@ -1,12 +1,13 @@
 package me.chester.minitruco.android.bluetooth;
 
+import android.bluetooth.BluetoothSocket;
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
-import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -47,9 +48,9 @@ import android.util.Log;
 public class JogadorBluetooth extends Jogador implements Runnable {
 
 	private InputStream in;
-	private BluetoothSocket socket;
-	private ServidorBluetoothActivity servidor;
-	private Thread threadProcessaMensagens;
+	private final BluetoothSocket socket;
+	private final ServidorBluetoothActivity servidor;
+	private final Thread threadProcessaMensagens;
 
 	public JogadorBluetooth(BluetoothSocket socket,
 			ServidorBluetoothActivity servidor) {
@@ -97,7 +98,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 					// Processa linhas (não-vazias)
 					if (sbLinha.length() > 0) {
 						Log.w("MINITRUCO",
-								"Linha acumulada: " + sbLinha.toString());
+								"Linha acumulada: " + sbLinha);
 						char tipoNotificacao = sbLinha.charAt(0);
 						String[] args = sbLinha.toString().split(" ");
 						switch (tipoNotificacao) {
@@ -171,7 +172,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 				param = "";
 			}
 		} else {
-			param = " " + c.toString();
+			param = " " + c;
 		}
 		enviaMensagem("J " + j.getPosicao() + param);
 	}

@@ -1,12 +1,5 @@
 package me.chester.minitruco.android;
 
-import java.util.Random;
-import java.util.Vector;
-
-import me.chester.minitruco.R;
-import me.chester.minitruco.core.Carta;
-import me.chester.minitruco.core.Jogador;
-import me.chester.minitruco.core.Jogo;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -22,6 +15,14 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.Random;
+import java.util.Vector;
+
+import me.chester.minitruco.R;
+import me.chester.minitruco.core.Carta;
+import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.Jogo;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -73,7 +74,7 @@ public class MesaView extends View {
 
 	private int posicaoVez;
 
-	private static Random rand = new Random();
+	private static final Random rand = new Random();
 
 	public MesaView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -820,7 +821,7 @@ public class MesaView extends View {
 	 * Guarda as cartas que foram jogadas pelos jogadores (para saber em que
 	 * ordem desenhar)
 	 */
-	private Vector<CartaVisual> cartasJogadas = new Vector<CartaVisual>(12);
+	private final Vector<CartaVisual> cartasJogadas = new Vector<CartaVisual>(12);
 
 	private int numRodadaPiscando = 0;
 

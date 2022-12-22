@@ -39,13 +39,13 @@ package me.chester.minitruco.core;
 
 public interface Tento {
 
-	public abstract int calcValorTento(int valorMao);
+	int calcValorTento(int valorMao);
 
-	public abstract int calcValorMao(int valorMao);
+	int calcValorMao(int valorMao);
 
-	public abstract int inicializaMao();
+	int inicializaMao();
 
-	public abstract int inicializaPenultimaMao();
+	int inicializaPenultimaMao();
 
-	public abstract int valorPenultimaMao();
+	int valorPenultimaMao();
 }

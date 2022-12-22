@@ -1,7 +1,5 @@
 package me.chester.minitruco.android;
 
-import me.chester.minitruco.R;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -11,7 +9,10 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
 import androidx.activity.ComponentActivity;
+
+import me.chester.minitruco.R;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>

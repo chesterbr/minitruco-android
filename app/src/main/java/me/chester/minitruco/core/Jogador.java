@@ -1,8 +1,8 @@
 package me.chester.minitruco.core;
 
-import java.util.Random;
-
 import android.util.Log;
+
+import java.util.Random;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -114,7 +114,7 @@ public abstract class Jogador {
 	 * @return
 	 */
 
-	private String[] votedCoolList = new String[100];
+	private final String[] votedCoolList = new String[100];
 	private int votedCoolListPointer = 0;
 
 	public String getVotedCoolList(int pos) {
