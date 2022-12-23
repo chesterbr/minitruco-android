@@ -250,17 +250,15 @@ public abstract class Jogo implements Runnable {
 	public synchronized boolean adiciona(Jogador jogador) {
 
 		// Se for jogador, só entra se a mesa ainda tiver vaga.
-		if (jogador instanceof Jogador) {
-			Jogador j = (Jogador) jogador;
-			if (numJogadores == 4) {
-				return false;
-			}
-			jogadores[numJogadores] = j;
-			numJogadores++;
-			j.setPosicao(numJogadores);
+		if (numJogadores == 4) {
+			return false;
 		}
 
 		// Adiciona na lista e notifica a todos (incluindo ele) de sua presença
+		jogadores[numJogadores] = jogador;
+		numJogadores++;
+		jogador.jogo = this;
+		jogador.setPosicao(numJogadores);
 		for (Jogador j : jogadores) {
 			if (j != null) {
 				j.entrouNoJogo(jogador, this);
