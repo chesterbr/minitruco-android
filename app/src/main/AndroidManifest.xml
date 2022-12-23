@@ -3,6 +3,7 @@
     package="me.chester.minitruco"
     android:versionCode="20200"
     android:versionName="2.2.0" >
+    <!-- Ao aumentar a versão, atualize "novidades" em strings.xml" -->
 
     <supports-screens
         android:anyDensity="true"

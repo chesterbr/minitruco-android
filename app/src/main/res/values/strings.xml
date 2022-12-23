@@ -148,5 +148,8 @@
 		<br/><br/>]]>
     </string>
     <string name="jogar_bold"><b>Jogar</b></string>
+    <string name="novidades">
+        No jogo local (sem ser Bluetooth), o parceiro virtual não pode aceitar truco sem a sua confirmação - ele diz se aceitaria, mas você é que decide.
+    </string>
 
 </resources>

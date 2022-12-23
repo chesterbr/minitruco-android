@@ -20,6 +20,7 @@ import android.view.View;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
@@ -83,16 +84,23 @@ public class TituloActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.titulo);
 		habilitaBluetoothSeExistir();
+
+		// Na primeira vez que a app roda, mostra as instruções
+		// Na primeira vez em que roda uma nova versão (sem ser a 1a. vez geral), mostra as novidades
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean mostraInstrucoes = preferences.getBoolean("mostraInstrucoes",
 				true);
+		String versaoQueMostrouNovidades = preferences.getString("versaoQueMostrouNovidades", "");
+		String versaoAtual = String.valueOf(BuildConfig.VERSION_NAME);
+		Editor e = preferences.edit();
 		if (mostraInstrucoes) {
-			Editor e = preferences.edit();
-			e.putBoolean("mostraInstrucoes", false);
-			e.commit();
-			mostraAlertBox(this.getString(R.string.titulo_ajuda),
-					this.getString(R.string.texto_ajuda));
+			mostraAlertBox(this.getString(R.string.titulo_ajuda), this.getString(R.string.texto_ajuda));
+		} else if (!versaoQueMostrouNovidades.equals(versaoAtual)) {
+			mostraAlertBox("Novidades desta versão", this.getString(R.string.novidades));
 		}
+		e.putBoolean("mostraInstrucoes", false);
+		e.putString("versaoQueMostrouNovidades", versaoAtual);
+		e.commit();
 	}
 
 	private void habilitaBluetoothSeExistir() {
