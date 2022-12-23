@@ -152,8 +152,6 @@ public abstract class Jogo implements Runnable {
 	 * assume-se que as instâncias de Jogador são honestas e se protegem de
 	 * clientes remotos desonestos
 	 * 
-	 * @param j
-	 * @param c
 	 */
 	public abstract void jogaCarta(Jogador j, Carta c);
 
@@ -342,6 +340,13 @@ public abstract class Jogo implements Runnable {
 	 */
 	public boolean isAlguemTem11Pontos() {
 		return pontosEquipe[0] == 11 || pontosEquipe[1] == 11;
+	}
+
+	/**
+	 * @return true se este jogo não tem nenhum jogador remoto (bluetooth, etc)
+	 */
+	public boolean semJogadoresRemotos() {
+		return false;
 	}
 
 	/**

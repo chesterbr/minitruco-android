@@ -62,6 +62,11 @@
         <item>Só porque você quer.</item>
         <item>Nem pensar.</item>
     </string-array>
+    <string-array name="balao_aumento_quero">
+        <item>Eu topo, e você?</item>
+        <item>Vamo lá, parça?</item>
+        <item>Pras cabeça, chefia?</item>
+    </string-array>
     <string-array name="balao_vitoria">
         <item>Foi fácil demais!!!</item>
         <item>Toooooomem!</item>
@@ -71,7 +76,7 @@
     </string-array>
     <string-array name="balao_derrota">
         <item>:-(</item>
-        <item>Malditos!</item>
+        <item>Maldição!</item>
         <item>Nem queria ganhar...</item>
         <item>Ok...</item>
         <item>A próxima é nossa.</item>
@@ -122,6 +127,7 @@
 		deles aceitar jogar, a mão vale 3 pontos. Se os dois recusarem, a
 		equipe adversária ganha um ponto, e uma nova mão é distribuída,
 		valendo as mesmas regras.
+		<br/><br/><b><u>Prioridade Humana</u></b>: No jogo normal (sem ser Bluetooth), você é que decide o aceite dos aumentos e da mão de 11. O parceiro diz se aceitaria o aumento ou não - mas a escolha é sua.
 		<br/><br/><b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram ele. É recomendável parear os celulares antes. Quem criou o jogo pode rearranjar as posições antes de começar. Mão de 11 ainda não é suportada, e celulares Java ME ainda não conectam 100%.
 		<br/><br/><b><u>Opções</u></b>: neste menu, você pode optar por um baralho \"limpo\"
 		 (sem as cartas 4, 5, 6 e 7) ou pela manilha velha, isto é, as
@@ -149,7 +155,7 @@
     </string>
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
-        No jogo local (sem ser Bluetooth), o parceiro virtual não pode aceitar truco sem a sua confirmação - ele diz se aceitaria, mas você é que decide.
+        No jogo local (sem ser Bluetooth), agora só você decide se vai ser aceito aumento (truco, 6, etc.) ou mão de 11.
     </string>
 
 </resources>

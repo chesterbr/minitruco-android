@@ -8,6 +8,7 @@ import android.util.Log;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 
 /*
@@ -178,6 +179,12 @@ public class JogadorHumano extends Jogador {
 	@Override
 	public void aceitouAumentoAposta(Jogador j, int valor) {
 		if (j.getEquipe() == this.getEquipe()) {
+			// Num jogo sem bluetooth/etc, a CPU não aumenta, ela só
+			// sinaliza a intenção de aumentar
+			if (j instanceof JogadorCPU && jogo.semJogadoresRemotos()) {
+				mesa.diz("aumento_quero", posicaoNaTela(j), 1500);
+				return;
+			}
 			// Nós aceitamos um truco, então podemos pedir 6, 9 ou 12
 			if (valor != 12) {
 				valorProximaAposta = valor + 3;

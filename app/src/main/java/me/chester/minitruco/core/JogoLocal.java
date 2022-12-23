@@ -2,6 +2,8 @@ package me.chester.minitruco.core;
 
 import android.util.Log;
 
+import me.chester.minitruco.android.JogadorHumano;
+
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
  * Todos os direitos reservados.
@@ -479,9 +481,15 @@ public class JogoLocal extends Jogo {
 		Log.i("JogoLocal", "J" + j.getPosicao() + (aceita ? "" : " nao")
 				+ " quer jogar mao de 11 ");
 
-		// Avisa os outros jogadores da decisão
-		for (Jogador interessado : jogadores) {
-			interessado.decidiuMao11(j, aceita);
+		// Se for uma CPU parceira de humano num jogo 100% local, trata como recusa
+		// (quem decide mão de 11 é o humano) e nem notifica (silenciando o balão)
+		if (isIgnoraDecisao(j)) {
+			aceita = false;
+		} else {
+			// Avisa os outros jogadores da decisão
+			for (Jogador interessado : jogadores) {
+				interessado.decidiuMao11(j, aceita);
+			}
 		}
 
 		aguardandoRespostaMaoDe11[j.getPosicao() - 1] = false;
@@ -552,7 +560,16 @@ public class JogoLocal extends Jogo {
 		Log.i("JogoLocal", "Jogador  " + j.getPosicao()
 				+ (aceitou ? "aceitou" : "recusou"));
 
+		int posParceiro = (j.getPosicao() + 1) % 4 + 1;
 		if (aceitou) {
+			// Se, num jogo 100% local (só o humano e CPUs)
+			// o bot parceiro do humano aceita, trata como recusa
+			// (mas notifica humano do aceite)
+			if (isIgnoraDecisao(j)) {
+				jogadores[posParceiro - 1].aceitouAumentoAposta(j, valorMao);
+				recusouAumento[j.getPosicao() - 1] = true;
+				return;
+			}
 			// Se o jogador aceitou, seta o novo valor, notifica a galera e tira
 			// o jogo da situtação de truco
 			valorMao = tento.calcValorTento(valorMao);
@@ -565,7 +582,6 @@ public class JogoLocal extends Jogo {
 			for (Jogador interessado : jogadores) {
 				interessado.recusouAumentoAposta(j);
 			}
-			int posParceiro = (j.getPosicao() + 1) % 4 + 1;
 			if (recusouAumento[posParceiro - 1]) {
 				// Se o parceiro também recusou, derrota da dupla
 				pontosEquipe[jogadorPedindoAumento.getEquipe() - 1] += valorMao;
@@ -575,6 +591,26 @@ public class JogoLocal extends Jogo {
 				recusouAumento[j.getPosicao() - 1] = true;
 			}
 		}
+	}
+
+	@Override
+	public boolean semJogadoresRemotos() {
+		for (int i = 0; i < 3; i ++)
+			if (!(jogadores[i] instanceof JogadorHumano || jogadores[i] instanceof JogadorCPU)) {
+				return false;
+			}
+		return true;
+	}
+
+	/**
+	 * Determina se o jogador em questão deve ter sua decisão (aceite de aumento ou mão 11) ignorada.
+	 *
+	 * @param jogador jogador que acabou de tomar uma decisão
+	 * @return true se o jogador for uma CPU cujo parceiro é humano em um jogo 100% local
+	 */
+	private boolean isIgnoraDecisao(Jogador jogador) {
+		int posParceiro = (jogador.getPosicao() + 1) % 4 + 1;
+		return semJogadoresRemotos() && jogador instanceof JogadorCPU && jogadores[posParceiro - 1] instanceof JogadorHumano;
 	}
 
 	/**
