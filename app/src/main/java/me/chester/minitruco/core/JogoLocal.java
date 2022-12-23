@@ -9,20 +9,20 @@ import android.util.Log;
  * A redistribuição e o uso nas formas binária e código fonte, com ou sem
  * modificações, são permitidos contanto que as condições abaixo sejam
  * cumpridas:
- * 
+ *
  * - Redistribuições do código fonte devem conter o aviso de direitos
  *   autorais acima, esta lista de condições e o aviso de isenção de
  *   garantias subseqüente.
- * 
+ *
  * - Redistribuições na forma binária devem reproduzir o aviso de direitos
  *   autorais acima, esta lista de condições e o aviso de isenção de
  *   garantias subseqüente na documentação e/ou materiais fornecidos com
  *   a distribuição.
- *   
+ *
  * - Nem o nome do Chester, nem o nome dos contribuidores podem ser
  *   utilizados para endossar ou promover produtos derivados deste
  *   software sem autorização prévia específica por escrito.
- * 
+ *
  * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
  * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
  * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
@@ -36,7 +36,7 @@ import android.util.Log;
  * CONTRATUAL, RESTRITA, ILÍCITO CIVIL, OU QUALQUER OUTRA, COMO DECORRÊNCIA
  * DE USO DESTE SOFTWARE, MESMO QUE HOUVESSEM SIDO AVISADOS DA
  * POSSIBILIDADE DE TAIS DANOS.
- * 
+ *
  */
 
 /**
@@ -51,8 +51,8 @@ import android.util.Log;
  * <code>jogaCarta()</code>, <code>aumentaAposta</code>, etc.) para interagir
  * com o jogo.
  * <p>
- * 
- * 
+ *
+ *
  */
 public class JogoLocal extends Jogo {
 
@@ -60,7 +60,7 @@ public class JogoLocal extends Jogo {
 	 * Cria um novo jogo.
 	 * <p>
 	 * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
-	 * 
+	 *
 	 * @param manilhaVelha
 	 *            true para jogo com manilhas fixas, false para jogar com "vira"
 	 * @param baralhoLimpo
@@ -82,7 +82,7 @@ public class JogoLocal extends Jogo {
 	 * Cria um novo jogo.
 	 * <p>
 	 * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
-	 * 
+	 *
 	 * @param manilhaVelha
 	 *            true para jogo com manilhas fixas, false para jogar com "vira"
 	 * @param baralho
@@ -170,7 +170,7 @@ public class JogoLocal extends Jogo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mt.JogoGenerico#run()
 	 */
 	public void run() {
@@ -199,7 +199,7 @@ public class JogoLocal extends Jogo {
 
 	/**
 	 * Inicia uma mão (i.e., uma distribuição de cartas)
-	 * 
+	 *
 	 * @param jogadorQueAbre
 	 *            Jogador que abre a rodada
 	 */
@@ -443,7 +443,7 @@ public class JogoLocal extends Jogo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mt.JogoGenerico#jogaCarta(mt.Jogador, mt.Carta)
 	 */
 	public synchronized void jogaCarta(Jogador j, Carta c) {
@@ -465,7 +465,7 @@ public class JogoLocal extends Jogo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mt.JogoGenerico#decideMao11(mt.Jogador, boolean)
 	 */
 	public synchronized void decideMao11(Jogador j, boolean aceita) {
@@ -506,7 +506,7 @@ public class JogoLocal extends Jogo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mt.JogoGenerico#aumentaAposta(mt.Jogador)
 	 */
 	public void aumentaAposta(Jogador j) {
@@ -539,7 +539,7 @@ public class JogoLocal extends Jogo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mt.JogoGenerico#respondeAumento(mt.Jogador, boolean)
 	 */
 	public synchronized void respondeAumento(Jogador j, boolean aceitou) {
