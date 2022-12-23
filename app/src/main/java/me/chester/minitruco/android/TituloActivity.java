@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -91,7 +92,7 @@ public class TituloActivity extends BaseActivity {
 		boolean mostraInstrucoes = preferences.getBoolean("mostraInstrucoes",
 				true);
 		String versaoQueMostrouNovidades = preferences.getString("versaoQueMostrouNovidades", "");
-		String versaoAtual = String.valueOf(BuildConfig.VERSION_NAME);
+		String versaoAtual = BuildConfig.VERSION_NAME;
 		Editor e = preferences.edit();
 		if (mostraInstrucoes) {
 			mostraAlertBox(this.getString(R.string.titulo_ajuda), this.getString(R.string.texto_ajuda));
@@ -100,7 +101,7 @@ public class TituloActivity extends BaseActivity {
 		}
 		e.putBoolean("mostraInstrucoes", false);
 		e.putString("versaoQueMostrouNovidades", versaoAtual);
-		e.commit();
+		e.apply();
 	}
 
 	private void habilitaBluetoothSeExistir() {
@@ -124,16 +125,15 @@ public class TituloActivity extends BaseActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menuitem_opcoes:
+		int itemId = item.getItemId();
+		if (itemId == R.id.menuitem_opcoes) {
 			opcoesButtonClickHandler(null);
 			return true;
-		case R.id.menuitem_bluetooth:
+		} else if (itemId == R.id.menuitem_bluetooth) {
 			bluetoothButtonClickHandler(null);
 			return true;
-		default:
-			return super.onOptionsItemSelected(item);
 		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	private boolean verificaEPedePermissoesDeBluetooth(){
@@ -147,7 +147,7 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		if (requestCode == 1) {
 			// Normalmente a gente só pediria as duas permissões novas e checaria se foi dado grant
@@ -182,11 +182,7 @@ public class TituloActivity extends BaseActivity {
 		new AlertDialog.Builder(this).setTitle("Bluetooth")
 				.setPositiveButton("Criar Jogo", listener)
 				.setNegativeButton("Procurar Jogo", listener)
-				.setOnCancelListener(new OnCancelListener() {
-					public void onCancel(DialogInterface dialog) {
-						finish();
-					}
-				}).show();
+				.show();
 	}
 
 	public void jogarClickHandler(View v) {
