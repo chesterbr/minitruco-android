@@ -238,7 +238,7 @@ public abstract class Jogador {
 		try {
 			Log.i("Jogador", "Criando estrategia: "
 					+ ESTRATEGIAS[numEstrategia].getNomeEstrategia());
-			return (Estrategia) ESTRATEGIAS[numEstrategia].getClass()
+			return ESTRATEGIAS[numEstrategia].getClass()
 					.newInstance();
 		} catch (InstantiationException e) {
 			throw new Error(e.getMessage());

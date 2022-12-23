@@ -256,7 +256,7 @@ public class JogadorHumano extends Jogador {
 		int partidas = preferences.getInt(chave, 0);
 		Editor editor = preferences.edit();
 		editor.putInt(chave, ++partidas);
-		editor.commit();
+		editor.apply();
 	}
 
 	/**
@@ -267,7 +267,6 @@ public class JogadorHumano extends Jogador {
 	 * posição que aquele jogador ocupa na tela sob o ponto de vista local.
 	 * <p>
 	 * 
-	 * @param j
 	 * @return 1 para a posição inferior, 2 para a direita, 3 para cima, 4 para
 	 *         esquerda
 	 */
