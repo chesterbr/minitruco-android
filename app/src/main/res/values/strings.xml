@@ -155,7 +155,7 @@
     </string>
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
-        No jogo local (sem ser Bluetooth), agora só você decide se vai ser aceito aumento (truco, 6, etc.) ou mão de 11.
+        Agora só você decide se a sua dupla aceita aumento (truco, 6, etc.) ou mão de 11 (exceto no jogo Bluetooth).
     </string>
 
 </resources>
