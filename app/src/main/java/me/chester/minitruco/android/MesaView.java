@@ -306,45 +306,65 @@ public class MesaView extends View {
 		case MotionEvent.ACTION_DOWN:
 			return true;
 		case MotionEvent.ACTION_UP:
-			if (mostrarPerguntaMao11) {
-				if (rectBotaoSim.contains((int) event.getX(),
-						(int) event.getY())) {
-					mostrarPerguntaMao11 = false;
-					aceitarMao11 = true;
-				}
-				if (rectBotaoNao.contains((int) event.getX(),
-						(int) event.getY())) {
-					mostrarPerguntaMao11 = false;
-					recusarMao11 = true;
-				}
+			if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
+				respondePergunta(true);
 			}
-			if (mostrarPerguntaAumento) {
-				if (rectBotaoSim.contains((int) event.getX(),
-						(int) event.getY())) {
-					mostrarPerguntaAumento = false;
-					aceitarAumento = true;
-				}
-				if (rectBotaoNao.contains((int) event.getX(),
-						(int) event.getY())) {
-					mostrarPerguntaAumento = false;
-					recusarAumento = true;
-				}
+			if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
+				respondePergunta(false);
 			}
-			if (statusVez == STATUS_VEZ_HUMANO_OK) {
-				for (int i = 6; i >= 4; i--) {
-					if ((!cartas[i].descartada)
-							&& cartas[i].isDentro(event.getX(), event.getY())) {
-						statusVez = STATUS_VEZ_OUTRO;
-						cartas[i].setFechada(vaiJogarFechada);
-						trucoActivity.jogo.jogaCarta(
-								trucoActivity.jogadorHumano, cartas[i]);
-					}
+			// Verificamos primeiro a carta mais à direita porque ela é desenhada
+			// em cima da do meio, e esta em cima da carta à esquerda
+			for (int i = 6; i >= 4; i--) {
+				if (cartas[i].isDentro(event.getX(), event.getY())) {
+					jogaCarta(i - 4);
 				}
 			}
 			return true;
 		default:
 			return super.onTouchEvent(event);
 		}
+	}
+
+	/**
+	 * Responde pergunta em exibição (aceita truco, aceita mão 11, etc.)
+	 * e oculta a pergunta, desde que uma pergunta esteja sendo exibida.
+	 *
+	 * @param resposta resposta do jogador (true=sim, false=não)
+	 */
+	public void respondePergunta(boolean resposta) {
+		if (mostrarPerguntaAumento) {
+			mostrarPerguntaAumento = false;
+			if (resposta) {
+				aceitarAumento = true;
+			} else {
+				recusarAumento = true;
+			}
+		} else if (mostrarPerguntaMao11) {
+			mostrarPerguntaMao11 = false;
+			if (resposta) {
+				aceitarMao11 = true;
+			} else {
+				recusarMao11 = true;
+			}
+		}
+	}
+
+	/**
+	 * Joga a carta na posição indicada, desde que seja a vez do jogador humano
+	 * e a carta não tenha ainda sido descartada.
+	 *
+	 * @param posicao
+	 *            posição da carta na mão do jogador (0 a 2)
+	 */
+	public void jogaCarta(int posicao) {
+		CartaVisual carta = cartas[posicao + 4];
+		if (carta.descartada) return;
+		if (statusVez != STATUS_VEZ_HUMANO_OK) return;
+
+		statusVez = STATUS_VEZ_OUTRO;
+		carta.setFechada(vaiJogarFechada);
+		trucoActivity.jogo.jogaCarta(
+			trucoActivity.jogadorHumano, carta);
 	}
 
 	private TrucoActivity trucoActivity;

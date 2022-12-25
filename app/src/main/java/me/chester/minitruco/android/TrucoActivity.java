@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -198,6 +199,27 @@ public class TrucoActivity extends BaseActivity {
 		if (CartaVisual.resources == null) {
 			CartaVisual.resources = getResources();
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		switch (keyCode){
+			case KeyEvent.KEYCODE_MEDIA_REWIND:
+			case KeyEvent.KEYCODE_1:
+				mesa.jogaCarta(0);
+				mesa.respondePergunta(true);
+				return true;
+			case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+			case KeyEvent.KEYCODE_2:
+				mesa.jogaCarta(1);
+				return true;
+			case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:;
+			case KeyEvent.KEYCODE_3:
+				mesa.jogaCarta(2);
+				mesa.respondePergunta(false);
+				return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
