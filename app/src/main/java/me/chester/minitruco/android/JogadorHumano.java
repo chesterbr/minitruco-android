@@ -57,13 +57,8 @@ import me.chester.minitruco.core.JogoLocal;
  * Esta classe trabalha em conjunto com uma <code>TrucoActivity</code> e uma
  * <code>MesaView</code>, que mostram o jogo ao usuário, capturam seu input e
  * executam as jogadas.
- * <p>
- * Num jogo remoto, esta carta "traduz" as posicoes recebidas pelo jogo para as
- * posicoes corretas da mesa
- * 
- * 
  */
-public class JogadorHumano extends Jogador {
+public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
 	private final static Logger LOGGER = Logger.getLogger("JogadorHumano");
 

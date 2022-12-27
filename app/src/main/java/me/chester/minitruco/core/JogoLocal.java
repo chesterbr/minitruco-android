@@ -3,8 +3,6 @@ package me.chester.minitruco.core;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import me.chester.minitruco.android.JogadorHumano;
-
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
  * Todos os direitos reservados.
@@ -632,7 +630,7 @@ public class JogoLocal extends Jogo {
 
 	/**
 	 * Determina qual a equipe que está aguardando mão de 11
-	 * 
+	 *
 	 * @param i
 	 *            1 ou 2 para a respectiva equipe, 0 para ninguém aguardando mão
 	 *            de 11 (jogo normal)
@@ -707,7 +705,7 @@ public class JogoLocal extends Jogo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mt.JogoGenerico#atualizaSituacao(mt.SituacaoJogo, mt.Jogador)
 	 */
 	public void atualizaSituacao(SituacaoJogo s, Jogador j) {
@@ -768,7 +766,7 @@ public class JogoLocal extends Jogo {
 
 	/**
 	 * Verifica se estamos aguardando resposta para mão de 11
-	 * 
+	 *
 	 * @return true se falta alguém responder, false caso contrário
 	 */
 	private boolean isAguardandoRespostaMao11() {
