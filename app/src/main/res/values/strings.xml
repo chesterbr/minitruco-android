@@ -155,7 +155,10 @@
     </string>
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
-        Agora só você decide se a sua dupla aceita aumento (truco, 6, etc.) ou mão de 11 (exceto no jogo Bluetooth).
+        <![CDATA[
+            - Agora só você decide se a sua dupla aceita aumento (truco, 6, etc.) ou mão de 11 (exceto no jogo Bluetooth).<br/><br/>
+            - Corrigido bug que travava o jogo se você recusasse mais rápido do que o parceiro sugeria aceitar (🙇‍♂️ Mr. Mendes).
+        ]]>
     </string>
     <string name="nova_partida">Nova Partida</string>
 
