@@ -1,6 +1,5 @@
 package me.chester.minitruco.core;
 
-import android.util.Log;
 
 import me.chester.minitruco.android.JogadorHumano;
 
@@ -178,7 +177,6 @@ public class JogoLocal extends Jogo {
 	public void run() {
 
 		// Avisa os jogadores que o jogo vai começar
-		Log.i("Jogo", "Jogo (.run) iniciado");
 		for (Jogador interessado : jogadores) {
 			interessado.inicioPartida(pontosEquipe[0], pontosEquipe[1]);
 		}
@@ -196,7 +194,6 @@ public class JogoLocal extends Jogo {
 				alguemJogou = false;
 			}
 		}
-		Log.i("Jogo", "Jogo (.run) finalizado");
 	}
 
 	/**
@@ -231,9 +228,6 @@ public class JogoLocal extends Jogo {
 		jogadorPedindoAumento = null;
 		numRodadaAtual = 1;
 		jogadorAbriuMao = jogadorAbriuRodada = jogadorQueAbre;
-
-		Log.i("JogoLocal", "Abrindo mao com j" + jogadorQueAbre.getPosicao()
-				+ ",manilha=" + getManilha());
 
 		// Abre a primeira rodada, informando a carta da mesa e quem vai abrir
 		posJogadorDaVez = jogadorQueAbre.getPosicao();
@@ -305,8 +299,6 @@ public class JogoLocal extends Jogo {
 			c.setFechada(false);
 		}
 
-		Log.i("JogoLocal", "J" + j.getPosicao() + " joga " + c);
-
 		// Dá a carta como jogada, notificando os jogadores
 		cartasJogadasPorRodada[numRodadaAtual - 1][j.getPosicao() - 1] = c;
 		for (Jogador interessado : jogadores) {
@@ -345,9 +337,6 @@ public class JogoLocal extends Jogo {
 					}
 				}
 			}
-
-			Log.i("JogoLocal", "Rodada fechou. Resultado: "
-					+ getResultadoRodada(numRodadaAtual));
 
 			// Se houve vencedor, passa a vez para o jogador que fechou a
 			// vitória, senão deixa quem abriu a mão anterior abrir a próxima
@@ -413,9 +402,6 @@ public class JogoLocal extends Jogo {
 	 */
 	private void fechaMao() {
 
-		Log.i("JogoLocal", "Mao fechou. Placar: " + pontosEquipe[0] + " a "
-				+ pontosEquipe[1]);
-
 		// Notifica os interessados que a rodada acabou, e, se for o caso, que o
 		// jogo acabou também
 
@@ -478,9 +464,6 @@ public class JogoLocal extends Jogo {
 		if (jogoFinalizado || !aguardandoRespostaMaoDe11[j.getPosicao() - 1])
 			return;
 
-		Log.i("JogoLocal", "J" + j.getPosicao() + (aceita ? "" : " nao")
-				+ " quer jogar mao de 11 ");
-
 		// Se for uma CPU parceira de humano num jogo 100% local, trata como recusa
 		// (quem decide mão de 11 é o humano) e nem notifica (silenciando o balão)
 		if (isIgnoraDecisao(j)) {
@@ -528,8 +511,6 @@ public class JogoLocal extends Jogo {
 			return;
 		}
 
-		Log.i("JogoLocal", "Jogador  " + j.getPosicao() + " pede aumento");
-
 		// Atualiza o status e notifica os outros jogadores do pedido
 		jogadorPedindoAumento = j;
 		for (int i = 0; i <= 3; i++)
@@ -541,8 +522,6 @@ public class JogoLocal extends Jogo {
 		for (Jogador interessado : jogadores) {
 			interessado.pediuAumentoAposta(j, valor);
 		}
-		Log.i("JogoLocal", "Jogadores notificados do aumento");
-
 	}
 
 	/*
@@ -556,9 +535,6 @@ public class JogoLocal extends Jogo {
 				|| jogadorPedindoAumento.getEquipeAdversaria() != j.getEquipe()) {
 			return;
 		}
-
-		Log.i("JogoLocal", "Jogador  " + j.getPosicao()
-				+ (aceitou ? "aceitou" : "recusou"));
 
 		int posParceiro = (j.getPosicao() + 1) % 4 + 1;
 		if (aceitou) {

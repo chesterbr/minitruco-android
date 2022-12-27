@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -83,8 +82,6 @@ public class JogadorHumano extends Jogador {
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa.descarta(c, posicaoNaTela(j));
-		Log.i("Partida", "Jogador na posicao de tela " + posicaoNaTela(j)
-				+ " jogou " + c);
 	}
 
 	@Override
@@ -171,7 +168,6 @@ public class JogadorHumano extends Jogador {
 		mesa.diz("aumento_" + ordem_valor, posicaoNaTela(j),
 				1500 + 200 * (valor / 3));
 		if (j.getEquipe() != this.getEquipe()) {
-			Log.d("TrucoActivity", "pedindo para mostrar pergunta aumento");
 			mesa.mostrarPerguntaAumento = true;
 		}
 	}
@@ -222,7 +218,6 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void vez(Jogador j, boolean podeFechada) {
-		Log.d("TrucoActivity", "vez do jogador " + posicaoNaTela(j));
 		mesa.vaiJogarFechada = false;
 		boolean mostraBtnAumento = (j instanceof JogadorHumano)
 				&& (valorProximaAposta > 0) && (activity.placar[0] != 11)

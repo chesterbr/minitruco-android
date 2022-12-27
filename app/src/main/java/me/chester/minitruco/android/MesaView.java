@@ -12,7 +12,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -423,7 +422,6 @@ public class MesaView extends View {
 					sleep(50);
 				} while (calcTempoAteFimAnimacaoMS() >= 0);
 			}
-			Log.d("MesaView", "Fim thread animacao");
 		}
 
 		private void sleep(int tempoMS) {
@@ -472,7 +470,6 @@ public class MesaView extends View {
 					jogo.respondeAumento(trucoActivity.jogadorHumano, true);
 				}
 			}
-			Log.d("MesaView", "Fim thread diálogos");
 		}
 
 	};
@@ -485,7 +482,6 @@ public class MesaView extends View {
 	 */
 	public void setStatusVez(int vezHumano) {
 		aguardaFimAnimacoes();
-		Log.d("MesaView", "StatusVez:" + vezHumano);
 		this.statusVez = vezHumano;
 	}
 
@@ -521,8 +517,6 @@ public class MesaView extends View {
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
-		Log.d("MesaView", "Jogador " + j.getPosicao()
-				+ " aceitou aumento para " + valor + ", liberando");
 		if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
 			statusVez = STATUS_VEZ_HUMANO_OK;
 		}

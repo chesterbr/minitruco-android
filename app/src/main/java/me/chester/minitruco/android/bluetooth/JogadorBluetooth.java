@@ -1,7 +1,6 @@
 package me.chester.minitruco.android.bluetooth;
 
 import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,8 +96,6 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 				} else {
 					// Processa linhas (não-vazias)
 					if (sbLinha.length() > 0) {
-						Log.w("MINITRUCO",
-								"Linha acumulada: " + sbLinha);
 						char tipoNotificacao = sbLinha.charAt(0);
 						String[] args = sbLinha.toString().split(" ");
 						switch (tipoNotificacao) {
@@ -135,10 +132,8 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 				}
 			} while (in != null);
 		} catch (IOException e) {
-			Log.w("MINITRUCO", e);
 			// Não precisa tratar - ou é fim de jogo, ou o servidor cuida
 		}
-		Log.w("MINITRUCO", "encerrando loop JogadorBT");
 	}
 
 	/**

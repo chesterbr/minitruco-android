@@ -37,7 +37,6 @@ package me.chester.minitruco.core;
  * 
  */
 
-import android.util.Log;
 
 import java.util.Vector;
 
@@ -121,8 +120,6 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	public void vez(Jogador j, boolean podeFechada) {
 		if (this.equals(j)) {
-			Log.i("JogadorCPU", "Jogador " + this.getPosicao()
-					+ " recebeu notificacao de vez");
 			this.podeFechada = podeFechada;
 			this.minhaVez = true;
 		}
@@ -130,16 +127,12 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	public void run() {
 
-		Log.i("JogadorCPU", "JogadorCPU " + this + " (.run) iniciado");
 		while (jogo == null || !jogo.jogoFinalizado) {
 			sleep(100);
 
 			if (minhaVez) {
 
 				minhaVez = false;
-				Log.i("JogadorCPU", "Jogador " + this.getPosicao()
-						+ " viu que e' sua vez");
-
 				// Dá um tempinho, pra fingir que está "pensando"
 				try {
 					Thread.sleep(random.nextInt(250) + 200);
@@ -156,7 +149,6 @@ public class JogadorCPU extends Jogador implements Runnable {
 				try {
 					posCarta = estrategia.joga(situacaoJogo);
 				} catch (Exception e) {
-					Log.w("JogadorCPU", "Erro em joga", e);
 					posCarta = 0;
 				}
 
@@ -170,12 +162,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// otimizei para reduzir o .jar)
 					aceitaramTruco = false;
 					numRespostasAguardando = 2;
-					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
-							+ " vai aumentar aposta");
 					estouAguardandoRepostaAumento = true;
 					jogo.aumentaAposta(this);
-					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
-							+ " aguardando resposta");
 					continue;
 				}
 
@@ -194,8 +182,6 @@ public class JogadorCPU extends Jogador implements Runnable {
 				Carta c = (Carta) cartasRestantes.elementAt(posCarta);
 				c.setFechada(isFechada && podeFechada);
 				cartasRestantes.removeElement(c);
-				Log.i("JogadorCPU", "Jogador " + this.getPosicao()
-						+ " vai pedir para jogar " + c);
 				jogo.jogaCarta(this, c);
 
 			}
@@ -211,7 +197,6 @@ public class JogadorCPU extends Jogador implements Runnable {
 						try {
 							resposta = estrategia.aceitaTruco(situacaoJogo);
 						} catch (Exception e) {
-							Log.d("JogadorCPU", "Erro em aceite-aumento", e);
 						}
 						jogo.respondeAumento(this, resposta);
 					}
@@ -231,15 +216,9 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// deixando a decisão na mão do humano.
 					if (getPosicao() == 3) {
 						boolean aceitaEstrategia = random.nextInt(10) == 5;
-						Log.i("JogadorCPU",
-								"Mão de 11 do parceiro do humano. AceitaEstrategia="
-										+ aceitaEstrategia);
 						respostaMao11 = respostaMao11 && aceitaEstrategia;
 					}
 				} catch (Exception e) {
-					Log.d("JogadorCPU",
-							"Erro em aceite-11 no jogador" + this.getPosicao(),
-							e);
 					respostaMao11 = random.nextBoolean();
 				}
 				jogo.decideMao11(this, respostaMao11);
@@ -256,7 +235,6 @@ public class JogadorCPU extends Jogador implements Runnable {
 			}
 
 		}
-		Log.i("JogadorCPU", "JogadorCPU " + this + " (.run) finalizado");
 
 	}
 
@@ -400,7 +378,6 @@ public class JogadorCPU extends Jogador implements Runnable {
 		try {
 			Thread.sleep(i);
 		} catch (InterruptedException e) {
-			Log.i("JogadorCPU", "Interrupted during sleep", e);
 		}
 	}
 
