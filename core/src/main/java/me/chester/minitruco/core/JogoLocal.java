@@ -498,6 +498,7 @@ public class JogoLocal extends Jogo {
             return;
         }
 
+        int posParceiro = (j.getPosicao() + 1) % 4 + 1;
 		// Se, num jogo 100% local (só o humano e CPUs)
 		// o bot parceiro do humano aceita, trata como recusa
 		// (mas notifica humano do aceite)
