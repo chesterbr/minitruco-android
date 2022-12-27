@@ -37,63 +37,31 @@ package me.chester.minitruco.server;
  *
  */
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+/**
+ * Faz o jogador sair da sala onde está.
+ * <p>
+ * Se houver algum jogo em andamento, será encerrado.
+ * <p>
+ * Os participantes da sala são notificados.
+ *
+ * @author Chester
+ */
+public class ComandoS extends Comando {
 
-public class MiniTrucoServer {
-
-    public static final int PORTA_SERVIDOR = 6912;
-
-    /**
-     * Versão do servidor (3.0 é a primeira pós-J2ME)
-     */
-    public static final String VERSAO_SERVER = "3.0";
-
-    public static DateFormat dfStartup;
-
-    public static Date dataStartup;
-
-    public static String strDataStartup;
-
-    public static void main(String[] args) {
-
-        try {
-
-            // Guarda a data de início do servidor num formato apropriado para HTTP
-            // vide JogadorContectado.serveArquivosApplet
-
-            dfStartup = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z",
-                    Locale.US);
-            dataStartup = new Date();
-            strDataStartup = dfStartup.format(dataStartup);
-
-            ServerLogger
-                    .evento("Servidor Inicializado, pronto para escutar na porta "
-                            + PORTA_SERVIDOR);
-
-            // Inicializa as salas
-            int numSalas = 10;
-            Sala.inicializaSalas(numSalas);
-
-            try {
-                ServerSocket s = new ServerSocket(PORTA_SERVIDOR);
-                while (true) {
-                    Socket sCliente = s.accept();
-                    JogadorConectado j = new JogadorConectado(sCliente);
-                    Thread t = new Thread(j);
-                    t.start();
-                }
-            } catch (IOException e) {
-                ServerLogger.evento(e, "Erro de I/O no ServerSocket, saindo do programa");
+    @Override
+    public void executa(String[] args, JogadorConectado j) {
+        Sala s = j.getSala();
+        if (s != null) {
+            s.remove(j);
+            j.println("S");
+            if (s.getNumPessoas() == 0) {
+                // Se esvaziou a sala, volta as regras para o default
+                s.baralhoLimpo = false;
+                s.manilhaVelha = false;
             }
-
-        } finally {
-            ServerLogger.evento("Servidor Finalizado");
+            s.notificaJogadores(s.getInfo());
+        } else {
+            j.println("X FS");
         }
 
     }
