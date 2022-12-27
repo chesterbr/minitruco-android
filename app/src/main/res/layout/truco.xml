@@ -20,10 +20,10 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="4dp"
-            android:text="Eles: 0"
             android:textColor="#000000"
             android:textSize="20dp"
-            android:typeface="sans" />
+            android:typeface="sans"
+            android:layout_alignParentEnd="true" />
 
         <TextView
             android:id="@+id/textview_nos"
@@ -31,10 +31,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="4dp"
-            android:text="Nós: 0"
             android:textColor="#000000"
             android:textSize="20dp"
-            android:typeface="sans" />
+            android:typeface="sans"
+            android:layout_marginStart="4dp" />
 
         <Button
             android:id="@+id/btnAumento"
@@ -42,7 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/textview_nos"
             android:onClick="aumentoClickHandler"
-            android:text="yyyy"
+            android:textColor="@drawable/botao_text_color"
+            android:background="@drawable/botao_bg"
             android:textSize="14sp"
             android:visibility="gone" />
 
@@ -53,7 +54,8 @@
             android:layout_above="@id/textview_eles"
             android:layout_alignParentRight="true"
             android:onClick="abertaFechadaClickHandler"
-            android:text="xxxxx"
+            android:textColor="@drawable/botao_text_color"
+            android:background="@drawable/botao_bg"
             android:textSize="12sp"
             android:visibility="gone" />
     </RelativeLayout>
@@ -77,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:onClick="novaPartidaClickHandler"
-                android:text="Nova Partida" />
+                android:text="@string/nova_partida" />
         </RelativeLayout>
     </LinearLayout>
 

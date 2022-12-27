@@ -7,7 +7,6 @@ import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -123,7 +122,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			while ((c = in.read()) != -1) {
 				if (c == SEPARADOR_REC) {
 					if (sbLinha.length() > 0) {
-						Log.w("MINITRUCO", "Recebeu:" + sbLinha);
 						char tipoNotificacao = sbLinha.charAt(0);
 						String parametros = sbLinha.delete(0, 2).toString();
 						switch (tipoNotificacao) {
@@ -217,14 +215,10 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			if (out == null) {
 				return;
 			}
-			if (linha.length() > 0) {
-				Log.w("MINITRUCO", "Enviando:" + linha);
-			}
 			out.write(linha.getBytes());
 			out.write(ClienteBluetoothActivity.SEPARADOR_ENV);
 			out.flush();
 		} catch (IOException e) {
-			Log.w("MINITRUCO", e);
 			// Não preciso tratar, desconexões são identificadas no loop do in
 		}
 	}
@@ -312,9 +306,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             threadConexao.start();
 
         } catch (Exception e) {
-            Log.w("MINITRUCO",
-                    "Falhou conexao com device " + device.getName());
-            Log.w("MINITRUCO", e);
             msgErroFatal("Falhou conexao com device " + device.getName() + ". Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
             try {
                 socket.close();

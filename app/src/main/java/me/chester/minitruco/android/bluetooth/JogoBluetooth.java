@@ -37,7 +37,6 @@ package me.chester.minitruco.android.bluetooth;
  * 
  */
 
-import android.util.Log;
 
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Baralho;
@@ -143,8 +142,6 @@ public class JogoBluetooth extends Jogo {
 			// Recupera a carta jogada (isso depende do jogaodr ser local ou
 			// remoto, e de a carta ser aberta ou fechada)
 			Carta c;
-			Log.w("MINITRUCO", "posicoes: " + getJogadorHumano().getPosicao()
-					+ "," + posicao);
 			if (getJogadorHumano().getPosicao() == posicao) {
 				// Recupera a carta jogada pelo humano
 				c = null;

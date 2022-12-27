@@ -160,5 +160,6 @@
             - Corrigido bug que travava o jogo se você recusasse mais rápido do que o parceiro sugeria aceitar (🙇‍♂️ Mr. Mendes).
         ]]>
     </string>
+    <string name="nova_partida">Nova Partida</string>
 
 </resources>
