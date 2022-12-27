@@ -97,7 +97,7 @@ public class TituloActivity extends BaseActivity {
 		if (mostraInstrucoes) {
 			mostraAlertBox(this.getString(R.string.titulo_ajuda), this.getString(R.string.texto_ajuda));
 		} else if (!versaoQueMostrouNovidades.equals(versaoAtual)) {
-			mostraAlertBox("Novidades desta versão", this.getString(R.string.novidades));
+			mostraAlertBox("Novidades", this.getString(R.string.novidades));
 		}
 		e.putBoolean("mostraInstrucoes", false);
 		e.putString("versaoQueMostrouNovidades", versaoAtual);
