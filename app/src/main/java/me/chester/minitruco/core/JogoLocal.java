@@ -561,15 +561,11 @@ public class JogoLocal extends Jogo {
 				+ (aceitou ? "aceitou" : "recusou"));
 
 		int posParceiro = (j.getPosicao() + 1) % 4 + 1;
-		if (aceitou) {
-			// Se, num jogo 100% local (só o humano e CPUs)
-			// o bot parceiro do humano aceita, trata como recusa
-			// (mas notifica humano do aceite)
-			if (isIgnoraDecisao(j)) {
-				jogadores[posParceiro - 1].aceitouAumentoAposta(j, valorMao);
-				recusouAumento[j.getPosicao() - 1] = true;
-				return;
-			}
+		// Se, num jogo 100% local (só o humano e CPUs)
+		// o bot parceiro do humano aceita, trata como recusa
+		// (mas notifica humano do aceite)
+		boolean ignorarAceite = isIgnoraDecisao(j) && aceitou;
+		if (aceitou && !ignorarAceite) {
 			// Se o jogador aceitou, seta o novo valor, notifica a galera e tira
 			// o jogo da situtação de truco
 			valorMao = tento.calcValorTento(valorMao);
@@ -578,9 +574,13 @@ public class JogoLocal extends Jogo {
 				interessado.aceitouAumentoAposta(j, valorMao);
 			}
 		} else {
-			// Primeiro notifica todo mundo
-			for (Jogador interessado : jogadores) {
-				interessado.recusouAumentoAposta(j);
+			// Primeiro notifica todo mundo (ou só o humano, se for um aceite ignorado)
+			if (ignorarAceite) {
+				jogadores[posParceiro - 1].aceitouAumentoAposta(j, valorMao);
+			} else {
+				for (Jogador interessado : jogadores) {
+					interessado.recusouAumentoAposta(j);
+				}
 			}
 			if (recusouAumento[posParceiro - 1]) {
 				// Se o parceiro também recusou, derrota da dupla
