@@ -1,0 +1,22 @@
+plugins {
+    id 'application'
+}
+application {
+    mainClass = 'me.chester.minitruco.server.MiniTrucoServer'
+}
+
+dependencies {
+    implementation project(':core')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
+tasks.jar {
+    manifest.attributes["Main-Class"] = "me.chester.minitruco.server.MiniTrucoServer"
+    from(project(':core').fileTree("build/classes/java/main")) {
+        include '**/*.class'
+    }
+}
