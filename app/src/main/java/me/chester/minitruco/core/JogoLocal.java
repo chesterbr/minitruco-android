@@ -1,8 +1,5 @@
 package me.chester.minitruco.core;
 
-
-import me.chester.minitruco.android.JogadorHumano;
-
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
  * Todos os direitos reservados.
