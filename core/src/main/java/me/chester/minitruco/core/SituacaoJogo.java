@@ -98,24 +98,29 @@ public class SituacaoJogo {
      * não é o de uma carta
      */
     public char manilha;
+
     /**
      * Pontos de cada equipe na partida
      */
     public int[] pontosEquipe = new int[2];
+
     /**
      * Para cada rodada (0-2) dá as cartas jogadas pelas 4 posicões (0-3)
      */
     public Carta[][] cartasJogadas = new Carta[3][4];
+
     /**
      * Cartas que ainda estão na mão do jogador
      */
     public Carta[] cartasJogador;
+
     /**
      * Determina se o baralho inclui as cartas 4, 5, 6 e 7 (true) ou não
      * (false).
      * <p>
      */
     public boolean baralhoSujo;
+
     /**
      * Informa se vale jogar carta fechada
      */

@@ -133,19 +133,6 @@ public class JogoLocal extends Jogo {
             this.tento = new TentoPaulista();
         this.baralho = new Baralho(baralhoLimpo);
     }
-    /**
-     * Cria um novo jogo.
-     * <p>
-     * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
-     *
-     * @param manilhaVelha true para jogo com manilhas fixas, false para jogar com "vira"
-     * @param baralho      Instância de baralho a ser utilizado no jogo.
-     */
-    public JogoLocal(Baralho baralho, boolean manilhaVelha) {
-        this.manilhaVelha = manilhaVelha;
-        this.baralhoLimpo = baralho.isLimpo();
-        this.baralho = baralho;
-    }
 
     /*
      * (non-Javadoc)

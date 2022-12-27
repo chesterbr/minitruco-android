@@ -50,8 +50,6 @@ import java.util.Random;
  */
 public abstract class Jogador {
 
-    // Variáveis / Métodos úteis
-
     protected static Random random = new Random();
     /**
      * Estratégias suportadas pelos jogadores automático (CPU e Bot)
@@ -73,22 +71,12 @@ public abstract class Jogador {
     }
 
     /**
-     * List of voted people (control for multiplayer games using database)
-     *
-     * @return
-     */
-
-    private final String[] votedCoolList = new String[100];
-    /**
      * Jogo que está sendo jogado por este jogador
      */
     protected Jogo jogo;
-    long loginTime = 0;
     private int posicao = 0;
     private Carta[] cartas;
     private String nome = "unnamed";
-    private boolean isGuest = true;
-    private int votedCoolListPointer = 0;
 
     /**
      * Instancia uma estratégia (para uso em jogadores que precisam disso, como
@@ -134,8 +122,6 @@ public abstract class Jogador {
 
     /**
      * Nome do jogador (em jogos multiplayer)
-     *
-     * @return
      */
     public String getNome() {
         return nome;
@@ -143,40 +129,6 @@ public abstract class Jogador {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public boolean getIsGuest() {
-        return isGuest;
-    }
-
-    public void setIsGuest(boolean isGuest) {
-        this.isGuest = isGuest;
-    }
-
-    public long getLoginTime() {
-        return loginTime;
-    }
-
-    public void setLoginTime(long loginTime) {
-        this.loginTime = loginTime;
-    }
-
-    public String getVotedCoolList(int pos) {
-        if (!(votedCoolList[pos] == null))
-            return votedCoolList[pos];
-        else
-            return "";
-    }
-
-    public int getVotedCoolListLength() {
-        return votedCoolList.length;
-    }
-
-    public void addToVotedCoolList(String votedUser) {
-        this.votedCoolList[votedCoolListPointer] = votedUser;
-        votedCoolListPointer++;
-        if (votedCoolListPointer == 100)
-            votedCoolListPointer = 0;
     }
 
     /**
@@ -221,18 +173,6 @@ public abstract class Jogador {
 
     public void setCartas(Carta[] cartas) {
         this.cartas = cartas;
-    }
-
-    public boolean possuiCarta(Carta c) {
-        if (cartas == null) {
-            return false;
-        }
-        for (int i = 0; i < cartas.length; i++) {
-            if (cartas[i].equals(c)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

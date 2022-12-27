@@ -304,11 +304,6 @@ public class JogadorCPU extends Jogador implements Runnable {
 
     }
 
-    public void jogadaRecusada(int numJogadores, int equipeTrucando,
-                               Jogador jogadorDaVez) {
-        // Não faz nada
-    }
-
     public void rodadaFechada(int numMao, int resultado, Jogador jogadorQueTorna) {
         // Não faz nada
     }
