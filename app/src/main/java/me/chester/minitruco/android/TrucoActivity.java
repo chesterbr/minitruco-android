@@ -109,7 +109,7 @@ public class TrucoActivity extends BaseActivity {
 					tvEles.setBackgroundColor(Color.YELLOW);
 				}
 				tvNos.setText("Nós: " + msg.arg1);
-				tvEles.setText("Eles: " + msg.arg2);
+				tvEles.setText("Rivais: " + msg.arg2);
 				placar[0] = msg.arg1;
 				placar[1] = msg.arg2;
 				break;
