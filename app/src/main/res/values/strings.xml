@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="hello">Use o log (adb logcat no SDK) para debugar</string>
     <string name="app_name">miniTruco</string>
@@ -77,8 +77,8 @@
     <string-array name="balao_derrota">
         <item>:-(</item>
         <item>Maldição!</item>
-        <item>Nem queria ganhar...</item>
-        <item>Ok...</item>
+        <item>Nem queria ganhar…</item>
+        <item>Perdemos.</item>
         <item>A próxima é nossa.</item>
         <item>Raios!</item>
     </string-array>
@@ -97,11 +97,11 @@
         <item>Nem, manda outras.</item>
     </string-array>
     <string-array name="balao_abortou">
-        <item>Tchau...</item>
+        <item>Tchau!</item>
     </string-array>
 
     <string name="titulo_ajuda">Bem-vindo!</string>
-    <string name="texto_ajuda">        <![CDATA[Estas instruções podem ser lidas a qualquer momento no <b>menu Ajuda</b>. Role a tela, tem bastante coisa! <br/><br/>O miniTruco é um <u>software livre</u> de truco, jogado em duplas, com os parceiros
+    <string name="texto_ajuda" tools:ignore="Typos">        <![CDATA[Estas instruções podem ser lidas a qualquer momento no <b>menu Ajuda</b>. Role a tela, tem bastante coisa! <br/><br/>O miniTruco é um <u>software livre</u> de truco, jogado em duplas, com os parceiros
 		frente a frente. O objetivo é fazer a sua dupla de jogadores alcançar
 		12 pontos antes da dupla adversária.
 		<br/><br/>Cada jogador começa com uma \"mão\" de três cartas e, na sua vez, escolhe
