@@ -23,20 +23,17 @@ Features/bugs:
 - Nenhum! \o/
 
 Débito Técnico:
-- Refactor: Renomear o Jogo e descendentes para Partida (fazer isso quando tiver tempo, para arrumar comentários, etc.)
 - Refactor: Trocar os loops de thread baseados em sleep por um esquema wait/notify (JogadorCPU e JogoLocal). Ou pelo menos fazer algo melhor com as InterruptedException (vide http://bit.ly/172PUX)
 - Mover strings (ex.: frases do botão de truco) para strings.xml
 - Criar constantes, polimorfismos ou qualquer coisa para matar os magic numbers herdados do miniTruco Java ME. Ex.: posições dos jogadores, nomes das equipes.
 - Criar uma documentação do desenvolvedor nos moldes de http://minitruco.googlecode.com/svn/tags/v3.12.00/docs/index.html
 
-Features 2.0:
-- Jogos multiplayer
-
+Para um histórico de versões, verifique as tags ou as atualizações na Play Store
 
 Créditos e Licença
 ------------------
 
-Copyright © 2005-2016 Carlos Duarte do Nascimento (Chester) - cd@pobox.com
+Copyright © 2005-2022 Carlos Duarte do Nascimento (Chester) - cd@pobox.com
 
 Imagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)
 
