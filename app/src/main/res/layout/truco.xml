@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -20,10 +21,12 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
             android:textColor="#000000"
             android:textSize="20dp"
             android:typeface="sans"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            tools:ignore="RelativeOverlap" />
 
         <TextView
             android:id="@+id/textview_nos"
@@ -41,6 +44,8 @@
             android:layout_width="80sp"
             android:layout_height="wrap_content"
             android:layout_above="@id/textview_nos"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
             android:onClick="aumentoClickHandler"
             android:textColor="@drawable/botao_text_color"
             android:background="@drawable/botao_bg"
@@ -53,6 +58,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/textview_eles"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp"
             android:onClick="abertaFechadaClickHandler"
             android:textColor="@drawable/botao_text_color"
             android:background="@drawable/botao_bg"

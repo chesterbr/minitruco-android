@@ -161,5 +161,7 @@
         ]]>
     </string>
     <string name="nova_partida">Nova Partida</string>
+    <string name="placarEquipe0">Nós: %1$d</string>
+    <string name="placarEquipe1">Rivais: %1$d</string>
 
 </resources>
