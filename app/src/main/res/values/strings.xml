@@ -157,7 +157,7 @@
     <string name="novidades">
         <![CDATA[
             - Agora só você decide se a sua dupla aceita aumento (truco, 6, etc.) ou mão de 11 (exceto no jogo Bluetooth).<br/><br/>
-            - Corrigido bug que travava o jogo se você recusasse mais rápido do que o parceiro sugeria aceitar (🙇‍♂️ Mr. Mendes).
+            - Bugs corigidos: jogo fechando quando celular muda orientação; jogo travando se você recusa muito rápido
         ]]>
     </string>
 
