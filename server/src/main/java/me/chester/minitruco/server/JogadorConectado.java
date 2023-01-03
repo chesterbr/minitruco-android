@@ -87,16 +87,9 @@ public class JogadorConectado extends Jogador implements Runnable {
      * Informa se o jogador autorizou o início da partida na sala
      */
     public boolean querJogar = false;
-    /**
-     * Uso interno. Para consultar a sala atual, use <code>getSala()</code>,
-     * e para adicionar/remover salas, use os métodos<code>adicionar()</code>
-     * e <code>remover()</code> de Sala.
-     *
-     * @see JogadorConectado#getSala()
-     * @see Sala#adiciona(JogadorConectado)
-     * @see Sala#remove(JogadorConectado)
-     */
-    int numSalaAtual = 0;
+
+    private Sala sala;
+
     /**
      * Buffer de saída do jogador (para onde devemos "printar" os resultados dos
      * comandos)
@@ -445,7 +438,15 @@ public class JogadorConectado extends Jogador implements Runnable {
      * @return objeto representando a sala, ou null se estiver fora de uma sala
      */
     public Sala getSala() {
-        return Sala.getSala(this.numSalaAtual);
+        return sala;
+    }
+
+    /**
+     * Associa o jogador com a sala. NÃO deve ser usado diretamente (ao invés disso,
+     * use Sala.adiciona() e Sala.remove())
+     */
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
 
     @Override

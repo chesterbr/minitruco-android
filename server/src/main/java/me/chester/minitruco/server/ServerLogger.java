@@ -78,7 +78,8 @@ public class ServerLogger {
             s = ((JogadorConectado) j).getSala();
         }
         if (s != null) {
-            System.out.print(s.getNumSala());
+            // TODO representar salas sem código
+            System.out.print(s.codigo);
             System.out.print(' ');
         } else {
             System.out.print("[sem_sala] ");

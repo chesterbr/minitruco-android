@@ -76,10 +76,6 @@ public class MiniTrucoServer {
                     .evento("Servidor Inicializado, pronto para escutar na porta "
                             + PORTA_SERVIDOR);
 
-            // Inicializa as salas
-            int numSalas = 10;
-            Sala.inicializaSalas(numSalas);
-
             try {
                 ServerSocket s = new ServerSocket(PORTA_SERVIDOR);
                 while (true) {

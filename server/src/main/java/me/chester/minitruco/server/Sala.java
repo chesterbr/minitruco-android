@@ -38,8 +38,14 @@ package me.chester.minitruco.server;
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorCPU;
@@ -54,17 +60,26 @@ import me.chester.minitruco.core.JogoLocal;
 public class Sala {
 
     /**
-     * Salas de jogo
+     * Salas criadas por usuários (a chave é o código da sala)
      */
-    private static List<Sala> salas;
+    private static Map<String, Sala> salasPrivadas = new HashMap<>();
+
     /**
-     * Regra de baralho para jogos iniciados nesta sala
+     * Salas públicas que ainda tem espaço para pelo menos um jogaor
      */
+    private static Set<Sala> salasPublicasDisponiveis = new HashSet<>();
+
+    private static Set<Sala> salasPublicasLotadas = new HashSet<>();
+
+    /**
+     * Código usado para os amigos acharem a sala; null se for uma sala pública
+     */
+    String codigo;
+
     boolean baralhoLimpo = false;
-    /**
-     * Regra de manilha para jogos iniciados nesta sala
-     */
     boolean manilhaVelha = false;
+    boolean tentoMineiro = false;
+
     /**
      * Jogadores presentes na sala
      */
@@ -80,42 +95,49 @@ public class Sala {
     private JogoLocal jogo = null;
 
     /**
-     * Inicializa as salas de jogo a disponibilizar
-     *
-     * @param numSalas Quantidade de salas no servidor
+     * Cria uma sala e coloca o jogador nela.
      */
-    public static void inicializaSalas(int numSalas) {
-        salas = new ArrayList<Sala>(numSalas);
-        for (int i = 0; i < numSalas; i++) {
-            salas.add(i, new Sala());
-        }
-    }
-
-    /**
-     * Recupera uma sala de jogo.
-     *
-     * @param numSala Numero da sala (de 1 até <code>getQtdeSalas(</code>)
-     * @return sala correspondente ao número. Se as salas não tiverem sido
-     * inicializadas, ou se o número for inválido, retorna
-     * <code>null</code>
-     */
-    public static Sala getSala(int numSala) {
-        if (salas == null || numSala < 1 || numSala > salas.size()) {
-            return null;
+    public Sala(JogadorConectado j, boolean publica, boolean baralhoLimpo, boolean manilhaVelha, boolean tentoMineiro) {
+        if (publica) {
+            salasPublicasDisponiveis.add(this);
         } else {
-            return salas.get(numSala - 1);
+            String codigo = UUID.randomUUID().toString().substring(0, 5);
+            this.codigo = codigo;
+            salasPrivadas.put(codigo, this);
         }
+        this.baralhoLimpo = baralhoLimpo;
+        this.manilhaVelha = manilhaVelha;
+        this.tentoMineiro = tentoMineiro;
+        adiciona(j);
     }
 
     /**
-     * @return quantidade de salas disponíveis no servidor
+     * Coloca o jogador em uma sala pública que tenha as regras especificadas,
+     * criando uma caso estejam todas lotadas
      */
-    public static int getQtdeSalas() {
-        return (salas == null ? 0 : salas.size());
+    public static synchronized void colocaEmSalaPublica(JogadorConectado j, boolean baralhoLimpo, boolean manilhaVelha, boolean tentoMineiro) {
+        Sala sala = salasPublicasDisponiveis.stream().filter(s ->
+            s.baralhoLimpo == baralhoLimpo &&
+            s.manilhaVelha == manilhaVelha &&
+            s.tentoMineiro == tentoMineiro
+        ).findFirst().orElse(
+            new Sala(j, false, baralhoLimpo, manilhaVelha, tentoMineiro)
+        );
     }
 
     /**
-     * Adiciona um jogador na sala
+     * Coloca o jogador em uma sala privada pré-existente
+     * @param codigo o código recebido de quem criou a sala
+     * @return false caso a sala não tenha sido encontrada ou esteja lotada
+     */
+    public static synchronized boolean colocaEmSalaPrivada(JogadorConectado j, String codigo) {
+        Sala sala = salasPrivadas.get(codigo);
+        return (sala != null && sala.adiciona(j));
+    }
+
+    /**
+     * Adiciona um jogador na sala, garantindo os links bidirecionais e, se necessário,
+     * trocando entre a lista das lotadas e das disponíveis.
      *
      * @param j Jogador a adicionar
      * @return true se tudo correr bem, false se a sala estiver lotada ou o
@@ -133,7 +155,17 @@ public class Sala {
                 jogadores[i] = j;
                 timestamps[i] = new Date();
                 // Link jogador->sala
-                j.numSalaAtual = this.getNumSala();
+                j.setSala(this);
+                // Se for uma sala pública, coloca na lista certa (para agilizar busca de salas abertas)
+                if (codigo == null) {
+                    if (this.getNumPessoas() == 4) {
+                        salasPublicasLotadas.add(this);
+                        salasPublicasDisponiveis.remove(this);
+                    } else {
+                        salasPublicasLotadas.remove(this);
+                        salasPublicasDisponiveis.add(this);
+                    }
+                }
                 return true;
             }
         }
@@ -198,7 +230,7 @@ public class Sala {
                 // Desfaz link sala->jogador
                 jogadores[i] = null;
                 // Desfaz link jogador->sala
-                j.numSalaAtual = 0;
+                j.setSala(null);
                 return true;
             }
         }
@@ -253,25 +285,16 @@ public class Sala {
         }
         // Cria o jogo com as regras selecionadas, adiciona os jogadores na
         // ordem e inicia
-        // TODO: implementar tento mineiro aqui (e no Bluetooth)
-        jogo = new JogoLocal(baralhoLimpo, manilhaVelha, false);
-        for (int i = 0; i <= 3; i++) {
-            jogo.adiciona(jogadores[i]);
-            if (jogadores[i] instanceof JogadorConectado) {
-                ((JogadorConectado) jogadores[i]).jogando = true;
+        jogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro);
+        for (Jogador j : jogadores) {
+            jogo.adiciona(j);
+            if (j instanceof JogadorConectado) {
+                ((JogadorConectado) j).jogando = true;
             }
+
         }
         Thread t = new Thread(jogo);
         t.start();
-    }
-
-    /**
-     * Recupera o número da sala
-     *
-     * @return Número de 1 a <code>getQtdeSalas()</code>
-     */
-    public int getNumSala() {
-        return salas.indexOf(this) + 1;
     }
 
     /**
@@ -324,7 +347,8 @@ public class Sala {
     public String getInfo() {
         StringBuilder sb = new StringBuilder();
         // I numsala
-        sb.append("I " + getNumSala());
+        // TODO representar salas sem código (vai ser 'I null' como está)
+        sb.append("I " + codigo);
         // Nomes dos jogadores, separados por pipe (posições vazias são strings
         // vazias)
         for (int i = 0; i <= 3; i++) {
