@@ -178,7 +178,17 @@ public class JogadorCPU extends Jogador implements Runnable {
                     posCarta -= 10;
                 }
 
-                Carta c = cartasRestantes.elementAt(posCarta);
+				Carta c;
+				try {
+					c = (Carta) cartasRestantes.elementAt(posCarta);
+				} catch (ArrayIndexOutOfBoundsException e) {
+					// Tentativa de resolver o out-of-bounds que surgiu na 2.3.x
+					// Eu não consigo reproduzir nem faço idéia de como diabos ele
+					// chega aqui com 0 elementos no array, mas vamos evitar o crash
+					// e ver se tudo se resolve sozinho; não deve afetar quem
+					// não tem o problema (como eu)
+					continue;
+				}
                 c.setFechada(isFechada && podeFechada);
                 cartasRestantes.removeElement(c);
                 jogo.jogaCarta(this, c);

@@ -26,7 +26,7 @@
             android:gravity="center"
             android:linksClickable="true"
             android:padding="16sp"
-            android:text="http://chester.me"
+            android:text="cd@pobox.com\nhttps://chester.me"
             android:textColor="#000000"
             android:textColorLink="#000000"
             android:textSize="24sp"

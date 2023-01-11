@@ -156,8 +156,9 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Agora só você decide se a sua dupla aceita aumento (truco, 6, etc.) ou mão de 11 (exceto no jogo Bluetooth).<br/><br/>
-            - Bugs corigidos: jogo fechando quando celular muda orientação; jogo travando se você recusa muito rápido
+            Tentando corrigir fechamento na 3a. rodada em alguns celulares.
+            <br/>
+            Me mande um e-mail (cd@pobox.com) se isso ainda acontece com você e quiser me ajudar a resolver. Obrigado!
         ]]>
     </string>
     <string name="nova_partida">Nova Partida</string>

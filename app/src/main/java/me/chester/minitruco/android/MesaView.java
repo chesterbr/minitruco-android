@@ -699,7 +699,12 @@ public class MesaView extends View {
 		// Desenha as cartas que já foram jogadas (se houverem),
 		// na ordem em que foram jogadas
 		for (int i = 0; i < cartasJogadas.size(); i++) {
-			cartasJogadas.elementAt(i).draw(canvas);
+			try {
+				cartasJogadas.elementAt(i).draw(canvas);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				// Não faz nada (o jogo encerrou no meio de um refresh,
+				// por isso a carta não está lá)
+			}
 		}
 
 		// Desenha as cartas restantes, e o vira por cima de todas
