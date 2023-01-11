@@ -12,7 +12,6 @@
         android:src="@drawable/menuprincipal" />
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center_horizontal|bottom"
@@ -26,7 +25,7 @@
             android:gravity="center"
             android:linksClickable="true"
             android:padding="16sp"
-            android:text="http://chester.me"
+            android:text="cd@pobox.com\nhttps://chester.me"
             android:textColor="#000000"
             android:textColorLink="#000000"
             android:textSize="24sp"

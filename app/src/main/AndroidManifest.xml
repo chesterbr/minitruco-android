@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.chester.minitruco"
-    android:versionCode="20302"
-    android:versionName="2.3.2" >
-    <!-- Ao aumentar a versão, atualize "novidades" em strings.xml" -->
+    android:versionCode="20303"
+    android:versionName="2.3.3" >
+    <!-- Ao aumentar a versão, atualize também o versionCode
+         e não esqueça do "novidades" em strings.xml" -->
 
     <supports-screens
         android:anyDensity="true"
