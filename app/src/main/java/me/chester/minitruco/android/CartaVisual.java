@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -104,8 +103,6 @@ public class CartaVisual extends Carta {
 		double ratioCarta = Math.min(ratioLargura, ratioAltura);
 		largura = (int) (180 * ratioCarta);
 		altura = (int) (252 * ratioCarta);
-		Log.d("CartaVisual", "Tamanho (largura x altura):" + largura + ","
-				+ altura);
 	}
 
 	/**

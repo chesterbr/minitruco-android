@@ -5,8 +5,10 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -93,12 +95,12 @@ public class TrucoActivity extends BaseActivity {
 	static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
 	static final int MSG_ESCONDE_PATROCINIO = 8;
 
-	Handler handler = new Handler() {
+	Handler handler = new Handler(Looper.getMainLooper()) {
 		public void handleMessage(Message msg) {
-			TextView tvNos = (TextView) findViewById(R.id.textview_nos);
-			TextView tvEles = (TextView) findViewById(R.id.textview_eles);
-			Button btnAumento = (Button) findViewById(R.id.btnAumento);
-			Button btnAbertaFechada = (Button) findViewById(R.id.btnAbertaFechada);
+			TextView tvNos = findViewById(R.id.textview_nos);
+			TextView tvEles = findViewById(R.id.textview_eles);
+			Button btnAumento = findViewById(R.id.btnAumento);
+			Button btnAbertaFechada = findViewById(R.id.btnAbertaFechada);
 			switch (msg.what) {
 			case MSG_ATUALIZA_PLACAR:
 				if (placar[0] != msg.arg1) {
@@ -107,8 +109,8 @@ public class TrucoActivity extends BaseActivity {
 				if (placar[1] != msg.arg2) {
 					tvEles.setBackgroundColor(Color.YELLOW);
 				}
-				tvNos.setText("Nós: " + msg.arg1);
-				tvEles.setText("Eles: " + msg.arg2);
+				tvNos.setText(getString(R.string.placarEquipe0, msg.arg1));
+				tvEles.setText(getString(R.string.placarEquipe1, msg.arg2));
 				placar[0] = msg.arg1;
 				placar[1] = msg.arg2;
 				break;
@@ -189,7 +191,7 @@ public class TrucoActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.truco);
 		mIsViva = true;
-		mesa = ((MesaView) findViewById(R.id.MesaView01));
+		mesa = findViewById(R.id.MesaView01);
 		layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
 		mesa.setTrucoActivity(this);
@@ -198,6 +200,27 @@ public class TrucoActivity extends BaseActivity {
 		if (CartaVisual.resources == null) {
 			CartaVisual.resources = getResources();
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		switch (keyCode){
+			case KeyEvent.KEYCODE_MEDIA_REWIND:
+			case KeyEvent.KEYCODE_1:
+				mesa.jogaCarta(0);
+				mesa.respondePergunta(true);
+				return true;
+			case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+			case KeyEvent.KEYCODE_2:
+				mesa.jogaCarta(1);
+				return true;
+			case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+			case KeyEvent.KEYCODE_3:
+				mesa.jogaCarta(2);
+				mesa.respondePergunta(false);
+				return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
