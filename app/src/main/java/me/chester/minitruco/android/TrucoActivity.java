@@ -176,7 +176,8 @@ public class TrucoActivity extends BaseActivity {
 		boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
 		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
 				&& !baralhoLimpo;
-		Jogo novoJogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro);
+		boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
+		Jogo novoJogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro, humanoDecide);
 		novoJogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
 			novoJogo.adiciona(new JogadorCPU());

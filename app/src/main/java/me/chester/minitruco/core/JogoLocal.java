@@ -70,7 +70,7 @@ public class JogoLocal extends Jogo {
 	 *            completo (sujo)
 	 */
 	public JogoLocal(boolean baralhoLimpo, boolean manilhaVelha,
-			boolean tentoMineiro) {
+			boolean tentoMineiro, boolean humanoDecide) {
 		this.manilhaVelha = manilhaVelha;
 		this.baralhoLimpo = baralhoLimpo;
 		if (tentoMineiro && manilhaVelha)
@@ -78,22 +78,7 @@ public class JogoLocal extends Jogo {
 		else
 			this.tento = new TentoPaulista();
 		this.baralho = new Baralho(baralhoLimpo);
-	}
-
-	/**
-	 * Cria um novo jogo.
-	 * <p>
-	 * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
-	 *
-	 * @param manilhaVelha
-	 *            true para jogo com manilhas fixas, false para jogar com "vira"
-	 * @param baralho
-	 *            Instância de baralho a ser utilizado no jogo.
-	 */
-	public JogoLocal(Baralho baralho, boolean manilhaVelha) {
-		this.manilhaVelha = manilhaVelha;
-		this.baralhoLimpo = baralho.isLimpo();
-		this.baralho = baralho;
+		this.humanoDecide = humanoDecide;
 	}
 
 	/**
@@ -169,6 +154,7 @@ public class JogoLocal extends Jogo {
 
 	private final boolean manilhaVelha;
 	private final boolean baralhoLimpo;
+	private final boolean humanoDecide;
 
 	/*
 	 * (non-Javadoc)
@@ -608,9 +594,12 @@ public class JogoLocal extends Jogo {
 	 * @param jogador jogador que acabou de tomar uma decisão
 	 * @return true se o jogador for uma CPU cujo parceiro é humano em um jogo 100% local
 	 */
-	private boolean isIgnoraDecisao(Jogador jogador) {
+	public boolean isIgnoraDecisao(Jogador jogador) {
 		int posParceiro = (jogador.getPosicao() + 1) % 4 + 1;
-		return semJogadoresRemotos() && jogador instanceof JogadorCPU && jogadores[posParceiro - 1] instanceof JogadorHumano;
+		return  humanoDecide &&
+				semJogadoresRemotos() &&
+				(jogador instanceof JogadorCPU) &&
+				(jogadores[posParceiro - 1] instanceof JogadorHumano);
 	}
 
 	/**
