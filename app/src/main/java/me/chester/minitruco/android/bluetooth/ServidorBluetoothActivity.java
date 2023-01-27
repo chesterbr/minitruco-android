@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -181,14 +180,12 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	}
 
 	public void run() {
-		Log.w("MINITRUCO", "iniciou atividade server");
 		inicializaDisplay();
 		atualizaDisplay();
 		try {
 			serverSocket = btAdapter.listenUsingRfcommWithServiceRecord(
 					NOME_BT, UUID_BT);
 		} catch (IOException e) {
-			Log.w("MINITRUCO", e);
 			return;
 		}
 		while (status != STATUS_BLUETOOTH_ENCERRADO) {
@@ -213,14 +210,12 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 					encaixaEmUmSlot(socket);
 				}
 			} catch (IOException e) {
-				Log.w("MINITRUCO", e);
 			}
 			if (isFinishing()) {
 				status = STATUS_BLUETOOTH_ENCERRADO;
 			}
 		}
 		encerraConexoes();
-		Log.w("MINITRUCO", "finalizou atividade server");
 	}
 
 	private void encerraConexoes() {
@@ -232,7 +227,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 			try {
 				serverSocket.close();
 			} catch (IOException e) {
-				Log.w("MINITRUCO", e);
 			}
 		}
 
@@ -300,7 +294,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	}
 
 	void desconecta(int slot) {
-		Log.w("MINITRUCO", "desconecta() " + slot);
 		try {
 			outClientes[slot].close();
 		} catch (Exception e) {
@@ -346,16 +339,11 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	public synchronized void enviaMensagem(int slot, String comando) {
 		if (outClientes[slot] != null) {
-			if (comando.length() > 0) {
-				Log.w("MINITRUCO", "enviando comando " + comando
-						+ " para slot " + slot);
-			}
 			try {
 				outClientes[slot].write(comando.getBytes());
 				outClientes[slot].write(SEPARADOR_ENV);
 				outClientes[slot].flush();
 			} catch (IOException e) {
-				Log.w("MINITRUCO", e);
 				// Libera o slot e encerra o jogo em andamento
 				desconecta(slot);
 				if (jogo != null) {

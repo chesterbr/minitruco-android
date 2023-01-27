@@ -99,6 +99,8 @@
             android:id="@+id/btnIniciarBluetooth"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
+            android:textColor="@drawable/botao_text_color"
+            android:background="@drawable/botao_bg"
             android:text="Iniciar Jogo" />
     </LinearLayout>
 

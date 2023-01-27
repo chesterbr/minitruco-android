@@ -9,7 +9,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
-        android:src="@drawable/menuprincipal" />
+        android:src="@drawable/menuprincipal"
+        android:contentDescription="logotipo do miniTruco" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -44,7 +45,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:focusedByDefault="true"
                 android:onClick="jogarClickHandler"
+                android:textColor="@drawable/botao_text_color"
+                android:background="@drawable/botao_bg"
                 android:text="Jogar" />
 
 
@@ -52,6 +56,8 @@
                 android:layout_width="120sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="@drawable/botao_text_color"
+                android:background="@drawable/botao_bg"
                 android:text="Bluetooth"
                 android:onClick="bluetoothButtonClickHandler" />
 
@@ -59,6 +65,8 @@
                 android:layout_width="120sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="@drawable/botao_text_color"
+                android:background="@drawable/botao_bg"
                 android:text="Opções"
                 android:onClick="opcoesButtonClickHandler" />
 
