@@ -156,9 +156,9 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            Tentando corrigir fechamento na 3a. rodada em alguns celulares.
-            <br/>
-            Me mande um e-mail (cd@pobox.com) se isso ainda acontece com você e quiser me ajudar a resolver. Obrigado!
+            Agora você pode configurar se o aumento/mão de 11 são decisão exclusiva sua (quando estiver jogando sozinho).
+            <br/><br/>
+            Se o jogo estiver congelando na 3a. rodada, experimente desligar esta opção (e me mande um e-mail se for o caso, ainda estou tentando reproduzir este bug).
         ]]>
     </string>
     <string name="nova_partida">Nova Partida</string>

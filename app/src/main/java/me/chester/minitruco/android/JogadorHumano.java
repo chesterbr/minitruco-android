@@ -9,6 +9,7 @@ import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.JogoLocal;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -172,7 +173,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 		if (j.getEquipe() == this.getEquipe()) {
 			// Num jogo sem bluetooth/etc, a CPU não aumenta, ela só
 			// sinaliza a intenção de aumentar
-			if (j instanceof JogadorCPU && jogo.semJogadoresRemotos()) {
+			if (jogo instanceof JogoLocal && ((JogoLocal) jogo).isIgnoraDecisao(j)) {
 				mesa.diz("aumento_quero", posicaoNaTela(j), 1500);
 				return;
 			}

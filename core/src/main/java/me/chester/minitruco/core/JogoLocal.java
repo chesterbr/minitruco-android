@@ -75,6 +75,7 @@ public class JogoLocal extends Jogo {
     private final boolean[] aguardandoRespostaMaoDe11 = new boolean[4];
     private final boolean manilhaVelha;
     private final boolean baralhoLimpo;
+    private final boolean humanoDecide;
     /**
      * Sinaliza para o loop principal que alguém jogou uma carta
      */
@@ -124,7 +125,7 @@ public class JogoLocal extends Jogo {
      *                     completo (sujo)
      */
     public JogoLocal(boolean baralhoLimpo, boolean manilhaVelha,
-                     boolean tentoMineiro) {
+                     boolean tentoMineiro, boolean humanoDecide) {
         this.manilhaVelha = manilhaVelha;
         this.baralhoLimpo = baralhoLimpo;
         if (tentoMineiro && manilhaVelha)
@@ -132,6 +133,7 @@ public class JogoLocal extends Jogo {
         else
             this.tento = new TentoPaulista();
         this.baralho = new Baralho(baralhoLimpo);
+        this.humanoDecide = humanoDecide;
     }
 
     /*
@@ -547,9 +549,12 @@ public class JogoLocal extends Jogo {
      * @param jogador jogador que acabou de tomar uma decisão
      * @return true se o jogador for uma CPU cujo parceiro é humano em um jogo 100% local
      */
-    private boolean isIgnoraDecisao(Jogador jogador) {
+    public boolean isIgnoraDecisao(Jogador jogador) {
         int posParceiro = (jogador.getPosicao() + 1) % 4 + 1;
-        return semJogadoresRemotos() && jogador instanceof JogadorCPU && jogadores[posParceiro - 1] instanceof JogadorHumano;
+		return  humanoDecide &&
+				semJogadoresRemotos() &&
+				(jogador instanceof JogadorCPU) &&
+				(jogadores[posParceiro - 1] instanceof JogadorHumano);
     }
 
     /**

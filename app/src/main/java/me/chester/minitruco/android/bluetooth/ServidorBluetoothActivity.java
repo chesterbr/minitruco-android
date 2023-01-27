@@ -320,7 +320,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
 		Jogo jogo = new JogoLocal(regras.charAt(0) == 'T',
-				regras.charAt(1) == 'T', false);
+				regras.charAt(1) == 'T', false, false);
 		jogo.adiciona(jogadorHumano);
 		for (int i = 0; i <= 2; i++) {
 			if (connClientes[i] != null) {
