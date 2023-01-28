@@ -125,6 +125,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					+ " recebeu notificacao de vez");
 			this.podeFechada = podeFechada;
 			this.minhaVez = true;
+			this.estouAguardandoRepostaAumento = false;
 		}
 	}
 
@@ -134,18 +135,14 @@ public class JogadorCPU extends Jogador implements Runnable {
 		while (jogo == null || !jogo.jogoFinalizado) {
 			sleep(100);
 
-			if (minhaVez) {
+			if (minhaVez && !estouAguardandoRepostaAumento) {
 
 				minhaVez = false;
 				Log.i("JogadorCPU", "Jogador " + this.getPosicao()
 						+ " viu que e' sua vez");
 
 				// Dá um tempinho, pra fingir que está "pensando"
-				try {
-					Thread.sleep(random.nextInt(250) + 200);
-				} catch (InterruptedException e) {
-					// Nada, apenas timing...
-				}
+				sleep(random.nextInt(250) + 200);
 
 				// Atualiza a situação do jogo (incluindo as cartas na mão)
 				atualizaSituacaoJogo();
@@ -172,6 +169,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					numRespostasAguardando = 2;
 					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
 							+ " vai aumentar aposta");
+					minhaVez = true;
 					estouAguardandoRepostaAumento = true;
 					jogo.aumentaAposta(this);
 					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
