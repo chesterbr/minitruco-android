@@ -156,9 +156,7 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            Tentando corrigir fechamento na 3a. rodada em alguns celulares.
-            <br/>
-            Me mande um e-mail (cd@pobox.com) se isso ainda acontece com você e quiser me ajudar a resolver. Obrigado!
+            Corrige congelamento do jogo na 3a. jogada.
         ]]>
     </string>
 
