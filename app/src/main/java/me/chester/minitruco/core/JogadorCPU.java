@@ -129,6 +129,21 @@ public class JogadorCPU extends Jogador implements Runnable {
 		}
 	}
 
+	private class AumentoApostaRunner implements Runnable {
+		private final Jogo jogo;
+		private final Jogador jogador;
+
+		public AumentoApostaRunner(Jogo jogo, Jogador jogador) {
+			this.jogo = jogo;
+			this.jogador = jogador;
+		}
+
+		@Override
+		public void run() {
+			jogo.aumentaAposta(jogador);
+		}
+	}
+
 	public void run() {
 
 		Log.i("JogadorCPU", "JogadorCPU " + this + " (.run) iniciado");
@@ -160,18 +175,14 @@ public class JogadorCPU extends Jogador implements Runnable {
 				// Se a estratégia pediu truco, processa e desencana de jogar
 				// agora
 				if ((posCarta == -1) && (situacaoJogo.valorProximaAposta != 0)) {
-					// Faz a
-					// solicitação de truco numa nova thread // (usando o
-					// próprio
-					// JogadorCPU como Runnable - era uma inner // class, mas
-					// otimizei para reduzir o .jar)
 					aceitaramTruco = false;
 					numRespostasAguardando = 2;
 					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
 							+ " vai aumentar aposta");
 					minhaVez = true;
 					estouAguardandoRepostaAumento = true;
-					jogo.aumentaAposta(this);
+					Thread t = new Thread(new AumentoApostaRunner(jogo, this));
+					t.start();
 					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
 							+ " aguardando resposta");
 					continue;
