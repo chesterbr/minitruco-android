@@ -156,7 +156,9 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            Corrige congelamento do jogo na 3a. jogada.
+            Mais uma tentativa de corrigir os congelamentos do jogo quando o jogador está no controle do aceite.
+            <br/><br/>
+            Eu sei, é a terceira; mas eu não consigo reproduzir aqui; peço a compreensão das pessoas afetadas! Se quiser me ajudar a testar, entre no "Programa Beta" da loja do Google e você receberá atualizações dessas versões de teste antes das outras pessoas; me mande email se tiver dúvidas (endereço no título). Grato.
         ]]>
     </string>
 
