@@ -560,11 +560,12 @@ public class JogoLocal extends Jogo {
 				interessado.aceitouAumentoAposta(j, valorMao);
 			}
 		} else {
-			// Primeiro notifica todo mundo (ou só o humano, se for um aceite ignorado)
-			if (ignorarAceite) {
-				jogadores[posParceiro - 1].aceitouAumentoAposta(j, valorMao);
-			} else {
-				for (Jogador interessado : jogadores) {
+			// Primeiro notifica todo mundo da recusa
+			// (se for um aceite ignorado, diz pro humano que aceitou, só pra ele saber o que seria feito)
+			for (Jogador interessado : jogadores) {
+				if (aceitou && ignorarAceite && (interessado == jogadores[posParceiro - 1])) {
+					interessado.aceitouAumentoAposta(j, valorMao);
+				} else {
 					interessado.recusouAumentoAposta(j);
 				}
 			}
