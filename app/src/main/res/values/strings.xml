@@ -156,7 +156,7 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            Solução adicional para congelamento do jogo na 3a. jogada.
+            Corrige congelamento do jogo na 3a. jogada.
         ]]>
     </string>
 
