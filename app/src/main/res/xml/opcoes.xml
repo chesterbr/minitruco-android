@@ -8,4 +8,7 @@
 		android:key="manilhaVelha" android:disableDependentsState="false"/>
 	<CheckBoxPreference android:title="Tento Mineiro" android:key="tentoMineiro" android:dependency="manilhaVelha" android:defaultValue="false" android:summary="Usa os valores 2, 4, 6, 8, 10, 12 (só vale com manilha velha)"/>
 	<CheckBoxPreference android:title="Aumento/mão de 11 decidido pelo jogador" android:key="humanoDecide" android:defaultValue="true" android:summary="Em jogo local, se esta opção estiver ligada, o parceiro virtual não pode aceitar truco ou mão de 11 (ele só diz se iria)."/>
+	<PreferenceCategory android:title="Desenvolvimento/Depuração (não mexa a não ser que saiba o que está fazendo)">
+		<CheckBoxPreference android:title="Jogo Automático" android:key="jogoAutomatico" android:defaultValue="false" android:summary="Joga uma carta ou pede truco automaticamente (e aleatoriamente) apenas em jogo local."/>
+	</PreferenceCategory>
 </PreferenceScreen>

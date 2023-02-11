@@ -70,7 +70,7 @@ public class JogoLocal extends Jogo {
 	 *            completo (sujo)
 	 */
 	public JogoLocal(boolean baralhoLimpo, boolean manilhaVelha,
-			boolean tentoMineiro, boolean humanoDecide) {
+			boolean tentoMineiro, boolean humanoDecide, boolean jogoAutomatico) {
 		this.manilhaVelha = manilhaVelha;
 		this.baralhoLimpo = baralhoLimpo;
 		if (tentoMineiro && manilhaVelha)
@@ -79,6 +79,7 @@ public class JogoLocal extends Jogo {
 			this.tento = new TentoPaulista();
 		this.baralho = new Baralho(baralhoLimpo);
 		this.humanoDecide = humanoDecide;
+        this.jogoAutomatico = jogoAutomatico;
 	}
 
 	/**
@@ -155,6 +156,7 @@ public class JogoLocal extends Jogo {
 	private final boolean manilhaVelha;
 	private final boolean baralhoLimpo;
 	private final boolean humanoDecide;
+    private final boolean jogoAutomatico;
 
 	/*
 	 * (non-Javadoc)
@@ -781,6 +783,11 @@ public class JogoLocal extends Jogo {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean isJogoAutomatico() {
+		return jogoAutomatico;
 	}
 
 }

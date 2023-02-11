@@ -369,4 +369,13 @@ public abstract class Jogo implements Runnable {
 		}
 	}
 
+	/**
+	 * Configuração que faz o jogador humano jogar automaticamente
+	 *
+	 * @return false (a não ser em JogoLocal _se_ a opção for habilitada)
+	 */
+	public boolean isJogoAutomatico() {
+		return false;
+	}
+
 }

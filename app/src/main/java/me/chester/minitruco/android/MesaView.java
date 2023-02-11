@@ -764,6 +764,12 @@ public class MesaView extends View {
 		desenhaBalao(canvas);
 		desenhaIndicadorDeVez(canvas);
 
+		if (trucoActivity.jogo.isJogoAutomatico()) {
+			jogaCarta(0);
+			jogaCarta(1);
+			jogaCarta(2);
+			respondePergunta(rand.nextBoolean());
+		}
 	}
 
 	private void desenhaBotao(String texto, Canvas canvas, RectF outerRect) {
