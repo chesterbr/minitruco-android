@@ -136,8 +136,6 @@ public class JogadorCPU extends Jogador implements Runnable {
 			sleep(100);
 
 			if (minhaVez && !estouAguardandoRepostaAumento) {
-
-				minhaVez = false;
 				Log.i("JogadorCPU", "Jogador " + this.getPosicao()
 						+ " viu que e' sua vez");
 
@@ -169,7 +167,6 @@ public class JogadorCPU extends Jogador implements Runnable {
 					numRespostasAguardando = 2;
 					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
 							+ " vai aumentar aposta");
-					minhaVez = true;
 					estouAguardandoRepostaAumento = true;
 					jogo.aumentaAposta(this);
 					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
@@ -180,12 +177,16 @@ public class JogadorCPU extends Jogador implements Runnable {
 				// Se a estratégia pediu truco fora de hora, ignora e joga a
 				// primeira carta
 				if (posCarta == -1) {
+					Log.i("JogadorCPU", "Jogador" + this.getPosicao()
+							+ " pediu truco fora de hora");
 					posCarta = 0;
 				}
 
 				// Joga a carta selecionada e remove ela da mão
 				boolean isFechada = posCarta >= 10;
 				if (isFechada) {
+					Log.i("JogadorCPU", "Jogador" + this.getPosicao()
+							+ " vai tentar jogar fechada");
 					posCarta -= 10;
 				}
 
@@ -198,14 +199,24 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// chega aqui com 0 elementos no array, mas vamos evitar o crash
 					// e ver se tudo se resolve sozinho; não deve afetar quem
 					// não tem o problema (como eu)
+					Log.i("JogadorCPU", "Out Of Bounds tentando recuperar a carta de cartasRestantes", e);
 					continue;
 				}
 				c.setFechada(isFechada && podeFechada);
 				cartasRestantes.removeElement(c);
+				if (!minhaVez) {
+					// Isso acontece MUITO raramente, mas trava o jogo; na dúvida,
+					// a gente seta o minhaVez para false no maoFechada() e
+					// evita esse problema aqui
+					// TODO: deixar rodando e ver se chega aqui, ou se setar pra false no maoFechada resolveu
+					Log.i("Jogador CPU", "Jogador " + this.getPosicao()
+						+ "IA pedir para jogar " + c + ", mas acabou a mão/rodada");
+					continue;
+				}
 				Log.i("JogadorCPU", "Jogador " + this.getPosicao()
-						+ " vai pedir para jogar " + c);
+						+ " (" + this.estrategia.getNomeEstrategia() + ") vai pedir para jogar " + c);
 				jogo.jogaCarta(this, c);
-
+				minhaVez = false;
 			}
 
 			if (recebiPedidoDeAumento) {
@@ -354,7 +365,15 @@ public class JogadorCPU extends Jogador implements Runnable {
 	}
 
 	public void maoFechada(int[] pontosEquipe) {
-		// Não faz nada
+
+		Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+		+ " recebeu notificação de mão fechada; mudando minhaVez de " + minhaVez + "para false");
+
+		// Cancela todas as jogadas em aguardo
+		minhaVez = false;
+		estouAguardandoRepostaAumento = false;
+		recebiPedidoDeAumento = false;
+		recebiPedidoDeAumento = false;
 	}
 
 	public void jogoFechado(int numEquipeVencedora) {

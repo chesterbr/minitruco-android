@@ -178,6 +178,7 @@ public class JogoLocal extends Jogo {
 				sleep();
 			}
 			if (!jogoFinalizado) {
+				Log.i("Jogo", "alguém jogou!");
 				processaJogada();
 				alguemJogou = false;
 			}
@@ -267,6 +268,11 @@ public class JogoLocal extends Jogo {
 		Jogador j = this.jogadorQueJogou;
 		Carta c = this.cartaJogada;
 
+		Log.i("JogoLocal", "processaJogada: j" + j.getPosicao() + " joga " + c +
+				"; jogadorPedindoAumento:" + (jogadorPedindoAumento == null ? "null" : jogadorPedindoAumento.getPosicao()) +
+				"; isAguardandoRespostaMao11:" + isAguardandoRespostaMao11() +
+				"; jogadorDaVez: "+getJogadorDaVez().getPosicao());
+
 		// Se o jogo acabou, a mesa não estiver completa, já houver alguém
 		// trucando, estivermos aguardando ok da mão de 11 ou não for a vez do
 		// cara, recusa
@@ -281,9 +287,25 @@ public class JogoLocal extends Jogo {
 		for (int i = 0; i <= 2; i++) {
 			for (int k = 0; k <= 3; k++) {
 				if (c.equals(cartasJogadasPorRodada[i][k])) {
+					Log.i("JogoLocal", "carta jogada anteriormente: "+ c + "," + i + "," + k);
+					renotificaVezCPU();
 					return;
 				}
 			}
+		}
+
+		// Verifica se a carta realmente pertence ao jogador
+		Carta cartaNaMaoDoJogador = null;
+		for (int i = 0; i <= 2; i++) {
+			if (j.getCartas()[i].equals(c)) {
+				cartaNaMaoDoJogador = c;
+			}
+		}
+		if (cartaNaMaoDoJogador == null) {
+			Log.i("JogoLocal", "j" + j.getPosicao() + " tentou jogar " + c +
+					" mas esta carta não está na mão dele");
+			renotificaVezCPU();
+			return;
 		}
 
 		// Garante que a regra para carta fechada seja respeitada
@@ -638,6 +660,21 @@ public class JogoLocal extends Jogo {
 			interessado.vez(j, pf);
 		}
 
+	}
+
+	/**
+	 * Se o jogador da vez for CPU, re-notifica ele que é sua vez.
+	 *
+	 * Isso é usado para casos em que a CPU joga uma jogada inválida (ex.: porque
+	 * jogou depois que a mão fechou), evitando que ela fique "travada"
+	 */
+	private void renotificaVezCPU() {
+		Jogador j = getJogadorDaVez();
+		boolean pf = isPodeFechada();
+
+		if (j instanceof JogadorCPU) {
+			j.vez(j, pf);
+		}
 	}
 
 	/**
