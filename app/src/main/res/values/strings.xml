@@ -156,9 +156,8 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            Mais uma tentativa de corrigir os congelamentos do jogo quando o jogador está no controle do aceite.
-            <br/><br/>
-            Eu sei, é a terceira; mas eu não consigo reproduzir aqui; peço a compreensão das pessoas afetadas! Se quiser me ajudar a testar, entre no "Programa Beta" da loja do Google e você receberá atualizações dessas versões de teste antes das outras pessoas; me mande email se tiver dúvidas (endereço no título). Grato.
+            - Correção final do congelamento (🤞 - ficou 12h jogando sozinho sem congelar)<br/>
+            - Opção de deixar o celular jogar sozinho (para ajudar desenvolvedor com problemas como este)
         ]]>
     </string>
 
