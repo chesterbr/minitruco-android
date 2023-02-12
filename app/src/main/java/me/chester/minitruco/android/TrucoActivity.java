@@ -99,6 +99,7 @@ public class TrucoActivity extends BaseActivity {
 			TextView tvEles = (TextView) findViewById(R.id.textview_eles);
 			Button btnAumento = (Button) findViewById(R.id.btnAumento);
 			Button btnAbertaFechada = (Button) findViewById(R.id.btnAbertaFechada);
+			Button btnNovaPartida = (Button) findViewById(R.id.btnNovaPartida);
 			switch (msg.what) {
 			case MSG_ATUALIZA_PLACAR:
 				if (placar[0] != msg.arg1) {
@@ -122,6 +123,9 @@ public class TrucoActivity extends BaseActivity {
 			case MSG_OFERECE_NOVA_PARTIDA:
 				if (jogo instanceof JogoLocal) {
 					layoutFimDeJogo.setVisibility(View.VISIBLE);
+					if (jogo.isJogoAutomatico()) {
+						btnNovaPartida.performClick();
+					}
 				}
 				break;
 			case MSG_REMOVE_NOVA_PARTIDA:
@@ -177,7 +181,8 @@ public class TrucoActivity extends BaseActivity {
 		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
 				&& !baralhoLimpo;
 		boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
-		Jogo novoJogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro, humanoDecide);
+		boolean jogoAutomatico =  preferences.getBoolean("jogoAutomatico", false);
+		Jogo novoJogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro, humanoDecide, jogoAutomatico);
 		novoJogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
 			novoJogo.adiciona(new JogadorCPU());

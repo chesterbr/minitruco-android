@@ -156,9 +156,8 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            Tentando corrigir fechamento na 3a. rodada em alguns celulares.
-            <br/>
-            Me mande um e-mail (cd@pobox.com) se isso ainda acontece com você e quiser me ajudar a resolver. Obrigado!
+            - Correção final do congelamento (🤞 - ficou 12h jogando sozinho sem congelar)<br/>
+            - Opção de deixar o celular jogar sozinho (para ajudar desenvolvedor com problemas como este)
         ]]>
     </string>
 
