@@ -8,11 +8,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 
@@ -64,6 +65,8 @@ import me.chester.minitruco.core.Carta;
  */
 public class CartaVisual extends Carta {
 
+    private final static Logger LOGGER = Logger.getLogger("CartaVisual");
+
 	public static final int COR_MESA = Color.argb(255, 27, 142, 60);
 
 	/**
@@ -104,7 +107,7 @@ public class CartaVisual extends Carta {
 		double ratioCarta = Math.min(ratioLargura, ratioAltura);
 		largura = (int) (180 * ratioCarta);
 		altura = (int) (252 * ratioCarta);
-		Log.d("CartaVisual", "Tamanho (largura x altura):" + largura + ","
+		LOGGER.log(Level.INFO, "Tamanho (largura x altura):" + largura + ","
 				+ altura);
 	}
 

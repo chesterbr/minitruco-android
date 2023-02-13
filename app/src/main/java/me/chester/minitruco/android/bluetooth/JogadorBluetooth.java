@@ -1,10 +1,11 @@
 package me.chester.minitruco.android.bluetooth;
 
 import android.bluetooth.BluetoothSocket;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -46,6 +47,8 @@ import me.chester.minitruco.core.Jogador;
  * 
  */
 public class JogadorBluetooth extends Jogador implements Runnable {
+
+	private final static Logger LOGGER = Logger.getLogger("JogadorBluetooth");
 
 	private InputStream in;
 	private final BluetoothSocket socket;
@@ -97,7 +100,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 				} else {
 					// Processa linhas (não-vazias)
 					if (sbLinha.length() > 0) {
-						Log.w("MINITRUCO",
+						LOGGER.log(Level.INFO,
 								"Linha acumulada: " + sbLinha);
 						char tipoNotificacao = sbLinha.charAt(0);
 						String[] args = sbLinha.toString().split(" ");
@@ -135,10 +138,10 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 				}
 			} while (in != null);
 		} catch (IOException e) {
-			Log.w("MINITRUCO", e);
+			LOGGER.log(Level.INFO, "Exceção no jogador (fim de jogo?)", e);
 			// Não precisa tratar - ou é fim de jogo, ou o servidor cuida
 		}
-		Log.w("MINITRUCO", "encerrando loop JogadorBT");
+		LOGGER.log(Level.INFO, "encerrando loop JogadorBT");
 	}
 
 	/**

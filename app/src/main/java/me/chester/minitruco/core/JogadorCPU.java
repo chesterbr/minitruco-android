@@ -37,9 +37,9 @@ package me.chester.minitruco.core;
  * 
  */
 
-import android.util.Log;
-
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Jogador controlado pelo celular ou pelo servidor.
@@ -51,6 +51,8 @@ import java.util.Vector;
  */
 public class JogadorCPU extends Jogador implements Runnable {
 
+    private final static Logger LOGGER = Logger.getLogger("JogadorCPU");
+	
 	/**
 	 * Cria um novo jogador CPU, usando a estratégia fornecida.
 	 * 
@@ -121,7 +123,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	public void vez(Jogador j, boolean podeFechada) {
 		if (this.equals(j)) {
-			Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+			LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
 					+ " recebeu notificacao de vez");
 			this.podeFechada = podeFechada;
 			this.minhaVez = true;
@@ -131,12 +133,12 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	public void run() {
 
-		Log.i("JogadorCPU", "JogadorCPU " + this + " (.run) iniciado");
+		LOGGER.log(Level.INFO, "JogadorCPU " + this + " (.run) iniciado");
 		while (jogo == null || !jogo.jogoFinalizado) {
 			sleep(100);
 
 			if (minhaVez && !estouAguardandoRepostaAumento) {
-				Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+				LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
 						+ " viu que e' sua vez");
 
 				// Dá um tempinho, pra fingir que está "pensando"
@@ -151,7 +153,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 				try {
 					posCarta = estrategia.joga(situacaoJogo);
 				} catch (Exception e) {
-					Log.w("JogadorCPU", "Erro em joga", e);
+					LOGGER.log(Level.INFO, "Erro em joga", e);
 					posCarta = 0;
 				}
 
@@ -165,11 +167,11 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// otimizei para reduzir o .jar)
 					aceitaramTruco = false;
 					numRespostasAguardando = 2;
-					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+					LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
 							+ " vai aumentar aposta");
 					estouAguardandoRepostaAumento = true;
 					jogo.aumentaAposta(this);
-					Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+					LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
 							+ " aguardando resposta");
 					continue;
 				}
@@ -177,7 +179,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 				// Se a estratégia pediu truco fora de hora, ignora e joga a
 				// primeira carta
 				if (posCarta == -1) {
-					Log.i("JogadorCPU", "Jogador" + this.getPosicao()
+					LOGGER.log(Level.INFO, "Jogador" + this.getPosicao()
 							+ " pediu truco fora de hora");
 					posCarta = 0;
 				}
@@ -185,7 +187,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 				// Joga a carta selecionada e remove ela da mão
 				boolean isFechada = posCarta >= 10;
 				if (isFechada) {
-					Log.i("JogadorCPU", "Jogador" + this.getPosicao()
+					LOGGER.log(Level.INFO, "Jogador" + this.getPosicao()
 							+ " vai tentar jogar fechada");
 					posCarta -= 10;
 				}
@@ -199,7 +201,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// chega aqui com 0 elementos no array, mas vamos evitar o crash
 					// e ver se tudo se resolve sozinho; não deve afetar quem
 					// não tem o problema (como eu)
-					Log.i("JogadorCPU", "Out Of Bounds tentando recuperar a carta de cartasRestantes", e);
+					LOGGER.log(Level.INFO, "Out Of Bounds tentando recuperar a carta de cartasRestantes", e);
 					continue;
 				}
 				c.setFechada(isFechada && podeFechada);
@@ -209,11 +211,11 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// a gente seta o minhaVez para false no maoFechada() e
 					// evita esse problema aqui
 					// TODO: deixar rodando e ver se chega aqui, ou se setar pra false no maoFechada resolveu
-					Log.i("Jogador CPU", "Jogador " + this.getPosicao()
+					LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
 						+ "IA pedir para jogar " + c + ", mas acabou a mão/rodada");
 					continue;
 				}
-				Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+				LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
 						+ " (" + this.estrategia.getNomeEstrategia() + ") vai pedir para jogar " + c);
 				jogo.jogaCarta(this, c);
 				minhaVez = false;
@@ -230,7 +232,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 						try {
 							resposta = estrategia.aceitaTruco(situacaoJogo);
 						} catch (Exception e) {
-							Log.d("JogadorCPU", "Erro em aceite-aumento", e);
+							LOGGER.log(Level.INFO, "Erro em aceite-aumento", e);
 						}
 						jogo.respondeAumento(this, resposta);
 					}
@@ -250,13 +252,13 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// deixando a decisão na mão do humano.
 					if (getPosicao() == 3) {
 						boolean aceitaEstrategia = random.nextInt(10) == 5;
-						Log.i("JogadorCPU",
+						LOGGER.log(Level.INFO,
 								"Mão de 11 do parceiro do humano. AceitaEstrategia="
 										+ aceitaEstrategia);
 						respostaMao11 = respostaMao11 && aceitaEstrategia;
 					}
 				} catch (Exception e) {
-					Log.d("JogadorCPU",
+					LOGGER.log(Level.INFO,
 							"Erro em aceite-11 no jogador" + this.getPosicao(),
 							e);
 					respostaMao11 = random.nextBoolean();
@@ -275,7 +277,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 			}
 
 		}
-		Log.i("JogadorCPU", "JogadorCPU " + this + " (.run) finalizado");
+		LOGGER.log(Level.INFO, "JogadorCPU " + this + " (.run) finalizado");
 
 	}
 
@@ -366,7 +368,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	public void maoFechada(int[] pontosEquipe) {
 
-		Log.i("JogadorCPU", "Jogador " + this.getPosicao()
+		LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
 		+ " recebeu notificação de mão fechada; mudando minhaVez de " + minhaVez + "para false");
 
 		// Cancela todas as jogadas em aguardo
@@ -427,7 +429,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 		try {
 			Thread.sleep(i);
 		} catch (InterruptedException e) {
-			Log.i("JogadorCPU", "Interrupted during sleep", e);
+			LOGGER.log(Level.INFO, "Interrupted during sleep", e);
 		}
 	}
 

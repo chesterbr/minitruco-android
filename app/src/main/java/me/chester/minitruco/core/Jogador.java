@@ -1,8 +1,7 @@
 package me.chester.minitruco.core;
 
-import android.util.Log;
-
 import java.util.Random;
+import java.util.logging.Logger;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -236,8 +235,6 @@ public abstract class Jogador {
 
 		// Cria uma nova instância
 		try {
-			Log.i("Jogador", "Criando estrategia: "
-					+ ESTRATEGIAS[numEstrategia].getNomeEstrategia());
 			return ESTRATEGIAS[numEstrategia].getClass()
 					.newInstance();
 		} catch (InstantiationException e) {
