@@ -7,13 +7,14 @@ import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Jogo;
@@ -58,6 +59,8 @@ import me.chester.minitruco.core.Jogo;
 
 public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		Runnable {
+
+    private final static Logger LOGGER = Logger.getLogger("ClienteBluetoothActivity");
 
 	private static final int REQUEST_ENABLE_BT = 1;
 
@@ -123,7 +126,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			while ((c = in.read()) != -1) {
 				if (c == SEPARADOR_REC) {
 					if (sbLinha.length() > 0) {
-						Log.w("MINITRUCO", "Recebeu:" + sbLinha);
+						LOGGER.log(Level.INFO, "Recebeu:" + sbLinha);
 						char tipoNotificacao = sbLinha.charAt(0);
 						String parametros = sbLinha.delete(0, 2).toString();
 						switch (tipoNotificacao) {
@@ -218,13 +221,13 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 				return;
 			}
 			if (linha.length() > 0) {
-				Log.w("MINITRUCO", "Enviando:" + linha);
+				LOGGER.log(Level.INFO, "Enviando:" + linha);
 			}
 			out.write(linha.getBytes());
 			out.write(ClienteBluetoothActivity.SEPARADOR_ENV);
 			out.flush();
 		} catch (IOException e) {
-			Log.w("MINITRUCO", e);
+			LOGGER.log(Level.INFO, "Excção em EnviaLinha (desconexão?)", e);
 			// Não preciso tratar, desconexões são identificadas no loop do in
 		}
 	}
@@ -312,9 +315,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             threadConexao.start();
 
         } catch (Exception e) {
-            Log.w("MINITRUCO",
-                    "Falhou conexao com device " + device.getName());
-            Log.w("MINITRUCO", e);
+            LOGGER.log(Level.INFO,
+                    "Falhou conexao com device " + device.getName(), e);
             msgErroFatal("Falhou conexao com device " + device.getName() + ". Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
             try {
                 socket.close();

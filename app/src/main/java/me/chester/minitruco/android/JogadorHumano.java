@@ -4,7 +4,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.util.Log;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -55,13 +57,10 @@ import me.chester.minitruco.core.JogoLocal;
  * Esta classe trabalha em conjunto com uma <code>TrucoActivity</code> e uma
  * <code>MesaView</code>, que mostram o jogo ao usuário, capturam seu input e
  * executam as jogadas.
- * <p>
- * Num jogo remoto, esta carta "traduz" as posicoes recebidas pelo jogo para as
- * posicoes corretas da mesa
- * 
- * 
  */
-public class JogadorHumano extends Jogador {
+public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
+
+	private final static Logger LOGGER = Logger.getLogger("JogadorHumano");
 
 	private final TrucoActivity activity;
 
@@ -84,7 +83,7 @@ public class JogadorHumano extends Jogador {
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		mesa.descarta(c, posicaoNaTela(j));
-		Log.i("Partida", "Jogador na posicao de tela " + posicaoNaTela(j)
+		LOGGER.log(Level.INFO, "Jogador na posicao de tela " + posicaoNaTela(j)
 				+ " jogou " + c);
 	}
 
@@ -172,7 +171,7 @@ public class JogadorHumano extends Jogador {
 		mesa.diz("aumento_" + ordem_valor, posicaoNaTela(j),
 				1500 + 200 * (valor / 3));
 		if (j.getEquipe() != this.getEquipe()) {
-			Log.d("TrucoActivity", "pedindo para mostrar pergunta aumento");
+			LOGGER.log(Level.INFO, "pedindo para mostrar pergunta aumento");
 			mesa.mostrarPerguntaAumento = true;
 		}
 	}
@@ -223,7 +222,7 @@ public class JogadorHumano extends Jogador {
 
 	@Override
 	public void vez(Jogador j, boolean podeFechada) {
-		Log.d("TrucoActivity", "vez do jogador " + posicaoNaTela(j));
+		LOGGER.log(Level.INFO, "vez do jogador " + posicaoNaTela(j));
 		mesa.vaiJogarFechada = false;
 		boolean mostraBtnAumento = (j instanceof JogadorHumano)
 				&& (valorProximaAposta > 0) && (activity.placar[0] != 11)

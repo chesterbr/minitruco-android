@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +18,8 @@ import android.view.View.OnClickListener;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
@@ -64,6 +65,8 @@ import me.chester.minitruco.core.JogoLocal;
  */
 
 public class ServidorBluetoothActivity extends BluetoothBaseActivity {
+
+	private final static Logger LOGGER = Logger.getLogger("ServidorBluetoothActivity");
 
 	private static final char STATUS_AGUARDANDO = 'A';
 	private static final char STATUS_LOTADO = 'L';
@@ -181,14 +184,14 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	}
 
 	public void run() {
-		Log.w("MINITRUCO", "iniciou atividade server");
+		LOGGER.log(Level.INFO, "iniciou atividade server");
 		inicializaDisplay();
 		atualizaDisplay();
 		try {
 			serverSocket = btAdapter.listenUsingRfcommWithServiceRecord(
 					NOME_BT, UUID_BT);
 		} catch (IOException e) {
-			Log.w("MINITRUCO", e);
+			LOGGER.log(Level.INFO, "Exceção ao tentar iniciar o listen no servidor", e);
 			return;
 		}
 		while (status != STATUS_BLUETOOTH_ENCERRADO) {
@@ -213,14 +216,14 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 					encaixaEmUmSlot(socket);
 				}
 			} catch (IOException e) {
-				Log.w("MINITRUCO", e);
+				LOGGER.log(Level.INFO, "Exceção em serverSocket.accept()", e);
 			}
 			if (isFinishing()) {
 				status = STATUS_BLUETOOTH_ENCERRADO;
 			}
 		}
 		encerraConexoes();
-		Log.w("MINITRUCO", "finalizou atividade server");
+		LOGGER.log(Level.INFO, "finalizou atividade server");
 	}
 
 	private void encerraConexoes() {
@@ -232,7 +235,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 			try {
 				serverSocket.close();
 			} catch (IOException e) {
-				Log.w("MINITRUCO", e);
+				LOGGER.log(Level.INFO, "Exceção em serverSocket.close()", e);
 			}
 		}
 
@@ -300,7 +303,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	}
 
 	void desconecta(int slot) {
-		Log.w("MINITRUCO", "desconecta() " + slot);
+		LOGGER.log(Level.INFO, "desconecta() " + slot);
 		try {
 			outClientes[slot].close();
 		} catch (Exception e) {
@@ -347,7 +350,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	public synchronized void enviaMensagem(int slot, String comando) {
 		if (outClientes[slot] != null) {
 			if (comando.length() > 0) {
-				Log.w("MINITRUCO", "enviando comando " + comando
+				LOGGER.log(Level.INFO, "enviando comando " + comando
 						+ " para slot " + slot);
 			}
 			try {
@@ -355,7 +358,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				outClientes[slot].write(SEPARADOR_ENV);
 				outClientes[slot].flush();
 			} catch (IOException e) {
-				Log.w("MINITRUCO", e);
+				LOGGER.log(Level.INFO, "exceção ao enviar mensagem", e);
 				// Libera o slot e encerra o jogo em andamento
 				desconecta(slot);
 				if (jogo != null) {

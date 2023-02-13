@@ -1,8 +1,7 @@
 package me.chester.minitruco.core;
 
-import android.util.Log;
-
-import me.chester.minitruco.android.JogadorHumano;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
@@ -57,6 +56,8 @@ import me.chester.minitruco.android.JogadorHumano;
  *
  */
 public class JogoLocal extends Jogo {
+
+    private final static Logger LOGGER = Logger.getLogger("JogoLocal");
 
 	/**
 	 * Cria um novo jogo.
@@ -166,7 +167,7 @@ public class JogoLocal extends Jogo {
 	public void run() {
 
 		// Avisa os jogadores que o jogo vai começar
-		Log.i("Jogo", "Jogo (.run) iniciado");
+		LOGGER.log(Level.INFO, "Jogo (.run) iniciado");
 		for (Jogador interessado : jogadores) {
 			interessado.inicioPartida(pontosEquipe[0], pontosEquipe[1]);
 		}
@@ -180,12 +181,12 @@ public class JogoLocal extends Jogo {
 				sleep();
 			}
 			if (!jogoFinalizado) {
-				Log.i("Jogo", "alguém jogou!");
+				LOGGER.log(Level.INFO, "alguém jogou!");
 				processaJogada();
 				alguemJogou = false;
 			}
 		}
-		Log.i("Jogo", "Jogo (.run) finalizado");
+		LOGGER.log(Level.INFO, "Jogo (.run) finalizado");
 	}
 
 	/**
@@ -221,7 +222,7 @@ public class JogoLocal extends Jogo {
 		numRodadaAtual = 1;
 		jogadorAbriuMao = jogadorAbriuRodada = jogadorQueAbre;
 
-		Log.i("JogoLocal", "Abrindo mao com j" + jogadorQueAbre.getPosicao()
+		LOGGER.log(Level.INFO, "Abrindo mao com j" + jogadorQueAbre.getPosicao()
 				+ ",manilha=" + getManilha());
 
 		// Abre a primeira rodada, informando a carta da mesa e quem vai abrir
@@ -270,7 +271,7 @@ public class JogoLocal extends Jogo {
 		Jogador j = this.jogadorQueJogou;
 		Carta c = this.cartaJogada;
 
-		Log.i("JogoLocal", "processaJogada: j" + j.getPosicao() + " joga " + c +
+		LOGGER.log(Level.INFO, "processaJogada: j" + j.getPosicao() + " joga " + c +
 				"; jogadorPedindoAumento:" + (jogadorPedindoAumento == null ? "null" : jogadorPedindoAumento.getPosicao()) +
 				"; isAguardandoRespostaMao11:" + isAguardandoRespostaMao11() +
 				"; jogadorDaVez: "+getJogadorDaVez().getPosicao());
@@ -289,7 +290,7 @@ public class JogoLocal extends Jogo {
 		for (int i = 0; i <= 2; i++) {
 			for (int k = 0; k <= 3; k++) {
 				if (c.equals(cartasJogadasPorRodada[i][k])) {
-					Log.i("JogoLocal", "carta jogada anteriormente: "+ c + "," + i + "," + k);
+					LOGGER.log(Level.INFO, "carta jogada anteriormente: "+ c + "," + i + "," + k);
 					renotificaVezCPU();
 					return;
 				}
@@ -304,7 +305,7 @@ public class JogoLocal extends Jogo {
 			}
 		}
 		if (cartaNaMaoDoJogador == null) {
-			Log.i("JogoLocal", "j" + j.getPosicao() + " tentou jogar " + c +
+			LOGGER.log(Level.INFO, "j" + j.getPosicao() + " tentou jogar " + c +
 					" mas esta carta não está na mão dele");
 			renotificaVezCPU();
 			return;
@@ -315,7 +316,7 @@ public class JogoLocal extends Jogo {
 			c.setFechada(false);
 		}
 
-		Log.i("JogoLocal", "J" + j.getPosicao() + " joga " + c);
+		LOGGER.log(Level.INFO, "J" + j.getPosicao() + " joga " + c);
 
 		// Dá a carta como jogada, notificando os jogadores
 		cartasJogadasPorRodada[numRodadaAtual - 1][j.getPosicao() - 1] = c;
@@ -356,7 +357,7 @@ public class JogoLocal extends Jogo {
 				}
 			}
 
-			Log.i("JogoLocal", "Rodada fechou. Resultado: "
+			LOGGER.log(Level.INFO, "Rodada fechou. Resultado: "
 					+ getResultadoRodada(numRodadaAtual));
 
 			// Se houve vencedor, passa a vez para o jogador que fechou a
@@ -423,7 +424,7 @@ public class JogoLocal extends Jogo {
 	 */
 	private void fechaMao() {
 
-		Log.i("JogoLocal", "Mao fechou. Placar: " + pontosEquipe[0] + " a "
+		LOGGER.log(Level.INFO, "Mao fechou. Placar: " + pontosEquipe[0] + " a "
 				+ pontosEquipe[1]);
 
 		// Notifica os interessados que a rodada acabou, e, se for o caso, que o
@@ -488,7 +489,7 @@ public class JogoLocal extends Jogo {
 		if (jogoFinalizado || !aguardandoRespostaMaoDe11[j.getPosicao() - 1])
 			return;
 
-		Log.i("JogoLocal", "J" + j.getPosicao() + (aceita ? "" : " nao")
+		LOGGER.log(Level.INFO, "J" + j.getPosicao() + (aceita ? "" : " nao")
 				+ " quer jogar mao de 11 ");
 
 		// Se for uma CPU parceira de humano num jogo 100% local, trata como recusa
@@ -538,7 +539,7 @@ public class JogoLocal extends Jogo {
 			return;
 		}
 
-		Log.i("JogoLocal", "Jogador  " + j.getPosicao() + " pede aumento");
+		LOGGER.log(Level.INFO, "Jogador  " + j.getPosicao() + " pede aumento");
 
 		// Atualiza o status e notifica os outros jogadores do pedido
 		jogadorPedindoAumento = j;
@@ -551,7 +552,7 @@ public class JogoLocal extends Jogo {
 		for (Jogador interessado : jogadores) {
 			interessado.pediuAumentoAposta(j, valor);
 		}
-		Log.i("JogoLocal", "Jogadores notificados do aumento");
+		LOGGER.log(Level.INFO, "Jogadores notificados do aumento");
 
 	}
 
@@ -567,7 +568,7 @@ public class JogoLocal extends Jogo {
 			return;
 		}
 
-		Log.i("JogoLocal", "Jogador  " + j.getPosicao()
+		LOGGER.log(Level.INFO, "Jogador  " + j.getPosicao()
 				+ (aceitou ? "aceitou" : "recusou"));
 
 		int posParceiro = (j.getPosicao() + 1) % 4 + 1;
@@ -629,7 +630,7 @@ public class JogoLocal extends Jogo {
 
 	/**
 	 * Determina qual a equipe que está aguardando mão de 11
-	 * 
+	 *
 	 * @param i
 	 *            1 ou 2 para a respectiva equipe, 0 para ninguém aguardando mão
 	 *            de 11 (jogo normal)
@@ -704,7 +705,7 @@ public class JogoLocal extends Jogo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see mt.JogoGenerico#atualizaSituacao(mt.SituacaoJogo, mt.Jogador)
 	 */
 	public void atualizaSituacao(SituacaoJogo s, Jogador j) {
@@ -765,7 +766,7 @@ public class JogoLocal extends Jogo {
 
 	/**
 	 * Verifica se estamos aguardando resposta para mão de 11
-	 * 
+	 *
 	 * @return true se falta alguém responder, false caso contrário
 	 */
 	private boolean isAguardandoRespostaMao11() {

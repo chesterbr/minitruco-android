@@ -64,7 +64,7 @@ public class OpcoesActivity extends PreferenceActivity {
 	// public void onSharedPreferenceChanged(
 	// SharedPreferences sharedPreferences, String key) {
 	// if ("baralhoLimpo".equals(key)) {
-	// Log.w("Zerando manilha velha quando acionou baralho limpo", key);
+	// LOGGER.log(Level.INFO, key);
 	// Editor e = sharedPreferences.edit();
 	// e.putBoolean("manilhaVelha", false);
 	// e.commit();
