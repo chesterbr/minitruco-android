@@ -7,30 +7,13 @@ O jogo ainda está em desenvolvimento e pode apresentar instabilidades. Reports 
 
 Este software é livre, e você é encorajado a usar e modificar seu código como quiser, dentro dos termos da licença abaixo (vide abaixo para maiores informações).
 
-[1] A versão Java ME continua hospedada em http://code.google.com/p/minitruco
+[1] A versão Java ME continua hospedada em https://github.com/chesterbr/minitruco-j2me
 
 
 Requisitos do Código-Fonte
 --------------------------
 
-O código tem como plataforma-alvo o Android 2.2. Para a compilação é necessário apenas o Android Studio. Neste caso, basta importar a sub-pasta minitruco-android como projeto e testar diretamente no emulador.
-
-
-Backlog
--------
-
-Features/bugs:
-- Nenhum! \o/
-
-Débito Técnico:
-- Refactor: Renomear o Jogo e descendentes para Partida (fazer isso quando tiver tempo, para arrumar comentários, etc.)
-- Refactor: Trocar os loops de thread baseados em sleep por um esquema wait/notify (JogadorCPU e JogoLocal). Ou pelo menos fazer algo melhor com as InterruptedException (vide http://bit.ly/172PUX)
-- Mover strings (ex.: frases do botão de truco) para strings.xml
-- Criar constantes, polimorfismos ou qualquer coisa para matar os magic numbers herdados do miniTruco Java ME. Ex.: posições dos jogadores, nomes das equipes.
-- Criar uma documentação do desenvolvedor nos moldes de http://minitruco.googlecode.com/svn/tags/v3.12.00/docs/index.html
-
-Features 2.0:
-- Jogos multiplayer
+O código tem como plataforma-alvo o Android 4.0.1. Para a compilação é necessário apenas o Android Studio.
 
 
 Créditos e Licença
