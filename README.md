@@ -15,6 +15,8 @@ Requisitos do Código-Fonte
 
 O código tem como plataforma-alvo o Android 4.0.1. Para a compilação é necessário apenas o Android Studio.
 
+Recomendado desligar: Preferences => Inspections => Spelling => Typo, porque muito do código e dos comentários estão em português.
+
 
 Créditos e Licença
 ------------------
