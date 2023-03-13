@@ -53,11 +53,12 @@ public class ComandoS extends Comando {
         if (s != null) {
             s.remove(j);
             j.println("S");
-            if (s.getNumPessoas() == 0) {
-                // Se esvaziou a sala, volta as regras para o default
-                s.baralhoLimpo = false;
-                s.manilhaVelha = false;
-            }
+            // TODO: ao esvaziar uma sala completamente, liberar ela?
+//            if (s.getNumPessoas() == 0) {
+//                // Se esvaziou a sala, volta as regras para o default
+//                s.baralhoLimpo = false;
+//                s.manilhaVelha = false;
+//            }
             s.notificaJogadores(s.getInfo());
         } else {
             j.println("X FS");

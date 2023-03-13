@@ -38,7 +38,6 @@ package me.chester.minitruco.server;
  */
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -95,9 +94,9 @@ public class Sala {
     private JogoLocal jogo = null;
 
     /**
-     * Cria uma sala e coloca o jogador nela.
+     * Cria uma sala .
      */
-    public Sala(JogadorConectado j, boolean publica, boolean baralhoLimpo, boolean manilhaVelha, boolean tentoMineiro) {
+    public Sala(boolean publica, boolean baralhoLimpo, boolean manilhaVelha, boolean tentoMineiro) {
         if (publica) {
             salasPublicasDisponiveis.add(this);
         } else {
@@ -108,21 +107,24 @@ public class Sala {
         this.baralhoLimpo = baralhoLimpo;
         this.manilhaVelha = manilhaVelha;
         this.tentoMineiro = tentoMineiro;
-        adiciona(j);
     }
 
     /**
      * Coloca o jogador em uma sala pública que tenha as regras especificadas,
      * criando uma caso estejam todas lotadas
+     *
+     * @return
      */
-    public static synchronized void colocaEmSalaPublica(JogadorConectado j, boolean baralhoLimpo, boolean manilhaVelha, boolean tentoMineiro) {
+    public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, boolean baralhoLimpo, boolean manilhaVelha, boolean tentoMineiro) {
         Sala sala = salasPublicasDisponiveis.stream().filter(s ->
             s.baralhoLimpo == baralhoLimpo &&
             s.manilhaVelha == manilhaVelha &&
             s.tentoMineiro == tentoMineiro
         ).findFirst().orElse(
-            new Sala(j, false, baralhoLimpo, manilhaVelha, tentoMineiro)
+            new Sala(true, baralhoLimpo, manilhaVelha, tentoMineiro)
         );
+        sala.adiciona(j);
+        return sala;
     }
 
     /**
