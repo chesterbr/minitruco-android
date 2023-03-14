@@ -4,26 +4,27 @@ o jogo via internet
 
 === Comandos
 
+W - recupera número de versão (e de repente outras infos no futuro)
 E PUB ___ - Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com as regras especificadas
 S - Sai da sala (encerrando o jogo, se houver um em andamento)
 
 === Notificações (podem ser dadas assincronamente por um comando ou não)
 
+W x.y - Versão do servidor (outras infos podem vir no futuro)
 X CI - Comando inválido
 X AI - Argumento inválido
 X TT - Regras inválidas (não é possível jogar com baralho limpo e manilha velha)
 
 ------- comandos acima desta linha foram migrados/implementados
 
-E N - Cria uma nova sala privada
-E E codigo - Entra na sala privada com o código especificado
+E PRI ___ - Cria uma nova sala privada com as regras especificadas
+E PRI codigo - Entra na sala privada com o código especificado
 
 
 Comandos
 --------
 
 Iniciais (identificação):
-W - recupera número de versão
 N nome/email [password] - Define o nome do jogador
 Z Statistics about the server, however at the moment only current number of users is implemented.
 
