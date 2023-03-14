@@ -4,7 +4,7 @@ o jogo via internet
 
 === Comandos
 
-E R ___ - Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com as regras especificadas
+E PUB ___ - Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com as regras especificadas
 S - Sai da sala (encerrando o jogo, se houver um em andamento)
 
 === Notificações (podem ser dadas assincronamente por um comando ou não)

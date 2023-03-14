@@ -23,7 +23,7 @@ public class ComandoE extends Comando {
 				j.println("X JE " + j.getSala().codigo);
 			} else {
 				switch (args[1]) {
-					case "R":
+					case "PUB":
 						boolean baralhoLimpo = args[2].charAt(0) == 'T';
 						boolean manilhaVelha = args[2].charAt(1) == 'T';
 						boolean tentoMineiro = args[2].charAt(2) == 'T';
