@@ -20,24 +20,18 @@ package me.chester.minitruco.server;
  */
 
 /**
- * Informa ao servidor que o jogador deseja iniciar a partida na sala em que está.
- * <p>
- * @author Chester
+ * Corre (recusa aumento de aposta)
+ * 
+ * @author chester
  *
  */
-public class ComandoQ extends Comando {
+public class ComandoC extends Comando {
 
 	@Override
 	public void executa(String[] args, JogadorConectado j) {
-
-		Sala s = j.getSala();
-		if (s!=null) {
-			j.querJogar = true;
-			s.notificaJogadores(s.getInfo());
-			s.verificaMesaCompleta();
-		} else {
-			j.println("X FS");
-		}
+		if (!j.jogando)
+			return;		
+		j.getSala().getJogo().respondeAumento(j,false);
 	}
 
 }

@@ -1,5 +1,7 @@
 package me.chester.minitruco.server;
 
+import me.chester.minitruco.core.Carta;
+
 /*
  * Copyright © 2006-2007 Carlos Duarte do Nascimento (Chester)
  * cd@pobox.com
@@ -19,25 +21,35 @@ package me.chester.minitruco.server;
  * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+
 /**
- * Informa ao servidor que o jogador deseja iniciar a partida na sala em que está.
+ * Joga uma carta na mesa.
  * <p>
+ * Parâmetro: Carta a ser jogada, no formato Ln (Letra/Naipe).<br>
+ * Parâmetro 2 (opcional, default F): Se T, joga a carta fechada
+ * <p>
+ * Se a jogada for válida, será informada para todos os jogadores (incluindo o
+ * que jogou). Se não for, nenhuma mensagem é devolvida.
+ * 
  * @author Chester
- *
+ * @see Carta#toString()
+ * 
  */
-public class ComandoQ extends Comando {
+public class ComandoJ extends Comando {
 
 	@Override
 	public void executa(String[] args, JogadorConectado j) {
-
-		Sala s = j.getSala();
-		if (s!=null) {
-			j.querJogar = true;
-			s.notificaJogadores(s.getInfo());
-			s.verificaMesaCompleta();
-		} else {
-			j.println("X FS");
+		// Verifica se estamos em jogo e se recebeu argumento
+		if ((!j.jogando) || (args.length<2))
+			return;
+		// Encontra a carta solicitada (na mão do jogador)
+		Carta[] cartas = j.getCartas();
+		for (int i = 0; i < cartas.length; i++) {
+			if (cartas[i] != null && cartas[i].toString().equals(args[1])) {
+				// Joga a carta. Se der certo o evento vai notificar a todos.
+				cartas[i].setFechada(args.length > 2 && args[2].equals("T"));
+				j.getSala().getJogo().jogaCarta(j, cartas[i]);
+			}
 		}
 	}
-
 }
