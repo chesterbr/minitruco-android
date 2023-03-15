@@ -7,6 +7,7 @@ o jogo via internet
 === Gerais
 
 W - recupera número de versão (e de repente outras infos no futuro)
+N nome - Define o nome do jogador
 E PUB ___ - Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com as regras especificadas
 S - Sai da sala (encerrando o jogo, se houver um em andamento)
 Q - Quero Jogar
@@ -26,6 +27,10 @@ X CI - Comando inválido
 X AI - Argumento inválido
 X TT - Regras inválidas (não é possível jogar com baralho limpo e manilha velha)
 X FS - Você não está numa sala
+X NI - Nome inválido
+X NE - Nome já está em uso
+X NO - É preciso atribuir um nome para entrar na sala
+N nome
 I sala nome1|nome2|nome3|nome4 ____ posicao __ - Info da sala
       (numero, nomes dos jogadores, T/F "quer jogar" dos jogadores, posicao do gerente, T/F baralho limpo, T/F manilha velha)
 P posicao - Início da partida, sua posição é essa
@@ -54,7 +59,6 @@ Comandos
 --------
 
 Iniciais (identificação):
-N nome/email [password] - Define o nome do jogador
 Z Statistics about the server, however at the moment only current number of users is implemented.
 
 Navegação:
@@ -87,11 +91,8 @@ U Database queries:
 X JE sala - Você já está na sala de número "sala"
 X CH - Sala cheia, escolha outra
 X SI - Sala inválida
-X NI - Nome inválido
-X NE - Nome já está em uso / Database access error
 X JO - Você está em jogo, não pode fazer isso
 X JI - Jogador (posicao) invalida (deve ser de 1 a 4)
-X NO - É preciso atribuir um nome para entrar na sala
 X NP Invalid credentials (username/email/password)
 X NQ Nick does not exist
 X NA Email already in use when trying to register
@@ -104,8 +105,6 @@ X NX Invitation code expired
 X DB Error on a database query
 X NG Only registered users can do this
 X DV User already voted
-N nome[|email|city|state|birth|sex|avatar|wins|losses|cool] - Nome do jogador agora é nome. Detalhes adicionais
- são também retornados se usuário for registrado.
 L numero[|numero|numero...] - Listagem de salas (# de jogadores separado por pipe)
 E sala - Informa que o jogador entrou na sala com este número (um I vem logo em seguida)
 S - Informa que o jogador saiu da sala

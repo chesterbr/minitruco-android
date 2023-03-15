@@ -18,6 +18,10 @@ public class ComandoE extends Comando {
 	public void executa(String[] args, JogadorConectado j) {
 
 		try {
+			if (j.getNome().equals("unnamed")) {
+				j.println("X NO");
+				return;
+			}
 			if (j.getSala() != null) {
 				// TODO: mostrar o código se for sala pública?
 				j.println("X JE " + j.getSala().codigo);
