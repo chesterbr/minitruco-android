@@ -76,9 +76,7 @@ public class JogadorConectado extends Jogador implements Runnable {
      */
     private static final Set<String> nomes = new HashSet<String>();
     private final Socket cliente;
-    private final String[] ARQUIVOS_PERMITIDOS_HTTP = {"/applet.html",
-            "/miniTruco.jar", "/microemulator.jar", "/mtskin.jar",
-            "/favicon.ico", "/english.jar", "/applet_en.html"};
+
     /**
      * Informa se o jogador está participando de um jogo
      */
@@ -115,11 +113,6 @@ public class JogadorConectado extends Jogador implements Runnable {
         return nomes.contains(nome.toUpperCase());
     }
 
-    /*
-     * public void println(String mensagem) { if (out!=null) {
-     * out.println(mensagem); } }
-     */
-
     /**
      * Impede que um nome seja usado
      *
@@ -153,7 +146,9 @@ public class JogadorConectado extends Jogador implements Runnable {
     public void println(String linha) {
         out.print(linha);
         out.print("\r\n");
-        ServerLogger.evento(this, linha);
+        if (linha.length() > 0) {
+            ServerLogger.evento(this, linha);
+        }
     }
 
     /**
@@ -171,7 +166,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                     cliente.getInputStream()));
             out = new PrintStream(cliente.getOutputStream());
             // Imprime info do servidor (como mensagem de boas-vindas)
-            (new ComandoW()).executa(new String[0], this);
+            (new ComandoW()).executa(null, this);
             while (true) {
                 String s = null;
                 try {
@@ -194,42 +189,6 @@ public class JogadorConectado extends Jogador implements Runnable {
                 String[] args = s.split(" ");
                 if (args.length == 0 || args[0].length() == 0) {
                     continue;
-                }
-
-                // Se for um pedido de browser (para um arquivo da applet),
-                // serve e desconecta
-                if (args[0].equals("GET") && (args.length > 1)) {
-                    // Log do GET (incluindo headers)
-                    do {
-                        ServerLogger.evento(this, "]" + s);
-                        s = in.readLine();
-                        /*
-                         * TODO Arrumar esse código, não funciona a contento //
-                         * Se o cliente tiver uma cópia no cache, tenta usar if
-                         * (s.startsWith(IF_MODIFIED_SINCE_HTTP_HEADER)) { try {
-                         * Date dataMax = MiniTrucoServer.dfStartup .parse(s
-                         * .substring(IF_MODIFIED_SINCE_HTTP_HEADER .length()));
-                         * System.out.println(MiniTrucoServer.dataStartup);
-                         * System.out.println(dataMax); if
-                         * (!MiniTrucoServer.dataStartup.after(dataMax)) {
-                         * ServerLogger.evento("304 Not Modified");
-                         * out.println("HTTP/1.0 304 Not Modified");
-                         * out.flush(); cliente.close(); return; } } catch
-                         * (ParseException e) { // Se não conseguiu parsear,
-                         * loga e desencana ServerLogger.evento(this,
-                         * "!Cabecalho invalido: " + s + ". Erro: " +
-                         * e.getMessage()); } }
-                         */
-                    } while ((s != null) && (!s.equals("")));
-                    // Se livra dos parâmetros
-                    String nomeArq = args[1];
-                    int fimNome = nomeArq.indexOf('?');
-                    if (fimNome != -1)
-                        nomeArq = nomeArq.substring(0, fimNome);
-                    // Serve o arquivo
-                    serveArquivosApplet(nomeArq, out);
-                    cliente.close();
-                    return;
                 }
 
                 // Encontra a implementação do comando solicitado e chama
@@ -267,70 +226,7 @@ public class JogadorConectado extends Jogador implements Runnable {
 
     }
 
-    /**
-     * Serve (em formato HTTP) os arquivos que permitem inicializar a applet.
-     * <p>
-     *
-     * @param nomeArq nome do arquivo a ser servido (precedido de "/"), que deve
-     *                estar disponível no classpath e na lista de arquivos
-     *                permitidos
-     * @param out     stream para onde o HTML será servido
-     */
-    private void serveArquivosApplet(String nomeArq, PrintStream out) {
-        try {
 
-            if (nomeArq.equals("/")) {
-                nomeArq = "/applet.html";
-            }
-
-            boolean permitido = false;
-            for (int i = 0; i < ARQUIVOS_PERMITIDOS_HTTP.length; i++) {
-                if (ARQUIVOS_PERMITIDOS_HTTP[i].equals(nomeArq)) {
-                    permitido = true;
-                    break;
-                }
-            }
-
-            InputStream is = getClass().getResourceAsStream(nomeArq);
-
-            if (!permitido || (is == null)) {
-                ServerLogger.evento("404 Not Found: " + nomeArq);
-                out.println("HTTP/1.0 404 Not Found");
-                out.println("Content-Length: 14");
-                out.println();
-                out.println("Nao Encontrado");
-                return;
-            }
-
-            ServerLogger.evento("200 Ok: " + nomeArq);
-            BufferedInputStream bis = new BufferedInputStream(is);
-            out.println("HTTP/1.0 200 OK");
-            if (nomeArq.endsWith(".html")) {
-                out.println("Content-Type: text/html");
-            } else if (nomeArq.endsWith(".jar")) {
-                out.println("Content-Type: application/x-java-archive");
-            } else if (nomeArq.endsWith(".ico")) {
-                out.println("Content-Type: image/x-icon");
-            }
-            out.println("Server: miniTrucoServer/"
-                    + MiniTrucoServer.VERSAO_SERVER);
-            // Como não temos como recuperar as datas dos arquivos no JAR, vamos
-            // usar a data de startup do servidor (que é razoavelmente estável e
-            // só cresce nas CNTP)
-            out.println("Last-modified:" + MiniTrucoServer.strDataStartup);
-            out.println("Content-Length: " + bis.available());
-            out.println();
-            byte[] buf = new byte[4096];
-            int numBytes;
-            while ((numBytes = bis.read(buf)) != -1) {
-                out.write(buf, 0, numBytes);
-            }
-            bis.close();
-            is.close();
-        } catch (IOException e) {
-            ServerLogger.evento(e, "Erro de I/O ao servir " + nomeArq);
-        }
-    }
 
     @Override
     public void cartaJogada(Jogador j, Carta c) {
