@@ -120,9 +120,10 @@ public class Sala {
             s.baralhoLimpo == baralhoLimpo &&
             s.manilhaVelha == manilhaVelha &&
             s.tentoMineiro == tentoMineiro
-        ).findFirst().orElse(
-            new Sala(true, baralhoLimpo, manilhaVelha, tentoMineiro)
-        );
+        ).findFirst().orElse(null);
+        if (sala == null) {
+            sala = new Sala(true, baralhoLimpo, manilhaVelha, tentoMineiro);
+        }
         sala.adiciona(j);
         return sala;
     }
@@ -158,16 +159,7 @@ public class Sala {
                 timestamps[i] = new Date();
                 // Link jogador->sala
                 j.setSala(this);
-                // Se for uma sala pública, coloca na lista certa (para agilizar busca de salas abertas)
-                if (codigo == null) {
-                    if (this.getNumPessoas() == 4) {
-                        salasPublicasLotadas.add(this);
-                        salasPublicasDisponiveis.remove(this);
-                    } else {
-                        salasPublicasLotadas.remove(this);
-                        salasPublicasDisponiveis.add(this);
-                    }
-                }
+                atualizaColecoesDeSalas();
                 return true;
             }
         }
@@ -233,10 +225,31 @@ public class Sala {
                 jogadores[i] = null;
                 // Desfaz link jogador->sala
                 j.setSala(null);
+                j.querJogar = false;
+                atualizaColecoesDeSalas();
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Mantém as coleções atualizadas quando um jogador entra ou sai da sala
+     *
+     * Sala com 1-3 jogadores vai para salasPublicasDisponiveis
+     * Sala com 4 jogadores vai para salasPublicasLotadas
+     * Sala com 0 jogadores não vai para nenhuma coleção (e vai ser garbage collected)
+     */
+    private void atualizaColecoesDeSalas() {
+        if (codigo == null) {
+            salasPublicasDisponiveis.remove(this);
+            salasPublicasLotadas.remove(this);
+            if (this.getNumPessoas() == 4) {
+                salasPublicasLotadas.add(this);
+            } else if (this.getNumPessoas() > 0) {
+                salasPublicasDisponiveis.add(this);
+            }
+        }
     }
 
     /**
