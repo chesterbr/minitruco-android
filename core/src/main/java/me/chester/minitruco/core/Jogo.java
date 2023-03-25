@@ -1,41 +1,7 @@
 package me.chester.minitruco.core;
 
-/*
- * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
- * Todos os direitos reservados.
- *
- * A redistribuição e o uso nas formas binária e código fonte, com ou sem
- * modificações, são permitidos contanto que as condições abaixo sejam
- * cumpridas:
- * 
- * - Redistribuições do código fonte devem conter o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente.
- * 
- * - Redistribuições na forma binária devem reproduzir o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente na documentação e/ou materiais fornecidos com
- *   a distribuição.
- *   
- * - Nem o nome do Chester, nem o nome dos contribuidores podem ser
- *   utilizados para endossar ou promover produtos derivados deste
- *   software sem autorização prévia específica por escrito.
- * 
- * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
- * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
- * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
- * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS. EM NENHUMA
- * HIPÓTESE OS TITULARES DE DIREITOS AUTORAIS E CONTRIBUIDORES SERÃO
- * RESPONSÁVEIS POR QUAISQUER DANOS, DIRETOS, INDIRETOS, INCIDENTAIS,
- * ESPECIAIS, EXEMPLARES OU CONSEQUENTES, (INCLUINDO, SEM LIMITAÇÃO,
- * FORNECIMENTO DE BENS OU SERVIÇOS SUBSTITUTOS, PERDA DE USO OU DADOS,
- * LUCROS CESSANTES, OU INTERRUPÇÃO DE ATIVIDADES), CAUSADOS POR QUAISQUER
- * MOTIVOS E SOB QUALQUER TEORIA DE RESPONSABILIDADE, SEJA RESPONSABILIDADE
- * CONTRATUAL, RESTRITA, ILÍCITO CIVIL, OU QUALQUER OUTRA, COMO DECORRÊNCIA
- * DE USO DESTE SOFTWARE, MESMO QUE HOUVESSEM SIDO AVISADOS DA
- * POSSIBILIDADE DE TAIS DANOS.
- * 
- */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
  * Jogo (partida) em andamento (independente de estar rodando local ou
@@ -49,9 +15,9 @@ package me.chester.minitruco.core;
  * A classe é um Runnable para permitir tanto a execução em Thread (que "viverá"
  * o tempo de uma partida completa) quanto a chamada direta ao método run()
  * (para rodar um teste, por exemplo).
- * 
+ *
  * @see JogoLocal
- * 
+ *
  */
 public abstract class Jogo implements Runnable {
 
@@ -73,7 +39,7 @@ public abstract class Jogo implements Runnable {
 	 * Este método está na superclasse porque, no início da rodada, toda a
 	 * informação necessária consiste na manilha e em sua regra, e essas já
 	 * foram transmitidas, evitando assim, dúzias de comandos.
-	 * 
+	 *
 	 * @param c
 	 *            Carta cujo valor desejamos
 	 */
@@ -151,13 +117,13 @@ public abstract class Jogo implements Runnable {
 	 * A rotina não verifica se o jogador realmente possuía aquela carta -
 	 * assume-se que as instâncias de Jogador são honestas e se protegem de
 	 * clientes remotos desonestos
-	 * 
+	 *
 	 */
 	public abstract void jogaCarta(Jogador j, Carta c);
 
 	/**
 	 * Informa ao jogo o resultado de aceite daquela mão de 11
-	 * 
+	 *
 	 * @param j
 	 *            Jogador que está respondendo
 	 * @param aceita
@@ -176,7 +142,7 @@ public abstract class Jogo implements Runnable {
 	 * Observe-se que a vez do jogador fica "suspensa", já que lançamentos de
 	 * cartas só são aceitos se não houver ninguém trucando. Como o jogador
 	 * atualmente só pode trucar na sua vez, isso não é problema.
-	 * 
+	 *
 	 * @param j
 	 *            Jogador que está solicitando o aumento
 	 */
@@ -184,7 +150,7 @@ public abstract class Jogo implements Runnable {
 
 	/**
 	 * Informa que o jogador respondeu a um pedido de aumento de aposta
-	 * 
+	 *
 	 * @param j
 	 *            Jogador que respondeu ao pedido
 	 * @param aceitou
@@ -195,7 +161,7 @@ public abstract class Jogo implements Runnable {
 
 	/**
 	 * Retorna as cartas jogadas por cada jogador naquela rodada
-	 * 
+	 *
 	 * @param rodada
 	 *            número de 1 a 3
 	 * @return cartas jogadas naquela rodada (índice = posição do Jogador-1)
@@ -212,7 +178,7 @@ public abstract class Jogo implements Runnable {
 	/**
 	 * Atualiza um objeto que contém a situação do jogo (exceto pelas cartas do
 	 * jogador)
-	 * 
+	 *
 	 * @param s
 	 *            objeto a atualizar
 	 * @param j
@@ -239,7 +205,7 @@ public abstract class Jogo implements Runnable {
 	 * <p>
 	 * Ele será colocado na próxima posição disponível, e passa a receber
 	 * eventos do jogo.
-	 * 
+	 *
 	 * @param jogador
 	 *            Jogador que será adicionado (CPU, humano, etc)
 	 * @return true se adicionou o jogador, false se não conseguiu (ex.: mesa
@@ -268,7 +234,7 @@ public abstract class Jogo implements Runnable {
 
 	/**
 	 * Recupera um jogador inscrito
-	 * 
+	 *
 	 * @param posicao
 	 *            valor de 1 a 4
 	 * @return Objeto correspondente àquela posição
@@ -305,7 +271,7 @@ public abstract class Jogo implements Runnable {
 	 * Determina a letra da manilha, baseado na carta virada (o "vira").
 	 * <p>
 	 * Deve ser chamado a cada inicialização de mão.
-	 * 
+	 *
 	 * @param c
 	 *            Carta virada. Ignorado se for jogo com manilha velha
 	 */
@@ -356,7 +322,7 @@ public abstract class Jogo implements Runnable {
 	 * Implementações podem sobrescrever (ex.: para notificar o servidor) mas
 	 * devem chamar o super()
 	 * <p>
-	 * 
+	 *
 	 * @param posicao
 	 *            posição (1 a 4) do jogador que motivou o abort
 	 */
