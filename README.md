@@ -3,9 +3,11 @@ miniTruco Android
 
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android.
 
-Parcialmente baseado na [versão Java ME](O https://github.com/chesterbr/minitruco-j2me). 
+Ele é completamente gratuito, sem anúncios, leve e não precisa de internet para conectar (mas é possível jogar com outras pessoas via Bluetooth e, em breve, também pela internet).
 
-Este software é livre, e você é encorajado a usar e modificar seu código como quiser, dentro dos [termos da licença](LICENSE).
+A [versão oficial](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt) está disponível na Google Play Store.
+
+É um software livre, desenvolvido por hobby no meu tempo livre (com valiosas colaborações de outras pessoas). Você pode usar e modificar seu código como quiser, dentro dos [termos da licença](LICENSE).
 
 
 Desenvolvimento e Contribuição
@@ -17,7 +19,8 @@ O desenvolvimento é baseado no Android Studio. Recomendado desligar: Preference
 
 Fique à vontade para criar issues do GitHub; você também pode reportar erros por e-mail, mas provavelmente eu vou colocar numa issue de qualquer forma.
 
-Pull requests são bem-vindas, mas não há garantia de aceite (em particular devido à falta de testes automáticos, eu tenho que testar tudo muito cuidadosamente).
+Pull requests são bem-vindas, mas não há garantia de aceite (em particular devido à falta de testes automáticos, eu tenho que testar tudo muito cuidadosamente). O código é bastante antigo (baseado na [versão Java ME](https://github.com/chesterbr/minitruco-j2me), ainda mais antiga), mas aos poucos estou tentando modernizar.
+
 
 Créditos
 --------
