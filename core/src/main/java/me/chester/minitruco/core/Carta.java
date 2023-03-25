@@ -1,52 +1,18 @@
 package me.chester.minitruco.core;
 
-/*
- * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
- * Todos os direitos reservados.
- *
- * A redistribuição e o uso nas formas binária e código fonte, com ou sem
- * modificações, são permitidos contanto que as condições abaixo sejam
- * cumpridas:
- * 
- * - Redistribuições do código fonte devem conter o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente.
- * 
- * - Redistribuições na forma binária devem reproduzir o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente na documentação e/ou materiais fornecidos com
- *   a distribuição.
- *   
- * - Nem o nome do Chester, nem o nome dos contribuidores podem ser
- *   utilizados para endossar ou promover produtos derivados deste
- *   software sem autorização prévia específica por escrito.
- * 
- * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
- * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
- * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
- * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS. EM NENHUMA
- * HIPÓTESE OS TITULARES DE DIREITOS AUTORAIS E CONTRIBUIDORES SERÃO
- * RESPONSÁVEIS POR QUAISQUER DANOS, DIRETOS, INDIRETOS, INCIDENTAIS,
- * ESPECIAIS, EXEMPLARES OU CONSEQUENTES, (INCLUINDO, SEM LIMITAÇÃO,
- * FORNECIMENTO DE BENS OU SERVIÇOS SUBSTITUTOS, PERDA DE USO OU DADOS,
- * LUCROS CESSANTES, OU INTERRUPÇÃO DE ATIVIDADES), CAUSADOS POR QUAISQUER
- * MOTIVOS E SOB QUALQUER TEORIA DE RESPONSABILIDADE, SEJA RESPONSABILIDADE
- * CONTRATUAL, RESTRITA, ILÍCITO CIVIL, OU QUALQUER OUTRA, COMO DECORRÊNCIA
- * DE USO DESTE SOFTWARE, MESMO QUE HOUVESSEM SIDO AVISADOS DA
- * POSSIBILIDADE DE TAIS DANOS.
- * 
- */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
  * Representa uma carta do truco
- * 
- * 
+ *
+ *
  */
 public class Carta {
 
 	/**
 	 * Cria uma carta com letra e naipe definidos
-	 * 
+	 *
 	 * @param letra
 	 * @param naipe
 	 */
@@ -57,7 +23,7 @@ public class Carta {
 
 	/**
 	 * Cria uma carta baseado em sua representação string
-	 * 
+	 *
 	 * @param sCarta
 	 *            letra e naipe da carta, conforme retornado por
 	 *            <code>toString()</code>
@@ -118,7 +84,7 @@ public class Carta {
 	 * <p>
 	 * Letras válidas são as da constante LETRAS_VALIDAS. Se a letra for
 	 * inválida, a propriedade não é alterda.
-	 * 
+	 *
 	 * @param letra
 	 */
 	public void setLetra(char letra) {
@@ -135,7 +101,7 @@ public class Carta {
 	 * Seta o naipe da carta.
 	 * <p>
 	 * Caso o naipe seja inválido, não é alterado
-	 * 
+	 *
 	 * @param naipe
 	 *            Naipe de acordo com as constantes
 	 */
@@ -157,7 +123,7 @@ public class Carta {
 	/**
 	 * Determina que uma carta foi jogada como "fechada", e seu valor deve ser
 	 * ignorado.
-	 * 
+	 *
 	 * @param fechada
 	 */
 	public void setFechada(boolean fechada) {
@@ -170,7 +136,7 @@ public class Carta {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object outroObjeto) {
@@ -184,7 +150,7 @@ public class Carta {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
@@ -193,7 +159,7 @@ public class Carta {
 
 	/**
 	 * Retorna um valor de 1 a 14 para esta carta, considerando a manilha
-	 * 
+	 *
 	 * @param letraManilha
 	 *            letra da manilha desta rodada
 	 * @return valor que permite comparar duas cartas
@@ -217,7 +183,7 @@ public class Carta {
 
 	/**
 	 * Escurece/clareia uma carta para indicar que ela não está/está em jogo
-	 * 
+	 *
 	 * @param cartaEmJogo
 	 *            true para clarear, false para escurecer
 	 */
