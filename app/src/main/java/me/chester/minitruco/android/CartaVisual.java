@@ -17,42 +17,8 @@ import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 
-/*
- * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
- * Todos os direitos reservados.
- *
- * A redistribuição e o uso nas formas binária e código fonte, com ou sem
- * modificações, são permitidos contanto que as condições abaixo sejam
- * cumpridas:
- * 
- * - Redistribuições do código fonte devem conter o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente.
- * 
- * - Redistribuições na forma binária devem reproduzir o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente na documentação e/ou materiais fornecidos com
- *   a distribuição.
- *   
- * - Nem o nome do Chester, nem o nome dos contribuidores podem ser
- *   utilizados para endossar ou promover produtos derivados deste
- *   software sem autorização prévia específica por escrito.
- * 
- * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
- * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
- * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
- * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS. EM NENHUMA
- * HIPÓTESE OS TITULARES DE DIREITOS AUTORAIS E CONTRIBUIDORES SERÃO
- * RESPONSÁVEIS POR QUAISQUER DANOS, DIRETOS, INDIRETOS, INCIDENTAIS,
- * ESPECIAIS, EXEMPLARES OU CONSEQUENTES, (INCLUINDO, SEM LIMITAÇÃO,
- * FORNECIMENTO DE BENS OU SERVIÇOS SUBSTITUTOS, PERDA DE USO OU DADOS,
- * LUCROS CESSANTES, OU INTERRUPÇÃO DE ATIVIDADES), CAUSADOS POR QUAISQUER
- * MOTIVOS E SOB QUALQUER TEORIA DE RESPONSABILIDADE, SEJA RESPONSABILIDADE
- * CONTRATUAL, RESTRITA, ILÍCITO CIVIL, OU QUALQUER OUTRA, COMO DECORRÊNCIA
- * DE USO DESTE SOFTWARE, MESMO QUE HOUVESSEM SIDO AVISADOS DA
- * POSSIBILIDADE DE TAIS DANOS.
- * 
- */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
  * Uma carta que está sendo exibida no celular. É uma subclasse separada de
@@ -60,8 +26,8 @@ import me.chester.minitruco.core.Carta;
  * <p>
  * Esta classe faz o desenho da carta, executa sua animação, e ajusta sua
  * proporção para a resolução do celular.
- * 
- * 
+ *
+ *
  */
 public class CartaVisual extends Carta {
 
@@ -71,7 +37,7 @@ public class CartaVisual extends Carta {
 
 	/**
 	 * Cria uma nova carta na posição indicada
-	 * 
+	 *
 	 * @param left
 	 *            posição em relação à esquerda
 	 * @param top
@@ -88,7 +54,7 @@ public class CartaVisual extends Carta {
 	/**
 	 * Ajusta a altura/largura das cartas para caberem na mesa (considerando a
 	 * folga necessária para o descarte as cartas ao redor dele)
-	 * 
+	 *
 	 * @param larguraCanvas
 	 *            largura da mesa
 	 * @param alturaCanvas
@@ -115,7 +81,7 @@ public class CartaVisual extends Carta {
 	 * Move uma carta diretamente para uma posição, sem animar.
 	 * <p>
 	 * Qualuqer animação em curso será cancelada.
-	 * 
+	 *
 	 * @param left
 	 *            posição em relação à esquerda
 	 * @param top
@@ -132,7 +98,7 @@ public class CartaVisual extends Carta {
 	 * <p>
 	 * O método só guarda esses valores - o movimento real acontece à medida em
 	 * que a carta é redesenhada (isto é, no método draw).
-	 * 
+	 *
 	 * @param left
 	 *            posição em relação à esquerda
 	 * @param top
@@ -154,7 +120,7 @@ public class CartaVisual extends Carta {
 	 * <p>
 	 * Caso a carta esteja em meio a uma animação, atualiza sua posição para
 	 * corresponder ao instante atual.
-	 * 
+	 *
 	 * @param canvas
 	 */
 	public void draw(Canvas canvas) {
@@ -216,7 +182,7 @@ public class CartaVisual extends Carta {
 
 	/**
 	 * Diz se um ponto do canvas está dentro dessa carta ou não.
-	 * 
+	 *
 	 * @param x
 	 *            coordenada x do ponto
 	 * @param y
@@ -230,7 +196,7 @@ public class CartaVisual extends Carta {
 
 	/**
 	 * Associa uma carta do jogo (i.e., não visual) a esse objeto carta visual
-	 * 
+	 *
 	 * @param c
 	 *            carta a ser associada. Se <code>null</code>, desassocia a
 	 *            carta visual de qualquer carta real.
@@ -255,7 +221,7 @@ public class CartaVisual extends Carta {
 	 * Recupera o bitmap correspondente a essa carta (levando em conta se ela
 	 * está "fechada" ou não, e se tem um valor atribuído). Pode ser chamado
 	 * múltiplas vezes, pois guarda referência do cache a cada mudança de estado
-	 * 
+	 *
 	 * @return bitmap do cache.
 	 */
 	private Bitmap getBitmap() {
@@ -300,7 +266,7 @@ public class CartaVisual extends Carta {
 
 	/**
 	 * Recupera o bitmap da carta a partir dos resources
-	 * 
+	 *
 	 * @param valor
 	 *            string que representa o bitmap. Ex.: "Ko" para rei de ouros.
 	 * @return ID de resource do bitmap

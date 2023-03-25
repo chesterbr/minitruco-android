@@ -3,42 +3,8 @@ package me.chester.minitruco.core;
 import java.util.Random;
 import java.util.logging.Logger;
 
-/*
- * Copyright © 2005-2012 Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
- * Todos os direitos reservados.
- *
- * A redistribuição e o uso nas formas binária e código fonte, com ou sem
- * modificações, são permitidos contanto que as condições abaixo sejam
- * cumpridas:
- * 
- * - Redistribuições do código fonte devem conter o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente.
- * 
- * - Redistribuições na forma binária devem reproduzir o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente na documentação e/ou materiais fornecidos com
- *   a distribuição.
- *   
- * - Nem o nome do Chester, nem o nome dos contribuidores podem ser
- *   utilizados para endossar ou promover produtos derivados deste
- *   software sem autorização prévia específica por escrito.
- * 
- * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
- * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
- * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
- * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS. EM NENHUMA
- * HIPÓTESE OS TITULARES DE DIREITOS AUTORAIS E CONTRIBUIDORES SERÃO
- * RESPONSÁVEIS POR QUAISQUER DANOS, DIRETOS, INDIRETOS, INCIDENTAIS,
- * ESPECIAIS, EXEMPLARES OU CONSEQUENTES, (INCLUINDO, SEM LIMITAÇÃO,
- * FORNECIMENTO DE BENS OU SERVIÇOS SUBSTITUTOS, PERDA DE USO OU DADOS,
- * LUCROS CESSANTES, OU INTERRUPÇÃO DE ATIVIDADES), CAUSADOS POR QUAISQUER
- * MOTIVOS E SOB QUALQUER TEORIA DE RESPONSABILIDADE, SEJA RESPONSABILIDADE
- * CONTRATUAL, RESTRITA, ILÍCITO CIVIL, OU QUALQUER OUTRA, COMO DECORRÊNCIA
- * DE USO DESTE SOFTWARE, MESMO QUE HOUVESSEM SIDO AVISADOS DA
- * POSSIBILIDADE DE TAIS DANOS.
- * 
- */
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
  * Base para os diversos tipos de jogador que podem participar de um jogo.
@@ -47,8 +13,8 @@ import java.util.logging.Logger;
  * <p>
  * A subclasse determina se o jogador é o usuário do celular, um jogador virtual
  * ou um jogador de outro celular conectado remotamente.
- * 
- * 
+ *
+ *
  */
 public abstract class Jogador {
 
@@ -80,7 +46,7 @@ public abstract class Jogador {
 
 	/**
 	 * Nome do jogador (em jogos multiplayer)
-	 * 
+	 *
 	 * @return
 	 */
 	public String getNome() {
@@ -109,7 +75,7 @@ public abstract class Jogador {
 
 	/**
 	 * List of voted people (control for multiplayer games using database)
-	 * 
+	 *
 	 * @return
 	 */
 
@@ -136,7 +102,7 @@ public abstract class Jogador {
 
 	/**
 	 * Recupera a posição do jogador no jogo
-	 * 
+	 *
 	 * @return número de 1 a 4 (não necessariamente a posição dele na mesa)
 	 */
 	public int getPosicao() {
@@ -150,7 +116,7 @@ public abstract class Jogador {
 	/**
 	 * Recupera a equipe em que este jogador está (assumindo que ele já esteja
 	 * aceito em um jogo)
-	 * 
+	 *
 	 * @return 1 ou 2
 	 */
 	public int getEquipe() {
@@ -159,7 +125,7 @@ public abstract class Jogador {
 
 	/**
 	 * Recupera a posição do parceiro
-	 * 
+	 *
 	 * @return número de 1 a 4
 	 */
 	public int getParceiro() {
@@ -213,7 +179,7 @@ public abstract class Jogador {
 	/**
 	 * Instancia uma estratégia (para uso em jogadores que precisam disso, como
 	 * o <code>JogadorBot</code> ou o <code>JogadorCPU</code>).
-	 * 
+	 *
 	 * @param nomeEstrategia
 	 *            Nome da estratégia (ex.: "Willian"). Se nenhuma estratégia se
 	 *            identificar por aquele nome, sorteia uma aleatória
@@ -246,7 +212,7 @@ public abstract class Jogador {
 
 	/**
 	 * Informa que uma carta foi jogada na mesa.
-	 * 
+	 *
 	 * @param j
 	 *            Jogador que jogou a carta
 	 * @param c
@@ -270,7 +236,7 @@ public abstract class Jogador {
 
 	/**
 	 * Informa que é a vez de um jogador jogar.
-	 * 
+	 *
 	 * @param j
 	 *            Jogador cuja vez chegou
 	 * @param podeFechada
@@ -280,7 +246,7 @@ public abstract class Jogador {
 
 	/**
 	 * Informa que um jogador pediu aumento de aposta (truco, seis, etc.).
-	 * 
+	 *
 	 * @param j
 	 *            Jogador que pediu o aumento
 	 * @param valor
@@ -290,7 +256,7 @@ public abstract class Jogador {
 
 	/**
 	 * Informa que o jogador aceitou um pedido de aumento de aposta.
-	 * 
+	 *
 	 * @param j
 	 *            Jogador que aceitou o aumento
 	 * @param valor
@@ -304,7 +270,7 @@ public abstract class Jogador {
 	 * Obs.: isso não impede que o outro jogador da dupla aceite o pedido, é
 	 * apenas para notificação visual. Se o segundo jogdor recusar o pedido, a
 	 * mensagem de derrota da dupla será enviada logo em seguida.
-	 * 
+	 *
 	 * @param j
 	 *            Jogador que recusou o pedido.
 	 */
@@ -312,7 +278,7 @@ public abstract class Jogador {
 
 	/**
 	 * Informa o jogador que a rodada foi fechada
-	 * 
+	 *
 	 * @param numRodada
 	 *            1 a 3, rodada que foi fechada
 	 * @param resultado
@@ -327,16 +293,16 @@ public abstract class Jogador {
 
 	/**
 	 * Informa que a mão foi concluída
-	 * 
+	 *
 	 * @param pontosEquipe
 	 *            Array com os pontos da equipe 1 e 2 (índices 0 e 1)
-	 * 
+	 *
 	 */
 	public abstract void maoFechada(int[] pontosEquipe);
 
 	/**
 	 * Informa que o jogo foi concluído
-	 * 
+	 *
 	 * @param numEquipeVencedora
 	 *            Equipe que ganhou o jogo (1 ou 2)
 	 */
@@ -345,7 +311,7 @@ public abstract class Jogador {
 	/**
 	 * Informa que um jogador fez sua escolha de topar ou não uma rodada quando
 	 * sua equipe tinha 11 pontos
-	 * 
+	 *
 	 * @param j
 	 *            Jogador que fez a escolha
 	 * @param aceita
@@ -357,18 +323,18 @@ public abstract class Jogador {
 	 * Informa que o jogador é beneficiário de uma "mão de 11", e, portanto,
 	 * deve decidir se aceita ou não esta rodada (se aceitar vale 3 pontos, se
 	 * ambos recusarem perde 1)
-	 * 
+	 *
 	 * @param cartasParceiro
 	 *            Cartas do parceiro
 	 * @see Jogo#decideMao11(Jogador, boolean)
-	 * 
+	 *
 	 */
 	public abstract void informaMao11(Carta[] cartasParceiro);
 
 	/**
 	 * Informa que o jogo foi abandonado por alguma causa externa (ex.: um
 	 * jogador desistiu)
-	 * 
+	 *
 	 * @param posicao
 	 *            Posição do jogador que abortou
 	 */

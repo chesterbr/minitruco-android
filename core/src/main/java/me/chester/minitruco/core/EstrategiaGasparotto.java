@@ -1,51 +1,19 @@
 package me.chester.minitruco.core;
 
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Copyright © 2007-2010 Sandro Gasparotto (sandro.gasparoto@gmail.com) */
+
 /*
- * Copyright (c) 2007-2010 Sandro Gasparotto (sandro.gasparoto@gmail.com)
- * Todos os direitos reservados.
- *
  * Nota 1: parte do código (métodos de suporte) adaptada
  * da Estratégia Sellani (Copyright (c) 2006 Leonardo Sellani)
  * Nota 2: lógica estratégica completamente nova
- *
- * A redistribuição e o uso nas formas binária e código fonte, com ou sem
- * modificações, são permitidos contanto que as condições abaixo sejam
- * cumpridas:
- * 
- * - Redistribuições do código fonte devem conter o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente.
- * 
- * - Redistribuições na forma binária devem reproduzir o aviso de direitos
- *   autorais acima, esta lista de condições e o aviso de isenção de
- *   garantias subseqüente na documentação e/ou materiais fornecidos com
- *   a distribuição.
- *   
- * - Nem o nome do Chester, nem o nome dos contribuidores podem ser
- *   utilizados para endossar ou promover produtos derivados deste
- *   software sem autorização prévia específica por escrito.
- * 
- * ESTE SOFTWARE É FORNECIDO PELOS DETENTORES DE DIREITOS AUTORAIS E
- * CONTRIBUIDORES "COMO ESTÁ", ISENTO DE GARANTIAS EXPRESSAS OU TÁCITAS,
- * INCLUINDO, SEM LIMITAÇÃO, QUAISQUER GARANTIAS IMPLÍCITAS DE
- * COMERCIABILIDADE OU DE ADEQUAÇÃO A FINALIDADES ESPECÍFICAS. EM NENHUMA
- * HIPÓTESE OS TITULARES DE DIREITOS AUTORAIS E CONTRIBUIDORES SERÃO
- * RESPONSÁVEIS POR QUAISQUER DANOS, DIRETOS, INDIRETOS, INCIDENTAIS,
- * ESPECIAIS, EXEMPLARES OU CONSEQUENTES, (INCLUINDO, SEM LIMITAÇÃO,
- * FORNECIMENTO DE BENS OU SERVIÇOS SUBSTITUTOS, PERDA DE USO OU DADOS,
- * LUCROS CESSANTES, OU INTERRUPÇÃO DE ATIVIDADES), CAUSADOS POR QUAISQUER
- * MOTIVOS E SOB QUALQUER TEORIA DE RESPONSABILIDADE, SEJA RESPONSABILIDADE
- * CONTRATUAL, RESTRITA, ILÍCITO CIVIL, OU QUALQUER OUTRA, COMO DECORRÊNCIA
- * DE USO DESTE SOFTWARE, MESMO QUE HOUVESSEM SIDO AVISADOS DA
- * POSSIBILIDADE DE TAIS DANOS.
- * 
  */
 
 import java.util.Random;
 
 /**
  * Estratégia inteligente para jogadores CPU
- * 
+ *
  */
 public class EstrategiaGasparotto implements Estrategia {
 	private static final Random rand = new Random();
@@ -1789,7 +1757,7 @@ public class EstrategiaGasparotto implements Estrategia {
 	 * A estratégia é responsável por checar se o valor da próxima aposta é
 	 * diferente de 0 e só pedir aumento nesta situação.
 	 * <p>
-	 * 
+	 *
 	 * @param s
 	 *            Situação do jogo no momento
 	 * @return posição da carta na mão a jogar (em letrasCartasJogador), ou -1
