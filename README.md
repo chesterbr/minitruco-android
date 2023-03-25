@@ -3,7 +3,7 @@ miniTruco Android
 
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android.
 
-Ele é completamente gratuito, sem anúncios, leve e não precisa de internet para conectar (mas é possível jogar com outras pessoas via Bluetooth e, em breve, também pela internet).
+Ele é completamente gratuito, sem anúncios, leve e não precisa de internet para jogar sozinho. É possível jogar com outras pessoas via Bluetooth e (em breve) também pela internet.
 
 A [versão oficial](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt) está disponível na Google Play Store.
 
@@ -27,10 +27,10 @@ Pull requests são bem-vindas, mas não há garantia de aceite (em particular de
 Créditos
 --------
 
-Idéia, desenvolvimento e arte: Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
-Imagens de carta, fundo e logotipo: Vanessa Sabino (Bani)
-Estratégias da CPU: Leonardo Sellani, Sandro Gasparotto
-Estratégia da CPU (antiga): Willian Gigliotti
-Seleção manual de servidor Bluetooth: Rodolfo Vasconcelos
-Tento mineiro: Guilherme Caram
-
+- Idéia, desenvolvimento e arte: Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
+- Imagens de carta, fundo e logotipo: Vanessa Sabino (Bani)
+- Estratégias da CPU: Leonardo Sellani, Sandro Gasparotto
+- Estratégia da CPU (antiga): Willian Gigliotti
+- Seleção manual de servidor Bluetooth: Rodolfo Vasconcelos
+- Tento mineiro: Guilherme Caram
+- 
