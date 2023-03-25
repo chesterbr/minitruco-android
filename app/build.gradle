@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "me.chester.minitruco"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 33
     }
 
