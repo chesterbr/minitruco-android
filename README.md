@@ -17,19 +17,19 @@ Desenvolvimento e Contribuição
 
 A linguagem do jogo é Java. Comentários, variáveis e afins usam o português do Brasil.
 
-O desenvolvimento é baseado no Android Studio. Recomendado desligar: Preferences => Inspections => Spelling => Typo, porque muito do código e dos comentários estão em português.
+O desenvolvimento é baseado no Android Studio (no qual eu recomendo desligar: `Preferences` => `Inspections` => `Spelling` => `Typo` por conta do uso do português).
 
-Fique à vontade para criar issues do GitHub; você também pode reportar erros por e-mail, mas provavelmente eu vou colocar numa issue de qualquer forma.
+Fique à vontade para criar issues no GitHub se encontrar um problema ou tiver uma sugestão.
 
-Pull requests são bem-vindas, mas não há garantia de aceite (em particular devido à falta de testes automáticos, eu tenho que testar tudo muito cuidadosamente). O código é bastante antigo (baseado na [versão Java ME](https://github.com/chesterbr/minitruco-j2me), ainda mais antiga), mas aos poucos estou tentando modernizar.
+Pull requests são bem-vindas, mas não há garantia de aceite (em particular devido à falta de testes automáticos, que me obriga a testar tudo muito cuidadosamente). O código é bastante antigo (baseado na ainda mais antiga [versão Java ME](https://github.com/chesterbr/minitruco-j2me)), mas aos poucos estou tentando modernizar.
 
 
 Créditos
 --------
 
-- Idéia, desenvolvimento e arte: Carlos Duarte do Nascimento "Chester" <cd@pobox.com>
-- Imagens de carta, fundo e logotipo: Vanessa Sabino (Bani)
-- Estratégias da CPU: Leonardo Sellani, Sandro Gasparotto
-- Estratégia da CPU (antiga): Willian Gigliotti
-- Seleção manual de servidor Bluetooth: Rodolfo Vasconcelos
-- Tento mineiro: Guilherme Caram
+- Idéia, desenvolvimento e arte: **Carlos Duarte do Nascimento (Chester)**
+- Imagens de carta, fundo e logotipo: **Vanessa Sabino (Bani)**
+- Estratégias da CPU: **Leonardo Sellani**, **Sandro Gasparotto**
+- Estratégia da CPU (antiga): **Willian Gigliotti**
+- Seleção manual de servidor Bluetooth: **Rodolfo Vasconcelos**
+- Tento mineiro: **Guilherme Caram**
