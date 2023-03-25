@@ -8,13 +8,16 @@ Parcialmente baseado na [versão Java ME](O https://github.com/chesterbr/minitru
 Este software é livre, e você é encorajado a usar e modificar seu código como quiser, dentro dos [termos da licença](LICENSE).
 
 
-Requisitos do Código-Fonte
---------------------------
+Desenvolvimento e Contribuição
+------------------------------
 
-O código tem como plataforma-alvo o Android 4.0.1. Para a compilação é necessário apenas o Android Studio.
+A linguagem do jogo é Java. Comentários, variáveis e afins usam o português do Brasil.
 
-Recomendado desligar: Preferences => Inspections => Spelling => Typo, porque muito do código e dos comentários estão em português.
+O desenvolvimento é baseado no Android Studio. Recomendado desligar: Preferences => Inspections => Spelling => Typo, porque muito do código e dos comentários estão em português.
 
+Fique à vontade para criar issues do GitHub; você também pode reportar erros por e-mail, mas provavelmente eu vou colocar numa issue de qualquer forma.
+
+Pull requests são bem-vindas, mas não há garantia de aceite (em particular devido à falta de testes automáticos, eu tenho que testar tudo muito cuidadosamente).
 
 Créditos
 --------
