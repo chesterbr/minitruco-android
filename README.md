@@ -5,7 +5,7 @@ O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos An
 
 Ele é completamente gratuito, sem anúncios, leve e não precisa de internet para jogar sozinho. É possível jogar com outras pessoas via Bluetooth e (em breve) também pela internet.
 
-A [versão oficial](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt) está disponível na Google Play Store.
+A [versão oficial](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt) está disponível no Google Play.
 
 [![versão oficial no Google Play](disponivel-google-play-badge.png)](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt)
 
