@@ -2,6 +2,8 @@ Este texto descreve os comandos enviados pelos clientes e as notificações
 dadas pelo servidor, tanto para o jogo Bluetooth quanto para
 o jogo via internet
 
+= Implementados
+
 == Comandos
 
 === Gerais
@@ -30,6 +32,8 @@ X FS - Você não está numa sala
 X NI - Nome inválido
 X NE - Nome já está em uso
 X NO - É preciso atribuir um nome para entrar na sala
+X JE sala - Você já está na sala de código "sala"
+
 N nome
 I sala nome1|nome2|nome3|nome4 ____ posicao __ - Info da sala
       (numero, nomes dos jogadores, T/F "quer jogar" dos jogadores, posicao do gerente, T/F baralho limpo, T/F manilha velha)
@@ -46,23 +50,16 @@ D jogador valor - Jogador mandou descer (aceitou aumento) no valor indicado
 C jogador - Jogador correu do pedido de aumento
 F Ln Ln Ln - Informa que estamos em mão de 11 e o adversário tem essas cartas
 H posicao _ - Informa que o jogador na posição acusou/recusou (_=T/F) mão de 11
+S - Informa que o jogador saiu da sala
 
 
+= A implementar? (TBD)
 
-------- comandos/notificações acima desta linha foram migrados/implementados
+== Comandos
 
 E PRI ___ - Cria uma nova sala privada com as regras especificadas
 E PRI codigo - Entra na sala privada com o código especificado
 
-
-Comandos
---------
-
-Iniciais (identificação):
-Z Statistics about the server, however at the moment only current number of users is implemented.
-
-Navegação:
-L - Lista salas
 I numero - Obtém info da sala (se omitido numero, da sala em que estou)
 
 Comandos do gerente da sala (usuário mais antigo)
@@ -74,112 +71,14 @@ V = Inverte os adversários
 Comandos do jogo:
 
 B - message broadcast
+B jogador mensagem - Message broadcast
 
-Misc:
-U Database queries:
-	U SU email pass [invitation_code] - creates/adds user in the database
-	U DX email pass - deletes user from database
-	U SP city state birth sex avatar - sets preferences
-	U SS pass - sets new password
-	U SE email  - sets new email
-	U SC username - increments field 'cool'
-	U GI username - gets information about an user
-	U RS - resets stats
-	U FP email - resets password and sends out an email
+== Notificações
 
-
-X JE sala - Você já está na sala de número "sala"
 X CH - Sala cheia, escolha outra
 X SI - Sala inválida
 X JO - Você está em jogo, não pode fazer isso
 X JI - Jogador (posicao) invalida (deve ser de 1 a 4)
-X NP Invalid credentials (username/email/password)
-X NQ Nick does not exist
-X NA Email already in use when trying to register
-X NM Email does not exist in database
-X NR Email already in use when trying to change it
-X NX Invalid email when trying to register
-X NY Invalid email when trying to change it
-X NC Invalid invitation code
-X NX Invitation code expired
-X DB Error on a database query
-X NG Only registered users can do this
-X DV User already voted
-L numero[|numero|numero...] - Listagem de salas (# de jogadores separado por pipe)
+
 E sala - Informa que o jogador entrou na sala com este número (um I vem logo em seguida)
-S - Informa que o jogador saiu da sala
-B jogador mensagem - Message broadcast
-Z nReg|nGuest - Number of current registered and guest users on the server
-U SU - User created/added to database
-U DX - User deleted from database
-U SP city|state|birth|sex|avatar - Preferences set
-U SS - New password set
-U SE email - New email set
-U SC username - Field 'cool' incremented
-U GI username|creation|city|state|birth|sex|avatar|wins|losses|cool - Info about an user
-U UP wins|losses - Update sent after game is over
-U RS - Stats reset
-U FP - Password reset and email sent out with new one
 
- * mySQL database info & structure:
- *
- * Field 				Type		Null	Key		Default		Extra
- * id					int(11)		NO		PRI		NULL		auto_increment
- * username				varchar(20)	YES		UNI		NULL
- * password				varchar(32)	YES				NULL
- * email				varchar(50)	YES				NULL
- * creation				date		YES				NULL
- * last_login			date		YES				NULL
- * city					varchar(15)	YES
- * state				varchar(2)	YES
- * birth				date		YES				0001-01-01
- * sex					varchar(1)	YES
- * avatar				int(11)		YES				1
- * wins					int(11)		YES				0
- * losses				int(11)		YES				0
- * cool					int(11)		YES				0
- * last_session_mnts	int(11)		YES				0
-
-mySQL with the default config has to be running on the same server. Database with a table named 'users' has to be created:
-
-mysql> create database database_name;
-mysql> use database_name;
-mysql> create table users (id int auto_increment , primary key(id), username varchar(20) unique, password varchar(32), email varchar(50) unique, creation date, last_login date, city varchar(15) default "", state varchar(2) default "", birth date not null default "0001-01-01", sex varchar(1) default "", avatar int default 1, wins int default 0, losses int default 0, cool int default 0, last_session_mnts int default 0);
-mysql: alter table users add index(username);
-mysql: alter table users add index(email);
-mysql> describe users;
-
- table 'invitations' [used if we want to allow registration only with an invitation code]:
- * Field 				Type		Null	Key		Default		Extra
- * code					varchar(10)	NO		PRI		NULL
- * available			int(11)		YES				0
-
- Arquivo de configuração miniTrucoServer.cfg:
- [this is the default config]
- [must be located in the same dir than miniTrucoServer.cfg - windows]
- [must be on /etc - linux]
-# comments must have a # symbol in the beginning of line
-# no blank lines must be inserted here
-SERVER_PORT=6912
-SERVER_ROOMS=10
-EVENTS_SHOW=TRUE
-STATS_SHOW=FALSE
-APPLET_GET_FILE=TRUE
-TELNET_WELCOME_MSG=> Welcome to miniTrucoServer. Authorized access only.
-STRATEGY=HAL
-MYSQL_ENABLED=FALSE
-SMTP_ENABLED=FALSE
-INVITATION_CODE_ENABLED=FALSE
-SMTP_HOST_NAME=localhost
-SMTP_AUTH_USER=user@localhost
-SMTP_AUTH_PWD=password
-REG_EMAIL_MSG_TXT=Sua conta foi criada e já encontra-se ativa. Seu email foi registrado com sucesso.<BR><BR>Obrigado e boa diversão!
-REG_EMAIL_SUBJECT_TXT=Benvindo!
-NEW_PASS_EMAIL_MSG_TXT_BEF_PASS=Sua nova senha de acesso é:<BR><BR>
-NEW_PASS_EMAIL_MSG_TXT_AFT_PASS=<BR><BR>Lembre-se de alterá-la para uma senha de sua preferência após login.<BR><BR>Boa diversão!
-NEW_PASS_EMAIL_SUBJECT_TXT=Nova senha de acesso
-MYSQL_HOST=localhost
-MYSQL_PORT=3306
-MYSQL_DATABASE_NAME=database_name
-MYSQL_USER=root
-#MYSQL_PASS=password
