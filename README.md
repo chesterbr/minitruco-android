@@ -33,4 +33,3 @@ Créditos
 - Estratégia da CPU (antiga): Willian Gigliotti
 - Seleção manual de servidor Bluetooth: Rodolfo Vasconcelos
 - Tento mineiro: Guilherme Caram
-- 
