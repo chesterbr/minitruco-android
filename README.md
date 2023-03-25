@@ -7,7 +7,9 @@ Ele é completamente gratuito, sem anúncios, leve e não precisa de internet pa
 
 A [versão oficial](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt) está disponível na Google Play Store.
 
-É um software livre, desenvolvido por hobby no meu tempo livre (com valiosas colaborações de outras pessoas). Você pode usar e modificar seu código como quiser, dentro dos [termos da licença](LICENSE).
+[![versão oficial no Google Play](disponivel-google-play-badge.png)](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt)
+
+É um software livre, desenvolvido por hobby no meu tempo pessoal (com valiosas colaborações de outras pessoas). Você pode usar e modificar seu código como quiser, dentro dos [termos da licença](LICENSE).
 
 
 Desenvolvimento e Contribuição
