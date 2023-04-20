@@ -4,6 +4,13 @@ package me.chester.minitruco.android.internet;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.InputType;
+import android.util.Log;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -60,8 +67,7 @@ public enum ServidorInternet implements Runnable {
                     switch (line.charAt(0)) {
                         case 'W':
                             // O servidor manda um W quando conecta
-                            // TODO: pedir o nome do jogador e tentar setar no servidor
-                            // pedeNome();
+                            pedeNome();
                     }
 
                 }
@@ -70,5 +76,33 @@ public enum ServidorInternet implements Runnable {
             // TODO: handle errors
             throw new RuntimeException(e);
         }
+    }
+
+    private void pedeNome() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Seu nome:");
+
+        final EditText editNome = new EditText(context);
+        editNome.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(editNome);
+
+        builder.setPositiveButton("Confirma", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO: tentar setar o nome
+                Log.d("Internet", editNome.getText().toString());
+            }
+        });
+        builder.setNegativeButton("Cancela", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                // TODO: desconectar
+            }
+        });
+
+        ContextCompat.getMainExecutor(context).execute(()  -> {
+            builder.show();
+        });
     }
 }
