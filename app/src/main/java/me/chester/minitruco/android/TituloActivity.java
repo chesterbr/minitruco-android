@@ -25,6 +25,7 @@ import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
+import me.chester.minitruco.android.internet.ServidorInternet;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -154,6 +155,11 @@ public class TituloActivity extends BaseActivity {
 	public void jogarClickHandler(View v) {
 		Intent intent = new Intent(TituloActivity.this, TrucoActivity.class);
 		startActivity(intent);
+	}
+
+	public void internetButtonClickHandler(View v) {
+		ServidorInternet s = ServidorInternet.INSTANCE.getInstance();
+		s.conecta();
 	}
 
 	public void bluetoothButtonClickHandler(View v) {

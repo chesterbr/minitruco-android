@@ -9,6 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
+        android:contentDescription="logo do miniTruco"
         android:src="@drawable/menuprincipal" />
 
     <LinearLayout
@@ -48,6 +49,13 @@
                 android:text="Jogar" />
 
 
+            <Button android:id="@+id/btnInternet"
+                android:layout_width="120sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Internet"
+                android:onClick="internetButtonClickHandler" />
+
             <Button android:id="@+id/btnBluetooth"
                 android:layout_width="120sp"
                 android:layout_height="wrap_content"
@@ -56,10 +64,10 @@
                 android:onClick="bluetoothButtonClickHandler" />
 
             <Button android:id="@+id/btnOpcoes"
-                android:layout_width="120sp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Opções"
+                android:text="⚙️"
                 android:onClick="opcoesButtonClickHandler" />
 
         </LinearLayout>
