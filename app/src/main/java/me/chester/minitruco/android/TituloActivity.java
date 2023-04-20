@@ -159,7 +159,7 @@ public class TituloActivity extends BaseActivity {
 
 	public void internetButtonClickHandler(View v) {
 		ServidorInternet s = ServidorInternet.INSTANCE.getInstance();
-		s.conecta();
+		s.conecta(this);
 	}
 
 	public void bluetoothButtonClickHandler(View v) {
