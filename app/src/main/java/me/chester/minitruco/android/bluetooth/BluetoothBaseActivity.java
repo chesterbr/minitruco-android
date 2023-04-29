@@ -1,18 +1,28 @@
 package me.chester.minitruco.android.bluetooth;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.BaseActivity;
@@ -23,10 +33,33 @@ import me.chester.minitruco.android.TrucoActivity;
 
 /**
  * Tarefas comuns ao cliente e ao servidor Bluetooth: mostrar quem está
- * conectado, garantir que o bt está ligado, iniciar a thread, etc.
+ * conectado, garantir que o bt está ligado e as permissões cedidas, etc.
  */
 public abstract class BluetoothBaseActivity extends BaseActivity implements
 		Runnable {
+
+	public static String[] BLUETOOTH_PERMISSIONS;
+	{
+		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+			// Android 11 ou anterior pede permissões genéricas
+			BLUETOOTH_PERMISSIONS = new String[] {
+					Manifest.permission.BLUETOOTH,
+					Manifest.permission.BLUETOOTH_ADMIN,
+			};
+		} else {
+			// Android 12 ou superior pede permissões mais refinadas
+			BLUETOOTH_PERMISSIONS = new String[] {
+					Manifest.permission.BLUETOOTH_CONNECT,
+					Manifest.permission.BLUETOOTH_SCAN,
+					Manifest.permission.BLUETOOTH_ADVERTISE
+			};
+		}
+	};
+
+	/**
+	 * Vamos usar o logger da classe correta (cliente ou servidor)
+	 */
+	abstract Logger logger();
 
 	/**
 	 * Separador de linha recebido
@@ -76,7 +109,59 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 		textViewsJogadores[2] = (TextView) findViewById(R.id.textViewJogador3);
 		textViewsJogadores[3] = (TextView) findViewById(R.id.textViewJogador4);
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
+
+		if (verficaPermissoesBluetooth()) {
+			iniciaAtividadeBluetooth();
+		} else {
+			pedePermissoesBluetooth();
+		}
+
 	}
+
+	private boolean verficaPermissoesBluetooth() {
+		// Antes do Android 6, permissões eram declaradas no manifest, e a app simplesmente
+		// assumia que foi autorizada. A vida era simples. Eu sinto falta disso.
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+			return true;
+		}
+		// Versões mais novas pedem permissões de runtime, então começa a dança da manivela:
+		for (String permission: BLUETOOTH_PERMISSIONS) {
+			if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void pedePermissoesBluetooth(){
+		// Pedimos as permissões individualmente para reduzir a chance de problemas com versões
+		// específicas de Android
+		for (String permission: BLUETOOTH_PERMISSIONS) {
+			if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+				logger().log(Level.INFO, "Solicitando permissão:" + permission);
+				permissionsLauncher.launch(permission);
+			}
+		}
+	}
+
+	ActivityResultLauncher<String> permissionsLauncher =
+		registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+				result -> {
+					if (result) {
+						if (verficaPermissoesBluetooth()) {
+							iniciaAtividadeBluetooth();
+						}
+					} else {
+						Toast.makeText(this, "Permissão Bluetooth negada. Se persistir, tente autorizar nas configs do celular ou desinstalar/reinstalar o jogo.", Toast.LENGTH_LONG).show();
+						finish();
+					}
+				});
+
+	/**
+	 * As atividades de Bluetooth são vão iniciar quando as permissões estiverem garantidas,
+	 * através da chamada deste método
+	 */
+	abstract void iniciaAtividadeBluetooth();
 
 	protected void atualizaDisplay() {
 		Message.obtain(handlerAtualizaDisplay).sendToTarget();

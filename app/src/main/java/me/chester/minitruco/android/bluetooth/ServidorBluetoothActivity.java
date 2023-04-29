@@ -1,5 +1,6 @@
 package me.chester.minitruco.android.bluetooth;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -15,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -39,7 +43,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	private static final char STATUS_EM_JOGO = 'J';
 	private static final char STATUS_BLUETOOTH_ENCERRADO = 'X';
 	private static final int REQUEST_ENABLE_DISCOVERY = 1;
-	private static final String[] APELIDOS_CPU = { "CPU1", "CPU2", "CPU3" };
+	private static final String[] APELIDOS_CPU = {"CPU1", "CPU2", "CPU3"};
 
 	private static ServidorBluetoothActivity currentInstance;
 
@@ -59,9 +63,18 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	};
 
 	@Override
+	Logger logger() {
+		return LOGGER;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		currentInstance = this;
+	}
+
+	@Override
+	void iniciaAtividadeBluetooth() {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		regras = (preferences.getBoolean("baralhoLimpo", false) ? "T" : "F")
@@ -80,7 +93,12 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 					"Aviso",
 					"O Tento Mineiro ainda não está disponível para jogos Bluetooth. Esta opção será ignorada.");
 		}
+		pedePraHabilitarDiscoverableSePreciso();
+		if (!aguardandoDiscoverable) {
+			iniciaThreads();
+		}
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,23 +113,14 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		// TODO limpar essa sujeira, herança do Java ME
 		// (e ver se é uma boa fazer isso na UI thread mesmo)
 		switch (item.getItemId()) {
-		case R.id.menuitem_troca_parceiro:
-			trocaParceiro();
-			return true;
-		case R.id.menuitem_inverte_adversarios:
-			inverteAdversarios();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-		pedePraHabilitarDiscoverableSePreciso();
-		if (!aguardandoDiscoverable) {
-			iniciaThreads();
+			case R.id.menuitem_troca_parceiro:
+				trocaParceiro();
+				return true;
+			case R.id.menuitem_inverte_adversarios:
+				inverteAdversarios();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -145,7 +154,13 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(receiverMantemDiscoverable);
+		try {
+			unregisterReceiver(receiverMantemDiscoverable);
+		} catch (IllegalArgumentException e) {
+			// Não tem API pra verificar se está registrado, então é o que tem pra hoje
+			// cf. https://stackoverflow.com/a/3568906
+			LOGGER.log(Level.INFO, "Activity destruída antes do receiver ser registrado");
+		}
 		encerraConexoes();
 	}
 

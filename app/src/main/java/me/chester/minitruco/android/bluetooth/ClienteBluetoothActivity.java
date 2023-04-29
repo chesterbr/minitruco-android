@@ -42,21 +42,32 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private int posJogador;
 
 	@Override
+	Logger logger() {
+		return LOGGER;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		currentInstance = this;
 	}
 
 	@Override
+	void iniciaAtividadeBluetooth() {
+		listaDispositivosPareados();
+	}
+
+	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		listaDispositivosPareados();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		dispositivosPareados.clear();
+		if (dispositivosPareados != null) {
+			dispositivosPareados.clear();
+		}
 		finalizaThreadFechandoConexoes();
 	}
 
