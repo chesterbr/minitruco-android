@@ -156,8 +156,8 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Correção final do congelamento (🤞 - ficou 12h jogando sozinho sem congelar)<br/>
-            - Opção de deixar o celular jogar sozinho (para ajudar desenvolvedor com problemas como este)
+            - Melhorias visuais em versões específicas do Android<br/>
+            - Gerenciamento de permissões do Bluetooth melhorado<br/>
         ]]>
     </string>
 
