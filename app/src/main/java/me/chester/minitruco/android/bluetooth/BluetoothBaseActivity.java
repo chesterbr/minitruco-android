@@ -14,7 +14,6 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -51,7 +50,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			BLUETOOTH_PERMISSIONS = new String[] {
 					Manifest.permission.BLUETOOTH_CONNECT,
 					Manifest.permission.BLUETOOTH_SCAN,
-					Manifest.permission.BLUETOOTH_ADVERTISE
+					Manifest.permission.BLUETOOTH_ADVERTISE,
 			};
 		}
 	};
@@ -152,8 +151,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 							iniciaAtividadeBluetooth();
 						}
 					} else {
-						Toast.makeText(this, "Permissão Bluetooth negada. Se persistir, tente autorizar nas configs do celular ou desinstalar/reinstalar o jogo.", Toast.LENGTH_LONG).show();
-						finish();
+						msgErroFatal("Permissão Bluetooth negada. Se o problema persistir, tente autorizar nas configs do celular ou desinstalar/reinstalar o jogo.");
 					}
 				});
 
