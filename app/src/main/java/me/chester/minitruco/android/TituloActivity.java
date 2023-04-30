@@ -91,11 +91,11 @@ public class TituloActivity extends BaseActivity {
 		OnClickListener listener = new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
-				case AlertDialog.BUTTON_POSITIVE:
+				case AlertDialog.BUTTON_NEGATIVE:
 					startActivity(new Intent(TituloActivity.this,
 							ServidorBluetoothActivity.class));
 					break;
-				case AlertDialog.BUTTON_NEGATIVE:
+				case AlertDialog.BUTTON_POSITIVE:
 					startActivity(new Intent(TituloActivity.this,
 							ClienteBluetoothActivity.class));
 					break;
@@ -103,8 +103,9 @@ public class TituloActivity extends BaseActivity {
 			}
 		};
 		new AlertDialog.Builder(this).setTitle("Bluetooth")
-				.setPositiveButton("Criar Jogo", listener)
-				.setNegativeButton("Procurar Jogo", listener)
+				.setMessage("Para jogar via Bluetooth, um celular deve criar o jogo e os outros devem procurá-lo.\n\nCertifique-se de que todos os celulares estejam pareados com o celular que criar o jogo.")
+				.setNegativeButton("Criar Jogo", listener)
+				.setPositiveButton("Procurar Jogo", listener)
 				.show();
 	}
 

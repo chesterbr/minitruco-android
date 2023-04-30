@@ -341,7 +341,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             return;
         }
 
-        new AlertDialog.Builder(this).setTitle("Escolha o Servidor")
+        new AlertDialog.Builder(this).setTitle("Escolha o celular que criou o jogo")
                 .setItems(criaArrayComNomeDosAparelhosPareados(), new AlertDialog.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int posicaoNaLista) {
