@@ -33,6 +33,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private static ClienteBluetoothActivity currentInstance;
 
 	private List<BluetoothDevice> dispositivosPareados;
+	private BluetoothDevice servidor;
+
 	private Thread threadConexao;
 	private Thread threadMonitoraConexao;
 	private JogoBluetooth jogo;
@@ -42,21 +44,32 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private int posJogador;
 
 	@Override
+	Logger logger() {
+		return LOGGER;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		currentInstance = this;
 	}
 
 	@Override
+	void iniciaAtividadeBluetooth() {
+		listaDispositivosPareados();
+	}
+
+	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		listaDispositivosPareados();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		dispositivosPareados.clear();
+		if (dispositivosPareados != null) {
+			dispositivosPareados.clear();
+		}
 		finalizaThreadFechandoConexoes();
 	}
 
@@ -73,6 +86,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	}
 
 	public void run() {
+		if (!conectaNoServidor()) {
+			return;
+		}
 		atualizaDisplay();
 
 		if (socket == null) {
@@ -264,31 +280,29 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
         return true;
     }
 
-    /**
-     * Tenta conectar no servidor recebido e, caso consiga, inicia o jogo
-     *
-     * @param device Servidor do Mni Truco
-     */
-    private void conectaNoServidor(BluetoothDevice device) {
-        try {
-            setMensagem("Consultando " + device.getName());
-            socket = device.createRfcommSocketToServiceRecord(UUID_BT);
+    private boolean conectaNoServidor() {
+		String nomeDoServidor = servidor.getName();
+		try {
+			LOGGER.log(Level.INFO, "Criando socket");
+			LOGGER.log(Level.INFO, "device.getName()");
+            setMensagem("Conectando em " + nomeDoServidor);
+            socket = servidor.createRfcommSocketToServiceRecord(UUID_BT);
             sleep(1000);
+			LOGGER.log(Level.INFO, "Conectando");
             socket.connect();
+			LOGGER.log(Level.INFO, "Conectado");
             setMensagem("Conectado!");
-
-            threadConexao = new Thread(ClienteBluetoothActivity.this);
-            threadConexao.start();
-
+			return true;
         } catch (Exception e) {
             LOGGER.log(Level.INFO,
-                    "Falhou conexao com device " + device.getName(), e);
-            msgErroFatal("Falhou conexao com device " + device.getName() + ". Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
+                    "Falhou conexao com " + nomeDoServidor, e);
+            msgErroFatal("Não foi possível conectar com " + nomeDoServidor + ". Veja se o o seu aparelho está pareado/autorizado com ele e tente novamente.");
             try {
                 socket.close();
             } catch (Exception e1) {
                 // Sem problemas, era só pra garantir
             }
+			return false;
         }
     }
 
@@ -330,12 +344,13 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             return;
         }
 
-        new AlertDialog.Builder(this).setTitle("Escolha o Servidor")
+        new AlertDialog.Builder(this).setTitle("Escolha o celular que criou o jogo")
                 .setItems(criaArrayComNomeDosAparelhosPareados(), new AlertDialog.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int posicaoNaLista) {
-
-                        conectaNoServidor(dispositivosPareados.get(posicaoNaLista));
+                        servidor = dispositivosPareados.get(posicaoNaLista);
+						threadConexao = new Thread(ClienteBluetoothActivity.this);
+			            threadConexao.start();
                     }
                 }).show();
     }

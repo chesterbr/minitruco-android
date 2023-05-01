@@ -1,25 +1,19 @@
 package me.chester.minitruco.android;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
@@ -35,14 +29,6 @@ import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
  */
 public class TituloActivity extends BaseActivity {
 
-	public static final String[] BLUETOOTH_PERMISSIONS = new String[] {
-		// Permissões que nem deveriam estar aqui, vide callback abaixo
-		Manifest.permission.BLUETOOTH,
-		Manifest.permission.BLUETOOTH_ADMIN,
-		// Permissões runtime
-		Manifest.permission.BLUETOOTH_CONNECT,
-		Manifest.permission.BLUETOOTH_SCAN
-	};
 	SharedPreferences preferences;
 	Boolean mostrarMenuBluetooth;
 
@@ -75,6 +61,12 @@ public class TituloActivity extends BaseActivity {
 		findViewById(R.id.btnBluetooth).setVisibility(mostrarMenuBluetooth ? View.VISIBLE : View.GONE);
 	}
 
+	private void botoesHabilitados(boolean status) {
+		findViewById(R.id.btnJogar).setActivated(status);
+		findViewById(R.id.btnBluetooth).setActivated(status);
+		findViewById(R.id.btnOpcoes).setActivated(status);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -102,43 +94,17 @@ public class TituloActivity extends BaseActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private boolean verificaEPedePermissoesDeBluetooth(){
-		if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED &&
-			ContextCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
-			return true;
-		} else {
-			ActivityCompat.requestPermissions(this, BLUETOOTH_PERMISSIONS, 1);
-			return false;
-		}
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		if (requestCode == 1) {
-			// Normalmente a gente só pediria as duas permissões novas e checaria se foi dado grant
-			// aqui; mas alguns aparelhos (mesmo com Android relativamente novo) simplesmente pulam
-			// a fase de perguntar, então eu resolvi pular a checagem aqui, porque das três uma:
-			// - Pessoa autorizou; vai dar tudo certo
-			// - Pergunta não foi feita; vai dar tudo certo (as permissões básicas aparecem)
-			// - Pessoa não autorizou (mesmo depois de clicar o botão Bluetooth): vai crashar,
-			//   e eu não me importo. Como você quer jogar no Bluetooth sem Bluetooth? Abre a app
-			//   e tenta de novo.
-			//			if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-				perguntaCriarOuProcurarBluetooth();
-			//			}
-		}
-	}
-
 	private void perguntaCriarOuProcurarBluetooth() {
+		botoesHabilitados(false);
 		OnClickListener listener = new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
+				botoesHabilitados(true);
 				switch (which) {
-				case AlertDialog.BUTTON_POSITIVE:
+				case AlertDialog.BUTTON_NEGATIVE:
 					startActivity(new Intent(TituloActivity.this,
 							ServidorBluetoothActivity.class));
 					break;
-				case AlertDialog.BUTTON_NEGATIVE:
+				case AlertDialog.BUTTON_POSITIVE:
 					startActivity(new Intent(TituloActivity.this,
 							ClienteBluetoothActivity.class));
 					break;
@@ -146,8 +112,9 @@ public class TituloActivity extends BaseActivity {
 			}
 		};
 		new AlertDialog.Builder(this).setTitle("Bluetooth")
-				.setPositiveButton("Criar Jogo", listener)
-				.setNegativeButton("Procurar Jogo", listener)
+				.setMessage("Para jogar via Bluetooth, um celular deve criar o jogo e os outros devem procurá-lo.\n\nCertifique-se de que todos os celulares estejam pareados com o celular que criar o jogo.")
+				.setNegativeButton("Criar Jogo", listener)
+				.setPositiveButton("Procurar Jogo", listener)
 				.show();
 	}
 
@@ -157,9 +124,7 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	public void bluetoothButtonClickHandler(View v) {
-		if (verificaEPedePermissoesDeBluetooth()) {
-			perguntaCriarOuProcurarBluetooth();
-		}
+		perguntaCriarOuProcurarBluetooth();
 	}
 
 	public void opcoesButtonClickHandler(View v) {
@@ -171,5 +136,12 @@ public class TituloActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			this.finishAndRemoveTask();
+		}
 	}
 }
