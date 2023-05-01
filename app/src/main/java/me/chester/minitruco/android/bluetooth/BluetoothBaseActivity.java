@@ -19,8 +19,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.chester.minitruco.R;
@@ -109,49 +111,46 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 		textViewsJogadores[3] = (TextView) findViewById(R.id.textViewJogador4);
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 
-		if (verficaPermissoesBluetooth()) {
+		String[] permissoesFaltantes = permissoesBluetoothFaltantes();
+		if (permissoesFaltantes.length == 0) {
 			iniciaAtividadeBluetooth();
 		} else {
-			pedePermissoesBluetooth();
+			permissionsLauncher.launch(permissoesFaltantes);
 		}
 
 	}
-
-	private boolean verficaPermissoesBluetooth() {
+	private String[] permissoesBluetoothFaltantes() {
 		// Antes do Android 6, permissões eram declaradas no manifest, e a app simplesmente
 		// assumia que foi autorizada. A vida era simples. Eu sinto falta disso.
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-			return true;
+			return new String[0];
 		}
 		// Versões mais novas pedem permissões de runtime, então começa a dança da manivela:
+		List<String> permissoes = new ArrayList<>();
 		for (String permission: BLUETOOTH_PERMISSIONS) {
 			if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-				return false;
+				permissoes.add(permission);
 			}
 		}
-		return true;
+		return permissoes.toArray(new String[0]);
 	}
 
-	private void pedePermissoesBluetooth(){
-		// Pedimos as permissões individualmente para reduzir a chance de problemas com versões
-		// específicas de Android
-		for (String permission: BLUETOOTH_PERMISSIONS) {
-			if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-				logger().log(Level.INFO, "Solicitando permissão:" + permission);
-				permissionsLauncher.launch(permission);
-			}
-		}
-	}
 
-	ActivityResultLauncher<String> permissionsLauncher =
-		registerForActivityResult(new ActivityResultContracts.RequestPermission(),
+	ActivityResultLauncher<String[]> permissionsLauncher =
+		registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
 				result -> {
-					if (result) {
-						if (verficaPermissoesBluetooth()) {
-							iniciaAtividadeBluetooth();
-						}
+					String[] permissoesFaltantes = permissoesBluetoothFaltantes();
+					if (permissoesFaltantes.length == 0) {
+						iniciaAtividadeBluetooth();
 					} else {
-						msgErroFatal("Permissão Bluetooth negada. Se o problema persistir, tente autorizar nas configs do celular ou desinstalar/reinstalar o jogo.");
+						for (int i = 0; i < permissoesFaltantes.length; i++) {
+							permissoesFaltantes[i] = permissoesFaltantes[i].replace("android.permission.", "");
+						}
+						msgErroFatal("Não foi possivel obter permissões: " +
+								     Arrays.toString(permissoesFaltantes) + ".\n\n" +
+								     "Se o problema persistir, tente autorizar "+
+								     "nas configurações do celular (em \"Aplicativos\"), " +
+								     "ou desinstalar e reinstalar o jogo.");
 					}
 				});
 
