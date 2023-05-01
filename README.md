@@ -27,9 +27,11 @@ Pull requests são bem-vindas, mas não há garantia de aceite (em particular de
 Créditos
 --------
 
-- Idéia, desenvolvimento e arte: **Carlos Duarte do Nascimento (Chester)** (@chesterbr)
-- Imagens de carta, fundo e logotipo: @bani **Vanessa Sabino (Bani)**
-- Estratégias da CPU: **Leonardo Sellani**, **Sandro Gasparotto**
-- Estratégia da CPU (antiga): **Willian Gigliotti**
-- Seleção manual de servidor Bluetooth: **Rodolfo Vasconcelos**
-- Tento mineiro: **Guilherme Caram**
+- Idéia, desenvolvimento, manutenção e arte: **[Carlos Duarte do Nascimento](https://chester.me)** ([@chesterbr](https://github.com/chesterbr))
+- Imagens de carta, fundo e logotipo: **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani))
+- Tento mineiro: **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram))
+- Estratégias da CPU atuais:
+  - **[Leonardo Sellani](https://www.linkedin.com/in/leonardosellani/)**
+  - **[Sandro Gasparoto](https://www.linkedin.com/in/sgasparoto/)**
+- Estratégia da CPU antiga: **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**
+- Seleção manual de servidor Bluetooth: **[Rodolfo Vasconcelos](https://www.linkedin.com/in/rodolfo-de-andrade-vasconcelos/)**
