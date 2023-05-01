@@ -27,8 +27,8 @@ Pull requests são bem-vindas, mas não há garantia de aceite (em particular de
 Créditos
 --------
 
-- Idéia, desenvolvimento e arte: **Carlos Duarte do Nascimento (Chester)**
-- Imagens de carta, fundo e logotipo: **Vanessa Sabino (Bani)**
+- Idéia, desenvolvimento e arte: **Carlos Duarte do Nascimento (Chester)** (@chesterbr)
+- Imagens de carta, fundo e logotipo: @bani **Vanessa Sabino (Bani)**
 - Estratégias da CPU: **Leonardo Sellani**, **Sandro Gasparotto**
 - Estratégia da CPU (antiga): **Willian Gigliotti**
 - Seleção manual de servidor Bluetooth: **Rodolfo Vasconcelos**
