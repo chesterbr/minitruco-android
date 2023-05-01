@@ -9,12 +9,6 @@ android {
         targetSdkVersion 33
     }
 
-    dependencies {
-        implementation 'androidx.appcompat:appcompat:1.5.1'
-        implementation 'androidx.activity:activity:1.6.1'
-        implementation 'androidx.fragment:fragment:1.5.5'
-    }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -24,5 +18,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+
     implementation project(path: ':core')
 }

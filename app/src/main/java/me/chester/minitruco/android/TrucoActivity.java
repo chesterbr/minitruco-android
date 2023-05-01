@@ -1,5 +1,7 @@
 package me.chester.minitruco.android;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -37,8 +39,6 @@ public class TrucoActivity extends BaseActivity {
 			"NOVE!", "DOZE!!!" };
 
 	private MesaView mesa;
-	private TextView textViewAnuncio;
-	private View layoutAnuncio;
 	private View layoutFimDeJogo;
 	private static boolean mIsViva = false;
 	boolean jogoAbortado = false;
@@ -57,7 +57,6 @@ public class TrucoActivity extends BaseActivity {
 	static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
 	static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
 	static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
-	static final int MSG_ESCONDE_PATROCINIO = 8;
 
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -74,17 +73,14 @@ public class TrucoActivity extends BaseActivity {
 				if (placar[1] != msg.arg2) {
 					tvEles.setBackgroundColor(Color.YELLOW);
 				}
-				tvNos.setText("Nós: " + msg.arg1);
-				tvEles.setText("Eles: " + msg.arg2);
+				tvNos.setText(msg.arg1 + " 👇");
+				tvEles.setText("👆 " + msg.arg2);
 				placar[0] = msg.arg1;
 				placar[1] = msg.arg2;
 				break;
 			case MSG_TIRA_DESTAQUE_PLACAR:
 				tvNos.setBackgroundColor(Color.TRANSPARENT);
 				tvEles.setBackgroundColor(Color.TRANSPARENT);
-				break;
-			case MSG_ESCONDE_PATROCINIO:
-				layoutAnuncio.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_OFERECE_NOVA_PARTIDA:
 				if (jogo instanceof JogoLocal) {
@@ -186,7 +182,9 @@ public class TrucoActivity extends BaseActivity {
 	}
 
 	public void aumentoClickHandler(View v) {
-		handler.sendMessage(Message.obtain(handler, MSG_ESCONDE_BOTAO_AUMENTO));
+		// Não usamos o handler aqui para reduzir a chance da pessoa
+		// fazer uma acionamento duplo (e duplicar o aumento)
+		findViewById(R.id.btnAumento).setVisibility(Button.GONE);
 		mesa.setStatusVez(MesaView.STATUS_VEZ_HUMANO_AGUARDANDO);
 		jogo.aumentaAposta(jogadorHumano);
 	}
@@ -221,6 +219,17 @@ public class TrucoActivity extends BaseActivity {
 		if (!jogoAbortado) {
 			jogo.abortaJogo(1);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		new AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle("Encerrar")
+			.setMessage("Você quer mesmo encerrar este jogo?")
+			.setPositiveButton("Sim", (dialog, which) -> finish())
+			.setNegativeButton("Não", null)
+			.show();
 	}
 
 	public static boolean isViva() {
