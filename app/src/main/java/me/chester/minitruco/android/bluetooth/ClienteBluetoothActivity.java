@@ -282,10 +282,14 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
      */
     private void conectaNoServidor(BluetoothDevice device) {
         try {
+			LOGGER.log(Level.INFO, "Criando socket");
+			LOGGER.log(Level.INFO, "device.getName()");
             setMensagem("Consultando " + device.getName());
             socket = device.createRfcommSocketToServiceRecord(UUID_BT);
             sleep(1000);
+			LOGGER.log(Level.INFO, "Conectando");
             socket.connect();
+			LOGGER.log(Level.INFO, "Conectado");
             setMensagem("Conectado!");
 
             threadConexao = new Thread(ClienteBluetoothActivity.this);
