@@ -37,8 +37,6 @@ public class TrucoActivity extends BaseActivity {
 			"NOVE!", "DOZE!!!" };
 
 	private MesaView mesa;
-	private TextView textViewAnuncio;
-	private View layoutAnuncio;
 	private View layoutFimDeJogo;
 	private static boolean mIsViva = false;
 	boolean jogoAbortado = false;
@@ -57,7 +55,6 @@ public class TrucoActivity extends BaseActivity {
 	static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
 	static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
 	static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
-	static final int MSG_ESCONDE_PATROCINIO = 8;
 
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
@@ -82,9 +79,6 @@ public class TrucoActivity extends BaseActivity {
 			case MSG_TIRA_DESTAQUE_PLACAR:
 				tvNos.setBackgroundColor(Color.TRANSPARENT);
 				tvEles.setBackgroundColor(Color.TRANSPARENT);
-				break;
-			case MSG_ESCONDE_PATROCINIO:
-				layoutAnuncio.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_OFERECE_NOVA_PARTIDA:
 				if (jogo instanceof JogoLocal) {
@@ -186,7 +180,9 @@ public class TrucoActivity extends BaseActivity {
 	}
 
 	public void aumentoClickHandler(View v) {
-		handler.sendMessage(Message.obtain(handler, MSG_ESCONDE_BOTAO_AUMENTO));
+		// Não usamos o handler aqui para reduzir a chance da pessoa
+		// fazer uma acionamento duplo (e duplicar o aumento)
+		findViewById(R.id.btnAumento).setVisibility(Button.GONE);
 		mesa.setStatusVez(MesaView.STATUS_VEZ_HUMANO_AGUARDANDO);
 		jogo.aumentaAposta(jogadorHumano);
 	}
