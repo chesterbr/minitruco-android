@@ -60,6 +60,12 @@ public class TituloActivity extends BaseActivity {
 		findViewById(R.id.btnBluetooth).setVisibility(mostrarMenuBluetooth ? View.VISIBLE : View.GONE);
 	}
 
+	private void botoesHabilitados(boolean status) {
+		findViewById(R.id.btnJogar).setActivated(status);
+		findViewById(R.id.btnBluetooth).setActivated(status);
+		findViewById(R.id.btnOpcoes).setActivated(status);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -88,8 +94,10 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	private void perguntaCriarOuProcurarBluetooth() {
+		botoesHabilitados(false);
 		OnClickListener listener = new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
+				botoesHabilitados(true);
 				switch (which) {
 				case AlertDialog.BUTTON_NEGATIVE:
 					startActivity(new Intent(TituloActivity.this,
