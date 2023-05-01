@@ -156,10 +156,11 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
+            - Confirmação ao sair do jogo com botão Voltar</br>
             - Ajustes visuais para celulares com borda redonda<br/>
-            - Padronização do esquema de cores<br/>
-            - Correções e melhor comunicação nas permissões de conexão Bluetooth<br/>
             - Impedido acionamento duplo do botão de truco<br/>
+            - Correções e melhor comunicação nas permissões de conexão Bluetooth<br/>
+            - Padronização do esquema de cores (possível correção para modo escuro nos Poco X3 Pro)<br/>
         ]]>
     </string>
 

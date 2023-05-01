@@ -1,5 +1,7 @@
 package me.chester.minitruco.android;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -217,6 +219,17 @@ public class TrucoActivity extends BaseActivity {
 		if (!jogoAbortado) {
 			jogo.abortaJogo(1);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		new AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle("Encerrar")
+			.setMessage("Você quer mesmo encerrar este jogo?")
+			.setPositiveButton("Sim", (dialog, which) -> finish())
+			.setNegativeButton("Não", null)
+			.show();
 	}
 
 	public static boolean isViva() {
