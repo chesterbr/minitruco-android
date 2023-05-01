@@ -74,8 +74,8 @@ public class TrucoActivity extends BaseActivity {
 				if (placar[1] != msg.arg2) {
 					tvEles.setBackgroundColor(Color.YELLOW);
 				}
-				tvNos.setText("Nós: " + msg.arg1);
-				tvEles.setText("Eles: " + msg.arg2);
+				tvNos.setText(msg.arg1 + " 👇");
+				tvEles.setText("👆 " + msg.arg2);
 				placar[0] = msg.arg1;
 				placar[1] = msg.arg2;
 				break;

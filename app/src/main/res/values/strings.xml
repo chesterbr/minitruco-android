@@ -156,8 +156,9 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Melhorias visuais em versões específicas do Android<br/>
-            - Gerenciamento de permissões do Bluetooth melhorado<br/>
+            - Ajustes visuais para celulares com borda redonda<br/>
+            - Padronização do esquema de cores<br/>
+            - Correções e melhor comunicação nas permissões e conexão Bluetooth<br/>
         ]]>
     </string>
 
