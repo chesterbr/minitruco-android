@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -135,5 +136,12 @@ public class TituloActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			this.finishAndRemoveTask();
+		}
 	}
 }

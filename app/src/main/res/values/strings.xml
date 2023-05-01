@@ -159,6 +159,7 @@
             - Confirmação ao sair do jogo com botão Voltar</br>
             - Ajustes visuais para celulares com borda redonda<br/>
             - Impedido acionamento duplo do botão de truco<br/>
+            - Quando o botão voltar é usado na tela de título, fecha o jogo (em Android 5 ou superior)<br/>
             - Correções e melhor comunicação nas permissões de conexão Bluetooth<br/>
             - Padronização do esquema de cores (possível correção para modo escuro nos Poco X3 Pro)<br/>
         ]]>
