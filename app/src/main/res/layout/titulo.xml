@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#1B8E3C" >
+    android:background="#1B8E3C">
 
     <ImageView
         android:id="@+id/menuprincipal"
@@ -42,7 +42,7 @@
             <Button
                 android:id="@+id/btnJogar"
                 android:layout_width="120sp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:onClick="jogarClickHandler"
@@ -51,24 +51,40 @@
 
             <Button android:id="@+id/btnInternet"
                 android:layout_width="120sp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Internet"
                 android:onClick="internetButtonClickHandler" />
 
-            <Button android:id="@+id/btnBluetooth"
-                android:layout_width="120sp"
-                android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/btnBluetoothContainer"
+            android:layout_width="50sp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnBluetooth"
+                android:autoSizeTextType="uniform"
+                android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Bluetooth"
                 android:onClick="bluetoothButtonClickHandler" />
 
+                    </LinearLayout>
+                                            <LinearLayout
+            android:layout_width="50sp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
             <Button android:id="@+id/btnOpcoes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:paddingLeft="9sp"
+                android:drawableLeft="@android:drawable/ic_menu_preferences"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="⚙️"
                 android:onClick="opcoesButtonClickHandler" />
+                    </LinearLayout>
 
         </LinearLayout>
 
