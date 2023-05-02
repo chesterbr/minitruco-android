@@ -59,7 +59,7 @@ public class TituloActivity extends BaseActivity {
 
 	private void habilitaBluetoothSeExistir() {
 		mostrarMenuBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
-		findViewById(R.id.btnBluetooth).setVisibility(mostrarMenuBluetooth ? View.VISIBLE : View.GONE);
+		findViewById(R.id.btnBluetoothContainer).setVisibility(mostrarMenuBluetooth ? View.VISIBLE : View.GONE);
 	}
 
 	private void botoesHabilitados(boolean status) {
