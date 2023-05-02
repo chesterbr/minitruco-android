@@ -63,12 +63,12 @@
 
                 <Button
                     android:id="@+id/btnBluetooth"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:autoSizeTextType="uniform"
                     android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
-                    android:onClick="bluetoothButtonClickHandler" />
+                    android:onClick="bluetoothButtonClickHandler"
+                    android:drawableStart="@android:drawable/stat_sys_data_bluetooth" />
 
             </LinearLayout>
 
@@ -79,12 +79,14 @@
 
                 <Button
                     android:id="@+id/btnOpcoes"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:drawableLeft="@android:drawable/ic_menu_preferences"
                     android:onClick="opcoesButtonClickHandler"
-                    android:paddingLeft="9sp" />
+                    android:paddingLeft="9sp"
+                    android:drawableStart="@android:drawable/ic_menu_preferences"
+                    android:paddingStart="9sp" />
             </LinearLayout>
 
         </LinearLayout>
