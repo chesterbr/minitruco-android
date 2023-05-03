@@ -1,12 +1,17 @@
 package me.chester.minitruco.android.internet;
 
+import static android.provider.Settings.Global.DEVICE_NAME;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,16 +26,12 @@ import me.chester.minitruco.R;
 
 public class ClienteInternetActivity extends Activity {
 
+    public EditText editNomeJogador;
     private Socket socket;
-
     private Thread thread;
-
     private PrintWriter out;
     private BufferedReader in;
-
     private SharedPreferences preferences;
-
-    public EditText editNomeJogador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +53,8 @@ public class ClienteInternetActivity extends Activity {
         thread.start();
     }
 
-	@Override
-	public void onBackPressed() {
+    @Override
+    public void onBackPressed() {
         desconecta();
         finish();
     }
@@ -76,7 +77,7 @@ public class ClienteInternetActivity extends Activity {
     }
 
     private void processaNotificacoes() {
-        String line = null;
+        String line;
         try {
             line = in.readLine();
         } catch (IOException e) {
@@ -88,13 +89,31 @@ public class ClienteInternetActivity extends Activity {
             desconecta();
             return;
         }
-        if (line == "") { // O servidor manda linhas vazias periodicamente para fins de keepalive
+        if (line.length() == 0) { // O servidor manda linhas vazias periodicamente para fins de keepalive
             return;
         }
         switch (line.charAt(0)) {
-            case 'W':
-                // O servidor manda um W quando conecta
-                runOnUiThread(() -> setContentView(R.layout.internet_menu));
+            case 'W': // O servidor manda um W quando conecta
+                pedeNome();
+                break;
+            case 'N': // Nome foi aceito
+                runOnUiThread(() -> {
+                    setContentView(R.layout.internet_menu);
+                    ((TextView) findViewById(R.id.textViewInternetTitulo)).setText(
+                        "Conectado como " + editNomeJogador.getText() + ". Regras:"
+                    );
+                    ((TextView) findViewById(R.id.textViewInternetRegras)).setText(
+                        "TODO mostrar as regras aqui"
+                    );
+                });
+                break;
+            case 'X': // Erro tratável
+                switch(line) {
+                    case "X NE": // Nome já existe
+                        pedeNome();
+                        break;
+                }
+                break;
             default:
                 // TODO log? talvez só ignorar (aí nem precisa tratar o keepalive)
         }
@@ -110,6 +129,8 @@ public class ClienteInternetActivity extends Activity {
         }
     }
 
+
+
     private void msgErroFatal(String msg, Throwable e) {
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)
@@ -123,50 +144,58 @@ public class ClienteInternetActivity extends Activity {
     }
 
 
-
-    private void preparanome() {
-//        editNomeJogador = new EditText(this);
-//        String nome = null;
-//        // TODO armazenar último nome usado e recuperar aqui
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-//            nome = Settings.System.getString(getContentResolver(), DEVICE_NAME);
-//        }
-//        if (nome == null) {
-//            // Não-documentado e só funciona se tiver Bluetooth, cf https://stackoverflow.com/a/67949517/64635
-//            nome = Settings.Secure.getString(getContentResolver(), "bluetooth_name");
-//        }
-//        if (nome == null) {
-//            nome = "um nome aleatório";
-//        }
-//        editNomeJogador.setText(nome);
-    }
-
-
-	public void enviaComando(String comando) {
-        out.write(comando);
-        out.write('\n');
-        out.flush();
-        // TODO log
+    public void enviaComando(String comando) {
+        // Roda numa nova thread sempre, porque pode ser chamado por handlers da main thread
+        // Não é a coisa mais otimizada do planeta, mas o custo é mínimo
+        new Thread(() -> {
+            out.write(comando);
+            out.write('\n');
+            out.flush();
+            // TODO log
 //			Jogo.log(comando);
+        }).start();
     }
 
     private void pedeNome() {
-        new AlertDialog.Builder(this)
-            .setIcon(R.drawable.icon)
-            .setTitle("Nome")
-            .setMessage("Qual nome você gostaria de usar?")
-            .setView(editNomeJogador)
-            .setPositiveButton("Ok", (dialog, which) -> defineNome())
-            .setNegativeButton("Cancela", null) // TODO desconectar
-            .show();
+        String nome = null;
+        String mensagem;
+        if (editNomeJogador == null) {
+            mensagem = "Qual nome você gostaria de usar?";
+            editNomeJogador = new EditText(this);
+            // TODO armazenar último nome usado e recuperar aqui
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+                nome = Settings.System.getString(getContentResolver(), DEVICE_NAME);
+            }
+            if (nome == null) {
+                // Não-documentado e só funciona se tiver Bluetooth, cf https://stackoverflow.com/a/67949517/64635
+                nome = Settings.Secure.getString(getContentResolver(), "bluetooth_name");
+            }
+            if (nome == null) {
+                nome = "um nome aleatório";
+            }
+            editNomeJogador.setText(nome);
+
+        } else {
+            mensagem = "Nome já usado ou inválido, tente outro:";
+        }
+
+        runOnUiThread(() -> {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.icon)
+                    .setTitle("Nome")
+                    .setMessage(mensagem)
+                    .setView(editNomeJogador)
+                    .setPositiveButton("Ok", (dialog, which) -> defineNome())
+                    .setNegativeButton("Cancela", null) // TODO desconectar
+                    .show();
+        });
     }
 
     private void defineNome() {
-        enviaComando("N "+ editNomeJogador.getText().toString());
+        enviaComando("N " + editNomeJogador.getText().toString());
         // TODO trocar pra logger?
         Log.d("Internet", editNomeJogador.getText().toString());
     }
-
 
 
     // TODO botão de back tem que

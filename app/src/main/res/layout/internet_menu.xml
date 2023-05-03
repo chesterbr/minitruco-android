@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/textViewInternetTitulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
@@ -17,7 +18,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/textViewRegrasInternet"
+        android:id="@+id/textViewInternetRegras"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="18dp"
