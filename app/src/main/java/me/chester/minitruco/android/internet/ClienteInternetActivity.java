@@ -1,6 +1,7 @@
 package me.chester.minitruco.android.internet;
 
 import static android.provider.Settings.Global.DEVICE_NAME;
+import static android.text.InputType.TYPE_CLASS_TEXT;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -161,7 +162,6 @@ public class ClienteInternetActivity extends Activity {
         String mensagem;
         if (editNomeJogador == null) {
             mensagem = "Qual nome você gostaria de usar?";
-            editNomeJogador = new EditText(this);
             // TODO armazenar último nome usado e recuperar aqui
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
                 nome = Settings.System.getString(getContentResolver(), DEVICE_NAME);
@@ -173,11 +173,15 @@ public class ClienteInternetActivity extends Activity {
             if (nome == null) {
                 nome = "um nome aleatório";
             }
-            editNomeJogador.setText(nome);
 
         } else {
             mensagem = "Nome já usado ou inválido, tente outro:";
+            nome = editNomeJogador.getText().toString() + (int)(1 + Math.random() * 99);
         }
+        editNomeJogador = new EditText(this);
+        editNomeJogador.setInputType(TYPE_CLASS_TEXT);
+        editNomeJogador.setMaxLines(1);
+        editNomeJogador.setText(nome);
 
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)
