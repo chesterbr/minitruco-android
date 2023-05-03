@@ -2,7 +2,6 @@ package me.chester.minitruco.android;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +18,7 @@ import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
-import me.chester.minitruco.android.internet.ServidorInternet;
+import me.chester.minitruco.android.internet.ClienteInternetActivity;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -30,7 +29,6 @@ import me.chester.minitruco.android.internet.ServidorInternet;
  */
 public class TituloActivity extends BaseActivity {
 
-	private static final String SERVIDOR_DEFAULT = "minitruco.chester.me";
 	SharedPreferences preferences;
 	Boolean mostrarMenuBluetooth;
 
@@ -98,19 +96,17 @@ public class TituloActivity extends BaseActivity {
 
 	private void perguntaCriarOuProcurarBluetooth() {
 		botoesHabilitados(false);
-		OnClickListener listener = new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				botoesHabilitados(true);
-				switch (which) {
-				case AlertDialog.BUTTON_NEGATIVE:
-					startActivity(new Intent(TituloActivity.this,
-							ServidorBluetoothActivity.class));
-					break;
-				case AlertDialog.BUTTON_POSITIVE:
-					startActivity(new Intent(TituloActivity.this,
-							ClienteBluetoothActivity.class));
-					break;
-				}
+		OnClickListener listener = (dialog, which) -> {
+			botoesHabilitados(true);
+			switch (which) {
+			case AlertDialog.BUTTON_NEGATIVE:
+				startActivity(new Intent(TituloActivity.this,
+						ServidorBluetoothActivity.class));
+				break;
+			case AlertDialog.BUTTON_POSITIVE:
+				startActivity(new Intent(TituloActivity.this,
+						ClienteBluetoothActivity.class));
+				break;
 			}
 		};
 		new AlertDialog.Builder(this).setTitle("Bluetooth")
@@ -126,9 +122,7 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	public void internetButtonClickHandler(View v) {
-		// TODO desabilitar os botões enquanto estiver conectando/conectado
-		ServidorInternet s = ServidorInternet.INSTANCE.getInstance();
-		s.conecta(this, preferences.getString("servidor", this.getString(R.string.opcoes_default_servidor)));
+		startActivity(new Intent(getBaseContext(), ClienteInternetActivity.class));
 	}
 
 	public void bluetoothButtonClickHandler(View v) {
