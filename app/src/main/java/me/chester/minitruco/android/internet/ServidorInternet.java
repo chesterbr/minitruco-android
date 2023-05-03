@@ -3,14 +3,16 @@ package me.chester.minitruco.android.internet;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
+import static android.provider.Settings.Global.DEVICE_NAME;
+
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.text.InputType;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.EditText;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,6 +21,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+
+import me.chester.minitruco.R;
 
 /**
  * Singleton responsável por toda a comunicação com o servidor no jogo via internet.
@@ -39,6 +43,8 @@ public enum ServidorInternet implements Runnable {
     private String info;
     private Context context;
 
+    private String servidor;
+
     private ServidorInternet() {
     }
 
@@ -46,8 +52,25 @@ public enum ServidorInternet implements Runnable {
         return INSTANCE;
     }
 
-    public void conecta(Context context) {
+    public EditText editNome;
+
+    public void conecta(Context context, String servidor) {
         this.context = context;
+        this.servidor = servidor;
+        editNome = new EditText(context);
+        String nome = null;
+        // TODO armazenar último nome usado e recuperar aqui
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            nome = Settings.System.getString(context.getContentResolver(), DEVICE_NAME);
+        }
+        if (nome == null) {
+            // Não-documentado e só funciona se tiver Bluetooth, cf https://stackoverflow.com/a/67949517/64635
+            nome = Settings.Secure.getString(context.getContentResolver(), "bluetooth_name");
+        }
+        if (nome == null) {
+            nome = "um nome aleatório";
+        }
+        editNome.setText(nome);
         internetThread = new Thread(this);
         internetThread.start();
     }
@@ -79,30 +102,23 @@ public enum ServidorInternet implements Runnable {
     }
 
     private void pedeNome() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Seu nome:");
-
-        final EditText editNome = new EditText(context);
-        editNome.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(editNome);
-
-        builder.setPositiveButton("Confirma", new DialogInterface.OnClickListener() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO: tentar setar o nome
-                Log.d("Internet", editNome.getText().toString());
+            public void run() {
+                new AlertDialog.Builder(context)
+        			.setIcon(R.drawable.icon)
+                    .setTitle("Nome")
+        			.setMessage("Qual nome você gostaria de usar?")
+                    .setView(editNome)
+                    .setPositiveButton("Ok", (dialog, which) -> defineNome())
+                    .setNegativeButton("Cancela", null) // TODO desconectar
+                    .show();
             }
         });
-        builder.setNegativeButton("Cancela", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                // TODO: desconectar
-            }
-        });
+    }
 
-        ContextCompat.getMainExecutor(context).execute(()  -> {
-            builder.show();
-        });
+    private void defineNome() {
+        // TODO implementar
+        Log.d("Internet", editNome.getText().toString());
     }
 }
