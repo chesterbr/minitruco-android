@@ -101,7 +101,7 @@ public class ClienteInternetActivity extends Activity {
                 runOnUiThread(() -> {
                     setContentView(R.layout.internet_menu);
                     ((TextView) findViewById(R.id.textViewInternetTitulo)).setText(
-                        "Conectado como " + editNomeJogador.getText() + ". Regras:"
+                        "Conectado como " + line.substring(2) + ". Regras:"
                     );
                     ((TextView) findViewById(R.id.textViewInternetRegras)).setText(
                         "TODO mostrar as regras aqui"
@@ -111,6 +111,11 @@ public class ClienteInternetActivity extends Activity {
             case 'X': // Erro tratável
                 switch(line) {
                     case "X NE": // Nome já existe
+                        pedeNome();
+                        break;
+                    case "X NI":
+                        // TODO sinalizar como invalido, tambem fazer
+                        // algo parecido no NE acima
                         pedeNome();
                         break;
                 }
