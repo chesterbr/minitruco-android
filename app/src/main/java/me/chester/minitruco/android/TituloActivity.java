@@ -126,6 +126,7 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	public void internetButtonClickHandler(View v) {
+		// TODO desabilitar os botões enquanto estiver conectando/conectado
 		ServidorInternet s = ServidorInternet.INSTANCE.getInstance();
 		s.conecta(this, preferences.getString("servidor", this.getString(R.string.opcoes_default_servidor)));
 	}

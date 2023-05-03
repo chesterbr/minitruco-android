@@ -101,6 +101,21 @@ public enum ServidorInternet implements Runnable {
         }
     }
 
+
+	/**
+	 * Envia um comando ao servidor
+	 *
+	 * @param comando
+	 *            texto do comando a enviar
+	 */
+	public void enviaComando(String comando) {
+        out.write(comando);
+        out.write('\n');
+        out.flush();
+        // TODO log
+//			Jogo.log(comando);
+    }
+
     private void pedeNome() {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
@@ -118,6 +133,7 @@ public enum ServidorInternet implements Runnable {
     }
 
     private void defineNome() {
+        enviaComando("N "+editNome.getText().toString());
         // TODO implementar
         Log.d("Internet", editNome.getText().toString());
     }
