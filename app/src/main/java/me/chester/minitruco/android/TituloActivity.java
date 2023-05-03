@@ -30,6 +30,7 @@ import me.chester.minitruco.android.internet.ServidorInternet;
  */
 public class TituloActivity extends BaseActivity {
 
+	private static final String SERVIDOR_DEFAULT = "minitruco.chester.me";
 	SharedPreferences preferences;
 	Boolean mostrarMenuBluetooth;
 
@@ -126,7 +127,7 @@ public class TituloActivity extends BaseActivity {
 
 	public void internetButtonClickHandler(View v) {
 		ServidorInternet s = ServidorInternet.INSTANCE.getInstance();
-		s.conecta(this);
+		s.conecta(this, preferences.getString("servidor", this.getString(R.string.opcoes_default_servidor)));
 	}
 
 	public void bluetoothButtonClickHandler(View v) {

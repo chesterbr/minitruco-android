@@ -55,7 +55,7 @@ public enum ServidorInternet implements Runnable {
     @Override
     public void run() {
         try {
-            internetSocket = new Socket("10.0.2.2", 6912);
+            internetSocket = new Socket(servidor, 6912);
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
                     internetSocket.getOutputStream())), true);
             in = new BufferedReader(new InputStreamReader(
