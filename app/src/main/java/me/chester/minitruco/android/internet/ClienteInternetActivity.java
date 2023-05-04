@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,6 +23,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import me.chester.minitruco.R;
 
@@ -82,12 +86,12 @@ public class ClienteInternetActivity extends Activity {
         try {
             line = in.readLine();
         } catch (IOException e) {
-            msgErroFatal("Erro de comunicação", e);
+            msgErroFatal("Erro de comunicação.", e);
             return;
         }
-        if (line == null) { // Servidor desconectou
-            msgErroFatal("Você foi desconectado", null);
+        if (line == null) {
             desconecta();
+            msgErroFatal("Você foi desconectado.", null);
             return;
         }
         if (line.length() == 0) { // O servidor manda linhas vazias periodicamente para fins de keepalive
@@ -100,12 +104,36 @@ public class ClienteInternetActivity extends Activity {
             case 'N': // Nome foi aceito
                 runOnUiThread(() -> {
                     setContentView(R.layout.internet_menu);
+                    ((Button) findViewById(R.id.btnEntrarSalaPublica)).setOnClickListener(v -> {
+                        // TODO pegar as regras das preferências
+                        enviaComando("E PUB FFF");
+                    });
                     ((TextView) findViewById(R.id.textViewInternetTitulo)).setText(
                         "Conectado como " + line.substring(2) + ". Regras:"
                     );
                     ((TextView) findViewById(R.id.textViewInternetRegras)).setText(
                         "TODO mostrar as regras aqui"
                     );
+                });
+                break;
+            case 'I': // Entrou numa sala (ou ela foi atualizada)
+                runOnUiThread(() -> {
+                    setContentView(R.layout.internet_sala);
+                    ((Button) findViewById(R.id.btnQueroJogar)).setOnClickListener(v -> {
+                        // TODO pegar as regras das preferências
+                        enviaComando("Q");
+                    });
+                    String[] nomes = line.split(" ")[2].split(Pattern.quote("|"));
+                    List<String> nomesNaPosicao = new ArrayList<String>(5);
+                    nomesNaPosicao.add("zeroth");
+                    for (int i = 0; i <= 3; i++) {
+                        String nome = i < nomes.length ? nomes[i] : "";
+                        nomesNaPosicao.add(nome.length() == 0 ? "bot" : nome);
+                    }
+                    ((TextView) findViewById(R.id.textViewJogador1)).setText(nomesNaPosicao.get(1));
+                    ((TextView) findViewById(R.id.textViewJogador2)).setText(nomesNaPosicao.get(2));
+                    ((TextView) findViewById(R.id.textViewJogador3)).setText(nomesNaPosicao.get(3));
+                    ((TextView) findViewById(R.id.textViewJogador4)).setText(nomesNaPosicao.get(4));
                 });
                 break;
             case 'X': // Erro tratável
@@ -142,7 +170,7 @@ public class ClienteInternetActivity extends Activity {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_delete)
                     .setTitle("Erro")
-                    .setMessage(e == null ? msg : msg + "\n\nErro: " + e.getLocalizedMessage())
+                    .setMessage(e == null ? msg : msg + "\n\nDetalhes: " + e.getLocalizedMessage())
                     .setNeutralButton("Fechar", (dialog, which) -> finish())
                     .setOnCancelListener(v -> finish())
                     .show();

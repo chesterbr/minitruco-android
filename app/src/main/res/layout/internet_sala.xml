@@ -4,19 +4,19 @@
     android:layout_height="fill_parent"
     android:background="#1B8E3C"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:gravity="center" >
+        android:gravity="center">
 
         <LinearLayout
             android:id="@+id/layoutJogadores"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textViewJogador3"
@@ -32,7 +32,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textViewJogador4"
@@ -68,7 +68,7 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent">
 
             <TextView
                 android:id="@+id/textViewMensagem"
@@ -92,14 +92,13 @@
         android:layout_height="fill_parent"
         android:layout_weight="2"
         android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone" >
+        android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnIniciarBluetooth"
+            android:id="@+id/btnQueroJogar"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:text="Iniciar Jogo" />
+            android:text="Quero Jogar" />
     </LinearLayout>
 
     <LinearLayout
@@ -108,7 +107,7 @@
         android:layout_height="20sp"
         android:layout_marginTop="4sp"
         android:background="#A0A0A0"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textViewRegras"
