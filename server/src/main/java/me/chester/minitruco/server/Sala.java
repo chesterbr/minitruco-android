@@ -357,6 +357,7 @@ public class Sala {
         // Regras
         sb.append((baralhoLimpo ? 'T' : 'F'));
         sb.append((manilhaVelha ? 'T' : 'F'));
+        sb.append((tentoMineiro ? 'T' : 'F'));
         return sb.toString();
     }
 

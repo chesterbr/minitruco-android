@@ -123,6 +123,7 @@ public class ClienteInternetActivity extends Activity {
                         // TODO pegar as regras das preferências
                         enviaComando("Q");
                     });
+                    // TODO considerar posição do jogador na sala
                     String[] nomes = line.split(" ")[2].split(Pattern.quote("|"));
                     List<String> nomesNaPosicao = new ArrayList<String>(5);
                     nomesNaPosicao.add("zeroth");

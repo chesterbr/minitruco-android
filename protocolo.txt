@@ -1,6 +1,8 @@
 Este texto descreve os comandos enviados pelos clientes e as notificações
 dadas pelo servidor, tanto para o jogo Bluetooth quanto para
-o jogo via internet
+o jogo via internet.
+
+Regras são sempre três caracteres (___), T ou F para baralho limpo, manilha velha e tento mineiro, nessa ordem
 
 = Implementados
 
@@ -36,7 +38,7 @@ X JE sala - Você já está na sala de código "sala"
 
 N nome
 I sala nome1|nome2|nome3|nome4 ____ posicao __ - Info da sala
-      (numero, nomes dos jogadores, T/F "quer jogar" dos jogadores, posicao do gerente, T/F baralho limpo, T/F manilha velha)
+      (numero, nomes dos jogadores, T/F "quer jogar" dos jogadores, posicao do gerente, regras)
 P posicao - Início da partida, sua posição é essa
 M Ln Ln Ln Ln - Início da mão. Suas cartas são Ln, Ln e Ln (Letra naipe), a última, se houver, é o vira
 V posicao _ - vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode
@@ -81,4 +83,3 @@ X JO - Você está em jogo, não pode fazer isso
 X JI - Jogador (posicao) invalida (deve ser de 1 a 4)
 
 E sala - Informa que o jogador entrou na sala com este número (um I vem logo em seguida)
-
