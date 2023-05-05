@@ -2,7 +2,14 @@ Este texto descreve os comandos enviados pelos clientes e as notificações
 dadas pelo servidor, tanto para o jogo Bluetooth quanto para
 o jogo via internet.
 
-Regras são sempre três caracteres (___), T ou F para baralho limpo, manilha velha e tento mineiro, nessa ordem
+Convenções nas notificações:
+
+<apelidos> Quatro sequências de caracteres (uma ou mais podendo ser "bot"), separadas por "|".
+           Exemplo: john|bot|ringo|george
+<regras> Três caracteres, T/F para baralho limpo/sujo, manilha velha/nova e tento mineiro/paulista
+         Exemplo: FTF (baralho completo, manilha nova e tento [truco] paulista)
+<posicao> Posição do jogador atual, de 1 a 4; 1 e 3 são uma dupla, 2 e 4 são a outra.
+<quer jogar> Quatro caracteres, T/F conforme cada posição queira iniciar o jogo
 
 = Implementados
 
@@ -11,7 +18,7 @@ Regras são sempre três caracteres (___), T ou F para baralho limpo, manilha ve
 === Gerais
 
 W - recupera número de versão (e de repente outras infos no futuro)
-N nome - Define o nome do jogador
+N <apelido> - Define o nome do jogador
 E PUB ___ - Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com as regras especificadas
 S - Sai da sala (encerrando o jogo, se houver um em andamento)
 Q - Quero Jogar
@@ -37,9 +44,8 @@ X NO - É preciso atribuir um nome para entrar na sala
 X JE sala - Você já está na sala de código "sala"
 
 N nome
-I sala nome1|nome2|nome3|nome4 ____ posicao __ - Info da sala
-      (numero, nomes dos jogadores, T/F "quer jogar" dos jogadores, posicao do gerente, regras)
-P posicao - Início da partida, sua posição é essa
+I <apelidos> <regras> <posicao> <quero jogar> - Info da sala. <quer jogar> apenas no jogo via internet
+P <posicao> - Início da partida
 M Ln Ln Ln Ln - Início da mão. Suas cartas são Ln, Ln e Ln (Letra naipe), a última, se houver, é o vira
 V posicao _ - vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode
 J posicao Ln - Carta Ln foi jogada pela pessoa na posição indicada (se Ln omitido, foi jogada carta fechada)

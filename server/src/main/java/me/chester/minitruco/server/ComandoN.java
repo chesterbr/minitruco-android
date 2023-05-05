@@ -1,8 +1,5 @@
 package me.chester.minitruco.server;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
@@ -22,7 +19,10 @@ import java.util.Calendar;
  */
 public class ComandoN extends Comando {
 
-	private static final String CARACTERES_PERMITIDOS = "!@$()-_.";
+	private static final String CARACTERES_PERMITIDOS = "!@()-_.";
+
+	// TODO sanitizar nomes reservados, case insensitive: bot, chester, chesterbr, minitruco
+	// (aqui ou em Sala?)
 
 	@Override
 	public void executa(String[] args, JogadorConectado j) {
