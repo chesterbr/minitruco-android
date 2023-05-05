@@ -141,23 +141,13 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                         jogo = null;
                     }
             		String[] tokens = line.split(" ");
-                    String[] nomes = tokens[2].split(Pattern.quote("|"));
-                    // O que tá errado aqui: tokens[4] é a posição do gerente; o código
-                    // Bluetooth assume que o servidor manda a posição do jogador
-                    // Fix: fazer isso acontecer no servidor (aliás, compatibilizar mais o servidor
-                    // com o Bluetooth; colocar as coisas dele, como o "quero jogar" no fim)
-                    List<String> nomesNaPosicao = new ArrayList<String>(5);
-                    nomesNaPosicao.add("zeroth");
-                    for (int i = 0; i <= 3; i++) {
-                        String nome = i < nomes.length ? nomes[i] : "";
-                        nomesNaPosicao.add(nome.length() == 0 ? "bot" : nome);
-                    }
-                    ((TextView) findViewById(R.id.textViewJogador1)).setText(nomesNaPosicao.get(1));
-                    ((TextView) findViewById(R.id.textViewJogador2)).setText(nomesNaPosicao.get(2));
-                    ((TextView) findViewById(R.id.textViewJogador3)).setText(nomesNaPosicao.get(3));
-                    ((TextView) findViewById(R.id.textViewJogador4)).setText(nomesNaPosicao.get(4));
-		            posJogador = Integer.parseInt(tokens[4]);
-		            regras = tokens[5];
+                    String[] nomes = tokens[1].split(Pattern.quote("|"));
+                    ((TextView) findViewById(R.id.textViewJogador1)).setText(nomes[0]);
+                    ((TextView) findViewById(R.id.textViewJogador2)).setText(nomes[1]);
+                    ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[2]);
+                    ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[3]);
+		            posJogador = Integer.parseInt(tokens[2]);
+		            regras = tokens[3];
                 });
                 break;
             case 'X': // Erro tratável
@@ -225,7 +215,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
     @Override
     public String getRegras() {
         // TODO ler as configs e/ou consolidar
-        return "TTT";
+        return "FFF";
     }
 
     public void enviaLinha(String comando) {
@@ -235,8 +225,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
             out.write(comando);
             out.write('\n');
             out.flush();
-            // TODO log
-//			Jogo.log(comando);
+            LOGGER.log(Level.INFO, "enviou: " + comando);
         }).start();
     }
 
