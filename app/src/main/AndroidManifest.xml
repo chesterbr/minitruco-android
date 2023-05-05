@@ -41,7 +41,7 @@
         android:label="@string/app_name"
         android:theme="@style/miniTrucoTheme">
         <activity
-            android:name=".android.internet.ClienteInternetActivity"
+            android:name=".android.multiplayer.internet.ClienteInternetActivity"
             android:exported="false" />
         <activity
             android:name=".android.TituloActivity"
@@ -56,10 +56,10 @@
             android:name=".android.TrucoActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".android.bluetooth.ServidorBluetoothActivity"
+            android:name=".android.multiplayer.bluetooth.ServidorBluetoothActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".android.bluetooth.ClienteBluetoothActivity"
+            android:name=".android.multiplayer.bluetooth.ClienteBluetoothActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".android.OpcoesActivity"

@@ -1,4 +1,4 @@
-package me.chester.minitruco.android.bluetooth;
+package me.chester.minitruco.android.multiplayer;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;

@@ -16,9 +16,9 @@ import android.view.View;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
-import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
-import me.chester.minitruco.android.internet.ClienteInternetActivity;
+import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
+import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
+import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */

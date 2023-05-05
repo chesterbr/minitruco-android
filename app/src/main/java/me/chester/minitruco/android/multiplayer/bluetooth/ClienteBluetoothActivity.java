@@ -1,4 +1,4 @@
-package me.chester.minitruco.android.bluetooth;
+package me.chester.minitruco.android.multiplayer.bluetooth;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -17,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
+import me.chester.minitruco.android.multiplayer.JogoRemoto;
 import me.chester.minitruco.core.Jogo;
 
 
@@ -24,7 +26,7 @@ import me.chester.minitruco.core.Jogo;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
-		Runnable {
+		Runnable, ClienteMultiplayer {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteBluetoothActivity");
 
@@ -37,7 +39,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 
 	private Thread threadConexao;
 	private Thread threadMonitoraConexao;
-	private JogoBluetooth jogo;
+	private JogoRemoto jogo;
 	private BluetoothSocket socket = null;
 	private InputStream in;
 	private OutputStream out;
@@ -142,6 +144,14 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		}
 	}
 
+	// TODO rever esse getter introduzido para poder generalizar
+	//     JogoRemoto entre internet e bluetooth que é protected
+	//     e está na classe base
+	@Override
+	public String getRegras() {
+		return regras;
+	}
+
 	private void iniciaMonitorConexao() {
 		if (threadMonitoraConexao == null) {
 			threadMonitoraConexao = new Thread() {
@@ -197,6 +207,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	 *
 	 * @param linha
 	 */
+	@Override
 	public synchronized void enviaLinha(String linha) {
 		try {
 			if (out == null) {
@@ -206,7 +217,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 				LOGGER.log(Level.INFO, "Enviando:" + linha);
 			}
 			out.write(linha.getBytes());
-			out.write(ClienteBluetoothActivity.SEPARADOR_ENV);
+			out.write(SEPARADOR_ENV);
 			out.flush();
 		} catch (IOException e) {
 			LOGGER.log(Level.INFO, "Excção em EnviaLinha (desconexão?)", e);
@@ -252,16 +263,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	}
 
 	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-		jogo = new JogoBluetooth(this);
-		// Adiciona o jogador na posição correta
-		// (preenchendo as outras com dummies)
-		for (int i = 1; i <= 4; i++) {
-			if (i == posJogador) {
-				jogo.adiciona(jogadorHumano);
-			} else {
-				jogo.adiciona(new JogadorDummy());
-			}
-		}
+		jogo = new JogoRemoto(this, jogadorHumano, posJogador);
 		return jogo;
 	}
 

@@ -1,4 +1,4 @@
-package me.chester.minitruco.android.bluetooth;
+package me.chester.minitruco.android.multiplayer.bluetooth;
 
 import android.Manifest;
 import android.app.AlertDialog;

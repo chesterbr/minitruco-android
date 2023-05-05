@@ -1,10 +1,11 @@
-package me.chester.minitruco.android.internet;
+package me.chester.minitruco.android.multiplayer.internet;
 
 import static android.provider.Settings.Global.DEVICE_NAME;
 import static android.text.InputType.TYPE_CLASS_TEXT;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,8 +29,13 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.TrucoActivity;
+import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
+import me.chester.minitruco.android.multiplayer.JogoRemoto;
+import me.chester.minitruco.core.Jogo;
 
-public class ClienteInternetActivity extends Activity {
+public class ClienteInternetActivity extends Activity implements ClienteMultiplayer {
 
     public EditText editNomeJogador;
     private Socket socket;
@@ -38,9 +44,16 @@ public class ClienteInternetActivity extends Activity {
     private BufferedReader in;
     private SharedPreferences preferences;
 
+	private static ClienteInternetActivity currentInstance;
+    private JogoRemoto jogo;
+    private String regras;
+    private int posJogador;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentInstance = this;
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.internet_conectando);
 
@@ -106,7 +119,7 @@ public class ClienteInternetActivity extends Activity {
                     setContentView(R.layout.internet_menu);
                     ((Button) findViewById(R.id.btnEntrarSalaPublica)).setOnClickListener(v -> {
                         // TODO pegar as regras das preferências
-                        enviaComando("E PUB FFF");
+                        enviaLinha("E PUB FFF");
                     });
                     ((TextView) findViewById(R.id.textViewInternetTitulo)).setText(
                         "Conectado como " + line.substring(2) + ". Regras:"
@@ -121,10 +134,18 @@ public class ClienteInternetActivity extends Activity {
                     setContentView(R.layout.internet_sala);
                     ((Button) findViewById(R.id.btnQueroJogar)).setOnClickListener(v -> {
                         // TODO pegar as regras das preferências
-                        enviaComando("Q");
+                        enviaLinha("Q");
                     });
-                    // TODO considerar posição do jogador na sala
-                    String[] nomes = line.split(" ")[2].split(Pattern.quote("|"));
+                    if (jogo != null) {
+                        jogo.abortaJogo(0);
+                        jogo = null;
+                    }
+            		String[] tokens = line.split(" ");
+                    String[] nomes = tokens[2].split(Pattern.quote("|"));
+                    // O que tá errado aqui: tokens[4] é a posição do gerente; o código
+                    // Bluetooth assume que o servidor manda a posição do jogador
+                    // Fix: fazer isso acontecer no servidor (aliás, compatibilizar mais o servidor
+                    // com o Bluetooth; colocar as coisas dele, como o "quero jogar" no fim)
                     List<String> nomesNaPosicao = new ArrayList<String>(5);
                     nomesNaPosicao.add("zeroth");
                     for (int i = 0; i <= 3; i++) {
@@ -135,6 +156,8 @@ public class ClienteInternetActivity extends Activity {
                     ((TextView) findViewById(R.id.textViewJogador2)).setText(nomesNaPosicao.get(2));
                     ((TextView) findViewById(R.id.textViewJogador3)).setText(nomesNaPosicao.get(3));
                     ((TextView) findViewById(R.id.textViewJogador4)).setText(nomesNaPosicao.get(4));
+		            posJogador = Integer.parseInt(tokens[4]);
+		            regras = tokens[5];
                 });
                 break;
             case 'X': // Erro tratável
@@ -149,8 +172,21 @@ public class ClienteInternetActivity extends Activity {
                         break;
                 }
                 break;
+            case 'P': // Jogo iniciado
+                // Se for o primeiro jogo nessa sala, temos que abrir a activity
+                if (!TrucoActivity.isViva()) {
+                    startActivity(
+                        new Intent(this, TrucoActivity.class)
+                            .putExtra("clienteInternet", true));
+                }
+                // Não tem break mesmo, porque se for um novo jogo, temos que
+                // deixar a activity encerrar (visualmente) o jogo anterior.
             default:
-                // TODO log? talvez só ignorar (aí nem precisa tratar o keepalive)
+                // Se chegou aqui, não é nossa, encaminha pro JogoRemoto
+                if (jogo != null) {
+                    jogo.processaNotificacao(line.charAt(0),
+                            line.length() > 2 ? line.substring(2) : "");
+                }
         }
     }
 
@@ -164,7 +200,14 @@ public class ClienteInternetActivity extends Activity {
         }
     }
 
+	public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
+		return currentInstance._criaNovoJogo(jogadorHumano);
+	}
 
+	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
+		jogo = new JogoRemoto(this, jogadorHumano, posJogador);
+		return jogo;
+	}
 
     private void msgErroFatal(String msg, Throwable e) {
         runOnUiThread(() -> {
@@ -179,7 +222,13 @@ public class ClienteInternetActivity extends Activity {
     }
 
 
-    public void enviaComando(String comando) {
+    @Override
+    public String getRegras() {
+        // TODO ler as configs e/ou consolidar
+        return "TTT";
+    }
+
+    public void enviaLinha(String comando) {
         // Roda numa nova thread sempre, porque pode ser chamado por handlers da main thread
         // Não é a coisa mais otimizada do planeta, mas o custo é mínimo
         new Thread(() -> {
@@ -230,7 +279,7 @@ public class ClienteInternetActivity extends Activity {
     }
 
     private void defineNome() {
-        enviaComando("N " + editNomeJogador.getText().toString());
+        enviaLinha("N " + editNomeJogador.getText().toString());
         // TODO trocar pra logger?
         Log.d("Internet", editNomeJogador.getText().toString());
     }
