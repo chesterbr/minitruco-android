@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,8 +23,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import me.chester.minitruco.R;
@@ -36,6 +35,8 @@ import me.chester.minitruco.android.multiplayer.JogoRemoto;
 import me.chester.minitruco.core.Jogo;
 
 public class ClienteInternetActivity extends Activity implements ClienteMultiplayer {
+
+    private final static Logger LOGGER = Logger.getLogger("ClienteInternetActivity");
 
     public EditText editNomeJogador;
     private Socket socket;
@@ -110,6 +111,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
         if (line.length() == 0) { // O servidor manda linhas vazias periodicamente para fins de keepalive
             return;
         }
+        LOGGER.log(Level.INFO, "recebeu: " + line);
         switch (line.charAt(0)) {
             case 'W': // O servidor manda um W quando conecta
                 pedeNome();
@@ -164,12 +166,17 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                 break;
             case 'P': // Jogo iniciado
                 // Se for o primeiro jogo nessa sala, temos que abrir a activity
-                if (!TrucoActivity.isViva()) {
+                while (!TrucoActivity.isViva()) {
                     startActivity(
                         new Intent(this, TrucoActivity.class)
                             .putExtra("clienteInternet", true));
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        // TODO consolidar esses sleeps
+                    }
                 }
-                // Não tem break mesmo, porque se for um novo jogo, temos que
+                // Não tem break mesmo, porque se *não* for o primeiro jogo, temos que
                 // deixar a activity encerrar (visualmente) o jogo anterior.
             default:
                 // Se chegou aqui, não é nossa, encaminha pro JogoRemoto
@@ -269,8 +276,6 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
 
     private void defineNome() {
         enviaLinha("N " + editNomeJogador.getText().toString());
-        // TODO trocar pra logger?
-        Log.d("Internet", editNomeJogador.getText().toString());
     }
 
 
