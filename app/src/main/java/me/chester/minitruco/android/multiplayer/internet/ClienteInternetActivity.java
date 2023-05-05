@@ -176,6 +176,9 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                         // TODO consolidar esses sleeps
                     }
                 }
+                // TODO checar se não tem chance de ficar preso no while acima
+                //      (acho que não , mas ainda teve uma vez que o jogo iniciou de bobeira)
+
                 // Não tem break mesmo, porque se *não* for o primeiro jogo, temos que
                 // deixar a activity encerrar (visualmente) o jogo anterior.
             default:
