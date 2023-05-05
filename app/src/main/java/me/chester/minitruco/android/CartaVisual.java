@@ -143,7 +143,8 @@ public class CartaVisual extends Carta {
 				movePara(destLeft, destTop);
 			}
 		}
-		if (getBitmap() != null) {
+		Bitmap bitmapCarta = getBitmap();
+		if (bitmapCarta != null) {
 			int raio_canto = calculaRaioCanto();
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
@@ -155,7 +156,7 @@ public class CartaVisual extends Carta {
 			canvas.drawRoundRect(rectf, raio_canto, raio_canto, paint);
 			paint.setColor(COR_MESA);
 			paint.setStyle(Paint.Style.FILL);
-			canvas.drawBitmap(getBitmap(), left, top, paint);
+			canvas.drawBitmap(bitmapCarta, left, top, paint);
 			paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.STROKE);
 			paint.setStrokeWidth(1);
