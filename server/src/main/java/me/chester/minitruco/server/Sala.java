@@ -24,6 +24,9 @@ import me.chester.minitruco.core.JogoLocal;
  */
 public class Sala {
 
+	private static final String APELIDO_CPU = "bot";
+    private static final String POSICAO_PLACEHOLDER = "$POSICAO";
+
     /**
      * Salas criadas por usuários (a chave é o código da sala)
      */
@@ -226,16 +229,71 @@ public class Sala {
     }
 
     /**
-     * Envia uma notificação para todos os jogadores na sala
-     *
-     * @param mensagem linha de texto a ser enviada
+     * Manda a notificação de informação da sala ("I ...") para todos os membros.
      */
-    public void notificaJogadores(String mensagem) {
+    public void mandaInfoParaTodos() {
+        String mensagem = getInfo();
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] instanceof JogadorConectado) {
-                ((JogadorConectado) jogadores[i]).println(mensagem);
+                ((JogadorConectado) jogadores[i]).println(
+                    mensagem.replace(POSICAO_PLACEHOLDER, String.valueOf(i + 1)));
             }
         }
+    }
+
+    /**
+     * Monta a string de informação da sala.
+     *
+     * Chamadores devem substituir a string POSICAO_PLACEHOLDER pela posição do jogdaor
+     * para o qual a informação será enviada.
+     *
+     * @return String no formato "I ..." definido em protocolo.txt
+     */
+    private String getInfo() {
+        StringBuilder sb = new StringBuilder();
+        // I numsala
+        // TODO codigo da sala privada
+        sb.append("I ");
+
+        // Nomes dos jogadores, separados por pipe (posições vazias são strings
+        // vazias)
+        for (int i = 0; i <= 3; i++) {
+            sb.append(i == 0 ? "" : '|');
+            sb.append(jogadores[i] == null ? APELIDO_CPU : jogadores[i].getNome());
+        }
+        sb.append(' ');
+
+        // Posição do jogador que solicitou a informação
+        sb.append(POSICAO_PLACEHOLDER);
+        sb.append(' ');
+
+        // Regras
+        sb.append((baralhoLimpo ? 'T' : 'F'));
+        sb.append((manilhaVelha ? 'T' : 'F'));
+        sb.append((tentoMineiro ? 'T' : 'F'));
+        sb.append(' ');
+
+        // Status de "quero jogar" dos jogadores (posições vazias são T,
+        // indicando que serão preenchidas por robôs caso o jogo inicie)
+        for (int i = 0; i <= 3; i++) {
+            if (jogadores[i] instanceof JogadorConectado) {
+                if (((JogadorConectado) jogadores[i]).querJogar) {
+                    sb.append('T');
+                } else {
+                    sb.append('F');
+                }
+            } else {
+                sb.append('T');
+            }
+        }
+        sb.append(' ');
+
+//        TODO ver se vamos ter esse conceito de gerente
+//        // Posição do gerente
+//        sb.append(getPosicao(getGerente()));
+//        sb.append(' ');
+
+        return sb.toString();
     }
 
     /**
@@ -317,47 +375,6 @@ public class Sala {
             }
         }
         this.jogo = null;
-    }
-
-    /**
-     * Recupera a string de informação da sala.
-     *
-     * @return String no formato "I sala nome1|nome2|nome3|nome4 vontade posicao
-     * regras"
-     */
-    public String getInfo() {
-        StringBuilder sb = new StringBuilder();
-        // I numsala
-        // TODO representar salas sem código (vai ser 'I null' como está)
-        sb.append("I " + codigo);
-        // Nomes dos jogadores, separados por pipe (posições vazias são strings
-        // vazias)
-        for (int i = 0; i <= 3; i++) {
-            sb.append(i == 0 ? ' ' : '|');
-            sb.append(jogadores[i] == null ? "" : jogadores[i].getNome());
-        }
-        sb.append(' ');
-        // Status de "quer jogar" dos jogadores (posições vazias são T,
-        // indicando que serão preenchidas por robôs caso o jogo inicie)
-        for (int i = 0; i <= 3; i++) {
-            if (jogadores[i] instanceof JogadorConectado) {
-                if (((JogadorConectado) jogadores[i]).querJogar) {
-                    sb.append('T');
-                } else {
-                    sb.append('F');
-                }
-            } else {
-                sb.append('T');
-            }
-        }
-        sb.append(' ');
-        // Posição do gerente
-        sb.append(getPosicao(getGerente()));
-        sb.append(' ');
-        // Regras
-        sb.append((baralhoLimpo ? 'T' : 'F'));
-        sb.append((manilhaVelha ? 'T' : 'F'));
-        return sb.toString();
     }
 
     /**

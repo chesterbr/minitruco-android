@@ -17,7 +17,7 @@ public class ComandoQ extends Comando {
 		Sala s = j.getSala();
 		if (s!=null) {
 			j.querJogar = true;
-			s.notificaJogadores(s.getInfo());
+			s.mandaInfoParaTodos();
 			s.verificaMesaCompleta();
 		} else {
 			j.println("X FS");

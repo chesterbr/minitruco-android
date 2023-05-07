@@ -25,7 +25,7 @@ public class ComandoS extends Comando {
 //                s.baralhoLimpo = false;
 //                s.manilhaVelha = false;
 //            }
-            s.notificaJogadores(s.getInfo());
+            s.mandaInfoParaTodos();
         } else {
             j.println("X FS");
         }

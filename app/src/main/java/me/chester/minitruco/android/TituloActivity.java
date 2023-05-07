@@ -2,7 +2,6 @@ package me.chester.minitruco.android;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,8 +16,9 @@ import android.view.View;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
-import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
+import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
+import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
+import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -58,7 +58,7 @@ public class TituloActivity extends BaseActivity {
 
 	private void habilitaBluetoothSeExistir() {
 		mostrarMenuBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
-		findViewById(R.id.btnBluetooth).setVisibility(mostrarMenuBluetooth ? View.VISIBLE : View.GONE);
+		findViewById(R.id.btnBluetoothContainer).setVisibility(mostrarMenuBluetooth ? View.VISIBLE : View.GONE);
 	}
 
 	private void botoesHabilitados(boolean status) {
@@ -96,19 +96,17 @@ public class TituloActivity extends BaseActivity {
 
 	private void perguntaCriarOuProcurarBluetooth() {
 		botoesHabilitados(false);
-		OnClickListener listener = new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				botoesHabilitados(true);
-				switch (which) {
-				case AlertDialog.BUTTON_NEGATIVE:
-					startActivity(new Intent(TituloActivity.this,
-							ServidorBluetoothActivity.class));
-					break;
-				case AlertDialog.BUTTON_POSITIVE:
-					startActivity(new Intent(TituloActivity.this,
-							ClienteBluetoothActivity.class));
-					break;
-				}
+		OnClickListener listener = (dialog, which) -> {
+			botoesHabilitados(true);
+			switch (which) {
+			case AlertDialog.BUTTON_NEGATIVE:
+				startActivity(new Intent(TituloActivity.this,
+						ServidorBluetoothActivity.class));
+				break;
+			case AlertDialog.BUTTON_POSITIVE:
+				startActivity(new Intent(TituloActivity.this,
+						ClienteBluetoothActivity.class));
+				break;
 			}
 		};
 		new AlertDialog.Builder(this).setTitle("Bluetooth")
@@ -121,6 +119,10 @@ public class TituloActivity extends BaseActivity {
 	public void jogarClickHandler(View v) {
 		Intent intent = new Intent(TituloActivity.this, TrucoActivity.class);
 		startActivity(intent);
+	}
+
+	public void internetButtonClickHandler(View v) {
+		startActivity(new Intent(getBaseContext(), ClienteInternetActivity.class));
 	}
 
 	public void bluetoothButtonClickHandler(View v) {

@@ -1,7 +1,6 @@
 package me.chester.minitruco.android;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -16,8 +15,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.bluetooth.ClienteBluetoothActivity;
-import me.chester.minitruco.android.bluetooth.ServidorBluetoothActivity;
+import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
+import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
+import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
 import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
@@ -129,6 +129,8 @@ public class TrucoActivity extends BaseActivity {
 			jogo = ServidorBluetoothActivity.criaNovoJogo(jogadorHumano);
 		} else if (getIntent().hasExtra("clienteBluetooth")) {
 			jogo = ClienteBluetoothActivity.criaNovoJogo(jogadorHumano);
+		} else if (getIntent().hasExtra("clienteInternet")) {
+			jogo = ClienteInternetActivity.criaNovoJogo(jogadorHumano);
 		} else {
 			jogo = criaNovoJogoSinglePlayer(jogadorHumano);
 		}

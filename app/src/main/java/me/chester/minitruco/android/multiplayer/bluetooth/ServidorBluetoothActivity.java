@@ -1,6 +1,5 @@
-package me.chester.minitruco.android.bluetooth;
+package me.chester.minitruco.android.multiplayer.bluetooth;
 
-import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
@@ -9,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -17,8 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-
-import androidx.core.app.ActivityCompat;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -43,7 +39,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	private static final char STATUS_EM_JOGO = 'J';
 	private static final char STATUS_BLUETOOTH_ENCERRADO = 'X';
 	private static final int REQUEST_ENABLE_DISCOVERY = 1;
-	private static final String[] APELIDOS_CPU = {"CPU1", "CPU2", "CPU3"};
+	private static final String APELIDO_CPU = "bot";
 
 	private static ServidorBluetoothActivity currentInstance;
 
@@ -251,7 +247,9 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	private void inicializaDisplay() {
 		apelidos[0] = btAdapter.getName();
-		System.arraycopy(APELIDOS_CPU, 0, apelidos, 1, 3);
+		apelidos[1] = APELIDO_CPU;
+		apelidos[2] = APELIDO_CPU;
+		apelidos[3] = APELIDO_CPU;
 	}
 
 	@Override
@@ -298,7 +296,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		if (slot >= 0) {
 			connClientes[slot] = null;
 			outClientes[slot] = null;
-			apelidos[slot + 1] = APELIDOS_CPU[slot];
+			apelidos[slot + 1] = APELIDO_CPU;
 		}
 		status = STATUS_AGUARDANDO;
 		atualizaDisplay();

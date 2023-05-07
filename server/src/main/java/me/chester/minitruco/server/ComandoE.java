@@ -38,7 +38,7 @@ public class ComandoE extends Comando {
 							j.println("X TT");
 						} else {
 							Sala s = Sala.colocaEmSalaPublica(j, baralhoLimpo, manilhaVelha, tentoMineiro);
-							s.notificaJogadores(s.getInfo());
+							s.mandaInfoParaTodos();
 						}
 						break;
 						// TODO: implementar comandos para sala privada

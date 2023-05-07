@@ -2,22 +2,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.chester.minitruco"
     android:versionCode="20309"
-    android:versionName="2.3.9" >
-    <!-- Ao aumentar a versão, atualize também o versionCode
-         e não esqueça do "novidades" em strings.xml" -->
-
+    android:versionName="2.3.9">
+    <!--
+         Ao aumentar a versão, atualize também o versionCode
+         e não esqueça do "novidades" em strings.xml"
+    -->
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"
-        android:smallScreens="true" />
-
-    <!-- Bluetooth game -->
-    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+        android:smallScreens="true" /> <!-- Jogo via Bluetooth -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" /> <!-- Jogo via internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -32,9 +39,14 @@
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/miniTrucoTheme" >
+        android:theme="@style/miniTrucoTheme">
+        <activity
+            android:name=".android.multiplayer.internet.ClienteInternetActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="false" />
         <activity
             android:name=".android.TituloActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,19 +56,16 @@
         </activity>
         <activity
             android:name=".android.TrucoActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".android.bluetooth.ServidorBluetoothActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
+            android:name=".android.multiplayer.bluetooth.ServidorBluetoothActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".android.bluetooth.ClienteBluetoothActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
+            android:name=".android.multiplayer.bluetooth.ClienteBluetoothActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".android.OpcoesActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-        </activity>
+            android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>
+
 </manifest>

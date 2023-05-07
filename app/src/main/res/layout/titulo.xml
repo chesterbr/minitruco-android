@@ -2,20 +2,21 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#1B8E3C" >
+    android:background="#1B8E3C">
 
     <ImageView
         android:id="@+id/menuprincipal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
+        android:contentDescription="logo do miniTruco"
         android:src="@drawable/menuprincipal" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center_horizontal|bottom"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/url_site"
@@ -31,36 +32,63 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnJogar"
                 android:layout_width="120sp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textStyle="bold"
                 android:onClick="jogarClickHandler"
-                android:text="Jogar" />
+                android:text="Jogar"
+                android:textStyle="bold" />
 
-
-            <Button android:id="@+id/btnBluetooth"
+            <Button
+                android:id="@+id/btnInternet"
                 android:layout_width="120sp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Bluetooth"
-                android:onClick="bluetoothButtonClickHandler" />
+                android:onClick="internetButtonClickHandler"
+                android:visibility="gone"
+                android:text="Internet" />
 
-            <Button android:id="@+id/btnOpcoes"
-                android:layout_width="120sp"
+            <LinearLayout
+                android:id="@+id/btnBluetoothContainer"
+                android:layout_width="50sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Opções"
-                android:onClick="opcoesButtonClickHandler" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnBluetooth"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
+                    android:onClick="bluetoothButtonClickHandler"
+                    android:drawableStart="@android:drawable/stat_sys_data_bluetooth" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="50sp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnOpcoes"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableLeft="@android:drawable/ic_menu_preferences"
+                    android:onClick="opcoesButtonClickHandler"
+                    android:paddingLeft="9sp"
+                    android:drawableStart="@android:drawable/ic_menu_preferences"
+                    android:paddingStart="9sp" />
+            </LinearLayout>
 
         </LinearLayout>
 
