@@ -210,7 +210,8 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			for (int i = 0; i < 4; i++) {
 				textViewsJogadores[i].setText(apelidos[i]);
 			}
-			textViewRegras.setText(getTextoRegras());
+			// TODO rever esse lance de escrever regras
+//			textViewRegras.setText(getTextoRegras());
 			btnIniciar.setEnabled(getNumClientes() > 0);
 		}
 
