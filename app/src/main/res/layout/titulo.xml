@@ -6,9 +6,9 @@
 
     <ImageView
         android:id="@+id/menuprincipal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:contentDescription="logo do miniTruco"
         android:src="@drawable/menuprincipal" />
 
@@ -31,6 +31,52 @@
             android:textColorLink="#000000"
             android:textSize="24sp"
             android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/textViewModo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Truco Paulista"
+                android:textColor="#000000"
+                android:textColorLink="#000000"
+                android:textStyle="italic"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="150sp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnModoPaulista"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:src="@drawable/sp"
+                    android:tag="P"
+                    android:onClick="modoButtonClickHandler"
+                    android:scaleType="fitCenter" />
+
+                <ImageButton
+                    android:id="@+id/btnModoMineiro"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:src="@drawable/mg"
+                    android:tag="M"
+                    android:onClick="modoButtonClickHandler"
+                    android:scaleType="fitCenter" />
+
+                <ImageButton
+                    android:id="@+id/btnModoLimpo"
+                    android:layout_width="50sp"
+                    android:layout_height="50sp"
+                    android:src="@drawable/limpo"
+                    android:tag="L"
+                    android:onClick="modoButtonClickHandler"
+                    android:scaleType="fitCenter" />
+
+            </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="fill_parent"

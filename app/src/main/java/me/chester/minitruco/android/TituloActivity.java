@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
@@ -38,22 +39,29 @@ public class TituloActivity extends BaseActivity {
 		setContentView(R.layout.titulo);
 		habilitaBluetoothSeExistir();
 
-		// Na primeira vez que a app roda, mostra as instruções
-		// Na primeira vez em que roda uma nova versão (sem ser a 1a. vez geral), mostra as novidades
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean mostraInstrucoes = preferences.getBoolean("mostraInstrucoes",
 				true);
+		// TODO migrar configurações de baralho limpo/manilha velha/tento mineiro para "modo"
+		String modo = preferences.getString("modo", "P");
 		String versaoQueMostrouNovidades = preferences.getString("versaoQueMostrouNovidades", "");
 		String versaoAtual = BuildConfig.VERSION_NAME;
-		Editor e = preferences.edit();
+
+		// Na primeira vez que a app roda, mostra as instruções
+		// Na primeira vez em que roda uma nova versão (sem ser a 1a. vez geral), mostra as novidades
 		if (mostraInstrucoes) {
 			mostraAlertBox(this.getString(R.string.titulo_ajuda), this.getString(R.string.texto_ajuda));
 		} else if (!versaoQueMostrouNovidades.equals(versaoAtual)) {
 			mostraAlertBox("Novidades", this.getString(R.string.novidades));
 		}
+
+		Editor e = preferences.edit();
 		e.putBoolean("mostraInstrucoes", false);
 		e.putString("versaoQueMostrouNovidades", versaoAtual);
+		e.putString("modo", modo);
 		e.apply();
+
+		((TextView)findViewById(R.id.textViewModo)).setText(textoModo(modo));
 	}
 
 	private void habilitaBluetoothSeExistir() {
@@ -145,5 +153,20 @@ public class TituloActivity extends BaseActivity {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			this.finishAndRemoveTask();
 		}
+	}
+
+	public void modoButtonClickHandler(View view) {
+		String modo = (String)view.getTag();
+		((TextView)findViewById(R.id.textViewModo)).setText(textoModo(modo));
+		preferences.edit().putString("modo", modo).apply();
+	}
+
+	private String textoModo(String modo) {
+		switch (modo) {
+			case "P": return "Truco Paulista";
+			case "M": return "Truco Mineiro";
+			case "L": return "Truco Paulista com baralho limpo";
+		}
+		return null;
 	}
 }
