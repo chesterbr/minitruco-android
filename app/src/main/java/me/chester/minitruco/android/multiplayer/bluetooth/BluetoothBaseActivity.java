@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.BaseActivity;
 import me.chester.minitruco.android.TrucoActivity;
+import me.chester.minitruco.core.Jogo;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -89,7 +90,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 
 	protected BluetoothAdapter btAdapter;
 	protected String[] apelidos = new String[4];
-	protected String regras;
+	protected String modo;
 	protected Button btnIniciar;
 	protected View layoutIniciar;
 	private TextView textViewMensagem;
@@ -228,12 +229,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	}
 
 	protected String getTextoRegras() {
-		if (regras == null || regras.length() < 2) {
-			return "";
-		}
-		return (regras.charAt(0) == 'T' ? "Baralho Limpo" : "Baralho Sujo")
-				+ " / "
-				+ (regras.charAt(1) == 'T' ? "Manilha Velha" : "Manilha Nova");
+		return Jogo.textoModo(modo);
 	}
 
 	protected void sleep(int ms) {

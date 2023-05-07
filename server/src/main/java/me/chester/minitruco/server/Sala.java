@@ -44,9 +44,7 @@ public class Sala {
      */
     String codigo;
 
-    boolean baralhoLimpo = false;
-    boolean manilhaVelha = false;
-    boolean tentoMineiro = false;
+    String modo;
 
     /**
      * Jogadores presentes na sala
@@ -65,7 +63,7 @@ public class Sala {
     /**
      * Cria uma sala .
      */
-    public Sala(boolean publica, boolean baralhoLimpo, boolean manilhaVelha, boolean tentoMineiro) {
+    public Sala(boolean publica, String modo) {
         if (publica) {
             salasPublicasDisponiveis.add(this);
         } else {
@@ -73,25 +71,21 @@ public class Sala {
             this.codigo = codigo;
             salasPrivadas.put(codigo, this);
         }
-        this.baralhoLimpo = baralhoLimpo;
-        this.manilhaVelha = manilhaVelha;
-        this.tentoMineiro = tentoMineiro;
+        this.modo = modo;
     }
 
     /**
-     * Coloca o jogador em uma sala pública que tenha as regras especificadas,
+     * Coloca o jogador em uma sala pública que tenha aquele modo de jogo
      * criando uma caso estejam todas lotadas
      *
      * @return
      */
-    public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, boolean baralhoLimpo, boolean manilhaVelha, boolean tentoMineiro) {
+    public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, String modo) {
         Sala sala = salasPublicasDisponiveis.stream().filter(s ->
-            s.baralhoLimpo == baralhoLimpo &&
-            s.manilhaVelha == manilhaVelha &&
-            s.tentoMineiro == tentoMineiro
+            s.modo == modo
         ).findFirst().orElse(null);
         if (sala == null) {
-            sala = new Sala(true, baralhoLimpo, manilhaVelha, tentoMineiro);
+            sala = new Sala(true, modo);
         }
         sala.adiciona(j);
         return sala;
@@ -267,10 +261,8 @@ public class Sala {
         sb.append(POSICAO_PLACEHOLDER);
         sb.append(' ');
 
-        // Regras
-        sb.append((baralhoLimpo ? 'T' : 'F'));
-        sb.append((manilhaVelha ? 'T' : 'F'));
-        sb.append((tentoMineiro ? 'T' : 'F'));
+        // Modo de jogo
+        sb.append(modo);
         sb.append(' ');
 
         // Status de "quero jogar" dos jogadores (posições vazias são T,
@@ -324,7 +316,7 @@ public class Sala {
         }
         // Cria o jogo com as regras selecionadas, adiciona os jogadores na
         // ordem e inicia
-        jogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro, false, false);
+        jogo = new JogoLocal(modo, false, false);
         for (Jogador j : jogadores) {
             jogo.adiciona(j);
             if (j instanceof JogadorConectado) {

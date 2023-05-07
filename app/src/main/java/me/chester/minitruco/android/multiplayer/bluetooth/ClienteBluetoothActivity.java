@@ -77,6 +77,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_ENABLE_BT) {
 			if (resultCode == RESULT_CANCELED) {
 				// Sem bluetooth, sem cliente
@@ -144,14 +145,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		}
 	}
 
-	// TODO rever esse getter introduzido para poder generalizar
-	//     JogoRemoto entre internet e bluetooth que é protected
-	//     e está na classe base
-	@Override
-	public String getRegras() {
-		return regras;
-	}
-
 	private void iniciaMonitorConexao() {
 		if (threadMonitoraConexao == null) {
 			threadMonitoraConexao = new Thread() {
@@ -179,7 +172,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		// Exibe as informações recebidas fora do jogo
 		String[] tokens = parametros.split(" ");
 		posJogador = Integer.parseInt(tokens[2]);
-		regras = tokens[1];
+		modo = tokens[1];
 		encaixaApelidosNaMesa(tokens[0].split("\\|"));
 		atualizaDisplay();
 	}
@@ -263,7 +256,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	}
 
 	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-		jogo = new JogoRemoto(this, jogadorHumano, posJogador);
+		jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
 		return jogo;
 	}
 

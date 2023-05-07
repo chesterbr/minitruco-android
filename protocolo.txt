@@ -6,8 +6,7 @@ Convenções nas notificações:
 
 <apelidos> Quatro sequências de caracteres (uma ou mais podendo ser "bot"), separadas por "|".
            Exemplo: john|bot|ringo|george
-<regras> Três caracteres, T/F para baralho limpo/sujo, manilha velha/nova e tento mineiro/paulista
-         Exemplo: FTF (baralho completo, manilha nova e tento [truco] paulista)
+<modo> P para Truco Paulista, M para Truco Mineiro ou L para Truco Paulista com baralho limpo.
 <posicao> Posição do jogador atual, de 1 a 4; 1 e 3 são uma dupla, 2 e 4 são a outra.
 <quer jogar> Quatro caracteres, T/F conforme cada posição queira iniciar o jogo
 
@@ -19,7 +18,7 @@ Convenções nas notificações:
 
 W - recupera número de versão (e de repente outras infos no futuro)
 N <apelido> - Define o nome do jogador
-E PUB ___ - Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com as regras especificadas
+E PUB <modo> - Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
 S - Sai da sala (encerrando o jogo, se houver um em andamento)
 Q - Quero Jogar
 
@@ -36,7 +35,6 @@ H _ - decide se aceita ou recusa jogar em mão de 11 (_ = T para aceita e F para
 W x.y - Versão do servidor (outras infos podem vir no futuro)
 X CI - Comando inválido
 X AI - Argumento inválido
-X TT - Regras inválidas (não é possível jogar com baralho limpo e manilha velha)
 X FS - Você não está numa sala
 X NI - Nome inválido
 X NE - Nome já está em uso
@@ -44,7 +42,7 @@ X NO - É preciso atribuir um nome para entrar na sala
 X JE sala - Você já está na sala de código "sala"
 
 N nome
-I <apelidos> <regras> <posicao> <quero jogar> - Info da sala. <quer jogar> apenas no jogo via internet
+I <apelidos> <modo> <posicao> <quero jogar> - Info da sala. <quer jogar> apenas no jogo via internet
 P <posicao> - Início da partida
 M Ln Ln Ln Ln - Início da mão. Suas cartas são Ln, Ln e Ln (Letra naipe), a última, se houver, é o vira
 V posicao _ - vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode

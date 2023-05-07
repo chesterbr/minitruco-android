@@ -30,17 +30,12 @@ public class JogoLocal extends Jogo {
 	 * <p>
 	 * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
 	 *
-	 * @param manilhaVelha
-	 *            true para jogo com manilhas fixas, false para jogar com "vira"
-	 * @param baralhoLimpo
-	 *            true para baralho sem os 4, 5, 6, 7, false para baralho
-	 *            completo (sujo)
+	 * @param modo "P"aulista, "M"ineiro, ou "L"impo (paulista com baralho limpo)
 	 */
-	public JogoLocal(boolean baralhoLimpo, boolean manilhaVelha,
-			boolean tentoMineiro, boolean humanoDecide, boolean jogoAutomatico) {
-		this.manilhaVelha = manilhaVelha;
-		this.baralhoLimpo = baralhoLimpo;
-		if (tentoMineiro && manilhaVelha)
+	public JogoLocal(String modo, boolean humanoDecide, boolean jogoAutomatico) {
+		this.manilhaVelha = modo.equals("M");
+		this.baralhoLimpo = modo.equals("L");
+		if (modo.equals("M"))
 			this.tento = new TentoMineiro();
 		else
 			this.tento = new TentoPaulista();

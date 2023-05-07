@@ -47,7 +47,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
 
 	private static ClienteInternetActivity currentInstance;
     private JogoRemoto jogo;
-    private String regras;
+    private String modo;
     private int posJogador;
 
     @Override
@@ -135,7 +135,6 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                 runOnUiThread(() -> {
                     setContentView(R.layout.internet_sala);
                     ((Button) findViewById(R.id.btnQueroJogar)).setOnClickListener(v -> {
-                        // TODO pegar as regras das preferências
                         enviaLinha("Q");
                     });
                     if (jogo != null) {
@@ -149,7 +148,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                     ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[2]);
                     ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[3]);
 		            posJogador = Integer.parseInt(tokens[2]);
-		            regras = tokens[3];
+		            modo = tokens[3];
                 });
                 break;
             case 'X': // Erro tratável
@@ -205,7 +204,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
 	}
 
 	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-		jogo = new JogoRemoto(this, jogadorHumano, posJogador);
+		jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
 		return jogo;
 	}
 
@@ -219,13 +218,6 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                     .setOnCancelListener(v -> finish())
                     .show();
         });
-    }
-
-
-    @Override
-    public String getRegras() {
-        // TODO ler as configs e/ou consolidar
-        return "FFF";
     }
 
     public void enviaLinha(String comando) {

@@ -140,13 +140,10 @@ public class TrucoActivity extends BaseActivity {
 	private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		boolean tentoMineiro = preferences.getBoolean("tentoMineiro", false);
-		boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
-		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
-				&& !baralhoLimpo;
+		String modo = preferences.getString("modo", "P");
 		boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
 		boolean jogoAutomatico =  preferences.getBoolean("jogoAutomatico", false);
-		Jogo novoJogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro, humanoDecide, jogoAutomatico);
+		Jogo novoJogo = new JogoLocal(modo, humanoDecide, jogoAutomatico);
 		novoJogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
 			novoJogo.adiciona(new JogadorCPU());

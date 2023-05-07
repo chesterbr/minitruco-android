@@ -73,8 +73,8 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	void iniciaAtividadeBluetooth() {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		regras = (preferences.getBoolean("baralhoLimpo", false) ? "T" : "F")
-				+ (preferences.getBoolean("manilhaVelha", false) ? "T" : "F");
+		// TODO titulo poderia passar como extra do intent
+		modo = preferences.getString("modo", "P");
 		layoutIniciar.setVisibility(View.VISIBLE);
 		btnIniciar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -136,6 +136,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_ENABLE_DISCOVERY) {
 			aguardandoDiscoverable = false;
 			if (resultCode == RESULT_CANCELED) {
@@ -272,7 +273,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 			sbComando.append(apelidos[i]);
 			sbComando.append(i < 3 ? '|' : ' ');
 		}
-		sbComando.append(regras);
+		sbComando.append(modo);
 		sbComando.append(' ');
 		String comando = sbComando.toString();
 		// Envia a notificação para cada jogador (com sua posição)
@@ -308,8 +309,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	}
 
 	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-		Jogo jogo = new JogoLocal(regras.charAt(0) == 'T',
-				regras.charAt(1) == 'T', false, false, false);
+		Jogo jogo = new JogoLocal(modo, false, false);
 		jogo.adiciona(jogadorHumano);
 		for (int i = 0; i <= 2; i++) {
 			if (connClientes[i] != null) {

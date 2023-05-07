@@ -47,8 +47,9 @@ public class JogoRemoto extends Jogo {
      * e instâncias de JogadorDummy nas outras posições (as ações deles serão todas baseadas
      * em notificações recebidas por esta classe).
      */
-    public JogoRemoto(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador) {
+    public JogoRemoto(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador, String modo) {
         this.cliente = cliente;
+        this.modo = modo;
 
 		// Adiciona o jogador na posição correta
 		// (preenchendo as outras com dummies)
@@ -218,13 +219,9 @@ public class JogoRemoto extends Jogo {
         // não faz nada
     }
 
-    public boolean isBaralhoLimpo() {
-        return cliente.getRegras().charAt(0) == 'T';
-    }
+    public boolean isBaralhoLimpo() { return modo.equals("L"); }
 
-    public boolean isManilhaVelha() {
-        return cliente.getRegras().charAt(1) == 'T';
-    }
+    public boolean isManilhaVelha() { return modo.equals("M"); }
 
     public void run() {
         // Notifica o jogador humano que a partida começou

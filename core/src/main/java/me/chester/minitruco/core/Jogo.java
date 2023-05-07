@@ -27,6 +27,11 @@ public abstract class Jogo implements Runnable {
 	protected static final String letrasOrdenadas = "4567QJKA23";
 
 	/**
+	 * Modo do jogo: "P"aulista, "M"ineiro ou paulista com baralho "L"impo
+	 */
+	protected String modo;
+
+	/**
 	 * Rodada que estamos jogando (de 1 a 3).
 	 * <p>
 	 * (as implementações devem manter atualizado)
@@ -99,6 +104,15 @@ public abstract class Jogo implements Runnable {
 	 * (as implementações devem alimentar este array)
 	 */
 	protected Carta[][] cartasJogadasPorRodada;
+
+	public static String textoModo(String modo) {
+		switch (modo) {
+			case "P": return "Truco Paulista";
+			case "M": return "Truco Mineiro";
+			case "L": return "Truco Paulista com baralho limpo";
+		}
+		return null;
+	}
 
 	/**
 	 * Inicia o jogo.

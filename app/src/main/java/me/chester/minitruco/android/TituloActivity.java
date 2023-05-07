@@ -20,6 +20,7 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
+import me.chester.minitruco.core.Jogo;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -61,7 +62,7 @@ public class TituloActivity extends BaseActivity {
 		e.putString("modo", modo);
 		e.apply();
 
-		((TextView)findViewById(R.id.textViewModo)).setText(textoModo(modo));
+		((TextView)findViewById(R.id.textViewModo)).setText(Jogo.textoModo(modo));
 	}
 
 	private void habilitaBluetoothSeExistir() {
@@ -157,16 +158,7 @@ public class TituloActivity extends BaseActivity {
 
 	public void modoButtonClickHandler(View view) {
 		String modo = (String)view.getTag();
-		((TextView)findViewById(R.id.textViewModo)).setText(textoModo(modo));
+		((TextView)findViewById(R.id.textViewModo)).setText(Jogo.textoModo(modo));
 		preferences.edit().putString("modo", modo).apply();
-	}
-
-	private String textoModo(String modo) {
-		switch (modo) {
-			case "P": return "Truco Paulista";
-			case "M": return "Truco Mineiro";
-			case "L": return "Truco Paulista com baralho limpo";
-		}
-		return null;
 	}
 }
