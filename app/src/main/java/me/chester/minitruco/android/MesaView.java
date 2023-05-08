@@ -720,13 +720,15 @@ public class MesaView extends View {
 		if (iconesRodadas != null) {
 			for (int i = 0; i <= 3; i++) {
 				Bitmap bmpIcone = null;
-				if (i == 3) {
+				if (i == 0) {
 					// O último ícone é o placar da rodada
-					bmpIcone = iconesRodadas[valorMao + 10];
-				} else if (i != (numRodadaPiscando - 1) || (agora % 250) % 2 == 0) {
+					if (valorMao > 0) {
+						bmpIcone = iconesRodadas[valorMao + 10];
+					}
+				} else if (i != numRodadaPiscando || (agora % 250) % 2 == 0) {
 					// Desenha se não for a rodada piscando, ou, se for, alterna o
 					// desenho a cada 250ms
-					bmpIcone = iconesRodadas[resultadoRodada[i]];
+					bmpIcone = iconesRodadas[resultadoRodada[i - 1]];
 				}
 
 				if (bmpIcone != null) {
