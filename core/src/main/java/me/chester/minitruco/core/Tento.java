@@ -5,9 +5,7 @@ package me.chester.minitruco.core;
 
 public interface Tento {
 
-	int calcValorTento(int valorMao);
-
-	int calcValorMao(int valorMao);
+	int calcValorAumento(int valorMao);
 
 	int inicializaMao();
 

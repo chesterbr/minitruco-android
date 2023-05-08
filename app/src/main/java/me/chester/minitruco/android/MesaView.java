@@ -39,6 +39,8 @@ public class MesaView extends View {
 
 	private int posicaoVez;
 
+	private int valorMao;
+
 	private static final Random rand = new Random();
 
 	public MesaView(Context context, AttributeSet attrs, int defStyle) {
@@ -178,6 +180,8 @@ public class MesaView extends View {
 		iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
 			.getDrawable(R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
 
+		// Define posição do placar de valor da mão (é relativa aos ícones das rodadas)
+		rectValorMao = new Rect(MARGEM * 4 + lado, MARGEM + lado / 2, MARGEM * 4 + 3 * lado, MARGEM + lado * 5 / 2 );
 	}
 
 	/**
@@ -336,6 +340,8 @@ public class MesaView extends View {
 
 	private Rect rectDialog;
 
+	private Rect rectValorMao;
+
 	private RectF rectBotaoSim;
 
 	private RectF rectBotaoNao;
@@ -483,6 +489,7 @@ public class MesaView extends View {
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
+		valorMao = valor;
 		if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
 			statusVez = STATUS_VEZ_HUMANO_OK;
 		}
@@ -704,6 +711,35 @@ public class MesaView extends View {
 							new Paint());
 				}
 			}
+		}
+
+		// Valor da mão
+		if (valorMao != 0) {
+			Paint paint = new Paint();
+			paint.setAntiAlias(true);
+			if (valorMao == 1 || valorMao == 2) {
+				paint.setColor(0xFF2E8B57);
+			} else if (valorMao == 3 || valorMao == 4) {
+				paint.setColor(0xFF0CC5C4);
+			} else if (valorMao == 6) {
+				paint.setColor(0xFF2049B1);
+			} else if (valorMao == 8 || valorMao == 9) {
+				paint.setColor(0xFFB7832A);
+			} else if (valorMao == 12) {
+				paint.setColor(0xFFDA0607);
+			}
+			paint.setStyle(Style.FILL);
+			canvas.drawRect(rectValorMao, paint);
+			paint.setColor(Color.WHITE);
+			paint.setStyle(Style.STROKE);
+			canvas.drawRect(rectValorMao, paint);
+			paint.setTextSize(tamanhoFonte);
+			paint.setTextAlign(Align.CENTER);
+			paint.setStyle(Style.FILL);
+			canvas.drawText( "vale", rectValorMao.centerX(),
+					rectValorMao.top + paint.getTextSize(), paint);
+			canvas.drawText( Integer.toString(valorMao), rectValorMao.centerX(),
+					rectValorMao.top + paint.getTextSize() * 2.2f, paint);
 		}
 
 		// Caixa de diálogo (mão de 11 ou aumento)
@@ -992,4 +1028,7 @@ public class MesaView extends View {
 		this.posicaoVez = posicaoVez;
 	}
 
+	public void setValorMao(int m) {
+		valorMao = m;
+	}
 }

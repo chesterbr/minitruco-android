@@ -33,6 +33,7 @@ public class JogoLocal extends Jogo {
 	 * @param modo "P"aulista, "M"ineiro, ou "L"impo (paulista com baralho limpo)
 	 */
 	public JogoLocal(String modo, boolean humanoDecide, boolean jogoAutomatico) {
+		this.modo = modo;
 		this.manilhaVelha = modo.equals("M");
 		this.baralhoLimpo = modo.equals("L");
 		if (modo.equals("M"))
@@ -507,7 +508,7 @@ public class JogoLocal extends Jogo {
 		for (int i = 0; i <= 3; i++)
 			recusouAumento[i] = false;
 
-		int valor = tento.calcValorTento(valorMao);
+		int valor = tento.calcValorAumento(valorMao);
 
 		// Notifica os interessados
 		for (Jogador interessado : jogadores) {
@@ -540,7 +541,7 @@ public class JogoLocal extends Jogo {
 		if (aceitou && !ignorarAceite) {
 			// Se o jogador aceitou, seta o novo valor, notifica a galera e tira
 			// o jogo da situtação de truco
-			valorMao = tento.calcValorTento(valorMao);
+			valorMao = tento.calcValorAumento(valorMao);
 			jogadorPedindoAumento = null;
 			for (Jogador interessado : jogadores) {
 				interessado.aceitouAumentoAposta(j, valorMao);

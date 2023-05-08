@@ -114,6 +114,10 @@ public abstract class Jogo implements Runnable {
 		return null;
 	}
 
+	public String getModo() {
+		return modo;
+	}
+
 	/**
 	 * Inicia o jogo.
 	 * <p>

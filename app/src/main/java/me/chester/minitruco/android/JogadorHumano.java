@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
-import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 
@@ -79,6 +78,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 			mesa.resultadoRodada[i] = 0;
 		}
 		mesa.distribuiMao();
+		mesa.setValorMao(jogo.getModo().equals("M") ? 2 : 1);
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
 	}
@@ -126,6 +126,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
+		mesa.setValorMao(0);
 		mesa.recolheMao();
 
 	}
