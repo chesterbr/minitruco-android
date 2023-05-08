@@ -41,6 +41,8 @@ public class MesaView extends View {
 
 	private int valorMao;
 
+	private final float density = getResources().getDisplayMetrics().density;
+
 	private static final Random rand = new Random();
 
 	public MesaView(Context context, AttributeSet attrs, int defStyle) {
@@ -169,8 +171,8 @@ public class MesaView extends View {
 
 		// Se o tamanho da tela mudou (ex.: rotação), precisamos recalcular
 		// estes bitmaps
-		int lado = getHeight() / 18;
-		iconesRodadas = new Bitmap[4];
+		int lado = CartaVisual.altura / 2;
+		iconesRodadas = new Bitmap[23];
 		iconesRodadas[0] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
 			.getDrawable(R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
 		iconesRodadas[1] =  Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
@@ -179,10 +181,27 @@ public class MesaView extends View {
 			.getDrawable(R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
 		iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
 			.getDrawable(R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
+		// indice = valorMao + 10
+		iconesRodadas[10] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
+		iconesRodadas[11] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada1)).getBitmap(), lado, lado, true);
+		iconesRodadas[12] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada2)).getBitmap(), lado, lado, true);
+		iconesRodadas[13] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada3)).getBitmap(), lado, lado, true);
+		iconesRodadas[14] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada4)).getBitmap(), lado, lado, true);
+		iconesRodadas[16] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada6)).getBitmap(), lado, lado, true);
+		iconesRodadas[18] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada8)).getBitmap(), lado, lado, true);
+		iconesRodadas[19] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada9)).getBitmap(), lado, lado, true);
+		iconesRodadas[22] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada12)).getBitmap(), lado, lado, true);
 
-		// Define posição do placar de valor da mão (é relativa aos ícones das rodadas)
-		rectValorMao = new Rect(MARGEM * 4 + lado, MARGEM + lado / 2, MARGEM * 4 + 3 * lado, MARGEM + lado * 5 / 2 );
-	}
+}
 
 	/**
 	 * Recupera a carta visual correspondente a uma carta do jogo.
@@ -339,8 +358,6 @@ public class MesaView extends View {
 	private TrucoActivity trucoActivity;
 
 	private Rect rectDialog;
-
-	private Rect rectValorMao;
 
 	private RectF rectBotaoSim;
 
@@ -701,45 +718,24 @@ public class MesaView extends View {
 
 		// Ícones das rodadas
 		if (iconesRodadas != null) {
-			for (int i = 0; i <= 2; i++) {
-				// Desenha se não for a rodada piscando, ou, se for, alterna o
-				// desenho a cada 250ms
-				if (i != (numRodadaPiscando - 1) || (agora % 250) % 2 == 0) {
-					canvas.drawBitmap(iconesRodadas[resultadoRodada[i]],
-							MARGEM,
-							MARGEM + i * (1 + iconesRodadas[0].getHeight()),
+			for (int i = 0; i <= 3; i++) {
+				Bitmap bmpIcone = null;
+				if (i == 3) {
+					// O último ícone é o placar da rodada
+					bmpIcone = iconesRodadas[valorMao + 10];
+				} else if (i != (numRodadaPiscando - 1) || (agora % 250) % 2 == 0) {
+					// Desenha se não for a rodada piscando, ou, se for, alterna o
+					// desenho a cada 250ms
+					bmpIcone = iconesRodadas[resultadoRodada[i]];
+				}
+
+				if (bmpIcone != null) {
+					canvas.drawBitmap(bmpIcone,
+							MARGEM + (i % 2) * (1 + iconesRodadas[0].getWidth()),
+							MARGEM + (i / 2) * (1 + iconesRodadas[0].getHeight()),
 							new Paint());
 				}
 			}
-		}
-
-		// Valor da mão
-		if (valorMao != 0) {
-			Paint paint = new Paint();
-			paint.setAntiAlias(true);
-			if (valorMao == 1 || valorMao == 2) {
-				paint.setColor(0xFF2E8B57);
-			} else if (valorMao == 3 || valorMao == 4) {
-				paint.setColor(0xFF0CC5C4);
-			} else if (valorMao == 6) {
-				paint.setColor(0xFF2049B1);
-			} else if (valorMao == 8 || valorMao == 9) {
-				paint.setColor(0xFFB7832A);
-			} else if (valorMao == 12) {
-				paint.setColor(0xFFDA0607);
-			}
-			paint.setStyle(Style.FILL);
-			canvas.drawRect(rectValorMao, paint);
-			paint.setColor(Color.WHITE);
-			paint.setStyle(Style.STROKE);
-			canvas.drawRect(rectValorMao, paint);
-			paint.setTextSize(tamanhoFonte);
-			paint.setTextAlign(Align.CENTER);
-			paint.setStyle(Style.FILL);
-			canvas.drawText( "vale", rectValorMao.centerX(),
-					rectValorMao.top + paint.getTextSize(), paint);
-			canvas.drawText( Integer.toString(valorMao), rectValorMao.centerX(),
-					rectValorMao.top + paint.getTextSize() * 2.2f, paint);
 		}
 
 		// Caixa de diálogo (mão de 11 ou aumento)

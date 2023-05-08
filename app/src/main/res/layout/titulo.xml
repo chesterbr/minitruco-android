@@ -20,16 +20,15 @@
 
         <TextView
             android:id="@+id/url_site"
-            android:layout_width="250sp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:gravity="center"
             android:linksClickable="true"
-            android:padding="16sp"
             android:text="cd@pobox.com\nhttps://chester.me"
-            android:textColor="#000000"
-            android:textColorLink="#000000"
-            android:textSize="24sp"
+            android:textColor="#FF3F28A4"
+            android:textColorLink="#FF3F28A4"
+            android:textSize="12sp"
             android:textStyle="bold" />
 
 
@@ -37,11 +36,12 @@
                 android:id="@+id/textViewModo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="4sp"
                 android:text="Truco Paulista"
-                android:textColor="#000000"
+                android:textColor="@android:color/white"
                 android:textColorLink="#000000"
-                android:textStyle="italic"
-                android:textSize="20sp" />
+                android:textStyle="bold"
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="150sp"
