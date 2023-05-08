@@ -133,8 +133,9 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
 	@Override
 	public void pediuAumentoAposta(Jogador j, int valor) {
-		// TODO so funciona para tento paulista
-		int ordem_valor = valor / 3;
+		// Vide balao_aumento_* em strings.xml - dividir inteiro por 3 pega
+		// a frase certa para aumento de 3, 4, 6, 9 e 12; o 8 vai na hands
+		int ordem_valor = (valor == 8 ? 5 : valor / 3);
 		mesa.diz("aumento_" + ordem_valor, posicaoNaTela(j),
 				1500 + 200 * (valor / 3));
 		if (j.getEquipe() != this.getEquipe()) {
