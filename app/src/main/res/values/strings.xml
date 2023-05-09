@@ -31,6 +31,7 @@
     <string-array name="balao_aumento_3">
         <item>Nove!</item>
         <item>Nooooove!</item>
+        <item>É nove, é NOVE!</item>
         <item>Nove na cabeça!</item>
         <item>Ah, vem pra nove!</item>
         <item>É nove!</item>
@@ -38,9 +39,11 @@
     <string name="botao_aumento_3">NOVE!</string>
     <string-array name="balao_aumento_4">
         <item>Doze!</item>
+        <item>DOOOOZEEEEE!</item>
         <item>Doze pra acabar!</item>
         <item>É doze!</item>
         <item>Doze sem piedade!</item>
+        <item>Jogo!</item>
     </string-array>
     <string name="botao_aumento_4">DOZE!!!</string>
     <string-array name="balao_aumento_5">
