@@ -43,7 +43,7 @@ public class TituloActivity extends BaseActivity {
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean mostraInstrucoes = preferences.getBoolean("mostraInstrucoes",
 				true);
-		// TODO migrar configurações de baralho limpo/manilha velha/tento mineiro para "modo"
+		// TODO migrar configurações de baralho limpo/manilha velha/modo mineiro para "modo"
 		String modo = preferences.getString("modo", "P");
 		String versaoQueMostrouNovidades = preferences.getString("versaoQueMostrouNovidades", "");
 		String versaoAtual = BuildConfig.VERSION_NAME;

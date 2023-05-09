@@ -78,7 +78,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 			mesa.resultadoRodada[i] = 0;
 		}
 		mesa.distribuiMao();
-		mesa.setValorMao(jogo.getModo().equals("M") ? 2 : 1);
+		mesa.setValorMao(jogo.getModoStr().equals("M") ? 2 : 1);
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
 	}
@@ -166,9 +166,9 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 			}
 			// Nós aceitamos um truco, então podemos pedir aumento
 			if (valor != 12) {
-				// TODO isso é gambis pq não dá pra ter acesso ao tento (que pode
+				// TODO isso é gambis pq não dá pra ter acesso ao modo (que pode
 				//      nem existir num jogo remoto. Consolidar essas regras)
-				valorProximaAposta = valor + (jogo.getModo().equals("M") ? 2 : 3);
+				valorProximaAposta = valor + (jogo.getModoStr().equals("M") ? 2 : 3);
 				if (valorProximaAposta == 10) {
 					valorProximaAposta = 12;
 				}

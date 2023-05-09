@@ -219,9 +219,9 @@ public class JogoRemoto extends Jogo {
         // não faz nada
     }
 
-    public boolean isBaralhoLimpo() { return modo.equals("L"); }
+    public boolean isBaralhoLimpo() { return modoStr.equals("L"); }
 
-    public boolean isManilhaVelha() { return modo.equals("M"); }
+    public boolean isManilhaVelha() { return modoStr.equals("M"); }
 
     public void run() {
         // Notifica o jogador humano que a partida começou

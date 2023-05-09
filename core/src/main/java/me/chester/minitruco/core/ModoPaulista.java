@@ -4,29 +4,29 @@ package me.chester.minitruco.core;
 /* Copyright © 2011 Guilherme Caram <gcaram@gmail.com> */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
-public class TentoMineiro implements Tento {
+public class ModoPaulista implements Modo {
 
 	public int pontuacaoQueDeterminaMaoDeFerro() {
-		return 10;
+		return 11;
 	}
 
 	public int valorInicialDaMao() {
-		return 2;
+		return 1;
 	}
 
 	public int valorDaMaoDeFerro() {
-		return 4;
+		return 3;
 	}
 
 	public int valorSeHouverAumento(int valorMao) {
 		switch (valorMao) {
-		case 2:
-			return 4;
-		case 4:
+		case 1:
+			return 3;
+		case 3:
 			return 6;
 		case 6:
-			return 8;
-		case 8:
+			return 9;
+		case 9:
 			return 12;
 		}
 		return 0;

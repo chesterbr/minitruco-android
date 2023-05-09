@@ -5,10 +5,10 @@ package me.chester.minitruco.core;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Encapsula diferenças de pontuação entre as diferentes variedades
- * de truco (paulista, mineiro, etc.)
+ * Encapsula diferenças de pontuação entre as diferentes modalidades
+ * de truco (paulista, mineiro, baralho limpo)
  */
-public interface Tento {
+public interface Modo {
 
 	int pontuacaoQueDeterminaMaoDeFerro();
 

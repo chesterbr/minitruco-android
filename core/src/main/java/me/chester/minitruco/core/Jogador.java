@@ -321,7 +321,7 @@ public abstract class Jogador {
 	/**
 	 * Informa que o jogador é beneficiário de uma "mão de ferro", e, portanto,
 	 * deve decidir se aceita ou não esta rodada (se aceitar vale o valor do truco,
-	 * se ambos recusarem perde o tento normal)
+	 * se ambos recusarem perde o modo normal)
 	 *
 	 * @param cartasParceiro
 	 *            Cartas do parceiro

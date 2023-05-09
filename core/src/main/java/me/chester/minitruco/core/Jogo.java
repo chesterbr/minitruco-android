@@ -29,11 +29,11 @@ public abstract class Jogo implements Runnable {
 	/**
 	 * Modo do jogo: "P"aulista, "M"ineiro ou paulista com baralho "L"impo
 	 */
-	protected String modo;
+	protected String modoStr;
 	/**
-	 * Forma de tento que será usado durante esse jogo
+	 * Modalidade do jogo (paulista, mineiro, etc.)
 	 */
-	protected Tento tento;
+	protected Modo modo;
 
 	/**
 	 * Rodada que estamos jogando (de 1 a 3).
@@ -43,11 +43,11 @@ public abstract class Jogo implements Runnable {
 	int numRodadaAtual;
 
 	public Jogo(String modo) {
-		this.modo = modo;
+		this.modoStr = modo;
 		if (modo.equals("M"))
-			tento = new TentoMineiro();
+			this.modo = new ModoMineiro();
 		else // "P" ou "L"
-			tento = new TentoPaulista();
+			this.modo = new ModoPaulista();
 	}
 
 	/**
@@ -126,8 +126,8 @@ public abstract class Jogo implements Runnable {
 		return null;
 	}
 
-	public String getModo() {
-		return modo;
+	public String getModoStr() {
+		return modoStr;
 	}
 
 	/**
@@ -333,7 +333,7 @@ public abstract class Jogo implements Runnable {
 	 * 11x11 no Truco Paulista)
 	 */
 	public boolean isPlacarPermiteAumento() {
-		int max = modo.equals("M") ? 10 : 11;
+		int max = modoStr.equals("M") ? 10 : 11;
 		return pontosEquipe[0] < max && pontosEquipe[1] < max;
 	}
 
