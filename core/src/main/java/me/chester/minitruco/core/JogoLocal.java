@@ -96,8 +96,8 @@ public class JogoLocal extends Jogo {
 	private Jogador jogadorAbriuMao;
 
 	/**
-	 * Indica, para cada jogador, se estamos aguardando a resposta para uma mão
-	 * de 11
+	 * Indica, para cada jogador, se estamos aguardando a resposta dele
+	 * de aceite/recusa da mão de ferro
 	 */
 	private final boolean[] aguardandoRespostaMaoDeFerro = new boolean[4];
 
@@ -178,7 +178,7 @@ public class JogoLocal extends Jogo {
 		setManilha(cartaDaMesa);
 
 		// Inicializa a mão
-		valorMao = tento.inicializaMao();
+		valorMao = tento.valorInicialDaMao();
 
 		jogadorPedindoAumento = null;
 		numRodadaAtual = 1;
@@ -193,13 +193,9 @@ public class JogoLocal extends Jogo {
 			interessado.inicioMao();
 		}
 
-		if (pontosEquipe[0] == tento.valorPenultimaMao()
-				^ pontosEquipe[1] == tento.valorPenultimaMao()) {
-			// Se apenas uma das equipes tiver 11 pontos, estamos numa
-			// "mão de ferro": os membros da equipe podem ver as cartas do parceiro
-			// e decidir se querem jogar (valendo 3 pontos) ou desistir
-			// (perdendo 1)
-			if (pontosEquipe[0] == tento.valorPenultimaMao()) {
+		if (pontosEquipe[0] == tento.pontuacaoQueDeterminaMaoDeFerro()
+				^ pontosEquipe[1] == tento.pontuacaoQueDeterminaMaoDeFerro()) {
+			if (pontosEquipe[0] == tento.pontuacaoQueDeterminaMaoDeFerro()) {
 				setEquipeAguardandoMaoDeFerro(1);
 				getJogador(1).informaMaoDeFerro(getJogador(3).getCartas());
 				getJogador(3).informaMaoDeFerro(getJogador(1).getCartas());
@@ -394,18 +390,18 @@ public class JogoLocal extends Jogo {
 
 		for (Jogador interessado : jogadores) {
 			interessado.maoFechada(pontosEquipe);
-			if (pontosEquipe[0] > tento.valorPenultimaMao()) {
+			if (pontosEquipe[0] > tento.pontuacaoQueDeterminaMaoDeFerro()) {
 				interessado.jogoFechado(1);
 				jogoFinalizado = true;
-			} else if (pontosEquipe[1] > tento.valorPenultimaMao()) {
+			} else if (pontosEquipe[1] > tento.pontuacaoQueDeterminaMaoDeFerro()) {
 				interessado.jogoFechado(2);
 				jogoFinalizado = true;
 			}
 		}
 
 		// Se ainda estivermos em jogo, incia a nova mao
-		if (pontosEquipe[0] <= tento.valorPenultimaMao()
-				&& pontosEquipe[1] <= tento.valorPenultimaMao()) {
+		if (pontosEquipe[0] <= tento.pontuacaoQueDeterminaMaoDeFerro()
+				&& pontosEquipe[1] <= tento.pontuacaoQueDeterminaMaoDeFerro()) {
 			int posAbre = jogadorAbriuMao.getPosicao() + 1;
 			if (posAbre == 5)
 				posAbre = 1;
@@ -471,14 +467,14 @@ public class JogoLocal extends Jogo {
 			// Se aceitou, desencana da resposta do parceiro e pode tocar o
 			// jogo, valendo 3
 			aguardandoRespostaMaoDeFerro[j.getParceiro() - 1] = false;
-			valorMao = tento.inicializaPenultimaMao();
+			valorMao = tento.valorDaMaoDeFerro();
 			notificaVez();
 		} else {
 			// Se recusou (e o parceiro também), a equipe perde um ponto e
 			// recomeça a mao
 			if (!aguardandoRespostaMaoDeFerro[j.getParceiro() - 1]) {
 				pontosEquipe[j.getEquipeAdversaria() - 1] += tento
-						.inicializaMao();
+						.valorInicialDaMao();
 				fechaMao();
 			}
 		}
@@ -508,7 +504,7 @@ public class JogoLocal extends Jogo {
 		for (int i = 0; i <= 3; i++)
 			recusouAumento[i] = false;
 
-		int valor = tento.calcValorAumento(valorMao);
+		int valor = tento.valorSeHouverAumento(valorMao);
 
 		// Notifica os interessados
 		for (Jogador interessado : jogadores) {
@@ -541,7 +537,7 @@ public class JogoLocal extends Jogo {
 		if (aceitou && !ignorarAceite) {
 			// Se o jogador aceitou, seta o novo valor, notifica a galera e tira
 			// o jogo da situtação de truco
-			valorMao = tento.calcValorAumento(valorMao);
+			valorMao = tento.valorSeHouverAumento(valorMao);
 			jogadorPedindoAumento = null;
 			for (Jogador interessado : jogadores) {
 				interessado.aceitouAumentoAposta(j, valorMao);

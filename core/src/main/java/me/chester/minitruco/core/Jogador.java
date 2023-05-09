@@ -308,8 +308,8 @@ public abstract class Jogador {
 	public abstract void jogoFechado(int numEquipeVencedora);
 
 	/**
-	 * Informa que um jogador fez sua escolha de topar ou não uma rodada quando
-	 * sua equipe tinha 11 pontos
+	 * Informa que um jogador fez sua escolha de topar ou não
+	 * a mão de ferro
 	 *
 	 * @param j
 	 *            Jogador que fez a escolha
@@ -320,8 +320,8 @@ public abstract class Jogador {
 
 	/**
 	 * Informa que o jogador é beneficiário de uma "mão de ferro", e, portanto,
-	 * deve decidir se aceita ou não esta rodada (se aceitar vale 3 pontos, se
-	 * ambos recusarem perde 1)
+	 * deve decidir se aceita ou não esta rodada (se aceitar vale o valor do truco,
+	 * se ambos recusarem perde o tento normal)
 	 *
 	 * @param cartasParceiro
 	 *            Cartas do parceiro

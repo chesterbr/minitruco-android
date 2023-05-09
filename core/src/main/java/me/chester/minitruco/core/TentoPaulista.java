@@ -2,14 +2,23 @@ package me.chester.minitruco.core;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2011 Guilherme Caram <gcaram@gmail.com> */
+/* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
-/**
- * Forma de pontuação dos tentos
- *
- */
 public class TentoPaulista implements Tento {
 
-	public int calcValorAumento(int valorMao) {
+	public int pontuacaoQueDeterminaMaoDeFerro() {
+		return 11;
+	}
+
+	public int valorInicialDaMao() {
+		return 1;
+	}
+
+	public int valorDaMaoDeFerro() {
+		return 3;
+	}
+
+	public int valorSeHouverAumento(int valorMao) {
 		switch (valorMao) {
 		case 1:
 			return 3;
@@ -23,15 +32,4 @@ public class TentoPaulista implements Tento {
 		return 0;
 	}
 
-	public int inicializaMao() {
-		return 1;
-	}
-
-	public int inicializaPenultimaMao() {
-		return 3;
-	}
-
-	public int valorPenultimaMao() {
-		return 11;
-	}
 }
