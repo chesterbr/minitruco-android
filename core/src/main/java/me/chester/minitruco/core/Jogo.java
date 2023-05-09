@@ -316,14 +316,13 @@ public abstract class Jogo implements Runnable {
 	}
 
 	/**
-	 * Informa se alguma das equipes tem 11 pontos (para fins de permitir
-	 * trucar)
-	 * <p>
-	 * Isso não tem a ver com a "mão de 11" - aquela em que uma das equipes
-	 * apenas tem 11. Toda mão de 11 retorna true aqui, mas o 11x11 também.
+	 * Informa se não estamos impedidos de disponibilizar aumento (por conta
+	 * de ser uma mão de ferro, ou mesmo um empate acima do limite, ex.:
+	 * 11x11 no Truco Paulista)
 	 */
-	public boolean isAlguemTem11Pontos() {
-		return pontosEquipe[0] == 11 || pontosEquipe[1] == 11;
+	public boolean isPlacarPermiteAumento() {
+		int max = modo.equals("M") ? 10 : 11;
+		return pontosEquipe[0] < max && pontosEquipe[1] < max;
 	}
 
 	/**

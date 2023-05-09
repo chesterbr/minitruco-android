@@ -268,10 +268,10 @@ public class JogadorCPU extends Jogador implements Runnable {
 	 */
 	private void atualizaSituacaoJogo() {
 		jogo.atualizaSituacao(situacaoJogo, this);
-		if (jogo.isAlguemTem11Pontos()) {
-			situacaoJogo.valorProximaAposta = 0;
-		} else {
+		if (jogo.isPlacarPermiteAumento()) {
 			situacaoJogo.valorProximaAposta = valorProximaAposta;
+		} else {
+			situacaoJogo.valorProximaAposta = 0;
 		}
 		int numCartas = cartasRestantes.size();
 		situacaoJogo.cartasJogador = new Carta[numCartas];
@@ -364,7 +364,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 		}
 
 		// Libera o jogador para pedir truco (se nao estivermos em mao de 11)
-		valorProximaAposta = (jogo.isAlguemTem11Pontos() ? 0 : 3);
+		valorProximaAposta = (jogo.isPlacarPermiteAumento() ? 3 : 0);
 
 	}
 
