@@ -54,8 +54,8 @@ A posicao - Jogo abortado pelo jogador nesta posição
 T jogador valor - Jogador pediu aumento. valor é 3 para truco, 6 para seis, etc.
 D jogador valor - Jogador mandou descer (aceitou aumento) no valor indicado
 C jogador - Jogador correu do pedido de aumento
-F Ln Ln Ln - Informa que estamos em mão de 11 e o adversário tem essas cartas
-H posicao _ - Informa que o jogador na posição acusou/recusou (_=T/F) mão de 11
+F Ln Ln Ln - Informa que estamos em mão de ferro e o adversário tem essas cartas
+H posicao _ - Informa que o jogador na posição acusou/recusou (_=T/F) mão de ferro
 S - Informa que o jogador saiu da sala
 
 
