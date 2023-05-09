@@ -17,10 +17,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.JogadorCPU;
@@ -51,6 +53,8 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	private BluetoothServerSocket serverSocket;
 	private final BluetoothSocket[] connClientes = new BluetoothSocket[3];
 	private final OutputStream[] outClientes = new OutputStream[3];
+
+	private final boolean[] respondeuComVersaoOk = new boolean[3];
 
 	private final BroadcastReceiver receiverMantemDiscoverable = new BroadcastReceiver() {
 		public void onReceive(Context context, Intent intent) {
@@ -186,7 +190,8 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				BluetoothSocket socket = serverSocket.accept();
 				setMensagem(null);
 				if (socket != null) {
-					encaixaEmUmSlot(socket);
+					int slot = encaixaEmUmSlot(socket);
+					verificaVersaoCompativel(slot);
 				}
 			} catch (IOException e) {
 				LOGGER.log(Level.INFO, "Exceção em serverSocket.accept()", e);
@@ -197,6 +202,57 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		}
 		encerraConexoes();
 		LOGGER.log(Level.INFO, "finalizou atividade server");
+	}
+
+	/**
+	 * Verifica (assincronamente) se o cliente conectado é compatível com este celular
+	 *
+	 * @param slot slot no qual o cliente está conectado.
+	 */
+	private void verificaVersaoCompativel(int slot) {
+		// Idealmente bastaria esperar numa thread pelo comando "B <numero do build",
+		// mas clientes < 2.03.09 nem vão enviar o comando. Então serão duas threads:
+		//
+		// - Uma vai aguardar o comando e, se receber com o build correto, marca o slot
+		//   como tendo um cliente com versão válida;
+		// - A outra aguarda um tempo razoável e caso o slot não tenha sido marcado como
+		//   válido, desconecta o cliente e pede pra atualizar.
+		BluetoothSocket socket = connClientes[slot];
+		respondeuComVersaoOk[slot] = false;
+		new Thread(() -> {
+			StringBuilder sb = new StringBuilder();
+			int c;
+			try {
+				InputStream in = socket.getInputStream();
+				while (socket.isConnected() && (c = in.read()) != -1) {
+					if (c == SEPARADOR_REC) {
+						break;
+					}
+					sb.append((char) c);
+				}
+				LOGGER.info("recebeu ao conectar: " + sb.toString());
+				if (sb.toString().equals("B " + BuildConfig.VERSION_CODE)) {
+					respondeuComVersaoOk[slot] = true;
+				}
+
+			} catch (IOException e) {
+				desconecta(slot);
+			} catch (NumberFormatException e) {
+				desconecta(slot);
+			}
+		}).start();
+
+		new Thread(() -> {
+			sleep(3000);
+			if (!respondeuComVersaoOk[slot]) {
+				desconecta(slot);
+				mostraAlertBox("Versão antiga",
+						"O aparelho " + socket.getRemoteDevice().getName() +
+								" está rodando uma versão diferente do miniTruco " +
+								" e foi desconectado.\n\n" +
+								" Atualize o jogo em todos os celulares e tente novamente.");
+			}
+		}).start();
 	}
 
 	private void encerraConexoes() {
@@ -292,11 +348,15 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		if (slot >= 0) {
 			connClientes[slot] = null;
 			outClientes[slot] = null;
+			respondeuComVersaoOk[slot] = false;
 			apelidos[slot + 1] = APELIDO_CPU;
 		}
 		status = STATUS_AGUARDANDO;
 		atualizaDisplay();
 		atualizaClientes();
+		if (jogo != null) {
+			jogo.abortaJogo(slot + 2);
+		}
 	}
 
 	public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
@@ -333,16 +393,12 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				outClientes[slot].flush();
 			} catch (IOException e) {
 				LOGGER.log(Level.INFO, "exceção ao enviar mensagem", e);
-				// Libera o slot e encerra o jogo em andamento
 				desconecta(slot);
-				if (jogo != null) {
-					jogo.abortaJogo(slot + 2);
-				}
 			}
 		}
 	}
 
-	private synchronized void encaixaEmUmSlot(BluetoothSocket socket)
+	private synchronized int encaixaEmUmSlot(BluetoothSocket socket)
 			throws IOException {
 		for (int i = 0; i <= 2; i++) {
 			if (connClientes[i] == null) {
@@ -351,9 +407,10 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 				apelidos[i + 1] = socket.getRemoteDevice().getName()
 						.replace(' ', '_');
 				status = i == 2 ? STATUS_LOTADO : STATUS_AGUARDANDO;
-				return;
+				return i;
 			}
 		}
+		return -1;
 	}
 
 	private synchronized void inverteAdversarios() {

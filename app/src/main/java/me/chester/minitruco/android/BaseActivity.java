@@ -69,12 +69,14 @@ public abstract class BaseActivity extends ComponentActivity {
 	}
 
 	protected void mostraAlertBox(String titulo, String texto) {
-		new AlertDialog.Builder(this).setTitle(titulo)
-				.setMessage(Html.fromHtml(texto))
-				.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).show();
+		runOnUiThread(() -> {
+			new AlertDialog.Builder(this).setTitle(titulo)
+					.setMessage(Html.fromHtml(texto))
+					.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+						}
+					}).show();
+		});
 	}
 
 }
