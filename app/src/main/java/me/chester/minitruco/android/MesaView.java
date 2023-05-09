@@ -753,7 +753,7 @@ public class MesaView extends View {
 			paint.setTextSize(tamanhoFonte * 0.5f);
 			paint.setTextAlign(Align.CENTER);
 			paint.setStyle(Style.FILL);
-			canvas.drawText(mostrarPerguntaMaoDeFerro ? "Aceita Mão de 11?"
+			canvas.drawText(mostrarPerguntaMaoDeFerro ? "Aceita mão de ferro?"
 					: "Aceita?", rectDialog.centerX(),
 					rectDialog.top + paint.getTextSize() * 1.5f, paint);
 			desenhaBotao("Sim", canvas, rectBotaoSim);
