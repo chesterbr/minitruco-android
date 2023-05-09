@@ -48,8 +48,8 @@ public class JogoRemoto extends Jogo {
      * em notificações recebidas por esta classe).
      */
     public JogoRemoto(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador, String modo) {
+        super(modo);
         this.cliente = cliente;
-        this.modo = modo;
 
 		// Adiciona o jogador na posição correta
 		// (preenchendo as outras com dummies)

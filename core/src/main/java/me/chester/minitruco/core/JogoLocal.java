@@ -33,22 +33,13 @@ public class JogoLocal extends Jogo {
 	 * @param modo "P"aulista, "M"ineiro, ou "L"impo (paulista com baralho limpo)
 	 */
 	public JogoLocal(String modo, boolean humanoDecide, boolean jogoAutomatico) {
-		this.modo = modo;
+		super(modo);
 		this.manilhaVelha = modo.equals("M");
 		this.baralhoLimpo = modo.equals("L");
-		if (modo.equals("M"))
-			this.tento = new TentoMineiro();
-		else
-			this.tento = new TentoPaulista();
 		this.baralho = new Baralho(baralhoLimpo);
 		this.humanoDecide = humanoDecide;
         this.jogoAutomatico = jogoAutomatico;
 	}
-
-	/**
-	 * Forma de tento que será usado durante esse jogo
-	 */
-	private Tento tento;
 
 	/**
 	 * Baralho que será usado durante esse jogo

@@ -30,6 +30,10 @@ public abstract class Jogo implements Runnable {
 	 * Modo do jogo: "P"aulista, "M"ineiro ou paulista com baralho "L"impo
 	 */
 	protected String modo;
+	/**
+	 * Forma de tento que será usado durante esse jogo
+	 */
+	protected Tento tento;
 
 	/**
 	 * Rodada que estamos jogando (de 1 a 3).
@@ -37,6 +41,14 @@ public abstract class Jogo implements Runnable {
 	 * (as implementações devem manter atualizado)
 	 */
 	int numRodadaAtual;
+
+	public Jogo(String modo) {
+		this.modo = modo;
+		if (modo.equals("M"))
+			tento = new TentoMineiro();
+		else // "P" ou "L"
+			tento = new TentoPaulista();
+	}
 
 	/**
 	 * Calcula um valor relativo para a carta, considerando as manilhas em jogo
