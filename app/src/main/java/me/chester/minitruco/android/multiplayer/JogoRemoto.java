@@ -99,7 +99,7 @@ public class JogoRemoto extends Jogo {
                 // Início da mão
                 numRodadaAtual = 1;
                 cartasJogadasPorRodada = new Carta[3][4];
-                baralho = new Baralho(modo);
+                baralho = new Baralho(modo.isBaralhoLimpo());
                 // Gera as cartas e notifica
                 Carta[] cartas = new Carta[3];
                 for (int i = 0; i <= 2; i++) {

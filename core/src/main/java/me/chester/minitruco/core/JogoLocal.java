@@ -34,7 +34,7 @@ public class JogoLocal extends Jogo {
 	 */
 	public JogoLocal(String modoStr, boolean humanoDecide, boolean jogoAutomatico) {
 		super(modoStr);
-		this.baralho = new Baralho(modo);
+		this.baralho = new Baralho(modo.isBaralhoLimpo());
 		this.humanoDecide = humanoDecide;
         this.jogoAutomatico = jogoAutomatico;
 	}
