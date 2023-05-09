@@ -35,9 +35,6 @@ import me.chester.minitruco.core.JogoLocal;
  */
 public class TrucoActivity extends BaseActivity {
 
-	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
-			"NOVE!", "DOZE!!!" };
-
 	private MesaView mesa;
 	private View layoutFimDeJogo;
 	private static boolean mIsViva = false;
@@ -94,8 +91,10 @@ public class TrucoActivity extends BaseActivity {
 				layoutFimDeJogo.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_MOSTRA_BOTAO_AUMENTO:
-				btnAumento
-						.setText(TEXTO_BOTAO_AUMENTO[(jogadorHumano.valorProximaAposta / 3) - 1]);
+				int chave = getResources().getIdentifier("botao_aumento_" +
+					Integer.toString(jogadorHumano.getIndiceParaAumentoAposta(jogadorHumano.valorProximaAposta)),
+				"string", "me.chester.minitruco");
+				btnAumento.setText(getResources().getString(chave));
 				btnAumento.setVisibility(Button.VISIBLE);
 				break;
 			case MSG_ESCONDE_BOTAO_AUMENTO:

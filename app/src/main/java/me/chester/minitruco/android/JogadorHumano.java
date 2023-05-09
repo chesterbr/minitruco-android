@@ -133,15 +133,26 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
 	@Override
 	public void pediuAumentoAposta(Jogador j, int valor) {
-		// Vide balao_aumento_* em strings.xml - dividir inteiro por 3 pega
-		// a frase certa para aumento de 3, 4, 6, 9 e 12; o 8 vai na hands
-		int ordem_valor = (valor == 8 ? 5 : valor / 3);
-		mesa.diz("aumento_" + ordem_valor, posicaoNaTela(j),
+		mesa.diz("aumento_" + getIndiceParaAumentoAposta(valor), posicaoNaTela(j),
 				1500 + 200 * (valor / 3));
 		if (j.getEquipe() != this.getEquipe()) {
 			LOGGER.log(Level.INFO, "pedindo para mostrar pergunta aumento");
 			mesa.mostrarPerguntaAumento = true;
 		}
+	}
+
+	/**
+	 * Indica a chave correta do strings.xml corresponde a um pedido de aumento.
+	 *
+	 * @param valor aumento solicitado. Pode ser 3, 6, 9, 12 no truco paulista,
+	 *              ou 4, 6, 8, 12 no truco mineiro.
+	 * @return sufixo da chave onde a frase (para balão, botão de aumento, etc.)
+	 *         se encontra. Ex.: para valor 9, retorna 3, que bate com balao_aumento_3,
+	 *         onde estão frases como "Nove!", "Nove na cabeça!", etc.
+	 */
+	public int getIndiceParaAumentoAposta(int valor) {
+		LOGGER.log(Level.INFO, "Valor: " + valor);
+		return (valor == 8 ? 5 : valor / 3);
 	}
 
 	@Override
@@ -153,9 +164,14 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 				mesa.diz("aumento_quero", posicaoNaTela(j), 1500);
 				return;
 			}
-			// Nós aceitamos um truco, então podemos pedir 6, 9 ou 12
+			// Nós aceitamos um truco, então podemos pedir aumento
 			if (valor != 12) {
-				valorProximaAposta = valor + 3;
+				// TODO isso é gambis pq não dá pra ter acesso ao tento (que pode
+				//      nem existir num jogo remoto. Consolidar essas regras)
+				valorProximaAposta = valor + (jogo.getModo().equals("M") ? 2 : 3);
+				if (valorProximaAposta == 10) {
+					valorProximaAposta = 12;
+				}
 			}
 		} else {
 			// Eles aceitaram um truco, temos que esperar eles pedirem

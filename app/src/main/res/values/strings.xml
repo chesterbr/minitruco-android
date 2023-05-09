@@ -15,6 +15,7 @@
         <item>Truquei e tá trucado!</item>
         <item>Truco! Pede seis!</item>
     </string-array>
+    <string name="botao_aumento_1">Truco</string>
     <string-array name="balao_aumento_2">
         <item>Seis!</item>
         <item>Meio-pau!</item>
@@ -26,6 +27,7 @@
         <item>Toma seis!</item>
         <item>SEEEEEEEEIS</item>
     </string-array>
+    <string name="botao_aumento_2">Seis</string>
     <string-array name="balao_aumento_3">
         <item>Nove!</item>
         <item>Nooooove!</item>
@@ -33,12 +35,14 @@
         <item>Ah, vem pra nove!</item>
         <item>É nove!</item>
     </string-array>
+    <string name="botao_aumento_3">NOVE!</string>
     <string-array name="balao_aumento_4">
         <item>Doze!</item>
         <item>Doze pra acabar!</item>
         <item>É doze!</item>
         <item>Doze sem piedade!</item>
     </string-array>
+    <string name="botao_aumento_4">DOZE!!!</string>
     <string-array name="balao_aumento_5">
         <item>Oito!</item>
         <item>Oooooitooo!</item>
@@ -46,6 +50,7 @@
         <item>Ah, vem pra oito!</item>
         <item>É oito!</item>
     </string-array>
+    <string name="botao_aumento_5">OITO!</string>
     <string-array name="balao_aumento_sim">
         <item>Desce!</item>
         <item>Manda bala!</item>
