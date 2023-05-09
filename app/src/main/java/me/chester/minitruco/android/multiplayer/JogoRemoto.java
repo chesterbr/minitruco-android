@@ -259,6 +259,7 @@ public class JogoRemoto extends Jogo {
         if (posicao == 1) {
             cliente.enviaLinha("A");
         }
+        jogadorHumano.jogoAbortado(0);
     }
 
 }
