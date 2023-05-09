@@ -57,7 +57,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 		if (posicaoNaTela(j) == 3 && aceita) {
 			mesa.mostrarPerguntaMaoDeFerro = false;
 		}
-		mesa.diz(aceita ? "mao11_sim" : "mao11_nao", posicaoNaTela(j), 1500);
+		mesa.diz(aceita ? "mao_de_ferro_sim" : "mao_de_ferro_nao", posicaoNaTela(j), 1500);
 	}
 
 	@Override

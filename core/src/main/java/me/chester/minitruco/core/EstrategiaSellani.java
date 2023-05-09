@@ -739,7 +739,7 @@ public class EstrategiaSellani implements Estrategia {
 	}
 
 	/**
-	 * Retorna se eu aceito jogar ou não esta mão de 11.
+	 * Retorna se eu aceito jogar ou não esta mão de ferro.
 	 */
 	public boolean aceitaMaoDeFerro(Carta[] cartasParceiro, SituacaoJogo s) {
 		int qBoa = 0, qExcelente = 0;

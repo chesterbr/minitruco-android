@@ -196,7 +196,7 @@ public class JogoLocal extends Jogo {
 		if (pontosEquipe[0] == tento.valorPenultimaMao()
 				^ pontosEquipe[1] == tento.valorPenultimaMao()) {
 			// Se apenas uma das equipes tiver 11 pontos, estamos numa
-			// "mão de 11": os membros da equipe podem ver as cartas do parceiro
+			// "mão de ferro": os membros da equipe podem ver as cartas do parceiro
 			// e decidir se querem jogar (valendo 3 pontos) ou desistir
 			// (perdendo 1)
 			if (pontosEquipe[0] == tento.valorPenultimaMao()) {
@@ -239,7 +239,7 @@ public class JogoLocal extends Jogo {
 				"; jogadorDaVez: "+getJogadorDaVez().getPosicao());
 
 		// Se o jogo acabou, a mesa não estiver completa, já houver alguém
-		// trucando, estivermos aguardando ok da mão de 11 ou não for a vez do
+		// trucando, estivermos aguardando ok da mão de ferro ou não for a vez do
 		// cara, recusa
 		if (jogoFinalizado || numJogadores < 4 || jogadorPedindoAumento != null
 				|| (isAguardandoRespostaMaoDeFerro())
@@ -455,7 +455,7 @@ public class JogoLocal extends Jogo {
 				+ " quer jogar mao de 11 ");
 
 		// Se for uma CPU parceira de humano num jogo 100% local, trata como recusa
-		// (quem decide mão de 11 é o humano) e nem notifica (silenciando o balão)
+		// (quem decide mão de ferro é o humano) e nem notifica (silenciando o balão)
 		if (isIgnoraDecisao(j)) {
 			aceita = false;
 		} else {
@@ -493,7 +493,7 @@ public class JogoLocal extends Jogo {
 	public void aumentaAposta(Jogador j) {
 
 		// Se o jogo estiver fianlizado, a mesa não estiver completa, já houver
-		// alguém trucando, estivermos aguardando a mão de 11 ou não for a vez
+		// alguém trucando, estivermos aguardando a mão de ferro ou não for a vez
 		// do cara, recusa
 		if ((jogoFinalizado) || (numJogadores < 4)
 				|| (jogadorPedindoAumento != null)
@@ -591,7 +591,7 @@ public class JogoLocal extends Jogo {
 	}
 
 	/**
-	 * Determina qual a equipe que está aguardando mão de 11
+	 * Determina qual a equipe que está aguardando mão de ferro
 	 *
 	 * @param i
 	 *            1 ou 2 para a respectiva equipe, 0 para ninguém aguardando mão
@@ -727,7 +727,7 @@ public class JogoLocal extends Jogo {
 	}
 
 	/**
-	 * Verifica se estamos aguardando resposta para mão de 11
+	 * Verifica se estamos aguardando resposta para mão de ferro
 	 *
 	 * @return true se falta alguém responder, false caso contrário
 	 */

@@ -173,13 +173,13 @@ public class JogoRemoto extends Jogo {
                         getJogador(Integer.parseInt(tokens[0])));
                 break;
             case 'H':
-                // Alguém aceitou mão de 11, informa
+                // Alguém aceitou mão de ferro, informa
                 getJogadorHumano().decidiuMaoDeFerro(
                         getJogador(Integer.parseInt(tokens[0])),
                         tokens[1].equals("T"));
                 break;
             case 'F':
-                // Mão de 11. Recupera as cartas do parceiro e informa o jogador
+                // Mão de ferro. Recupera as cartas do parceiro e informa o jogador
                 Carta[] cartasMaoDeFerro = new Carta[3];
                 for (int i = 0; i <= 2; i++) {
                     cartasMaoDeFerro[i] = new Carta(tokens[i]);

@@ -140,7 +140,7 @@ public abstract class Jogo implements Runnable {
 	public abstract void jogaCarta(Jogador j, Carta c);
 
 	/**
-	 * Informa ao jogo o resultado de aceite daquela mão de 11
+	 * Informa ao jogo o resultado de aceite daquela mão de ferro
 	 *
 	 * @param j
 	 *            Jogador que está respondendo
@@ -266,7 +266,7 @@ public abstract class Jogo implements Runnable {
 	/**
 	 * Pontos de cada equipe na partida.
 	 * <p>
-	 * As implementações devem atualizar (para se saber quando é mão de 11)
+	 * As implementações devem atualizar (para se saber quando é mão de ferro)
 	 */
 	protected int[] pontosEquipe = { 0, 0 };
 

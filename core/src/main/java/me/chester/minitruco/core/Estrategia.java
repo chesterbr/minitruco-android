@@ -9,7 +9,7 @@ package me.chester.minitruco.core;
  * Uma estratégia é uma classe que implementa os métodos <code>joga</code>,
  * <code>aceitaTruco</code> e <code>aceitaMaoDeFerro</code>, que são chamados pelo
  * jogo quando for a vez do jogador, quando pedirem aumento para a dupla dele e
- * quando a dupla for decidir uma mão de 11, respectivamente.
+ * quando a dupla for decidir uma mão de ferro, respectivamente.
  * <p>
  * Eses métodos recebem uma "fotografia" do jogo (SituacaoJogo) no momento em
  * que a ação deles é demandada. Esta fotografia inclui todo o histórico da
@@ -71,7 +71,7 @@ public interface Estrategia {
 	boolean aceitaTruco(SituacaoJogo s);
 
 	/**
-	 * Decide se aceita iniciar uma "mão de 11"
+	 * Decide se aceita iniciar uma "mão de ferro"
 	 *
 	 * @param cartasParceiro
 	 *            cartas que o parceiro possui

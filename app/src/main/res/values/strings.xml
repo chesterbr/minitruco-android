@@ -97,12 +97,12 @@
         <item>A próxima é nossa.</item>
         <item>Raios!</item>
     </string-array>
-    <string-array name="balao_mao11_sim">
+    <string-array name="balao_mao_de_ferro_sim">
         <item>Vamos jogar!</item>
         <item>Vamos nessa!</item>
         <item>Tô dentro.</item>
     </string-array>
-    <string-array name="balao_mao11_nao">
+    <string-array name="balao_mao_de_ferro_nao">
         <item>Não quero.</item>
         <item>Que lixo!</item>
         <item>Não.</item>

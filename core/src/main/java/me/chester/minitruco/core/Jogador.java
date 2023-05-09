@@ -319,7 +319,7 @@ public abstract class Jogador {
 	public abstract void decidiuMaoDeFerro(Jogador j, boolean aceita);
 
 	/**
-	 * Informa que o jogador é beneficiário de uma "mão de 11", e, portanto,
+	 * Informa que o jogador é beneficiário de uma "mão de ferro", e, portanto,
 	 * deve decidir se aceita ou não esta rodada (se aceitar vale 3 pontos, se
 	 * ambos recusarem perde 1)
 	 *

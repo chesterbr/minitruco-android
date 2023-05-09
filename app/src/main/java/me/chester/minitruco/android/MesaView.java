@@ -248,7 +248,7 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Torna as cartas da mão de 11 visíveis
+	 * Torna as cartas da mão de ferro visíveis
 	 *
 	 * @param cartasParceiro
 	 *            cartas do seu parceiro
@@ -314,7 +314,7 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Responde pergunta em exibição (aceita truco, aceita mão 11, etc.)
+	 * Responde pergunta em exibição (aceita truco, aceita mão de ferro, etc.)
 	 * e oculta a pergunta, desde que uma pergunta esteja sendo exibida.
 	 *
 	 * @param resposta resposta do jogador (true=sim, false=não)
@@ -552,7 +552,7 @@ public class MesaView extends View {
 			if (cvCandidata.descartada) {
 				continue;
 			}
-			// ...e, no caso de um humano (ou parceiro em mão de 11), que
+			// ...e, no caso de um humano (ou parceiro em mão de ferro), que
 			// corresponda à carta do jogo
 			cv = cvCandidata;
 			if (c.equals(cvCandidata)) {
@@ -740,7 +740,7 @@ public class MesaView extends View {
 			}
 		}
 
-		// Caixa de diálogo (mão de 11 ou aumento)
+		// Caixa de diálogo (mão de ferro ou aumento)
 		if (mostrarPerguntaMaoDeFerro || mostrarPerguntaAumento) {
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
