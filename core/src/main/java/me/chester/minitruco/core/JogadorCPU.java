@@ -211,7 +211,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 				sleep(1000 + random.nextInt(1000));
 				boolean respostaMao11 = false;
 				try {
-					respostaMao11 = estrategia.aceitaMao11(
+					respostaMao11 = estrategia.aceitaMaoDeFerro(
 							cartasDoParceiroDaMaoDe11, situacaoJogo);
 					// Atendendo a pedidos no Market, o parceiro do humano vai
 					// ignorar a estratégia com 90% de chance e recusar,
@@ -229,7 +229,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 							e);
 					respostaMao11 = random.nextBoolean();
 				}
-				jogo.decideMao11(this, respostaMao11);
+				jogo.decideMaoDeFerro(this, respostaMao11);
 			}
 
 			if (estouAguardandoRepostaAumento && (numRespostasAguardando == 0)) {
@@ -378,11 +378,11 @@ public class JogadorCPU extends Jogador implements Runnable {
 		estrategia.inicioPartida();
 	}
 
-	public void decidiuMao11(Jogador j, boolean aceita) {
+	public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
 		// Por ora não faz nada
 	}
 
-	public void informaMao11(Carta[] cartasParceiro) {
+	public void informaMaoDeFerro(Carta[] cartasParceiro) {
 		cartasDoParceiroDaMaoDe11 = cartasParceiro;
 		recebiPedidoDeMaoDe11 = true;
 	}

@@ -253,7 +253,7 @@ public class MesaView extends View {
 	 * @param cartasParceiro
 	 *            cartas do seu parceiro
 	 */
-	public void mostraCartasMao11(Carta[] cartasParceiro) {
+	public void mostraCartasMaoDeFerro(Carta[] cartasParceiro) {
 		for (int i = 0; i <= 2; i++) {
 			cartas[10 + i].setCarta(cartasParceiro[i]);
 		}
@@ -444,11 +444,11 @@ public class MesaView extends View {
 				Jogo jogo = trucoActivity.jogo;
 				if (recusarMao11) {
 					recusarMao11 = false;
-					jogo.decideMao11(trucoActivity.jogadorHumano, false);
+					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, false);
 				}
 				if (aceitarMao11) {
 					aceitarMao11 = false;
-					jogo.decideMao11(trucoActivity.jogadorHumano, true);
+					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, true);
 				}
 				if (recusarAumento) {
 					recusarAumento = false;

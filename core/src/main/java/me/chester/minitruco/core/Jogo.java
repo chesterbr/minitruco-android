@@ -148,7 +148,7 @@ public abstract class Jogo implements Runnable {
 	 *            true se o jogador topa jogar, false se deixar para o parceiro
 	 *            decidir
 	 */
-	public abstract void decideMao11(Jogador j, boolean aceita);
+	public abstract void decideMaoDeFerro(Jogador j, boolean aceita);
 
 	/**
 	 * Informa que o jogador solicitou um aumento de aposta ("truco", "seis",

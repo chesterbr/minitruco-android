@@ -1,7 +1,6 @@
 package me.chester.minitruco.core;
 
 import java.util.Random;
-import java.util.logging.Logger;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -317,7 +316,7 @@ public abstract class Jogador {
 	 * @param aceita
 	 *            true se o jogador topou, false se recusou
 	 */
-	public abstract void decidiuMao11(Jogador j, boolean aceita);
+	public abstract void decidiuMaoDeFerro(Jogador j, boolean aceita);
 
 	/**
 	 * Informa que o jogador é beneficiário de uma "mão de 11", e, portanto,
@@ -326,10 +325,10 @@ public abstract class Jogador {
 	 *
 	 * @param cartasParceiro
 	 *            Cartas do parceiro
-	 * @see Jogo#decideMao11(Jogador, boolean)
+	 * @see Jogo#decideMaoDeFerro(Jogador, boolean)
 	 *
 	 */
-	public abstract void informaMao11(Carta[] cartasParceiro);
+	public abstract void informaMaoDeFerro(Carta[] cartasParceiro);
 
 	/**
 	 * Informa que o jogo foi abandonado por alguma causa externa (ex.: um
