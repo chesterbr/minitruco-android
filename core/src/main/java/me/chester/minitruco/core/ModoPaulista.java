@@ -37,4 +37,9 @@ public class ModoPaulista implements Modo {
 		return false;
 	}
 
+	@Override
+	public boolean isManilhaVelha() {
+		return false;
+	}
+
 }

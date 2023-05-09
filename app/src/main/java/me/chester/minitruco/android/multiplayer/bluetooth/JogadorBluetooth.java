@@ -151,7 +151,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 		for (int i = 0; i <= 2; i++)
 			comando.append(" " + getCartas()[i]);
 		// Se for manilha nova, também envia o "vira"
-		if (!jogo.isManilhaVelha()) {
+		if (!jogo.getModo().isManilhaVelha()) {
 			comando.append(" " + jogo.cartaDaMesa);
 		}
 		enviaMensagem(comando.toString());

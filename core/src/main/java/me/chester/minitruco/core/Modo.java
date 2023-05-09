@@ -16,7 +16,16 @@ public interface Modo {
 
 	int valorDaMaoDeFerro();
 
+	/**
+	 * @return valor para o qual um jogo cujo valor seja valorMao vai se houver um aumento,
+	 *         ou 0 se estivermos num valor que não permite aumento (ex.: 12 no truco paulista)
+	 */
 	int valorSeHouverAumento(int valorMao);
 
 	boolean isBaralhoLimpo();
+
+	/**
+	 * @return True para manilhas fixas (sem "vira")
+	 */
+	public abstract boolean isManilhaVelha();
 }

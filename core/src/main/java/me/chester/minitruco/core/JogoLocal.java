@@ -34,7 +34,6 @@ public class JogoLocal extends Jogo {
 	 */
 	public JogoLocal(String modoStr, boolean humanoDecide, boolean jogoAutomatico) {
 		super(modoStr);
-		this.manilhaVelha = modoStr.equals("M");
 		this.baralho = new Baralho(modo);
 		this.humanoDecide = humanoDecide;
         this.jogoAutomatico = jogoAutomatico;
@@ -106,7 +105,6 @@ public class JogoLocal extends Jogo {
 	 */
 	private Carta cartaJogada;
 
-	private final boolean manilhaVelha;
 	private final boolean humanoDecide;
     private final boolean jogoAutomatico;
 
@@ -657,7 +655,7 @@ public class JogoLocal extends Jogo {
 	 */
 	public void atualizaSituacao(SituacaoJogo s, Jogador j) {
 		s.baralhoSujo = !modo.isBaralhoLimpo();
-		if (manilhaVelha) {
+		if (modo.isManilhaVelha()) {
 			s.manilha = SituacaoJogo.MANILHA_INDETERMINADA;
 		} else {
 			s.manilha = this.getManilha();
@@ -695,13 +693,6 @@ public class JogoLocal extends Jogo {
 				}
 			}
 
-	}
-
-	/**
-	 * @return True para manilhas fixas (sem "vira")
-	 */
-	public boolean isManilhaVelha() {
-		return manilhaVelha;
 	}
 
 	/**

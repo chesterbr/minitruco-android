@@ -498,7 +498,7 @@ public class MesaView extends View {
 		}
 
 		// Abre o vira, se for manilha nova
-		if (!trucoActivity.jogo.isManilhaVelha()) {
+		if (!trucoActivity.jogo.getModo().isManilhaVelha()) {
 			cartas[0].setCarta(trucoActivity.jogo.cartaDaMesa);
 			cartas[0].visible = true;
 		}

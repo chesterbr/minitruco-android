@@ -135,8 +135,8 @@ public abstract class Jogo implements Runnable {
 		return null;
 	}
 
-	public String getModoStr() {
-		return modoStr;
+	public Modo getModo() {
+		return modo;
 	}
 
 	/**
@@ -225,11 +225,6 @@ public abstract class Jogo implements Runnable {
 	 */
 	public abstract void atualizaSituacao(SituacaoJogo s, Jogador j);
 
-	/**
-	 * @return True para manilhas fixas (sem "vira")
-	 */
-	public abstract boolean isManilhaVelha();
-
 	protected int getValorTruco(Carta c) {
 		return getValorTruco(c, this.getManilha());
 	}
@@ -313,7 +308,7 @@ public abstract class Jogo implements Runnable {
 
 		cartaDaMesa = c;
 
-		if (isManilhaVelha()) {
+		if (modo.isManilhaVelha()) {
 			manilha = SituacaoJogo.MANILHA_INDETERMINADA;
 			return;
 		}
@@ -337,7 +332,7 @@ public abstract class Jogo implements Runnable {
 	 * 11x11 no Truco Paulista)
 	 */
 	public boolean isPlacarPermiteAumento() {
-		int max = modoStr.equals("M") ? 10 : 11;
+		int max = modo.pontuacaoQueDeterminaMaoDeFerro();
 		return pontosEquipe[0] < max && pontosEquipe[1] < max;
 	}
 

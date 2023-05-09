@@ -212,7 +212,7 @@ public class JogadorConectado extends Jogador implements Runnable {
         StringBuilder comando = new StringBuilder("M");
         for (int i = 0; i <= 2; i++)
             comando.append(" " + getCartas()[i]);
-        if (!jogo.isManilhaVelha()) {
+        if (!jogo.getModo().isManilhaVelha()) {
             comando.append(" " + jogo.cartaDaMesa);
         }
         println(comando.toString());
