@@ -44,10 +44,19 @@ public abstract class Jogo implements Runnable {
 
 	public Jogo(String modo) {
 		this.modoStr = modo;
-		if (modo.equals("M"))
-			this.modo = new ModoMineiro();
-		else // "P" ou "L"
-			this.modo = new ModoPaulista();
+		switch (modo) {
+			case "M":
+				this.modo = new ModoMineiro();
+				break;
+			case "P":
+				this.modo = new ModoPaulista();
+				break;
+			case "L":
+				this.modo = new ModoBaralhoLimpo();
+				break;
+			default:
+				throw new IllegalArgumentException("Modo deve ser M, P ou L");
+		}
 	}
 
 	/**

@@ -32,4 +32,9 @@ public class ModoMineiro implements Modo {
 		return 0;
 	}
 
+	@Override
+	public boolean isBaralhoLimpo() {
+		return false;
+	}
+
 }

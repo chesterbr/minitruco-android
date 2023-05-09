@@ -32,4 +32,9 @@ public class ModoPaulista implements Modo {
 		return 0;
 	}
 
+	@Override
+	public boolean isBaralhoLimpo() {
+		return false;
+	}
+
 }

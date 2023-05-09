@@ -17,4 +17,6 @@ public interface Modo {
 	int valorDaMaoDeFerro();
 
 	int valorSeHouverAumento(int valorMao);
+
+	boolean isBaralhoLimpo();
 }
