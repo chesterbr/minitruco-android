@@ -23,12 +23,11 @@ public class Baralho {
 	/**
 	 * Cria um novo bararalho de truco
 	 *
-	 * @param isLimpo
-	 *            true para baralho limpo (sem 4, 5, 6 e 7), false para sujo
-	 *            (default)
+	 * @param modo Modalidade de truco na qual o baralho será utilizado
 	 */
-	public Baralho(boolean isLimpo) {
-		limpo = isLimpo;
+
+	public Baralho(Modo modo) {
+		limpo = modo.isBaralhoLimpo();
 	}
 
 	public boolean isLimpo() {

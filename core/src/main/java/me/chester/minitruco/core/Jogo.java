@@ -226,11 +226,6 @@ public abstract class Jogo implements Runnable {
 	public abstract void atualizaSituacao(SituacaoJogo s, Jogador j);
 
 	/**
-	 * @return True para jogo sem os 4,5,6 e 7.
-	 */
-	public abstract boolean isBaralhoLimpo();
-
-	/**
 	 * @return True para manilhas fixas (sem "vira")
 	 */
 	public abstract boolean isManilhaVelha();
@@ -330,7 +325,7 @@ public abstract class Jogo implements Runnable {
 		manilha = letrasOrdenadas.charAt(posManilha);
 
 		// Detalhe: no baralho limpo, a manilha do vira 3 é a dama (e não o 4)
-		if (isBaralhoLimpo() && c.getLetra() == '3') {
+		if (modo.isBaralhoLimpo() && c.getLetra() == '3') {
 			manilha = 'Q';
 		}
 

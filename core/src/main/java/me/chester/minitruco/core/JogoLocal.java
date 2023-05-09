@@ -30,13 +30,12 @@ public class JogoLocal extends Jogo {
 	 * <p>
 	 * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
 	 *
-	 * @param modo "P"aulista, "M"ineiro, ou "L"impo (paulista com baralho limpo)
+	 * @param modoStr "P"aulista, "M"ineiro, ou "L"impo (paulista com baralho limpo)
 	 */
-	public JogoLocal(String modo, boolean humanoDecide, boolean jogoAutomatico) {
-		super(modo);
-		this.manilhaVelha = modo.equals("M");
-		this.baralhoLimpo = modo.equals("L");
-		this.baralho = new Baralho(baralhoLimpo);
+	public JogoLocal(String modoStr, boolean humanoDecide, boolean jogoAutomatico) {
+		super(modoStr);
+		this.manilhaVelha = modoStr.equals("M");
+		this.baralho = new Baralho(modo);
 		this.humanoDecide = humanoDecide;
         this.jogoAutomatico = jogoAutomatico;
 	}
@@ -108,7 +107,6 @@ public class JogoLocal extends Jogo {
 	private Carta cartaJogada;
 
 	private final boolean manilhaVelha;
-	private final boolean baralhoLimpo;
 	private final boolean humanoDecide;
     private final boolean jogoAutomatico;
 
@@ -658,7 +656,7 @@ public class JogoLocal extends Jogo {
 	 * @see mt.JogoGenerico#atualizaSituacao(mt.SituacaoJogo, mt.Jogador)
 	 */
 	public void atualizaSituacao(SituacaoJogo s, Jogador j) {
-		s.baralhoSujo = !this.baralhoLimpo;
+		s.baralhoSujo = !modo.isBaralhoLimpo();
 		if (manilhaVelha) {
 			s.manilha = SituacaoJogo.MANILHA_INDETERMINADA;
 		} else {
@@ -697,13 +695,6 @@ public class JogoLocal extends Jogo {
 				}
 			}
 
-	}
-
-	/**
-	 * @return True para jogo sem os 4,5,6 e 7.
-	 */
-	public boolean isBaralhoLimpo() {
-		return baralhoLimpo;
 	}
 
 	/**
