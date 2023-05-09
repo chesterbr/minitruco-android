@@ -17,6 +17,7 @@ Convenções nas notificações:
 === Gerais
 
 W - recupera número de versão (e de repente outras infos no futuro)
+B <numero> - Informa o número do build do cliente, para que o servidor verifique compatibilidade
 N <apelido> - Define o nome do jogador
 E PUB <modo> - Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
 S - Sai da sala (encerrando o jogo, se houver um em andamento)

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
 import me.chester.minitruco.android.multiplayer.JogoRemoto;
@@ -108,6 +109,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		try {
 			in = socket.getInputStream();
 			out = socket.getOutputStream();
+			enviaLinha("B " + (BuildConfig.VERSION_CODE));
 			while ((c = in.read()) != -1) {
 				if (c == SEPARADOR_REC) {
 					if (sbLinha.length() > 0) {
@@ -140,6 +142,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 				if (jogo != null) {
 					jogo.abortaJogo(0);
 				}
+				LOGGER.log(Level.INFO, "desconectado");
 				msgErroFatal("Você foi desconectado");
 			}
 		}
@@ -213,8 +216,12 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			out.write(SEPARADOR_ENV);
 			out.flush();
 		} catch (IOException e) {
-			LOGGER.log(Level.INFO, "Excção em EnviaLinha (desconexão?)", e);
-			// Não preciso tratar, desconexões são identificadas no loop do in
+			LOGGER.log(Level.INFO, "Exceção em EnviaLinha (desconexão?)", e);
+			try {
+				socket.close();
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
+			}
 		}
 	}
 
