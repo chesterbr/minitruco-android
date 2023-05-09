@@ -99,7 +99,7 @@ public class JogoLocal extends Jogo {
 	 * Indica, para cada jogador, se estamos aguardando a resposta para uma mão
 	 * de 11
 	 */
-	private final boolean[] aguardandoRespostaMaoDe11 = new boolean[4];
+	private final boolean[] aguardandoRespostaMaoDeFerro = new boolean[4];
 
 	/**
 	 * Sinaliza para o loop principal que alguém jogou uma carta
@@ -448,7 +448,7 @@ public class JogoLocal extends Jogo {
 		// Só entra se estivermos jogando e se estivermos agurardando resposta
 		// daquele jogador para a pergunta (isso é importante para evitar duplo
 		// início)
-		if (jogoFinalizado || !aguardandoRespostaMaoDe11[j.getPosicao() - 1])
+		if (jogoFinalizado || !aguardandoRespostaMaoDeFerro[j.getPosicao() - 1])
 			return;
 
 		LOGGER.log(Level.INFO, "J" + j.getPosicao() + (aceita ? "" : " nao")
@@ -465,18 +465,18 @@ public class JogoLocal extends Jogo {
 			}
 		}
 
-		aguardandoRespostaMaoDe11[j.getPosicao() - 1] = false;
+		aguardandoRespostaMaoDeFerro[j.getPosicao() - 1] = false;
 
 		if (aceita) {
 			// Se aceitou, desencana da resposta do parceiro e pode tocar o
 			// jogo, valendo 3
-			aguardandoRespostaMaoDe11[j.getParceiro() - 1] = false;
+			aguardandoRespostaMaoDeFerro[j.getParceiro() - 1] = false;
 			valorMao = tento.inicializaPenultimaMao();
 			notificaVez();
 		} else {
 			// Se recusou (e o parceiro também), a equipe perde um ponto e
 			// recomeça a mao
-			if (!aguardandoRespostaMaoDe11[j.getParceiro() - 1]) {
+			if (!aguardandoRespostaMaoDeFerro[j.getParceiro() - 1]) {
 				pontosEquipe[j.getEquipeAdversaria() - 1] += tento
 						.inicializaMao();
 				fechaMao();
@@ -598,8 +598,8 @@ public class JogoLocal extends Jogo {
 	 *            de 11 (jogo normal)
 	 */
 	private void setEquipeAguardandoMaoDeFerro(int i) {
-		aguardandoRespostaMaoDe11[0] = aguardandoRespostaMaoDe11[2] = (i == 1);
-		aguardandoRespostaMaoDe11[1] = aguardandoRespostaMaoDe11[3] = (i == 2);
+		aguardandoRespostaMaoDeFerro[0] = aguardandoRespostaMaoDeFerro[2] = (i == 1);
+		aguardandoRespostaMaoDeFerro[1] = aguardandoRespostaMaoDeFerro[3] = (i == 2);
 	}
 
 	private int getResultadoRodada(int mao) {
@@ -733,7 +733,7 @@ public class JogoLocal extends Jogo {
 	 */
 	private boolean isAguardandoRespostaMaoDeFerro() {
 		for (int i = 0; i <= 3; i++) {
-			if (aguardandoRespostaMaoDe11[i]) {
+			if (aguardandoRespostaMaoDeFerro[i]) {
 				return true;
 			}
 		}

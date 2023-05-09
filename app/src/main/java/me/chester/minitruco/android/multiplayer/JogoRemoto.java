@@ -180,11 +180,11 @@ public class JogoRemoto extends Jogo {
                 break;
             case 'F':
                 // Mão de 11. Recupera as cartas do parceiro e informa o jogador
-                Carta[] cartasMao11 = new Carta[3];
+                Carta[] cartasMaoDeFerro = new Carta[3];
                 for (int i = 0; i <= 2; i++) {
-                    cartasMao11[i] = new Carta(tokens[i]);
+                    cartasMaoDeFerro[i] = new Carta(tokens[i]);
                 }
-                getJogadorHumano().informaMaoDeFerro(cartasMao11);
+                getJogadorHumano().informaMaoDeFerro(cartasMaoDeFerro);
                 break;
             case 'R':
                 // Fim de rodada, recupera o resultado e o jogador que torna

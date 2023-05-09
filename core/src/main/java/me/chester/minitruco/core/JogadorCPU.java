@@ -205,14 +205,14 @@ public class JogadorCPU extends Jogador implements Runnable {
 				}
 			}
 
-			if (recebiPedidoDeMaoDe11) {
-				recebiPedidoDeMaoDe11 = false;
+			if (recebiPedidoDeMaoDeFerro) {
+				recebiPedidoDeMaoDeFerro = false;
 				atualizaSituacaoJogo();
 				sleep(1000 + random.nextInt(1000));
-				boolean respostaMao11 = false;
+				boolean respostaMaoDeFerro = false;
 				try {
-					respostaMao11 = estrategia.aceitaMaoDeFerro(
-							cartasDoParceiroDaMaoDe11, situacaoJogo);
+					respostaMaoDeFerro = estrategia.aceitaMaoDeFerro(
+							cartasDoParceiroDaMaoDeFerro, situacaoJogo);
 					// Atendendo a pedidos no Market, o parceiro do humano vai
 					// ignorar a estratégia com 90% de chance e recusar,
 					// deixando a decisão na mão do humano.
@@ -221,15 +221,15 @@ public class JogadorCPU extends Jogador implements Runnable {
 						LOGGER.log(Level.INFO,
 								"Mão de 11 do parceiro do humano. AceitaEstrategia="
 										+ aceitaEstrategia);
-						respostaMao11 = respostaMao11 && aceitaEstrategia;
+						respostaMaoDeFerro = respostaMaoDeFerro && aceitaEstrategia;
 					}
 				} catch (Exception e) {
 					LOGGER.log(Level.INFO,
 							"Erro em aceite-11 no jogador" + this.getPosicao(),
 							e);
-					respostaMao11 = random.nextBoolean();
+					respostaMaoDeFerro = random.nextBoolean();
 				}
-				jogo.decideMaoDeFerro(this, respostaMao11);
+				jogo.decideMaoDeFerro(this, respostaMaoDeFerro);
 			}
 
 			if (estouAguardandoRepostaAumento && (numRespostasAguardando == 0)) {
@@ -250,9 +250,9 @@ public class JogadorCPU extends Jogador implements Runnable {
 	private boolean recebiPedidoDeAumento = false;
 	private boolean estouAguardandoRepostaAumento = false;
 
-	private boolean recebiPedidoDeMaoDe11 = false;
+	private boolean recebiPedidoDeMaoDeFerro = false;
 
-	private Carta[] cartasDoParceiroDaMaoDe11;
+	private Carta[] cartasDoParceiroDaMaoDeFerro;
 
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		// Notifica a estrategia
@@ -383,8 +383,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 	}
 
 	public void informaMaoDeFerro(Carta[] cartasParceiro) {
-		cartasDoParceiroDaMaoDe11 = cartasParceiro;
-		recebiPedidoDeMaoDe11 = true;
+		cartasDoParceiroDaMaoDeFerro = cartasParceiro;
+		recebiPedidoDeMaoDeFerro = true;
 	}
 
 	public void jogoAbortado(int posicao) {

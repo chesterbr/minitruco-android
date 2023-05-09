@@ -327,12 +327,12 @@ public class MesaView extends View {
 			} else {
 				recusarAumento = true;
 			}
-		} else if (mostrarPerguntaMao11) {
-			mostrarPerguntaMao11 = false;
+		} else if (mostrarPerguntaMaoDeFerro) {
+			mostrarPerguntaMaoDeFerro = false;
 			if (resposta) {
-				aceitarMao11 = true;
+				aceitarMaoDeFerro = true;
 			} else {
-				recusarMao11 = true;
+				recusarMaoDeFerro = true;
 			}
 		}
 	}
@@ -442,12 +442,12 @@ public class MesaView extends View {
 					e.printStackTrace();
 				}
 				Jogo jogo = trucoActivity.jogo;
-				if (recusarMao11) {
-					recusarMao11 = false;
+				if (recusarMaoDeFerro) {
+					recusarMaoDeFerro = false;
 					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, false);
 				}
-				if (aceitarMao11) {
-					aceitarMao11 = false;
+				if (aceitarMaoDeFerro) {
+					aceitarMaoDeFerro = false;
 					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, true);
 				}
 				if (recusarAumento) {
@@ -741,7 +741,7 @@ public class MesaView extends View {
 		}
 
 		// Caixa de diálogo (mão de 11 ou aumento)
-		if (mostrarPerguntaMao11 || mostrarPerguntaAumento) {
+		if (mostrarPerguntaMaoDeFerro || mostrarPerguntaAumento) {
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
 			paint.setColor(Color.BLACK);
@@ -753,7 +753,7 @@ public class MesaView extends View {
 			paint.setTextSize(tamanhoFonte * 0.5f);
 			paint.setTextAlign(Align.CENTER);
 			paint.setStyle(Style.FILL);
-			canvas.drawText(mostrarPerguntaMao11 ? "Aceita Mão de 11?"
+			canvas.drawText(mostrarPerguntaMaoDeFerro ? "Aceita Mão de 11?"
 					: "Aceita?", rectDialog.centerX(),
 					rectDialog.top + paint.getTextSize() * 1.5f, paint);
 			desenhaBotao("Sim", canvas, rectBotaoSim);
@@ -857,10 +857,10 @@ public class MesaView extends View {
 	 */
 	private CartaVisual cartaQueFez;
 
-	public boolean mostrarPerguntaMao11 = false;
+	public boolean mostrarPerguntaMaoDeFerro = false;
 
-	private boolean recusarMao11 = false;
-	private boolean aceitarMao11 = false;
+	private boolean recusarMaoDeFerro = false;
+	private boolean aceitarMaoDeFerro = false;
 
 	public boolean mostrarPerguntaAumento = false;
 

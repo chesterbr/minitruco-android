@@ -40,7 +40,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
 	@Override
 	public void cartaJogada(Jogador j, Carta c) {
-		mesa.mostrarPerguntaMao11 = false;
+		mesa.mostrarPerguntaMaoDeFerro = false;
 		mesa.mostrarPerguntaAumento = false;
 		mesa.setPosicaoVez(0);
 		activity.handler.sendMessage(Message.obtain(activity.handler,
@@ -55,7 +55,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	@Override
 	public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
 		if (posicaoNaTela(j) == 3 && aceita) {
-			mesa.mostrarPerguntaMao11 = false;
+			mesa.mostrarPerguntaMaoDeFerro = false;
 		}
 		mesa.diz(aceita ? "mao11_sim" : "mao11_nao", posicaoNaTela(j), 1500);
 	}
@@ -68,7 +68,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	@Override
 	public void informaMaoDeFerro(Carta[] cartasParceiro) {
 		mesa.mostraCartasMaoDeFerro(cartasParceiro);
-		mesa.mostrarPerguntaMao11 = true;
+		mesa.mostrarPerguntaMaoDeFerro = true;
 	}
 
 	@Override
@@ -198,7 +198,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 				resultado = 1;
 			}
 		}
-		mesa.mostrarPerguntaMao11 = false;
+		mesa.mostrarPerguntaMaoDeFerro = false;
 		mesa.mostrarPerguntaAumento = false;
 		mesa.setPosicaoVez(0);
 		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
