@@ -176,6 +176,10 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		String[] tokens = parametros.split(" ");
 		posJogador = Integer.parseInt(tokens[2]);
 		modo = tokens[1];
+		if (modo.length() != 1) {
+			msgErroFatal("O celular que criou o jogo está com uma versão muito antiga do miniTruco. Peça para atualizar e tente novamente.");
+			return;
+		}
 		encaixaApelidosNaMesa(tokens[0].split("\\|"));
 		atualizaDisplay();
 	}
