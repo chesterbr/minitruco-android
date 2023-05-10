@@ -47,13 +47,13 @@
     </string-array>
     <string name="botao_aumento_4">DOZE!!!</string>
     <string-array name="balao_aumento_5">
-        <item>Oito!</item>
-        <item>Oooooitooo!</item>
-        <item>Oito na cabeça!</item>
-        <item>Ah, vem pra oito!</item>
-        <item>É oito!</item>
+        <item>Dez!</item>
+        <item>Deeeeeez!</item>
+        <item>Dez na cabeça!</item>
+        <item>Ah, vem pra dez!</item>
+        <item>É deis-zão!</item>
     </string-array>
-    <string name="botao_aumento_5">OITO!</string>
+    <string name="botao_aumento_5">DEZ!</string>
     <string-array name="balao_aumento_sim">
         <item>Desce!</item>
         <item>Manda bala!</item>

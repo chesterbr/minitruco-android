@@ -25,8 +25,8 @@ public class ModoMineiro implements Modo {
 		case 4:
 			return 6;
 		case 6:
-			return 8;
-		case 8:
+			return 10;
+		case 10:
 			return 12;
 		}
 		return 0;

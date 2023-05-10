@@ -194,10 +194,10 @@ public class MesaView extends View {
 			.getDrawable(R.drawable.valorrodada4)).getBitmap(), lado, lado, true);
 		iconesRodadas[16] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
 			.getDrawable(R.drawable.valorrodada6)).getBitmap(), lado, lado, true);
-		iconesRodadas[18] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.valorrodada8)).getBitmap(), lado, lado, true);
 		iconesRodadas[19] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
 			.getDrawable(R.drawable.valorrodada9)).getBitmap(), lado, lado, true);
+		iconesRodadas[20] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada10)).getBitmap(), lado, lado, true);
 		iconesRodadas[22] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
 			.getDrawable(R.drawable.valorrodada12)).getBitmap(), lado, lado, true);
 

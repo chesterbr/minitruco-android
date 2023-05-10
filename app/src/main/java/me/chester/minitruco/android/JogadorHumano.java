@@ -145,14 +145,14 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	 * Indica a chave correta do strings.xml corresponde a um pedido de aumento.
 	 *
 	 * @param valor aumento solicitado. Pode ser 3, 6, 9, 12 no truco paulista,
-	 *              ou 4, 6, 8, 12 no truco mineiro.
+	 *              ou 4, 6, 10, 12 no truco mineiro.
 	 * @return sufixo da chave onde a frase (para balão, botão de aumento, etc.)
 	 *         se encontra. Ex.: para valor 9, retorna 3, que bate com balao_aumento_3,
 	 *         onde estão frases como "Nove!", "Nove na cabeça!", etc.
 	 */
 	public int getIndiceParaAumentoAposta(int valor) {
 		LOGGER.log(Level.INFO, "Valor: " + valor);
-		return (valor == 8 ? 5 : valor / 3);
+		return (valor == 10 ? 5 : valor / 3);
 	}
 
 	@Override
