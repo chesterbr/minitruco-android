@@ -38,18 +38,59 @@ public class TituloActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.titulo);
-		habilitaBluetoothSeExistir();
 
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+		habilitaBluetoothSeExistir();
+		mostraNotificacaoInicial();
+		migraOpcoesLegadas();
+
+		// TODO ver se tem um modo mais central de garantir este default (e outros)
+		//      (provavelmente quando migrar esse PreferenceManager deprecado
+		//      e começar a centralizar as preferencias nesta view)
+		selecionaModo(preferences.getString("modo", "P"));
+	}
+
+	/**
+	 * Até a versão 2.3.9, a pessoa configurava se queria tento mineiro, baralho limpo ou
+	 * manilha velha; a 2.3.10 trocou isso pelo modo de jogo. Esse método migra as opções
+	 * antigas da melhor forma possível.
+	 *
+	 * Seria bom deixar ele até que a maior parte das pessoas esteja >= 2.3.10.
+	 */
+	private void migraOpcoesLegadas() {
+		if (preferences.contains("baralhoLimpo")) {
+			boolean tentoMineiro = preferences.getBoolean("tentoMineiro", false);
+			boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false);
+			boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
+			String modo;
+			if (tentoMineiro && manilhaVelha) {
+				modo = "M";
+			} else if (baralhoLimpo) {
+				modo = "L";
+			} else {
+				modo = "P";
+			}
+			preferences.edit()
+					   .putString("modo", modo)
+					   .remove("tentoMineiro")
+					   .remove("baralhoLimpo")
+					   .remove("manilhaVelha")
+					   .apply();
+		}
+	}
+
+	/**
+	 * Na primeira vez que a app roda, mostra as instruções.
+	 * Na primeira vez em que roda uma nova versão (sem ser a 1a. vez geral),
+	 * mostra as novidades desta versão.
+	 */
+	private void mostraNotificacaoInicial() {
 		boolean mostraInstrucoes = preferences.getBoolean("mostraInstrucoes",
-				true);
-		// TODO migrar configurações de baralho limpo/manilha velha/modo mineiro para "modo"
-		String modo = preferences.getString("modo", "P");
+			true);
 		String versaoQueMostrouNovidades = preferences.getString("versaoQueMostrouNovidades", "");
 		String versaoAtual = BuildConfig.VERSION_NAME;
 
-		// Na primeira vez que a app roda, mostra as instruções
-		// Na primeira vez em que roda uma nova versão (sem ser a 1a. vez geral), mostra as novidades
 		if (mostraInstrucoes) {
 			mostraAlertBox(this.getString(R.string.titulo_ajuda), this.getString(R.string.texto_ajuda));
 		} else if (!versaoQueMostrouNovidades.equals(versaoAtual)) {
@@ -59,10 +100,8 @@ public class TituloActivity extends BaseActivity {
 		Editor e = preferences.edit();
 		e.putBoolean("mostraInstrucoes", false);
 		e.putString("versaoQueMostrouNovidades", versaoAtual);
-		e.putString("modo", modo);
 		e.apply();
 
-		((TextView)findViewById(R.id.textViewModo)).setText(Jogo.textoModo(modo));
 	}
 
 	private void habilitaBluetoothSeExistir() {
@@ -157,7 +196,10 @@ public class TituloActivity extends BaseActivity {
 	}
 
 	public void modoButtonClickHandler(View view) {
-		String modo = (String)view.getTag();
+		selecionaModo((String) view.getTag());
+	}
+
+	private void selecionaModo(String modo) {
 		((TextView)findViewById(R.id.textViewModo)).setText(Jogo.textoModo(modo));
 		preferences.edit().putString("modo", modo).apply();
 	}

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<CheckBoxPreference android:title="Baralho Limpo" android:disableDependentsState="true"
-		android:defaultValue="false" android:summary="Tira as cartas 4, 5, 6 e 7 do baralho"
-		android:key="baralhoLimpo" />
-	<CheckBoxPreference android:title="Manilha Velha" android:dependency="baralhoLimpo"
-		android:defaultValue="false" android:summary="Usa manilhas fixas no lugar do &quot;vira&quot; (só vale em baralho sujo)"
-		android:key="manilhaVelha" android:disableDependentsState="false"/>
-	<CheckBoxPreference android:title="Tento Mineiro" android:key="tentoMineiro" android:dependency="manilhaVelha" android:defaultValue="false" android:summary="Usa os valores 2, 4, 6, 8, 10, 12 (só vale com manilha velha)"/>
-	<CheckBoxPreference android:title="Aumento/mão de 11 decidido pelo jogador" android:key="humanoDecide" android:defaultValue="true" android:summary="Em jogo local, se esta opção estiver ligada, o parceiro virtual não pode aceitar truco ou mão de 11 (ele só diz se iria)."/>
-	<PreferenceCategory android:title="Desenvolvimento/Depuração (não mexa a não ser que saiba o que está fazendo)">
-		<EditTextPreference android:title="Servidor" android:key="servidor" android:defaultValue="@string/opcoes_default_servidor"/>
-		<CheckBoxPreference android:title="Jogo Automático" android:key="jogoAutomatico" android:defaultValue="false" android:summary="Joga uma carta ou pede truco automaticamente (e aleatoriamente) apenas em jogo local."/>
-	</PreferenceCategory>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="humanoDecide"
+        android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de ferro. Ele só diz se iria, mas o humano é que decide."
+        android:title="Jogador decide truco / mão de ferro" />
+    <PreferenceCategory android:title="Desenvolvimento/Depuração (não mexa a não ser que saiba o que está fazendo)">
+        <EditTextPreference
+            android:defaultValue="@string/opcoes_default_servidor"
+            android:key="servidor"
+            android:title="Servidor" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="jogoAutomatico"
+            android:summary="Joga uma carta ou pede truco automaticamente (e aleatoriamente) apenas em jogo local."
+            android:title="Jogo Automático" />
+    </PreferenceCategory>
 </PreferenceScreen>
