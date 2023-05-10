@@ -4,7 +4,12 @@
     <string name="hello">Use o log (adb logcat no SDK) para debugar</string>
     <string name="app_name">miniTruco</string>
 
-    <string-array name="balao_aumento_1">
+    <string name="botao_aumento_truco">Truco</string>
+    <string name="botao_aumento_seis">Seis</string>
+    <string name="botao_aumento_nove">NOVE!</string>
+    <string name="botao_aumento_dez">DEZ!</string>
+    <string name="botao_aumento_doze">DOZE!!!</string>
+    <string-array name="balao_aumento_truco">
         <item>Truco!</item>
         <item>Truco ladrão!</item>
         <item>É truco mesmo!</item>
@@ -15,8 +20,7 @@
         <item>Truquei e tá trucado!</item>
         <item>Truco! Pede seis!</item>
     </string-array>
-    <string name="botao_aumento_1">Truco</string>
-    <string-array name="balao_aumento_2">
+    <string-array name="balao_aumento_seis">
         <item>Seis!</item>
         <item>Meio-pau!</item>
         <item>Meio-saco!</item>
@@ -27,8 +31,7 @@
         <item>Toma seis!</item>
         <item>SEEEEEEEEIS</item>
     </string-array>
-    <string name="botao_aumento_2">Seis</string>
-    <string-array name="balao_aumento_3">
+    <string-array name="balao_aumento_nove">
         <item>Nove!</item>
         <item>Nooooove!</item>
         <item>É nove, é NOVE!</item>
@@ -36,8 +39,14 @@
         <item>Ah, vem pra nove!</item>
         <item>É nove!</item>
     </string-array>
-    <string name="botao_aumento_3">NOVE!</string>
-    <string-array name="balao_aumento_4">
+    <string-array name="balao_aumento_dez">
+        <item>Dez!</item>
+        <item>Deeeeeez!</item>
+        <item>Dez na cabeça!</item>
+        <item>Ah, vem pra dez!</item>
+        <item>É deis-zão!</item>
+    </string-array>
+    <string-array name="balao_aumento_doze">
         <item>Doze!</item>
         <item>DOOOOZEEEEE!</item>
         <item>Doze pra acabar!</item>
@@ -45,15 +54,6 @@
         <item>Doze sem piedade!</item>
         <item>Jogo!</item>
     </string-array>
-    <string name="botao_aumento_4">DOZE!!!</string>
-    <string-array name="balao_aumento_5">
-        <item>Dez!</item>
-        <item>Deeeeeez!</item>
-        <item>Dez na cabeça!</item>
-        <item>Ah, vem pra dez!</item>
-        <item>É deis-zão!</item>
-    </string-array>
-    <string name="botao_aumento_5">DEZ!</string>
     <string-array name="balao_aumento_sim">
         <item>Desce!</item>
         <item>Manda bala!</item>

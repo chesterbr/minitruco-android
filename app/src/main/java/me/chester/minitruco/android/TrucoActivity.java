@@ -92,7 +92,7 @@ public class TrucoActivity extends BaseActivity {
 				break;
 			case MSG_MOSTRA_BOTAO_AUMENTO:
 				int chave = getResources().getIdentifier("botao_aumento_" +
-					Integer.toString(jogadorHumano.getIndiceParaAumentoAposta(jogadorHumano.valorProximaAposta)),
+					jogo.nomeNoTruco(jogadorHumano.valorProximaAposta),
 				"string", "me.chester.minitruco");
 				btnAumento.setText(getResources().getString(chave));
 				btnAumento.setVisibility(Button.VISIBLE);

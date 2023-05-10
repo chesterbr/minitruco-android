@@ -372,4 +372,34 @@ public abstract class Jogo implements Runnable {
 		return false;
 	}
 
+	/**
+	 * Retorna o nome usado para um determinado valor quando estamos pedindo aumento
+	 * de aposta. Por exemplo, 3 (no truco paulista) ou 4 (no truco mineiro)
+	 * se chamam "truco".
+	 *
+	 * O principal uso é mapear valores para assets do strings.xml. Por exemplo, as
+	 * frases usadas no pedido de truco estão em "balao_aumento_truco", para pedir
+	 * seis estão em "balao_aumento_seis", etc.
+	 *
+	 * @param valor aumento solicitado. Pode ser 3, 6, 9, 12 no truco paulista,
+	 *              ou 4, 6, 10, 12 no truco mineiro.
+	 * @return "truco", "seis", "nove", etc.
+	 */
+	public String nomeNoTruco(int valor) {
+		switch (valor) {
+			case 3:
+			case 4:
+				return "truco";
+			case 6:
+				return "seis";
+			case 9:
+				return "nove";
+			case 10:
+				return "dez";
+			case 12:
+				return "doze";
+		}
+		throw new IllegalArgumentException(valor + " não é um valor especial no truco");
+	}
+
 }
