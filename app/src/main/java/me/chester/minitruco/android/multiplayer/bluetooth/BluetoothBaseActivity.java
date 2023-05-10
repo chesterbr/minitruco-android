@@ -94,17 +94,17 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	protected Button btnIniciar;
 	protected View layoutIniciar;
 	private TextView textViewMensagem;
-	private TextView textViewRegras;
+	private TextView textViewStatus;
 	private TextView[] textViewsJogadores;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.bluetooth);
+		setContentView(R.layout.sala);
 		layoutIniciar = (View) findViewById(R.id.layoutIniciar);
 		btnIniciar = (Button) findViewById(R.id.btnIniciarBluetooth);
 		textViewMensagem = ((TextView) findViewById(R.id.textViewMensagem));
-		textViewRegras = (TextView) findViewById(R.id.textViewRegras);
+		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
 		textViewsJogadores = new TextView[4];
 		textViewsJogadores[0] = (TextView) findViewById(R.id.textViewJogador1);
 		textViewsJogadores[1] = (TextView) findViewById(R.id.textViewJogador2);
@@ -210,8 +210,9 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			for (int i = 0; i < 4; i++) {
 				textViewsJogadores[i].setText(apelidos[i]);
 			}
-			// TODO rever esse lance de escrever regras
-//			textViewRegras.setText(getTextoRegras());
+			if (modo != null) {
+				textViewStatus.setText("Modo: " + Jogo.textoModo(modo));
+			}
 			btnIniciar.setEnabled(getNumClientes() > 0);
 		}
 
@@ -227,10 +228,6 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			}
 			startActivity(intent);
 		}
-	}
-
-	protected String getTextoRegras() {
-		return Jogo.textoModo(modo);
 	}
 
 	protected void sleep(int ms) {
