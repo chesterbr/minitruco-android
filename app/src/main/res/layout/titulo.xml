@@ -97,9 +97,28 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/versao_app"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:gravity="center"
+                android:text="versao x.y"
+                android:paddingBottom="4dp"
+                android:textColor="#FFFFFFFF"
+                android:textColorLink="#FF3F28A4"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/url_site"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:autoLink="web"
                 android:gravity="center"
@@ -109,7 +128,7 @@
                 android:textColorLink="#FF3F28A4"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-
+            </LinearLayout>
         </TableRow>
 
     </TableLayout>

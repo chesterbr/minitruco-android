@@ -39,6 +39,7 @@ public class TituloActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.titulo);
 
+		((TextView) findViewById(R.id.versao_app)).setText("versão " + BuildConfig.VERSION_NAME);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 		habilitaBluetoothSeExistir();
