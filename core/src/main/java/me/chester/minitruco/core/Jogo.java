@@ -130,7 +130,7 @@ public abstract class Jogo implements Runnable {
 		switch (modo) {
 			case "P": return "Truco Paulista";
 			case "M": return "Truco Mineiro";
-			case "L": return "Truco Paulista com baralho limpo";
+			case "L": return "Baralho limpo";
 		}
 		return null;
 	}
