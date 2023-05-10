@@ -4,8 +4,8 @@
         android:defaultValue="true"
         android:key="humanoDecide"
         android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de ferro. Ele só diz se iria, mas o humano é que decide."
-        android:title="Jogador decide truco / mão de ferro" />
-    <PreferenceCategory android:title="Desenvolvimento/Depuração (não mexa a não ser que saiba o que está fazendo)">
+        android:title="Humano decide pela dupla" />
+    <PreferenceCategory android:title="Opções de Desenvolvimento (sério, nem mexe aqui)">
         <EditTextPreference
             android:defaultValue="@string/opcoes_default_servidor"
             android:key="servidor"
