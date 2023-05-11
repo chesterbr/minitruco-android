@@ -43,20 +43,12 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:maxLines="1"
+                    android:paddingBottom="2dp"
                     android:text="Truco Paulista"
                     android:textColor="@android:color/white"
                     android:textColorLink="#000000"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="selecione outro modo:"
-                    android:textColor="@android:color/white"
-                    android:textColorLink="#000000"
-                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:layout_width="150sp"

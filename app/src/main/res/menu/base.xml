@@ -8,6 +8,6 @@
     <item
         android:id="@+id/menuitem_sobre"
         android:icon="@android:drawable/ic_menu_info_details"
-        android:title="Informações"/>
+        android:title="Sobre o miniTruco"/>
 
 </menu>

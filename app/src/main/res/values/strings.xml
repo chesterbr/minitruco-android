@@ -112,46 +112,97 @@
         <item>Nem, manda outras.</item>
     </string-array>
     <string-array name="balao_abortou">
-        <item>Tchau...</item>
+        <item>Tchau…</item>
     </string-array>
 
     <string name="titulo_ajuda">Bem-vindo!</string>
-    <string name="texto_ajuda">        <![CDATA[Estas instruções podem ser lidas a qualquer momento no <b>menu Ajuda</b>. Role a tela, tem bastante coisa! <br/><br/>O miniTruco é um <u>software livre</u> de truco, jogado em duplas, com os parceiros
+    <string name="texto_ajuda">
+        <![CDATA[
+        Estas instruções podem ser lidas a qualquer momento no <b>menu Ajuda</b>.
+        Role a tela, tem bastante coisa!
+        <br/><br/>
+        O miniTruco é um <u>software livre</u> de truco, jogado em duplas, com os parceiros
 		frente a frente. O objetivo é fazer a sua dupla de jogadores alcançar
 		12 pontos antes da dupla adversária.
-		<br/><br/>Cada jogador começa com uma \"mão\" de três cartas e, na sua vez, escolhe
+		<br/><br/>
+		Cada jogador começa com uma \"mão\" de três cartas e, na sua vez, escolhe
 		uma para jogar. A dupla que jogou a maior carta ganha a rodada, e o
-		vencedor inicia a rodada seguinte. Duas rodadas ganha um ponto, encerrando a mão.
-		<br/><br/><b><u>Valor das Cartas</u></b>: Dentre as cartas normais, 4 é a menor carta, seguida de
+		vencedor inicia a rodada seguinte. A \"melhor de três\" ganha um ponto, encerrando a mão.
+		<br/><br/>
+		<b><u>Valor das Cartas</u></b>:
+		Dentre as cartas normais, 4 é a menor carta, seguida de
 		5, 6, 7, Q, J, K, A, 2, e 3 é a maior de todas, sendo os naipes
-		indiferentes. No início de cada mão, uma carta é virada sobre o
-		baralho para escolher as manilhas - cartas especiais que valem mais
-		que as normais, e cujos naipes dão mais ou menos valor: o pica-fumo
+		indiferentes.
+		<br/>
+	    As manilhas são cartas especiais, que valem mais que as normais,
+		e cujos naipes dão mais ou menos valor. O pica-fumo
 		(♦) é a menor manilha, seguida da espadilha (♠), da escopeta (♥), e do
 		zap (♣). O zap (manilha de paus) é, portanto, a carta de maior valor
 		do jogo.
-		<br/><br/><b><u>Aumento</u></b>: Na sua vez, um jogador pode pedir \"truco\". Se os dois adversários
-		recusarem, perdem a mão, mas se pelo menos um aceitar, a mão passa a
-		valer 3 pontos. Um adversário pode, na sua vez, pedir \"seis\", \"nove\"
-		ou \"doze\", aumentando a aposta da mesma forma para estes valores.<br/><br/>
-		<b><u>Empate</u></b>: Um empate na primeira ou segunda rodada é decidido pela rodada
-		seguinte. Um empate após a primeira é decidido pelo resultado da
-		primeira.
-		<br/><br/><b><u>Mão de 11</u></b>: Se uma das duplas fizer 11 pontos (mas a outra não), seus
-		membros podem ver as cartas do parceiro antes de começar o jogo. Se um
-		deles aceitar jogar, a mão vale 3 pontos. Se os dois recusarem, a
-		equipe adversária ganha um ponto, e uma nova mão é distribuída,
-		valendo as mesmas regras.
-		<br/><br/><b><u>Prioridade Humana</u></b>: No jogo normal (sem ser Bluetooth), você é que decide o aceite dos aumentos e da mão de 11. O parceiro diz se aceitaria o aumento ou não - mas a escolha é sua.
-		<br/><br/><b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram ele. É recomendável parear os celulares antes. Quem criou o jogo pode rearranjar as posições antes de começar. Mão de 11 ainda não é suportada, e celulares Java ME ainda não conectam 100%.
-		<br/><br/><b><u>Opções</u></b>: neste menu, você pode optar por um baralho \"limpo\"
-		 (sem as cartas 4, 5, 6 e 7) ou pela manilha velha, isto é, as
-		manilhas sendo sempre 7♦ (menor), A♠, 7♥ e 4♣ (maior). A manilha velha também
-		permite acionar a contagem de pontos (tentos) do truco mineiro (4, 8, 10 e 12 pontos
-		nos aumentos e "mão de 11" nos 10 pontos).<br/><br/>]]>
+		<br/><br/>
+		No <b>truco paulista</b>, antes de começar a mão, uma carta é virada,
+		e ela indica qual é o valor das manilhas para aquela mão - é sempre
+		o próximo valor. Por exemplo, se foi virado um 5, as manilhas são
+		6♦, 6♠, 6♥ e 6♣.
+		<br/><br/>
+		Já no <b>truco mineiro</b> não tem \"vira\": os valores das manilhas
+		são fixos (a chamada \"manilha velha\"), então elas são sempre: 7♦, A♠, 7♥, e 4♣.
+		<br/><br/>
+		<b><u>Pontos e Aumentos</u></b>: A mão vale, em princípio 1 ponto no truco
+		paulista e 2 pontos no truco mineiro. Um jogador que acredite ter cartas boas pode
+		pode pedir \"truco\". Se os dois adversários recusarem, perdem a mão, mas se pelo menos
+		um aceitar, a mão aumenta de valor (3 pontos no truco paulista e 4 no truco mineiro).
+		A partir dali, um adversário pode aumentar a aposta
+		pedindo \"seis\". A coisa se repete para a dupla que trucou, que pode pedir
+		\"oito\" (truco mineiro) ou \"nove\" (paulista), e finalmente os adversários podem
+		pedir \"doze\", aumentando a aposta da mesma forma para estes valores.
+		<br/><br/>
+		<b><u>Empate</u></b>: Se a mão abre com empate, a primeira rodada não-empatada decide ela.
+		Se o empate acontece após a primeira rodada, a mão é de quem ganhou a primeira.
+		<br/><br/><b><u>Mão de ferro</u></b>: Se uma das duplas fizer 10 pontos (no truco mineiro)
+		ou 11 pontos (no truco paulista), seus membros podem ver as cartas do parceiro antes de
+		começar o jogo. Se um deles aceitar jogar, a mão vale o valor do truco. Se os dois recusarem,
+		perdem a rodada (no valor normal), e uma nova mão é distribuída, valendo as mesmas regras.
+		Caso empate 10 a 10 (mineiro) ou 11 a 11 (paulista), o jogo segue normalmente
+		<br/><br/>
+		<b><u>Prioridade Humana</u></b>: No jogo normal (sem ser Bluetooth), você é que decide
+		o aceite dos aumentos e da mão de 11. O parceiro diz se aceitaria o aumento ou não -
+		mas a escolha é sua.
+		<br/><br/>
+		<b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram ele. Todos tem
+		que estar com a mesma versão do miniTruco, e é necessário parear os celulares antes.
+		O modo (paulista, mineiro ou baralho limpo) é o que estiver configurando no celular que
+		cria o jogo, e este também pode rearranjar as posições antes de começar.
+		<br/><br/>
+		<b><u>Baralho Limpo</u></b>: Além do truco pauilsta e do truco mineiro, um terceiro modo
+		permite jogar com o baralho  \"limpo\" (sem as cartas 4, 5, 6 e 7). As regras são as do
+		truco paulista (porque quase todas as manilhas do mineiro são "sujas").
+		<br/><br/>
+		<b><u>Diferenças do miniTruco</u></b>: No jogo físico, jogadores podem trucar a qualquer
+		hora; no miniTruco você só truca na sua vez. Não existem sinais (por enquanto), e não é
+		possível entregar o jogo. No jogo normal, qualquer um pode jogar uma carta \"fechada\"
+		(virada para baixo), no miniTruco apenas um integrante da dupla pode fazer isso.
+		<br/><br/>
+		<b><u>Sugestões e comentários</u></b>: O meu e-mail está na tela de título, você pode me
+		escrever com sugestões e comentários, desde que seja de forma educada. Lembre-se que o
+		jogo é inteiramente gratuito e sem publicidade; é algo que eu faço como hobby sem
+		pedir nada em troca. Avaliações positivas na Play Store ajudam outras pessoas a conhecer;
+		avaliações negativas sem uma boa justificativa só me fazem pensar em arrumar outro hobby
+		e tirar o aplicativo de lá.
+		<br/><br/>
+		<b><u><i>\"Ain, mas o jogo rouba, eu só pego carta ruim\"</i></u></b>: Não, zé: as cartas são
+		escolhidas aleatoriamente, e os bots não têm acesso a nada além das cartas jogadas e
+		as próprias cartas. O código-fonte do jogo é aberto e isso pode ser auditado por
+		qualquer pessoa.
+		<br/><br/>
+		<b><u><i>\"Mimimi, o meu parceiro é muito burro\"</i></u></b>: O jogo usa duas estratégias,
+		desenvolvidas por pessoas que colaboraram quando viram que o bot poderia jogar melhor.
+		Talvez você possa fazer o mesmo, talvez possa convencer alguém que programe e jogue
+		truco bem a fazer. Talvez não seja bem o parceiro que está jogando mal. Talvez…
+        ]]>
     </string>
     <string name="titulo_sobre">Sobre o miniTruco</string>
-    <string name="texto_sobre">        <![CDATA[miniTruco-android: Copyright © 2005-2016 Carlos
+    <string name="texto_sobre">        <![CDATA[miniTruco-android: Copyright © 2005-2023 Carlos
 		Duarte do Nascimento (Chester) - cd@pobox.com
         <br/><br/>Seleção manual de servidor Bluetooth: Copyright © 2016 Rodolfo Vasconcelos
 		<br/><br/>Tento mineiro: Copyright © 2011 Guilherme Caram
