@@ -35,9 +35,6 @@ import me.chester.minitruco.core.JogoLocal;
  */
 public class TrucoActivity extends BaseActivity {
 
-	private static final String[] TEXTO_BOTAO_AUMENTO = { "Truco", "Seis!",
-			"NOVE!", "DOZE!!!" };
-
 	private MesaView mesa;
 	private View layoutFimDeJogo;
 	private static boolean mIsViva = false;
@@ -94,8 +91,10 @@ public class TrucoActivity extends BaseActivity {
 				layoutFimDeJogo.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_MOSTRA_BOTAO_AUMENTO:
-				btnAumento
-						.setText(TEXTO_BOTAO_AUMENTO[(jogadorHumano.valorProximaAposta / 3) - 1]);
+				int chave = getResources().getIdentifier("botao_aumento_" +
+					jogo.nomeNoTruco(jogadorHumano.valorProximaAposta),
+				"string", "me.chester.minitruco");
+				btnAumento.setText(getResources().getString(chave));
 				btnAumento.setVisibility(Button.VISIBLE);
 				break;
 			case MSG_ESCONDE_BOTAO_AUMENTO:
@@ -140,13 +139,10 @@ public class TrucoActivity extends BaseActivity {
 	private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		boolean tentoMineiro = preferences.getBoolean("tentoMineiro", false);
-		boolean baralhoLimpo = preferences.getBoolean("baralhoLimpo", false);
-		boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false)
-				&& !baralhoLimpo;
+		String modo = preferences.getString("modo", "P");
 		boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
 		boolean jogoAutomatico =  preferences.getBoolean("jogoAutomatico", false);
-		Jogo novoJogo = new JogoLocal(baralhoLimpo, manilhaVelha, tentoMineiro, humanoDecide, jogoAutomatico);
+		Jogo novoJogo = new JogoLocal(modo, humanoDecide, jogoAutomatico);
 		novoJogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
 			novoJogo.adiciona(new JogadorCPU());

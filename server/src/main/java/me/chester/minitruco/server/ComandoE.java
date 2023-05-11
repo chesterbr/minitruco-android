@@ -8,7 +8,7 @@ package me.chester.minitruco.server;
  *
  * Parâmetros:
  *   - "R ___" para entrar em uma sala (ou criar uma) com as regras especificadas
- *     (cada _ é T ou F para baralho limpo, manilha velha e tento mineiro)
+ *     (cada _ é T ou F para baralho limpo, manilha velha e modo mineiro)
  *
  * Obs.: Se o jogador não tiver nome, um nome implícito será dado
  *
@@ -31,15 +31,8 @@ public class ComandoE extends Comando {
 			} else {
 				switch (args[1]) {
 					case "PUB":
-						boolean baralhoLimpo = args[2].charAt(0) == 'T';
-						boolean manilhaVelha = args[2].charAt(1) == 'T';
-						boolean tentoMineiro = args[2].charAt(2) == 'T';
-						if (baralhoLimpo && manilhaVelha) {
-							j.println("X TT");
-						} else {
-							Sala s = Sala.colocaEmSalaPublica(j, baralhoLimpo, manilhaVelha, tentoMineiro);
-							s.mandaInfoParaTodos();
-						}
+						Sala s = Sala.colocaEmSalaPublica(j, args[2]);
+						s.mandaInfoParaTodos();
 						break;
 						// TODO: implementar comandos para sala privada
 					default:

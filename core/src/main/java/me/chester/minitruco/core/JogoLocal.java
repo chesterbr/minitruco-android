@@ -30,29 +30,14 @@ public class JogoLocal extends Jogo {
 	 * <p>
 	 * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
 	 *
-	 * @param manilhaVelha
-	 *            true para jogo com manilhas fixas, false para jogar com "vira"
-	 * @param baralhoLimpo
-	 *            true para baralho sem os 4, 5, 6, 7, false para baralho
-	 *            completo (sujo)
+	 * @param modoStr "P"aulista, "M"ineiro, ou "L"impo (paulista com baralho limpo)
 	 */
-	public JogoLocal(boolean baralhoLimpo, boolean manilhaVelha,
-			boolean tentoMineiro, boolean humanoDecide, boolean jogoAutomatico) {
-		this.manilhaVelha = manilhaVelha;
-		this.baralhoLimpo = baralhoLimpo;
-		if (tentoMineiro && manilhaVelha)
-			this.tento = new TentoMineiro();
-		else
-			this.tento = new TentoPaulista();
-		this.baralho = new Baralho(baralhoLimpo);
+	public JogoLocal(String modoStr, boolean humanoDecide, boolean jogoAutomatico) {
+		super(modoStr);
+		this.baralho = new Baralho(modo.isBaralhoLimpo());
 		this.humanoDecide = humanoDecide;
         this.jogoAutomatico = jogoAutomatico;
 	}
-
-	/**
-	 * Forma de tento que será usado durante esse jogo
-	 */
-	private Tento tento;
 
 	/**
 	 * Baralho que será usado durante esse jogo
@@ -100,10 +85,10 @@ public class JogoLocal extends Jogo {
 	private Jogador jogadorAbriuMao;
 
 	/**
-	 * Indica, para cada jogador, se estamos aguardando a resposta para uma mão
-	 * de 11
+	 * Indica, para cada jogador, se estamos aguardando a resposta dele
+	 * de aceite/recusa da mão de ferro
 	 */
-	private final boolean[] aguardandoRespostaMaoDe11 = new boolean[4];
+	private final boolean[] aguardandoRespostaMaoDeFerro = new boolean[4];
 
 	/**
 	 * Sinaliza para o loop principal que alguém jogou uma carta
@@ -120,8 +105,6 @@ public class JogoLocal extends Jogo {
 	 */
 	private Carta cartaJogada;
 
-	private final boolean manilhaVelha;
-	private final boolean baralhoLimpo;
 	private final boolean humanoDecide;
     private final boolean jogoAutomatico;
 
@@ -182,7 +165,7 @@ public class JogoLocal extends Jogo {
 		setManilha(cartaDaMesa);
 
 		// Inicializa a mão
-		valorMao = tento.inicializaMao();
+		valorMao = modo.valorInicialDaMao();
 
 		jogadorPedindoAumento = null;
 		numRodadaAtual = 1;
@@ -197,31 +180,27 @@ public class JogoLocal extends Jogo {
 			interessado.inicioMao();
 		}
 
-		if (pontosEquipe[0] == tento.valorPenultimaMao()
-				^ pontosEquipe[1] == tento.valorPenultimaMao()) {
-			// Se apenas uma das equipes tiver 11 pontos, estamos numa
-			// "mão de 11": os membros da equipe podem ver as cartas do parceiro
-			// e decidir se querem jogar (valendo 3 pontos) ou desistir
-			// (perdendo 1)
-			if (pontosEquipe[0] == tento.valorPenultimaMao()) {
-				setEquipeAguardandoMao11(1);
-				getJogador(1).informaMao11(getJogador(3).getCartas());
-				getJogador(3).informaMao11(getJogador(1).getCartas());
+		if (pontosEquipe[0] == modo.pontuacaoQueDeterminaMaoDeFerro()
+				^ pontosEquipe[1] == modo.pontuacaoQueDeterminaMaoDeFerro()) {
+			if (pontosEquipe[0] == modo.pontuacaoQueDeterminaMaoDeFerro()) {
+				setEquipeAguardandoMaoDeFerro(1);
+				getJogador(1).informaMaoDeFerro(getJogador(3).getCartas());
+				getJogador(3).informaMaoDeFerro(getJogador(1).getCartas());
 				for (Jogador interessado : jogadores) {
 					// Interessados que não sejam Jogador (ex.: a Partida na
 					// versão Android) devem ser notificados também
 					if (!(interessado instanceof Jogador)) {
-						interessado.informaMao11(getJogador(3).getCartas());
+						interessado.informaMaoDeFerro(getJogador(3).getCartas());
 					}
 				}
 			} else {
-				setEquipeAguardandoMao11(2);
-				getJogador(2).informaMao11(getJogador(4).getCartas());
-				getJogador(4).informaMao11(getJogador(2).getCartas());
+				setEquipeAguardandoMaoDeFerro(2);
+				getJogador(2).informaMaoDeFerro(getJogador(4).getCartas());
+				getJogador(4).informaMaoDeFerro(getJogador(2).getCartas());
 			}
 		} else {
 			// Se for uma mão normal, passa a vez para o jogador que abre
-			setEquipeAguardandoMao11(0);
+			setEquipeAguardandoMaoDeFerro(0);
 			notificaVez();
 		}
 
@@ -239,14 +218,14 @@ public class JogoLocal extends Jogo {
 
 		LOGGER.log(Level.INFO, "processaJogada: j" + j.getPosicao() + " joga " + c +
 				"; jogadorPedindoAumento:" + (jogadorPedindoAumento == null ? "null" : jogadorPedindoAumento.getPosicao()) +
-				"; isAguardandoRespostaMao11:" + isAguardandoRespostaMao11() +
+				"; isAguardandoRespostaMaoDeFerro:" + isAguardandoRespostaMaoDeFerro() +
 				"; jogadorDaVez: "+getJogadorDaVez().getPosicao());
 
 		// Se o jogo acabou, a mesa não estiver completa, já houver alguém
-		// trucando, estivermos aguardando ok da mão de 11 ou não for a vez do
+		// trucando, estivermos aguardando ok da mão de ferro ou não for a vez do
 		// cara, recusa
 		if (jogoFinalizado || numJogadores < 4 || jogadorPedindoAumento != null
-				|| (isAguardandoRespostaMao11())
+				|| (isAguardandoRespostaMaoDeFerro())
 				|| !j.equals(getJogadorDaVez())) {
 			return;
 		}
@@ -398,18 +377,18 @@ public class JogoLocal extends Jogo {
 
 		for (Jogador interessado : jogadores) {
 			interessado.maoFechada(pontosEquipe);
-			if (pontosEquipe[0] > tento.valorPenultimaMao()) {
+			if (pontosEquipe[0] > modo.pontuacaoQueDeterminaMaoDeFerro()) {
 				interessado.jogoFechado(1);
 				jogoFinalizado = true;
-			} else if (pontosEquipe[1] > tento.valorPenultimaMao()) {
+			} else if (pontosEquipe[1] > modo.pontuacaoQueDeterminaMaoDeFerro()) {
 				interessado.jogoFechado(2);
 				jogoFinalizado = true;
 			}
 		}
 
 		// Se ainda estivermos em jogo, incia a nova mao
-		if (pontosEquipe[0] <= tento.valorPenultimaMao()
-				&& pontosEquipe[1] <= tento.valorPenultimaMao()) {
+		if (pontosEquipe[0] <= modo.pontuacaoQueDeterminaMaoDeFerro()
+				&& pontosEquipe[1] <= modo.pontuacaoQueDeterminaMaoDeFerro()) {
 			int posAbre = jogadorAbriuMao.getPosicao() + 1;
 			if (posAbre == 5)
 				posAbre = 1;
@@ -445,44 +424,44 @@ public class JogoLocal extends Jogo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see mt.JogoGenerico#decideMao11(mt.Jogador, boolean)
+	 * @see mt.JogoGenerico#decideMaoDeFerro(mt.Jogador, boolean)
 	 */
-	public synchronized void decideMao11(Jogador j, boolean aceita) {
+	public synchronized void decideMaoDeFerro(Jogador j, boolean aceita) {
 
 		// Só entra se estivermos jogando e se estivermos agurardando resposta
 		// daquele jogador para a pergunta (isso é importante para evitar duplo
 		// início)
-		if (jogoFinalizado || !aguardandoRespostaMaoDe11[j.getPosicao() - 1])
+		if (jogoFinalizado || !aguardandoRespostaMaoDeFerro[j.getPosicao() - 1])
 			return;
 
 		LOGGER.log(Level.INFO, "J" + j.getPosicao() + (aceita ? "" : " nao")
 				+ " quer jogar mao de 11 ");
 
 		// Se for uma CPU parceira de humano num jogo 100% local, trata como recusa
-		// (quem decide mão de 11 é o humano) e nem notifica (silenciando o balão)
+		// (quem decide mão de ferro é o humano) e nem notifica (silenciando o balão)
 		if (isIgnoraDecisao(j)) {
 			aceita = false;
 		} else {
 			// Avisa os outros jogadores da decisão
 			for (Jogador interessado : jogadores) {
-				interessado.decidiuMao11(j, aceita);
+				interessado.decidiuMaoDeFerro(j, aceita);
 			}
 		}
 
-		aguardandoRespostaMaoDe11[j.getPosicao() - 1] = false;
+		aguardandoRespostaMaoDeFerro[j.getPosicao() - 1] = false;
 
 		if (aceita) {
 			// Se aceitou, desencana da resposta do parceiro e pode tocar o
 			// jogo, valendo 3
-			aguardandoRespostaMaoDe11[j.getParceiro() - 1] = false;
-			valorMao = tento.inicializaPenultimaMao();
+			aguardandoRespostaMaoDeFerro[j.getParceiro() - 1] = false;
+			valorMao = modo.valorDaMaoDeFerro();
 			notificaVez();
 		} else {
 			// Se recusou (e o parceiro também), a equipe perde um ponto e
 			// recomeça a mao
-			if (!aguardandoRespostaMaoDe11[j.getParceiro() - 1]) {
-				pontosEquipe[j.getEquipeAdversaria() - 1] += tento
-						.inicializaMao();
+			if (!aguardandoRespostaMaoDeFerro[j.getParceiro() - 1]) {
+				pontosEquipe[j.getEquipeAdversaria() - 1] += modo
+						.valorInicialDaMao();
 				fechaMao();
 			}
 		}
@@ -497,11 +476,11 @@ public class JogoLocal extends Jogo {
 	public void aumentaAposta(Jogador j) {
 
 		// Se o jogo estiver fianlizado, a mesa não estiver completa, já houver
-		// alguém trucando, estivermos aguardando a mão de 11 ou não for a vez
+		// alguém trucando, estivermos aguardando a mão de ferro ou não for a vez
 		// do cara, recusa
 		if ((jogoFinalizado) || (numJogadores < 4)
 				|| (jogadorPedindoAumento != null)
-				|| isAguardandoRespostaMao11() || !j.equals(getJogadorDaVez())) {
+				|| isAguardandoRespostaMaoDeFerro() || !j.equals(getJogadorDaVez())) {
 			return;
 		}
 
@@ -512,7 +491,7 @@ public class JogoLocal extends Jogo {
 		for (int i = 0; i <= 3; i++)
 			recusouAumento[i] = false;
 
-		int valor = tento.calcValorTento(valorMao);
+		int valor = modo.valorSeHouverAumento(valorMao);
 
 		// Notifica os interessados
 		for (Jogador interessado : jogadores) {
@@ -545,7 +524,7 @@ public class JogoLocal extends Jogo {
 		if (aceitou && !ignorarAceite) {
 			// Se o jogador aceitou, seta o novo valor, notifica a galera e tira
 			// o jogo da situtação de truco
-			valorMao = tento.calcValorTento(valorMao);
+			valorMao = modo.valorSeHouverAumento(valorMao);
 			jogadorPedindoAumento = null;
 			for (Jogador interessado : jogadores) {
 				interessado.aceitouAumentoAposta(j, valorMao);
@@ -595,15 +574,15 @@ public class JogoLocal extends Jogo {
 	}
 
 	/**
-	 * Determina qual a equipe que está aguardando mão de 11
+	 * Determina qual a equipe que está aguardando mão de ferro
 	 *
 	 * @param i
 	 *            1 ou 2 para a respectiva equipe, 0 para ninguém aguardando mão
 	 *            de 11 (jogo normal)
 	 */
-	private void setEquipeAguardandoMao11(int i) {
-		aguardandoRespostaMaoDe11[0] = aguardandoRespostaMaoDe11[2] = (i == 1);
-		aguardandoRespostaMaoDe11[1] = aguardandoRespostaMaoDe11[3] = (i == 2);
+	private void setEquipeAguardandoMaoDeFerro(int i) {
+		aguardandoRespostaMaoDeFerro[0] = aguardandoRespostaMaoDeFerro[2] = (i == 1);
+		aguardandoRespostaMaoDeFerro[1] = aguardandoRespostaMaoDeFerro[3] = (i == 2);
 	}
 
 	private int getResultadoRodada(int mao) {
@@ -675,8 +654,8 @@ public class JogoLocal extends Jogo {
 	 * @see mt.JogoGenerico#atualizaSituacao(mt.SituacaoJogo, mt.Jogador)
 	 */
 	public void atualizaSituacao(SituacaoJogo s, Jogador j) {
-		s.baralhoSujo = !this.baralhoLimpo;
-		if (manilhaVelha) {
+		s.baralhoSujo = !modo.isBaralhoLimpo();
+		if (modo.isManilhaVelha()) {
 			s.manilha = SituacaoJogo.MANILHA_INDETERMINADA;
 		} else {
 			s.manilha = this.getManilha();
@@ -717,27 +696,13 @@ public class JogoLocal extends Jogo {
 	}
 
 	/**
-	 * @return True para jogo sem os 4,5,6 e 7.
-	 */
-	public boolean isBaralhoLimpo() {
-		return baralhoLimpo;
-	}
-
-	/**
-	 * @return True para manilhas fixas (sem "vira")
-	 */
-	public boolean isManilhaVelha() {
-		return manilhaVelha;
-	}
-
-	/**
-	 * Verifica se estamos aguardando resposta para mão de 11
+	 * Verifica se estamos aguardando resposta para mão de ferro
 	 *
 	 * @return true se falta alguém responder, false caso contrário
 	 */
-	private boolean isAguardandoRespostaMao11() {
+	private boolean isAguardandoRespostaMaoDeFerro() {
 		for (int i = 0; i <= 3; i++) {
-			if (aguardandoRespostaMaoDe11[i]) {
+			if (aguardandoRespostaMaoDeFerro[i]) {
 				return true;
 			}
 		}

@@ -39,6 +39,10 @@ public class MesaView extends View {
 
 	private int posicaoVez;
 
+	private int valorMao;
+
+	private final float density = getResources().getDisplayMetrics().density;
+
 	private static final Random rand = new Random();
 
 	public MesaView(Context context, AttributeSet attrs, int defStyle) {
@@ -167,8 +171,8 @@ public class MesaView extends View {
 
 		// Se o tamanho da tela mudou (ex.: rotação), precisamos recalcular
 		// estes bitmaps
-		int lado = getHeight() / 18;
-		iconesRodadas = new Bitmap[4];
+		int lado = CartaVisual.altura / 2;
+		iconesRodadas = new Bitmap[23];
 		iconesRodadas[0] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
 			.getDrawable(R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
 		iconesRodadas[1] =  Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
@@ -177,8 +181,27 @@ public class MesaView extends View {
 			.getDrawable(R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
 		iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
 			.getDrawable(R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
+		// indice = valorMao + 10
+		iconesRodadas[10] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
+		iconesRodadas[11] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada1)).getBitmap(), lado, lado, true);
+		iconesRodadas[12] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada2)).getBitmap(), lado, lado, true);
+		iconesRodadas[13] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada3)).getBitmap(), lado, lado, true);
+		iconesRodadas[14] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada4)).getBitmap(), lado, lado, true);
+		iconesRodadas[16] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada6)).getBitmap(), lado, lado, true);
+		iconesRodadas[19] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada9)).getBitmap(), lado, lado, true);
+		iconesRodadas[20] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada10)).getBitmap(), lado, lado, true);
+		iconesRodadas[22] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
+			.getDrawable(R.drawable.valorrodada12)).getBitmap(), lado, lado, true);
 
-	}
+}
 
 	/**
 	 * Recupera a carta visual correspondente a uma carta do jogo.
@@ -225,12 +248,12 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Torna as cartas da mão de 11 visíveis
+	 * Torna as cartas da mão de ferro visíveis
 	 *
 	 * @param cartasParceiro
 	 *            cartas do seu parceiro
 	 */
-	public void mostraCartasMao11(Carta[] cartasParceiro) {
+	public void mostraCartasMaoDeFerro(Carta[] cartasParceiro) {
 		for (int i = 0; i <= 2; i++) {
 			cartas[10 + i].setCarta(cartasParceiro[i]);
 		}
@@ -291,7 +314,7 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Responde pergunta em exibição (aceita truco, aceita mão 11, etc.)
+	 * Responde pergunta em exibição (aceita truco, aceita mão de ferro, etc.)
 	 * e oculta a pergunta, desde que uma pergunta esteja sendo exibida.
 	 *
 	 * @param resposta resposta do jogador (true=sim, false=não)
@@ -304,12 +327,12 @@ public class MesaView extends View {
 			} else {
 				recusarAumento = true;
 			}
-		} else if (mostrarPerguntaMao11) {
-			mostrarPerguntaMao11 = false;
+		} else if (mostrarPerguntaMaoDeFerro) {
+			mostrarPerguntaMaoDeFerro = false;
 			if (resposta) {
-				aceitarMao11 = true;
+				aceitarMaoDeFerro = true;
 			} else {
-				recusarMao11 = true;
+				recusarMaoDeFerro = true;
 			}
 		}
 	}
@@ -419,13 +442,13 @@ public class MesaView extends View {
 					e.printStackTrace();
 				}
 				Jogo jogo = trucoActivity.jogo;
-				if (recusarMao11) {
-					recusarMao11 = false;
-					jogo.decideMao11(trucoActivity.jogadorHumano, false);
+				if (recusarMaoDeFerro) {
+					recusarMaoDeFerro = false;
+					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, false);
 				}
-				if (aceitarMao11) {
-					aceitarMao11 = false;
-					jogo.decideMao11(trucoActivity.jogadorHumano, true);
+				if (aceitarMaoDeFerro) {
+					aceitarMaoDeFerro = false;
+					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, true);
 				}
 				if (recusarAumento) {
 					recusarAumento = false;
@@ -475,7 +498,7 @@ public class MesaView extends View {
 		}
 
 		// Abre o vira, se for manilha nova
-		if (!trucoActivity.jogo.isManilhaVelha()) {
+		if (!trucoActivity.jogo.getModo().isManilhaVelha()) {
 			cartas[0].setCarta(trucoActivity.jogo.cartaDaMesa);
 			cartas[0].visible = true;
 		}
@@ -483,6 +506,7 @@ public class MesaView extends View {
 	}
 
 	public void aceitouAumentoAposta(Jogador j, int valor) {
+		valorMao = valor;
 		if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
 			statusVez = STATUS_VEZ_HUMANO_OK;
 		}
@@ -528,7 +552,7 @@ public class MesaView extends View {
 			if (cvCandidata.descartada) {
 				continue;
 			}
-			// ...e, no caso de um humano (ou parceiro em mão de 11), que
+			// ...e, no caso de um humano (ou parceiro em mão de ferro), que
 			// corresponda à carta do jogo
 			cv = cvCandidata;
 			if (c.equals(cvCandidata)) {
@@ -694,20 +718,30 @@ public class MesaView extends View {
 
 		// Ícones das rodadas
 		if (iconesRodadas != null) {
-			for (int i = 0; i <= 2; i++) {
-				// Desenha se não for a rodada piscando, ou, se for, alterna o
-				// desenho a cada 250ms
-				if (i != (numRodadaPiscando - 1) || (agora % 250) % 2 == 0) {
-					canvas.drawBitmap(iconesRodadas[resultadoRodada[i]],
-							MARGEM,
-							MARGEM + i * (1 + iconesRodadas[0].getHeight()),
+			for (int i = 0; i <= 3; i++) {
+				Bitmap bmpIcone = null;
+				if (i == 0) {
+					// O último ícone é o placar da rodada
+					if (valorMao > 0) {
+						bmpIcone = iconesRodadas[valorMao + 10];
+					}
+				} else if (i != numRodadaPiscando || (agora % 250) % 2 == 0) {
+					// Desenha se não for a rodada piscando, ou, se for, alterna o
+					// desenho a cada 250ms
+					bmpIcone = iconesRodadas[resultadoRodada[i - 1]];
+				}
+
+				if (bmpIcone != null) {
+					canvas.drawBitmap(bmpIcone,
+							MARGEM + (i % 2) * (1 + iconesRodadas[0].getWidth()),
+							MARGEM + (i / 2) * (1 + iconesRodadas[0].getHeight()),
 							new Paint());
 				}
 			}
 		}
 
-		// Caixa de diálogo (mão de 11 ou aumento)
-		if (mostrarPerguntaMao11 || mostrarPerguntaAumento) {
+		// Caixa de diálogo (mão de ferro ou aumento)
+		if (mostrarPerguntaMaoDeFerro || mostrarPerguntaAumento) {
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
 			paint.setColor(Color.BLACK);
@@ -719,7 +753,7 @@ public class MesaView extends View {
 			paint.setTextSize(tamanhoFonte * 0.5f);
 			paint.setTextAlign(Align.CENTER);
 			paint.setStyle(Style.FILL);
-			canvas.drawText(mostrarPerguntaMao11 ? "Aceita Mão de 11?"
+			canvas.drawText(mostrarPerguntaMaoDeFerro ? "Aceita mão de ferro?"
 					: "Aceita?", rectDialog.centerX(),
 					rectDialog.top + paint.getTextSize() * 1.5f, paint);
 			desenhaBotao("Sim", canvas, rectBotaoSim);
@@ -823,10 +857,10 @@ public class MesaView extends View {
 	 */
 	private CartaVisual cartaQueFez;
 
-	public boolean mostrarPerguntaMao11 = false;
+	public boolean mostrarPerguntaMaoDeFerro = false;
 
-	private boolean recusarMao11 = false;
-	private boolean aceitarMao11 = false;
+	private boolean recusarMaoDeFerro = false;
+	private boolean aceitarMaoDeFerro = false;
 
 	public boolean mostrarPerguntaAumento = false;
 
@@ -992,4 +1026,7 @@ public class MesaView extends View {
 		this.posicaoVez = posicaoVez;
 	}
 
+	public void setValorMao(int m) {
+		valorMao = m;
+	}
 }

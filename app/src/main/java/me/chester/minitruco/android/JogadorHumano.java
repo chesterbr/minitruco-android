@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
-import me.chester.minitruco.core.JogadorCPU;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 
@@ -41,7 +40,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
 	@Override
 	public void cartaJogada(Jogador j, Carta c) {
-		mesa.mostrarPerguntaMao11 = false;
+		mesa.mostrarPerguntaMaoDeFerro = false;
 		mesa.mostrarPerguntaAumento = false;
 		mesa.setPosicaoVez(0);
 		activity.handler.sendMessage(Message.obtain(activity.handler,
@@ -54,11 +53,11 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	}
 
 	@Override
-	public void decidiuMao11(Jogador j, boolean aceita) {
+	public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
 		if (posicaoNaTela(j) == 3 && aceita) {
-			mesa.mostrarPerguntaMao11 = false;
+			mesa.mostrarPerguntaMaoDeFerro = false;
 		}
-		mesa.diz(aceita ? "mao11_sim" : "mao11_nao", posicaoNaTela(j), 1500);
+		mesa.diz(aceita ? "mao_de_ferro_sim" : "mao_de_ferro_nao", posicaoNaTela(j), 1500);
 	}
 
 	@Override
@@ -67,9 +66,9 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	}
 
 	@Override
-	public void informaMao11(Carta[] cartasParceiro) {
-		mesa.mostraCartasMao11(cartasParceiro);
-		mesa.mostrarPerguntaMao11 = true;
+	public void informaMaoDeFerro(Carta[] cartasParceiro) {
+		mesa.mostraCartasMaoDeFerro(cartasParceiro);
+		mesa.mostrarPerguntaMaoDeFerro = true;
 	}
 
 	@Override
@@ -79,6 +78,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 			mesa.resultadoRodada[i] = 0;
 		}
 		mesa.distribuiMao();
+		mesa.setValorMao(jogo.getModo().valorInicialDaMao());
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
 	}
@@ -126,15 +126,14 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
+		mesa.setValorMao(0);
 		mesa.recolheMao();
 
 	}
 
 	@Override
 	public void pediuAumentoAposta(Jogador j, int valor) {
-		// TODO so funciona para tento paulista
-		int ordem_valor = valor / 3;
-		mesa.diz("aumento_" + ordem_valor, posicaoNaTela(j),
+		mesa.diz("aumento_" + jogo.nomeNoTruco(valor), posicaoNaTela(j),
 				1500 + 200 * (valor / 3));
 		if (j.getEquipe() != this.getEquipe()) {
 			LOGGER.log(Level.INFO, "pedindo para mostrar pergunta aumento");
@@ -151,10 +150,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 				mesa.diz("aumento_quero", posicaoNaTela(j), 1500);
 				return;
 			}
-			// Nós aceitamos um truco, então podemos pedir 6, 9 ou 12
-			if (valor != 12) {
-				valorProximaAposta = valor + 3;
-			}
+			// Nós aceitamos um truco, então podemos pedir aumento (se o valor atual ainda permitir)
+			valorProximaAposta = jogo.getModo().valorSeHouverAumento(valor);
 		} else {
 			// Eles aceitaram um truco, temos que esperar eles pedirem
 			valorProximaAposta = 0;
@@ -180,7 +177,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 				resultado = 1;
 			}
 		}
-		mesa.mostrarPerguntaMao11 = false;
+		mesa.mostrarPerguntaMaoDeFerro = false;
 		mesa.mostrarPerguntaAumento = false;
 		mesa.setPosicaoVez(0);
 		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
@@ -191,8 +188,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 		LOGGER.log(Level.INFO, "vez do jogador " + posicaoNaTela(j));
 		mesa.vaiJogarFechada = false;
 		boolean mostraBtnAumento = (j instanceof JogadorHumano)
-				&& (valorProximaAposta > 0) && (activity.placar[0] != 11)
-				&& (activity.placar[1] != 11);
+				&& (valorProximaAposta > 0) && jogo.isPlacarPermiteAumento();
 		boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
 				&& podeFechada;
 		activity.handler.sendMessage(Message.obtain(activity.handler,

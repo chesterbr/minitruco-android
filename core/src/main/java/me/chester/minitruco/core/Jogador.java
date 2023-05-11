@@ -1,7 +1,6 @@
 package me.chester.minitruco.core;
 
 import java.util.Random;
-import java.util.logging.Logger;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -309,27 +308,27 @@ public abstract class Jogador {
 	public abstract void jogoFechado(int numEquipeVencedora);
 
 	/**
-	 * Informa que um jogador fez sua escolha de topar ou não uma rodada quando
-	 * sua equipe tinha 11 pontos
+	 * Informa que um jogador fez sua escolha de topar ou não
+	 * a mão de ferro
 	 *
 	 * @param j
 	 *            Jogador que fez a escolha
 	 * @param aceita
 	 *            true se o jogador topou, false se recusou
 	 */
-	public abstract void decidiuMao11(Jogador j, boolean aceita);
+	public abstract void decidiuMaoDeFerro(Jogador j, boolean aceita);
 
 	/**
-	 * Informa que o jogador é beneficiário de uma "mão de 11", e, portanto,
-	 * deve decidir se aceita ou não esta rodada (se aceitar vale 3 pontos, se
-	 * ambos recusarem perde 1)
+	 * Informa que o jogador é beneficiário de uma "mão de ferro", e, portanto,
+	 * deve decidir se aceita ou não esta rodada (se aceitar vale o valor do truco,
+	 * se ambos recusarem perde o modo normal)
 	 *
 	 * @param cartasParceiro
 	 *            Cartas do parceiro
-	 * @see Jogo#decideMao11(Jogador, boolean)
+	 * @see Jogo#decideMaoDeFerro(Jogador, boolean)
 	 *
 	 */
-	public abstract void informaMao11(Carta[] cartasParceiro);
+	public abstract void informaMaoDeFerro(Carta[] cartasParceiro);
 
 	/**
 	 * Informa que o jogo foi abandonado por alguma causa externa (ex.: um

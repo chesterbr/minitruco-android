@@ -27,11 +27,37 @@ public abstract class Jogo implements Runnable {
 	protected static final String letrasOrdenadas = "4567QJKA23";
 
 	/**
+	 * Modo do jogo: "P"aulista, "M"ineiro ou paulista com baralho "L"impo
+	 */
+	protected String modoStr;
+	/**
+	 * Modalidade do jogo (paulista, mineiro, etc.)
+	 */
+	protected Modo modo;
+
+	/**
 	 * Rodada que estamos jogando (de 1 a 3).
 	 * <p>
 	 * (as implementações devem manter atualizado)
 	 */
 	int numRodadaAtual;
+
+	public Jogo(String modo) {
+		this.modoStr = modo;
+		switch (modo) {
+			case "M":
+				this.modo = new ModoMineiro();
+				break;
+			case "P":
+				this.modo = new ModoPaulista();
+				break;
+			case "L":
+				this.modo = new ModoBaralhoLimpo();
+				break;
+			default:
+				throw new IllegalArgumentException("Modo deve ser M, P ou L");
+		}
+	}
 
 	/**
 	 * Calcula um valor relativo para a carta, considerando as manilhas em jogo
@@ -100,6 +126,19 @@ public abstract class Jogo implements Runnable {
 	 */
 	protected Carta[][] cartasJogadasPorRodada;
 
+	public static String textoModo(String modo) {
+		switch (modo) {
+			case "P": return "Truco Paulista";
+			case "M": return "Truco Mineiro";
+			case "L": return "Baralho limpo";
+		}
+		return null;
+	}
+
+	public Modo getModo() {
+		return modo;
+	}
+
 	/**
 	 * Inicia o jogo.
 	 * <p>
@@ -122,7 +161,7 @@ public abstract class Jogo implements Runnable {
 	public abstract void jogaCarta(Jogador j, Carta c);
 
 	/**
-	 * Informa ao jogo o resultado de aceite daquela mão de 11
+	 * Informa ao jogo o resultado de aceite daquela mão de ferro
 	 *
 	 * @param j
 	 *            Jogador que está respondendo
@@ -130,7 +169,7 @@ public abstract class Jogo implements Runnable {
 	 *            true se o jogador topa jogar, false se deixar para o parceiro
 	 *            decidir
 	 */
-	public abstract void decideMao11(Jogador j, boolean aceita);
+	public abstract void decideMaoDeFerro(Jogador j, boolean aceita);
 
 	/**
 	 * Informa que o jogador solicitou um aumento de aposta ("truco", "seis",
@@ -186,16 +225,6 @@ public abstract class Jogo implements Runnable {
 	 */
 	public abstract void atualizaSituacao(SituacaoJogo s, Jogador j);
 
-	/**
-	 * @return True para jogo sem os 4,5,6 e 7.
-	 */
-	public abstract boolean isBaralhoLimpo();
-
-	/**
-	 * @return True para manilhas fixas (sem "vira")
-	 */
-	public abstract boolean isManilhaVelha();
-
 	protected int getValorTruco(Carta c) {
 		return getValorTruco(c, this.getManilha());
 	}
@@ -248,7 +277,7 @@ public abstract class Jogo implements Runnable {
 	/**
 	 * Pontos de cada equipe na partida.
 	 * <p>
-	 * As implementações devem atualizar (para se saber quando é mão de 11)
+	 * As implementações devem atualizar (para se saber quando é mão de ferro)
 	 */
 	protected int[] pontosEquipe = { 0, 0 };
 
@@ -279,7 +308,7 @@ public abstract class Jogo implements Runnable {
 
 		cartaDaMesa = c;
 
-		if (isManilhaVelha()) {
+		if (modo.isManilhaVelha()) {
 			manilha = SituacaoJogo.MANILHA_INDETERMINADA;
 			return;
 		}
@@ -291,21 +320,20 @@ public abstract class Jogo implements Runnable {
 		manilha = letrasOrdenadas.charAt(posManilha);
 
 		// Detalhe: no baralho limpo, a manilha do vira 3 é a dama (e não o 4)
-		if (isBaralhoLimpo() && c.getLetra() == '3') {
+		if (modo.isBaralhoLimpo() && c.getLetra() == '3') {
 			manilha = 'Q';
 		}
 
 	}
 
 	/**
-	 * Informa se alguma das equipes tem 11 pontos (para fins de permitir
-	 * trucar)
-	 * <p>
-	 * Isso não tem a ver com a "mão de 11" - aquela em que uma das equipes
-	 * apenas tem 11. Toda mão de 11 retorna true aqui, mas o 11x11 também.
+	 * Informa se não estamos impedidos de disponibilizar aumento (por conta
+	 * de ser uma mão de ferro, ou mesmo um empate acima do limite, ex.:
+	 * 11x11 no Truco Paulista)
 	 */
-	public boolean isAlguemTem11Pontos() {
-		return pontosEquipe[0] == 11 || pontosEquipe[1] == 11;
+	public boolean isPlacarPermiteAumento() {
+		int max = modo.pontuacaoQueDeterminaMaoDeFerro();
+		return pontosEquipe[0] < max && pontosEquipe[1] < max;
 	}
 
 	/**
@@ -342,6 +370,36 @@ public abstract class Jogo implements Runnable {
 	 */
 	public boolean isJogoAutomatico() {
 		return false;
+	}
+
+	/**
+	 * Retorna o nome usado para um determinado valor quando estamos pedindo aumento
+	 * de aposta. Por exemplo, 3 (no truco paulista) ou 4 (no truco mineiro)
+	 * se chamam "truco".
+	 *
+	 * O principal uso é mapear valores para assets do strings.xml. Por exemplo, as
+	 * frases usadas no pedido de truco estão em "balao_aumento_truco", para pedir
+	 * seis estão em "balao_aumento_seis", etc.
+	 *
+	 * @param valor aumento solicitado. Pode ser 3, 6, 9, 12 no truco paulista,
+	 *              ou 4, 6, 10, 12 no truco mineiro.
+	 * @return "truco", "seis", "nove", etc.
+	 */
+	public String nomeNoTruco(int valor) {
+		switch (valor) {
+			case 3:
+			case 4:
+				return "truco";
+			case 6:
+				return "seis";
+			case 9:
+				return "nove";
+			case 10:
+				return "dez";
+			case 12:
+				return "doze";
+		}
+		throw new IllegalArgumentException(valor + " não é um valor especial no truco");
 	}
 
 }

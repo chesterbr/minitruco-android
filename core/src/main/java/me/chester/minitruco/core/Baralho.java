@@ -23,12 +23,11 @@ public class Baralho {
 	/**
 	 * Cria um novo bararalho de truco
 	 *
-	 * @param isLimpo
-	 *            true para baralho limpo (sem 4, 5, 6 e 7), false para sujo
-	 *            (default)
+	 * @param limpo true se o baralho for limpo (sem 4, 5, 6 e 7)
 	 */
-	public Baralho(boolean isLimpo) {
-		limpo = isLimpo;
+
+	public Baralho(boolean limpo) {
+		this.limpo = limpo;
 	}
 
 	public boolean isLimpo() {

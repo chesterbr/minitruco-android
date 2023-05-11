@@ -205,31 +205,31 @@ public class JogadorCPU extends Jogador implements Runnable {
 				}
 			}
 
-			if (recebiPedidoDeMaoDe11) {
-				recebiPedidoDeMaoDe11 = false;
+			if (recebiPedidoDeMaoDeFerro) {
+				recebiPedidoDeMaoDeFerro = false;
 				atualizaSituacaoJogo();
 				sleep(1000 + random.nextInt(1000));
-				boolean respostaMao11 = false;
+				boolean respostaMaoDeFerro = false;
 				try {
-					respostaMao11 = estrategia.aceitaMao11(
-							cartasDoParceiroDaMaoDe11, situacaoJogo);
-					// Atendendo a pedidos no Market, o parceiro do humano vai
+					respostaMaoDeFerro = estrategia.aceitaMaoDeFerro(
+							cartasDoParceiroDaMaoDeFerro, situacaoJogo);
+					// Atendendo a pedidos na Play Store, o parceiro do humano vai
 					// ignorar a estratégia com 90% de chance e recusar,
 					// deixando a decisão na mão do humano.
 					if (getPosicao() == 3) {
 						boolean aceitaEstrategia = random.nextInt(10) == 5;
 						LOGGER.log(Level.INFO,
-								"Mão de 11 do parceiro do humano. AceitaEstrategia="
+								"Mão de ferro do parceiro do humano. AceitaEstrategia="
 										+ aceitaEstrategia);
-						respostaMao11 = respostaMao11 && aceitaEstrategia;
+						respostaMaoDeFerro = respostaMaoDeFerro && aceitaEstrategia;
 					}
 				} catch (Exception e) {
 					LOGGER.log(Level.INFO,
-							"Erro em aceite-11 no jogador" + this.getPosicao(),
+							"Erro em aceite-mao-de-ferro no jogador" + this.getPosicao(),
 							e);
-					respostaMao11 = random.nextBoolean();
+					respostaMaoDeFerro = random.nextBoolean();
 				}
-				jogo.decideMao11(this, respostaMao11);
+				jogo.decideMaoDeFerro(this, respostaMaoDeFerro);
 			}
 
 			if (estouAguardandoRepostaAumento && (numRespostasAguardando == 0)) {
@@ -250,9 +250,9 @@ public class JogadorCPU extends Jogador implements Runnable {
 	private boolean recebiPedidoDeAumento = false;
 	private boolean estouAguardandoRepostaAumento = false;
 
-	private boolean recebiPedidoDeMaoDe11 = false;
+	private boolean recebiPedidoDeMaoDeFerro = false;
 
-	private Carta[] cartasDoParceiroDaMaoDe11;
+	private Carta[] cartasDoParceiroDaMaoDeFerro;
 
 	public void pediuAumentoAposta(Jogador j, int valor) {
 		// Notifica a estrategia
@@ -268,10 +268,10 @@ public class JogadorCPU extends Jogador implements Runnable {
 	 */
 	private void atualizaSituacaoJogo() {
 		jogo.atualizaSituacao(situacaoJogo, this);
-		if (jogo.isAlguemTem11Pontos()) {
-			situacaoJogo.valorProximaAposta = 0;
-		} else {
+		if (jogo.isPlacarPermiteAumento()) {
 			situacaoJogo.valorProximaAposta = valorProximaAposta;
+		} else {
+			situacaoJogo.valorProximaAposta = 0;
 		}
 		int numCartas = cartasRestantes.size();
 		situacaoJogo.cartasJogador = new Carta[numCartas];
@@ -364,7 +364,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 		}
 
 		// Libera o jogador para pedir truco (se nao estivermos em mao de 11)
-		valorProximaAposta = (jogo.isAlguemTem11Pontos() ? 0 : 3);
+		valorProximaAposta = (jogo.isPlacarPermiteAumento() ? 3 : 0);
 
 	}
 
@@ -378,13 +378,13 @@ public class JogadorCPU extends Jogador implements Runnable {
 		estrategia.inicioPartida();
 	}
 
-	public void decidiuMao11(Jogador j, boolean aceita) {
+	public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
 		// Por ora não faz nada
 	}
 
-	public void informaMao11(Carta[] cartasParceiro) {
-		cartasDoParceiroDaMaoDe11 = cartasParceiro;
-		recebiPedidoDeMaoDe11 = true;
+	public void informaMaoDeFerro(Carta[] cartasParceiro) {
+		cartasDoParceiroDaMaoDeFerro = cartasParceiro;
+		recebiPedidoDeMaoDeFerro = true;
 	}
 
 	public void jogoAbortado(int posicao) {

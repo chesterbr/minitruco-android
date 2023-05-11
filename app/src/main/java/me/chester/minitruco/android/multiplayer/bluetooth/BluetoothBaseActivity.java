@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.BaseActivity;
 import me.chester.minitruco.android.TrucoActivity;
+import me.chester.minitruco.core.Jogo;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -89,21 +90,21 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 
 	protected BluetoothAdapter btAdapter;
 	protected String[] apelidos = new String[4];
-	protected String regras;
+	protected String modo;
 	protected Button btnIniciar;
 	protected View layoutIniciar;
 	private TextView textViewMensagem;
-	private TextView textViewRegras;
+	private TextView textViewStatus;
 	private TextView[] textViewsJogadores;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.bluetooth);
+		setContentView(R.layout.sala);
 		layoutIniciar = (View) findViewById(R.id.layoutIniciar);
 		btnIniciar = (Button) findViewById(R.id.btnIniciarBluetooth);
 		textViewMensagem = ((TextView) findViewById(R.id.textViewMensagem));
-		textViewRegras = (TextView) findViewById(R.id.textViewRegras);
+		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
 		textViewsJogadores = new TextView[4];
 		textViewsJogadores[0] = (TextView) findViewById(R.id.textViewJogador1);
 		textViewsJogadores[1] = (TextView) findViewById(R.id.textViewJogador2);
@@ -209,7 +210,9 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			for (int i = 0; i < 4; i++) {
 				textViewsJogadores[i].setText(apelidos[i]);
 			}
-			textViewRegras.setText(getTextoRegras());
+			if (modo != null) {
+				textViewStatus.setText("Modo: " + Jogo.textoModo(modo));
+			}
 			btnIniciar.setEnabled(getNumClientes() > 0);
 		}
 
@@ -225,15 +228,6 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			}
 			startActivity(intent);
 		}
-	}
-
-	protected String getTextoRegras() {
-		if (regras == null || regras.length() < 2) {
-			return "";
-		}
-		return (regras.charAt(0) == 'T' ? "Baralho Limpo" : "Baralho Sujo")
-				+ " / "
-				+ (regras.charAt(1) == 'T' ? "Manilha Velha" : "Manilha Nova");
 	}
 
 	protected void sleep(int ms) {

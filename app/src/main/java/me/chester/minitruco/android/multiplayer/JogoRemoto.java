@@ -47,7 +47,8 @@ public class JogoRemoto extends Jogo {
      * e instâncias de JogadorDummy nas outras posições (as ações deles serão todas baseadas
      * em notificações recebidas por esta classe).
      */
-    public JogoRemoto(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador) {
+    public JogoRemoto(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador, String modo) {
+        super(modo);
         this.cliente = cliente;
 
 		// Adiciona o jogador na posição correta
@@ -98,7 +99,7 @@ public class JogoRemoto extends Jogo {
                 // Início da mão
                 numRodadaAtual = 1;
                 cartasJogadasPorRodada = new Carta[3][4];
-                baralho = new Baralho(isBaralhoLimpo());
+                baralho = new Baralho(modo.isBaralhoLimpo());
                 // Gera as cartas e notifica
                 Carta[] cartas = new Carta[3];
                 for (int i = 0; i <= 2; i++) {
@@ -172,18 +173,18 @@ public class JogoRemoto extends Jogo {
                         getJogador(Integer.parseInt(tokens[0])));
                 break;
             case 'H':
-                // Alguém aceitou mão de 11, informa
-                getJogadorHumano().decidiuMao11(
+                // Alguém aceitou mão de ferro, informa
+                getJogadorHumano().decidiuMaoDeFerro(
                         getJogador(Integer.parseInt(tokens[0])),
                         tokens[1].equals("T"));
                 break;
             case 'F':
-                // Mão de 11. Recupera as cartas do parceiro e informa o jogador
-                Carta[] cartasMao11 = new Carta[3];
+                // Mão de ferro. Recupera as cartas do parceiro e informa o jogador
+                Carta[] cartasMaoDeFerro = new Carta[3];
                 for (int i = 0; i <= 2; i++) {
-                    cartasMao11[i] = new Carta(tokens[i]);
+                    cartasMaoDeFerro[i] = new Carta(tokens[i]);
                 }
-                getJogadorHumano().informaMao11(cartasMao11);
+                getJogadorHumano().informaMaoDeFerro(cartasMaoDeFerro);
                 break;
             case 'R':
                 // Fim de rodada, recupera o resultado e o jogador que torna
@@ -218,13 +219,7 @@ public class JogoRemoto extends Jogo {
         // não faz nada
     }
 
-    public boolean isBaralhoLimpo() {
-        return cliente.getRegras().charAt(0) == 'T';
-    }
-
-    public boolean isManilhaVelha() {
-        return cliente.getRegras().charAt(1) == 'T';
-    }
+    public boolean isManilhaVelha() { return modoStr.equals("M"); }
 
     public void run() {
         // Notifica o jogador humano que a partida começou
@@ -235,7 +230,7 @@ public class JogoRemoto extends Jogo {
         cliente.enviaLinha("J " + c + (c.isFechada() ? " T" : ""));
     }
 
-    public void decideMao11(Jogador j, boolean aceita) {
+    public void decideMaoDeFerro(Jogador j, boolean aceita) {
         cliente.enviaLinha("H " + (aceita ? "T" : "F"));
     }
 
@@ -264,6 +259,7 @@ public class JogoRemoto extends Jogo {
         if (posicao == 1) {
             cliente.enviaLinha("A");
         }
+        jogadorHumano.jogoAbortado(0);
     }
 
 }

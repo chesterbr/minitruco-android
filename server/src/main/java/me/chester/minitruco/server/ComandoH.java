@@ -4,7 +4,7 @@ package me.chester.minitruco.server;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Decide (aceitar ou recusar) mão de 11
+ * Decide (aceitar ou recusar) mão de ferro
  * <p>
  * parâmetro: T ou F (aceita ou recusa)
  * @author chester
@@ -16,7 +16,7 @@ public class ComandoH extends Comando {
 	public void executa(String[] args, JogadorConectado j) {
 		if (!j.jogando)
 			return;
-		j.getSala().getJogo().decideMao11(j,args[1].equals("T"));
+		j.getSala().getJogo().decideMaoDeFerro(j,args[1].equals("T"));
 	}
 
 }
