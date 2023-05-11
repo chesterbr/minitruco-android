@@ -54,10 +54,10 @@ public class TituloActivity extends BaseActivity {
 
 	/**
 	 * Até a versão 2.3.9, a pessoa configurava se queria tento mineiro, baralho limpo ou
-	 * manilha velha; a 2.3.10 trocou isso pelo modo de jogo. Esse método migra as opções
+	 * manilha velha; a 2.4.0 trocou isso pelo modo de jogo. Esse método migra as opções
 	 * antigas da melhor forma possível.
 	 *
-	 * Seria bom deixar ele até que a maior parte das pessoas esteja >= 2.3.10.
+	 * Seria bom deixar ele até que a maior parte das pessoas esteja >= 2.4.0.
 	 */
 	private void migraOpcoesLegadas() {
 		if (preferences.contains("baralhoLimpo")) {
