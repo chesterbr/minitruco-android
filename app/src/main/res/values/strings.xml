@@ -234,6 +234,8 @@
         <![CDATA[
             - Confirmação de encerramento de jogo agora é opcional<br/>
             - Opções para acelerar a animação das cartas, balões, etc. ("rápido" e "turbo")<br/>
+            - Aparelhos que procuram o jogo Bluetooth não tem mais que aguardar a distribuição
+              e recolhimento de cartas do aparelho que criou o jogo Bluetooth<br/>
         ]]>
     </string>
 
