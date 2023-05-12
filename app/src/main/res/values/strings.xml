@@ -122,7 +122,7 @@
     <string-array name="velocidade_animacao_valores">
         <item>1</item>
         <item>3</item>
-        <item>10</item>
+        <item>100</item>
     </string-array>
 
     <string name="titulo_ajuda">Bem-vindo!</string>

@@ -146,7 +146,7 @@ public class TrucoActivity extends BaseActivity {
 		novoJogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
 			JogadorCPU bot = new JogadorCPU();
-			bot.setFingeQuePensa(!"10".equals(preferences.getString("velocidadeAnimacao", "")));
+			bot.setFingeQuePensa(Integer.parseInt(preferences.getString("velocidadeAnimacao", "1")) < 5);
 			novoJogo.adiciona(bot);
 		}
 		return novoJogo;
