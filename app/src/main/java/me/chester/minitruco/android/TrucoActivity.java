@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import me.chester.minitruco.R;
@@ -113,6 +114,7 @@ public class TrucoActivity extends BaseActivity {
 			}
 		}
 	};
+	private SharedPreferences preferences;
 
 	/**
 	 * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
@@ -137,7 +139,7 @@ public class TrucoActivity extends BaseActivity {
 	}
 
 	private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
-		SharedPreferences preferences = PreferenceManager
+		preferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		String modo = preferences.getString("modo", "P");
 		boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
@@ -221,9 +223,23 @@ public class TrucoActivity extends BaseActivity {
 
 	@Override
 	public void onBackPressed() {
+		if (!preferences.getBoolean("sempreConfirmaFecharJogo", true)) {
+			finish();
+			return;
+		}
+
+		View dialogPerguntaAntesDeFechar = getLayoutInflater()
+				.inflate(R.layout.dialog_sempre_confirma_fechar_jogo, null);
+		final CheckBox checkBoxPerguntarSempre = dialogPerguntaAntesDeFechar
+				.findViewById(R.id.checkBoxSempreConfirmaFecharJogo);
+		checkBoxPerguntarSempre.setOnCheckedChangeListener((button, isChecked) -> {
+			preferences.edit().putBoolean("sempreConfirmaFecharJogo", isChecked).apply();
+		});
+
 		new AlertDialog.Builder(this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle("Encerrar")
+			.setView(dialogPerguntaAntesDeFechar)
 			.setMessage("Você quer mesmo encerrar este jogo?")
 			.setPositiveButton("Sim", (dialog, which) -> finish())
 			.setNegativeButton("Não", null)

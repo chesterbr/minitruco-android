@@ -2,6 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
         android:defaultValue="true"
+        android:key="sempreConfirmaFecharJogo"
+        android:summary="Se esta opção estiver desligada e o botão ou gesto de voltar for acionado, o jogo encerra imediatamente."
+        android:title="Sempre perguntar ao fechar um jogo" />
+    <CheckBoxPreference
+        android:defaultValue="true"
         android:key="humanoDecide"
         android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de ferro. Ele só diz se iria, mas o humano é que decide."
         android:title="Humano decide pela dupla" />
