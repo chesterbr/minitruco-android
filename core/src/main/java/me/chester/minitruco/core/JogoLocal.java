@@ -176,10 +176,8 @@ public class JogoLocal extends Jogo {
 
 		// Abre a primeira rodada, informando a carta da mesa e quem vai abrir
 		posJogadorDaVez = jogadorQueAbre.getPosicao();
-		for (Jogador interessado : jogadores) {
-			new Thread(() -> {
-				interessado.inicioMao();
-			}).start();
+		for (int i = 3; i >= 0; i--) {
+			jogadores[i].inicioMao();
 		}
 
 		if (pontosEquipe[0] == modo.pontuacaoQueDeterminaMaoDeFerro()
@@ -376,8 +374,11 @@ public class JogoLocal extends Jogo {
 
 		// Notifica os interessados que a rodada acabou, e, se for o caso, que o
 		// jogo acabou também
+		// A notificação é feita em ordem reversa para que um JogadorBluetooth não tenha
+		// que esperar pelas animacões de um JogadorHumano
 
-		for (Jogador interessado : jogadores) {
+		for (int i = 3; i >= 0; i--) {
+			Jogador interessado = jogadores[i];
 			interessado.maoFechada(pontosEquipe);
 			if (pontosEquipe[0] > modo.pontuacaoQueDeterminaMaoDeFerro()) {
 				interessado.jogoFechado(1);
