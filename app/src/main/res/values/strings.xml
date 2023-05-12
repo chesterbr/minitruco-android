@@ -114,6 +114,16 @@
     <string-array name="balao_abortou">
         <item>Tchau…</item>
     </string-array>
+    <string-array name="velocidade_animacao_textos">
+        <item>Normal</item>
+        <item>Rápida</item>
+        <item>Turbo</item>
+    </string-array>
+    <string-array name="velocidade_animacao_valores">
+        <item>1</item>
+        <item>3</item>
+        <item>10</item>
+    </string-array>
 
     <string name="titulo_ajuda">Bem-vindo!</string>
     <string name="texto_ajuda">
@@ -223,6 +233,7 @@
     <string name="novidades">
         <![CDATA[
             - Confirmação de encerramento de jogo agora é opcional<br/>
+            - Opções para acelerar a animação das cartas, balões, etc. ("rápido" e "turbo")<br/>
         ]]>
     </string>
 

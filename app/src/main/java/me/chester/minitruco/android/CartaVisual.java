@@ -111,7 +111,7 @@ public class CartaVisual extends Carta {
 		this.destLeft = left;
 		this.destTop = top;
 		ultimoTime = System.currentTimeMillis();
-		destTime = ultimoTime + tempoMS;
+		destTime = ultimoTime + tempoMS / mesa.velocidade;
 		MesaView.notificaAnimacao(destTime);
 	}
 

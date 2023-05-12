@@ -19,6 +19,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 
     private final static Logger LOGGER = Logger.getLogger("JogadorCPU");
 
+	private boolean fingeQuePensa = true;
+
 	/**
 	 * Cria um novo jogador CPU, usando a estratégia fornecida.
 	 *
@@ -87,6 +89,10 @@ public class JogadorCPU extends Jogador implements Runnable {
 	 */
 	private boolean podeFechada = false;
 
+	public void setFingeQuePensa(boolean fingeQuePensa) {
+		this.fingeQuePensa = fingeQuePensa;
+	}
+
 	public void vez(Jogador j, boolean podeFechada) {
 		if (this.equals(j)) {
 			LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
@@ -108,7 +114,9 @@ public class JogadorCPU extends Jogador implements Runnable {
 						+ " viu que e' sua vez");
 
 				// Dá um tempinho, pra fingir que está "pensando"
-				sleep(random.nextInt(250) + 200);
+				if (fingeQuePensa) {
+					sleep(random.nextInt(500));
+				}
 
 				// Atualiza a situação do jogo (incluindo as cartas na mão)
 				atualizaSituacaoJogo();

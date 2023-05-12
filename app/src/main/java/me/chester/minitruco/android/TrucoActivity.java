@@ -139,15 +139,15 @@ public class TrucoActivity extends BaseActivity {
 	}
 
 	private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
-		preferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
 		String modo = preferences.getString("modo", "P");
 		boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
 		boolean jogoAutomatico =  preferences.getBoolean("jogoAutomatico", false);
 		Jogo novoJogo = new JogoLocal(modo, humanoDecide, jogoAutomatico);
 		novoJogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
-			novoJogo.adiciona(new JogadorCPU());
+			JogadorCPU bot = new JogadorCPU();
+			bot.setFingeQuePensa(!"10".equals(preferences.getString("velocidadeAnimacao", "")));
+			novoJogo.adiciona(bot);
 		}
 		return novoJogo;
 	}
@@ -157,9 +157,11 @@ public class TrucoActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.truco);
 		mIsViva = true;
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		mesa = ((MesaView) findViewById(R.id.MesaView01));
 		layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
+		mesa.velocidade = Integer.parseInt(preferences.getString("velocidadeAnimacao", "1"));
 		mesa.setTrucoActivity(this);
 		// Inicializa componentes das classes visuais que dependem de métodos
 		// disponíveis exclusivamente na Activity

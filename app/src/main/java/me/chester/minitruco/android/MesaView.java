@@ -37,6 +37,7 @@ import me.chester.minitruco.core.Jogo;
  */
 public class MesaView extends View {
 
+	protected int velocidade;
 	private int posicaoVez;
 
 	private int valorMao;
@@ -271,11 +272,11 @@ public class MesaView extends View {
 	 * @param posicao
 	 *            posição (1 a 4) do jogador que "dirá" a frase
 	 * @param tempoMS
-	 *            tempo em que ela aparecerá
+	 *            tempo em que ela aparecerá (reduzido se a velocidade das animações for > 1)
 	 */
 	public void diz(String chave, int posicao, int tempoMS) {
 		aguardaFimAnimacoes();
-		mostraBalaoAte = System.currentTimeMillis() + tempoMS;
+		mostraBalaoAte = System.currentTimeMillis() + tempoMS / Math.min(velocidade, 2);
 		Resources res = getResources();
 		String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_"
 				+ chave, "array", "me.chester.minitruco"));
