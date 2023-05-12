@@ -177,7 +177,9 @@ public class JogoLocal extends Jogo {
 		// Abre a primeira rodada, informando a carta da mesa e quem vai abrir
 		posJogadorDaVez = jogadorQueAbre.getPosicao();
 		for (Jogador interessado : jogadores) {
-			interessado.inicioMao();
+			new Thread(() -> {
+				interessado.inicioMao();
+			}).start();
 		}
 
 		if (pontosEquipe[0] == modo.pontuacaoQueDeterminaMaoDeFerro()
