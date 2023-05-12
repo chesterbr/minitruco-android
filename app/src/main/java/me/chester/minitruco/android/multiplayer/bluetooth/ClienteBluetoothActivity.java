@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
 import me.chester.minitruco.android.multiplayer.JogoRemoto;
 import me.chester.minitruco.core.Jogo;
@@ -122,6 +123,11 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 							break;
 						case 'P':
 							iniciaTrucoActivitySePreciso();
+							// Enquanto não tiver a activity iniciada, melhor não processar
+							// nenhuma mensagem
+							while (!TrucoActivity.isViva()) {
+								sleep(100);
+							}
 							// Não tem mesmo um break aqui, o início de partida
 							// também precisa ser processado pelo jogo anterior
 							// (para limpar o placar)

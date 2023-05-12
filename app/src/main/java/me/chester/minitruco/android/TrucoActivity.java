@@ -136,6 +136,7 @@ public class TrucoActivity extends BaseActivity {
 			jogo = criaNovoJogoSinglePlayer(jogadorHumano);
 		}
 		(new Thread(jogo)).start();
+		mIsViva = true;
 	}
 
 	private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
@@ -156,7 +157,6 @@ public class TrucoActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.truco);
-		mIsViva = true;
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		mesa = ((MesaView) findViewById(R.id.MesaView01));
 		layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
