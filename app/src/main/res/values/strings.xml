@@ -222,10 +222,7 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Truco mineiro totalmente refeito, corrigindo todos os bugs<br/>
-            - Bluetooth agora suporta truco mineiro<br/>
-            - Resultados da rodada com visual melhorado, e agora mostrando o valor da rodada atual<br/>
-            - Corrige bug que fechava com erro quando o celular estava com pouca memória<br/>
+            - Confirmação de encerramento de jogo agora é opcional<br/>
         ]]>
     </string>
 
