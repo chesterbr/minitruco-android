@@ -262,6 +262,7 @@ public class CartaVisual extends Carta {
 	@Override
 	public void setFechada(boolean fechada) {
 		super.setFechada(fechada);
+		mesa.aguardaFimAnimacoes();
 		this.bitmap = null;
 	}
 

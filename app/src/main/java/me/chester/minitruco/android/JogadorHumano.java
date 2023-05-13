@@ -77,6 +77,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 		for (int i = 0; i <= 2; i++) {
 			mesa.resultadoRodada[i] = 0;
 		}
+		LOGGER.log(Level.INFO, "distribuindo a mão");
 		mesa.distribuiMao();
 		mesa.setValorMao(jogo.getModo().valorInicialDaMao());
 		activity.handler.sendMessage(Message.obtain(activity.handler,
