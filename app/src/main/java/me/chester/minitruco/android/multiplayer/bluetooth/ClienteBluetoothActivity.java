@@ -173,7 +173,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	}
 
 	private void exibeMesaForaDoJogo(String parametros) {
-		parametros = tiraEspacoDosNomes(parametros);
 		if (jogo != null) {
 			jogo.abortaJogo(0);
 			jogo = null;
@@ -194,13 +193,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		for (int n = 1; n <= 4; n++) {
 			apelidos[getPosicaoMesa(n) - 1] = apelidosOriginais[n - 1];
 		}
-	}
-
-	private String tiraEspacoDosNomes(String parametros) {
-		while (parametros.split(" ").length > 3) {
-			parametros = parametros.replaceFirst(" ", "_");
-		}
-		return parametros;
 	}
 
 	@Override
