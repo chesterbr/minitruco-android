@@ -117,12 +117,10 @@
     <string-array name="velocidade_animacao_textos">
         <item>Normal</item>
         <item>Rápida</item>
-        <item>Turbo</item>
     </string-array>
     <string-array name="velocidade_animacao_valores">
         <item>1</item>
-        <item>3</item>
-        <item>100</item>
+        <item>4</item>
     </string-array>
 
     <string name="titulo_ajuda">Bem-vindo!</string>
