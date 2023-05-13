@@ -245,6 +245,7 @@ public class CartaVisual extends Carta {
 
 	public void resetBitmap() {
 		this.bitmap = null;
+		this.bitmap = getBitmap();
 	}
 
 	@Override
@@ -263,7 +264,7 @@ public class CartaVisual extends Carta {
 	public void setFechada(boolean fechada) {
 		super.setFechada(fechada);
 		mesa.aguardaFimAnimacoes();
-		this.bitmap = null;
+		this.resetBitmap();
 	}
 
 	/**
