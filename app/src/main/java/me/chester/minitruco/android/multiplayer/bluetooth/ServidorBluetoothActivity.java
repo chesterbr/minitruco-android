@@ -370,7 +370,9 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 			if (connClientes[i] != null) {
 				jogo.adiciona(new JogadorBluetooth(connClientes[i], this));
 			} else {
-				jogo.adiciona(new JogadorCPU());
+				JogadorCPU bot = new JogadorCPU();
+				bot.setFingeQuePensa(false);
+				jogo.adiciona(bot);
 			}
 		}
 		this.jogo = jogo;
