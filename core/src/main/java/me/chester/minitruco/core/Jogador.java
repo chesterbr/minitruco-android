@@ -13,7 +13,6 @@ import java.util.Random;
  * A subclasse determina se o jogador é o usuário do celular, um jogador virtual
  * ou um jogador de outro celular conectado remotamente.
  *
- *
  */
 public abstract class Jogador {
 
@@ -40,13 +39,9 @@ public abstract class Jogador {
 	}
 
 	private String nome = "unnamed";
-	private boolean isGuest = true;
-	long loginTime = 0;
 
 	/**
-	 * Nome do jogador (em jogos multiplayer)
-	 *
-	 * @return
+	 * @return Nome do jogador (em jogos multiplayer)
 	 */
 	public String getNome() {
 		return nome;
@@ -54,49 +49,6 @@ public abstract class Jogador {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public boolean getIsGuest() {
-		return isGuest;
-	}
-
-	public void setIsGuest(boolean isGuest) {
-		this.isGuest = isGuest;
-	}
-
-	public long getLoginTime() {
-		return loginTime;
-	}
-
-	public void setLoginTime(long loginTime) {
-		this.loginTime = loginTime;
-	}
-
-	/**
-	 * List of voted people (control for multiplayer games using database)
-	 *
-	 * @return
-	 */
-
-	private final String[] votedCoolList = new String[100];
-	private int votedCoolListPointer = 0;
-
-	public String getVotedCoolList(int pos) {
-		if (!(votedCoolList[pos] == null))
-			return votedCoolList[pos];
-		else
-			return "";
-	}
-
-	public int getVotedCoolListLength() {
-		return votedCoolList.length;
-	}
-
-	public void addToVotedCoolList(String votedUser) {
-		this.votedCoolList[votedCoolListPointer] = votedUser;
-		votedCoolListPointer++;
-		if (votedCoolListPointer == 100)
-			votedCoolListPointer = 0;
 	}
 
 	/**
@@ -141,18 +93,6 @@ public abstract class Jogador {
 
 	public Carta[] getCartas() {
 		return cartas;
-	}
-
-	public boolean possuiCarta(Carta c) {
-		if (cartas == null) {
-			return false;
-		}
-		for (int i = 0; i < cartas.length; i++) {
-			if (cartas[i].equals(c)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
