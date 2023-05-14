@@ -35,9 +35,9 @@ public abstract class BaseActivity extends ComponentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menuitem_ajuda:
-			mostraAlertBox(this.getString(R.string.titulo_ajuda),
-					this.getString(R.string.texto_ajuda));
+		case R.id.menuitem_instrucoes:
+			mostraAlertBox(this.getString(R.string.titulo_instrucoes),
+					this.getString(R.string.texto_instrucoes));
 			return true;
 		case R.id.menuitem_sobre:
 			SharedPreferences preferences = PreferenceManager

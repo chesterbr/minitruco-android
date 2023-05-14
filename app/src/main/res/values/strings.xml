@@ -124,10 +124,10 @@
         <item>4</item>
     </string-array>
 
-    <string name="titulo_ajuda">Bem-vindo!</string>
-    <string name="texto_ajuda">
+    <string name="titulo_instrucoes">Bem-vindo!</string>
+    <string name="texto_instrucoes">
         <![CDATA[
-        Estas instruções podem ser lidas a qualquer momento no <b>menu Ajuda</b>.
+        Estas instruções podem ser lidas a qualquer momento no menu <b>Instruções</b>.
         Role a tela, tem bastante coisa!
         <br/><br/>
         O miniTruco é um <u>software livre</u> de truco, jogado em duplas, com os parceiros
@@ -138,16 +138,17 @@
 		uma para jogar. A dupla que jogou a maior carta ganha a rodada, e o
 		vencedor inicia a rodada seguinte. A \"melhor de três\" ganha um ponto, encerrando a mão.
 		<br/><br/>
-		<b><u>Valor das Cartas</u></b>:
-		Dentre as cartas normais, 4 é a menor carta, seguida de
-		5, 6, 7, Q, J, K, A, 2, e 3 é a maior de todas, sendo os naipes
-		indiferentes.
-		<br/>
-	    As manilhas são cartas especiais, que valem mais que as normais,
-		e cujos naipes dão mais ou menos valor. O pica-fumo
+		<b><u>Ordem/valor das cartas</u></b>:
+		Dentre as cartas normais, 4 é a de menor valor, seguida de
+		5, 6, 7, Q, J, K, A, 2, e 3 - a maior de todas. Nas cartas normais, o
+		naipe é indiferente, então, por exemplo, um 6♠ empata com um 6♥, mas perde
+		para qualquer 7.
+		<br/><br/>
+	    <b><u>Manilhas</u></b>: Manilhas são quatro cartas especiais, que valem
+	    mais que as normais. Os naipes determinam o nome da manilha e seu valor
+	    relativo: O pica-fumo
 		(♦) é a menor manilha, seguida da espadilha (♠), da escopeta (♥), e do
-		zap (♣). O zap (manilha de paus) é, portanto, a carta de maior valor
-		do jogo.
+		zap (♣) - este último sendo a maior carta do jogo.
 		<br/><br/>
 		No <b>truco paulista</b>, antes de começar a mão, uma carta é virada,
 		e ela indica qual é o valor das manilhas para aquela mão - é sempre
@@ -197,9 +198,9 @@
 		<b><u>Sugestões e comentários</u></b>: O meu e-mail está na tela de título, você pode me
 		escrever com sugestões e comentários, desde que seja de forma educada. Lembre-se que o
 		jogo é inteiramente gratuito e sem publicidade; é algo que eu faço como hobby sem
-		pedir nada em troca. Avaliações positivas na Play Store ajudam outras pessoas a conhecer;
-		avaliações negativas sem uma boa justificativa só me fazem pensar em arrumar outro hobby
-		e tirar o aplicativo de lá.
+		pedir nada em troca. É super válido sugerir melhorias e informar bugs, tanto por e-mail
+		quanto em avaliações na Play Store, mas peço para não penalizar o jogo injustamente (ex.:
+		1 estrela porque o jogo tem um detalhe que você não curtiu).
         ]]>
     </string>
     <string name="titulo_sobre">Sobre o miniTruco</string>

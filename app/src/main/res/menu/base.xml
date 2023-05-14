@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
 
     <item
-        android:id="@+id/menuitem_ajuda"
+        android:id="@+id/menuitem_instrucoes"
         android:icon="@android:drawable/ic_menu_help"
-        android:title="Ajuda"/>
+        android:title="Instruções" />
     <item
         android:id="@+id/menuitem_sobre"
         android:icon="@android:drawable/ic_menu_info_details"
-        android:title="Sobre o miniTruco"/>
+        android:title="Sobre o miniTruco" />
 
 </menu>
