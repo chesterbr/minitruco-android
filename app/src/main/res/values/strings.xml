@@ -238,6 +238,9 @@
             - Frases dos balões sincronizadas entre os aparelhos no Bluetooth<br/>
             - Performance Bluetooth melhorada (não precisa mais esperar quem criou a mesa
               distribuir as cartas, menos lag com bots, etc.)<br/>
+            - Exibe nome correto da mão de 10/11 (ao invés de "mão de ferro", que é outra coisa)<br/>
+            - Mostra o valor correto no placar quando a mão de 10/11 é aceita (a pontuação estava
+              certa, só a exibição estava errada).
         ]]>
     </string>
 
