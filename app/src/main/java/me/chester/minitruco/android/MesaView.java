@@ -379,7 +379,7 @@ public class MesaView extends View {
 	 *
 	 * TODO: refatorar esses magic numbers para algo melhor.
 	 */
-	public CartaVisual[] cartas = new CartaVisual[16];
+	public final CartaVisual[] cartas = new CartaVisual[16];
 
 	/**
 	 * É true se a view já está pronta para responder a solicitações do jogo
@@ -395,7 +395,7 @@ public class MesaView extends View {
 	 * Thread/runnable que faz as animações acontecerem.
 	 * <p>
 	 */
-	Thread animacaoJogo = new Thread(new Runnable() {
+	final Thread animacaoJogo = new Thread(new Runnable() {
 
 		// Para economizar CPU/bateria, o jogo trabalha a um máximo de 4 FPS
 		// (1000/(200+50)) quando não tem nenhuma animação rolando, e sobe para
@@ -429,7 +429,7 @@ public class MesaView extends View {
 		}
 	});
 
-	Thread respondeDialogos = new Thread() {
+	final Thread respondeDialogos = new Thread() {
 		@Override
 		public void run() {
 			// Aguarda o jogo existir
@@ -816,7 +816,7 @@ public class MesaView extends View {
 	/**
 	 * Resultado das rodadas (0=não jogada; 1=vitória; 2=derrota; 3=empate)
 	 */
-	protected int[] resultadoRodada = { 0, 0, 0 };
+	protected final int[] resultadoRodada = { 0, 0, 0 };
 
 	/**
 	 * Margem entre a mesa e as cartas

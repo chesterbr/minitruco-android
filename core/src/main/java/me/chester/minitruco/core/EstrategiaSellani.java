@@ -15,7 +15,7 @@ public class EstrategiaSellani implements Estrategia {
 	private static final int CARTA_MEDIA = 1;
 	private static final int CARTA_BOA = 2;
 	private static final int CARTA_EXCELENTE = 3;
-	int[] C = new int[3];
+	final int[] C = new int[3];
 
 	public String getNomeEstrategia() {
 		return "Sellani";

@@ -45,7 +45,7 @@ public class TrucoActivity extends BaseActivity {
 
 	Jogo jogo;
 
-	int[] placar = new int[2];
+	final int[] placar = new int[2];
 
 	static final int MSG_ATUALIZA_PLACAR = 0;
 	static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
@@ -56,7 +56,7 @@ public class TrucoActivity extends BaseActivity {
 	static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
 	static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
 
-	Handler handler = new Handler() {
+	final Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			TextView tvNos = findViewById(R.id.textview_nos);
 			TextView tvEles = findViewById(R.id.textview_eles);

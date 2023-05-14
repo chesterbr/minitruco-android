@@ -18,7 +18,7 @@ public abstract class Jogador {
 
 	// Variáveis / Métodos úteis
 
-	protected static Random random = new Random();
+	protected static final Random random = new Random();
 
 	private int posicao = 0;
 
@@ -98,14 +98,14 @@ public abstract class Jogador {
 	/**
 	 * Estratégias suportadas pelos jbots
 	 */
-	static Estrategia[] ESTRATEGIAS = { new EstrategiaGasparotto(),
+	static final Estrategia[] ESTRATEGIAS = { new EstrategiaGasparotto(),
 			new EstrategiaSellani() };
 
 	/**
 	 * Lista de opções de estratégia para comboboxes (tem os nomes e a última
 	 * opção é a de sorteio
 	 */
-	static String[] opcoesEstrategia = new String[ESTRATEGIAS.length + 1];
+	static final String[] opcoesEstrategia = new String[ESTRATEGIAS.length + 1];
 
 	static {
 		// Preenche a lista de opções usando o array de estratégias

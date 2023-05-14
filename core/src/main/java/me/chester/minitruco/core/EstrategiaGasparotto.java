@@ -18,7 +18,7 @@ import java.util.Random;
 public class EstrategiaGasparotto implements Estrategia {
 	private static final Random rand = new Random();
 
-	int[] C = new int[3];
+	final int[] C = new int[3];
 
 	private static final int LIXO = 0;
 	private static final int AS = 1;

@@ -55,7 +55,7 @@ public class JogadorBot extends Jogador implements Runnable {
 	 * Thread que processa as notificações recebidas pelo jogador (para não
 	 * travar o jogo enquanto isso oacontece)
 	 */
-	Thread thread;
+    final Thread thread;
 
 	/**
 	 * Estrategia que está controlando este jogador
@@ -65,7 +65,7 @@ public class JogadorBot extends Jogador implements Runnable {
 	/**
 	 * Situação atual do jogo (para o estrategia)
 	 */
-	SituacaoJogo situacaoJogo = new SituacaoJogo();
+    final SituacaoJogo situacaoJogo = new SituacaoJogo();
 
 	/**
 	 * Quantidade de jogadores cuja resposta estamos esperando para um pedido de

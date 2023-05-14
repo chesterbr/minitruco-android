@@ -37,7 +37,7 @@ public class SituacaoJogo {
 	 * Resultados de cada rodada (1 para vitória da equipe 1/3, 2 para vitória
 	 * da equipe 2/4 e 3 para empate)
 	 */
-	public int[] resultadoRodada = new int[3];
+	public final int[] resultadoRodada = new int[3];
 
 	/**
 	 * Valor atual da mão (1, 3, 6, 9 ou 12)
@@ -74,17 +74,17 @@ public class SituacaoJogo {
 	 * Valor que a proprieade manilha assume quando estamos jogando com manilha
 	 * velha (não-fixa)
 	 */
-	public static char MANILHA_INDETERMINADA = 'X';
+	public static final char MANILHA_INDETERMINADA = 'X';
 
 	/**
 	 * Pontos de cada equipe na partida
 	 */
-	public int[] pontosEquipe = new int[2];
+	public final int[] pontosEquipe = new int[2];
 
 	/**
 	 * Para cada rodada (0-2) dá as cartas jogadas pelas 4 posicões (0-3)
 	 */
-	public Carta[][] cartasJogadas = new Carta[3][4];
+	public final Carta[][] cartasJogadas = new Carta[3][4];
 
 	/**
 	 * Cartas que ainda estão na mão do jogador

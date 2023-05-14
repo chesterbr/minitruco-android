@@ -76,7 +76,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 			.fromString("3B175368-ABB4-11DB-A508-C2B155D89593");
 
 	protected BluetoothAdapter btAdapter;
-	protected String[] apelidos = new String[4];
+	protected final String[] apelidos = new String[4];
 	protected String modo;
 	protected Button btnIniciar;
 	protected View layoutIniciar;
@@ -124,7 +124,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	}
 
 
-	ActivityResultLauncher<String[]> permissionsLauncher =
+	final ActivityResultLauncher<String[]> permissionsLauncher =
 		registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
 				result -> {
 					String[] permissoesFaltantes = permissoesBluetoothFaltantes();

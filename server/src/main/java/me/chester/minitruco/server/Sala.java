@@ -44,7 +44,7 @@ public class Sala {
      */
     String codigo;
 
-    String modo;
+    final String modo;
 
     /**
      * Jogadores presentes na sala

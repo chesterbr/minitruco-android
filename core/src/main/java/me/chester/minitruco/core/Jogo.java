@@ -29,7 +29,7 @@ public abstract class Jogo implements Runnable {
 	/**
 	 * Modo do jogo: "P"aulista, "M"ineiro ou paulista com baralho "L"impo
 	 */
-	protected String modoStr;
+	protected final String modoStr;
 	/**
 	 * Modalidade do jogo (paulista, mineiro, etc.)
 	 */
@@ -112,7 +112,7 @@ public abstract class Jogo implements Runnable {
 	/**
 	 * Jogadores adicionados a este jogo
 	 */
-	protected Jogador[] jogadores = new Jogador[4];
+	protected final Jogador[] jogadores = new Jogador[4];
 
 	/**
 	 * Número de jogadores adicionados até agora
@@ -277,7 +277,7 @@ public abstract class Jogo implements Runnable {
 	/**
 	 * Pontos de cada equipe na partida.
 	 */
-	protected int[] pontosEquipe = { 0, 0 };
+	protected final int[] pontosEquipe = { 0, 0 };
 
 	/**
 	 * Indica que o jogo foi finalizado (para evitar que os bots fiquem
