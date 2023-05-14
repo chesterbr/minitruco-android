@@ -231,10 +231,11 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Confirmação de encerramento de jogo agora é opcional<br/>
+            - Opção para desligar o "Você quer mesmo encerrar esse jogo?"<br/>
             - Opção para acelerar a animação das cartas<br/>
-            - Aparelhos que procuram o jogo Bluetooth não tem mais que aguardar a distribuição
-              e recolhimento de cartas do aparelho que criou o jogo Bluetooth<br/>
+            - Frases dos balões sincronizadas entre os aparelhos no Bluetooth<br/>
+            - Performance Bluetooth melhorada (não precisa mais esperar quem criou a mesa
+              distribuir as cartas, menos lag com bots, etc.)<br/>
         ]]>
     </string>
 
