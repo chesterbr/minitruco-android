@@ -461,13 +461,13 @@ public class JogoLocal extends Jogo {
 
 		if (aceita) {
 			// Se aceitou, desencana da resposta do parceiro e pode tocar o
-			// jogo, valendo 3
+			// jogo, valendo o valor da mão de ferro
 			aguardandoRespostaMaoDeFerro[j.getParceiro() - 1] = false;
 			valorMao = modo.valorDaMaoDeFerro();
 			notificaVez();
 		} else {
-			// Se recusou (e o parceiro também), a equipe perde um ponto e
-			// recomeça a mao
+			// Se recusou (e o parceiro também), a equipe adversária ganha
+			// a pontuação da mão comum
 			if (!aguardandoRespostaMaoDeFerro[j.getParceiro() - 1]) {
 				pontosEquipe[j.getEquipeAdversaria() - 1] += modo
 						.valorInicialDaMao();
