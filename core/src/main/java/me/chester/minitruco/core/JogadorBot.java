@@ -232,7 +232,7 @@ public class JogadorBot extends Jogador implements Runnable {
 					}
 				} catch (Exception e) {
 					LOGGER.log(Level.INFO,
-							"Erro em aceite-mao-de-ferro no jogador" + this.getPosicao(),
+							"Erro em aceite-mao-de-x no jogador" + this.getPosicao(),
 							e);
 					respostaMaoDeX = random.nextBoolean();
 				}
