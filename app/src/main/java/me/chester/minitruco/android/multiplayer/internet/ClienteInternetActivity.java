@@ -39,7 +39,6 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
 
     public EditText editNomeJogador;
     private Socket socket;
-    private Thread thread;
     private PrintWriter out;
     private BufferedReader in;
     private SharedPreferences preferences;
@@ -57,7 +56,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.internet_conectando);
 
-        thread = new Thread(() -> {
+        new Thread(() -> {
             try {
                 if (conecta()) {
                     while (!socket.isClosed()) {
@@ -67,8 +66,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
             } finally {
                 desconecta();
             }
-        });
-        thread.start();
+        }).start();
     }
 
     @Override

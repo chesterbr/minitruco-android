@@ -19,14 +19,12 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 	private InputStream in;
 	private final BluetoothSocket socket;
 	private final ServidorBluetoothActivity servidor;
-	private final Thread threadProcessaMensagens;
 
 	public JogadorBluetooth(BluetoothSocket socket,
 			ServidorBluetoothActivity servidor) {
 		this.socket = socket;
 		this.servidor = servidor;
-		threadProcessaMensagens = new Thread(this);
-		threadProcessaMensagens.start();
+		new Thread(this).start();
 	}
 
 	/**
