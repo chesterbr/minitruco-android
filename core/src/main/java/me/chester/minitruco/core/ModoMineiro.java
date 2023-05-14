@@ -6,7 +6,7 @@ package me.chester.minitruco.core;
 
 public class ModoMineiro implements Modo {
 
-	public int pontuacaoQueDeterminaMaoDeFerro() {
+	public int pontuacaoParaMaoDeX() {
 		return 10;
 	}
 
@@ -14,7 +14,8 @@ public class ModoMineiro implements Modo {
 		return 2;
 	}
 
-	public int valorDaMaoDeFerro() {
+	@Override
+	public int valorDaMaoDeX() {
 		return 4;
 	}
 

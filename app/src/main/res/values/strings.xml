@@ -168,7 +168,7 @@
 		<br/><br/>
 		<b><u>Empate</u></b>: Se a mão abre com empate, a primeira rodada não-empatada decide ela.
 		Se o empate acontece após a primeira rodada, a mão é de quem ganhou a primeira.
-		<br/><br/><b><u>Mão de ferro</u></b>: Se uma das duplas fizer 10 pontos (no truco mineiro)
+		<br/><br/><b><u>Mão de 10 (ou 11)</u></b>: Se uma das duplas fizer 10 pontos (no truco mineiro)
 		ou 11 pontos (no truco paulista), seus membros podem ver as cartas do parceiro antes de
 		começar o jogo. Se um deles aceitar jogar, a mão vale o valor do truco. Se os dois recusarem,
 		perdem a rodada (no valor normal), e uma nova mão é distribuída, valendo as mesmas regras.
@@ -190,7 +190,9 @@
 		<b><u>Diferenças do miniTruco</u></b>: No jogo físico, jogadores podem trucar a qualquer
 		hora; no miniTruco você só truca na sua vez. Não existem sinais (por enquanto), e não é
 		possível entregar o jogo. No jogo normal, qualquer um pode jogar uma carta \"fechada\"
-		(virada para baixo), no miniTruco apenas um integrante da dupla pode fazer isso.
+		(virada para baixo), no miniTruco apenas um integrante da dupla pode fazer isso. O miniTruco
+		não faz a "mão de ferro" (quando o truco mineiro empata em 10x10 ou o paulista em 11x11),
+		na qual se joga sem ver as próprias cartas).
 		<br/><br/>
 		<b><u>Sugestões e comentários</u></b>: O meu e-mail está na tela de título, você pode me
 		escrever com sugestões e comentários, desde que seja de forma educada. Lembre-se que o

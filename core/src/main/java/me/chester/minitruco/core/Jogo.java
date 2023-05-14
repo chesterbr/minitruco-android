@@ -332,7 +332,7 @@ public abstract class Jogo implements Runnable {
 	 * 11x11 no Truco Paulista)
 	 */
 	public boolean isPlacarPermiteAumento() {
-		int max = modo.pontuacaoQueDeterminaMaoDeFerro();
+		int max = modo.pontuacaoParaMaoDeX();
 		return pontosEquipe[0] < max && pontosEquipe[1] < max;
 	}
 

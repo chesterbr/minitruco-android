@@ -184,9 +184,9 @@ public class JogoLocal extends Jogo {
 		}
 
 		int rndFrase = Math.abs(rand.nextInt());
-		if (pontosEquipe[0] == modo.pontuacaoQueDeterminaMaoDeFerro()
-				^ pontosEquipe[1] == modo.pontuacaoQueDeterminaMaoDeFerro()) {
-			if (pontosEquipe[0] == modo.pontuacaoQueDeterminaMaoDeFerro()) {
+		if (pontosEquipe[0] == modo.pontuacaoParaMaoDeX()
+				^ pontosEquipe[1] == modo.pontuacaoParaMaoDeX()) {
+			if (pontosEquipe[0] == modo.pontuacaoParaMaoDeX()) {
 				setEquipeAguardandoMaoDeFerro(1);
 				getJogador(1).informaMaoDeFerro(getJogador(3).getCartas());
 				getJogador(3).informaMaoDeFerro(getJogador(1).getCartas());
@@ -385,18 +385,18 @@ public class JogoLocal extends Jogo {
 		for (int i = 3; i >= 0; i--) {
 			Jogador interessado = jogadores[i];
 			interessado.maoFechada(pontosEquipe);
-			if (pontosEquipe[0] > modo.pontuacaoQueDeterminaMaoDeFerro()) {
+			if (pontosEquipe[0] > modo.pontuacaoParaMaoDeX()) {
 				interessado.jogoFechado(1, rndFrase);
 				jogoFinalizado = true;
-			} else if (pontosEquipe[1] > modo.pontuacaoQueDeterminaMaoDeFerro()) {
+			} else if (pontosEquipe[1] > modo.pontuacaoParaMaoDeX()) {
 				interessado.jogoFechado(2, rndFrase);
 				jogoFinalizado = true;
 			}
 		}
 
 		// Se ainda estivermos em jogo, incia a nova mao
-		if (pontosEquipe[0] <= modo.pontuacaoQueDeterminaMaoDeFerro()
-				&& pontosEquipe[1] <= modo.pontuacaoQueDeterminaMaoDeFerro()) {
+		if (pontosEquipe[0] <= modo.pontuacaoParaMaoDeX()
+				&& pontosEquipe[1] <= modo.pontuacaoParaMaoDeX()) {
 			int posAbre = jogadorAbriuMao.getPosicao() + 1;
 			if (posAbre == 5)
 				posAbre = 1;
@@ -463,7 +463,7 @@ public class JogoLocal extends Jogo {
 			// Se aceitou, desencana da resposta do parceiro e pode tocar o
 			// jogo, valendo o valor da mão de ferro
 			aguardandoRespostaMaoDeFerro[j.getParceiro() - 1] = false;
-			valorMao = modo.valorDaMaoDeFerro();
+			valorMao = modo.valorDaMaoDeX();
 			notificaVez();
 		} else {
 			// Se recusou (e o parceiro também), a equipe adversária ganha

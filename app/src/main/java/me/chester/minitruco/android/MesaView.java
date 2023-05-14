@@ -331,8 +331,8 @@ public class MesaView extends View {
 			} else {
 				recusarAumento = true;
 			}
-		} else if (mostrarPerguntaMaoDeFerro) {
-			mostrarPerguntaMaoDeFerro = false;
+		} else if (mostrarPerguntaMaoDeX) {
+			mostrarPerguntaMaoDeX = false;
 			if (resposta) {
 				aceitarMaoDeFerro = true;
 			} else {
@@ -745,7 +745,13 @@ public class MesaView extends View {
 		}
 
 		// Caixa de diálogo (mão de ferro ou aumento)
-		if (mostrarPerguntaMaoDeFerro || mostrarPerguntaAumento) {
+		if (mostrarPerguntaMaoDeX || mostrarPerguntaAumento) {
+			String textoPergunta;
+			if (mostrarPerguntaAumento) {
+				textoPergunta = "Aceita?"; // TODO descrever?
+			} else {
+				textoPergunta = "Aceita mão de " + trucoActivity.jogo.getModo().pontuacaoParaMaoDeX();
+			}
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
 			paint.setColor(Color.BLACK);
@@ -757,12 +763,10 @@ public class MesaView extends View {
 			paint.setTextSize(tamanhoFonte * 0.5f);
 			paint.setTextAlign(Align.CENTER);
 			paint.setStyle(Style.FILL);
-			canvas.drawText(mostrarPerguntaMaoDeFerro ? "Aceita mão de ferro?"
-					: "Aceita?", rectDialog.centerX(),
+			canvas.drawText(textoPergunta, rectDialog.centerX(),
 					rectDialog.top + paint.getTextSize() * 1.5f, paint);
 			desenhaBotao("Sim", canvas, rectBotaoSim);
 			desenhaBotao("Nao", canvas, rectBotaoNao);
-
 		}
 
 		desenhaBalao(canvas);
@@ -861,7 +865,7 @@ public class MesaView extends View {
 	 */
 	private CartaVisual cartaQueFez;
 
-	public boolean mostrarPerguntaMaoDeFerro = false;
+	public boolean mostrarPerguntaMaoDeX = false;
 
 	private boolean recusarMaoDeFerro = false;
 	private boolean aceitarMaoDeFerro = false;
