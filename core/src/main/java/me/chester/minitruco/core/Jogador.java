@@ -269,16 +269,16 @@ public abstract class Jogador {
 	 *			  Número "grande" que identifica a frase do strings.xml dita
 	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase);
+	public abstract void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase);
 
 	/**
-	 * Informa que o jogador é beneficiário de uma "mão de ferro", e, portanto,
+	 * Informa que o jogador é beneficiário de uma mão de 10/11, e, portanto,
 	 * deve decidir se aceita ou não esta rodada (se aceitar vale o valor do truco,
 	 * se ambos recusarem perde o modo normal)
 	 *
 	 * @param cartasParceiro Cartas do parceiro
 	 */
-	public abstract void informaMaoDeFerro(Carta[] cartasParceiro);
+	public abstract void informaMaoDeX(Carta[] cartasParceiro);
 
 	/**
 	 * Informa que o jogo foi abandonado por alguma causa externa (ex.: um

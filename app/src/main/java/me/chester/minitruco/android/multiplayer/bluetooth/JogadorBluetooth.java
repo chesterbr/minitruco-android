@@ -84,7 +84,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 							}
 							break;
 						case 'H':
-							jogo.decideMaoDeFerro(this, args[1].equals("T"));
+							jogo.decideMaoDeX(this, args[1].equals("T"));
 							break;
 						case 'T':
 							jogo.aumentaAposta(this);
@@ -186,11 +186,11 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 		enviaMensagem("O " + pontosEquipe[0] + ' ' + pontosEquipe[1]);
 	}
 
-	public void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase) {
+	public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
 		enviaMensagem("H " + j.getPosicao() + (aceita ? " T" : " F") + ' ' + rndFrase);
 	}
 
-	public void informaMaoDeFerro(Carta[] cartasParceiro) {
+	public void informaMaoDeX(Carta[] cartasParceiro) {
 		StringBuffer sbComando = new StringBuffer("F ");
 		for (int i = 0; i <= 2; i++) {
 			sbComando.append(cartasParceiro[i]);

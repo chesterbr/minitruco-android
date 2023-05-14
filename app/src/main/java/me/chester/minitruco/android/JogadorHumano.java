@@ -53,7 +53,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	}
 
 	@Override
-	public void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase) {
+	public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
 		if (posicaoNaTela(j) == 3 && aceita) {
 			mesa.mostrarPerguntaMaoDeX = false;
 		}
@@ -69,8 +69,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	}
 
 	@Override
-	public void informaMaoDeFerro(Carta[] cartasParceiro) {
-		mesa.mostraCartasMaoDeFerro(cartasParceiro);
+	public void informaMaoDeX(Carta[] cartasParceiro) {
+		mesa.mostraCartasMaoDeX(cartasParceiro);
 		mesa.mostrarPerguntaMaoDeX = true;
 	}
 

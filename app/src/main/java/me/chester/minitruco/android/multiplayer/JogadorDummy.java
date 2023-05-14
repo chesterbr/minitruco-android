@@ -24,11 +24,11 @@ public class JogadorDummy extends Jogador {
 
 	}
 
-	public void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase) {
+	public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
 
 	}
 
-	public void informaMaoDeFerro(Carta[] cartasParceiro) {
+	public void informaMaoDeX(Carta[] cartasParceiro) {
 
 	}
 

@@ -212,14 +212,14 @@ public class JogadorCPU extends Jogador implements Runnable {
 				}
 			}
 
-			if (recebiPedidoDeMaoDeFerro) {
-				recebiPedidoDeMaoDeFerro = false;
+			if (recebiPedidoDeMaoDeX) {
+				recebiPedidoDeMaoDeX = false;
 				atualizaSituacaoJogo();
 				sleep(1000 + random.nextInt(1000));
-				boolean respostaMaoDeFerro = false;
+				boolean respostaMaoDeX = false;
 				try {
-					respostaMaoDeFerro = estrategia.aceitaMaoDeFerro(
-							cartasDoParceiroDaMaoDeFerro, situacaoJogo);
+					respostaMaoDeX = estrategia.aceitaMaoDeX(
+							cartasDoParceiroDaMaoDeX, situacaoJogo);
 					// Atendendo a pedidos na Play Store, o parceiro do humano vai
 					// ignorar a estratégia com 90% de chance e recusar,
 					// deixando a decisão na mão do humano.
@@ -228,15 +228,15 @@ public class JogadorCPU extends Jogador implements Runnable {
 						LOGGER.log(Level.INFO,
 								"Mão de ferro do parceiro do humano. AceitaEstrategia="
 										+ aceitaEstrategia);
-						respostaMaoDeFerro = respostaMaoDeFerro && aceitaEstrategia;
+						respostaMaoDeX = respostaMaoDeX && aceitaEstrategia;
 					}
 				} catch (Exception e) {
 					LOGGER.log(Level.INFO,
 							"Erro em aceite-mao-de-ferro no jogador" + this.getPosicao(),
 							e);
-					respostaMaoDeFerro = random.nextBoolean();
+					respostaMaoDeX = random.nextBoolean();
 				}
-				jogo.decideMaoDeFerro(this, respostaMaoDeFerro);
+				jogo.decideMaoDeX(this, respostaMaoDeX);
 			}
 
 			if (estouAguardandoRepostaAumento && (numRespostasAguardando == 0)) {
@@ -257,9 +257,9 @@ public class JogadorCPU extends Jogador implements Runnable {
 	private boolean recebiPedidoDeAumento = false;
 	private boolean estouAguardandoRepostaAumento = false;
 
-	private boolean recebiPedidoDeMaoDeFerro = false;
+	private boolean recebiPedidoDeMaoDeX = false;
 
-	private Carta[] cartasDoParceiroDaMaoDeFerro;
+	private Carta[] cartasDoParceiroDaMaoDeX;
 
 	public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
 		// Notifica a estrategia
@@ -387,13 +387,13 @@ public class JogadorCPU extends Jogador implements Runnable {
 		estrategia.inicioPartida();
 	}
 
-	public void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase) {
+	public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
 		// Por ora não faz nada
 	}
 
-	public void informaMaoDeFerro(Carta[] cartasParceiro) {
-		cartasDoParceiroDaMaoDeFerro = cartasParceiro;
-		recebiPedidoDeMaoDeFerro = true;
+	public void informaMaoDeX(Carta[] cartasParceiro) {
+		cartasDoParceiroDaMaoDeX = cartasParceiro;
+		recebiPedidoDeMaoDeX = true;
 	}
 
 	public void jogoAbortado(int posicao, int rndFrase) {

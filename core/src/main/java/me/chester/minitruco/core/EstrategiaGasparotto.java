@@ -2054,7 +2054,7 @@ public class EstrategiaGasparotto implements Estrategia {
 	/**
 	 * Retorna se eu aceito jogar ou não esta mão de ferro.
 	 */
-	public boolean aceitaMaoDeFerro(Carta[] cartasParceiro, SituacaoJogo s) {
+	public boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s) {
 		// Não vamos pensar muito...
 
 		int q3 = 0, q2 = 0, qManilhas = 0;

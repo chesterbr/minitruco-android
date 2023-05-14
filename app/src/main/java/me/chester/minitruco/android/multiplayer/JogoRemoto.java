@@ -177,18 +177,18 @@ public class JogoRemoto extends Jogo {
                 break;
             case 'H':
                 // Alguém aceitou mão de ferro, informa
-                getJogadorHumano().decidiuMaoDeFerro(
+                getJogadorHumano().decidiuMaoDeX(
                         getJogador(Integer.parseInt(tokens[0])),
                         tokens[1].equals("T"),
                         Integer.parseInt(tokens[2]));
                 break;
             case 'F':
                 // Mão de ferro. Recupera as cartas do parceiro e informa o jogador
-                Carta[] cartasMaoDeFerro = new Carta[3];
+                Carta[] cartasMaoDeX = new Carta[3];
                 for (int i = 0; i <= 2; i++) {
-                    cartasMaoDeFerro[i] = new Carta(tokens[i]);
+                    cartasMaoDeX[i] = new Carta(tokens[i]);
                 }
-                getJogadorHumano().informaMaoDeFerro(cartasMaoDeFerro);
+                getJogadorHumano().informaMaoDeX(cartasMaoDeX);
                 break;
             case 'R':
                 // Fim de rodada, recupera o resultado e o jogador que torna
@@ -238,7 +238,7 @@ public class JogoRemoto extends Jogo {
         cliente.enviaLinha("J " + c + (c.isFechada() ? " T" : ""));
     }
 
-    public void decideMaoDeFerro(Jogador j, boolean aceita) {
+    public void decideMaoDeX(Jogador j, boolean aceita) {
         cliente.enviaLinha("H " + (aceita ? "T" : "F"));
     }
 

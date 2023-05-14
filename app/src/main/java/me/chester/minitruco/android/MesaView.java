@@ -254,7 +254,7 @@ public class MesaView extends View {
 	 * @param cartasParceiro
 	 *            cartas do seu parceiro
 	 */
-	public void mostraCartasMaoDeFerro(Carta[] cartasParceiro) {
+	public void mostraCartasMaoDeX(Carta[] cartasParceiro) {
 		for (int i = 0; i <= 2; i++) {
 			cartas[10 + i].setCarta(cartasParceiro[i]);
 		}
@@ -334,9 +334,9 @@ public class MesaView extends View {
 		} else if (mostrarPerguntaMaoDeX) {
 			mostrarPerguntaMaoDeX = false;
 			if (resposta) {
-				aceitarMaoDeFerro = true;
+				aceitarMaoDeX = true;
 			} else {
-				recusarMaoDeFerro = true;
+				recusarMaoDeX = true;
 			}
 		}
 	}
@@ -446,13 +446,13 @@ public class MesaView extends View {
 					e.printStackTrace();
 				}
 				Jogo jogo = trucoActivity.jogo;
-				if (recusarMaoDeFerro) {
-					recusarMaoDeFerro = false;
-					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, false);
+				if (recusarMaoDeX) {
+					recusarMaoDeX = false;
+					jogo.decideMaoDeX(trucoActivity.jogadorHumano, false);
 				}
-				if (aceitarMaoDeFerro) {
-					aceitarMaoDeFerro = false;
-					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, true);
+				if (aceitarMaoDeX) {
+					aceitarMaoDeX = false;
+					jogo.decideMaoDeX(trucoActivity.jogadorHumano, true);
 				}
 				if (recusarAumento) {
 					recusarAumento = false;
@@ -867,8 +867,8 @@ public class MesaView extends View {
 
 	public boolean mostrarPerguntaMaoDeX = false;
 
-	private boolean recusarMaoDeFerro = false;
-	private boolean aceitarMaoDeFerro = false;
+	private boolean recusarMaoDeX = false;
+	private boolean aceitarMaoDeX = false;
 
 	public boolean mostrarPerguntaAumento = false;
 

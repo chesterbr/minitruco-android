@@ -262,12 +262,12 @@ public class JogadorConectado extends Jogador implements Runnable {
     }
 
     @Override
-    public void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase) {
+    public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
         println("H " + j.getPosicao() + (aceita ? " T" : " F"));
     }
 
     @Override
-    public void informaMaoDeFerro(Carta[] cartasParceiro) {
+    public void informaMaoDeX(Carta[] cartasParceiro) {
         StringBuilder sbComando = new StringBuilder("F ");
         for (int i = 0; i <= 2; i++) {
             sbComando.append(cartasParceiro[i]);
