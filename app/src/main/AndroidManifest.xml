@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="20401"
-    android:versionName="2.4.1">
+    android:versionCode="20402"
+    android:versionName="2.4.2">
     <!--
          Ao aumentar a versão, atualize também o versionCode
          e não esqueça do "novidades" em strings.xml"
