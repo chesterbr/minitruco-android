@@ -236,7 +236,7 @@ public abstract class Jogo implements Runnable {
 	 * eventos do jogo.
 	 *
 	 * @param jogador
-	 *            Jogador que será adicionado (CPU, humano, etc)
+	 *            Jogador que será adicionado (bot, humano, etc)
 	 * @return true se adicionou o jogador, false se não conseguiu (ex.: mesa
 	 *         lotada)
 	 */
@@ -280,7 +280,7 @@ public abstract class Jogo implements Runnable {
 	protected int[] pontosEquipe = { 0, 0 };
 
 	/**
-	 * Indica que o jogo foi finalizado (para evitar que os jogadoresCPU fiquem
+	 * Indica que o jogo foi finalizado (para evitar que os bots fiquem
 	 * "rodando em falso" caso o jogo seja abortado
 	 */
 	public boolean jogoFinalizado = false;

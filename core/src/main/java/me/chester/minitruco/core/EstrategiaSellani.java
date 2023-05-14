@@ -6,7 +6,7 @@ package me.chester.minitruco.core;
 import java.util.Random;
 
 /**
- * Estratégia inteligente para jogadores CPU
+ * Estratégia inteligente para bots
  *
  */
 public class EstrategiaSellani implements Estrategia {

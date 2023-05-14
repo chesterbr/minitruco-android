@@ -19,7 +19,7 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
-import me.chester.minitruco.core.JogadorCPU;
+import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 
@@ -146,7 +146,7 @@ public class TrucoActivity extends BaseActivity {
 		Jogo novoJogo = new JogoLocal(modo, humanoDecide, jogoAutomatico);
 		novoJogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
-			novoJogo.adiciona(new JogadorCPU());
+			novoJogo.adiciona(new JogadorBot());
 		}
 		return novoJogo;
 	}

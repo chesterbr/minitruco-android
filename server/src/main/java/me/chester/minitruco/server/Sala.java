@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import me.chester.minitruco.core.Jogador;
-import me.chester.minitruco.core.JogadorCPU;
+import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 
@@ -24,7 +24,7 @@ import me.chester.minitruco.core.JogoLocal;
  */
 public class Sala {
 
-	private static final String APELIDO_CPU = "bot";
+	private static final String APELIDO_BOT = "bot";
     private static final String POSICAO_PLACEHOLDER = "$POSICAO";
 
     /**
@@ -253,7 +253,7 @@ public class Sala {
         // vazias)
         for (int i = 0; i <= 3; i++) {
             sb.append(i == 0 ? "" : '|');
-            sb.append(jogadores[i] == null ? APELIDO_CPU : jogadores[i].getNome());
+            sb.append(jogadores[i] == null ? APELIDO_BOT : jogadores[i].getNome());
         }
         sb.append(' ');
 
@@ -310,7 +310,7 @@ public class Sala {
         int n = 1;
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == null) {
-                jogadores[i] = new JogadorCPU("Sortear");
+                jogadores[i] = new JogadorBot("Sortear");
                 jogadores[i].setNome("[ROBO_" + (n++) + "]");
             }
         }
@@ -362,7 +362,7 @@ public class Sala {
      */
     public synchronized void liberaJogo() {
         for (int i = 0; i <= 3; i++) {
-            if (jogadores[i] instanceof JogadorCPU) {
+            if (jogadores[i] instanceof JogadorBot) {
                 jogadores[i] = null;
             }
         }

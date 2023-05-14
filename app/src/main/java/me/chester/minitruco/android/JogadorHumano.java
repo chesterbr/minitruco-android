@@ -148,7 +148,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	@Override
 	public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
 		if (j.getEquipe() == this.getEquipe()) {
-			// Num jogo sem bluetooth/etc, a CPU não aumenta, ela só
+			// Num jogo sem bluetooth/etc, o bot não aumenta, só
 			// sinaliza a intenção de aumentar
 			if (jogo instanceof JogoLocal && ((JogoLocal) jogo).isIgnoraDecisao(j)) {
 				mesa.diz("aumento_quero", posicaoNaTela(j), 1500, rndFrase);

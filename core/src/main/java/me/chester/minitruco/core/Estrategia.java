@@ -4,7 +4,7 @@ package me.chester.minitruco.core;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Base para as estratégias "plugáveis" que um jogador CPU pode utilizar.
+ * Base para as estratégias "plugáveis" que um bot pode utilizar.
  * <p>
  * Uma estratégia é uma classe que implementa os métodos <code>joga</code>,
  * <code>aceitaTruco</code> e <code>aceitaMaoDeX</code>, que são chamados pelo

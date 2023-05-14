@@ -30,8 +30,8 @@ Créditos
 - Idéia, desenvolvimento, manutenção e arte: **[Carlos Duarte do Nascimento](https://chester.me)** ([@chesterbr](https://github.com/chesterbr))
 - Imagens de carta, fundo e logotipo: **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani))
 - Tento mineiro: **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram))
-- Estratégias da CPU atuais:
+- Estratégias de bots atuais:
   - **[Leonardo Sellani](https://www.linkedin.com/in/leonardosellani/)**
   - **[Sandro Gasparoto](https://www.linkedin.com/in/sgasparoto/)**
-- Estratégia da CPU antiga: **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**
+- Estratégia de bot antiga: **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**
 - Seleção manual de servidor Bluetooth: **[Rodolfo Vasconcelos](https://www.linkedin.com/in/rodolfo-de-andrade-vasconcelos/)**

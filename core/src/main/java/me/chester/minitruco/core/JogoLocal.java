@@ -241,7 +241,7 @@ public class JogoLocal extends Jogo {
 			for (int k = 0; k <= 3; k++) {
 				if (c.equals(cartasJogadasPorRodada[i][k])) {
 					LOGGER.log(Level.INFO, "carta jogada anteriormente: "+ c + "," + i + "," + k);
-					renotificaVezCPU();
+					renotificaVezBot();
 					return;
 				}
 			}
@@ -257,7 +257,7 @@ public class JogoLocal extends Jogo {
 		if (cartaNaMaoDoJogador == null) {
 			LOGGER.log(Level.INFO, "j" + j.getPosicao() + " tentou jogar " + c +
 					" mas esta carta não está na mão dele");
-			renotificaVezCPU();
+			renotificaVezBot();
 			return;
 		}
 
@@ -445,7 +445,7 @@ public class JogoLocal extends Jogo {
 		LOGGER.log(Level.INFO, "J" + j.getPosicao() + (aceita ? "" : " nao")
 				+ " quer jogar mao de 11 ");
 
-		// Se for uma CPU parceira de humano num jogo 100% local, trata como recusa
+		// Se for um bot parceiro de humano num jogo 100% local, trata como recusa
 		// (quem decide mão de 10/11 é o humano) e nem notifica (silenciando o balão)
 		if (isIgnoraDecisao(j)) {
 			aceita = false;
@@ -525,7 +525,7 @@ public class JogoLocal extends Jogo {
 				+ (aceitou ? "aceitou" : "recusou"));
 
 		int posParceiro = (j.getPosicao() + 1) % 4 + 1;
-		// Se, num jogo 100% local (só o humano e CPUs)
+		// Se, num jogo 100% local (só o humano e bots)
 		// o bot parceiro do humano aceita, trata como recusa
 		// (mas notifica humano do aceite)
 		boolean ignorarAceite = isIgnoraDecisao(j) && aceitou;
@@ -562,7 +562,7 @@ public class JogoLocal extends Jogo {
 	@Override
 	public boolean semJogadoresRemotos() {
 		for (int i = 0; i < 3; i ++)
-			if (!(jogadores[i] instanceof JogadorHumano || jogadores[i] instanceof JogadorCPU)) {
+			if (!(jogadores[i] instanceof JogadorHumano || jogadores[i] instanceof JogadorBot)) {
 				return false;
 			}
 		return true;
@@ -583,13 +583,13 @@ public class JogoLocal extends Jogo {
 	 * Determina se o jogador em questão deve ter sua decisão (aceite de aumento ou mão 11) ignorada.
 	 *
 	 * @param jogador jogador que acabou de tomar uma decisão
-	 * @return true se o jogador for uma CPU cujo parceiro é humano em um jogo 100% local
+	 * @return true se o jogador for um bot cujo parceiro é humano em um jogo 100% local
 	 */
 	public boolean isIgnoraDecisao(Jogador jogador) {
 		int posParceiro = (jogador.getPosicao() + 1) % 4 + 1;
 		return  humanoDecide &&
 				semJogadoresRemotos() &&
-				(jogador instanceof JogadorCPU) &&
+				(jogador instanceof JogadorBot) &&
 				(jogadores[posParceiro - 1] instanceof JogadorHumano);
 	}
 
@@ -631,16 +631,16 @@ public class JogoLocal extends Jogo {
 	}
 
 	/**
-	 * Se o jogador da vez for CPU, re-notifica ele que é sua vez.
+	 * Se o jogador da vez for bot, re-notifica ele que é sua vez.
 	 *
-	 * Isso é usado para casos em que a CPU joga uma jogada inválida (ex.: porque
+	 * Isso é usado para casos em que o bot joga uma jogada inválida (ex.: porque
 	 * jogou depois que a mão fechou), evitando que ela fique "travada"
 	 */
-	private void renotificaVezCPU() {
+	private void renotificaVezBot() {
 		Jogador j = getJogadorDaVez();
 		boolean pf = isPodeFechada();
 
-		if (j instanceof JogadorCPU) {
+		if (j instanceof JogadorBot) {
 			j.vez(j, pf);
 		}
 	}

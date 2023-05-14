@@ -96,7 +96,7 @@ public abstract class Jogador {
 	}
 
 	/**
-	 * Estratégias suportadas pelos jogadores automático (CPU e Bot)
+	 * Estratégias suportadas pelos jbots
 	 */
 	static Estrategia[] ESTRATEGIAS = { new EstrategiaGasparotto(),
 			new EstrategiaSellani() };
@@ -117,7 +117,7 @@ public abstract class Jogador {
 
 	/**
 	 * Instancia uma estratégia (para uso em jogadores que precisam disso, como
-	 * o <code>JogadorBot</code> ou o <code>JogadorCPU</code>).
+	 * o <code>JogadorBot</code> ou o <code>JogadorBot</code>).
 	 *
 	 * @param nomeEstrategia
 	 *            Nome da estratégia (ex.: "Willian"). Se nenhuma estratégia se

@@ -15,18 +15,18 @@ import java.util.logging.Logger;
  * @see Estrategia
  *
  */
-public class JogadorCPU extends Jogador implements Runnable {
-    private final static Logger LOGGER = Logger.getLogger("JogadorCPU");
+public class JogadorBot extends Jogador implements Runnable {
+    private final static Logger LOGGER = Logger.getLogger("JogadorBot");
 
 	private boolean fingeQuePensa = true;
 
 	/**
-	 * Cria um novo jogador CPU, usando a estratégia fornecida.
+	 * Cria um novo bot, usando a estratégia fornecida.
 	 *
 	 * @param estrategia
 	 *            Estratégia a ser adotada por este jogador
 	 */
-	public JogadorCPU(Estrategia estrategia) {
+	public JogadorBot(Estrategia estrategia) {
 		this.estrategia = estrategia;
 		this.setNome(estrategia.getNomeEstrategia());
 		this.thread = new Thread(this);
@@ -34,20 +34,20 @@ public class JogadorCPU extends Jogador implements Runnable {
 	}
 
 	/**
-	 * Cria um novo jogador CPU, buscando a estratégia pelo nome.
+	 * Cria um novo bot, buscando a estratégia pelo nome.
 	 * <p>
 	 *
 	 * @param nomeEstrategia
 	 *            Nome da estratégia (ex.: "Willian")
 	 */
-	public JogadorCPU(String nomeEstrategia) {
+	public JogadorBot(String nomeEstrategia) {
 		this(criaEstrategiaPeloNome(nomeEstrategia));
 	}
 
 	/**
-	 * Cria um novo jogador CPU, com uma estratégia aleatória
+	 * Cria um novo bot, com uma estratégia aleatória
 	 */
-	public JogadorCPU() {
+	public JogadorBot() {
 		this(criaEstrategiaPeloNome("x"));
 	}
 
@@ -104,7 +104,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	public void run() {
 
-		LOGGER.log(Level.INFO, "JogadorCPU " + this + " (.run) iniciado");
+		LOGGER.log(Level.INFO, "JogadorBot " + this + " (.run) iniciado");
 		while (jogo == null || !jogo.jogoFinalizado) {
 			sleep(100);
 
@@ -136,7 +136,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// Faz a
 					// solicitação de truco numa nova thread // (usando o
 					// próprio
-					// JogadorCPU como Runnable - era uma inner // class, mas
+					// JogadorBot como Runnable - era uma inner // class, mas
 					// otimizei para reduzir o .jar)
 					aceitaramTruco = false;
 					numRespostasAguardando = 2;
@@ -198,7 +198,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 				recebiPedidoDeAumento = false;
 				atualizaSituacaoJogo();
 				sleep(1000 + random.nextInt(1000));
-				// O sync/if é só pra evitar resposta dupla entre 2 CPUs
+				// O sync/if é só pra evitar resposta dupla entre 2 bots
 				synchronized (jogo) {
 					if (situacaoJogo.posJogadorPedindoAumento != 0) {
 						boolean resposta = false;
@@ -250,7 +250,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 			}
 
 		}
-		LOGGER.log(Level.INFO, "JogadorCPU " + this + " (.run) finalizado");
+		LOGGER.log(Level.INFO, "JogadorBot " + this + " (.run) finalizado");
 
 	}
 

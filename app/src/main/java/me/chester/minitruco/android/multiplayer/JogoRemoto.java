@@ -139,7 +139,7 @@ public class JogoRemoto extends Jogo {
                     }
                 } else {
                     if (tokens.length > 1) {
-                        // Cria a carta jogada pela CPU
+                        // Cria a carta jogada pelo bot
                         c = new Carta(tokens[1]);
                         baralho.tiraDoBaralho(c);
                     } else {
@@ -220,7 +220,7 @@ public class JogoRemoto extends Jogo {
     }
 
     /**
-     * Não implementado em jogo remoto (apenas o JogadorCPU usa isso, e ele
+     * Não implementado em jogo remoto (apenas o JogadorBot usa isso, e ele
      * não participa desses jogos).
      */
     public void atualizaSituacao(SituacaoJogo s, Jogador j) {
