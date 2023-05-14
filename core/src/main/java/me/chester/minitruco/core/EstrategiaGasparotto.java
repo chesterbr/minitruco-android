@@ -67,8 +67,7 @@ public class EstrategiaGasparotto implements Estrategia {
 	 */
 	public void setNickEstrategia() {
 		this.nick = nicks_estrategia[this.gameLevel];
-		return;
-	}
+    }
 
 	/**
 	 * Retorna informações de copyright e afins
@@ -151,7 +150,7 @@ public class EstrategiaGasparotto implements Estrategia {
 	 * Retorna a posicao do adversário 1 na mesa (0..3)
 	 */
 	private int adversario1(SituacaoJogo s) {
-		return ((s.posJogador + 0) % 4);
+		return ((s.posJogador) % 4);
 	}
 
 	/**
@@ -635,7 +634,7 @@ public class EstrategiaGasparotto implements Estrategia {
 			fator9 = fator9 - 10;
 		}
 		if (s.pontosEquipe[eu(s) % 2] >= 9 && fator12 != 100) {
-			fator12 = fator12 - 0;
+			fator12 = fator12;
 		}
 
 		// aumenta agressividade em caso de grande desvantagem no placar

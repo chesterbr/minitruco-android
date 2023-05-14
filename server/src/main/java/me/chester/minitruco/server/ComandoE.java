@@ -29,15 +29,13 @@ public class ComandoE extends Comando {
 				// TODO: mostrar o código se for sala pública?
 				j.println("X JE " + j.getSala().codigo);
 			} else {
-				switch (args[1]) {
-					case "PUB":
-						Sala s = Sala.colocaEmSalaPublica(j, args[2]);
-						s.mandaInfoParaTodos();
-						break;
-						// TODO: implementar comandos para sala privada
-					default:
-						j.println("X AI");
-				}
+                if ("PUB".equals(args[1])) {
+                    Sala s = Sala.colocaEmSalaPublica(j, args[2]);
+                    s.mandaInfoParaTodos();
+                    // TODO: implementar comandos para sala privada
+                } else {
+                    j.println("X AI");
+                }
 //				Sala s = Sala.getSala(Integer.parseInt(args[1]));
 //				if (s == null) {
 //					j.println("X SI");

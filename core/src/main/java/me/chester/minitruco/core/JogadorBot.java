@@ -167,7 +167,7 @@ public class JogadorBot extends Jogador implements Runnable {
 
 				Carta c;
 				try {
-					c = (Carta) cartasRestantes.elementAt(posCarta);
+					c = cartasRestantes.elementAt(posCarta);
 				} catch (ArrayIndexOutOfBoundsException e) {
 					// Tentativa de resolver o out-of-bounds que surgiu na 2.3.x
 					// Eu não consigo reproduzir nem faço idéia de como diabos ele
@@ -283,7 +283,7 @@ public class JogadorBot extends Jogador implements Runnable {
 		int numCartas = cartasRestantes.size();
 		situacaoJogo.cartasJogador = new Carta[numCartas];
 		for (int i = 0; i < numCartas; i++) {
-			Carta c = (Carta) cartasRestantes.elementAt(i);
+			Carta c = cartasRestantes.elementAt(i);
 			situacaoJogo.cartasJogador[i] = new Carta(c.getLetra(),
 					c.getNaipe());
 		}

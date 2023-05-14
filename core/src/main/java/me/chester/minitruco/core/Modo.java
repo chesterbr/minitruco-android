@@ -31,6 +31,6 @@ public interface Modo {
 	/**
 	 * @return True para manilhas fixas (sem "vira")
 	 */
-	public abstract boolean isManilhaVelha();
+    boolean isManilhaVelha();
 
 }

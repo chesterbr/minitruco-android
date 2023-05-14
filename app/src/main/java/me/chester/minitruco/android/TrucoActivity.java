@@ -58,11 +58,11 @@ public class TrucoActivity extends BaseActivity {
 
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
-			TextView tvNos = (TextView) findViewById(R.id.textview_nos);
-			TextView tvEles = (TextView) findViewById(R.id.textview_eles);
-			Button btnAumento = (Button) findViewById(R.id.btnAumento);
-			Button btnAbertaFechada = (Button) findViewById(R.id.btnAbertaFechada);
-			Button btnNovaPartida = (Button) findViewById(R.id.btnNovaPartida);
+			TextView tvNos = findViewById(R.id.textview_nos);
+			TextView tvEles = findViewById(R.id.textview_eles);
+			Button btnAumento = findViewById(R.id.btnAumento);
+			Button btnAbertaFechada = findViewById(R.id.btnAbertaFechada);
+			Button btnNovaPartida = findViewById(R.id.btnNovaPartida);
 			switch (msg.what) {
 			case MSG_ATUALIZA_PLACAR:
 				if (placar[0] != msg.arg1) {
@@ -156,7 +156,7 @@ public class TrucoActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.truco);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		mesa = ((MesaView) findViewById(R.id.MesaView01));
+		mesa = findViewById(R.id.MesaView01);
 		layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
 		mesa.velocidade = Integer.parseInt(preferences.getString("velocidadeAnimacao", "1"));

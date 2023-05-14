@@ -30,14 +30,14 @@ public class Sala {
     /**
      * Salas criadas por usuários (a chave é o código da sala)
      */
-    private static Map<String, Sala> salasPrivadas = new HashMap<>();
+    private static final Map<String, Sala> salasPrivadas = new HashMap<>();
 
     /**
      * Salas públicas que ainda tem espaço para pelo menos um jogaor
      */
-    private static Set<Sala> salasPublicasDisponiveis = new HashSet<>();
+    private static final Set<Sala> salasPublicasDisponiveis = new HashSet<>();
 
-    private static Set<Sala> salasPublicasLotadas = new HashSet<>();
+    private static final Set<Sala> salasPublicasLotadas = new HashSet<>();
 
     /**
      * Código usado para os amigos acharem a sala; null se for uma sala pública

@@ -119,7 +119,7 @@ public class EstrategiaSellani implements Estrategia {
 	 * Retorna a posicao do adversário 1 na mesa (0..3)
 	 */
 	private int adversario1(SituacaoJogo s) {
-		return ((s.posJogador + 0) % 4);
+		return ((s.posJogador) % 4);
 	}
 
 	/**

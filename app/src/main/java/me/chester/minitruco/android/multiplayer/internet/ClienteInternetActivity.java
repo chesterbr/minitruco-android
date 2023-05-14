@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -119,7 +118,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
             case 'N': // Nome foi aceito
                 runOnUiThread(() -> {
                     setContentView(R.layout.internet_menu);
-                    ((Button) findViewById(R.id.btnEntrarSalaPublica)).setOnClickListener(v -> {
+                    findViewById(R.id.btnEntrarSalaPublica).setOnClickListener(v -> {
                         // TODO pegar as regras das preferências
                         enviaLinha("E PUB FFF");
                     });
@@ -134,7 +133,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
             case 'I': // Entrou numa sala (ou ela foi atualizada)
                 runOnUiThread(() -> {
                     setContentView(R.layout.internet_sala);
-                    ((Button) findViewById(R.id.btnQueroJogar)).setOnClickListener(v -> {
+                    findViewById(R.id.btnQueroJogar).setOnClickListener(v -> {
                         enviaLinha("Q");
                     });
                     if (jogo != null) {
