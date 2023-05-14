@@ -200,16 +200,6 @@
 		pedir nada em troca. Avaliações positivas na Play Store ajudam outras pessoas a conhecer;
 		avaliações negativas sem uma boa justificativa só me fazem pensar em arrumar outro hobby
 		e tirar o aplicativo de lá.
-		<br/><br/>
-		<b><u><i>\"Ain, mas o jogo rouba, eu só pego carta ruim\"</i></u></b>: Não, zé: as cartas são
-		escolhidas aleatoriamente, e os bots não têm acesso a nada além das cartas jogadas e
-		as próprias cartas. O código-fonte do jogo é aberto e isso pode ser auditado por
-		qualquer pessoa.
-		<br/><br/>
-		<b><u><i>\"Mimimi, o meu parceiro é muito burro\"</i></u></b>: O jogo usa duas estratégias,
-		desenvolvidas por pessoas que colaboraram quando viram que o bot poderia jogar melhor.
-		Talvez você possa fazer o mesmo, talvez possa convencer alguém que programe e jogue
-		truco bem a fazer. Talvez não seja bem o parceiro que está jogando mal. Talvez…
         ]]>
     </string>
     <string name="titulo_sobre">Sobre o miniTruco</string>
