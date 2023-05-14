@@ -64,8 +64,8 @@ A <jogador> - Jogo abortado pelo jogador nesta posição
 T <jogador> <valor> <frase> - Jogador pediu aumento. valor é 3 para truco, 6 para seis, etc.
 D <jogador> <valor> <frase> - Jogador mandou descer (aceitou aumento) no valor indicado
 C <jogador> <frase> - Jogador correu do pedido de aumento
-F Ln Ln Ln <frase> - Informa que estamos em mão de ferro e o adversário tem essas cartas
-H <jogador> <frase> _ - Informa que o jogador na posição acusou/recusou (_=T/F) mão de ferro
+F Ln Ln Ln <frase> - Informa que estamos em mão de 10/11 e o adversário tem essas cartas
+H <jogador> <frase> _ - Informa que o jogador na posição acusou/recusou (_=T/F) mão de 10/11
 S - Informa que o jogador saiu da sala
 
 

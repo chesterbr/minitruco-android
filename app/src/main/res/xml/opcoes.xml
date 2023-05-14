@@ -8,7 +8,7 @@
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="humanoDecide"
-        android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de ferro. Ele só diz se iria, mas o humano é que decide."
+        android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de 10/11. Ele só diz se iria, mas o humano é que decide."
         android:title="Humano decide pela dupla" />
     <ListPreference
         android:defaultValue="1"

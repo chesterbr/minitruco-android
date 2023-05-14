@@ -9,7 +9,7 @@ package me.chester.minitruco.core;
  * Uma estratégia é uma classe que implementa os métodos <code>joga</code>,
  * <code>aceitaTruco</code> e <code>aceitaMaoDeX</code>, que são chamados pelo
  * jogo quando for a vez do jogador, quando pedirem aumento para a dupla dele e
- * quando a dupla for decidir uma mão de ferro, respectivamente.
+ * quando a dupla for decidir uma mão de 10/11, respectivamente.
  * <p>
  * Eses métodos recebem uma "fotografia" do jogo (SituacaoJogo) no momento em
  * que a ação deles é demandada. Esta fotografia inclui todo o histórico da

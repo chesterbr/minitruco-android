@@ -261,7 +261,7 @@ public abstract class Jogador {
 
 	/**
 	 * Informa que um jogador fez sua escolha de topar ou não
-	 * a mão de ferro
+	 * a mão de 10/11
 	 *
 	 * @param j        Jogador que fez a escolha
 	 * @param aceita   true se o jogador topou, false se recusou

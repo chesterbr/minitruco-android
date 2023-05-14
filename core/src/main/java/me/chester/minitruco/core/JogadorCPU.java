@@ -226,7 +226,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					if (getPosicao() == 3) {
 						boolean aceitaEstrategia = random.nextInt(10) == 5;
 						LOGGER.log(Level.INFO,
-								"Mão de ferro do parceiro do humano. AceitaEstrategia="
+								"mão de 10/11 do parceiro do humano. AceitaEstrategia="
 										+ aceitaEstrategia);
 						respostaMaoDeX = respostaMaoDeX && aceitaEstrategia;
 					}

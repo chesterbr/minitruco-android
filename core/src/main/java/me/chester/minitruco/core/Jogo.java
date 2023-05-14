@@ -161,7 +161,7 @@ public abstract class Jogo implements Runnable {
 	public abstract void jogaCarta(Jogador j, Carta c);
 
 	/**
-	 * Informa ao jogo o resultado de aceite daquela mão de ferro
+	 * Informa ao jogo o resultado de aceite daquela mão de 10/11
 	 *
 	 * @param j
 	 *            Jogador que está respondendo
@@ -276,8 +276,6 @@ public abstract class Jogo implements Runnable {
 
 	/**
 	 * Pontos de cada equipe na partida.
-	 * <p>
-	 * As implementações devem atualizar (para se saber quando é mão de ferro)
 	 */
 	protected int[] pontosEquipe = { 0, 0 };
 
@@ -328,7 +326,7 @@ public abstract class Jogo implements Runnable {
 
 	/**
 	 * Informa se não estamos impedidos de disponibilizar aumento (por conta
-	 * de ser uma mão de ferro, ou mesmo um empate acima do limite, ex.:
+	 * de ser uma mão de 10/11, ou mesmo um empate acima do limite, ex.:
 	 * 11x11 no Truco Paulista)
 	 */
 	public boolean isPlacarPermiteAumento() {

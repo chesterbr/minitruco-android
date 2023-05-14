@@ -4,7 +4,7 @@ package me.chester.minitruco.server;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Decide (aceitar ou recusar) mão de ferro
+ * Decide (aceitar ou recusar) mão de 10/11
  * <p>
  * parâmetro: T ou F (aceita ou recusa)
  * @author chester
