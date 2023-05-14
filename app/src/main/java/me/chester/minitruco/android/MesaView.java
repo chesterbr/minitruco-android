@@ -15,6 +15,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
+
 import java.util.Random;
 import java.util.Vector;
 
@@ -174,33 +176,33 @@ public class MesaView extends View {
 		// estes bitmaps
 		int lado = CartaVisual.altura / 2;
 		iconesRodadas = new Bitmap[23];
-		iconesRodadas[0] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
-		iconesRodadas[1] =  Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.placarrodada1)).getBitmap(), lado, lado, true);
-		iconesRodadas[2] =  Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
-		iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
+		iconesRodadas[0] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
+		iconesRodadas[1] =  Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.placarrodada1)).getBitmap(), lado, lado, true);
+		iconesRodadas[2] =  Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
+		iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
 		// indice = valorMao + 10
-		iconesRodadas[10] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
-		iconesRodadas[11] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.valorrodada1)).getBitmap(), lado, lado, true);
-		iconesRodadas[12] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.valorrodada2)).getBitmap(), lado, lado, true);
-		iconesRodadas[13] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.valorrodada3)).getBitmap(), lado, lado, true);
-		iconesRodadas[14] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.valorrodada4)).getBitmap(), lado, lado, true);
-		iconesRodadas[16] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.valorrodada6)).getBitmap(), lado, lado, true);
-		iconesRodadas[19] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.valorrodada9)).getBitmap(), lado, lado, true);
-		iconesRodadas[20] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.valorrodada10)).getBitmap(), lado, lado, true);
-		iconesRodadas[22] = Bitmap.createScaledBitmap(((BitmapDrawable) getResources()
-			.getDrawable(R.drawable.valorrodada12)).getBitmap(), lado, lado, true);
+		iconesRodadas[10] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
+		iconesRodadas[11] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.valorrodada1)).getBitmap(), lado, lado, true);
+		iconesRodadas[12] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.valorrodada2)).getBitmap(), lado, lado, true);
+		iconesRodadas[13] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.valorrodada3)).getBitmap(), lado, lado, true);
+		iconesRodadas[14] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.valorrodada4)).getBitmap(), lado, lado, true);
+		iconesRodadas[16] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.valorrodada6)).getBitmap(), lado, lado, true);
+		iconesRodadas[19] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.valorrodada9)).getBitmap(), lado, lado, true);
+		iconesRodadas[20] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.valorrodada10)).getBitmap(), lado, lado, true);
+		iconesRodadas[22] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
+			.getDrawable(trucoActivity, R.drawable.valorrodada12)).getBitmap(), lado, lado, true);
 
 }
 
