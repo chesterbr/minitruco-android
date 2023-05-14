@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
-import me.chester.minitruco.core.JogadorCPU;
+import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 
@@ -41,7 +41,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	private static final char STATUS_EM_JOGO = 'J';
 	private static final char STATUS_BLUETOOTH_ENCERRADO = 'X';
 	private static final int REQUEST_ENABLE_DISCOVERY = 1;
-	private static final String APELIDO_CPU = "bot";
+	private static final String APELIDO_BOT = "bot";
 
 	private static ServidorBluetoothActivity currentInstance;
 
@@ -298,10 +298,10 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	}
 
 	private void inicializaDisplay() {
-		apelidos[0] = btAdapter.getName();
-		apelidos[1] = APELIDO_CPU;
-		apelidos[2] = APELIDO_CPU;
-		apelidos[3] = APELIDO_CPU;
+		apelidos[0] = btAdapter.getName().replace(" ","_");
+		apelidos[1] = APELIDO_BOT;
+		apelidos[2] = APELIDO_BOT;
+		apelidos[3] = APELIDO_BOT;
 	}
 
 	@Override
@@ -349,7 +349,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 			connClientes[slot] = null;
 			outClientes[slot] = null;
 			respondeuComVersaoOk[slot] = false;
-			apelidos[slot + 1] = APELIDO_CPU;
+			apelidos[slot + 1] = APELIDO_BOT;
 		}
 		status = STATUS_AGUARDANDO;
 		atualizaDisplay();
@@ -370,7 +370,9 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 			if (connClientes[i] != null) {
 				jogo.adiciona(new JogadorBluetooth(connClientes[i], this));
 			} else {
-				jogo.adiciona(new JogadorCPU());
+				JogadorBot bot = new JogadorBot();
+				bot.setFingeQuePensa(false);
+				jogo.adiciona(bot);
 			}
 		}
 		this.jogo = jogo;

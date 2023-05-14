@@ -16,7 +16,7 @@ import me.chester.minitruco.core.Jogador;
  */
 public class JogadorDummy extends Jogador {
 
-	public void aceitouAumentoAposta(Jogador j, int valor) {
+	public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
 
 	}
 
@@ -24,11 +24,11 @@ public class JogadorDummy extends Jogador {
 
 	}
 
-	public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
+	public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
 
 	}
 
-	public void informaMaoDeFerro(Carta[] cartasParceiro) {
+	public void informaMaoDeX(Carta[] cartasParceiro) {
 
 	}
 
@@ -40,7 +40,7 @@ public class JogadorDummy extends Jogador {
 
 	}
 
-	public void jogoAbortado(int posicao) {
+	public void jogoAbortado(int posicao, int rndFrase) {
 
 	}
 
@@ -48,7 +48,7 @@ public class JogadorDummy extends Jogador {
 
 	}
 
-	public void jogoFechado(int numEquipeVencedora) {
+	public void jogoFechado(int numEquipeVencedora, int rndFrase) {
 
 	}
 
@@ -56,11 +56,11 @@ public class JogadorDummy extends Jogador {
 
 	}
 
-	public void pediuAumentoAposta(Jogador j, int valor) {
+	public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
 
 	}
 
-	public void recusouAumentoAposta(Jogador j) {
+	public void recusouAumentoAposta(Jogador j, int rndFrase) {
 
 	}
 

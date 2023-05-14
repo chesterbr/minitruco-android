@@ -139,7 +139,7 @@ public class JogoRemoto extends Jogo {
                     }
                 } else {
                     if (tokens.length > 1) {
-                        // Cria a carta jogada pela CPU
+                        // Cria a carta jogada pelo bot
                         c = new Carta(tokens[1]);
                         baralho.tiraDoBaralho(c);
                     } else {
@@ -161,30 +161,34 @@ public class JogoRemoto extends Jogo {
             case 'T':
                 getJogadorHumano().pediuAumentoAposta(
                         getJogador(Integer.parseInt(tokens[0])),
-                        Integer.parseInt(tokens[1]));
+                        Integer.parseInt(tokens[1]),
+                        Integer.parseInt(tokens[2]));
                 break;
             case 'D':
                 getJogadorHumano().aceitouAumentoAposta(
                         getJogador(Integer.parseInt(tokens[0])),
-                        Integer.parseInt(tokens[1]));
+                        Integer.parseInt(tokens[1]),
+                        Integer.parseInt(tokens[2]));
                 break;
             case 'C':
                 getJogadorHumano().recusouAumentoAposta(
-                        getJogador(Integer.parseInt(tokens[0])));
+                        getJogador(Integer.parseInt(tokens[0])),
+                        Integer.parseInt(tokens[1]));
                 break;
             case 'H':
-                // Alguém aceitou mão de ferro, informa
-                getJogadorHumano().decidiuMaoDeFerro(
+                // Alguém aceitou mão de 10/11, informa
+                getJogadorHumano().decidiuMaoDeX(
                         getJogador(Integer.parseInt(tokens[0])),
-                        tokens[1].equals("T"));
+                        tokens[1].equals("T"),
+                        Integer.parseInt(tokens[2]));
                 break;
             case 'F':
-                // Mão de ferro. Recupera as cartas do parceiro e informa o jogador
-                Carta[] cartasMaoDeFerro = new Carta[3];
+                // mão de 10/11. Recupera as cartas do parceiro e informa o jogador
+                Carta[] cartasMaoDeX = new Carta[3];
                 for (int i = 0; i <= 2; i++) {
-                    cartasMaoDeFerro[i] = new Carta(tokens[i]);
+                    cartasMaoDeX[i] = new Carta(tokens[i]);
                 }
-                getJogadorHumano().informaMaoDeFerro(cartasMaoDeFerro);
+                getJogadorHumano().informaMaoDeX(cartasMaoDeX);
                 break;
             case 'R':
                 // Fim de rodada, recupera o resultado e o jogador que torna
@@ -201,18 +205,22 @@ public class JogoRemoto extends Jogo {
                 break;
             case 'G':
                 // Fim de jogo
-                getJogadorHumano().jogoFechado(Integer.parseInt(parametros));
+                getJogadorHumano().jogoFechado(
+                        Integer.parseInt(tokens[0]),
+                        Integer.parseInt(tokens[1]));
 
                 break;
             case 'A':
                 // Jogo abortado por alguém
-                getJogadorHumano().jogoAbortado(Integer.parseInt(parametros));
+                getJogadorHumano().jogoAbortado(
+                        Integer.parseInt(tokens[0]),
+                        Integer.parseInt(tokens[1]));
                 break;
         }
     }
 
     /**
-     * Não implementado em jogo remoto (apenas o JogadorCPU usa isso, e ele
+     * Não implementado em jogo remoto (apenas o JogadorBot usa isso, e ele
      * não participa desses jogos).
      */
     public void atualizaSituacao(SituacaoJogo s, Jogador j) {
@@ -230,7 +238,7 @@ public class JogoRemoto extends Jogo {
         cliente.enviaLinha("J " + c + (c.isFechada() ? " T" : ""));
     }
 
-    public void decideMaoDeFerro(Jogador j, boolean aceita) {
+    public void decideMaoDeX(Jogador j, boolean aceita) {
         cliente.enviaLinha("H " + (aceita ? "T" : "F"));
     }
 
@@ -251,15 +259,13 @@ public class JogoRemoto extends Jogo {
     public void enviaMensagem(Jogador j, String s) {
     }
 
-    /**
-     * Se o jogador humano aborta, encaminha para o jogo "de verdade"
-     */
     @Override
     public void abortaJogo(int posicao) {
+        // TODO eu acho que o if aqui é redundante (no geral, só o Jogador 1
+        //.     faria isso mesmo); conferir em outros lugares
         if (posicao == 1) {
             cliente.enviaLinha("A");
         }
-        jogadorHumano.jogoAbortado(0);
     }
 
 }

@@ -230,18 +230,18 @@ public class JogadorConectado extends Jogador implements Runnable {
     }
 
     @Override
-    public void pediuAumentoAposta(Jogador j, int valor) {
-        println("T " + j.getPosicao() + ' ' + valor);
+    public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
+        println("T " + j.getPosicao() + ' ' + valor + ' ' + rndFrase);
     }
 
     @Override
-    public void aceitouAumentoAposta(Jogador j, int valor) {
-        println("D " + j.getPosicao() + ' ' + valor);
+    public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
+        println("D " + j.getPosicao() + ' ' + valor + ' ' + rndFrase);
     }
 
     @Override
-    public void recusouAumentoAposta(Jogador j) {
-        println("C " + j.getPosicao());
+    public void recusouAumentoAposta(Jogador j, int rndFrase) {
+        println("C " + j.getPosicao() + ' ' + rndFrase);
     }
 
     @Override
@@ -256,18 +256,18 @@ public class JogadorConectado extends Jogador implements Runnable {
     }
 
     @Override
-    public void jogoFechado(int numEquipeVencedora) {
+    public void jogoFechado(int numEquipeVencedora, int rndFrase) {
         desvinculaJogo();
-        println("G " + numEquipeVencedora);
+        println("G " + numEquipeVencedora + " " + rndFrase);
     }
 
     @Override
-    public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
+    public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
         println("H " + j.getPosicao() + (aceita ? " T" : " F"));
     }
 
     @Override
-    public void informaMaoDeFerro(Carta[] cartasParceiro) {
+    public void informaMaoDeX(Carta[] cartasParceiro) {
         StringBuilder sbComando = new StringBuilder("F ");
         for (int i = 0; i <= 2; i++) {
             sbComando.append(cartasParceiro[i]);
@@ -278,7 +278,7 @@ public class JogadorConectado extends Jogador implements Runnable {
     }
 
     @Override
-    public void jogoAbortado(int posicao) {
+    public void jogoAbortado(int posicao, int rndFrase) {
         desvinculaJogo();
         println("A " + posicao);
     }

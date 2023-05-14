@@ -93,7 +93,7 @@ public class TituloActivity extends BaseActivity {
 		String versaoAtual = BuildConfig.VERSION_NAME;
 
 		if (mostraInstrucoes) {
-			mostraAlertBox(this.getString(R.string.titulo_ajuda), this.getString(R.string.texto_ajuda));
+			mostraAlertBox(this.getString(R.string.titulo_instrucoes), this.getString(R.string.texto_instrucoes));
 		} else if (!versaoQueMostrouNovidades.equals(versaoAtual)) {
 			mostraAlertBox("Novidades", this.getString(R.string.novidades));
 		}

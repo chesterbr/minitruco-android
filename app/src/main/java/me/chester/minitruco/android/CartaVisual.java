@@ -111,7 +111,7 @@ public class CartaVisual extends Carta {
 		this.destLeft = left;
 		this.destTop = top;
 		ultimoTime = System.currentTimeMillis();
-		destTime = ultimoTime + tempoMS;
+		destTime = ultimoTime + tempoMS / mesa.velocidade;
 		MesaView.notificaAnimacao(destTime);
 	}
 
@@ -245,6 +245,7 @@ public class CartaVisual extends Carta {
 
 	public void resetBitmap() {
 		this.bitmap = null;
+		this.bitmap = getBitmap();
 	}
 
 	@Override
@@ -262,7 +263,8 @@ public class CartaVisual extends Carta {
 	@Override
 	public void setFechada(boolean fechada) {
 		super.setFechada(fechada);
-		this.bitmap = null;
+		mesa.aguardaFimAnimacoes();
+		this.resetBitmap();
 	}
 
 	/**

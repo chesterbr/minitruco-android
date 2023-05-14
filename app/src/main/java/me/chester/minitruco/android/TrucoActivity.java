@@ -12,13 +12,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
-import me.chester.minitruco.core.JogadorCPU;
+import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Jogo;
 import me.chester.minitruco.core.JogoLocal;
 
@@ -113,6 +114,7 @@ public class TrucoActivity extends BaseActivity {
 			}
 		}
 	};
+	private SharedPreferences preferences;
 
 	/**
 	 * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
@@ -134,18 +136,17 @@ public class TrucoActivity extends BaseActivity {
 			jogo = criaNovoJogoSinglePlayer(jogadorHumano);
 		}
 		(new Thread(jogo)).start();
+		mIsViva = true;
 	}
 
 	private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
 		String modo = preferences.getString("modo", "P");
 		boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
 		boolean jogoAutomatico =  preferences.getBoolean("jogoAutomatico", false);
 		Jogo novoJogo = new JogoLocal(modo, humanoDecide, jogoAutomatico);
 		novoJogo.adiciona(jogadorHumano);
 		for (int i = 2; i <= 4; i++) {
-			novoJogo.adiciona(new JogadorCPU());
+			novoJogo.adiciona(new JogadorBot());
 		}
 		return novoJogo;
 	}
@@ -154,10 +155,11 @@ public class TrucoActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.truco);
-		mIsViva = true;
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		mesa = ((MesaView) findViewById(R.id.MesaView01));
 		layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
+		mesa.velocidade = Integer.parseInt(preferences.getString("velocidadeAnimacao", "1"));
 		mesa.setTrucoActivity(this);
 		// Inicializa componentes das classes visuais que dependem de métodos
 		// disponíveis exclusivamente na Activity
@@ -221,9 +223,23 @@ public class TrucoActivity extends BaseActivity {
 
 	@Override
 	public void onBackPressed() {
+		if (!preferences.getBoolean("sempreConfirmaFecharJogo", true)) {
+			finish();
+			return;
+		}
+
+		View dialogPerguntaAntesDeFechar = getLayoutInflater()
+				.inflate(R.layout.dialog_sempre_confirma_fechar_jogo, null);
+		final CheckBox checkBoxPerguntarSempre = dialogPerguntaAntesDeFechar
+				.findViewById(R.id.checkBoxSempreConfirmaFecharJogo);
+		checkBoxPerguntarSempre.setOnCheckedChangeListener((button, isChecked) -> {
+			preferences.edit().putBoolean("sempreConfirmaFecharJogo", isChecked).apply();
+		});
+
 		new AlertDialog.Builder(this)
 			.setIcon(android.R.drawable.ic_dialog_alert)
 			.setTitle("Encerrar")
+			.setView(dialogPerguntaAntesDeFechar)
 			.setMessage("Você quer mesmo encerrar este jogo?")
 			.setPositiveButton("Sim", (dialog, which) -> finish())
 			.setNegativeButton("Não", null)

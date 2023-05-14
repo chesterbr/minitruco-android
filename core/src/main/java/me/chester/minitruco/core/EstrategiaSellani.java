@@ -6,7 +6,7 @@ package me.chester.minitruco.core;
 import java.util.Random;
 
 /**
- * Estratégia inteligente para jogadores CPU
+ * Estratégia inteligente para bots
  *
  */
 public class EstrategiaSellani implements Estrategia {
@@ -739,9 +739,9 @@ public class EstrategiaSellani implements Estrategia {
 	}
 
 	/**
-	 * Retorna se eu aceito jogar ou não esta mão de ferro.
+	 * Retorna se eu aceito jogar ou não esta mão de 10/11.
 	 */
-	public boolean aceitaMaoDeFerro(Carta[] cartasParceiro, SituacaoJogo s) {
+	public boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s) {
 		int qBoa = 0, qExcelente = 0;
 
 		for (int i = 0; i <= 2; i++) {
@@ -761,7 +761,7 @@ public class EstrategiaSellani implements Estrategia {
 			if (cartasParceiro[i].getValorTruco(s.manilha) >= 9)
 				qBoa++;
 		}
-		// System.out.println("aceitaMaoDeFerro()\n  Qtd Boa:" + qBoa +
+		// System.out.println("aceitaMaoDeX()\n  Qtd Boa:" + qBoa +
 		// "  Qtd Excelente:" + qExcelente);
 		// vamos analisar!
 		return qExcelente >= 2 || qBoa >= 3 || (qExcelente >= 1 && qBoa >= 1);

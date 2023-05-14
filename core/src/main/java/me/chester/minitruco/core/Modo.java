@@ -10,11 +10,15 @@ package me.chester.minitruco.core;
  */
 public interface Modo {
 
-	int pontuacaoQueDeterminaMaoDeFerro();
+	int pontuacaoParaMaoDeX();
 
 	int valorInicialDaMao();
 
-	int valorDaMaoDeFerro();
+	/**
+	 * @return quantos pontos a equipe adversária leva se a equipe
+	 * 		   beneficiária aceitar a mão de X
+	 */
+	int valorDaMaoDeX();
 
 	/**
 	 * @return valor para o qual um jogo cujo valor seja valorMao vai se houver um aumento,
@@ -28,4 +32,5 @@ public interface Modo {
 	 * @return True para manilhas fixas (sem "vira")
 	 */
 	public abstract boolean isManilhaVelha();
+
 }

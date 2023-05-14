@@ -97,12 +97,12 @@
         <item>A próxima é nossa.</item>
         <item>Raios!</item>
     </string-array>
-    <string-array name="balao_mao_de_ferro_sim">
+    <string-array name="balao_mao_de_x_sim">
         <item>Vamos jogar!</item>
         <item>Vamos nessa!</item>
         <item>Tô dentro.</item>
     </string-array>
-    <string-array name="balao_mao_de_ferro_nao">
+    <string-array name="balao_mao_de_x_nao">
         <item>Não quero.</item>
         <item>Que lixo!</item>
         <item>Não.</item>
@@ -113,12 +113,21 @@
     </string-array>
     <string-array name="balao_abortou">
         <item>Tchau…</item>
+        <item>Cansei</item>
+    </string-array>
+    <string-array name="velocidade_animacao_textos">
+        <item>Normal</item>
+        <item>Rápida</item>
+    </string-array>
+    <string-array name="velocidade_animacao_valores">
+        <item>1</item>
+        <item>4</item>
     </string-array>
 
-    <string name="titulo_ajuda">Bem-vindo!</string>
-    <string name="texto_ajuda">
+    <string name="titulo_instrucoes">Bem-vindo!</string>
+    <string name="texto_instrucoes">
         <![CDATA[
-        Estas instruções podem ser lidas a qualquer momento no <b>menu Ajuda</b>.
+        Estas instruções podem ser lidas a qualquer momento no menu <b>Instruções</b>.
         Role a tela, tem bastante coisa!
         <br/><br/>
         O miniTruco é um <u>software livre</u> de truco, jogado em duplas, com os parceiros
@@ -129,16 +138,17 @@
 		uma para jogar. A dupla que jogou a maior carta ganha a rodada, e o
 		vencedor inicia a rodada seguinte. A \"melhor de três\" ganha um ponto, encerrando a mão.
 		<br/><br/>
-		<b><u>Valor das Cartas</u></b>:
-		Dentre as cartas normais, 4 é a menor carta, seguida de
-		5, 6, 7, Q, J, K, A, 2, e 3 é a maior de todas, sendo os naipes
-		indiferentes.
-		<br/>
-	    As manilhas são cartas especiais, que valem mais que as normais,
-		e cujos naipes dão mais ou menos valor. O pica-fumo
+		<b><u>Ordem/valor das cartas</u></b>:
+		Dentre as cartas normais, 4 é a de menor valor, seguida de
+		5, 6, 7, Q, J, K, A, 2, e 3 - a maior de todas. Nas cartas normais, o
+		naipe é indiferente, então, por exemplo, um 6♠ empata com um 6♥, mas perde
+		para qualquer 7.
+		<br/><br/>
+	    <b><u>Manilhas</u></b>: Manilhas são quatro cartas especiais, que valem
+	    mais que as normais. Os naipes determinam o nome da manilha e seu valor
+	    relativo: O pica-fumo
 		(♦) é a menor manilha, seguida da espadilha (♠), da escopeta (♥), e do
-		zap (♣). O zap (manilha de paus) é, portanto, a carta de maior valor
-		do jogo.
+		zap (♣) - este último sendo a maior carta do jogo.
 		<br/><br/>
 		No <b>truco paulista</b>, antes de começar a mão, uma carta é virada,
 		e ela indica qual é o valor das manilhas para aquela mão - é sempre
@@ -159,7 +169,7 @@
 		<br/><br/>
 		<b><u>Empate</u></b>: Se a mão abre com empate, a primeira rodada não-empatada decide ela.
 		Se o empate acontece após a primeira rodada, a mão é de quem ganhou a primeira.
-		<br/><br/><b><u>Mão de ferro</u></b>: Se uma das duplas fizer 10 pontos (no truco mineiro)
+		<br/><br/><b><u>Mão de 10 (ou 11)</u></b>: Se uma das duplas fizer 10 pontos (no truco mineiro)
 		ou 11 pontos (no truco paulista), seus membros podem ver as cartas do parceiro antes de
 		começar o jogo. Se um deles aceitar jogar, a mão vale o valor do truco. Se os dois recusarem,
 		perdem a rodada (no valor normal), e uma nova mão é distribuída, valendo as mesmas regras.
@@ -181,24 +191,16 @@
 		<b><u>Diferenças do miniTruco</u></b>: No jogo físico, jogadores podem trucar a qualquer
 		hora; no miniTruco você só truca na sua vez. Não existem sinais (por enquanto), e não é
 		possível entregar o jogo. No jogo normal, qualquer um pode jogar uma carta \"fechada\"
-		(virada para baixo), no miniTruco apenas um integrante da dupla pode fazer isso.
+		(virada para baixo), no miniTruco apenas um integrante da dupla pode fazer isso. O miniTruco
+		não faz a "mão de ferro" (quando o truco mineiro empata em 10x10 ou o paulista em 11x11),
+		na qual se joga sem ver as próprias cartas).
 		<br/><br/>
 		<b><u>Sugestões e comentários</u></b>: O meu e-mail está na tela de título, você pode me
 		escrever com sugestões e comentários, desde que seja de forma educada. Lembre-se que o
 		jogo é inteiramente gratuito e sem publicidade; é algo que eu faço como hobby sem
-		pedir nada em troca. Avaliações positivas na Play Store ajudam outras pessoas a conhecer;
-		avaliações negativas sem uma boa justificativa só me fazem pensar em arrumar outro hobby
-		e tirar o aplicativo de lá.
-		<br/><br/>
-		<b><u><i>\"Ain, mas o jogo rouba, eu só pego carta ruim\"</i></u></b>: Não, zé: as cartas são
-		escolhidas aleatoriamente, e os bots não têm acesso a nada além das cartas jogadas e
-		as próprias cartas. O código-fonte do jogo é aberto e isso pode ser auditado por
-		qualquer pessoa.
-		<br/><br/>
-		<b><u><i>\"Mimimi, o meu parceiro é muito burro\"</i></u></b>: O jogo usa duas estratégias,
-		desenvolvidas por pessoas que colaboraram quando viram que o bot poderia jogar melhor.
-		Talvez você possa fazer o mesmo, talvez possa convencer alguém que programe e jogue
-		truco bem a fazer. Talvez não seja bem o parceiro que está jogando mal. Talvez…
+		pedir nada em troca. É super válido sugerir melhorias e informar bugs, tanto por e-mail
+		quanto em avaliações na Play Store, mas peço para não penalizar o jogo injustamente (ex.:
+		1 estrela porque o jogo tem um detalhe que você não curtiu).
         ]]>
     </string>
     <string name="titulo_sobre">Sobre o miniTruco</string>
@@ -207,8 +209,8 @@
         <br/><br/>Seleção manual de servidor Bluetooth: Copyright © 2016 Rodolfo Vasconcelos
 		<br/><br/>Tento mineiro: Copyright © 2011 Guilherme Caram
 		<br/><br/>Imagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)
-		<br/><br/>Estratégias da CPU: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/>
-        <br/><br/>Estratégia da CPU (antiga): Copyright © 2006-2011 Willian Gigliotti<br/>
+		<br/><br/>Estratégias de bots: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/>
+        <br/><br/>Estratégia de bot (antiga): Copyright © 2006-2011 Willian Gigliotti<br/>
         <br/>
 		Código-fonte: http://github.com/chesterbr/minitruco-android
         <br/>
@@ -222,10 +224,14 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Truco mineiro totalmente refeito, corrigindo todos os bugs<br/>
-            - Bluetooth agora suporta truco mineiro<br/>
-            - Resultados da rodada com visual melhorado, e agora mostrando o valor da rodada atual<br/>
-            - Corrige bug que fechava com erro quando o celular estava com pouca memória<br/>
+            - Opção para desligar o "Você quer mesmo encerrar esse jogo?"<br/>
+            - Opção para acelerar a animação das cartas<br/>
+            - Frases dos balões sincronizadas entre os aparelhos no Bluetooth<br/>
+            - Performance Bluetooth melhorada (não precisa mais esperar quem criou a mesa
+              distribuir as cartas, menos lag com bots, etc.)<br/>
+            - Exibe nome correto da mão de 10/11 (ao invés de "mão de ferro", que é outra coisa)<br/>
+            - Mostra o valor correto no placar quando a mão de 10/11 é aceita (a pontuação estava
+              certa, só a exibição estava errada).
         ]]>
     </string>
 

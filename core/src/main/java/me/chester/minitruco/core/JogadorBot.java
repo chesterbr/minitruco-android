@@ -15,17 +15,18 @@ import java.util.logging.Logger;
  * @see Estrategia
  *
  */
-public class JogadorCPU extends Jogador implements Runnable {
+public class JogadorBot extends Jogador implements Runnable {
+    private final static Logger LOGGER = Logger.getLogger("JogadorBot");
 
-    private final static Logger LOGGER = Logger.getLogger("JogadorCPU");
+	private boolean fingeQuePensa = true;
 
 	/**
-	 * Cria um novo jogador CPU, usando a estratégia fornecida.
+	 * Cria um novo bot, usando a estratégia fornecida.
 	 *
 	 * @param estrategia
 	 *            Estratégia a ser adotada por este jogador
 	 */
-	public JogadorCPU(Estrategia estrategia) {
+	public JogadorBot(Estrategia estrategia) {
 		this.estrategia = estrategia;
 		this.setNome(estrategia.getNomeEstrategia());
 		this.thread = new Thread(this);
@@ -33,20 +34,20 @@ public class JogadorCPU extends Jogador implements Runnable {
 	}
 
 	/**
-	 * Cria um novo jogador CPU, buscando a estratégia pelo nome.
+	 * Cria um novo bot, buscando a estratégia pelo nome.
 	 * <p>
 	 *
 	 * @param nomeEstrategia
 	 *            Nome da estratégia (ex.: "Willian")
 	 */
-	public JogadorCPU(String nomeEstrategia) {
+	public JogadorBot(String nomeEstrategia) {
 		this(criaEstrategiaPeloNome(nomeEstrategia));
 	}
 
 	/**
-	 * Cria um novo jogador CPU, com uma estratégia aleatória
+	 * Cria um novo bot, com uma estratégia aleatória
 	 */
-	public JogadorCPU() {
+	public JogadorBot() {
 		this(criaEstrategiaPeloNome("x"));
 	}
 
@@ -87,6 +88,10 @@ public class JogadorCPU extends Jogador implements Runnable {
 	 */
 	private boolean podeFechada = false;
 
+	public void setFingeQuePensa(boolean fingeQuePensa) {
+		this.fingeQuePensa = fingeQuePensa;
+	}
+
 	public void vez(Jogador j, boolean podeFechada) {
 		if (this.equals(j)) {
 			LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
@@ -99,7 +104,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	public void run() {
 
-		LOGGER.log(Level.INFO, "JogadorCPU " + this + " (.run) iniciado");
+		LOGGER.log(Level.INFO, "JogadorBot " + this + " (.run) iniciado");
 		while (jogo == null || !jogo.jogoFinalizado) {
 			sleep(100);
 
@@ -108,7 +113,9 @@ public class JogadorCPU extends Jogador implements Runnable {
 						+ " viu que e' sua vez");
 
 				// Dá um tempinho, pra fingir que está "pensando"
-				sleep(random.nextInt(250) + 200);
+				if (fingeQuePensa) {
+					sleep(random.nextInt(500));
+				}
 
 				// Atualiza a situação do jogo (incluindo as cartas na mão)
 				atualizaSituacaoJogo();
@@ -129,7 +136,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 					// Faz a
 					// solicitação de truco numa nova thread // (usando o
 					// próprio
-					// JogadorCPU como Runnable - era uma inner // class, mas
+					// JogadorBot como Runnable - era uma inner // class, mas
 					// otimizei para reduzir o .jar)
 					aceitaramTruco = false;
 					numRespostasAguardando = 2;
@@ -191,7 +198,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 				recebiPedidoDeAumento = false;
 				atualizaSituacaoJogo();
 				sleep(1000 + random.nextInt(1000));
-				// O sync/if é só pra evitar resposta dupla entre 2 CPUs
+				// O sync/if é só pra evitar resposta dupla entre 2 bots
 				synchronized (jogo) {
 					if (situacaoJogo.posJogadorPedindoAumento != 0) {
 						boolean resposta = false;
@@ -205,31 +212,31 @@ public class JogadorCPU extends Jogador implements Runnable {
 				}
 			}
 
-			if (recebiPedidoDeMaoDeFerro) {
-				recebiPedidoDeMaoDeFerro = false;
+			if (recebiPedidoDeMaoDeX) {
+				recebiPedidoDeMaoDeX = false;
 				atualizaSituacaoJogo();
 				sleep(1000 + random.nextInt(1000));
-				boolean respostaMaoDeFerro = false;
+				boolean respostaMaoDeX = false;
 				try {
-					respostaMaoDeFerro = estrategia.aceitaMaoDeFerro(
-							cartasDoParceiroDaMaoDeFerro, situacaoJogo);
+					respostaMaoDeX = estrategia.aceitaMaoDeX(
+							cartasDoParceiroDaMaoDeX, situacaoJogo);
 					// Atendendo a pedidos na Play Store, o parceiro do humano vai
 					// ignorar a estratégia com 90% de chance e recusar,
 					// deixando a decisão na mão do humano.
 					if (getPosicao() == 3) {
 						boolean aceitaEstrategia = random.nextInt(10) == 5;
 						LOGGER.log(Level.INFO,
-								"Mão de ferro do parceiro do humano. AceitaEstrategia="
+								"mão de 10/11 do parceiro do humano. AceitaEstrategia="
 										+ aceitaEstrategia);
-						respostaMaoDeFerro = respostaMaoDeFerro && aceitaEstrategia;
+						respostaMaoDeX = respostaMaoDeX && aceitaEstrategia;
 					}
 				} catch (Exception e) {
 					LOGGER.log(Level.INFO,
-							"Erro em aceite-mao-de-ferro no jogador" + this.getPosicao(),
+							"Erro em aceite-mao-de-x no jogador" + this.getPosicao(),
 							e);
-					respostaMaoDeFerro = random.nextBoolean();
+					respostaMaoDeX = random.nextBoolean();
 				}
-				jogo.decideMaoDeFerro(this, respostaMaoDeFerro);
+				jogo.decideMaoDeX(this, respostaMaoDeX);
 			}
 
 			if (estouAguardandoRepostaAumento && (numRespostasAguardando == 0)) {
@@ -243,18 +250,18 @@ public class JogadorCPU extends Jogador implements Runnable {
 			}
 
 		}
-		LOGGER.log(Level.INFO, "JogadorCPU " + this + " (.run) finalizado");
+		LOGGER.log(Level.INFO, "JogadorBot " + this + " (.run) finalizado");
 
 	}
 
 	private boolean recebiPedidoDeAumento = false;
 	private boolean estouAguardandoRepostaAumento = false;
 
-	private boolean recebiPedidoDeMaoDeFerro = false;
+	private boolean recebiPedidoDeMaoDeX = false;
 
-	private Carta[] cartasDoParceiroDaMaoDeFerro;
+	private Carta[] cartasDoParceiroDaMaoDeX;
 
-	public void pediuAumentoAposta(Jogador j, int valor) {
+	public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
 		// Notifica a estrategia
 		estrategia.pediuAumentoAposta(j.getPosicao(), valor);
 		// Se foi a equipe oposta que pediu, gera uma resposta
@@ -284,7 +291,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	int valorProximaAposta;
 
-	public void aceitouAumentoAposta(Jogador j, int valor) {
+	@Override
+	public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
 
 		// Notifica o estrategia
 		estrategia.aceitouAumentoAposta(j.getPosicao(), valor);
@@ -309,7 +317,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	}
 
-	public void recusouAumentoAposta(Jogador j) {
+	@Override
+	public void recusouAumentoAposta(Jogador j, int rndFrase) {
 
 		// Notifica o estrategia
 		estrategia.recusouAumentoAposta(j.getPosicao());
@@ -344,7 +353,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 		recebiPedidoDeAumento = false;
 	}
 
-	public void jogoFechado(int numEquipeVencedora) {
+	public void jogoFechado(int numEquipeVencedora, int rndFrase) {
 		// Não faz nada
 	}
 
@@ -378,16 +387,16 @@ public class JogadorCPU extends Jogador implements Runnable {
 		estrategia.inicioPartida();
 	}
 
-	public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
+	public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
 		// Por ora não faz nada
 	}
 
-	public void informaMaoDeFerro(Carta[] cartasParceiro) {
-		cartasDoParceiroDaMaoDeFerro = cartasParceiro;
-		recebiPedidoDeMaoDeFerro = true;
+	public void informaMaoDeX(Carta[] cartasParceiro) {
+		cartasDoParceiroDaMaoDeX = cartasParceiro;
+		recebiPedidoDeMaoDeX = true;
 	}
 
-	public void jogoAbortado(int posicao) {
+	public void jogoAbortado(int posicao, int rndFrase) {
 		// Não precisa tratar
 	}
 

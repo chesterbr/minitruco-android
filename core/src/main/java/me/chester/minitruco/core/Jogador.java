@@ -13,7 +13,6 @@ import java.util.Random;
  * A subclasse determina se o jogador é o usuário do celular, um jogador virtual
  * ou um jogador de outro celular conectado remotamente.
  *
- *
  */
 public abstract class Jogador {
 
@@ -40,13 +39,9 @@ public abstract class Jogador {
 	}
 
 	private String nome = "unnamed";
-	private boolean isGuest = true;
-	long loginTime = 0;
 
 	/**
-	 * Nome do jogador (em jogos multiplayer)
-	 *
-	 * @return
+	 * @return Nome do jogador (em jogos multiplayer)
 	 */
 	public String getNome() {
 		return nome;
@@ -54,49 +49,6 @@ public abstract class Jogador {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public boolean getIsGuest() {
-		return isGuest;
-	}
-
-	public void setIsGuest(boolean isGuest) {
-		this.isGuest = isGuest;
-	}
-
-	public long getLoginTime() {
-		return loginTime;
-	}
-
-	public void setLoginTime(long loginTime) {
-		this.loginTime = loginTime;
-	}
-
-	/**
-	 * List of voted people (control for multiplayer games using database)
-	 *
-	 * @return
-	 */
-
-	private final String[] votedCoolList = new String[100];
-	private int votedCoolListPointer = 0;
-
-	public String getVotedCoolList(int pos) {
-		if (!(votedCoolList[pos] == null))
-			return votedCoolList[pos];
-		else
-			return "";
-	}
-
-	public int getVotedCoolListLength() {
-		return votedCoolList.length;
-	}
-
-	public void addToVotedCoolList(String votedUser) {
-		this.votedCoolList[votedCoolListPointer] = votedUser;
-		votedCoolListPointer++;
-		if (votedCoolListPointer == 100)
-			votedCoolListPointer = 0;
 	}
 
 	/**
@@ -143,20 +95,8 @@ public abstract class Jogador {
 		return cartas;
 	}
 
-	public boolean possuiCarta(Carta c) {
-		if (cartas == null) {
-			return false;
-		}
-		for (int i = 0; i < cartas.length; i++) {
-			if (cartas[i].equals(c)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/**
-	 * Estratégias suportadas pelos jogadores automático (CPU e Bot)
+	 * Estratégias suportadas pelos jbots
 	 */
 	static Estrategia[] ESTRATEGIAS = { new EstrategiaGasparotto(),
 			new EstrategiaSellani() };
@@ -177,7 +117,7 @@ public abstract class Jogador {
 
 	/**
 	 * Instancia uma estratégia (para uso em jogadores que precisam disso, como
-	 * o <code>JogadorBot</code> ou o <code>JogadorCPU</code>).
+	 * o <code>JogadorBot</code> ou o <code>JogadorBot</code>).
 	 *
 	 * @param nomeEstrategia
 	 *            Nome da estratégia (ex.: "Willian"). Se nenhuma estratégia se
@@ -250,8 +190,11 @@ public abstract class Jogador {
 	 *            Jogador que pediu o aumento
 	 * @param valor
 	 *            Quanto a mão passará a valar se algum adversário aceitar
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void pediuAumentoAposta(Jogador j, int valor);
+	public abstract void pediuAumentoAposta(Jogador j, int valor, int rndFrase);
 
 	/**
 	 * Informa que o jogador aceitou um pedido de aumento de aposta.
@@ -260,8 +203,11 @@ public abstract class Jogador {
 	 *            Jogador que aceitou o aumento
 	 * @param valor
 	 *            Quanto a mão está valendo agora
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void aceitouAumentoAposta(Jogador j, int valor);
+	public abstract void aceitouAumentoAposta(Jogador j, int valor, int rndFrase);
 
 	/**
 	 * Informa que o jogador recusou um pedido de aumento de aposta.
@@ -272,8 +218,11 @@ public abstract class Jogador {
 	 *
 	 * @param j
 	 *            Jogador que recusou o pedido.
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void recusouAumentoAposta(Jogador j);
+	public abstract void recusouAumentoAposta(Jogador j, int rndFrase);
 
 	/**
 	 * Informa o jogador que a rodada foi fechada
@@ -304,39 +253,42 @@ public abstract class Jogador {
 	 *
 	 * @param numEquipeVencedora
 	 *            Equipe que ganhou o jogo (1 ou 2)
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void jogoFechado(int numEquipeVencedora);
+	public abstract void jogoFechado(int numEquipeVencedora, int rndFrase);
 
 	/**
 	 * Informa que um jogador fez sua escolha de topar ou não
-	 * a mão de ferro
+	 * a mão de 10/11
 	 *
-	 * @param j
-	 *            Jogador que fez a escolha
-	 * @param aceita
-	 *            true se o jogador topou, false se recusou
+	 * @param j        Jogador que fez a escolha
+	 * @param aceita   true se o jogador topou, false se recusou
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void decidiuMaoDeFerro(Jogador j, boolean aceita);
+	public abstract void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase);
 
 	/**
-	 * Informa que o jogador é beneficiário de uma "mão de ferro", e, portanto,
+	 * Informa que o jogador é beneficiário de uma mão de 10/11, e, portanto,
 	 * deve decidir se aceita ou não esta rodada (se aceitar vale o valor do truco,
 	 * se ambos recusarem perde o modo normal)
 	 *
-	 * @param cartasParceiro
-	 *            Cartas do parceiro
-	 * @see Jogo#decideMaoDeFerro(Jogador, boolean)
-	 *
+	 * @param cartasParceiro Cartas do parceiro
 	 */
-	public abstract void informaMaoDeFerro(Carta[] cartasParceiro);
+	public abstract void informaMaoDeX(Carta[] cartasParceiro);
 
 	/**
 	 * Informa que o jogo foi abandonado por alguma causa externa (ex.: um
 	 * jogador desistiu)
 	 *
-	 * @param posicao
-	 *            Posição do jogador que abortou
+	 * @param posicao  Posição do jogador que abortou
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void jogoAbortado(int posicao);
+	public abstract void jogoAbortado(int posicao, int rndFrase);
 
 }

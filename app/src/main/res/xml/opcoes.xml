@@ -2,9 +2,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
         android:defaultValue="true"
+        android:key="sempreConfirmaFecharJogo"
+        android:summary="Se esta opção estiver desligada e o botão ou gesto de voltar for acionado, o jogo encerra imediatamente."
+        android:title="Sempre perguntar ao fechar um jogo" />
+    <CheckBoxPreference
+        android:defaultValue="true"
         android:key="humanoDecide"
-        android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de ferro. Ele só diz se iria, mas o humano é que decide."
+        android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de 10/11. Ele só diz se iria, mas o humano é que decide."
         android:title="Humano decide pela dupla" />
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/velocidade_animacao_textos"
+        android:entryValues="@array/velocidade_animacao_valores"
+        android:key="velocidadeAnimacao"
+        android:title="Velocidade da Animação" />
     <PreferenceCategory android:title="Opções de Desenvolvimento (sério, nem mexe aqui)">
         <EditTextPreference
             android:defaultValue="@string/opcoes_default_servidor"

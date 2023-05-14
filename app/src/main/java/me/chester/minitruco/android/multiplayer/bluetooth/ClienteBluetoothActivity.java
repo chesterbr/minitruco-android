@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
 import me.chester.minitruco.android.multiplayer.JogoRemoto;
 import me.chester.minitruco.core.Jogo;
@@ -122,6 +123,11 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 							break;
 						case 'P':
 							iniciaTrucoActivitySePreciso();
+							// Enquanto não tiver a activity iniciada, melhor não processar
+							// nenhuma mensagem
+							while (!TrucoActivity.isViva()) {
+								sleep(100);
+							}
 							// Não tem mesmo um break aqui, o início de partida
 							// também precisa ser processado pelo jogo anterior
 							// (para limpar o placar)
@@ -167,7 +173,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	}
 
 	private void exibeMesaForaDoJogo(String parametros) {
-		parametros = tiraEspacoDosNomes(parametros);
 		if (jogo != null) {
 			jogo.abortaJogo(0);
 			jogo = null;
@@ -188,13 +193,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		for (int n = 1; n <= 4; n++) {
 			apelidos[getPosicaoMesa(n) - 1] = apelidosOriginais[n - 1];
 		}
-	}
-
-	private String tiraEspacoDosNomes(String parametros) {
-		while (parametros.split(" ").length > 3) {
-			parametros = parametros.replaceFirst(" ", "_");
-		}
-		return parametros;
 	}
 
 	@Override

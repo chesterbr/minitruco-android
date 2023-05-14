@@ -12,7 +12,7 @@ package me.chester.minitruco.core;
 import java.util.Random;
 
 /**
- * Estratégia inteligente para jogadores CPU
+ * Estratégia inteligente para bots
  *
  */
 public class EstrategiaGasparotto implements Estrategia {
@@ -83,7 +83,7 @@ public class EstrategiaGasparotto implements Estrategia {
 	 * máxima; f = 0: sem dúvida NÃO vou em frente; ou seja, qto maior esse
 	 * fator, maior a chance de "mandarmos bala". A idéia é gerar um pouco de
 	 * aleatoriedade ao jogo para as jogadas não ficarem evidentes e confundir
-	 * os adversários, dando também um toque humano à CPU...
+	 * os adversários, dando também um toque humano aos bots...
 	 */
 	private boolean mandaBala(int fatorDeDuvida) {
 		// this is where we adjust agressiveness as per the different "personas"
@@ -2052,9 +2052,9 @@ public class EstrategiaGasparotto implements Estrategia {
 	}
 
 	/**
-	 * Retorna se eu aceito jogar ou não esta mão de ferro.
+	 * Retorna se eu aceito jogar ou não esta mão de 10/11.
 	 */
-	public boolean aceitaMaoDeFerro(Carta[] cartasParceiro, SituacaoJogo s) {
+	public boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s) {
 		// Não vamos pensar muito...
 
 		int q3 = 0, q2 = 0, qManilhas = 0;

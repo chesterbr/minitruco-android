@@ -37,6 +37,7 @@ import me.chester.minitruco.core.Jogo;
  */
 public class MesaView extends View {
 
+	protected int velocidade;
 	private int posicaoVez;
 
 	private int valorMao;
@@ -248,12 +249,12 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Torna as cartas da mão de ferro visíveis
+	 * Torna as cartas da mão de 10/11 visíveis
 	 *
 	 * @param cartasParceiro
 	 *            cartas do seu parceiro
 	 */
-	public void mostraCartasMaoDeFerro(Carta[] cartasParceiro) {
+	public void mostraCartasMaoDeX(Carta[] cartasParceiro) {
 		for (int i = 0; i <= 2; i++) {
 			cartas[10 + i].setCarta(cartasParceiro[i]);
 		}
@@ -271,15 +272,18 @@ public class MesaView extends View {
 	 * @param posicao
 	 *            posição (1 a 4) do jogador que "dirá" a frase
 	 * @param tempoMS
-	 *            tempo em que ela aparecerá
+	 *            tempo em que ela aparecerá (reduzido se a velocidade das animações for > 1)
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public void diz(String chave, int posicao, int tempoMS) {
+	public void diz(String chave, int posicao, int tempoMS, int rndFrase) {
 		aguardaFimAnimacoes();
-		mostraBalaoAte = System.currentTimeMillis() + tempoMS;
+		mostraBalaoAte = System.currentTimeMillis() + tempoMS / Math.min(velocidade, 2);
 		Resources res = getResources();
 		String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_"
 				+ chave, "array", "me.chester.minitruco"));
-		fraseBalao = frasesBalao[rand.nextInt(frasesBalao.length)];
+		fraseBalao = frasesBalao[rndFrase % frasesBalao.length];
 		posicaoBalao = posicao;
 		notificaAnimacao(mostraBalaoAte);
 	}
@@ -314,7 +318,7 @@ public class MesaView extends View {
 	}
 
 	/**
-	 * Responde pergunta em exibição (aceita truco, aceita mão de ferro, etc.)
+	 * Responde pergunta em exibição (aceita truco, aceita mão de 10/11, etc.)
 	 * e oculta a pergunta, desde que uma pergunta esteja sendo exibida.
 	 *
 	 * @param resposta resposta do jogador (true=sim, false=não)
@@ -327,12 +331,12 @@ public class MesaView extends View {
 			} else {
 				recusarAumento = true;
 			}
-		} else if (mostrarPerguntaMaoDeFerro) {
-			mostrarPerguntaMaoDeFerro = false;
+		} else if (mostrarPerguntaMaoDeX) {
+			mostrarPerguntaMaoDeX = false;
 			if (resposta) {
-				aceitarMaoDeFerro = true;
+				aceitarMaoDeX = true;
 			} else {
-				recusarMaoDeFerro = true;
+				recusarMaoDeX = true;
 			}
 		}
 	}
@@ -442,13 +446,13 @@ public class MesaView extends View {
 					e.printStackTrace();
 				}
 				Jogo jogo = trucoActivity.jogo;
-				if (recusarMaoDeFerro) {
-					recusarMaoDeFerro = false;
-					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, false);
+				if (recusarMaoDeX) {
+					recusarMaoDeX = false;
+					jogo.decideMaoDeX(trucoActivity.jogadorHumano, false);
 				}
-				if (aceitarMaoDeFerro) {
-					aceitarMaoDeFerro = false;
-					jogo.decideMaoDeFerro(trucoActivity.jogadorHumano, true);
+				if (aceitarMaoDeX) {
+					aceitarMaoDeX = false;
+					jogo.decideMaoDeX(trucoActivity.jogadorHumano, true);
 				}
 				if (recusarAumento) {
 					recusarAumento = false;
@@ -464,10 +468,13 @@ public class MesaView extends View {
 	};
 
 	/**
-	 * Permite à Activity informar que (não) é a vez de deixar o humano jogar
+	 * Permite à Activity informar se o humano está na própria vez e liberado para jogar,
+	 * se está na própria vez mas aguarda resposta de um truco, mão de 10/11, etc.,
+	 * ou se é a vez de outro jogador.
 	 *
 	 * @param vezHumano
-	 *            um entre VEZ_HUMANO, VEZ_CPU e VEZ_HUMANO_AGUARDANDO_RESPOSTA
+	 *            um entre STATUS_VEZ_HUMANO_OK, STATUS_VEZ_HUMANO_AGUARDANDO e
+	 *            STATUS_VEZ_OUTRO
 	 */
 	public void setStatusVez(int vezHumano) {
 		aguardaFimAnimacoes();
@@ -552,7 +559,7 @@ public class MesaView extends View {
 			if (cvCandidata.descartada) {
 				continue;
 			}
-			// ...e, no caso de um humano (ou parceiro em mão de ferro), que
+			// ...e, no caso de um humano (ou parceiro em mão de 10/11), que
 			// corresponda à carta do jogo
 			cv = cvCandidata;
 			if (c.equals(cvCandidata)) {
@@ -740,8 +747,14 @@ public class MesaView extends View {
 			}
 		}
 
-		// Caixa de diálogo (mão de ferro ou aumento)
-		if (mostrarPerguntaMaoDeFerro || mostrarPerguntaAumento) {
+		// Caixa de diálogo (mão de 10/11 ou aumento)
+		if (mostrarPerguntaMaoDeX || mostrarPerguntaAumento) {
+			String textoPergunta;
+			if (mostrarPerguntaAumento) {
+				textoPergunta = "Aceita?"; // TODO descrever?
+			} else {
+				textoPergunta = "Aceita mão de " + trucoActivity.jogo.getModo().pontuacaoParaMaoDeX();
+			}
 			Paint paint = new Paint();
 			paint.setAntiAlias(true);
 			paint.setColor(Color.BLACK);
@@ -753,12 +766,10 @@ public class MesaView extends View {
 			paint.setTextSize(tamanhoFonte * 0.5f);
 			paint.setTextAlign(Align.CENTER);
 			paint.setStyle(Style.FILL);
-			canvas.drawText(mostrarPerguntaMaoDeFerro ? "Aceita mão de ferro?"
-					: "Aceita?", rectDialog.centerX(),
+			canvas.drawText(textoPergunta, rectDialog.centerX(),
 					rectDialog.top + paint.getTextSize() * 1.5f, paint);
 			desenhaBotao("Sim", canvas, rectBotaoSim);
 			desenhaBotao("Nao", canvas, rectBotaoNao);
-
 		}
 
 		desenhaBalao(canvas);
@@ -857,10 +868,10 @@ public class MesaView extends View {
 	 */
 	private CartaVisual cartaQueFez;
 
-	public boolean mostrarPerguntaMaoDeFerro = false;
+	public boolean mostrarPerguntaMaoDeX = false;
 
-	private boolean recusarMaoDeFerro = false;
-	private boolean aceitarMaoDeFerro = false;
+	private boolean recusarMaoDeX = false;
+	private boolean aceitarMaoDeX = false;
 
 	public boolean mostrarPerguntaAumento = false;
 
