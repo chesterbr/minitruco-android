@@ -1,10 +1,10 @@
 package me.chester.minitruco.android.multiplayer.bluetooth;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -27,6 +27,7 @@ import me.chester.minitruco.core.Jogo;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
+@SuppressLint("MissingPermission") // super.onCreate checa as permissões
 public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		Runnable, ClienteMultiplayer {
 
@@ -46,11 +47,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 	private InputStream in;
 	private OutputStream out;
 	private int posJogador;
-
-	@Override
-	Logger logger() {
-		return LOGGER;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +102,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		// Loop principal: decodifica as notificações recebidas e as
 		// processa (ou encaminha ao JogoBT, se estivermos em jogo)
 		int c;
-		StringBuffer sbLinha = new StringBuffer();
+		StringBuilder sbLinha = new StringBuilder();
 		try {
 			in = socket.getInputStream();
 			out = socket.getOutputStream();
@@ -202,8 +198,6 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 
 	/**
 	 * Manda um comando para o celular do servidor (se houver um conectado).
-	 *
-	 * @param linha
 	 */
 	@Override
 	public synchronized void enviaLinha(String linha) {
@@ -249,13 +243,13 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 		if (in != null) {
 			try {
 				in.close();
-			} catch (IOException e) {
+			} catch (IOException ignored) {
 			}
 		}
 		if (socket != null) {
 			try {
 				socket.close();
-			} catch (IOException e) {
+			} catch (IOException ignored) {
 			}
 		}
 	}
@@ -291,7 +285,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 			LOGGER.log(Level.INFO, "device.getName()");
             setMensagem("Conectando em " + nomeDoServidor);
             socket = servidor.createRfcommSocketToServiceRecord(UUID_BT);
-            sleep(1000);
+			sleep(1000);
 			LOGGER.log(Level.INFO, "Conectando");
             socket.connect();
 			LOGGER.log(Level.INFO, "Conectado");
@@ -340,7 +334,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             return;
         }
 
-        dispositivosPareados = new ArrayList<BluetoothDevice>();
+        dispositivosPareados = new ArrayList<>();
         dispositivosPareados.addAll(btAdapter.getBondedDevices());
 
         if (dispositivosPareados.size() == 0) {
@@ -349,14 +343,11 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
         }
 
         new AlertDialog.Builder(this).setTitle("Escolha o celular que criou o jogo")
-                .setItems(criaArrayComNomeDosAparelhosPareados(), new AlertDialog.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int posicaoNaLista) {
-                        servidor = dispositivosPareados.get(posicaoNaLista);
-						threadConexao = new Thread(ClienteBluetoothActivity.this);
-			            threadConexao.start();
-                    }
-                }).show();
+                .setItems(criaArrayComNomeDosAparelhosPareados(), (dialog, posicaoNaLista) -> {
+					servidor = dispositivosPareados.get(posicaoNaLista);
+					threadConexao = new Thread(ClienteBluetoothActivity.this);
+					threadConexao.start();
+				}).show();
     }
 
 }

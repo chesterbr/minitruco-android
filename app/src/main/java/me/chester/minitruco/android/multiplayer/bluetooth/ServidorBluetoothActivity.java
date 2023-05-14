@@ -1,5 +1,6 @@
 package me.chester.minitruco.android.multiplayer.bluetooth;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
@@ -14,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +32,7 @@ import me.chester.minitruco.core.JogoLocal;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
+@SuppressLint("MissingPermission")  // super.onCreate checa as permissões
 public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	private final static Logger LOGGER = Logger.getLogger("ServidorBluetoothActivity");
@@ -63,11 +64,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 	};
 
 	@Override
-	Logger logger() {
-		return LOGGER;
-	}
-
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		currentInstance = this;
@@ -80,11 +76,9 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		// TODO titulo poderia passar como extra do intent
 		modo = preferences.getString("modo", "P");
 		layoutIniciar.setVisibility(View.VISIBLE);
-		btnIniciar.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				status = STATUS_EM_JOGO;
-				iniciaTrucoActivitySePreciso();
-			}
+		btnIniciar.setOnClickListener(v -> {
+			status = STATUS_EM_JOGO;
+			iniciaTrucoActivitySePreciso();
 		});
 		registerReceiver(receiverMantemDiscoverable, new IntentFilter(
 				BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
@@ -105,8 +99,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO limpar essa sujeira, herança do Java ME
-		// (e ver se é uma boa fazer isso na UI thread mesmo)
+		// TODO colocar botões ao invés de itens de menu
 		switch (item.getItemId()) {
 			case R.id.menuitem_troca_parceiro:
 				trocaParceiro();
@@ -174,7 +167,6 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 		while (status != STATUS_BLUETOOTH_ENCERRADO) {
 			while (status == STATUS_EM_JOGO) {
 				sleep(500);
-				continue;
 			}
 			atualizaDisplay();
 			atualizaClientes();
@@ -230,7 +222,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 					}
 					sb.append((char) c);
 				}
-				LOGGER.info("recebeu ao conectar: " + sb.toString());
+				LOGGER.info("recebeu ao conectar: " + sb);
 				if (sb.toString().equals("B " + BuildConfig.VERSION_CODE)) {
 					respondeuComVersaoOk[slot] = true;
 				}
@@ -319,7 +311,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
 		// Monta o comando de dados no formato:
 		// I apelido1|apelido2|apelido3|apelido4 regras
-		StringBuffer sbComando = new StringBuffer("I ");
+		StringBuilder sbComando = new StringBuilder("I ");
 		for (int i = 0; i <= 3; i++) {
 			sbComando.append(apelidos[i]);
 			sbComando.append(i < 3 ? '|' : ' ');

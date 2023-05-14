@@ -3,14 +3,10 @@ package me.chester.minitruco.android.multiplayer.bluetooth;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.BaseActivity;
@@ -41,7 +36,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 		Runnable {
 
 	public static String[] BLUETOOTH_PERMISSIONS;
-	{
+	static {
 		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
 			// Android 11 ou anterior pede permissões genéricas
 			BLUETOOTH_PERMISSIONS = new String[] {
@@ -56,12 +51,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 					Manifest.permission.BLUETOOTH_ADVERTISE,
 			};
 		}
-	};
-
-	/**
-	 * Vamos usar o logger da classe correta (cliente ou servidor)
-	 */
-	abstract Logger logger();
+	}
 
 	/**
 	 * Separador de linha recebido
@@ -85,9 +75,6 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	public static final UUID UUID_BT = UUID
 			.fromString("3B175368-ABB4-11DB-A508-C2B155D89593");
 
-	private static final int MSG_MOSTRA_MENSAGEM = 1;
-	private static final int MSG_ERRO_FATAL = 2;
-
 	protected BluetoothAdapter btAdapter;
 	protected String[] apelidos = new String[4];
 	protected String modo;
@@ -101,15 +88,15 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sala);
-		layoutIniciar = (View) findViewById(R.id.layoutIniciar);
-		btnIniciar = (Button) findViewById(R.id.btnIniciarBluetooth);
-		textViewMensagem = ((TextView) findViewById(R.id.textViewMensagem));
-		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
+		layoutIniciar = findViewById(R.id.layoutIniciar);
+		btnIniciar = findViewById(R.id.btnIniciarBluetooth);
+		textViewMensagem = findViewById(R.id.textViewMensagem);
+		textViewStatus = findViewById(R.id.textViewStatus);
 		textViewsJogadores = new TextView[4];
-		textViewsJogadores[0] = (TextView) findViewById(R.id.textViewJogador1);
-		textViewsJogadores[1] = (TextView) findViewById(R.id.textViewJogador2);
-		textViewsJogadores[2] = (TextView) findViewById(R.id.textViewJogador3);
-		textViewsJogadores[3] = (TextView) findViewById(R.id.textViewJogador4);
+		textViewsJogadores[0] = findViewById(R.id.textViewJogador1);
+		textViewsJogadores[1] = findViewById(R.id.textViewJogador2);
+		textViewsJogadores[2] = findViewById(R.id.textViewJogador3);
+		textViewsJogadores[3] = findViewById(R.id.textViewJogador4);
 		btAdapter = BluetoothAdapter.getDefaultAdapter();
 
 		String[] permissoesFaltantes = permissoesBluetoothFaltantes();
@@ -162,51 +149,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 	abstract void iniciaAtividadeBluetooth();
 
 	protected void atualizaDisplay() {
-		Message.obtain(handlerAtualizaDisplay).sendToTarget();
-	}
-
-	protected void setMensagem(String mensagem) {
-		Message.obtain(handlerAtualizaDisplay, MSG_MOSTRA_MENSAGEM, mensagem)
-				.sendToTarget();
-	}
-
-	protected void msgErroFatal(String mensagem) {
-		Message.obtain(handlerAtualizaDisplay, MSG_ERRO_FATAL, mensagem)
-				.sendToTarget();
-	}
-
-	protected abstract int getNumClientes();
-
-	Handler handlerAtualizaDisplay = new Handler() {
-
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case MSG_MOSTRA_MENSAGEM:
-				if (msg.obj == null) {
-					textViewMensagem.setVisibility(View.GONE);
-				} else {
-					textViewMensagem.setVisibility(View.VISIBLE);
-					textViewMensagem.setText((String) msg.obj);
-				}
-				break;
-			case MSG_ERRO_FATAL:
-				new AlertDialog.Builder(BluetoothBaseActivity.this)
-						.setTitle("Erro")
-						.setMessage((String) msg.obj)
-						.setOnCancelListener(new OnCancelListener() {
-							public void onCancel(DialogInterface dialog) {
-								finish();
-							}
-						})
-						.setNeutralButton("Ok",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int which) {
-										finish();
-									}
-								}).show();
-				break;
-			}
+		runOnUiThread(() -> {
 			for (int i = 0; i < 4; i++) {
 				textViewsJogadores[i].setText(apelidos[i]);
 			}
@@ -214,9 +157,33 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
 				textViewStatus.setText("Modo: " + Jogo.textoModo(modo));
 			}
 			btnIniciar.setEnabled(getNumClientes() > 0);
-		}
+		});
+	}
 
-	};
+	protected void setMensagem(String mensagem) {
+		runOnUiThread(() -> {
+			if (mensagem == null) {
+				textViewMensagem.setVisibility(View.GONE);
+			} else {
+				textViewMensagem.setVisibility(View.VISIBLE);
+				textViewMensagem.setText(mensagem);
+			}
+		});
+	}
+
+	protected void msgErroFatal(String mensagem) {
+		runOnUiThread(() ->
+			new AlertDialog.Builder(BluetoothBaseActivity.this)
+					.setTitle("Erro")
+					.setMessage(mensagem)
+					.setOnCancelListener(dialog -> finish())
+					.setNeutralButton("Ok",
+							(dialog, which) -> finish())
+					.show()
+		);
+	}
+
+	protected abstract int getNumClientes();
 
 	protected void iniciaTrucoActivitySePreciso() {
 		if (!TrucoActivity.isViva()) {
