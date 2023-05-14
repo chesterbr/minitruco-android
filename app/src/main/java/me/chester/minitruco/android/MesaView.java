@@ -273,14 +273,17 @@ public class MesaView extends View {
 	 *            posição (1 a 4) do jogador que "dirá" a frase
 	 * @param tempoMS
 	 *            tempo em que ela aparecerá (reduzido se a velocidade das animações for > 1)
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public void diz(String chave, int posicao, int tempoMS) {
+	public void diz(String chave, int posicao, int tempoMS, int rndFrase) {
 		aguardaFimAnimacoes();
 		mostraBalaoAte = System.currentTimeMillis() + tempoMS / Math.min(velocidade, 2);
 		Resources res = getResources();
 		String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_"
 				+ chave, "array", "me.chester.minitruco"));
-		fraseBalao = frasesBalao[rand.nextInt(frasesBalao.length)];
+		fraseBalao = frasesBalao[rndFrase % frasesBalao.length];
 		posicaoBalao = posicao;
 		notificaAnimacao(mostraBalaoAte);
 	}

@@ -190,8 +190,11 @@ public abstract class Jogador {
 	 *            Jogador que pediu o aumento
 	 * @param valor
 	 *            Quanto a mão passará a valar se algum adversário aceitar
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void pediuAumentoAposta(Jogador j, int valor);
+	public abstract void pediuAumentoAposta(Jogador j, int valor, int rndFrase);
 
 	/**
 	 * Informa que o jogador aceitou um pedido de aumento de aposta.
@@ -200,8 +203,11 @@ public abstract class Jogador {
 	 *            Jogador que aceitou o aumento
 	 * @param valor
 	 *            Quanto a mão está valendo agora
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void aceitouAumentoAposta(Jogador j, int valor);
+	public abstract void aceitouAumentoAposta(Jogador j, int valor, int rndFrase);
 
 	/**
 	 * Informa que o jogador recusou um pedido de aumento de aposta.
@@ -212,8 +218,11 @@ public abstract class Jogador {
 	 *
 	 * @param j
 	 *            Jogador que recusou o pedido.
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void recusouAumentoAposta(Jogador j);
+	public abstract void recusouAumentoAposta(Jogador j, int rndFrase);
 
 	/**
 	 * Informa o jogador que a rodada foi fechada
@@ -244,29 +253,30 @@ public abstract class Jogador {
 	 *
 	 * @param numEquipeVencedora
 	 *            Equipe que ganhou o jogo (1 ou 2)
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void jogoFechado(int numEquipeVencedora);
+	public abstract void jogoFechado(int numEquipeVencedora, int rndFrase);
 
 	/**
 	 * Informa que um jogador fez sua escolha de topar ou não
 	 * a mão de ferro
 	 *
-	 * @param j
-	 *            Jogador que fez a escolha
-	 * @param aceita
-	 *            true se o jogador topou, false se recusou
+	 * @param j        Jogador que fez a escolha
+	 * @param aceita   true se o jogador topou, false se recusou
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void decidiuMaoDeFerro(Jogador j, boolean aceita);
+	public abstract void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase);
 
 	/**
 	 * Informa que o jogador é beneficiário de uma "mão de ferro", e, portanto,
 	 * deve decidir se aceita ou não esta rodada (se aceitar vale o valor do truco,
 	 * se ambos recusarem perde o modo normal)
 	 *
-	 * @param cartasParceiro
-	 *            Cartas do parceiro
-	 * @see Jogo#decideMaoDeFerro(Jogador, boolean)
-	 *
+	 * @param cartasParceiro Cartas do parceiro
 	 */
 	public abstract void informaMaoDeFerro(Carta[] cartasParceiro);
 
@@ -274,9 +284,11 @@ public abstract class Jogador {
 	 * Informa que o jogo foi abandonado por alguma causa externa (ex.: um
 	 * jogador desistiu)
 	 *
-	 * @param posicao
-	 *            Posição do jogador que abortou
+	 * @param posicao  Posição do jogador que abortou
+	 * @param rndFrase
+	 *			  Número "grande" que identifica a frase do strings.xml dita
+	 *			  pelo jogador (índice_da_frase = rndFrase % frases.length())
 	 */
-	public abstract void jogoAbortado(int posicao);
+	public abstract void jogoAbortado(int posicao, int rndFrase);
 
 }

@@ -1,5 +1,6 @@
 package me.chester.minitruco.core;
 
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,8 @@ import java.util.logging.Logger;
 public class JogoLocal extends Jogo {
 
     private final static Logger LOGGER = Logger.getLogger("JogoLocal");
+
+	private final static Random rand = new Random();
 
 	/**
 	 * Cria um novo jogo.
@@ -180,6 +183,7 @@ public class JogoLocal extends Jogo {
 			jogadores[i].inicioMao();
 		}
 
+		int rndFrase = Math.abs(rand.nextInt());
 		if (pontosEquipe[0] == modo.pontuacaoQueDeterminaMaoDeFerro()
 				^ pontosEquipe[1] == modo.pontuacaoQueDeterminaMaoDeFerro()) {
 			if (pontosEquipe[0] == modo.pontuacaoQueDeterminaMaoDeFerro()) {
@@ -189,6 +193,7 @@ public class JogoLocal extends Jogo {
 				for (Jogador interessado : jogadores) {
 					// Interessados que não sejam Jogador (ex.: a Partida na
 					// versão Android) devem ser notificados também
+					// TODO: isso ainda vale ou é resto do passado?
 					if (!(interessado instanceof Jogador)) {
 						interessado.informaMaoDeFerro(getJogador(3).getCartas());
 					}
@@ -376,15 +381,15 @@ public class JogoLocal extends Jogo {
 		// jogo acabou também
 		// A notificação é feita em ordem reversa para que um JogadorBluetooth não tenha
 		// que esperar pelas animacões de um JogadorHumano
-
+		int rndFrase = Math.abs(rand.nextInt());
 		for (int i = 3; i >= 0; i--) {
 			Jogador interessado = jogadores[i];
 			interessado.maoFechada(pontosEquipe);
 			if (pontosEquipe[0] > modo.pontuacaoQueDeterminaMaoDeFerro()) {
-				interessado.jogoFechado(1);
+				interessado.jogoFechado(1, rndFrase);
 				jogoFinalizado = true;
 			} else if (pontosEquipe[1] > modo.pontuacaoQueDeterminaMaoDeFerro()) {
-				interessado.jogoFechado(2);
+				interessado.jogoFechado(2, rndFrase);
 				jogoFinalizado = true;
 			}
 		}
@@ -446,8 +451,9 @@ public class JogoLocal extends Jogo {
 			aceita = false;
 		} else {
 			// Avisa os outros jogadores da decisão
+			int rndFrase = Math.abs(rand.nextInt());
 			for (Jogador interessado : jogadores) {
-				interessado.decidiuMaoDeFerro(j, aceita);
+				interessado.decidiuMaoDeFerro(j, aceita, rndFrase);
 			}
 		}
 
@@ -489,19 +495,18 @@ public class JogoLocal extends Jogo {
 
 		LOGGER.log(Level.INFO, "Jogador  " + j.getPosicao() + " pede aumento");
 
-		// Atualiza o status e notifica os outros jogadores do pedido
-		jogadorPedindoAumento = j;
+		// Atualiza o status
+		this.jogadorPedindoAumento = j;
 		for (int i = 0; i <= 3; i++)
 			recusouAumento[i] = false;
 
+		// Notifica todos os jogadores
 		int valor = modo.valorSeHouverAumento(valorMao);
-
-		// Notifica os interessados
+		int rndFrase = Math.abs(rand.nextInt());
 		for (Jogador interessado : jogadores) {
-			interessado.pediuAumentoAposta(j, valor);
+			interessado.pediuAumentoAposta(j, valor, rndFrase);
 		}
 		LOGGER.log(Level.INFO, "Jogadores notificados do aumento");
-
 	}
 
 	/*
@@ -524,22 +529,23 @@ public class JogoLocal extends Jogo {
 		// o bot parceiro do humano aceita, trata como recusa
 		// (mas notifica humano do aceite)
 		boolean ignorarAceite = isIgnoraDecisao(j) && aceitou;
+		int rndFrase = Math.abs(rand.nextInt());
 		if (aceitou && !ignorarAceite) {
 			// Se o jogador aceitou, seta o novo valor, notifica a galera e tira
 			// o jogo da situtação de truco
 			valorMao = modo.valorSeHouverAumento(valorMao);
 			jogadorPedindoAumento = null;
 			for (Jogador interessado : jogadores) {
-				interessado.aceitouAumentoAposta(j, valorMao);
+				interessado.aceitouAumentoAposta(j, valorMao, rndFrase);
 			}
 		} else {
 			// Primeiro notifica todo mundo da recusa
 			// (se for um aceite ignorado, diz pro humano que aceitou, só pra ele saber o que seria feito)
 			for (Jogador interessado : jogadores) {
 				if (aceitou && ignorarAceite && (interessado == jogadores[posParceiro - 1])) {
-					interessado.aceitouAumentoAposta(j, valorMao);
+					interessado.aceitouAumentoAposta(j, valorMao, rndFrase);
 				} else {
-					interessado.recusouAumentoAposta(j);
+					interessado.recusouAumentoAposta(j, rndFrase);
 				}
 			}
 			if (recusouAumento[posParceiro - 1]) {
@@ -560,6 +566,17 @@ public class JogoLocal extends Jogo {
 				return false;
 			}
 		return true;
+	}
+
+	@Override
+	public void abortaJogo(int posicao) {
+ 		jogoFinalizado = true;
+		int rndFrase = Math.abs(rand.nextInt());
+		for (Jogador j : jogadores) {
+			if (j != null) {
+				j.jogoAbortado(posicao, rndFrase);
+			}
+		}
 	}
 
 	/**

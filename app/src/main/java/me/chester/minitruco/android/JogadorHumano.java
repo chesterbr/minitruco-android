@@ -53,11 +53,11 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	}
 
 	@Override
-	public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
+	public void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase) {
 		if (posicaoNaTela(j) == 3 && aceita) {
 			mesa.mostrarPerguntaMaoDeFerro = false;
 		}
-		mesa.diz(aceita ? "mao_de_ferro_sim" : "mao_de_ferro_nao", posicaoNaTela(j), 1500);
+		mesa.diz(aceita ? "mao_de_ferro_sim" : "mao_de_ferro_nao", posicaoNaTela(j), 1500, rndFrase);
 	}
 
 	@Override
@@ -95,10 +95,10 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	}
 
 	@Override
-	public void jogoAbortado(int posicao) {
+	public void jogoAbortado(int posicao, int rndFrase) {
 		if (posicao != 0 && mesa != null) {
 			mesa.diz("abortou", convertePosicaoJogadorParaPosicaoTela(posicao),
-					1000);
+					1000, rndFrase);
 			mesa.aguardaFimAnimacoes();
 		}
 		if (activity != null) {
@@ -108,10 +108,10 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	}
 
 	@Override
-	public void jogoFechado(int numEquipeVencedora) {
+	public void jogoFechado(int numEquipeVencedora, int rndFrase) {
 		boolean ganhei = (numEquipeVencedora == this.getEquipe());
 		incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
-		mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000);
+		mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000, rndFrase);
 		mesa.aguardaFimAnimacoes();
 		activity.handler.sendMessage(Message.obtain(activity.handler,
 				TrucoActivity.MSG_OFERECE_NOVA_PARTIDA));
@@ -133,9 +133,9 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	}
 
 	@Override
-	public void pediuAumentoAposta(Jogador j, int valor) {
+	public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
 		mesa.diz("aumento_" + jogo.nomeNoTruco(valor), posicaoNaTela(j),
-				1500 + 200 * (valor / 3));
+				1500 + 200 * (valor / 3), rndFrase);
 		if (j.getEquipe() != this.getEquipe()) {
 			LOGGER.log(Level.INFO, "pedindo para mostrar pergunta aumento");
 			mesa.mostrarPerguntaAumento = true;
@@ -143,12 +143,12 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 	}
 
 	@Override
-	public void aceitouAumentoAposta(Jogador j, int valor) {
+	public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
 		if (j.getEquipe() == this.getEquipe()) {
 			// Num jogo sem bluetooth/etc, a CPU não aumenta, ela só
 			// sinaliza a intenção de aumentar
 			if (jogo instanceof JogoLocal && ((JogoLocal) jogo).isIgnoraDecisao(j)) {
-				mesa.diz("aumento_quero", posicaoNaTela(j), 1500);
+				mesa.diz("aumento_quero", posicaoNaTela(j), 1500, rndFrase);
 				return;
 			}
 			// Nós aceitamos um truco, então podemos pedir aumento (se o valor atual ainda permitir)
@@ -158,13 +158,13 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 			valorProximaAposta = 0;
 		}
 		mesa.mostrarPerguntaAumento = false;
-		mesa.diz("aumento_sim", posicaoNaTela(j), 1500);
+		mesa.diz("aumento_sim", posicaoNaTela(j), 1500, rndFrase);
 		mesa.aceitouAumentoAposta(j, valor);
 	}
 
 	@Override
-	public void recusouAumentoAposta(Jogador j) {
-		mesa.diz("aumento_nao", posicaoNaTela(j), 1300);
+	public void recusouAumentoAposta(Jogador j, int rndFrase) {
+		mesa.diz("aumento_nao", posicaoNaTela(j), 1300, rndFrase);
 	}
 
 	@Override

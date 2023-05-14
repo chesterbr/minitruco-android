@@ -161,22 +161,26 @@ public class JogoRemoto extends Jogo {
             case 'T':
                 getJogadorHumano().pediuAumentoAposta(
                         getJogador(Integer.parseInt(tokens[0])),
-                        Integer.parseInt(tokens[1]));
+                        Integer.parseInt(tokens[1]),
+                        Integer.parseInt(tokens[2]));
                 break;
             case 'D':
                 getJogadorHumano().aceitouAumentoAposta(
                         getJogador(Integer.parseInt(tokens[0])),
-                        Integer.parseInt(tokens[1]));
+                        Integer.parseInt(tokens[1]),
+                        Integer.parseInt(tokens[2]));
                 break;
             case 'C':
                 getJogadorHumano().recusouAumentoAposta(
-                        getJogador(Integer.parseInt(tokens[0])));
+                        getJogador(Integer.parseInt(tokens[0])),
+                        Integer.parseInt(tokens[1]));
                 break;
             case 'H':
                 // Alguém aceitou mão de ferro, informa
                 getJogadorHumano().decidiuMaoDeFerro(
                         getJogador(Integer.parseInt(tokens[0])),
-                        tokens[1].equals("T"));
+                        tokens[1].equals("T"),
+                        Integer.parseInt(tokens[2]));
                 break;
             case 'F':
                 // Mão de ferro. Recupera as cartas do parceiro e informa o jogador
@@ -201,12 +205,16 @@ public class JogoRemoto extends Jogo {
                 break;
             case 'G':
                 // Fim de jogo
-                getJogadorHumano().jogoFechado(Integer.parseInt(parametros));
+                getJogadorHumano().jogoFechado(
+                        Integer.parseInt(tokens[0]),
+                        Integer.parseInt(tokens[1]));
 
                 break;
             case 'A':
                 // Jogo abortado por alguém
-                getJogadorHumano().jogoAbortado(Integer.parseInt(parametros));
+                getJogadorHumano().jogoAbortado(
+                        Integer.parseInt(tokens[0]),
+                        Integer.parseInt(tokens[1]));
                 break;
         }
     }
@@ -251,15 +259,13 @@ public class JogoRemoto extends Jogo {
     public void enviaMensagem(Jogador j, String s) {
     }
 
-    /**
-     * Se o jogador humano aborta, encaminha para o jogo "de verdade"
-     */
     @Override
     public void abortaJogo(int posicao) {
+        // TODO eu acho que o if aqui é redundante (no geral, só o Jogador 1
+        //.     faria isso mesmo); conferir em outros lugares
         if (posicao == 1) {
             cliente.enviaLinha("A");
         }
-        jogadorHumano.jogoAbortado(0);
     }
 
 }

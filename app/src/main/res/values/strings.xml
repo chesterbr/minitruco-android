@@ -113,6 +113,7 @@
     </string-array>
     <string-array name="balao_abortou">
         <item>Tchau…</item>
+        <item>Cansei</item>
     </string-array>
     <string-array name="velocidade_animacao_textos">
         <item>Normal</item>

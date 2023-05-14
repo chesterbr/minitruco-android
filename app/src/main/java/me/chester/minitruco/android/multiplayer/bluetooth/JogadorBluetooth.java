@@ -165,16 +165,16 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 		enviaMensagem("V " + j.getPosicao() + ' ' + (podeFechada ? 'T' : 'F'));
 	}
 
-	public void pediuAumentoAposta(Jogador j, int valor) {
-		enviaMensagem("T " + j.getPosicao() + ' ' + valor);
+	public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
+		enviaMensagem("T " + j.getPosicao() + ' ' + valor + ' ' + rndFrase);
 	}
 
-	public void aceitouAumentoAposta(Jogador j, int valor) {
-		enviaMensagem("D " + j.getPosicao() + ' ' + valor);
+	public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
+		enviaMensagem("D " + j.getPosicao() + ' ' + valor + ' ' + rndFrase);
 	}
 
-	public void recusouAumentoAposta(Jogador j) {
-		enviaMensagem("C " + j.getPosicao());
+	public void recusouAumentoAposta(Jogador j, int rndFrase) {
+		enviaMensagem("C " + j.getPosicao() + ' ' + rndFrase);
 	}
 
 	public void rodadaFechada(int numRodada, int resultado,
@@ -186,8 +186,8 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 		enviaMensagem("O " + pontosEquipe[0] + ' ' + pontosEquipe[1]);
 	}
 
-	public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
-		enviaMensagem("H " + j.getPosicao() + (aceita ? " T" : " F"));
+	public void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase) {
+		enviaMensagem("H " + j.getPosicao() + (aceita ? " T" : " F") + ' ' + rndFrase);
 	}
 
 	public void informaMaoDeFerro(Carta[] cartasParceiro) {
@@ -202,13 +202,13 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 
 	// Eventos de fim-de-jogo
 
-	public void jogoFechado(int numEquipeVencedora) {
-		enviaMensagem("G " + numEquipeVencedora);
+	public void jogoFechado(int numEquipeVencedora, int rndFrase) {
+		enviaMensagem("G " + numEquipeVencedora + " " + rndFrase);
 		finaliza();
 	}
 
-	public void jogoAbortado(int posicao) {
-		enviaMensagem("A " + posicao);
+	public void jogoAbortado(int posicao, int rndFrase) {
+		enviaMensagem("A " + posicao + ' ' + rndFrase);
 		finaliza();
 	}
 

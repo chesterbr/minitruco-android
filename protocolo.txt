@@ -7,8 +7,17 @@ Convenções nas notificações:
 <apelidos> Quatro sequências de caracteres (uma ou mais podendo ser "bot"), separadas por "|".
            Exemplo: john|bot|ringo|george
 <modo> P para Truco Paulista, M para Truco Mineiro ou L para Truco Paulista com baralho limpo.
-<posicao> Posição do jogador atual, de 1 a 4; 1 e 3 são uma dupla, 2 e 4 são a outra.
+<jogador> Posição de um jogador na sala/jogo, de 1 a 4. É constante durante o jogo, mas pode
+          mudar fora dele (o servidor manda uma notificação I).
+<equipe> Uma das duas equipes (duplas). Pode ser 1 (equpe dos jogadores 1 e 3) ou 2 (jogadores 2 e 4).
 <quer jogar> Quatro caracteres, T/F conforme cada posição queira iniciar o jogo
+<frase> número aleatório grande que permite que todos os clientes mostrem a mesma frase
+        (o "balãozinho") para um evento. Por exemplo, se o jogador 1 pediu truco (paulista) e o
+        número sorteado foi 12345678, todos irão receber "T 1 3 12345678"; se o cliente tem 8
+        frases possíveis para truco, ele calcula 12345678 % 8 = 6 e exibe a frase de índice 6.
+        Dessa forma, todos os clientes mostram a mesma frase (se estiverem com a mesma versão
+        do strings.xml) e o servidor não tem que saber quantas frases tem cada tipo de mensagem.
+
 
 = Implementados
 
@@ -43,20 +52,20 @@ X NO - É preciso atribuir um nome para entrar na sala
 X JE sala - Você já está na sala de código "sala"
 
 N nome
-I <apelidos> <modo> <posicao> <quero jogar> - Info da sala. <quer jogar> apenas no jogo via internet
-P <posicao> - Início da partida
+I <apelidos> <modo> <jogador> <quero jogar> - Info da sala. <jogador> é a posição do cliente. <quer jogar> só vem no jogo via internet
+P <jogador> - Início da partida
 M Ln Ln Ln Ln - Início da mão. Suas cartas são Ln, Ln e Ln (Letra naipe), a última, se houver, é o vira
-V posicao _ - vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode
-J posicao Ln - Carta Ln foi jogada pela pessoa na posição indicada (se Ln omitido, foi jogada carta fechada)
-R resultado posicao - Fim de rodada, seguido de resultado (equipe vencedora) e no. do jogador que torna
+V <jogador> _ - vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode
+J <jogador> Ln - Carta Ln foi jogada pela pessoa na posição indicada (se Ln omitido, foi jogada carta fechada)
+R <equipe> <jogador> - Fim de rodada, indicando equipe vencedora e jogador que torna
 O pontosEquipe1 pontosEquipe2 - Fim de mão, seguido do placar atual do jogo
-G numEquipeVencedora - Fim de jogo
-A posicao - Jogo abortado pelo jogador nesta posição
-T jogador valor - Jogador pediu aumento. valor é 3 para truco, 6 para seis, etc.
-D jogador valor - Jogador mandou descer (aceitou aumento) no valor indicado
-C jogador - Jogador correu do pedido de aumento
-F Ln Ln Ln - Informa que estamos em mão de ferro e o adversário tem essas cartas
-H posicao _ - Informa que o jogador na posição acusou/recusou (_=T/F) mão de ferro
+G <equipe> <frase> - Fim de jogo, indicando a equipe vencedora
+A <jogador> - Jogo abortado pelo jogador nesta posição
+T <jogador> <valor> <frase> - Jogador pediu aumento. valor é 3 para truco, 6 para seis, etc.
+D <jogador> <valor> <frase> - Jogador mandou descer (aceitou aumento) no valor indicado
+C <jogador> <frase> - Jogador correu do pedido de aumento
+F Ln Ln Ln <frase> - Informa que estamos em mão de ferro e o adversário tem essas cartas
+H <jogador> <frase> _ - Informa que o jogador na posição acusou/recusou (_=T/F) mão de ferro
 S - Informa que o jogador saiu da sala
 
 

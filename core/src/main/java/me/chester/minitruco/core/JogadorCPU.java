@@ -16,7 +16,6 @@ import java.util.logging.Logger;
  *
  */
 public class JogadorCPU extends Jogador implements Runnable {
-
     private final static Logger LOGGER = Logger.getLogger("JogadorCPU");
 
 	private boolean fingeQuePensa = true;
@@ -262,7 +261,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	private Carta[] cartasDoParceiroDaMaoDeFerro;
 
-	public void pediuAumentoAposta(Jogador j, int valor) {
+	public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
 		// Notifica a estrategia
 		estrategia.pediuAumentoAposta(j.getPosicao(), valor);
 		// Se foi a equipe oposta que pediu, gera uma resposta
@@ -292,7 +291,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	int valorProximaAposta;
 
-	public void aceitouAumentoAposta(Jogador j, int valor) {
+	@Override
+	public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
 
 		// Notifica o estrategia
 		estrategia.aceitouAumentoAposta(j.getPosicao(), valor);
@@ -317,7 +317,8 @@ public class JogadorCPU extends Jogador implements Runnable {
 
 	}
 
-	public void recusouAumentoAposta(Jogador j) {
+	@Override
+	public void recusouAumentoAposta(Jogador j, int rndFrase) {
 
 		// Notifica o estrategia
 		estrategia.recusouAumentoAposta(j.getPosicao());
@@ -352,7 +353,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 		recebiPedidoDeAumento = false;
 	}
 
-	public void jogoFechado(int numEquipeVencedora) {
+	public void jogoFechado(int numEquipeVencedora, int rndFrase) {
 		// Não faz nada
 	}
 
@@ -386,7 +387,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 		estrategia.inicioPartida();
 	}
 
-	public void decidiuMaoDeFerro(Jogador j, boolean aceita) {
+	public void decidiuMaoDeFerro(Jogador j, boolean aceita, int rndFrase) {
 		// Por ora não faz nada
 	}
 
@@ -395,7 +396,7 @@ public class JogadorCPU extends Jogador implements Runnable {
 		recebiPedidoDeMaoDeFerro = true;
 	}
 
-	public void jogoAbortado(int posicao) {
+	public void jogoAbortado(int posicao, int rndFrase) {
 		// Não precisa tratar
 	}
 
