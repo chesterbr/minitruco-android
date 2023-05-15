@@ -188,14 +188,6 @@ public class JogoLocal extends Jogo {
 				setEquipeAguardandoMaoDeX(1);
 				getJogador(1).informaMaoDeX(getJogador(3).getCartas());
 				getJogador(3).informaMaoDeX(getJogador(1).getCartas());
-				for (Jogador interessado : jogadores) {
-					// Interessados que não sejam Jogador (ex.: a Partida na
-					// versão Android) devem ser notificados também
-					// TODO: isso ainda vale ou é resto do passado?
-					if (!(interessado instanceof Jogador)) {
-						interessado.informaMaoDeX(getJogador(3).getCartas());
-					}
-				}
 			} else {
 				setEquipeAguardandoMaoDeX(2);
 				getJogador(2).informaMaoDeX(getJogador(4).getCartas());
