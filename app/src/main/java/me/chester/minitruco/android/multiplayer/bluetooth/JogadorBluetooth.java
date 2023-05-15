@@ -72,12 +72,12 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 						case 'J':
 							// Procura a carta correspondente ao parâmetro
 							Carta[] cartas = getCartas();
-							for (int i = 0; i < cartas.length; i++) {
-								if (cartas[i] != null
-										&& cartas[i].toString().equals(args[1])) {
-									cartas[i].setFechada(args.length > 2
+							for (Carta carta : cartas) {
+								if (carta != null
+										&& carta.toString().equals(args[1])) {
+									carta.setFechada(args.length > 2
 											&& args[2].equals("T"));
-									jogo.jogaCarta(this, cartas[i]);
+									jogo.jogaCarta(this, carta);
 								}
 							}
 							break;
@@ -146,10 +146,10 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 	public void inicioMao() {
 		StringBuffer comando = new StringBuffer("M");
 		for (int i = 0; i <= 2; i++)
-			comando.append(" " + getCartas()[i]);
+			comando.append(" ").append(getCartas()[i]);
 		// Se for manilha nova, também envia o "vira"
 		if (!jogo.getModo().isManilhaVelha()) {
-			comando.append(" " + jogo.cartaDaMesa);
+			comando.append(" ").append(jogo.cartaDaMesa);
 		}
 		enviaMensagem(comando.toString());
 	}

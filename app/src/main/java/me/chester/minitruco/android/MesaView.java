@@ -850,7 +850,7 @@ public class MesaView extends View {
 	 * Guarda as cartas que foram jogadas pelos jogadores (para saber em que
 	 * ordem desenhar)
 	 */
-	private final Vector<CartaVisual> cartasJogadas = new Vector<CartaVisual>(12);
+	private final Vector<CartaVisual> cartasJogadas = new Vector<>(12);
 
 	private int numRodadaPiscando = 0;
 

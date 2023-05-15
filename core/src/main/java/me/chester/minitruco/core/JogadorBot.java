@@ -379,7 +379,7 @@ public class JogadorBot extends Jogador implements Runnable {
 	/**
 	 * Cartas que ainda não foram jogadas
 	 */
-	private final Vector<Carta> cartasRestantes = new Vector<Carta>(3);
+	private final Vector<Carta> cartasRestantes = new Vector<>(3);
 
 	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
 		// Avisa o estrategia

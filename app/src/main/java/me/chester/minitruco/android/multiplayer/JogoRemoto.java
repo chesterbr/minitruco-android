@@ -127,9 +127,9 @@ public class JogoRemoto extends Jogo {
                     // Recupera a carta jogada pelo humano
                     c = null;
                     Carta[] cartasHumano = getJogadorHumano().getCartas();
-                    for (int i = 0; i < cartasHumano.length; i++) {
-                        if (cartasHumano[i].toString().equals(tokens[1])) {
-                            c = cartasHumano[i];
+                    for (Carta carta : cartasHumano) {
+                        if (carta.toString().equals(tokens[1])) {
+                            c = carta;
                             break;
                         }
                     }

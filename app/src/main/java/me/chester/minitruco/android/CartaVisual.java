@@ -292,7 +292,7 @@ public class CartaVisual extends Carta {
 	/**
 	 * Guarda os bitmaps em que fizemos resize para o tamanho da carta visual
 	 */
-	private static final Map<String, Bitmap> bitmapCache = new HashMap<String, Bitmap>();
+	private static final Map<String, Bitmap> bitmapCache = new HashMap<>();
 
 	/**
 	 * Bitmap (já no tamanho certo) para esta carta

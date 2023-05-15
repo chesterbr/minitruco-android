@@ -20,7 +20,7 @@ import me.chester.minitruco.core.JogoLocal;
 /**
  * Representa uma sala, onde ocorre um jogo
  *
- * 
+ *
  */
 public class Sala {
 
@@ -377,7 +377,7 @@ public class Sala {
         Jogador gerente = getGerente();
 
         // Cria uma lista das posições a trocar, duplicando a primeira no final
-        List<Integer> posicoes = new ArrayList<Integer>();
+        List<Integer> posicoes = new ArrayList<>();
         int posGerente = 0;
         for (int i = 1; i <= 4; i++) {
             if (!gerente.equals(this.getJogador(i))) {

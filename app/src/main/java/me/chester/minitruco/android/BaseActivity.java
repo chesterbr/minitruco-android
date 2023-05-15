@@ -1,7 +1,6 @@
 package me.chester.minitruco.android;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
@@ -70,9 +69,7 @@ public abstract class BaseActivity extends ComponentActivity {
 		runOnUiThread(() -> {
 			new AlertDialog.Builder(this).setTitle(titulo)
 					.setMessage(Html.fromHtml(texto))
-					.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-						}
+					.setNeutralButton("Ok", (dialog, which) -> {
 					}).show();
 		});
 	}

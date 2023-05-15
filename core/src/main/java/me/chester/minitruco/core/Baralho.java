@@ -16,7 +16,7 @@ public class Baralho {
 
 	private final Random random = new Random();
 
-	private Vector<Carta> sorteadas = new Vector<Carta>();
+	private Vector<Carta> sorteadas = new Vector<>();
 
 	/**
 	 * Cria um novo bararalho de truco
@@ -58,7 +58,7 @@ public class Baralho {
 	 * Recolhe as cartas do baralho, zerando-o para um novo uso
 	 */
 	public void embaralha() {
-		sorteadas = new Vector<Carta>();
+		sorteadas = new Vector<>();
 	}
 
 	/**

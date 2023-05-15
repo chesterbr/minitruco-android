@@ -28,7 +28,7 @@ public class JogadorConectado extends Jogador implements Runnable {
     /**
      * Nomes de jogadores online (para evitar duplicidade)
      */
-    private static final Set<String> nomes = new HashSet<String>();
+    private static final Set<String> nomes = new HashSet<>();
     private final Socket cliente;
 
     /**
@@ -199,9 +199,9 @@ public class JogadorConectado extends Jogador implements Runnable {
     public void inicioMao() {
         StringBuilder comando = new StringBuilder("M");
         for (int i = 0; i <= 2; i++)
-            comando.append(" " + getCartas()[i]);
+            comando.append(" ").append(getCartas()[i]);
         if (!jogo.getModo().isManilhaVelha()) {
-            comando.append(" " + jogo.cartaDaMesa);
+            comando.append(" ").append(jogo.cartaDaMesa);
         }
         println(comando.toString());
     }
