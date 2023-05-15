@@ -5,8 +5,6 @@ package me.chester.minitruco.server;
 
 /**
  * Recupera informações do servidor
- *
- *
  */
 public class ComandoW extends Comando {
 

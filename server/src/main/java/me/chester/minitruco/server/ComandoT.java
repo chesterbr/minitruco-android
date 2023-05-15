@@ -5,8 +5,8 @@ package me.chester.minitruco.server;
 
 /**
  * Pede Truco (ou seis, nove, doze)
- * 
  */
+
 public class ComandoT extends Comando {
 
 	@Override

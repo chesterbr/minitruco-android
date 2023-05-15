@@ -7,8 +7,8 @@ package me.chester.minitruco.server;
  * Decide (aceitar ou recusar) mão de 10/11
  * <p>
  * parâmetro: T ou F (aceita ou recusa)
- * 
  */
+
 public class ComandoH extends Comando {
 
 	@Override

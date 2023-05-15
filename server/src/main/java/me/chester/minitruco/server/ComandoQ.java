@@ -6,8 +6,8 @@ package me.chester.minitruco.server;
 /**
  * Informa ao servidor que o jogador deseja iniciar a partida na sala em que está.
  * <p>
- * 
  */
+
 public class ComandoQ extends Comando {
 
 	@Override

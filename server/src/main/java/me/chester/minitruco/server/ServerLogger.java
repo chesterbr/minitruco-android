@@ -15,8 +15,6 @@ import me.chester.minitruco.core.Jogador;
  * A implementação atual coloca estes eventos em stdout num formato padronizado,
  * o que funciona bem para quem tem o grep à mão. Implementações futuras podem
  * fazer logs por sala, por jogador, efetuar alertas baseados em log, whatever.
- *
- * 
  */
 public class ServerLogger {
 

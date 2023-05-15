@@ -11,8 +11,6 @@ package me.chester.minitruco.server;
  *     (cada _ é T ou F para baralho limpo, manilha velha e modo mineiro)
  * <p>
  * Obs.: Se o jogador não tiver nome, um nome implícito será dado
- *
- * 
  */
 public class ComandoE extends Comando {
 

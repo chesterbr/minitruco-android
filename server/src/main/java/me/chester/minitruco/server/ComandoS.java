@@ -9,8 +9,6 @@ package me.chester.minitruco.server;
  * Se houver algum jogo em andamento, será encerrado.
  * <p>
  * Os participantes da sala são notificados.
- *
- * 
  */
 public class ComandoS extends Comando {
 

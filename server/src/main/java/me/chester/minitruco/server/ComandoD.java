@@ -5,8 +5,6 @@ package me.chester.minitruco.server;
 
 /**
  * Desce (confirma aumento de aposta)
- *
- * 
  */
 public class ComandoD extends Comando {
 

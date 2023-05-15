@@ -19,8 +19,6 @@ import me.chester.minitruco.core.JogoLocal;
 
 /**
  * Representa uma sala, onde ocorre um jogo
- *
- *
  */
 public class Sala {
 
