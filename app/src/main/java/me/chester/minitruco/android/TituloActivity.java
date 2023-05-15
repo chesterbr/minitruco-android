@@ -56,7 +56,7 @@ public class TituloActivity extends BaseActivity {
 	 * Até a versão 2.3.9, a pessoa configurava se queria tento mineiro, baralho limpo ou
 	 * manilha velha; a 2.4.0 trocou isso pelo modo de jogo. Esse método migra as opções
 	 * antigas da melhor forma possível.
-	 *
+	 * <p>
 	 * Seria bom deixar ele até que a maior parte das pessoas esteja >= 2.4.0.
 	 */
 	private void migraOpcoesLegadas() {

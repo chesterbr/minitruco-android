@@ -17,7 +17,6 @@ package me.chester.minitruco.core;
  * (para rodar um teste, por exemplo).
  *
  * @see JogoLocal
- *
  */
 public abstract class Jogo implements Runnable {
 
@@ -362,7 +361,7 @@ public abstract class Jogo implements Runnable {
 	 * Retorna o nome usado para um determinado valor quando estamos pedindo aumento
 	 * de aposta. Por exemplo, 3 (no truco paulista) ou 4 (no truco mineiro)
 	 * se chamam "truco".
-	 *
+	 * <p>
 	 * O principal uso é mapear valores para assets do strings.xml. Por exemplo, as
 	 * frases usadas no pedido de truco estão em "balao_aumento_truco", para pedir
 	 * seis estão em "balao_aumento_seis", etc.

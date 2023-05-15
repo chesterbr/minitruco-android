@@ -34,8 +34,7 @@ import me.chester.minitruco.core.Jogo;
  * <p>
  * Para simplificar o acesso, alguns métodos/propriedades são static - o que só
  * reitera que só deve existir uma instância desta View.
- *
- *
+ * <p>
  */
 public class MesaView extends View {
 
@@ -376,7 +375,7 @@ public class MesaView extends View {
 	 * cartas[1..3] são o baralho decorativo, cartas[4..6] são as do jogador na
 	 * posição 1 (inferior), cartas[7..9] o jogador 2 e assim por diante para os
 	 * jogadores 3 e 4.
-	 *
+	 * <p>
 	 * TODO: refatorar esses magic numbers para algo melhor.
 	 */
 	public final CartaVisual[] cartas = new CartaVisual[16];
@@ -542,7 +541,6 @@ public class MesaView extends View {
 	/**
 	 * Joga a carta no meio da mesa
 	 *
-	 * @param c
 	 */
 	public void descarta(Carta c, int posicao) {
 
@@ -583,7 +581,6 @@ public class MesaView extends View {
 
 	/**
 	 *
-	 * @param numJogador
 	 * @return posição (x) de uma carta descartada pelo jogador (no meio da
 	 *         tela, mas puxando para a direçãod dele com um breve distúrbio
 	 *         aleatório)
@@ -603,13 +600,12 @@ public class MesaView extends View {
 	/**
 	 * Exibe uma carta na posição apropriada, animando
 	 * <p>
-	 *
+	 * @param carta
+	 * 			  Carta a distribuir
 	 * @param numJogador
 	 *            Posição do jogador, de 1 a 4 (1 = humano).
 	 * @param posicao
 	 *            posição da carta na mão do jogador (0 a 2)
-	 *
-	 * @carta Carta a distribuir
 	 */
 	private void entregaCarta(CartaVisual carta, int numJogador, int posicao) {
 		if (numJogador == 3 || numJogador == 4) {
@@ -621,8 +617,6 @@ public class MesaView extends View {
 
 	/**
 	 *
-	 * @param numJogador
-	 * @param i
 	 * @return Posição (x) da i-ésima carta na mão do jogador em questão
 	 */
 	private int calcPosLeftCarta(int numJogador, int i) {
@@ -646,8 +640,6 @@ public class MesaView extends View {
 
 	/**
 	 *
-	 * @param numJogador
-	 * @param i
 	 * @return Posição (y) da i-ésima carta na mão do jogador em questão
 	 */
 	private int calcPosTopCarta(int numJogador, int i) {
@@ -671,7 +663,6 @@ public class MesaView extends View {
 
 	/**
 	 *
-	 * @param numJogador
 	 * @return posição (y) de uma carta descartada pelo jogador (no meio da
 	 *         tela, mas puxando para a direçãod dele com um breve distúrbio
 	 *         aleatório)

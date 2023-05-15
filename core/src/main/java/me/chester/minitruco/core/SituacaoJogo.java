@@ -9,8 +9,6 @@ package me.chester.minitruco.core;
  * Foi isolada da classe Jogo para poder passar às <code>Estrategia</code>s a
  * situação do jogo de forma a facilitar sua implementação e, ao mesmo tempo,
  * impedir que elas trapaceiem (não dando acesso ao <code>Jogo</code>.
- *
- *
  */
 public class SituacaoJogo {
 

@@ -20,8 +20,6 @@ import me.chester.minitruco.R;
 /**
  * Processa menus e diálogos comuns à tela de título (
  * <code>TituloActivity</code>) e à tela de jogo (<code>TrucoActivity</code>).
- *
- *
  */
 public abstract class BaseActivity extends ComponentActivity {
 

@@ -14,9 +14,8 @@ import me.chester.minitruco.core.Carta;
  * Se a jogada for válida, será informada para todos os jogadores (incluindo o
  * que jogou). Se não for, nenhuma mensagem é devolvida.
  *
- * @author Chester
+ * 
  * @see Carta#toString()
- *
  */
 public class ComandoJ extends Comando {
 

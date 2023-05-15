@@ -20,7 +20,7 @@ import me.chester.minitruco.core.JogoLocal;
 /**
  * Representa uma sala, onde ocorre um jogo
  *
- * @author Chester
+ * 
  */
 public class Sala {
 
@@ -78,7 +78,6 @@ public class Sala {
      * Coloca o jogador em uma sala pública que tenha aquele modo de jogo
      * criando uma caso estejam todas lotadas
      *
-     * @return
      */
     public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, String modo) {
         Sala sala = salasPublicasDisponiveis.stream().filter(s ->
@@ -198,7 +197,7 @@ public class Sala {
 
     /**
      * Mantém as coleções atualizadas quando um jogador entra ou sai da sala
-     *
+     * <p>
      * Sala com 1-3 jogadores vai para salasPublicasDisponiveis
      * Sala com 4 jogadores vai para salasPublicasLotadas
      * Sala com 0 jogadores não vai para nenhuma coleção (e vai ser garbage collected)
@@ -237,7 +236,7 @@ public class Sala {
 
     /**
      * Monta a string de informação da sala.
-     *
+     * <p>
      * Chamadores devem substituir a string POSICAO_PLACEHOLDER pela posição do jogdaor
      * para o qual a informação será enviada.
      *

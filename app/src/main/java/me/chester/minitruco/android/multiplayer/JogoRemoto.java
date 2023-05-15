@@ -42,7 +42,7 @@ public class JogoRemoto extends Jogo {
 
     /**
      * Cria um novo proxy de jogo remoto associado a um cliente.
-     *
+     * <p>
      * Este jogo vai conter o jogadorHumano passado (na posição especificada)
      * e instâncias de JogadorDummy nas outras posições (as ações deles serão todas baseadas
      * em notificações recebidas por esta classe).

@@ -26,8 +26,6 @@ import me.chester.minitruco.core.Carta;
  * <p>
  * Esta classe faz o desenho da carta, executa sua animação, e ajusta sua
  * proporção para a resolução do celular.
- *
- *
  */
 public class CartaVisual extends Carta {
 
@@ -121,7 +119,6 @@ public class CartaVisual extends Carta {
 	 * Caso a carta esteja em meio a uma animação, atualiza sua posição para
 	 * corresponder ao instante atual.
 	 *
-	 * @param canvas
 	 */
 	public void draw(Canvas canvas) {
 		if (!visible) {

@@ -13,7 +13,6 @@ import java.util.logging.Logger;
  * É preciso "plugar" uma estratégia para que o jogador funcione.
  *
  * @see Estrategia
- *
  */
 public class JogadorBot extends Jogador implements Runnable {
     private final static Logger LOGGER = Logger.getLogger("JogadorBot");

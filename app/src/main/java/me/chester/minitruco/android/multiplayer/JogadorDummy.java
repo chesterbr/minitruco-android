@@ -12,7 +12,6 @@ import me.chester.minitruco.core.Jogador;
  * <p>
  * A classe não faz nada - é só para o JogadorHumano não se sentir sozinho
  * (i.e., ter a quem referenciar nos eventos remotos).
- *
  */
 public class JogadorDummy extends Jogador {
 

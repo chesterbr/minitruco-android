@@ -6,8 +6,7 @@ package me.chester.minitruco.server;
 /**
  * Desce (confirma aumento de aposta)
  *
- * @author chester
- *
+ * 
  */
 public class ComandoD extends Comando {
 

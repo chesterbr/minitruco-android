@@ -12,7 +12,6 @@ import java.util.Random;
  * <p>
  * A subclasse determina se o jogador é o usuário do celular, um jogador virtual
  * ou um jogador de outro celular conectado remotamente.
- *
  */
 public abstract class Jogador {
 

@@ -31,8 +31,7 @@ import me.chester.minitruco.core.JogoLocal;
  * <p>
  * Ela inicializa o jogo e exibe sa cartas, "balões" de texto e diálogos através
  * de uma <code>MesaView</code>.
- *
- *
+ * <p>
  */
 public class TrucoActivity extends BaseActivity {
 

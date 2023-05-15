@@ -5,8 +5,7 @@ package me.chester.minitruco.server;
 
 /**
  * Pede Truco (ou seis, nove, doze)
- * @author chester
- *
+ * 
  */
 public class ComandoT extends Comando {
 

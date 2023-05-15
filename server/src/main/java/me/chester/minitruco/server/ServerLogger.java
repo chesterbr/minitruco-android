@@ -16,7 +16,7 @@ import me.chester.minitruco.core.Jogador;
  * o que funciona bem para quem tem o grep à mão. Implementações futuras podem
  * fazer logs por sala, por jogador, efetuar alertas baseados em log, whatever.
  *
- * @author Chester
+ * 
  */
 public class ServerLogger {
 

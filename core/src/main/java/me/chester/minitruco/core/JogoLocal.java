@@ -19,8 +19,6 @@ import java.util.logging.Logger;
  * <code>jogaCarta()</code>, <code>aumentaAposta</code>, etc.) para interagir
  * com o jogo.
  * <p>
- *
- *
  */
 public class JogoLocal extends Jogo {
 
@@ -632,7 +630,7 @@ public class JogoLocal extends Jogo {
 
 	/**
 	 * Se o jogador da vez for bot, re-notifica ele que é sua vez.
-	 *
+	 * <p>
 	 * Isso é usado para casos em que o bot joga uma jogada inválida (ex.: porque
 	 * jogou depois que a mão fechou), evitando que ela fique "travada"
 	 */

@@ -10,7 +10,7 @@ package me.chester.minitruco.server;
  * <p>
  * Os participantes da sala são notificados.
  *
- * @author Chester
+ * 
  */
 public class ComandoS extends Comando {
 

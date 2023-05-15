@@ -14,8 +14,7 @@ package me.chester.minitruco.server;
  * O servidor guarda o upper/lowercase, mas o nome tem que ser único de forma case-insensitive.
  * Ex.: se o "Roberto" entrou, o "roberto" ou o "ROBERTO" não pdoem entrar.
  *
- * @author Chester
- *
+ * 
  */
 public class ComandoN extends Comando {
 

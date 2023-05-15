@@ -16,7 +16,7 @@ package me.chester.minitruco.server;
  * Por exemplo, o comando <code>E</code>, que entra numa sala é representado
  * pela classe <code>ComandoE</code>.
  *
- * @author Chester
+ * 
  */
 public abstract class Comando {
 

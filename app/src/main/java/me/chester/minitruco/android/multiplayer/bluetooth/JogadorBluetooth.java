@@ -120,7 +120,6 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 	 * <p>
 	 * Estas linhas representam eventos gerados pelo JogoLocal.
 	 *
-	 * @param linha
 	 */
 	public synchronized void enviaMensagem(String linha) {
 		servidor.enviaMensagem(getPosicao() - 2, linha);

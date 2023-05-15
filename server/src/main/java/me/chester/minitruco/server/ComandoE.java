@@ -5,15 +5,14 @@ package me.chester.minitruco.server;
 
 /**
  * Entra numa sala.
- *
+ * <p>
  * Parâmetros:
  *   - "R ___" para entrar em uma sala (ou criar uma) com as regras especificadas
  *     (cada _ é T ou F para baralho limpo, manilha velha e modo mineiro)
- *
+ * <p>
  * Obs.: Se o jogador não tiver nome, um nome implícito será dado
  *
- * @author Chester
- *
+ * 
  */
 public class ComandoE extends Comando {
 

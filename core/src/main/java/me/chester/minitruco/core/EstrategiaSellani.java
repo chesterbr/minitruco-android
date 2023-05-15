@@ -7,7 +7,6 @@ import java.util.Random;
 
 /**
  * Estratégia inteligente para bots
- *
  */
 public class EstrategiaSellani implements Estrategia {
 	private static final Random rand = new Random();

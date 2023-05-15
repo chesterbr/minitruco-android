@@ -9,8 +9,6 @@ import java.util.Vector;
 /**
  * Gerencia as cartas já distribuídas, garantindo que não se sorteie duas vezes
  * a mesma carta.
- *
- *
  */
 public class Baralho {
 
@@ -65,8 +63,6 @@ public class Baralho {
 
 	/**
 	 * Sortea numeros entre 0 e um valor especificado, inclusive
-	 *
-	 * @param limiteSuperior
 	 */
 	private int sorteiaDeZeroA(int limiteSuperior) {
 		return (random.nextInt(limiteSuperior + 1));

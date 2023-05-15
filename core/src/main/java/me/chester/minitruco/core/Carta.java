@@ -5,16 +5,11 @@ package me.chester.minitruco.core;
 
 /**
  * Representa uma carta do truco
- *
- *
  */
 public class Carta {
 
 	/**
 	 * Cria uma carta com letra e naipe definidos
-	 *
-	 * @param letra
-	 * @param naipe
 	 */
 	public Carta(char letra, int naipe) {
 		setLetra(letra);
@@ -85,7 +80,6 @@ public class Carta {
 	 * Letras válidas são as da constante LETRAS_VALIDAS. Se a letra for
 	 * inválida, a propriedade não é alterda.
 	 *
-	 * @param letra
 	 */
 	public void setLetra(char letra) {
 		if (LETRAS_VALIDAS.indexOf(letra) != -1 || letra == LETRA_NENHUMA) {
@@ -124,7 +118,6 @@ public class Carta {
 	 * Determina que uma carta foi jogada como "fechada", e seu valor deve ser
 	 * ignorado.
 	 *
-	 * @param fechada
 	 */
 	public void setFechada(boolean fechada) {
 		this.fechada = fechada;

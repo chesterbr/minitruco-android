@@ -13,7 +13,6 @@ import java.util.Random;
 
 /**
  * Estratégia inteligente para bots
- *
  */
 public class EstrategiaGasparotto implements Estrategia {
 	private static final Random rand = new Random();
