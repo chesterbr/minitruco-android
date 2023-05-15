@@ -128,95 +128,95 @@
         Role a tela, tem bastante coisa!
         <br/><br/>
         O miniTruco é um <u>software livre</u> de truco, jogado em duplas, com os parceiros
-		frente a frente. O objetivo é fazer a sua dupla de jogadores alcançar
-		12 pontos antes da dupla adversária.
-		<br/><br/>
-		Cada jogador começa com uma \"mão\" de três cartas e, na sua vez, escolhe
-		uma para jogar. A dupla que jogou a maior carta ganha a rodada, e o
-		vencedor inicia a rodada seguinte. A \"melhor de três\" ganha um ponto, encerrando a mão.
-		<br/><br/>
-		<b><u>Ordem/valor das cartas</u></b>:
-		Dentre as cartas normais, 4 é a de menor valor, seguida de
-		5, 6, 7, Q, J, K, A, 2, e 3 - a maior de todas. Nas cartas normais, o
-		naipe é indiferente, então, por exemplo, um 6♠ empata com um 6♥, mas perde
-		para qualquer 7.
-		<br/><br/>
-	    <b><u>Manilhas</u></b>: Manilhas são quatro cartas especiais, que valem
-	    mais que as normais. Os naipes determinam o nome da manilha e seu valor
-	    relativo: O pica-fumo
-		(♦) é a menor manilha, seguida da espadilha (♠), da escopeta (♥), e do
-		zap (♣) - este último sendo a maior carta do jogo.
-		<br/><br/>
-		No <b>truco paulista</b>, antes de começar a mão, uma carta é virada,
-		e ela indica qual é o valor das manilhas para aquela mão - é sempre
-		o próximo valor. Por exemplo, se foi virado um 5, as manilhas são
-		6♦, 6♠, 6♥ e 6♣.
-		<br/><br/>
-		Já no <b>truco mineiro</b> não tem \"vira\": os valores das manilhas
-		são fixos (a chamada \"manilha velha\"), então elas são sempre: 7♦, A♠, 7♥, e 4♣.
-		<br/><br/>
-		<b><u>Pontos e Aumentos</u></b>: A mão vale, em princípio 1 ponto no truco
-		paulista e 2 pontos no truco mineiro. Um jogador que acredite ter cartas boas pode
-		pode pedir \"truco\". Se os dois adversários recusarem, perdem a mão, mas se pelo menos
-		um aceitar, a mão aumenta de valor (3 pontos no truco paulista e 4 no truco mineiro).
-		A partir dali, um adversário pode aumentar a aposta
-		pedindo \"seis\". A coisa se repete para a dupla que trucou, que pode pedir
-		\"oito\" (truco mineiro) ou \"nove\" (paulista), e finalmente os adversários podem
-		pedir \"doze\", aumentando a aposta da mesma forma para estes valores.
-		<br/><br/>
-		<b><u>Empate</u></b>: Se a mão abre com empate, a primeira rodada não-empatada decide ela.
-		Se o empate acontece após a primeira rodada, a mão é de quem ganhou a primeira.
-		<br/><br/><b><u>Mão de 10 (ou 11)</u></b>: Se uma das duplas fizer 10 pontos (no truco mineiro)
-		ou 11 pontos (no truco paulista), seus membros podem ver as cartas do parceiro antes de
-		começar o jogo. Se um deles aceitar jogar, a mão vale o valor do truco. Se os dois recusarem,
-		perdem a rodada (no valor normal), e uma nova mão é distribuída, valendo as mesmas regras.
-		Caso empate 10 a 10 (mineiro) ou 11 a 11 (paulista), o jogo segue normalmente
-		<br/><br/>
-		<b><u>Prioridade Humana</u></b>: No jogo normal (sem ser Bluetooth), você é que decide
-		o aceite dos aumentos e da mão de 11. O parceiro diz se aceitaria o aumento ou não -
-		mas a escolha é sua.
-		<br/><br/>
-		<b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram ele. Todos tem
-		que estar com a mesma versão do miniTruco, e é necessário parear os celulares antes.
-		O modo (paulista, mineiro ou baralho limpo) é o que estiver configurando no celular que
-		cria o jogo, e este também pode rearranjar as posições antes de começar.
-		<br/><br/>
-		<b><u>Baralho Limpo</u></b>: Além do truco pauilsta e do truco mineiro, um terceiro modo
-		permite jogar com o baralho  \"limpo\" (sem as cartas 4, 5, 6 e 7). As regras são as do
-		truco paulista (porque quase todas as manilhas do mineiro são "sujas").
-		<br/><br/>
-		<b><u>Diferenças do miniTruco</u></b>: No jogo físico, jogadores podem trucar a qualquer
-		hora; no miniTruco você só truca na sua vez. Não existem sinais (por enquanto), e não é
-		possível entregar o jogo. No jogo normal, qualquer um pode jogar uma carta \"fechada\"
-		(virada para baixo), no miniTruco apenas um integrante da dupla pode fazer isso. O miniTruco
-		não faz a "mão de ferro" (quando o truco mineiro empata em 10x10 ou o paulista em 11x11),
-		na qual se joga sem ver as próprias cartas).
-		<br/><br/>
-		<b><u>Sugestões e comentários</u></b>: O meu e-mail está na tela de título, você pode me
-		escrever com sugestões e comentários, desde que seja de forma educada. Lembre-se que o
-		jogo é inteiramente gratuito e sem publicidade; é algo que eu faço como hobby sem
-		pedir nada em troca. É super válido sugerir melhorias e informar bugs, tanto por e-mail
-		quanto em avaliações na Play Store, mas peço para não penalizar o jogo injustamente (ex.:
-		1 estrela porque o jogo tem um detalhe que você não curtiu).
+        frente a frente. O objetivo é fazer a sua dupla de jogadores alcançar
+        12 pontos antes da dupla adversária.
+        <br/><br/>
+        Cada jogador começa com uma \"mão\" de três cartas e, na sua vez, escolhe
+        uma para jogar. A dupla que jogou a maior carta ganha a rodada, e o
+        vencedor inicia a rodada seguinte. A \"melhor de três\" ganha um ponto, encerrando a mão.
+        <br/><br/>
+        <b><u>Ordem/valor das cartas</u></b>:
+        Dentre as cartas normais, 4 é a de menor valor, seguida de
+        5, 6, 7, Q, J, K, A, 2, e 3 - a maior de todas. Nas cartas normais, o
+        naipe é indiferente, então, por exemplo, um 6♠ empata com um 6♥, mas perde
+        para qualquer 7.
+        <br/><br/>
+        <b><u>Manilhas</u></b>: Manilhas são quatro cartas especiais, que valem
+        mais que as normais. Os naipes determinam o nome da manilha e seu valor
+        relativo: O pica-fumo
+        (♦) é a menor manilha, seguida da espadilha (♠), da escopeta (♥), e do
+        zap (♣) - este último sendo a maior carta do jogo.
+        <br/><br/>
+        No <b>truco paulista</b>, antes de começar a mão, uma carta é virada,
+        e ela indica qual é o valor das manilhas para aquela mão - é sempre
+        o próximo valor. Por exemplo, se foi virado um 5, as manilhas são
+        6♦, 6♠, 6♥ e 6♣.
+        <br/><br/>
+        Já no <b>truco mineiro</b> não tem \"vira\": os valores das manilhas
+        são fixos (a chamada \"manilha velha\"), então elas são sempre: 7♦, A♠, 7♥, e 4♣.
+        <br/><br/>
+        <b><u>Pontos e Aumentos</u></b>: A mão vale, em princípio 1 ponto no truco
+        paulista e 2 pontos no truco mineiro. Um jogador que acredite ter cartas boas pode
+        pode pedir \"truco\". Se os dois adversários recusarem, perdem a mão, mas se pelo menos
+        um aceitar, a mão aumenta de valor (3 pontos no truco paulista e 4 no truco mineiro).
+        A partir dali, um adversário pode aumentar a aposta
+        pedindo \"seis\". A coisa se repete para a dupla que trucou, que pode pedir
+        \"oito\" (truco mineiro) ou \"nove\" (paulista), e finalmente os adversários podem
+        pedir \"doze\", aumentando a aposta da mesma forma para estes valores.
+        <br/><br/>
+        <b><u>Empate</u></b>: Se a mão abre com empate, a primeira rodada não-empatada decide ela.
+        Se o empate acontece após a primeira rodada, a mão é de quem ganhou a primeira.
+        <br/><br/><b><u>Mão de 10 (ou 11)</u></b>: Se uma das duplas fizer 10 pontos (no truco mineiro)
+        ou 11 pontos (no truco paulista), seus membros podem ver as cartas do parceiro antes de
+        começar o jogo. Se um deles aceitar jogar, a mão vale o valor do truco. Se os dois recusarem,
+        perdem a rodada (no valor normal), e uma nova mão é distribuída, valendo as mesmas regras.
+        Caso empate 10 a 10 (mineiro) ou 11 a 11 (paulista), o jogo segue normalmente
+        <br/><br/>
+        <b><u>Prioridade Humana</u></b>: No jogo normal (sem ser Bluetooth), você é que decide
+        o aceite dos aumentos e da mão de 11. O parceiro diz se aceitaria o aumento ou não -
+        mas a escolha é sua.
+        <br/><br/>
+        <b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram ele. Todos tem
+        que estar com a mesma versão do miniTruco, e é necessário parear os celulares antes.
+        O modo (paulista, mineiro ou baralho limpo) é o que estiver configurando no celular que
+        cria o jogo, e este também pode rearranjar as posições antes de começar.
+        <br/><br/>
+        <b><u>Baralho Limpo</u></b>: Além do truco pauilsta e do truco mineiro, um terceiro modo
+        permite jogar com o baralho  \"limpo\" (sem as cartas 4, 5, 6 e 7). As regras são as do
+        truco paulista (porque quase todas as manilhas do mineiro são "sujas").
+        <br/><br/>
+        <b><u>Diferenças do miniTruco</u></b>: No jogo físico, jogadores podem trucar a qualquer
+        hora; no miniTruco você só truca na sua vez. Não existem sinais (por enquanto), e não é
+        possível entregar o jogo. No jogo normal, qualquer um pode jogar uma carta \"fechada\"
+        (virada para baixo), no miniTruco apenas um integrante da dupla pode fazer isso. O miniTruco
+        não faz a "mão de ferro" (quando o truco mineiro empata em 10x10 ou o paulista em 11x11),
+        na qual se joga sem ver as próprias cartas).
+        <br/><br/>
+        <b><u>Sugestões e comentários</u></b>: O meu e-mail está na tela de título, você pode me
+        escrever com sugestões e comentários, desde que seja de forma educada. Lembre-se que o
+        jogo é inteiramente gratuito e sem publicidade; é algo que eu faço como hobby sem
+        pedir nada em troca. É super válido sugerir melhorias e informar bugs, tanto por e-mail
+        quanto em avaliações na Play Store, mas peço para não penalizar o jogo injustamente (ex.:
+        1 estrela porque o jogo tem um detalhe que você não curtiu).
         ]]>
     </string>
     <string name="titulo_sobre">Sobre o miniTruco</string>
     <string name="texto_sobre">        <![CDATA[miniTruco-android: Copyright © 2005-2023 Carlos
-		Duarte do Nascimento (Chester) - cd@pobox.com
+        Duarte do Nascimento (Chester) - cd@pobox.com
         <br/><br/>Seleção manual de servidor Bluetooth: Copyright © 2016 Rodolfo Vasconcelos
-		<br/><br/>Tento mineiro: Copyright © 2011 Guilherme Caram
-		<br/><br/>Imagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)
-		<br/><br/>Estratégias de bots: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/>
+        <br/><br/>Tento mineiro: Copyright © 2011 Guilherme Caram
+        <br/><br/>Imagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)
+        <br/><br/>Estratégias de bots: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto<br/>
         <br/><br/>Estratégia de bot (antiga): Copyright © 2006-2011 Willian Gigliotti<br/>
         <br/>
-		Código-fonte: http://github.com/chesterbr/minitruco-android
+        Código-fonte: http://github.com/chesterbr/minitruco-android
         <br/>
-		<br/><br/>Todos os direitos reservados.
-		<br/><br/>A redistribuiçã̃o e o uso nas formas binária e código fonte, com ou sem modificações, são permitidos contanto que as condições abaixo sejam cumpridas:
-		<br/><br/>- Redistribuições do código fonte devem conter o aviso de direitos autorais acima, esta lista de condições e o aviso de isenção de garantias subsequente.
-		<br/><br/>- Redistribuições na forma binária devem reproduzir o aviso de direitos autorais acima, esta lista de condições e o aviso de isenção de garantias subsequente na documentação e/ou materiais fornecidos com a distribuição.
-		<br/><br/>- Nem o nome do Chester nem o nome dos contribuidores podem ser utilizados para endossar ou promover produtos derivados deste software sem autorização prévia específica por escrito.
-		<br/><br/>]]>
+        <br/><br/>Todos os direitos reservados.
+        <br/><br/>A redistribuiçã̃o e o uso nas formas binária e código fonte, com ou sem modificações, são permitidos contanto que as condições abaixo sejam cumpridas:
+        <br/><br/>- Redistribuições do código fonte devem conter o aviso de direitos autorais acima, esta lista de condições e o aviso de isenção de garantias subsequente.
+        <br/><br/>- Redistribuições na forma binária devem reproduzir o aviso de direitos autorais acima, esta lista de condições e o aviso de isenção de garantias subsequente na documentação e/ou materiais fornecidos com a distribuição.
+        <br/><br/>- Nem o nome do Chester nem o nome dos contribuidores podem ser utilizados para endossar ou promover produtos derivados deste software sem autorização prévia específica por escrito.
+        <br/><br/>]]>
     </string>
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
