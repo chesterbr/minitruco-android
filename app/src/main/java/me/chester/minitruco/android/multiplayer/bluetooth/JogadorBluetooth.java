@@ -38,7 +38,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 			Thread.yield();
 		}
 		// Caractere lido e buffer que acumula a linha lida
-		int c = 0;
+		int c;
 		StringBuffer sbLinha = new StringBuffer();
 		try {
 			in = socket.getInputStream();

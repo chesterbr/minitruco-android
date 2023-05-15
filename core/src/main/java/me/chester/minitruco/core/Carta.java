@@ -133,7 +133,7 @@ public class Carta {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object outroObjeto) {
-		if ((outroObjeto != null) && (outroObjeto instanceof Carta)) {
+		if ((outroObjeto instanceof Carta)) {
 			Carta outraCarta = (Carta) outroObjeto;
 			return outraCarta.getNaipe() == this.getNaipe()
 					&& outraCarta.getLetra() == this.getLetra();
