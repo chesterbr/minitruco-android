@@ -7,16 +7,15 @@ package me.chester.minitruco.server;
  * Decide (aceitar ou recusar) mão de 10/11
  * <p>
  * parâmetro: T ou F (aceita ou recusa)
- * @author chester
- *
  */
+
 public class ComandoH extends Comando {
 
-	@Override
-	public void executa(String[] args, JogadorConectado j) {
-		if (!j.jogando)
-			return;
-		j.getSala().getJogo().decideMaoDeX(j,args[1].equals("T"));
-	}
+    @Override
+    public void executa(String[] args, JogadorConectado j) {
+        if (!j.jogando)
+            return;
+        j.getSala().getJogo().decideMaoDeX(j,args[1].equals("T"));
+    }
 
 }

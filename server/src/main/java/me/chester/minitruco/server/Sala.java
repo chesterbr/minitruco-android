@@ -19,32 +19,30 @@ import me.chester.minitruco.core.JogoLocal;
 
 /**
  * Representa uma sala, onde ocorre um jogo
- *
- * @author Chester
  */
 public class Sala {
 
-	private static final String APELIDO_BOT = "bot";
+    private static final String APELIDO_BOT = "bot";
     private static final String POSICAO_PLACEHOLDER = "$POSICAO";
 
     /**
      * Salas criadas por usuários (a chave é o código da sala)
      */
-    private static Map<String, Sala> salasPrivadas = new HashMap<>();
+    private static final Map<String, Sala> salasPrivadas = new HashMap<>();
 
     /**
      * Salas públicas que ainda tem espaço para pelo menos um jogaor
      */
-    private static Set<Sala> salasPublicasDisponiveis = new HashSet<>();
+    private static final Set<Sala> salasPublicasDisponiveis = new HashSet<>();
 
-    private static Set<Sala> salasPublicasLotadas = new HashSet<>();
+    private static final Set<Sala> salasPublicasLotadas = new HashSet<>();
 
     /**
      * Código usado para os amigos acharem a sala; null se for uma sala pública
      */
     String codigo;
 
-    String modo;
+    final String modo;
 
     /**
      * Jogadores presentes na sala
@@ -78,11 +76,10 @@ public class Sala {
      * Coloca o jogador em uma sala pública que tenha aquele modo de jogo
      * criando uma caso estejam todas lotadas
      *
-     * @return
      */
     public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, String modo) {
         Sala sala = salasPublicasDisponiveis.stream().filter(s ->
-            s.modo == modo
+            s.modo.equals(modo)
         ).findFirst().orElse(null);
         if (sala == null) {
             sala = new Sala(true, modo);
@@ -198,7 +195,7 @@ public class Sala {
 
     /**
      * Mantém as coleções atualizadas quando um jogador entra ou sai da sala
-     *
+     * <p>
      * Sala com 1-3 jogadores vai para salasPublicasDisponiveis
      * Sala com 4 jogadores vai para salasPublicasLotadas
      * Sala com 0 jogadores não vai para nenhuma coleção (e vai ser garbage collected)
@@ -237,7 +234,7 @@ public class Sala {
 
     /**
      * Monta a string de informação da sala.
-     *
+     * <p>
      * Chamadores devem substituir a string POSICAO_PLACEHOLDER pela posição do jogdaor
      * para o qual a informação será enviada.
      *
@@ -378,7 +375,7 @@ public class Sala {
         Jogador gerente = getGerente();
 
         // Cria uma lista das posições a trocar, duplicando a primeira no final
-        List<Integer> posicoes = new ArrayList<Integer>();
+        List<Integer> posicoes = new ArrayList<>();
         int posGerente = 0;
         for (int i = 1; i <= 4; i++) {
             if (!gerente.equals(this.getJogador(i))) {

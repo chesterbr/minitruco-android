@@ -5,16 +5,15 @@ package me.chester.minitruco.server;
 
 /**
  * Pede Truco (ou seis, nove, doze)
- * @author chester
- *
  */
+
 public class ComandoT extends Comando {
 
-	@Override
-	public void executa(String[] args, JogadorConectado j) {
-		if (!j.jogando)
-			return;
-		j.getSala().getJogo().aumentaAposta(j);
-	}
+    @Override
+    public void executa(String[] args, JogadorConectado j) {
+        if (!j.jogando)
+            return;
+        j.getSala().getJogo().aumentaAposta(j);
+    }
 
 }

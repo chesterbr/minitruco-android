@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -40,12 +39,11 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
 
     public EditText editNomeJogador;
     private Socket socket;
-    private Thread thread;
     private PrintWriter out;
     private BufferedReader in;
     private SharedPreferences preferences;
 
-	private static ClienteInternetActivity currentInstance;
+    private static ClienteInternetActivity currentInstance;
     private JogoRemoto jogo;
     private String modo;
     private int posJogador;
@@ -58,7 +56,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.internet_conectando);
 
-        thread = new Thread(() -> {
+        new Thread(() -> {
             try {
                 if (conecta()) {
                     while (!socket.isClosed()) {
@@ -68,8 +66,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
             } finally {
                 desconecta();
             }
-        });
-        thread.start();
+        }).start();
     }
 
     @Override
@@ -119,7 +116,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
             case 'N': // Nome foi aceito
                 runOnUiThread(() -> {
                     setContentView(R.layout.internet_menu);
-                    ((Button) findViewById(R.id.btnEntrarSalaPublica)).setOnClickListener(v -> {
+                    findViewById(R.id.btnEntrarSalaPublica).setOnClickListener(v -> {
                         // TODO pegar as regras das preferências
                         enviaLinha("E PUB FFF");
                     });
@@ -134,21 +131,21 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
             case 'I': // Entrou numa sala (ou ela foi atualizada)
                 runOnUiThread(() -> {
                     setContentView(R.layout.internet_sala);
-                    ((Button) findViewById(R.id.btnQueroJogar)).setOnClickListener(v -> {
+                    findViewById(R.id.btnQueroJogar).setOnClickListener(v -> {
                         enviaLinha("Q");
                     });
                     if (jogo != null) {
                         jogo.abortaJogo(0);
                         jogo = null;
                     }
-            		String[] tokens = line.split(" ");
+                    String[] tokens = line.split(" ");
                     String[] nomes = tokens[1].split(Pattern.quote("|"));
                     ((TextView) findViewById(R.id.textViewJogador1)).setText(nomes[0]);
                     ((TextView) findViewById(R.id.textViewJogador2)).setText(nomes[1]);
                     ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[2]);
                     ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[3]);
-		            posJogador = Integer.parseInt(tokens[2]);
-		            modo = tokens[3];
+                    posJogador = Integer.parseInt(tokens[2]);
+                    modo = tokens[3];
                 });
                 break;
             case 'X': // Erro tratável
@@ -199,14 +196,14 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
         }
     }
 
-	public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
-		return currentInstance._criaNovoJogo(jogadorHumano);
-	}
+    public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
+        return currentInstance._criaNovoJogo(jogadorHumano);
+    }
 
-	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-		jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
-		return jogo;
-	}
+    public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
+        jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
+        return jogo;
+    }
 
     private void msgErroFatal(String msg, Throwable e) {
         runOnUiThread(() -> {

@@ -1,10 +1,10 @@
 package me.chester.minitruco.android.multiplayer.bluetooth;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -27,247 +27,241 @@ import me.chester.minitruco.core.Jogo;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
+@SuppressLint("MissingPermission") // super.onCreate checa as permissões
 public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
-		Runnable, ClienteMultiplayer {
+        Runnable, ClienteMultiplayer {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteBluetoothActivity");
 
-	private static final int REQUEST_ENABLE_BT = 1;
+    private static final int REQUEST_ENABLE_BT = 1;
 
-	private static ClienteBluetoothActivity currentInstance;
+    private static ClienteBluetoothActivity currentInstance;
 
-	private List<BluetoothDevice> dispositivosPareados;
-	private BluetoothDevice servidor;
+    private List<BluetoothDevice> dispositivosPareados;
+    private BluetoothDevice servidor;
 
-	private Thread threadConexao;
-	private Thread threadMonitoraConexao;
-	private JogoRemoto jogo;
-	private BluetoothSocket socket = null;
-	private InputStream in;
-	private OutputStream out;
-	private int posJogador;
+    private Thread threadConexao;
+    private Thread threadMonitoraConexao;
+    private JogoRemoto jogo;
+    private BluetoothSocket socket = null;
+    private InputStream in;
+    private OutputStream out;
+    private int posJogador;
 
-	@Override
-	Logger logger() {
-		return LOGGER;
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        currentInstance = this;
+    }
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		currentInstance = this;
-	}
+    @Override
+    void iniciaAtividadeBluetooth() {
+        listaDispositivosPareados();
+    }
 
-	@Override
-	void iniciaAtividadeBluetooth() {
-		listaDispositivosPareados();
-	}
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
 
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
-	}
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dispositivosPareados != null) {
+            dispositivosPareados.clear();
+        }
+        finalizaThreadFechandoConexoes();
+    }
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (dispositivosPareados != null) {
-			dispositivosPareados.clear();
-		}
-		finalizaThreadFechandoConexoes();
-	}
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == RESULT_CANCELED) {
+                // Sem bluetooth, sem cliente
+                finish();
+            } else {
+                listaDispositivosPareados();
+            }
+        }
+    }
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQUEST_ENABLE_BT) {
-			if (resultCode == RESULT_CANCELED) {
-				// Sem bluetooth, sem cliente
-				finish();
-			} else {
-				listaDispositivosPareados();
-			}
-		}
-	}
+    public void run() {
+        if (!conectaNoServidor()) {
+            return;
+        }
+        atualizaDisplay();
 
-	public void run() {
-		if (!conectaNoServidor()) {
-			return;
-		}
-		atualizaDisplay();
+        if (socket == null) {
+            msgErroFatal("Jogo não encontrado. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
+            return;
+        }
+        sleep(500);
+        setMensagem(null);
+        iniciaMonitorConexao();
+        // Loop principal: decodifica as notificações recebidas e as
+        // processa (ou encaminha ao JogoBT, se estivermos em jogo)
+        int c;
+        StringBuilder sbLinha = new StringBuilder();
+        try {
+            in = socket.getInputStream();
+            out = socket.getOutputStream();
+            enviaLinha("B " + (BuildConfig.VERSION_CODE));
+            while ((c = in.read()) != -1) {
+                if (c == SEPARADOR_REC) {
+                    if (sbLinha.length() > 0) {
+                        LOGGER.log(Level.INFO, "Recebeu:" + sbLinha);
+                        char tipoNotificacao = sbLinha.charAt(0);
+                        String parametros = sbLinha.delete(0, 2).toString();
+                        switch (tipoNotificacao) {
+                        case 'I':
+                            exibeMesaForaDoJogo(parametros);
+                            break;
+                        case 'P':
+                            iniciaTrucoActivitySePreciso();
+                            // Enquanto não tiver a activity iniciada, melhor não processar
+                            // nenhuma mensagem
+                            while (!TrucoActivity.isViva()) {
+                                sleep(100);
+                            }
+                            // Não tem mesmo um break aqui, o início de partida
+                            // também precisa ser processado pelo jogo anterior
+                            // (para limpar o placar)
+                        default:
+                            if (jogo != null) {
+                                jogo.processaNotificacao(tipoNotificacao,
+                                        parametros);
+                            }
+                        }
+                        sbLinha.setLength(0);
+                    }
+                } else {
+                    sbLinha.append((char) c);
+                }
+            }
+        } catch (IOException e) {
+            if (!isFinishing()) {
+                if (jogo != null) {
+                    jogo.abortaJogo(0);
+                }
+                LOGGER.log(Level.INFO, "desconectado");
+                msgErroFatal("Você foi desconectado");
+            }
+        }
+    }
 
-		if (socket == null) {
-			msgErroFatal("Jogo não encontrado. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
-			return;
-		}
-		sleep(500);
-		setMensagem(null);
-		iniciaMonitorConexao();
-		// Loop principal: decodifica as notificações recebidas e as
-		// processa (ou encaminha ao JogoBT, se estivermos em jogo)
-		int c;
-		StringBuffer sbLinha = new StringBuffer();
-		try {
-			in = socket.getInputStream();
-			out = socket.getOutputStream();
-			enviaLinha("B " + (BuildConfig.VERSION_CODE));
-			while ((c = in.read()) != -1) {
-				if (c == SEPARADOR_REC) {
-					if (sbLinha.length() > 0) {
-						LOGGER.log(Level.INFO, "Recebeu:" + sbLinha);
-						char tipoNotificacao = sbLinha.charAt(0);
-						String parametros = sbLinha.delete(0, 2).toString();
-						switch (tipoNotificacao) {
-						case 'I':
-							exibeMesaForaDoJogo(parametros);
-							break;
-						case 'P':
-							iniciaTrucoActivitySePreciso();
-							// Enquanto não tiver a activity iniciada, melhor não processar
-							// nenhuma mensagem
-							while (!TrucoActivity.isViva()) {
-								sleep(100);
-							}
-							// Não tem mesmo um break aqui, o início de partida
-							// também precisa ser processado pelo jogo anterior
-							// (para limpar o placar)
-						default:
-							if (jogo != null) {
-								jogo.processaNotificacao(tipoNotificacao,
-										parametros);
-							}
-						}
-						sbLinha.setLength(0);
-					}
-				} else {
-					sbLinha.append((char) c);
-				}
-			}
-		} catch (IOException e) {
-			if (!isFinishing()) {
-				if (jogo != null) {
-					jogo.abortaJogo(0);
-				}
-				LOGGER.log(Level.INFO, "desconectado");
-				msgErroFatal("Você foi desconectado");
-			}
-		}
-	}
+    private void iniciaMonitorConexao() {
+        if (threadMonitoraConexao == null) {
+            threadMonitoraConexao = new Thread() {
+                public void run() {
+                    while (threadConexao.isAlive()) {
+                        // Envia comando vazio, apenas para garantir desbloqueio
+                        // de I/O na thread principal se o servidor sumir
+                        for (int i = 0; i <= 2; i++) {
+                            enviaLinha("");
+                        }
+                        ClienteBluetoothActivity.this.sleep(2000);
+                    }
+                }
+            };
+            threadMonitoraConexao.start();
+        }
+    }
 
-	private void iniciaMonitorConexao() {
-		if (threadMonitoraConexao == null) {
-			threadMonitoraConexao = new Thread() {
-				public void run() {
-					while (threadConexao.isAlive()) {
-						// Envia comando vazio, apenas para garantir desbloqueio
-						// de I/O na thread principal se o servidor sumir
-						for (int i = 0; i <= 2; i++) {
-							enviaLinha("");
-						}
-						ClienteBluetoothActivity.this.sleep(2000);
-					}
-				}
-			};
-			threadMonitoraConexao.start();
-		}
-	}
+    private void exibeMesaForaDoJogo(String parametros) {
+        if (jogo != null) {
+            jogo.abortaJogo(0);
+            jogo = null;
+        }
+        // Exibe as informações recebidas fora do jogo
+        String[] tokens = parametros.split(" ");
+        posJogador = Integer.parseInt(tokens[2]);
+        modo = tokens[1];
+        if (modo.length() != 1) {
+            msgErroFatal("O celular que criou o jogo está com uma versão muito antiga do miniTruco. Peça para atualizar e tente novamente.");
+            return;
+        }
+        encaixaApelidosNaMesa(tokens[0].split("\\|"));
+        atualizaDisplay();
+    }
 
-	private void exibeMesaForaDoJogo(String parametros) {
-		if (jogo != null) {
-			jogo.abortaJogo(0);
-			jogo = null;
-		}
-		// Exibe as informações recebidas fora do jogo
-		String[] tokens = parametros.split(" ");
-		posJogador = Integer.parseInt(tokens[2]);
-		modo = tokens[1];
-		if (modo.length() != 1) {
-			msgErroFatal("O celular que criou o jogo está com uma versão muito antiga do miniTruco. Peça para atualizar e tente novamente.");
-			return;
-		}
-		encaixaApelidosNaMesa(tokens[0].split("\\|"));
-		atualizaDisplay();
-	}
+    private void encaixaApelidosNaMesa(String[] apelidosOriginais) {
+        for (int n = 1; n <= 4; n++) {
+            apelidos[getPosicaoMesa(n) - 1] = apelidosOriginais[n - 1];
+        }
+    }
 
-	private void encaixaApelidosNaMesa(String[] apelidosOriginais) {
-		for (int n = 1; n <= 4; n++) {
-			apelidos[getPosicaoMesa(n) - 1] = apelidosOriginais[n - 1];
-		}
-	}
+    @Override
+    public int getNumClientes() {
+        return 0;
+    }
 
-	@Override
-	public int getNumClientes() {
-		return 0;
-	}
+    /**
+     * Manda um comando para o celular do servidor (se houver um conectado).
+     */
+    @Override
+    public synchronized void enviaLinha(String linha) {
+        try {
+            if (out == null) {
+                return;
+            }
+            if (linha.length() > 0) {
+                LOGGER.log(Level.INFO, "Enviando:" + linha);
+            }
+            out.write(linha.getBytes());
+            out.write(SEPARADOR_ENV);
+            out.flush();
+        } catch (IOException e) {
+            LOGGER.log(Level.INFO, "Exceção em EnviaLinha (desconexão?)", e);
+            try {
+                socket.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
 
-	/**
-	 * Manda um comando para o celular do servidor (se houver um conectado).
-	 *
-	 * @param linha
-	 */
-	@Override
-	public synchronized void enviaLinha(String linha) {
-		try {
-			if (out == null) {
-				return;
-			}
-			if (linha.length() > 0) {
-				LOGGER.log(Level.INFO, "Enviando:" + linha);
-			}
-			out.write(linha.getBytes());
-			out.write(SEPARADOR_ENV);
-			out.flush();
-		} catch (IOException e) {
-			LOGGER.log(Level.INFO, "Exceção em EnviaLinha (desconexão?)", e);
-			try {
-				socket.close();
-			} catch (IOException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-	}
+    /**
+     * Recupera a posição "visual" correspondente a uma posição de jogo (i.e.,
+     * uma posição no servidor)
+     * <p>
+     * A idéia é que o jogador local fique sempre na parte inferior da tela,
+     * então o método retorna 1 para o jogador local, 2 para quem está à direita
+     * dele, etc.
+     *
+     * @param i
+     *            posição (no servidor) do jogador que queremos consultar
+     */
+    public int getPosicaoMesa(int i) {
+        int retorno = i - posJogador + 1;
+        if (retorno < 1)
+            retorno += 4;
+        return retorno;
+    }
 
-	/**
-	 * Recupera a posição "visual" correspondente a uma posição de jogo (i.e.,
-	 * uma posição no servidor)
-	 * <p>
-	 * A idéia é que o jogador local fique sempre na parte inferior da tela,
-	 * então o método retorna 1 para o jogador local, 2 para quem está à direita
-	 * dele, etc.
-	 *
-	 * @param i
-	 *            posição (no servidor) do jogador que queremos consultar
-	 */
-	public int getPosicaoMesa(int i) {
-		int retorno = i - posJogador + 1;
-		if (retorno < 1)
-			retorno += 4;
-		return retorno;
-	}
+    private void finalizaThreadFechandoConexoes() {
+        if (in != null) {
+            try {
+                in.close();
+            } catch (IOException ignored) {
+            }
+        }
+        if (socket != null) {
+            try {
+                socket.close();
+            } catch (IOException ignored) {
+            }
+        }
+    }
 
-	private void finalizaThreadFechandoConexoes() {
-		if (in != null) {
-			try {
-				in.close();
-			} catch (IOException e) {
-			}
-		}
-		if (socket != null) {
-			try {
-				socket.close();
-			} catch (IOException e) {
-			}
-		}
-	}
+    public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
+        return currentInstance._criaNovoJogo(jogadorHumano);
+    }
 
-	public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
-		return currentInstance._criaNovoJogo(jogadorHumano);
-	}
-
-	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-		jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
-		return jogo;
-	}
+    public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
+        jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
+        return jogo;
+    }
 
     /**
      * Verifica se o bluetooh está ativo e caso não esteja pede para habilitar
@@ -285,18 +279,18 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
     }
 
     private boolean conectaNoServidor() {
-		String nomeDoServidor = servidor.getName();
-		try {
-			LOGGER.log(Level.INFO, "Criando socket");
-			LOGGER.log(Level.INFO, "device.getName()");
+        String nomeDoServidor = servidor.getName();
+        try {
+            LOGGER.log(Level.INFO, "Criando socket");
+            LOGGER.log(Level.INFO, "device.getName()");
             setMensagem("Conectando em " + nomeDoServidor);
             socket = servidor.createRfcommSocketToServiceRecord(UUID_BT);
             sleep(1000);
-			LOGGER.log(Level.INFO, "Conectando");
+            LOGGER.log(Level.INFO, "Conectando");
             socket.connect();
-			LOGGER.log(Level.INFO, "Conectado");
+            LOGGER.log(Level.INFO, "Conectado");
             setMensagem("Conectado!");
-			return true;
+            return true;
         } catch (Exception e) {
             LOGGER.log(Level.INFO,
                     "Falhou conexao com " + nomeDoServidor, e);
@@ -306,7 +300,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             } catch (Exception e1) {
                 // Sem problemas, era só pra garantir
             }
-			return false;
+            return false;
         }
     }
 
@@ -340,7 +334,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             return;
         }
 
-        dispositivosPareados = new ArrayList<BluetoothDevice>();
+        dispositivosPareados = new ArrayList<>();
         dispositivosPareados.addAll(btAdapter.getBondedDevices());
 
         if (dispositivosPareados.size() == 0) {
@@ -349,13 +343,10 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
         }
 
         new AlertDialog.Builder(this).setTitle("Escolha o celular que criou o jogo")
-                .setItems(criaArrayComNomeDosAparelhosPareados(), new AlertDialog.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int posicaoNaLista) {
-                        servidor = dispositivosPareados.get(posicaoNaLista);
-						threadConexao = new Thread(ClienteBluetoothActivity.this);
-			            threadConexao.start();
-                    }
+                .setItems(criaArrayComNomeDosAparelhosPareados(), (dialog, posicaoNaLista) -> {
+                    servidor = dispositivosPareados.get(posicaoNaLista);
+                    threadConexao = new Thread(ClienteBluetoothActivity.this);
+                    threadConexao.start();
                 }).show();
     }
 

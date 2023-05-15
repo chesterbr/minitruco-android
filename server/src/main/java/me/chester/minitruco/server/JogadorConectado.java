@@ -20,16 +20,6 @@ import me.chester.minitruco.core.Jogador;
  * <p>
  * A classe é capaz de processar os comandos do jogador, e, uma vez associada ao
  * jogo, interagir com ele.
- * <p>
- * A classe também responde ao comando <code>GET /applet.html</code> (na
- * verdade, a qualquer tipo de <code>GET</code>, mas é melhor usar esse para
- * compatibilidade futura), retornando o HTML que abre a applet hospedada em
- * <code>chester.inf.br</code>
- * <p>
- * Isso é feito para permitir que esta applet se conecte no servidor, sem
- * restrições de segurança (vide http://java.sun.com/sfaq/#socket).
- *
- * @author Chester
  */
 public class JogadorConectado extends Jogador implements Runnable {
 
@@ -38,7 +28,7 @@ public class JogadorConectado extends Jogador implements Runnable {
     /**
      * Nomes de jogadores online (para evitar duplicidade)
      */
-    private static final Set<String> nomes = new HashSet<String>();
+    private static final Set<String> nomes = new HashSet<>();
     private final Socket cliente;
 
     /**
@@ -80,7 +70,6 @@ public class JogadorConectado extends Jogador implements Runnable {
     /**
      * Impede que um nome seja usado
      *
-     * @param nome
      */
     public static void bloqueiaNome(String nome) {
         nomes.add(nome.toUpperCase());
@@ -89,7 +78,6 @@ public class JogadorConectado extends Jogador implements Runnable {
     /**
      * Libera o uso de um nome
      *
-     * @param nome
      */
     public static void liberaNome(String nome) {
         nomes.remove(nome.toUpperCase());
@@ -156,7 +144,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                 }
 
                 // Encontra a implementação do comando solicitado e chama
-                if ((args[0] == null) || (args[0].length() != 1)) {
+                if (args[0].length() != 1) {
                     continue;
                 }
                 char comando = Character.toUpperCase(args[0].charAt(0));
@@ -211,9 +199,9 @@ public class JogadorConectado extends Jogador implements Runnable {
     public void inicioMao() {
         StringBuilder comando = new StringBuilder("M");
         for (int i = 0; i <= 2; i++)
-            comando.append(" " + getCartas()[i]);
+            comando.append(" ").append(getCartas()[i]);
         if (!jogo.getModo().isManilhaVelha()) {
-            comando.append(" " + jogo.cartaDaMesa);
+            comando.append(" ").append(jogo.cartaDaMesa);
         }
         println(comando.toString());
     }
@@ -311,10 +299,10 @@ public class JogadorConectado extends Jogador implements Runnable {
         this.sala = sala;
     }
 
-    @Override
     /**
      * Atribui um nome ao jogador (apenas se não houver outro com o mesmo nome)
      */
+    @Override
     public synchronized void setNome(String nome) {
         // Se já existir, desencana
         if (isNomeEmUso(nome)) {

@@ -5,17 +5,14 @@ package me.chester.minitruco.server;
 
 /**
  * Corre (recusa aumento de aposta)
- *
- * @author chester
- *
  */
 public class ComandoC extends Comando {
 
-	@Override
-	public void executa(String[] args, JogadorConectado j) {
-		if (!j.jogando)
-			return;
-		j.getSala().getJogo().respondeAumento(j,false);
-	}
+    @Override
+    public void executa(String[] args, JogadorConectado j) {
+        if (!j.jogando)
+            return;
+        j.getSala().getJogo().respondeAumento(j,false);
+    }
 
 }

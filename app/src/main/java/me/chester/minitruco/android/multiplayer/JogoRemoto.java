@@ -42,7 +42,7 @@ public class JogoRemoto extends Jogo {
 
     /**
      * Cria um novo proxy de jogo remoto associado a um cliente.
-     *
+     * <p>
      * Este jogo vai conter o jogadorHumano passado (na posição especificada)
      * e instâncias de JogadorDummy nas outras posições (as ações deles serão todas baseadas
      * em notificações recebidas por esta classe).
@@ -51,15 +51,15 @@ public class JogoRemoto extends Jogo {
         super(modo);
         this.cliente = cliente;
 
-		// Adiciona o jogador na posição correta
-		// (preenchendo as outras com dummies)
-		for (int i = 1; i <= 4; i++) {
-			if (i == posJogador) {
-				adiciona(jogadorHumano);
-			} else {
-				adiciona(new JogadorDummy());
-			}
-		}
+        // Adiciona o jogador na posição correta
+        // (preenchendo as outras com dummies)
+        for (int i = 1; i <= 4; i++) {
+            if (i == posJogador) {
+                adiciona(jogadorHumano);
+            } else {
+                adiciona(new JogadorDummy());
+            }
+        }
     }
 
     /**
@@ -127,9 +127,9 @@ public class JogoRemoto extends Jogo {
                     // Recupera a carta jogada pelo humano
                     c = null;
                     Carta[] cartasHumano = getJogadorHumano().getCartas();
-                    for (int i = 0; i < cartasHumano.length; i++) {
-                        if (cartasHumano[i].toString().equals(tokens[1])) {
-                            c = cartasHumano[i];
+                    for (Carta carta : cartasHumano) {
+                        if (carta.toString().equals(tokens[1])) {
+                            c = carta;
                             break;
                         }
                     }
