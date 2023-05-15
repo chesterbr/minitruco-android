@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Use o log (adb logcat no SDK) para debugar</string>
     <string name="app_name">miniTruco</string>
-
     <string name="botao_aumento_truco">Truco</string>
     <string name="botao_aumento_seis">Seis</string>
     <string name="botao_aumento_nove">NOVE!</string>
