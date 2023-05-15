@@ -13,10 +13,10 @@ import me.chester.minitruco.R;
  */
 public class OpcoesActivity extends PreferenceActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.opcoes);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.opcoes);
+    }
 
 }

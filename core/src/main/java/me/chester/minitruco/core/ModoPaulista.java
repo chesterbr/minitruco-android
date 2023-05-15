@@ -6,41 +6,41 @@ package me.chester.minitruco.core;
 
 public class ModoPaulista implements Modo {
 
-	public int pontuacaoParaMaoDeX() {
-		return 11;
-	}
+    public int pontuacaoParaMaoDeX() {
+        return 11;
+    }
 
-	public int valorInicialDaMao() {
-		return 1;
-	}
+    public int valorInicialDaMao() {
+        return 1;
+    }
 
-	@Override
-	public int valorDaMaoDeX() {
-		return 3;
-	}
+    @Override
+    public int valorDaMaoDeX() {
+        return 3;
+    }
 
-	public int valorSeHouverAumento(int valorMao) {
-		switch (valorMao) {
-		case 1:
-			return 3;
-		case 3:
-			return 6;
-		case 6:
-			return 9;
-		case 9:
-			return 12;
-		}
-		return 0;
-	}
+    public int valorSeHouverAumento(int valorMao) {
+        switch (valorMao) {
+        case 1:
+            return 3;
+        case 3:
+            return 6;
+        case 6:
+            return 9;
+        case 9:
+            return 12;
+        }
+        return 0;
+    }
 
-	@Override
-	public boolean isBaralhoLimpo() {
-		return false;
-	}
+    @Override
+    public boolean isBaralhoLimpo() {
+        return false;
+    }
 
-	@Override
-	public boolean isManilhaVelha() {
-		return false;
-	}
+    @Override
+    public boolean isManilhaVelha() {
+        return false;
+    }
 
 }

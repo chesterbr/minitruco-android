@@ -43,7 +43,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
     private BufferedReader in;
     private SharedPreferences preferences;
 
-	private static ClienteInternetActivity currentInstance;
+    private static ClienteInternetActivity currentInstance;
     private JogoRemoto jogo;
     private String modo;
     private int posJogador;
@@ -138,14 +138,14 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                         jogo.abortaJogo(0);
                         jogo = null;
                     }
-            		String[] tokens = line.split(" ");
+                    String[] tokens = line.split(" ");
                     String[] nomes = tokens[1].split(Pattern.quote("|"));
                     ((TextView) findViewById(R.id.textViewJogador1)).setText(nomes[0]);
                     ((TextView) findViewById(R.id.textViewJogador2)).setText(nomes[1]);
                     ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[2]);
                     ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[3]);
-		            posJogador = Integer.parseInt(tokens[2]);
-		            modo = tokens[3];
+                    posJogador = Integer.parseInt(tokens[2]);
+                    modo = tokens[3];
                 });
                 break;
             case 'X': // Erro tratável
@@ -196,14 +196,14 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
         }
     }
 
-	public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
-		return currentInstance._criaNovoJogo(jogadorHumano);
-	}
+    public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
+        return currentInstance._criaNovoJogo(jogadorHumano);
+    }
 
-	public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-		jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
-		return jogo;
-	}
+    public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
+        jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
+        return jogo;
+    }
 
     private void msgErroFatal(String msg, Throwable e) {
         runOnUiThread(() -> {

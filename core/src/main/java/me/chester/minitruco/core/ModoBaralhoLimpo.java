@@ -6,7 +6,7 @@ package me.chester.minitruco.core;
  */
 public class ModoBaralhoLimpo extends ModoPaulista {
     @Override
-	public boolean isBaralhoLimpo() {
-		return true;
-	}
+    public boolean isBaralhoLimpo() {
+        return true;
+    }
 }

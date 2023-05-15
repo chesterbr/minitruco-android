@@ -19,18 +19,18 @@ import me.chester.minitruco.core.Carta;
  */
 public class ComandoJ extends Comando {
 
-	@Override
-	public void executa(String[] args, JogadorConectado j) {
-		// Verifica se estamos em jogo e se recebeu argumento
-		if ((!j.jogando) || (args.length<2))
-			return;
-		// Encontra a carta solicitada (na mão do jogador)
-		for (Carta carta : j.getCartas()) {
-			if (carta != null && carta.toString().equals(args[1])) {
-				// Joga a carta. Se der certo o evento vai notificar a todos.
-				carta.setFechada(args.length > 2 && args[2].equals("T"));
-				j.getSala().getJogo().jogaCarta(j, carta);
-			}
-		}
-	}
+    @Override
+    public void executa(String[] args, JogadorConectado j) {
+        // Verifica se estamos em jogo e se recebeu argumento
+        if ((!j.jogando) || (args.length<2))
+            return;
+        // Encontra a carta solicitada (na mão do jogador)
+        for (Carta carta : j.getCartas()) {
+            if (carta != null && carta.toString().equals(args[1])) {
+                // Joga a carta. Se der certo o evento vai notificar a todos.
+                carta.setFechada(args.length > 2 && args[2].equals("T"));
+                j.getSala().getJogo().jogaCarta(j, carta);
+            }
+        }
+    }
 }

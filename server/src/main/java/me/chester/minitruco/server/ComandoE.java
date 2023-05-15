@@ -14,18 +14,18 @@ package me.chester.minitruco.server;
  */
 public class ComandoE extends Comando {
 
-	@Override
-	public void executa(String[] args, JogadorConectado j) {
+    @Override
+    public void executa(String[] args, JogadorConectado j) {
 
-		try {
-			if (j.getNome().equals("unnamed")) {
-				j.println("X NO");
-				return;
-			}
-			if (j.getSala() != null) {
-				// TODO: mostrar o código se for sala pública?
-				j.println("X JE " + j.getSala().codigo);
-			} else {
+        try {
+            if (j.getNome().equals("unnamed")) {
+                j.println("X NO");
+                return;
+            }
+            if (j.getSala() != null) {
+                // TODO: mostrar o código se for sala pública?
+                j.println("X JE " + j.getSala().codigo);
+            } else {
                 if ("PUB".equals(args[1])) {
                     Sala s = Sala.colocaEmSalaPublica(j, args[2]);
                     s.mandaInfoParaTodos();
@@ -33,26 +33,26 @@ public class ComandoE extends Comando {
                 } else {
                     j.println("X AI");
                 }
-//				Sala s = Sala.getSala(Integer.parseInt(args[1]));
-//				if (s == null) {
-//					j.println("X SI");
-//				} else if (j.getNome().equals("unnamed")) {
-//					j.println("X NO");
-//				} else if (s.adiciona(j)) {
-//					j.querJogar = false;
-//					// j.enviaTexto("A "+s.getNumSala()+" "+s.getPosicao(j));
-//					// s.notificaJogadores("E "+s.getPosicao(j)+"
-//					// "+j.getNome());
-//					j.println("E "+s.getNumSala());
-//					s.notificaJogadores(s.getInfo());
-//				} else {
-//					j.println("X CH");
-//				}
-			}
-		} catch (NumberFormatException | IndexOutOfBoundsException e) {
-			j.println("X AI");
-		}
+//                Sala s = Sala.getSala(Integer.parseInt(args[1]));
+//                if (s == null) {
+//                    j.println("X SI");
+//                } else if (j.getNome().equals("unnamed")) {
+//                    j.println("X NO");
+//                } else if (s.adiciona(j)) {
+//                    j.querJogar = false;
+//                    // j.enviaTexto("A "+s.getNumSala()+" "+s.getPosicao(j));
+//                    // s.notificaJogadores("E "+s.getPosicao(j)+"
+//                    // "+j.getNome());
+//                    j.println("E "+s.getNumSala());
+//                    s.notificaJogadores(s.getInfo());
+//                } else {
+//                    j.println("X CH");
+//                }
+            }
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            j.println("X AI");
+        }
 
-	}
+    }
 
 }

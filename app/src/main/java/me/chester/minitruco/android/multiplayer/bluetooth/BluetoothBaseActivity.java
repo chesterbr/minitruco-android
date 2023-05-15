@@ -33,176 +33,176 @@ import me.chester.minitruco.core.Jogo;
  * conectado, garantir que o bt está ligado e as permissões cedidas, etc.
  */
 public abstract class BluetoothBaseActivity extends BaseActivity implements
-		Runnable {
+        Runnable {
 
-	public static String[] BLUETOOTH_PERMISSIONS;
-	static {
-		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-			// Android 11 ou anterior pede permissões genéricas
-			BLUETOOTH_PERMISSIONS = new String[] {
-					Manifest.permission.BLUETOOTH,
-					Manifest.permission.BLUETOOTH_ADMIN,
-			};
-		} else {
-			// Android 12 ou superior pede permissões mais refinadas
-			BLUETOOTH_PERMISSIONS = new String[] {
-					Manifest.permission.BLUETOOTH_CONNECT,
-					Manifest.permission.BLUETOOTH_SCAN,
-					Manifest.permission.BLUETOOTH_ADVERTISE,
-			};
-		}
-	}
+    public static String[] BLUETOOTH_PERMISSIONS;
+    static {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+            // Android 11 ou anterior pede permissões genéricas
+            BLUETOOTH_PERMISSIONS = new String[] {
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN,
+            };
+        } else {
+            // Android 12 ou superior pede permissões mais refinadas
+            BLUETOOTH_PERMISSIONS = new String[] {
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.BLUETOOTH_ADVERTISE,
+            };
+        }
+    }
 
-	/**
-	 * Separador de linha recebido
-	 */
-	public static final int SEPARADOR_REC = '*';
+    /**
+     * Separador de linha recebido
+     */
+    public static final int SEPARADOR_REC = '*';
 
-	/**
-	 * Separador de linha enviado (tanto no sentido client-server quanto no
-	 * server-client).
-	 * <p>
-	 * É propositalmente um conjunto de SEPARADOR_REC, para garantir que o
-	 * recebimento seja detectado (linhas em branco são ignoradas de qualquer
-	 * forma).
-	 */
-	public static final byte[] SEPARADOR_ENV = "**".getBytes();
+    /**
+     * Separador de linha enviado (tanto no sentido client-server quanto no
+     * server-client).
+     * <p>
+     * É propositalmente um conjunto de SEPARADOR_REC, para garantir que o
+     * recebimento seja detectado (linhas em branco são ignoradas de qualquer
+     * forma).
+     */
+    public static final byte[] SEPARADOR_ENV = "**".getBytes();
 
-	/**
-	 * Identificadores Bluetooth do "serviço miniTruco"
-	 */
-	public static final String NOME_BT = "miniTruco";
-	public static final UUID UUID_BT = UUID
-			.fromString("3B175368-ABB4-11DB-A508-C2B155D89593");
+    /**
+     * Identificadores Bluetooth do "serviço miniTruco"
+     */
+    public static final String NOME_BT = "miniTruco";
+    public static final UUID UUID_BT = UUID
+            .fromString("3B175368-ABB4-11DB-A508-C2B155D89593");
 
-	protected BluetoothAdapter btAdapter;
-	protected final String[] apelidos = new String[4];
-	protected String modo;
-	protected Button btnIniciar;
-	protected View layoutIniciar;
-	private TextView textViewMensagem;
-	private TextView textViewStatus;
-	private TextView[] textViewsJogadores;
+    protected BluetoothAdapter btAdapter;
+    protected final String[] apelidos = new String[4];
+    protected String modo;
+    protected Button btnIniciar;
+    protected View layoutIniciar;
+    private TextView textViewMensagem;
+    private TextView textViewStatus;
+    private TextView[] textViewsJogadores;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.sala);
-		layoutIniciar = findViewById(R.id.layoutIniciar);
-		btnIniciar = findViewById(R.id.btnIniciarBluetooth);
-		textViewMensagem = findViewById(R.id.textViewMensagem);
-		textViewStatus = findViewById(R.id.textViewStatus);
-		textViewsJogadores = new TextView[4];
-		textViewsJogadores[0] = findViewById(R.id.textViewJogador1);
-		textViewsJogadores[1] = findViewById(R.id.textViewJogador2);
-		textViewsJogadores[2] = findViewById(R.id.textViewJogador3);
-		textViewsJogadores[3] = findViewById(R.id.textViewJogador4);
-		btAdapter = BluetoothAdapter.getDefaultAdapter();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.sala);
+        layoutIniciar = findViewById(R.id.layoutIniciar);
+        btnIniciar = findViewById(R.id.btnIniciarBluetooth);
+        textViewMensagem = findViewById(R.id.textViewMensagem);
+        textViewStatus = findViewById(R.id.textViewStatus);
+        textViewsJogadores = new TextView[4];
+        textViewsJogadores[0] = findViewById(R.id.textViewJogador1);
+        textViewsJogadores[1] = findViewById(R.id.textViewJogador2);
+        textViewsJogadores[2] = findViewById(R.id.textViewJogador3);
+        textViewsJogadores[3] = findViewById(R.id.textViewJogador4);
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
 
-		String[] permissoesFaltantes = permissoesBluetoothFaltantes();
-		if (permissoesFaltantes.length == 0) {
-			iniciaAtividadeBluetooth();
-		} else {
-			permissionsLauncher.launch(permissoesFaltantes);
-		}
+        String[] permissoesFaltantes = permissoesBluetoothFaltantes();
+        if (permissoesFaltantes.length == 0) {
+            iniciaAtividadeBluetooth();
+        } else {
+            permissionsLauncher.launch(permissoesFaltantes);
+        }
 
-	}
-	private String[] permissoesBluetoothFaltantes() {
-		// Antes do Android 6, permissões eram declaradas no manifest, e a app simplesmente
-		// assumia que foi autorizada. A vida era simples. Eu sinto falta disso.
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-			return new String[0];
-		}
-		// Versões mais novas pedem permissões de runtime, então começa a dança da manivela:
-		List<String> permissoes = new ArrayList<>();
-		for (String permission: BLUETOOTH_PERMISSIONS) {
-			if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-				permissoes.add(permission);
-			}
-		}
-		return permissoes.toArray(new String[0]);
-	}
+    }
+    private String[] permissoesBluetoothFaltantes() {
+        // Antes do Android 6, permissões eram declaradas no manifest, e a app simplesmente
+        // assumia que foi autorizada. A vida era simples. Eu sinto falta disso.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return new String[0];
+        }
+        // Versões mais novas pedem permissões de runtime, então começa a dança da manivela:
+        List<String> permissoes = new ArrayList<>();
+        for (String permission: BLUETOOTH_PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissoes.add(permission);
+            }
+        }
+        return permissoes.toArray(new String[0]);
+    }
 
 
-	final ActivityResultLauncher<String[]> permissionsLauncher =
-		registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
-				result -> {
-					String[] permissoesFaltantes = permissoesBluetoothFaltantes();
-					if (permissoesFaltantes.length == 0) {
-						iniciaAtividadeBluetooth();
-					} else {
-						for (int i = 0; i < permissoesFaltantes.length; i++) {
-							permissoesFaltantes[i] = permissoesFaltantes[i].replace("android.permission.", "");
-						}
-						msgErroFatal("Não foi possivel obter permissões: " +
-								     Arrays.toString(permissoesFaltantes) + ".\n\n" +
-								     "Se o problema persistir, tente autorizar "+
-								     "nas configurações do celular (em \"Aplicativos\"), " +
-								     "ou desinstalar e reinstalar o jogo.");
-					}
-				});
+    final ActivityResultLauncher<String[]> permissionsLauncher =
+        registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
+                result -> {
+                    String[] permissoesFaltantes = permissoesBluetoothFaltantes();
+                    if (permissoesFaltantes.length == 0) {
+                        iniciaAtividadeBluetooth();
+                    } else {
+                        for (int i = 0; i < permissoesFaltantes.length; i++) {
+                            permissoesFaltantes[i] = permissoesFaltantes[i].replace("android.permission.", "");
+                        }
+                        msgErroFatal("Não foi possivel obter permissões: " +
+                                     Arrays.toString(permissoesFaltantes) + ".\n\n" +
+                                     "Se o problema persistir, tente autorizar "+
+                                     "nas configurações do celular (em \"Aplicativos\"), " +
+                                     "ou desinstalar e reinstalar o jogo.");
+                    }
+                });
 
-	/**
-	 * As atividades de Bluetooth são vão iniciar quando as permissões estiverem garantidas,
-	 * através da chamada deste método
-	 */
-	abstract void iniciaAtividadeBluetooth();
+    /**
+     * As atividades de Bluetooth são vão iniciar quando as permissões estiverem garantidas,
+     * através da chamada deste método
+     */
+    abstract void iniciaAtividadeBluetooth();
 
-	protected void atualizaDisplay() {
-		runOnUiThread(() -> {
-			for (int i = 0; i < 4; i++) {
-				textViewsJogadores[i].setText(apelidos[i]);
-			}
-			if (modo != null) {
-				textViewStatus.setText("Modo: " + Jogo.textoModo(modo));
-			}
-			btnIniciar.setEnabled(getNumClientes() > 0);
-		});
-	}
+    protected void atualizaDisplay() {
+        runOnUiThread(() -> {
+            for (int i = 0; i < 4; i++) {
+                textViewsJogadores[i].setText(apelidos[i]);
+            }
+            if (modo != null) {
+                textViewStatus.setText("Modo: " + Jogo.textoModo(modo));
+            }
+            btnIniciar.setEnabled(getNumClientes() > 0);
+        });
+    }
 
-	protected void setMensagem(String mensagem) {
-		runOnUiThread(() -> {
-			if (mensagem == null) {
-				textViewMensagem.setVisibility(View.GONE);
-			} else {
-				textViewMensagem.setVisibility(View.VISIBLE);
-				textViewMensagem.setText(mensagem);
-			}
-		});
-	}
+    protected void setMensagem(String mensagem) {
+        runOnUiThread(() -> {
+            if (mensagem == null) {
+                textViewMensagem.setVisibility(View.GONE);
+            } else {
+                textViewMensagem.setVisibility(View.VISIBLE);
+                textViewMensagem.setText(mensagem);
+            }
+        });
+    }
 
-	protected void msgErroFatal(String mensagem) {
-		runOnUiThread(() ->
-			new AlertDialog.Builder(BluetoothBaseActivity.this)
-					.setTitle("Erro")
-					.setMessage(mensagem)
-					.setOnCancelListener(dialog -> finish())
-					.setNeutralButton("Ok",
-							(dialog, which) -> finish())
-					.show()
-		);
-	}
+    protected void msgErroFatal(String mensagem) {
+        runOnUiThread(() ->
+            new AlertDialog.Builder(BluetoothBaseActivity.this)
+                    .setTitle("Erro")
+                    .setMessage(mensagem)
+                    .setOnCancelListener(dialog -> finish())
+                    .setNeutralButton("Ok",
+                            (dialog, which) -> finish())
+                    .show()
+        );
+    }
 
-	protected abstract int getNumClientes();
+    protected abstract int getNumClientes();
 
-	protected void iniciaTrucoActivitySePreciso() {
-		if (!TrucoActivity.isViva()) {
-			Intent intent = new Intent(this, TrucoActivity.class);
-			if (this instanceof ClienteBluetoothActivity) {
-				intent.putExtra("clienteBluetooth", true);
-			} else {
-				intent.putExtra("servidorBluetooth", true);
-			}
-			startActivity(intent);
-		}
-	}
+    protected void iniciaTrucoActivitySePreciso() {
+        if (!TrucoActivity.isViva()) {
+            Intent intent = new Intent(this, TrucoActivity.class);
+            if (this instanceof ClienteBluetoothActivity) {
+                intent.putExtra("clienteBluetooth", true);
+            } else {
+                intent.putExtra("servidorBluetooth", true);
+            }
+            startActivity(intent);
+        }
+    }
 
-	protected void sleep(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {
-			// não precisa tratar
-		}
-	}
+    protected void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            // não precisa tratar
+        }
+    }
 
 }

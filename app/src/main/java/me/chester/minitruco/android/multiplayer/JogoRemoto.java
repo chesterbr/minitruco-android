@@ -51,15 +51,15 @@ public class JogoRemoto extends Jogo {
         super(modo);
         this.cliente = cliente;
 
-		// Adiciona o jogador na posição correta
-		// (preenchendo as outras com dummies)
-		for (int i = 1; i <= 4; i++) {
-			if (i == posJogador) {
-				adiciona(jogadorHumano);
-			} else {
-				adiciona(new JogadorDummy());
-			}
-		}
+        // Adiciona o jogador na posição correta
+        // (preenchendo as outras com dummies)
+        for (int i = 1; i <= 4; i++) {
+            if (i == posJogador) {
+                adiciona(jogadorHumano);
+            } else {
+                adiciona(new JogadorDummy());
+            }
+        }
     }
 
     /**

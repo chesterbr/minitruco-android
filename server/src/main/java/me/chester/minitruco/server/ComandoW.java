@@ -8,9 +8,9 @@ package me.chester.minitruco.server;
  */
 public class ComandoW extends Comando {
 
-	@Override
-	public void executa(String[] args, JogadorConectado j) {
-		j.println("W " + MiniTrucoServer.VERSAO_SERVER);
-	}
+    @Override
+    public void executa(String[] args, JogadorConectado j) {
+        j.println("W " + MiniTrucoServer.VERSAO_SERVER);
+    }
 
 }

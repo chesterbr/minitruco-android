@@ -11,11 +11,11 @@ package me.chester.minitruco.server;
 
 public class ComandoH extends Comando {
 
-	@Override
-	public void executa(String[] args, JogadorConectado j) {
-		if (!j.jogando)
-			return;
-		j.getSala().getJogo().decideMaoDeX(j,args[1].equals("T"));
-	}
+    @Override
+    public void executa(String[] args, JogadorConectado j) {
+        if (!j.jogando)
+            return;
+        j.getSala().getJogo().decideMaoDeX(j,args[1].equals("T"));
+    }
 
 }

@@ -10,27 +10,27 @@ package me.chester.minitruco.core;
  */
 public interface Modo {
 
-	int pontuacaoParaMaoDeX();
+    int pontuacaoParaMaoDeX();
 
-	int valorInicialDaMao();
+    int valorInicialDaMao();
 
-	/**
-	 * @return quantos pontos a equipe adversária leva se a equipe
-	 * 		   beneficiária aceitar a mão de X
-	 */
-	int valorDaMaoDeX();
+    /**
+     * @return quantos pontos a equipe adversária leva se a equipe
+     *         beneficiária aceitar a mão de X
+     */
+    int valorDaMaoDeX();
 
-	/**
-	 * @return valor para o qual um jogo cujo valor seja valorMao vai se houver um aumento,
-	 *         ou 0 se estivermos num valor que não permite aumento (ex.: 12 no truco paulista)
-	 */
-	int valorSeHouverAumento(int valorMao);
+    /**
+     * @return valor para o qual um jogo cujo valor seja valorMao vai se houver um aumento,
+     *         ou 0 se estivermos num valor que não permite aumento (ex.: 12 no truco paulista)
+     */
+    int valorSeHouverAumento(int valorMao);
 
-	boolean isBaralhoLimpo();
+    boolean isBaralhoLimpo();
 
-	/**
-	 * @return True para manilhas fixas (sem "vira")
-	 */
+    /**
+     * @return True para manilhas fixas (sem "vira")
+     */
     boolean isManilhaVelha();
 
 }

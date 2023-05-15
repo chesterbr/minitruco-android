@@ -22,7 +22,7 @@ import me.chester.minitruco.core.JogoLocal;
  */
 public class Sala {
 
-	private static final String APELIDO_BOT = "bot";
+    private static final String APELIDO_BOT = "bot";
     private static final String POSICAO_PLACEHOLDER = "$POSICAO";
 
     /**

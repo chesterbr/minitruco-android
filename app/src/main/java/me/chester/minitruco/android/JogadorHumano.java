@@ -25,231 +25,231 @@ import me.chester.minitruco.core.JogoLocal;
  */
 public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
-	private final static Logger LOGGER = Logger.getLogger("JogadorHumano");
+    private final static Logger LOGGER = Logger.getLogger("JogadorHumano");
 
-	private final TrucoActivity activity;
+    private final TrucoActivity activity;
 
-	private final MesaView mesa;
+    private final MesaView mesa;
 
-	int valorProximaAposta;
+    int valorProximaAposta;
 
-	public JogadorHumano(TrucoActivity partida, MesaView mesa) {
-		this.activity = partida;
-		this.mesa = mesa;
-	}
+    public JogadorHumano(TrucoActivity partida, MesaView mesa) {
+        this.activity = partida;
+        this.mesa = mesa;
+    }
 
-	@Override
-	public void cartaJogada(Jogador j, Carta c) {
-		mesa.mostrarPerguntaMaoDeX = false;
-		mesa.mostrarPerguntaAumento = false;
-		mesa.setPosicaoVez(0);
-		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		mesa.descarta(c, posicaoNaTela(j));
-		LOGGER.log(Level.INFO, "Jogador na posicao de tela " + posicaoNaTela(j)
-				+ " jogou " + c);
-	}
+    @Override
+    public void cartaJogada(Jogador j, Carta c) {
+        mesa.mostrarPerguntaMaoDeX = false;
+        mesa.mostrarPerguntaAumento = false;
+        mesa.setPosicaoVez(0);
+        activity.handler.sendMessage(Message.obtain(activity.handler,
+                TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
+        activity.handler.sendMessage(Message.obtain(activity.handler,
+                TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
+        mesa.descarta(c, posicaoNaTela(j));
+        LOGGER.log(Level.INFO, "Jogador na posicao de tela " + posicaoNaTela(j)
+                + " jogou " + c);
+    }
 
-	@Override
-	public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
-		if (posicaoNaTela(j) == 3 && aceita) {
-			mesa.mostrarPerguntaMaoDeX = false;
-		}
-		if (aceita) {
-			mesa.setValorMao(jogo.getModo().valorDaMaoDeX());
-		}
-		mesa.diz(aceita ? "mao_de_x_sim" : "mao_de_x_nao", posicaoNaTela(j), 1500, rndFrase);
-	}
+    @Override
+    public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
+        if (posicaoNaTela(j) == 3 && aceita) {
+            mesa.mostrarPerguntaMaoDeX = false;
+        }
+        if (aceita) {
+            mesa.setValorMao(jogo.getModo().valorDaMaoDeX());
+        }
+        mesa.diz(aceita ? "mao_de_x_sim" : "mao_de_x_nao", posicaoNaTela(j), 1500, rndFrase);
+    }
 
-	@Override
-	public void entrouNoJogo(Jogador i, Jogo j) {
+    @Override
+    public void entrouNoJogo(Jogador i, Jogo j) {
 
-	}
+    }
 
-	@Override
-	public void informaMaoDeX(Carta[] cartasParceiro) {
-		mesa.mostraCartasMaoDeX(cartasParceiro);
-		mesa.mostrarPerguntaMaoDeX = true;
-	}
+    @Override
+    public void informaMaoDeX(Carta[] cartasParceiro) {
+        mesa.mostraCartasMaoDeX(cartasParceiro);
+        mesa.mostrarPerguntaMaoDeX = true;
+    }
 
-	@Override
-	public void inicioMao() {
-		valorProximaAposta = 3;
-		for (int i = 0; i <= 2; i++) {
-			mesa.resultadoRodada[i] = 0;
-		}
-		LOGGER.log(Level.INFO, "distribuindo a mão");
-		mesa.distribuiMao();
-		mesa.setValorMao(jogo.getModo().valorInicialDaMao());
-		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
-	}
+    @Override
+    public void inicioMao() {
+        valorProximaAposta = 3;
+        for (int i = 0; i <= 2; i++) {
+            mesa.resultadoRodada[i] = 0;
+        }
+        LOGGER.log(Level.INFO, "distribuindo a mão");
+        mesa.distribuiMao();
+        mesa.setValorMao(jogo.getModo().valorInicialDaMao());
+        activity.handler.sendMessage(Message.obtain(activity.handler,
+                TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
+    }
 
-	@Override
-	public void inicioPartida(int placarEquipe1, int placarEquipe2) {
-		incrementaEstatistica("statPartidas");
-		activity.placar[0] = placarEquipe1;
-		activity.placar[1] = placarEquipe2;
-		activity.handler.sendMessage(Message
-				.obtain(activity.handler, TrucoActivity.MSG_ATUALIZA_PLACAR,
-						placarEquipe1, placarEquipe2));
-	}
+    @Override
+    public void inicioPartida(int placarEquipe1, int placarEquipe2) {
+        incrementaEstatistica("statPartidas");
+        activity.placar[0] = placarEquipe1;
+        activity.placar[1] = placarEquipe2;
+        activity.handler.sendMessage(Message
+                .obtain(activity.handler, TrucoActivity.MSG_ATUALIZA_PLACAR,
+                        placarEquipe1, placarEquipe2));
+    }
 
-	@Override
-	public void jogoAbortado(int posicao, int rndFrase) {
-		if (posicao != 0 && mesa != null) {
-			mesa.diz("abortou", convertePosicaoJogadorParaPosicaoTela(posicao),
-					1000, rndFrase);
-			mesa.aguardaFimAnimacoes();
-		}
-		if (activity != null) {
-			activity.jogoAbortado = true;
-			activity.finish();
-		}
-	}
+    @Override
+    public void jogoAbortado(int posicao, int rndFrase) {
+        if (posicao != 0 && mesa != null) {
+            mesa.diz("abortou", convertePosicaoJogadorParaPosicaoTela(posicao),
+                    1000, rndFrase);
+            mesa.aguardaFimAnimacoes();
+        }
+        if (activity != null) {
+            activity.jogoAbortado = true;
+            activity.finish();
+        }
+    }
 
-	@Override
-	public void jogoFechado(int numEquipeVencedora, int rndFrase) {
-		boolean ganhei = (numEquipeVencedora == this.getEquipe());
-		incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
-		mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000, rndFrase);
-		mesa.aguardaFimAnimacoes();
-		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_OFERECE_NOVA_PARTIDA));
-	}
+    @Override
+    public void jogoFechado(int numEquipeVencedora, int rndFrase) {
+        boolean ganhei = (numEquipeVencedora == this.getEquipe());
+        incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
+        mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000, rndFrase);
+        mesa.aguardaFimAnimacoes();
+        activity.handler.sendMessage(Message.obtain(activity.handler,
+                TrucoActivity.MSG_OFERECE_NOVA_PARTIDA));
+    }
 
-	@Override
-	public void maoFechada(int[] pontosEquipe) {
-		int pontosNos = pontosEquipe[getEquipe() - 1];
-		int pontosEles = pontosEquipe[getEquipeAdversaria() - 1];
-		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		activity.handler.sendMessage(Message.obtain(activity.handler,
-				TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
-		mesa.setValorMao(0);
-		mesa.recolheMao();
+    @Override
+    public void maoFechada(int[] pontosEquipe) {
+        int pontosNos = pontosEquipe[getEquipe() - 1];
+        int pontosEles = pontosEquipe[getEquipeAdversaria() - 1];
+        activity.handler.sendMessage(Message.obtain(activity.handler,
+                TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
+        activity.handler.sendMessage(Message.obtain(activity.handler,
+                TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
+        activity.handler.sendMessage(Message.obtain(activity.handler,
+                TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
+        mesa.setValorMao(0);
+        mesa.recolheMao();
 
-	}
+    }
 
-	@Override
-	public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
-		mesa.diz("aumento_" + jogo.nomeNoTruco(valor), posicaoNaTela(j),
-				1500 + 200 * (valor / 3), rndFrase);
-		if (j.getEquipe() != this.getEquipe()) {
-			LOGGER.log(Level.INFO, "pedindo para mostrar pergunta aumento");
-			mesa.mostrarPerguntaAumento = true;
-		}
-	}
+    @Override
+    public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
+        mesa.diz("aumento_" + jogo.nomeNoTruco(valor), posicaoNaTela(j),
+                1500 + 200 * (valor / 3), rndFrase);
+        if (j.getEquipe() != this.getEquipe()) {
+            LOGGER.log(Level.INFO, "pedindo para mostrar pergunta aumento");
+            mesa.mostrarPerguntaAumento = true;
+        }
+    }
 
-	@Override
-	public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
-		if (j.getEquipe() == this.getEquipe()) {
-			// Num jogo sem bluetooth/etc, o bot não aumenta, só
-			// sinaliza a intenção de aumentar
-			if (jogo instanceof JogoLocal && ((JogoLocal) jogo).isIgnoraDecisao(j)) {
-				mesa.diz("aumento_quero", posicaoNaTela(j), 1500, rndFrase);
-				return;
-			}
-			// Nós aceitamos um truco, então podemos pedir aumento (se o valor atual ainda permitir)
-			valorProximaAposta = jogo.getModo().valorSeHouverAumento(valor);
-		} else {
-			// Eles aceitaram um truco, temos que esperar eles pedirem
-			valorProximaAposta = 0;
-		}
-		mesa.mostrarPerguntaAumento = false;
-		mesa.diz("aumento_sim", posicaoNaTela(j), 1500, rndFrase);
-		mesa.aceitouAumentoAposta(j, valor);
-	}
+    @Override
+    public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
+        if (j.getEquipe() == this.getEquipe()) {
+            // Num jogo sem bluetooth/etc, o bot não aumenta, só
+            // sinaliza a intenção de aumentar
+            if (jogo instanceof JogoLocal && ((JogoLocal) jogo).isIgnoraDecisao(j)) {
+                mesa.diz("aumento_quero", posicaoNaTela(j), 1500, rndFrase);
+                return;
+            }
+            // Nós aceitamos um truco, então podemos pedir aumento (se o valor atual ainda permitir)
+            valorProximaAposta = jogo.getModo().valorSeHouverAumento(valor);
+        } else {
+            // Eles aceitaram um truco, temos que esperar eles pedirem
+            valorProximaAposta = 0;
+        }
+        mesa.mostrarPerguntaAumento = false;
+        mesa.diz("aumento_sim", posicaoNaTela(j), 1500, rndFrase);
+        mesa.aceitouAumentoAposta(j, valor);
+    }
 
-	@Override
-	public void recusouAumentoAposta(Jogador j, int rndFrase) {
-		mesa.diz("aumento_nao", posicaoNaTela(j), 1300, rndFrase);
-	}
+    @Override
+    public void recusouAumentoAposta(Jogador j, int rndFrase) {
+        mesa.diz("aumento_nao", posicaoNaTela(j), 1300, rndFrase);
+    }
 
-	@Override
-	public void rodadaFechada(int numRodada, int resultado,
-			Jogador jogadorQueTorna) {
-		if (getEquipe() == 2) {
-			// Se o humano nao é equipe 1 e não for empate, troca o resultado
-			if (resultado == 1) {
-				resultado = 2;
-			} else if (resultado == 2) {
-				resultado = 1;
-			}
-		}
-		mesa.mostrarPerguntaMaoDeX = false;
-		mesa.mostrarPerguntaAumento = false;
-		mesa.setPosicaoVez(0);
-		mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
-	}
+    @Override
+    public void rodadaFechada(int numRodada, int resultado,
+            Jogador jogadorQueTorna) {
+        if (getEquipe() == 2) {
+            // Se o humano nao é equipe 1 e não for empate, troca o resultado
+            if (resultado == 1) {
+                resultado = 2;
+            } else if (resultado == 2) {
+                resultado = 1;
+            }
+        }
+        mesa.mostrarPerguntaMaoDeX = false;
+        mesa.mostrarPerguntaAumento = false;
+        mesa.setPosicaoVez(0);
+        mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
+    }
 
-	@Override
-	public void vez(Jogador j, boolean podeFechada) {
-		LOGGER.log(Level.INFO, "vez do jogador " + posicaoNaTela(j));
-		mesa.vaiJogarFechada = false;
-		boolean mostraBtnAumento = (j instanceof JogadorHumano)
-				&& (valorProximaAposta > 0) && jogo.isPlacarPermiteAumento();
-		boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
-				&& podeFechada;
-		activity.handler.sendMessage(Message.obtain(activity.handler,
-				mostraBtnAumento ? TrucoActivity.MSG_MOSTRA_BOTAO_AUMENTO
-						: TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-		activity.handler
-				.sendMessage(Message
-						.obtain(activity.handler,
-								mostraBtnAbertaFechada ? TrucoActivity.MSG_MOSTRA_BOTAO_ABERTA_FECHADA
-										: TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-		mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
-				: MesaView.STATUS_VEZ_OUTRO);
-		mesa.setPosicaoVez(posicaoNaTela(j));
-	}
+    @Override
+    public void vez(Jogador j, boolean podeFechada) {
+        LOGGER.log(Level.INFO, "vez do jogador " + posicaoNaTela(j));
+        mesa.vaiJogarFechada = false;
+        boolean mostraBtnAumento = (j instanceof JogadorHumano)
+                && (valorProximaAposta > 0) && jogo.isPlacarPermiteAumento();
+        boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
+                && podeFechada;
+        activity.handler.sendMessage(Message.obtain(activity.handler,
+                mostraBtnAumento ? TrucoActivity.MSG_MOSTRA_BOTAO_AUMENTO
+                        : TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
+        activity.handler
+                .sendMessage(Message
+                        .obtain(activity.handler,
+                                mostraBtnAbertaFechada ? TrucoActivity.MSG_MOSTRA_BOTAO_ABERTA_FECHADA
+                                        : TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
+        mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
+                : MesaView.STATUS_VEZ_OUTRO);
+        mesa.setPosicaoVez(posicaoNaTela(j));
+    }
 
-	/**
-	 * Soma um a uma estatística (no. de partidas jogadas, no. de vitórias,
-	 * etc.)
-	 *
-	 * @param chave
-	 *            identificador da estatística (ex.: "statPartidas" para número
-	 *            de partidas jogadas)
-	 */
-	private void incrementaEstatistica(String chave) {
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(activity);
-		int partidas = preferences.getInt(chave, 0);
-		Editor editor = preferences.edit();
-		editor.putInt(chave, ++partidas);
-		editor.apply();
-	}
+    /**
+     * Soma um a uma estatística (no. de partidas jogadas, no. de vitórias,
+     * etc.)
+     *
+     * @param chave
+     *            identificador da estatística (ex.: "statPartidas" para número
+     *            de partidas jogadas)
+     */
+    private void incrementaEstatistica(String chave) {
+        SharedPreferences preferences = PreferenceManager
+                .getDefaultSharedPreferences(activity);
+        int partidas = preferences.getInt(chave, 0);
+        Editor editor = preferences.edit();
+        editor.putInt(chave, ++partidas);
+        editor.apply();
+    }
 
-	/**
-	 * Retorna a posição do jogador na tela.
-	 * <p>
-	 * Num jogo local, o 1 é o humano *e* a posição inferior da tela. Em jogos
-	 * remotos, o jogador 1 pode não ser o inferior, e esta função calcula a
-	 * posição que aquele jogador ocupa na tela sob o ponto de vista local.
-	 * <p>
-	 *
-	 * @return 1 para a posição inferior, 2 para a direita, 3 para cima, 4 para
-	 *         esquerda
-	 */
-	private int posicaoNaTela(Jogador j) {
-		int pos = j.getPosicao() - this.getPosicao() + 1;
-		if (pos < 1) {
-			pos = pos + 4;
-		}
-		return pos;
-	}
+    /**
+     * Retorna a posição do jogador na tela.
+     * <p>
+     * Num jogo local, o 1 é o humano *e* a posição inferior da tela. Em jogos
+     * remotos, o jogador 1 pode não ser o inferior, e esta função calcula a
+     * posição que aquele jogador ocupa na tela sob o ponto de vista local.
+     * <p>
+     *
+     * @return 1 para a posição inferior, 2 para a direita, 3 para cima, 4 para
+     *         esquerda
+     */
+    private int posicaoNaTela(Jogador j) {
+        int pos = j.getPosicao() - this.getPosicao() + 1;
+        if (pos < 1) {
+            pos = pos + 4;
+        }
+        return pos;
+    }
 
-	private int convertePosicaoJogadorParaPosicaoTela(int posicaoJogador) {
-		int pos = posicaoJogador - this.getPosicao() + 1;
-		if (pos < 1) {
-			pos = pos + 4;
-		}
-		return pos;
-	}
+    private int convertePosicaoJogadorParaPosicaoTela(int posicaoJogador) {
+        int pos = posicaoJogador - this.getPosicao() + 1;
+        if (pos < 1) {
+            pos = pos + 4;
+        }
+        return pos;
+    }
 
 }
