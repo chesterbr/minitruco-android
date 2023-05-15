@@ -349,7 +349,6 @@ public class JogadorBot extends Jogador implements Runnable {
 		minhaVez = false;
 		estouAguardandoRepostaAumento = false;
 		recebiPedidoDeAumento = false;
-		recebiPedidoDeAumento = false;
 	}
 
 	public void jogoFechado(int numEquipeVencedora, int rndFrase) {

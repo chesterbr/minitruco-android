@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
@@ -195,7 +197,7 @@ public class TrucoActivity extends BaseActivity {
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(@NonNull Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 	}
 

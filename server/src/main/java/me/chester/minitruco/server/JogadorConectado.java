@@ -144,7 +144,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                 }
 
                 // Encontra a implementação do comando solicitado e chama
-                if ((args[0] == null) || (args[0].length() != 1)) {
+                if (args[0].length() != 1) {
                     continue;
                 }
                 char comando = Character.toUpperCase(args[0].charAt(0));

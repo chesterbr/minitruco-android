@@ -79,7 +79,7 @@ public class Sala {
      */
     public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, String modo) {
         Sala sala = salasPublicasDisponiveis.stream().filter(s ->
-            s.modo == modo
+            s.modo.equals(modo)
         ).findFirst().orElse(null);
         if (sala == null) {
             sala = new Sala(true, modo);
