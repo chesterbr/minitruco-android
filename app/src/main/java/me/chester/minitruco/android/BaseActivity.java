@@ -3,13 +3,13 @@ package me.chester.minitruco.android;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.activity.ComponentActivity;
+import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.R;
 

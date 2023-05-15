@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="sempreConfirmaFecharJogo"
@@ -27,4 +28,4 @@
             android:summary="Joga uma carta ou pede truco automaticamente (e aleatoriamente) apenas em jogo local."
             android:title="Jogo Automático" />
     </PreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

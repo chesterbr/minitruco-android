@@ -1,7 +1,9 @@
 package me.chester.minitruco.android;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import me.chester.minitruco.R;
 
@@ -11,12 +13,10 @@ import me.chester.minitruco.R;
 /**
  * Activity que permite configurar manilhas, baralho e outras opções
  */
-public class OpcoesActivity extends PreferenceActivity {
-
+public class OpcoesActivity extends AppCompatActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.opcoes);
+        setContentView(R.layout.opcoes);
     }
-
 }

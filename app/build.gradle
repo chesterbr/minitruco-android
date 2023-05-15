@@ -22,4 +22,5 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
 
     implementation project(path: ':core')
+    implementation 'androidx.preference:preference:1.2.0'
 }
