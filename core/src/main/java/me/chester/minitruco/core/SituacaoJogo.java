@@ -4,11 +4,12 @@ package me.chester.minitruco.core;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Fotografia da situação atual do jogo.
+ * Fotografia da situação atual do jogo no momento em que um bot vai jogar,
+ * responder a um aumento ou decidir se joga uma mão de 10/11.
  * <p>
- * Foi isolada da classe Jogo para poder passar às <code>Estrategia</code>s a
- * situação do jogo de forma a facilitar sua implementação e, ao mesmo tempo,
- * impedir que elas trapaceiem (não dando acesso ao <code>Jogo</code>.
+ * Ela garante que a estratégia não trapaceie, disponibilizando apenas o que
+ * o bot vê: cartas na mão, histórico de cartas jogadas, placares da mão e
+ * do jogo, etc. A única classe do truco que ela enxerga é <code>Carta</code>.
  */
 public class SituacaoJogo {
 

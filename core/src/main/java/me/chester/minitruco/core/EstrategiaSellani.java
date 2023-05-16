@@ -752,18 +752,4 @@ public class EstrategiaSellani implements Estrategia {
         return qExcelente >= 2 || qBoa >= 3 || (qExcelente >= 1 && qBoa >= 1);
     }
 
-    public void inicioPartida() {
-    }
-
-    public void inicioMao() {
-    }
-
-    public void pediuAumentoAposta(int posJogador, int valor) {
-    }
-
-    public void aceitouAumentoAposta(int posJogador, int valor) {
-    }
-
-    public void recusouAumentoAposta(int posJogador) {
-    }
 }

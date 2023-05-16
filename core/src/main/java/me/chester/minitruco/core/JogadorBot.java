@@ -232,7 +232,6 @@ public class JogadorBot extends Jogador implements Runnable {
     private Carta[] cartasDoParceiroDaMaoDeX;
 
     public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
-        estrategia.pediuAumentoAposta(j.getPosicao(), valor);
         if (j.getEquipe() == this.getEquipeAdversaria()) {
             recebiPedidoDeAumento = true;
         }
@@ -262,9 +261,6 @@ public class JogadorBot extends Jogador implements Runnable {
     @Override
     public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
 
-        // Notifica o estrategia
-        estrategia.aceitouAumentoAposta(j.getPosicao(), valor);
-
         // Se estou esperando resposta, contabiliza
         if (numRespostasAguardando > 0) {
             numRespostasAguardando = 0;
@@ -287,9 +283,6 @@ public class JogadorBot extends Jogador implements Runnable {
 
     @Override
     public void recusouAumentoAposta(Jogador j, int rndFrase) {
-
-        // Notifica o estrategia
-        estrategia.recusouAumentoAposta(j.getPosicao());
 
         // Se estivermos aguardando resposta, contabiliza (e deixa o adversário
         // perceber)
@@ -325,9 +318,6 @@ public class JogadorBot extends Jogador implements Runnable {
 
     public void inicioMao() {
 
-        // Notifica o estrategia
-        estrategia.inicioMao();
-
         // Guarda as cartas que estão na mão do jogador
         cartasRestantes.removeAllElements();
         for (int i = 0; i <= 2; i++) {
@@ -345,8 +335,7 @@ public class JogadorBot extends Jogador implements Runnable {
     private final Vector<Carta> cartasRestantes = new Vector<>(3);
 
     public void inicioPartida(int placarEquipe1, int placarEquipe2) {
-        // Avisa o estrategia
-        estrategia.inicioPartida();
+        // Por ora não faz nada
     }
 
     public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {

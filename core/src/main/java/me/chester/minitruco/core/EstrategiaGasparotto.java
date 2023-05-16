@@ -2060,21 +2060,6 @@ public class EstrategiaGasparotto implements Estrategia {
                 && (qManilhas >= 1 || q3 >= 1 || q2 >= 2);
     }
 
-    public void inicioPartida() {
-    }
-
-    public void inicioMao() {
-    }
-
-    public void pediuAumentoAposta(int posJogador, int valor) {
-    }
-
-    public void aceitouAumentoAposta(int posJogador, int valor) {
-    }
-
-    public void recusouAumentoAposta(int posJogador) {
-    }
-
     public void setGameLevel(int gameLevel) {
         this.gameLevel = gameLevel;
     }
