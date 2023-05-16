@@ -219,16 +219,6 @@ public class JogadorBot extends Jogador implements Runnable {
                 try {
                     respostaMaoDeX = estrategia.aceitaMaoDeX(
                             cartasDoParceiroDaMaoDeX, situacaoJogo);
-                    // Atendendo a pedidos na Play Store, o parceiro do humano vai
-                    // ignorar a estratégia com 90% de chance e recusar,
-                    // deixando a decisão na mão do humano.
-                    if (getPosicao() == 3) {
-                        boolean aceitaEstrategia = random.nextInt(10) == 5;
-                        LOGGER.log(Level.INFO,
-                                "mão de 10/11 do parceiro do humano. AceitaEstrategia="
-                                        + aceitaEstrategia);
-                        respostaMaoDeX = respostaMaoDeX && aceitaEstrategia;
-                    }
                 } catch (Exception e) {
                     LOGGER.log(Level.INFO,
                             "Erro em aceite-mao-de-x no jogador" + this.getPosicao(),
