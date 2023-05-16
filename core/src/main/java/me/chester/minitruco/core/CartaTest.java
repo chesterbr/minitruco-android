@@ -1,6 +1,7 @@
 package me.chester.minitruco.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,75 @@ class CartaTest {
         assertNotEquals(new Carta("Ae"), cartaKe);
     }
 
-    // TODO getValorTruco deveria suportar manilha velha
-    //      (mas tem que ver as consequencias para estrategias)
+    @Test
+    @DisplayName("Atribui valor correto quando em jogo com manilha nova")
+    void testGetValorTrucoManilhaNova() {
+        char manilha = '6';
+        assertEquals(1, new Carta("4e").getValorTruco(manilha));
+        assertEquals(2, new Carta("5e").getValorTruco(manilha));
+        assertNotEquals(3, new Carta("6e").getValorTruco(manilha));
+        assertEquals(4, new Carta("7c").getValorTruco(manilha));
+        assertEquals(5, new Carta("Qp").getValorTruco(manilha));
+        assertEquals(6, new Carta("Jo").getValorTruco(manilha));
+        assertEquals(7, new Carta("Ke").getValorTruco(manilha));
+        assertEquals(8, new Carta("Ac").getValorTruco(manilha));
+        assertEquals(9, new Carta("2e").getValorTruco(manilha));
+        assertEquals(10, new Carta("3e").getValorTruco(manilha));
+        assertEquals(11, new Carta("6o").getValorTruco(manilha));
+        assertEquals(12, new Carta("6e").getValorTruco(manilha));
+        assertEquals(13, new Carta("6c").getValorTruco(manilha));
+        assertEquals(14, new Carta("6p").getValorTruco(manilha));
+
+        manilha = 'J';
+        assertEquals(1, new Carta("4p").getValorTruco(manilha));
+        assertEquals(2, new Carta("5c").getValorTruco(manilha));
+        assertEquals(3, new Carta("6e").getValorTruco(manilha));
+        assertEquals(4, new Carta("7o").getValorTruco(manilha));
+        assertEquals(5, new Carta("Qe").getValorTruco(manilha));
+        assertNotEquals(6, new Carta("Jo").getValorTruco(manilha));
+        assertEquals(7, new Carta("Ko").getValorTruco(manilha));
+        assertEquals(8, new Carta("Ae").getValorTruco(manilha));
+        assertEquals(9, new Carta("2c").getValorTruco(manilha));
+        assertEquals(10, new Carta("3e").getValorTruco(manilha));
+        assertEquals(11, new Carta("Jo").getValorTruco(manilha));
+        assertEquals(12, new Carta("Je").getValorTruco(manilha));
+        assertEquals(13, new Carta("Jc").getValorTruco(manilha));
+        assertEquals(14, new Carta("Jp").getValorTruco(manilha));
+    }
+
+    @Test
+    @DisplayName("Atribui valor correto quando em jogo com manilha velha")
+    void testGetValorTrucoManilhaVelha() {
+        char manilha = SituacaoJogo.MANILHA_INDETERMINADA;
+        assertEquals(1, new Carta("4e").getValorTruco(manilha));
+        assertEquals(2, new Carta("5c").getValorTruco(manilha));
+        assertEquals(3, new Carta("6p").getValorTruco(manilha));
+        assertEquals(4, new Carta("7e").getValorTruco(manilha));
+        assertEquals(5, new Carta("Qo").getValorTruco(manilha));
+        assertEquals(6, new Carta("Je").getValorTruco(manilha));
+        assertEquals(7, new Carta("Ke").getValorTruco(manilha));
+        assertEquals(8, new Carta("Ap").getValorTruco(manilha));
+        assertEquals(9, new Carta("2e").getValorTruco(manilha));
+        assertEquals(10, new Carta("3e").getValorTruco(manilha));
+        assertEquals(11, new Carta("7o").getValorTruco(manilha));
+        assertEquals(12, new Carta("Ae").getValorTruco(manilha));
+        assertEquals(13, new Carta("7c").getValorTruco(manilha));
+        assertEquals(14, new Carta("4p").getValorTruco(manilha));
+    }
+
+    @Test
+    @DisplayName("Cartas inicializam abertas")
+    void testFechada() {
+        assertFalse(new Carta("Ae").isFechada());
+    }
+
+    @Test
+    @DisplayName("Cartas valem 0 quando fechadas")
+    void testValorCartaFechada() {
+        Carta c = new Carta("Ae");
+        c.setFechada(true);
+        assertEquals(0, c.getValorTruco('A'));
+        c.setFechada(false);
+        assertNotEquals(0, c.getValorTruco('A'));
+    }
 }
