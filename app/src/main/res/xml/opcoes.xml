@@ -17,6 +17,10 @@
         android:entryValues="@array/velocidade_animacao_valores"
         android:key="velocidadeAnimacao"
         android:title="Velocidade da Animação" />
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        android:defaultValue="-1"
+        android:key="corFundoCarta"
+        android:title="Cor de fundo das cartas"/>
     <PreferenceCategory android:title="Opções de Desenvolvimento (sério, nem mexe aqui)">
         <EditTextPreference
             android:defaultValue="@string/opcoes_default_servidor"

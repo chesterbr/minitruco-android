@@ -46,6 +46,7 @@ public class MesaView extends View {
     private final float density = getResources().getDisplayMetrics().density;
 
     private static final Random rand = new Random();
+    private int corFundoCarta;
 
     public MesaView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -112,7 +113,7 @@ public class MesaView extends View {
         // Na primeira chamada (inicialização), instanciamos as cartas
         if (!inicializada) {
             for (int i = 0; i < cartas.length; i++) {
-                cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null);
+                cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null, corFundoCarta);
                 cartas[i].movePara(leftBaralho, topBaralho);
             }
             cartas[0].visible = false;
@@ -1032,5 +1033,9 @@ public class MesaView extends View {
 
     public void setValorMao(int m) {
         valorMao = m;
+    }
+
+    public void setCorFundoCarta(int corFundoCarta) {
+        this.corFundoCarta = corFundoCarta;
     }
 }

@@ -27,6 +27,8 @@ Pull requests são bem-vindas, mas não há garantia de aceite (em particular de
 Créditos
 --------
 
+TODO: adicionar licença e (c), para confirmidade com Apache License -> https://github.com/jaredrummler/ColorPicker
+
 - Idéia, desenvolvimento, manutenção e arte: **[Carlos Duarte do Nascimento](https://chester.me)** ([@chesterbr](https://github.com/chesterbr))
 - Imagens de carta, fundo e logotipo: **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani))
 - Tento mineiro: **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram))

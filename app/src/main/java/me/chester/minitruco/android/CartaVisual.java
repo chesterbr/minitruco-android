@@ -32,6 +32,7 @@ public class CartaVisual extends Carta {
     private final static Logger LOGGER = Logger.getLogger("CartaVisual");
 
     public static final int COR_MESA = Color.argb(255, 27, 142, 60);
+    private int corFundo;
 
     /**
      * Cria uma nova carta na posição indicada
@@ -42,10 +43,13 @@ public class CartaVisual extends Carta {
      *            posição em relação ao topo
      * @param sCarta
      *            valor que esta carta terá (ex.: "Kc"). Se null, entra virada.
+     * @param corFundo
+     *            cor de fundo da carta
      */
-    public CartaVisual(MesaView mesa, int left, int top, String sCarta) {
+    public CartaVisual(MesaView mesa, int left, int top, String sCarta, int corFundo) {
         super(sCarta == null ? LETRA_NENHUMA + "" + NAIPE_NENHUM : sCarta);
         this.mesa = mesa;
+        this.corFundo = corFundo;
         movePara(left, top);
     }
 
@@ -148,7 +152,7 @@ public class CartaVisual extends Carta {
             Rect rect = new Rect(left, top, left + largura - 1, top + altura
                     - 1);
             RectF rectf = new RectF(rect);
-            paint.setColor(Color.WHITE);
+            paint.setColor(corFundo);
             paint.setStyle(Paint.Style.FILL);
             canvas.drawRoundRect(rectf, raio_canto, raio_canto, paint);
             paint.setColor(COR_MESA);

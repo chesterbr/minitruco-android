@@ -158,6 +158,7 @@ public class TrucoActivity extends BaseActivity {
         setContentView(R.layout.truco);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         mesa = findViewById(R.id.MesaView01);
+        mesa.setCorFundoCarta(preferences.getInt("corFundoCarta", Color.WHITE));
         layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
         mesa.velocidade = Integer.parseInt(preferences.getString("velocidadeAnimacao", "1"));
