@@ -83,6 +83,7 @@ public class JogadorBot extends Jogador implements Runnable {
         }
     }
 
+    // TODO ao invez de ser o próprio runnable, colocar num método e chamar no lambda
     public void run() {
 
         LOGGER.log(Level.INFO, "JogadorBot " + this + " (.run) iniciado");
@@ -114,11 +115,6 @@ public class JogadorBot extends Jogador implements Runnable {
                 // Se a estratégia pediu truco, processa e desencana de jogar
                 // agora
                 if ((posCarta == -1) && (situacaoJogo.valorProximaAposta != 0)) {
-                    // Faz a
-                    // solicitação de truco numa nova thread // (usando o
-                    // próprio
-                    // JogadorBot como Runnable - era uma inner // class, mas
-                    // otimizei para reduzir o .jar)
                     aceitaramTruco = false;
                     numRespostasAguardando = 2;
                     LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
@@ -196,6 +192,7 @@ public class JogadorBot extends Jogador implements Runnable {
             if (recebiPedidoDeMaoDeX) {
                 recebiPedidoDeMaoDeX = false;
                 atualizaSituacaoJogo();
+                // TODO refletir fingeQuePensa
                 sleep(1000 + random.nextInt(1000));
                 boolean respostaMaoDeX = false;
                 try {
@@ -233,9 +230,7 @@ public class JogadorBot extends Jogador implements Runnable {
     private Carta[] cartasDoParceiroDaMaoDeX;
 
     public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
-        // Notifica a estrategia
         estrategia.pediuAumentoAposta(j.getPosicao(), valor);
-        // Se foi a equipe oposta que pediu, gera uma resposta
         if (j.getEquipe() == this.getEquipeAdversaria()) {
             recebiPedidoDeAumento = true;
         }
@@ -301,11 +296,6 @@ public class JogadorBot extends Jogador implements Runnable {
             Thread.yield();
         }
 
-    }
-
-    public void jogadaRecusada(int numJogadores, int equipeTrucando,
-            Jogador jogadorDaVez) {
-        // Não faz nada
     }
 
     public void rodadaFechada(int numMao, int resultado, Jogador jogadorQueTorna) {
