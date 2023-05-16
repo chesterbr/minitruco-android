@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import androidx.activity.ComponentActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.R;
@@ -20,7 +20,7 @@ import me.chester.minitruco.R;
  * Processa menus e diálogos comuns à tela de título (
  * <code>TituloActivity</code>) e à tela de jogo (<code>TrucoActivity</code>).
  */
-public abstract class BaseActivity extends ComponentActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
