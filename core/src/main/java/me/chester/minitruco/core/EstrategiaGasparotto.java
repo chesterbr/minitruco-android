@@ -48,13 +48,6 @@ public class EstrategiaGasparotto implements Estrategia {
     private String chatMsg = "";
 
     /**
-     * Retorna o nome "de tela" da Estrategia
-     */
-    public String getNomeEstrategia() {
-        return "HAL";
-    }
-
-    /**
      * Retorna o nick da Estrategia
      */
     public String getNickEstrategia() {
@@ -66,13 +59,6 @@ public class EstrategiaGasparotto implements Estrategia {
      */
     public void setNickEstrategia() {
         this.nick = nicks_estrategia[this.gameLevel];
-    }
-
-    /**
-     * Retorna informações de copyright e afins
-     */
-    public String getInfoEstrategia() {
-        return "v2.1 (c) 2007-2010 Sandro Gasparotto";
     }
 
     /**

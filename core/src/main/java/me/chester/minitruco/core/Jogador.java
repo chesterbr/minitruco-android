@@ -101,20 +101,6 @@ public abstract class Jogador {
             new EstrategiaSellani() };
 
     /**
-     * Lista de opções de estratégia para comboboxes (tem os nomes e a última
-     * opção é a de sorteio
-     */
-    static final String[] opcoesEstrategia = new String[ESTRATEGIAS.length + 1];
-
-    static {
-        // Preenche a lista de opções usando o array de estratégias
-        // (o último elemento é preenchido depois de carregar o idioma,
-        // pois é a frase "sortear estratégia")
-        for (int i = 0; i < ESTRATEGIAS.length; i++)
-            opcoesEstrategia[i] = ESTRATEGIAS[i].getNomeEstrategia();
-    }
-
-    /**
      * Informa que uma carta foi jogada na mesa.
      *
      * @param j

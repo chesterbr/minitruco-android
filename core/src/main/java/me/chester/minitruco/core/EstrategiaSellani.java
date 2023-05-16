@@ -16,14 +16,6 @@ public class EstrategiaSellani implements Estrategia {
     private static final int CARTA_EXCELENTE = 3;
     final int[] C = new int[3];
 
-    public String getNomeEstrategia() {
-        return "Sellani";
-    }
-
-    public String getInfoEstrategia() {
-        return "Leonardo Sellani, versão 1.0";
-    }
-
     /**
      * Retorna verdadeiro ou falso a partir de um número randômico e uma
      * porcentaem. Esta função é utilizada quando o jogador fica na dúvida,

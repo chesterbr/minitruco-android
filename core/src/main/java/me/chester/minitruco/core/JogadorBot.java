@@ -27,7 +27,6 @@ public class JogadorBot extends Jogador implements Runnable {
             estrategia = new EstrategiaGasparotto();
         }
         LOGGER.info("Estrategia: " + estrategia.getClass().getName());
-        this.setNome(estrategia.getNomeEstrategia());
         thread = new Thread(this);
         thread.start();
     }
@@ -84,6 +83,9 @@ public class JogadorBot extends Jogador implements Runnable {
     }
 
     // TODO ao invez de ser o próprio runnable, colocar num método e chamar no lambda
+    // TODO quebrar um pouco esse método
+    // TODO rever soluções provisórias do crash que era causado pela CPU
+    //      tentar jogar carta da rodada anterior
     public void run() {
 
         LOGGER.log(Level.INFO, "JogadorBot " + this + " (.run) iniciado");
@@ -166,7 +168,7 @@ public class JogadorBot extends Jogador implements Runnable {
                     continue;
                 }
                 LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
-                        + " (" + this.estrategia.getNomeEstrategia() + ") vai pedir para jogar " + c);
+                        + " (" + this.estrategia + ") vai pedir para jogar " + c);
                 jogo.jogaCarta(this, c);
                 minhaVez = false;
             }

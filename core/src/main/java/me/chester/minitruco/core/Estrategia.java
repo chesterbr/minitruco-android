@@ -12,33 +12,21 @@ package me.chester.minitruco.core;
  * quando a dupla for decidir uma mão de 10/11, respectivamente.
  * <p>
  * Eses métodos recebem uma "fotografia" do jogo (SituacaoJogo) no momento em
- * que a ação deles é demandada. Esta fotografia inclui todo o histórico da
- * mão/rodada, placares, etc. Se for desejado guardar estado, o tempo de vida de
+ * que a ação deles é demandada. Esta fotografia inclui o histórico de cartas
+ * jogadas na mão, placares, etc. Se for desejado guardar estado, o tempo de vida de
  * uma estratégia é o mesmo de <code>Jogo</code>, ou seja, o estado (não-
  * <code>static</code>) persistirá ao longo de uma partida, mas não entre
  * partidas.
+ * TODO: rever o assertion acima
  * <p>
- * Para que a estratégia apareça no jogo, adicione uma instância dela ao array
- * ESTRATEGIAS da classe Jogador.
+ * TODO: Instruções para fazer uma nova estratégia aparecer
  * <p>
  * Se você criar uma nova estratégia, pode contribui-la para o jogo (desde que
  * concorde em licenciá-la sob os termos acima, baseados na licença "new BSD").
  * Você será creditado e manterá seus direitos autorais. Basta fazer um fork e
  * pull request no github ou entrar em contato com o Chester no cd@pobox.com.
- *
- * @see Jogador#ESTRATEGIAS
  */
 public interface Estrategia {
-
-    /**
-     * Retorna o nome "copmpleto" da Estrategia
-     */
-    String getNomeEstrategia();
-
-    /**
-     * Retorna informações de copyright e afins
-     */
-    String getInfoEstrategia();
 
     /**
      * Executa uma jogada.
