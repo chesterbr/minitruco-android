@@ -1,5 +1,6 @@
 package me.chester.minitruco.android;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -35,7 +36,7 @@ import me.chester.minitruco.core.JogoLocal;
  * de uma <code>MesaView</code>.
  * <p>
  */
-public class TrucoActivity extends BaseActivity {
+public class TrucoActivity extends Activity {
 
     private MesaView mesa;
     private View layoutFimDeJogo;
