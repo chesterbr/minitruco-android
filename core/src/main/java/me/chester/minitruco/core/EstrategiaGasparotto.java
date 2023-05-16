@@ -28,6 +28,7 @@ public class EstrategiaGasparotto implements Estrategia {
     private static final int ESCOPETA = 6;
     private static final int ZAP = 7;
 
+    // TODO: nunca setamos um level <> 0; ver se habilitamos ou removemos
     // game level
     // each game level is associated with various different names
     // so we can create different playing levels and messages for each name...
@@ -38,28 +39,10 @@ public class EstrategiaGasparotto implements Estrategia {
     // 4: professional agressive play [Constantine(HAL_PRO)]
     private int gameLevel = 0; // default
 
-    private final String[] nicks_estrategia = { "HAL", "nero(HAL_PRO)",
-            "eliza(HAL_PRO)", "alex(HAL_PRO)", "constantine(HAL_PRO)" };
-
-    private String nick = nicks_estrategia[gameLevel];
-
+    // TODO não usamos o chat (isso provavelmente era do gTruco, mas talvez seja útil ao implementar sinais (se não for, remover)
     // chat message
     // this for some "psychological" play and entertainment as well
     private String chatMsg = "";
-
-    /**
-     * Retorna o nick da Estrategia
-     */
-    public String getNickEstrategia() {
-        return this.nick;
-    }
-
-    /**
-     * Seta o nick da Estrategia
-     */
-    public void setNickEstrategia() {
-        this.nick = nicks_estrategia[this.gameLevel];
-    }
 
     /**
      * Retorna verdadeiro ou falso a partir de um número randômico e um fator de
@@ -2096,10 +2079,4 @@ public class EstrategiaGasparotto implements Estrategia {
         this.gameLevel = gameLevel;
     }
 
-    public String getChatMsg() {
-        String s = this.chatMsg;
-        this.chatMsg = ""; // erase this now to avoid keep repeating the same
-                            // message over and over
-        return s;
-    }
 }

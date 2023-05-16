@@ -363,9 +363,6 @@ public class EstrategiaSellani implements Estrategia {
      * Efetua uma jogada. Sério?!? Se tá brincando!
      */
     public int joga(SituacaoJogo s) {
-        // System.out.println("\njoga() posição:" + eu(s) + " vez:" +
-        // minhaVez(s) + (minhaVez(s)==0?" mão":minhaVez(s)==3?" pé":"") +
-        // (s.posJogador==3?" Parceiro":" Adversário"));
         classificaCartas(s);
 
         switch (s.numRodadaAtual) {
@@ -587,9 +584,6 @@ public class EstrategiaSellani implements Estrategia {
      * Retorna se eu aceito o aumento da aposta dos adversários ou não.
      */
     public boolean aceitaTruco(SituacaoJogo s) {
-        // System.out.println("\naceitaTruco() vez:" + minhaVez(s) + " posição:"
-        // + eu(s) + (eu(s)==0?" mão":eu(s)==3?" pé":"") +
-        // (s.posJogador==3?" Parceiro":" Adversário"));
         classificaCartas(s);
 
         // se estou com o casal maior não vai nem ter graça...
@@ -771,19 +765,5 @@ public class EstrategiaSellani implements Estrategia {
     }
 
     public void recusouAumentoAposta(int posJogador) {
-    }
-
-    public void setGameLevel(int gameLevel) {
-    }
-
-    public String getChatMsg() {
-        return "";
-    }
-
-    public void setNickEstrategia() {
-    }
-
-    public String getNickEstrategia() {
-        return "Sellani";
     }
 }
