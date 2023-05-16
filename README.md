@@ -27,8 +27,6 @@ Pull requests são bem-vindas, mas não há garantia de aceite (em particular de
 Créditos
 --------
 
-TODO: adicionar licença e (c), para confirmidade com Apache License -> https://github.com/jaredrummler/ColorPicker
-
 - Idéia, desenvolvimento, manutenção e arte: **[Carlos Duarte do Nascimento](https://chester.me)** ([@chesterbr](https://github.com/chesterbr))
 - Imagens de carta, fundo e logotipo: **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani))
 - Tento mineiro: **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram))
@@ -37,3 +35,5 @@ TODO: adicionar licença e (c), para confirmidade com Apache License -> https://
   - **[Sandro Gasparoto](https://www.linkedin.com/in/sgasparoto/)**
 - Estratégia de bot antiga: **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**
 - Seleção manual de servidor Bluetooth: **[Rodolfo Vasconcelos](https://www.linkedin.com/in/rodolfo-de-andrade-vasconcelos/)**
+- [Color Picker](https://github.com/jaredrummler/ColorPicker) © 2016 Jared Rummler / © 2015 Daniel Nilsson
+  Licensed under the [Apache License, Version 2.0](https://github.com/jaredrummler/ColorPicker/blob/master/LICENSE)
