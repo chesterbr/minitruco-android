@@ -10,8 +10,8 @@ import java.util.logging.Logger;
 /**
  * Jogador controlado pelo celular ou pelo servidor.
  * <p>
- * É preciso "plugar" uma estratégia para que o jogador funcione.
- *
+ * A execução das jogadas é feita por <code>Estrategia</code>.
+ * <p>
  * @see Estrategia
  */
 public class JogadorBot extends Jogador implements Runnable {
@@ -19,35 +19,17 @@ public class JogadorBot extends Jogador implements Runnable {
 
     private boolean fingeQuePensa = true;
 
-    /**
-     * Cria um novo bot, usando a estratégia fornecida.
-     *
-     * @param estrategia
-     *            Estratégia a ser adotada por este jogador
-     */
-    public JogadorBot(Estrategia estrategia) {
-        this.estrategia = estrategia;
-        this.setNome(estrategia.getNomeEstrategia());
-        this.thread = new Thread(this);
-        thread.start();
-    }
-
-    /**
-     * Cria um novo bot, buscando a estratégia pelo nome.
-     * <p>
-     *
-     * @param nomeEstrategia
-     *            Nome da estratégia (ex.: "Willian")
-     */
-    public JogadorBot(String nomeEstrategia) {
-        this(criaEstrategiaPeloNome(nomeEstrategia));
-    }
-
-    /**
-     * Cria um novo bot, com uma estratégia aleatória
-     */
     public JogadorBot() {
-        this(criaEstrategiaPeloNome("x"));
+        // TODO se ficarmos com múltiplas estratégias, mover esse sorteio p/ Estrategia
+        if (random.nextBoolean()) {
+            estrategia = new EstrategiaSellani();
+        } else {
+            estrategia = new EstrategiaGasparotto();
+        }
+        LOGGER.info("Estrategia: " + estrategia.getClass().getName());
+        this.setNome(estrategia.getNomeEstrategia());
+        thread = new Thread(this);
+        thread.start();
     }
 
     /**

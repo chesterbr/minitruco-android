@@ -115,40 +115,6 @@ public abstract class Jogador {
     }
 
     /**
-     * Instancia uma estratégia (para uso em jogadores que precisam disso, como
-     * o <code>JogadorBot</code> ou o <code>JogadorBot</code>).
-     *
-     * @param nomeEstrategia
-     *            Nome da estratégia (ex.: "Willian"). Se nenhuma estratégia se
-     *            identificar por aquele nome, sorteia uma aleatória
-     * @return nova instância da estratégia
-     */
-    public static Estrategia criaEstrategiaPeloNome(String nomeEstrategia) {
-        // Procura uma classe de estratégia com aquele nome
-        int numEstrategia = -1;
-        for (int i = 0; i < ESTRATEGIAS.length; i++) {
-            if (ESTRATEGIAS[i].getNomeEstrategia().equals(nomeEstrategia)) {
-                numEstrategia = i;
-                break;
-            }
-        }
-        // Se não houver nenhuma, sorteia
-        if (numEstrategia == -1) {
-            numEstrategia = random.nextInt(ESTRATEGIAS.length);
-        }
-
-        // Cria uma nova instância
-        try {
-            return ESTRATEGIAS[numEstrategia].getClass()
-                    .newInstance();
-        } catch (InstantiationException e) {
-            throw new Error(e.getMessage());
-        } catch (IllegalAccessException e) {
-            throw new Error(e.getMessage());
-        }
-    }
-
-    /**
      * Informa que uma carta foi jogada na mesa.
      *
      * @param j
