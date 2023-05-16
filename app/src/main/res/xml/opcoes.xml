@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="sempreConfirmaFecharJogo"
@@ -16,6 +17,10 @@
         android:entryValues="@array/velocidade_animacao_valores"
         android:key="velocidadeAnimacao"
         android:title="Velocidade da Animação" />
+    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+        android:defaultValue="-1"
+        android:key="corFundoCarta"
+        android:title="Cor de fundo das cartas"/>
     <PreferenceCategory android:title="Opções de Desenvolvimento (sério, nem mexe aqui)">
         <EditTextPreference
             android:defaultValue="@string/opcoes_default_servidor"
@@ -27,4 +32,4 @@
             android:summary="Joga uma carta ou pede truco automaticamente (e aleatoriamente) apenas em jogo local."
             android:title="Jogo Automático" />
     </PreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>

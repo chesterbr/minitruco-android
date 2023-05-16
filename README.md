@@ -35,3 +35,5 @@ Créditos
   - **[Sandro Gasparoto](https://www.linkedin.com/in/sgasparoto/)**
 - Estratégia de bot antiga: **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**
 - Seleção manual de servidor Bluetooth: **[Rodolfo Vasconcelos](https://www.linkedin.com/in/rodolfo-de-andrade-vasconcelos/)**
+- [Color Picker](https://github.com/jaredrummler/ColorPicker) © 2016 Jared Rummler / © 2015 Daniel Nilsson
+  Licensed under the [Apache License, Version 2.0](https://github.com/jaredrummler/ColorPicker/blob/master/LICENSE)

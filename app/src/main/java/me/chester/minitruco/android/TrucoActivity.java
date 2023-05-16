@@ -1,5 +1,6 @@
 package me.chester.minitruco.android;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -7,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
@@ -35,7 +36,7 @@ import me.chester.minitruco.core.JogoLocal;
  * de uma <code>MesaView</code>.
  * <p>
  */
-public class TrucoActivity extends BaseActivity {
+public class TrucoActivity extends Activity {
 
     private MesaView mesa;
     private View layoutFimDeJogo;
@@ -158,6 +159,7 @@ public class TrucoActivity extends BaseActivity {
         setContentView(R.layout.truco);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         mesa = findViewById(R.id.MesaView01);
+        mesa.setCorFundoCarta(preferences.getInt("corFundoCarta", Color.WHITE));
         layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
         mesa.velocidade = Integer.parseInt(preferences.getString("velocidadeAnimacao", "1"));

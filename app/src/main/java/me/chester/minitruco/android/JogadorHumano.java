@@ -3,7 +3,8 @@ package me.chester.minitruco.android;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Message;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
