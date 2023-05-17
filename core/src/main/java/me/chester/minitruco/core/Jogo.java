@@ -75,7 +75,7 @@ public abstract class Jogo implements Runnable {
             return 0;
         }
 
-        if (letraManilha == SituacaoJogo.MANILHA_INDETERMINADA) {
+        if (letraManilha == SituacaoJogo.MANILHA_VELHA) {
             if (c.getLetra() == '7' && c.getNaipe() == Carta.NAIPE_OUROS) {
                 return 11;
             } else if (c.getLetra() == 'A'
@@ -287,7 +287,7 @@ public abstract class Jogo implements Runnable {
     /**
      * @return Letra correspondente à manilha, ou constante em caso de manilha
      *         fixa
-     * @see SituacaoJogo#MANILHA_INDETERMINADA
+     * @see SituacaoJogo#MANILHA_VELHA
      */
     public char getManilha() {
         return manilha;
@@ -306,7 +306,7 @@ public abstract class Jogo implements Runnable {
         cartaDaMesa = c;
 
         if (modo.isManilhaVelha()) {
-            manilha = SituacaoJogo.MANILHA_INDETERMINADA;
+            manilha = SituacaoJogo.MANILHA_VELHA;
             return;
         }
 

@@ -307,7 +307,7 @@ public class Sala {
         int n = 1;
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == null) {
-                jogadores[i] = new JogadorBot("Sortear");
+                jogadores[i] = new JogadorBot();
                 jogadores[i].setNome("[ROBO_" + (n++) + "]");
             }
         }

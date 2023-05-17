@@ -16,14 +16,6 @@ public class EstrategiaSellani implements Estrategia {
     private static final int CARTA_EXCELENTE = 3;
     final int[] C = new int[3];
 
-    public String getNomeEstrategia() {
-        return "Sellani";
-    }
-
-    public String getInfoEstrategia() {
-        return "Leonardo Sellani, versão 1.0";
-    }
-
     /**
      * Retorna verdadeiro ou falso a partir de um número randômico e uma
      * porcentaem. Esta função é utilizada quando o jogador fica na dúvida,
@@ -371,9 +363,6 @@ public class EstrategiaSellani implements Estrategia {
      * Efetua uma jogada. Sério?!? Se tá brincando!
      */
     public int joga(SituacaoJogo s) {
-        // System.out.println("\njoga() posição:" + eu(s) + " vez:" +
-        // minhaVez(s) + (minhaVez(s)==0?" mão":minhaVez(s)==3?" pé":"") +
-        // (s.posJogador==3?" Parceiro":" Adversário"));
         classificaCartas(s);
 
         switch (s.numRodadaAtual) {
@@ -595,9 +584,6 @@ public class EstrategiaSellani implements Estrategia {
      * Retorna se eu aceito o aumento da aposta dos adversários ou não.
      */
     public boolean aceitaTruco(SituacaoJogo s) {
-        // System.out.println("\naceitaTruco() vez:" + minhaVez(s) + " posição:"
-        // + eu(s) + (eu(s)==0?" mão":eu(s)==3?" pé":"") +
-        // (s.posJogador==3?" Parceiro":" Adversário"));
         classificaCartas(s);
 
         // se estou com o casal maior não vai nem ter graça...
@@ -766,32 +752,4 @@ public class EstrategiaSellani implements Estrategia {
         return qExcelente >= 2 || qBoa >= 3 || (qExcelente >= 1 && qBoa >= 1);
     }
 
-    public void inicioPartida() {
-    }
-
-    public void inicioMao() {
-    }
-
-    public void pediuAumentoAposta(int posJogador, int valor) {
-    }
-
-    public void aceitouAumentoAposta(int posJogador, int valor) {
-    }
-
-    public void recusouAumentoAposta(int posJogador) {
-    }
-
-    public void setGameLevel(int gameLevel) {
-    }
-
-    public String getChatMsg() {
-        return "";
-    }
-
-    public void setNickEstrategia() {
-    }
-
-    public String getNickEstrategia() {
-        return "Sellani";
-    }
 }

@@ -10,8 +10,8 @@ import java.util.logging.Logger;
 /**
  * Jogador controlado pelo celular ou pelo servidor.
  * <p>
- * É preciso "plugar" uma estratégia para que o jogador funcione.
- *
+ * A execução das jogadas é feita por <code>Estrategia</code>.
+ * <p>
  * @see Estrategia
  */
 public class JogadorBot extends Jogador implements Runnable {
@@ -19,35 +19,16 @@ public class JogadorBot extends Jogador implements Runnable {
 
     private boolean fingeQuePensa = true;
 
-    /**
-     * Cria um novo bot, usando a estratégia fornecida.
-     *
-     * @param estrategia
-     *            Estratégia a ser adotada por este jogador
-     */
-    public JogadorBot(Estrategia estrategia) {
-        this.estrategia = estrategia;
-        this.setNome(estrategia.getNomeEstrategia());
-        this.thread = new Thread(this);
-        thread.start();
-    }
-
-    /**
-     * Cria um novo bot, buscando a estratégia pelo nome.
-     * <p>
-     *
-     * @param nomeEstrategia
-     *            Nome da estratégia (ex.: "Willian")
-     */
-    public JogadorBot(String nomeEstrategia) {
-        this(criaEstrategiaPeloNome(nomeEstrategia));
-    }
-
-    /**
-     * Cria um novo bot, com uma estratégia aleatória
-     */
     public JogadorBot() {
-        this(criaEstrategiaPeloNome("x"));
+        // TODO se ficarmos com múltiplas estratégias, mover esse sorteio p/ Estrategia
+        if (random.nextBoolean()) {
+            estrategia = new EstrategiaSellani();
+        } else {
+            estrategia = new EstrategiaGasparotto();
+        }
+        LOGGER.info("Estrategia: " + estrategia.getClass().getName());
+        thread = new Thread(this);
+        thread.start();
     }
 
     /**
@@ -101,6 +82,10 @@ public class JogadorBot extends Jogador implements Runnable {
         }
     }
 
+    // TODO ao invez de ser o próprio runnable, colocar num método e chamar no lambda
+    // TODO quebrar um pouco esse método
+    // TODO rever soluções provisórias do crash que era causado pela CPU
+    //      tentar jogar carta da rodada anterior
     public void run() {
 
         LOGGER.log(Level.INFO, "JogadorBot " + this + " (.run) iniciado");
@@ -132,11 +117,6 @@ public class JogadorBot extends Jogador implements Runnable {
                 // Se a estratégia pediu truco, processa e desencana de jogar
                 // agora
                 if ((posCarta == -1) && (situacaoJogo.valorProximaAposta != 0)) {
-                    // Faz a
-                    // solicitação de truco numa nova thread // (usando o
-                    // próprio
-                    // JogadorBot como Runnable - era uma inner // class, mas
-                    // otimizei para reduzir o .jar)
                     aceitaramTruco = false;
                     numRespostasAguardando = 2;
                     LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
@@ -188,7 +168,7 @@ public class JogadorBot extends Jogador implements Runnable {
                     continue;
                 }
                 LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
-                        + " (" + this.estrategia.getNomeEstrategia() + ") vai pedir para jogar " + c);
+                        + " (" + this.estrategia + ") vai pedir para jogar " + c);
                 jogo.jogaCarta(this, c);
                 minhaVez = false;
             }
@@ -214,21 +194,12 @@ public class JogadorBot extends Jogador implements Runnable {
             if (recebiPedidoDeMaoDeX) {
                 recebiPedidoDeMaoDeX = false;
                 atualizaSituacaoJogo();
+                // TODO refletir fingeQuePensa
                 sleep(1000 + random.nextInt(1000));
                 boolean respostaMaoDeX = false;
                 try {
                     respostaMaoDeX = estrategia.aceitaMaoDeX(
                             cartasDoParceiroDaMaoDeX, situacaoJogo);
-                    // Atendendo a pedidos na Play Store, o parceiro do humano vai
-                    // ignorar a estratégia com 90% de chance e recusar,
-                    // deixando a decisão na mão do humano.
-                    if (getPosicao() == 3) {
-                        boolean aceitaEstrategia = random.nextInt(10) == 5;
-                        LOGGER.log(Level.INFO,
-                                "mão de 10/11 do parceiro do humano. AceitaEstrategia="
-                                        + aceitaEstrategia);
-                        respostaMaoDeX = respostaMaoDeX && aceitaEstrategia;
-                    }
                 } catch (Exception e) {
                     LOGGER.log(Level.INFO,
                             "Erro em aceite-mao-de-x no jogador" + this.getPosicao(),
@@ -261,9 +232,6 @@ public class JogadorBot extends Jogador implements Runnable {
     private Carta[] cartasDoParceiroDaMaoDeX;
 
     public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
-        // Notifica a estrategia
-        estrategia.pediuAumentoAposta(j.getPosicao(), valor);
-        // Se foi a equipe oposta que pediu, gera uma resposta
         if (j.getEquipe() == this.getEquipeAdversaria()) {
             recebiPedidoDeAumento = true;
         }
@@ -293,9 +261,6 @@ public class JogadorBot extends Jogador implements Runnable {
     @Override
     public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
 
-        // Notifica o estrategia
-        estrategia.aceitouAumentoAposta(j.getPosicao(), valor);
-
         // Se estou esperando resposta, contabiliza
         if (numRespostasAguardando > 0) {
             numRespostasAguardando = 0;
@@ -319,9 +284,6 @@ public class JogadorBot extends Jogador implements Runnable {
     @Override
     public void recusouAumentoAposta(Jogador j, int rndFrase) {
 
-        // Notifica o estrategia
-        estrategia.recusouAumentoAposta(j.getPosicao());
-
         // Se estivermos aguardando resposta, contabiliza (e deixa o adversário
         // perceber)
         if (numRespostasAguardando > 0) {
@@ -329,11 +291,6 @@ public class JogadorBot extends Jogador implements Runnable {
             Thread.yield();
         }
 
-    }
-
-    public void jogadaRecusada(int numJogadores, int equipeTrucando,
-            Jogador jogadorDaVez) {
-        // Não faz nada
     }
 
     public void rodadaFechada(int numMao, int resultado, Jogador jogadorQueTorna) {
@@ -361,9 +318,6 @@ public class JogadorBot extends Jogador implements Runnable {
 
     public void inicioMao() {
 
-        // Notifica o estrategia
-        estrategia.inicioMao();
-
         // Guarda as cartas que estão na mão do jogador
         cartasRestantes.removeAllElements();
         for (int i = 0; i <= 2; i++) {
@@ -381,8 +335,7 @@ public class JogadorBot extends Jogador implements Runnable {
     private final Vector<Carta> cartasRestantes = new Vector<>(3);
 
     public void inicioPartida(int placarEquipe1, int placarEquipe2) {
-        // Avisa o estrategia
-        estrategia.inicioPartida();
+        // Por ora não faz nada
     }
 
     public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {

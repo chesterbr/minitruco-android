@@ -4,7 +4,10 @@ package me.chester.minitruco.core;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Representa uma carta do truco
+ * Representa uma carta do truco.
+ * <p>
+ * É importante que ela não tenha qualquer referência ao jogo/jogadores, pois
+ * é passada para <code>Estrategia</code> por meio de <code>SituacaoJogo</code>.
  */
 public class Carta {
 

@@ -665,11 +665,7 @@ public class JogoLocal extends Jogo {
      */
     public void atualizaSituacao(SituacaoJogo s, Jogador j) {
         s.baralhoSujo = !modo.isBaralhoLimpo();
-        if (modo.isManilhaVelha()) {
-            s.manilha = SituacaoJogo.MANILHA_INDETERMINADA;
-        } else {
-            s.manilha = this.getManilha();
-        }
+        s.manilha = getManilha();
         s.numRodadaAtual = this.numRodadaAtual;
         s.posJogador = j.getPosicao();
         s.posJogadorQueAbriuRodada = this.jogadorAbriuRodada.getPosicao();

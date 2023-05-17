@@ -367,12 +367,14 @@ public class CartaVisual extends Carta {
      */
     public boolean destacada = false;
 
+    // TODO isso poderia ser acessado por uma estratégia? Tem outro jeito de obter?
     /**
      * Acessor dos resources da aplicação (deve ser setado antes de chamar
      * onDraw por uma Activity que tenha acesso a getResources())
      */
     public static Resources resources;
 
+    // TODO isso potentcialmente poderia ser acessado por uma Estratégia; rever
     /**
      * Mesa à qual esta carta pertence
      */
