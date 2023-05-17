@@ -73,7 +73,7 @@ public class SituacaoJogo {
      * Valor que a proprieade manilha assume quando estamos jogando com manilha
      * velha (não-fixa)
      */
-    public static final char MANILHA_INDETERMINADA = 'X';
+    public static final char MANILHA_VELHA = 'X';
 
     /**
      * Pontos de cada equipe na partida
