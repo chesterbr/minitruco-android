@@ -77,14 +77,14 @@
                         android:tag="M" />
 
                     <ImageButton
-                        android:id="@+id/btnModoLimpo"
+                        android:id="@+id/btnModoOutros"
                         android:layout_width="50sp"
                         android:layout_height="50sp"
-                        android:contentDescription="muda para Baralho limpo"
+                        android:contentDescription="muda para outros modos"
                         android:onClick="modoButtonClickHandler"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/limpo"
-                        android:tag="L" />
+                        android:src="@drawable/br"
+                        android:tag="outros" />
 
                 </LinearLayout>
             </LinearLayout>

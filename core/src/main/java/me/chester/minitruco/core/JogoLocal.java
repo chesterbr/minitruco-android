@@ -31,10 +31,14 @@ public class JogoLocal extends Jogo {
      * <p>
      * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
      *
-     * @param modoStr "P"aulista, "M"ineiro, ou "L"impo (paulista com baralho limpo)
+     * @param humanoDecide   Se verdadeira e o jogo não tiver clientes remotos, um bot
+     *                       parceiro de humano não pode aceitar aumento ou mão de 10/11
+     * @param jogoAutomatico Se verdadeira, o humano "joga sozinho" (teste de stress)
+     * @param modoStr        String de 1 caractere que determina
+     *                       se o truco é paulista, mineiro, etc.
      */
-    public JogoLocal(String modoStr, boolean humanoDecide, boolean jogoAutomatico) {
-        super(modoStr);
+    public JogoLocal(boolean humanoDecide, boolean jogoAutomatico, String modoStr) {
+        super(Modo.fromString(modoStr));
         this.baralho = new Baralho(modo.isBaralhoLimpo());
         this.humanoDecide = humanoDecide;
         this.jogoAutomatico = jogoAutomatico;

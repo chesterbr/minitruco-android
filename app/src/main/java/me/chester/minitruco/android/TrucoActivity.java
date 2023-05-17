@@ -145,7 +145,7 @@ public class TrucoActivity extends Activity {
         String modo = preferences.getString("modo", "P");
         boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
         boolean jogoAutomatico =  preferences.getBoolean("jogoAutomatico", false);
-        Jogo novoJogo = new JogoLocal(modo, humanoDecide, jogoAutomatico);
+        Jogo novoJogo = new JogoLocal(humanoDecide, jogoAutomatico, modo);
         novoJogo.adiciona(jogadorHumano);
         for (int i = 2; i <= 4; i++) {
             novoJogo.adiciona(new JogadorBot());
