@@ -10,6 +10,21 @@ package me.chester.minitruco.core;
  */
 public interface Modo {
 
+    public static Modo fromString(String modoStr) {
+        switch (modoStr) {
+            case "M":
+                return new ModoMineiro();
+            case "P":
+                return new ModoPaulista();
+            case "V":
+                return new ModoManilhaVelha();
+            case "L":
+                return new ModoBaralhoLimpo();
+            default:
+                throw new IllegalArgumentException("Modo deve ser M, P, V ou L");
+        }
+    }
+
     int pontuacaoParaMaoDeX();
 
     int valorInicialDaMao();

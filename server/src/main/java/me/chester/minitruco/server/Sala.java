@@ -313,7 +313,7 @@ public class Sala {
         }
         // Cria o jogo com as regras selecionadas, adiciona os jogadores na
         // ordem e inicia
-        jogo = new JogoLocal(modo, false, false);
+        jogo = new JogoLocal(false, false, modo);
         for (Jogador j : jogadores) {
             jogo.adiciona(j);
             if (j instanceof JogadorConectado) {

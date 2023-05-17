@@ -26,11 +26,7 @@ public abstract class Jogo implements Runnable {
     protected static final String letrasOrdenadas = "4567QJKA23";
 
     /**
-     * Modo do jogo: "P"aulista, "M"ineiro ou paulista com baralho "L"impo
-     */
-    protected final String modoStr;
-    /**
-     * Modalidade do jogo (paulista, mineiro, etc.)
+     * Modalidade do jogo (paulista, mineiro, baralho limpo, manilha velha...)
      */
     protected Modo modo;
 
@@ -41,21 +37,8 @@ public abstract class Jogo implements Runnable {
      */
     int numRodadaAtual;
 
-    public Jogo(String modo) {
-        this.modoStr = modo;
-        switch (modo) {
-            case "M":
-                this.modo = new ModoMineiro();
-                break;
-            case "P":
-                this.modo = new ModoPaulista();
-                break;
-            case "L":
-                this.modo = new ModoBaralhoLimpo();
-                break;
-            default:
-                throw new IllegalArgumentException("Modo deve ser M, P ou L");
-        }
+    public Jogo(Modo modo) {
+        this.modo = modo;
     }
 
     /**
@@ -129,7 +112,8 @@ public abstract class Jogo implements Runnable {
         switch (modo) {
             case "P": return "Truco Paulista";
             case "M": return "Truco Mineiro";
-            case "L": return "Baralho limpo";
+            case "L": return "Baralho Limpo";
+            case "V": return "Manilha Velha";
         }
         return null;
     }

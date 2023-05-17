@@ -12,21 +12,24 @@ import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.Modo;
 import me.chester.minitruco.core.SituacaoJogo;
 
 /**
  * Representa, no cliente, o <code>Jogo</code> que está executando no servidor.
  * <p>
- * Ela recebe do ClienteActivity as notificações
- * que ele não entende, repassando ao JogadorHumano (como um JogoLocal faria).
+ * Ela tem duas responsabilidades:
  * <p>
- * Quando a pessoa faz alguma ação que chama métodos métodos de ação (jogaCarta(),
- * aumentaAposta(), etc.), esta classe gera o comando apropriado para o servidor
- * e envia (também através do ClienteActivity).
+ * - Transformar as notificações específicas do jogo em andamento recebidas
+ *   do<code>ClienteActivity</code> em chamadas correspondentes no jogador
+ *   (que, se for o <code>JogadorHumano</code>, vai representar na UI)
  * <p>
- * Desta forma, ela não se envolve com a conexão em si (que é reaproveitada entre
- * um jogo e outro), e pode ser usada tanto em Bluetooth quanto em Internet (através
- * do descendente apropriado de ClienteActivity)
+ * - Transformar as ações de UI solicitadas pelo <code>JogadorHumano</code>
+ *   em comandos, enviando à <code>ClientActivity</code>
+ * <p>
+ * Desta forma, ela não se envolve com a conexão em si (que tem tempo de vida
+ * maior que um jogo) e pode ser usada tanto em Bluetooth quanto em Internet
+ * (através do descendente apropriado de <code>ClienteActivity</code>).
  */
 public class JogoRemoto extends Jogo {
 
@@ -41,14 +44,25 @@ public class JogoRemoto extends Jogo {
     private int numRodadaAtual;
 
     /**
-     * Cria um novo proxy de jogo remoto associado a um cliente.
+     * Cria um novo proxy de jogo que está rodando num servidor).
      * <p>
-     * Este jogo vai conter o jogadorHumano passado (na posição especificada)
-     * e instâncias de JogadorDummy nas outras posições (as ações deles serão todas baseadas
-     * em notificações recebidas por esta classe).
+     * As posições diferentes da posição do jogador humano (que é o único
+     * que realmente precisa ser notificado e escutado, pois é quem reproduz
+     * e coleta os eventos de UI) são preenchidas com <code>JogadorDummy</code>.
+     * @param cliente
+     *          Faz a comunicação com a camada físico (Bluetooth, Internet)
+     * @param jogadorHumano
+     *          Faz a comunicação com a UI
+     * @param posJogador
+     *          posição (1 a 4) na qual o jogadorHumano se encontra, do ponto
+     *          de vista do servidor (na tela, o jogadorHumano sempre
+     *          aparece na posição 1/inferior)
+     * @param modoStr
+     *          String de 1 caractere recebida pelo servidor que determina
+     *          se o truco é paulista, mineiro, etc.
      */
-    public JogoRemoto(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador, String modo) {
-        super(modo);
+    public JogoRemoto(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador, String modoStr) {
+        super(Modo.fromString(modoStr));
         this.cliente = cliente;
 
         // Adiciona o jogador na posição correta
@@ -106,7 +120,7 @@ public class JogoRemoto extends Jogo {
                     cartas[i] = new Carta(tokens[i]);
                     baralho.tiraDoBaralho(cartas[i]);
                 }
-                if (!isManilhaVelha()) {
+                if (!modo.isManilhaVelha()) {
                     cartaDaMesa = new Carta(tokens[3]);
                     baralho.tiraDoBaralho(cartaDaMesa);
                 }
@@ -226,8 +240,6 @@ public class JogoRemoto extends Jogo {
     public void atualizaSituacao(SituacaoJogo s, Jogador j) {
         // não faz nada
     }
-
-    public boolean isManilhaVelha() { return modoStr.equals("M"); }
 
     public void run() {
         // Notifica o jogador humano que a partida começou
