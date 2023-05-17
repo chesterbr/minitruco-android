@@ -347,7 +347,7 @@ public class EstrategiaSellani implements Estrategia {
             return false;
         if (s.valorProximaAposta == 6 && vouOuNaoVou(30) && consideraSorte)
             return false;
-        return s.valorProximaAposta != 9 || !vouOuNaoVou(50) || !consideraSorte;
+        return (s.valorProximaAposta != 9 && s.valorProximaAposta != 10) || !vouOuNaoVou(50) || !consideraSorte;
     }
 
     /**
@@ -362,6 +362,7 @@ public class EstrategiaSellani implements Estrategia {
     /**
      * Efetua uma jogada. Sério?!? Se tá brincando!
      */
+    @Override
     public int joga(SituacaoJogo s) {
         classificaCartas(s);
 
@@ -583,6 +584,7 @@ public class EstrategiaSellani implements Estrategia {
     /**
      * Retorna se eu aceito o aumento da aposta dos adversários ou não.
      */
+    @Override
     public boolean aceitaTruco(SituacaoJogo s) {
         classificaCartas(s);
 
@@ -726,6 +728,7 @@ public class EstrategiaSellani implements Estrategia {
     /**
      * Retorna se eu aceito jogar ou não esta mão de 10/11.
      */
+    @Override
     public boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s) {
         int qBoa = 0, qExcelente = 0;
 
