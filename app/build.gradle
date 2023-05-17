@@ -15,6 +15,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+   packagingOptions {
+       resources.excludes.add("META-INF/*")
+   }
+
     namespace 'me.chester.minitruco'
 }
 
