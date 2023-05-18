@@ -641,11 +641,11 @@ public class EstrategiaGasparotto implements Estrategia {
             fator12 = fator12 - 5;
         }
 
-        if (s.valorProximaAposta == 3 && mandaBala(fator3))
+        if ((s.valorProximaAposta == 3 || s.valorProximaAposta == 4) && mandaBala(fator3))
             return true;
         if (s.valorProximaAposta == 6 && mandaBala(fator6))
             return true;
-        if (s.valorProximaAposta == 9 && mandaBala(fator9))
+        if ((s.valorProximaAposta == 9 || s.valorProximaAposta == 10) && mandaBala(fator9))
             return true;
         return s.valorProximaAposta == 12 && mandaBala(fator12);
     }
@@ -673,7 +673,7 @@ public class EstrategiaGasparotto implements Estrategia {
         // o jogo já vai terminar de qualquer forma?
         if (s.valorProximaAposta == 6 && s.pontosEquipe[eu(s) % 2] >= 9)
             fatorF = 100;
-        if (s.valorProximaAposta == 9 && s.pontosEquipe[eu(s) % 2] >= 6)
+        if ((s.valorProximaAposta == 9 || s.valorProximaAposta == 10) && s.pontosEquipe[eu(s) % 2] >= 6)
             fatorF = 100;
         if (s.valorProximaAposta == 12 && s.pontosEquipe[eu(s) % 2] >= 3)
             fatorF = 100;
@@ -1714,22 +1714,7 @@ public class EstrategiaGasparotto implements Estrategia {
         return C[0]; // para satisfazer o corretor do método (Eclipse)...
     }
 
-    /**
-     * Executa uma jogada.
-     * <p>
-     * Observe que, ao pedir aumento, o sistema irá interagir com a outra dupla.
-     * Se a partida seguir, o método será chamado novamente para efetivar a real
-     * jogada.
-     * <p>
-     * A estratégia é responsável por checar se o valor da próxima aposta é
-     * diferente de 0 e só pedir aumento nesta situação.
-     * <p>
-     *
-     * @param s
-     *            Situação do jogo no momento
-     * @return posição da carta na mão a jogar (em letrasCartasJogador), ou -1
-     *         para pedir truco
-     */
+    @Override
     public int joga(SituacaoJogo s) {
         // Classifica as cartas que tenho na mão, da maior para a menor,
         // de maneira que vamos ter:
@@ -1782,6 +1767,7 @@ public class EstrategiaGasparotto implements Estrategia {
      * melhoria seria checar se estão pedindo truco, seis, ... e tomar as
      * decisões de acordo
      */
+    @Override
     public boolean aceitaTruco(SituacaoJogo s) {
         classificaCartas(s);
 
@@ -2018,9 +2004,7 @@ public class EstrategiaGasparotto implements Estrategia {
         return false;
     }
 
-    /**
-     * Retorna se eu aceito jogar ou não esta mão de 10/11.
-     */
+    @Override
     public boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s) {
         // Não vamos pensar muito...
 

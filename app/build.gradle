@@ -16,17 +16,16 @@ android {
         }
     }
 
-   packagingOptions {
-       resources.excludes.add("META-INF/*")
-   }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
 
     namespace 'me.chester.minitruco'
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-
-    implementation project(path: ':core')
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'com.jaredrummler:colorpicker:1.1.0'
+    implementation project(path: ':core')
 }

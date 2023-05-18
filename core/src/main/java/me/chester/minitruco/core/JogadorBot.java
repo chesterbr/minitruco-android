@@ -194,8 +194,9 @@ public class JogadorBot extends Jogador implements Runnable {
             if (recebiPedidoDeMaoDeX) {
                 recebiPedidoDeMaoDeX = false;
                 atualizaSituacaoJogo();
-                // TODO refletir fingeQuePensa
-                sleep(1000 + random.nextInt(1000));
+                if (fingeQuePensa) {
+                    sleep(1000 + random.nextInt(1000));
+                }
                 boolean respostaMaoDeX = false;
                 try {
                     respostaMaoDeX = estrategia.aceitaMaoDeX(
