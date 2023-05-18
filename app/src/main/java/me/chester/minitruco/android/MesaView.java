@@ -40,6 +40,7 @@ public class MesaView extends View {
 
     public static final int FPS_ANIMANDO = 60;
     public static final int FPS_PARADO = 4;
+    private final Paint paintPergunta = new Paint();
     protected int velocidade;
     private int posicaoVez;
 
@@ -49,6 +50,7 @@ public class MesaView extends View {
 
     private static final Random rand = new Random();
     private int corFundoCarta;
+    private Paint paintIconesRodadas = new Paint();
 
     public MesaView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -742,7 +744,7 @@ public class MesaView extends View {
                     canvas.drawBitmap(bmpIcone,
                             MARGEM + (i % 2) * (1 + iconesRodadas[0].getWidth()),
                             MARGEM + (i / 2) * (1 + iconesRodadas[0].getHeight()),
-                            new Paint());
+                            paintIconesRodadas);
                 }
             }
         }
@@ -755,19 +757,18 @@ public class MesaView extends View {
             } else {
                 textoPergunta = "Aceita mão de " + trucoActivity.jogo.getModo().pontuacaoParaMaoDeX();
             }
-            Paint paint = new Paint();
-            paint.setAntiAlias(true);
-            paint.setColor(Color.BLACK);
-            paint.setStyle(Style.FILL);
-            canvas.drawRect(rectDialog, paint);
-            paint.setColor(Color.WHITE);
-            paint.setStyle(Style.STROKE);
-            canvas.drawRect(rectDialog, paint);
-            paint.setTextSize(tamanhoFonte * 0.5f);
-            paint.setTextAlign(Align.CENTER);
-            paint.setStyle(Style.FILL);
+            paintPergunta.setAntiAlias(true);
+            paintPergunta.setColor(Color.BLACK);
+            paintPergunta.setStyle(Style.FILL);
+            canvas.drawRect(rectDialog, paintPergunta);
+            paintPergunta.setColor(Color.WHITE);
+            paintPergunta.setStyle(Style.STROKE);
+            canvas.drawRect(rectDialog, paintPergunta);
+            paintPergunta.setTextSize(tamanhoFonte * 0.5f);
+            paintPergunta.setTextAlign(Align.CENTER);
+            paintPergunta.setStyle(Style.FILL);
             canvas.drawText(textoPergunta, rectDialog.centerX(),
-                    rectDialog.top + paint.getTextSize() * 1.5f, paint);
+                    rectDialog.top + paintPergunta.getTextSize() * 1.5f, paintPergunta);
             desenhaBotao("Sim", canvas, rectBotaoSim);
             desenhaBotao("Nao", canvas, rectBotaoNao);
         }
