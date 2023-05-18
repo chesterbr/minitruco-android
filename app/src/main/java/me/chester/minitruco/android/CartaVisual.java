@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 
 import java.io.FileNotFoundException;
@@ -32,6 +31,9 @@ public class CartaVisual extends Carta {
     private final static Logger LOGGER = Logger.getLogger("CartaVisual");
 
     public static final int COR_MESA = Color.argb(255, 27, 142, 60);
+    private final Paint paintCarta = new Paint();
+    private final Paint paintCartaEscura = new Paint();
+    private final RectF rectCarta = new RectF();
     private int corFundo;
 
     /**
@@ -114,7 +116,7 @@ public class CartaVisual extends Carta {
         this.destTop = top;
         ultimoTime = System.currentTimeMillis();
         destTime = ultimoTime + tempoMS / mesa.velocidade;
-        MesaView.notificaAnimacao(destTime);
+        mesa.notificaAnimacao(destTime);
     }
 
     /**
@@ -147,31 +149,27 @@ public class CartaVisual extends Carta {
         Bitmap bitmapCarta = getBitmap();
         if (bitmapCarta != null) {
             int raio_canto = calculaRaioCanto();
-            Paint paint = new Paint();
-            paint.setAntiAlias(true);
-            Rect rect = new Rect(left, top, left + largura - 1, top + altura
-                    - 1);
-            RectF rectf = new RectF(rect);
-            paint.setColor(corFundo);
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawRoundRect(rectf, raio_canto, raio_canto, paint);
-            paint.setColor(COR_MESA);
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawBitmap(bitmapCarta, left, top, paint);
-            paint.setColor(Color.BLACK);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(1);
-            canvas.drawRoundRect(rectf, raio_canto, raio_canto, paint);
+            paintCarta.setAntiAlias(true);
+            rectCarta.set(left, top, left + largura - 1, top + altura - 1);
+            paintCarta.setColor(corFundo);
+            paintCarta.setStyle(Paint.Style.FILL);
+            canvas.drawRoundRect(rectCarta, raio_canto, raio_canto, paintCarta);
+            paintCarta.setColor(COR_MESA);
+            paintCarta.setStyle(Paint.Style.FILL);
+            canvas.drawBitmap(bitmapCarta, left, top, paintCarta);
+            paintCarta.setColor(Color.BLACK);
+            paintCarta.setStyle(Paint.Style.STROKE);
+            paintCarta.setStrokeWidth(1);
+            canvas.drawRoundRect(rectCarta, raio_canto, raio_canto, paintCarta);
 
             if (destacada) {
-                paint.setStrokeWidth(2);
-                paint.setColor(Color.BLUE);
-                canvas.drawRoundRect(rectf, raio_canto, raio_canto, paint);
+                paintCarta.setStrokeWidth(2);
+                paintCarta.setColor(Color.BLUE);
+                canvas.drawRoundRect(rectCarta, raio_canto, raio_canto, paintCarta);
             } else if (escura) {
-                Paint paintEscura = new Paint();
-                paintEscura.setColor(Color.BLACK);
-                paintEscura.setAlpha(128);
-                canvas.drawRoundRect(rectf, raio_canto, raio_canto, paintEscura);
+                paintCartaEscura.setColor(Color.BLACK);
+                paintCartaEscura.setAlpha(128);
+                canvas.drawRoundRect(rectCarta, raio_canto, raio_canto, paintCartaEscura);
             }
 
         }

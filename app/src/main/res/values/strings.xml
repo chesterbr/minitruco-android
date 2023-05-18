@@ -112,14 +112,6 @@
         <item>Tchau…</item>
         <item>Cansei</item>
     </string-array>
-    <string-array name="velocidade_animacao_textos">
-        <item>Normal</item>
-        <item>Rápida</item>
-    </string-array>
-    <string-array name="velocidade_animacao_valores">
-        <item>1</item>
-        <item>4</item>
-    </string-array>
 
     <string name="titulo_instrucoes">Bem-vindo!</string>
     <string name="texto_instrucoes">

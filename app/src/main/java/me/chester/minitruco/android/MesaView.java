@@ -38,6 +38,9 @@ import me.chester.minitruco.core.Jogo;
  */
 public class MesaView extends View {
 
+    public static final int FPS_ANIMANDO = 60;
+    public static final int FPS_PARADO = 4;
+    private final Paint paintPergunta = new Paint();
     protected int velocidade;
     private int posicaoVez;
 
@@ -47,6 +50,7 @@ public class MesaView extends View {
 
     private static final Random rand = new Random();
     private int corFundoCarta;
+    private Paint paintIconesRodadas = new Paint();
 
     public MesaView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -71,10 +75,11 @@ public class MesaView extends View {
      * @param fim
      *            timestamp de quando a animação vai acabar
      */
-    public static void notificaAnimacao(long fim) {
+    public void notificaAnimacao(long fim) {
         if (animandoAte < fim) {
             animandoAte = fim;
         }
+        threadAnimacao.interrupt(); // Hora de acordar e subir o frame rate!
     }
 
     /**
@@ -143,7 +148,7 @@ public class MesaView extends View {
         if (!inicializada) {
             // Inicia as threads internas que cuidam de animações e de responder
             // a diálogos e faz a activity começar o jogo
-            animacaoJogo.start();
+            threadAnimacao.start();
             respondeDialogos.start();
             inicializada = true;
             if (this.trucoActivity != null) {
@@ -392,30 +397,32 @@ public class MesaView extends View {
     }
 
     /**
-     * Thread/runnable que faz as animações acontecerem.
+     * Thread/runnable que faz as animações acontecerem (invalidando
+     * o display -> forçando um redraw várias vezes por segundo)
      * <p>
      */
-    final Thread animacaoJogo = new Thread(new Runnable() {
+    final Thread threadAnimacao = new Thread(new Runnable() {
 
-        // Para economizar CPU/bateria, o jogo trabalha a um máximo de 4 FPS
-        // (1000/(200+50)) quando não tem nenhuma animação rolando, e sobe para
-        // um máximo de 20 FPS (1000/50) quando tem (é sempre um pouco menos
-        // porque periga não ter dado tempo de redesenhar a tela entre um
-        // postInvalidate() e outro.
         public void run() {
+            int tempoEntreFramesAnimando = 1000 / FPS_ANIMANDO;
+            int tempoEntreFramesParado = 1000 / FPS_PARADO;
             // Aguarda o jogo existir
             while (trucoActivity.jogo == null) {
                 sleep(200);
             }
-            // Roda até a activity-mãe se encerrar
+            // Roda até a activity-mãe se encerrar, num frame rate que depende
+            // de estarmos animando algo ou não (mas sempre atualiza, pra não
+            // perder mudanças por algum arredondaento de ms ou por serem
+            // instantâneas)
             while (!trucoActivity.isFinishing()) {
-                sleep(200);
-                do {
-                    if (visivel) {
-                        postInvalidate();
-                    }
-                    sleep(50);
-                } while (calcTempoAteFimAnimacaoMS() >= 0);
+                if (visivel) {
+                    postInvalidate();
+                }
+                if (calcTempoAteFimAnimacaoMS() >= 0) {
+                    sleep(tempoEntreFramesAnimando);
+                } else{
+                    sleep(tempoEntreFramesParado);
+                }
             }
         }
 
@@ -423,7 +430,8 @@ public class MesaView extends View {
             try {
                 Thread.sleep(tempoMS);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                // Não faz nada; vamos interromper esse sleep sempre que
+                // uma animação começar!
             }
 
         }
@@ -530,7 +538,7 @@ public class MesaView extends View {
         for (int i = 4; i <= 15; i++) {
             CartaVisual c = cartas[i];
             if ((c.top != topBaralho) || (c.left != leftBaralho)) {
-                c.movePara(leftBaralho, topBaralho, 130);
+                c.movePara(leftBaralho, topBaralho, 50);
                 c.setCarta(null);
                 c.descartada = false;
                 c.escura = false;
@@ -613,7 +621,7 @@ public class MesaView extends View {
             posicao = 2 - posicao;
         }
         carta.movePara(calcPosLeftCarta(numJogador, posicao),
-                calcPosTopCarta(numJogador, posicao), 150);
+                calcPosTopCarta(numJogador, posicao), 85);
     }
 
     /**
@@ -726,7 +734,7 @@ public class MesaView extends View {
                     if (valorMao > 0) {
                         bmpIcone = iconesRodadas[valorMao + 10];
                     }
-                } else if (i != numRodadaPiscando || (agora % 250) % 2 == 0) {
+                } else if (i != numRodadaPiscando || (agora / 250) % 2 == 0) {
                     // Desenha se não for a rodada piscando, ou, se for, alterna o
                     // desenho a cada 250ms
                     bmpIcone = iconesRodadas[resultadoRodada[i - 1]];
@@ -736,7 +744,7 @@ public class MesaView extends View {
                     canvas.drawBitmap(bmpIcone,
                             MARGEM + (i % 2) * (1 + iconesRodadas[0].getWidth()),
                             MARGEM + (i / 2) * (1 + iconesRodadas[0].getHeight()),
-                            new Paint());
+                            paintIconesRodadas);
                 }
             }
         }
@@ -749,19 +757,18 @@ public class MesaView extends View {
             } else {
                 textoPergunta = "Aceita mão de " + trucoActivity.jogo.getModo().pontuacaoParaMaoDeX();
             }
-            Paint paint = new Paint();
-            paint.setAntiAlias(true);
-            paint.setColor(Color.BLACK);
-            paint.setStyle(Style.FILL);
-            canvas.drawRect(rectDialog, paint);
-            paint.setColor(Color.WHITE);
-            paint.setStyle(Style.STROKE);
-            canvas.drawRect(rectDialog, paint);
-            paint.setTextSize(tamanhoFonte * 0.5f);
-            paint.setTextAlign(Align.CENTER);
-            paint.setStyle(Style.FILL);
+            paintPergunta.setAntiAlias(true);
+            paintPergunta.setColor(Color.BLACK);
+            paintPergunta.setStyle(Style.FILL);
+            canvas.drawRect(rectDialog, paintPergunta);
+            paintPergunta.setColor(Color.WHITE);
+            paintPergunta.setStyle(Style.STROKE);
+            canvas.drawRect(rectDialog, paintPergunta);
+            paintPergunta.setTextSize(tamanhoFonte * 0.5f);
+            paintPergunta.setTextAlign(Align.CENTER);
+            paintPergunta.setStyle(Style.FILL);
             canvas.drawText(textoPergunta, rectDialog.centerX(),
-                    rectDialog.top + paint.getTextSize() * 1.5f, paint);
+                    rectDialog.top + paintPergunta.getTextSize() * 1.5f, paintPergunta);
             desenhaBotao("Sim", canvas, rectBotaoSim);
             desenhaBotao("Nao", canvas, rectBotaoNao);
         }
@@ -823,7 +830,7 @@ public class MesaView extends View {
     /**
      * Timestamp em que as animações em curso irão acabar
      */
-    private static long animandoAte = System.currentTimeMillis();
+    private long animandoAte = System.currentTimeMillis();
 
     /**
      * Indica que é a vez do humano, e ele pode jogar

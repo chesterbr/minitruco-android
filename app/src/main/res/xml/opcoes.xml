@@ -11,12 +11,11 @@
         android:key="humanoDecide"
         android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de 10/11. Ele só diz se iria, mas o humano é que decide."
         android:title="Humano decide pela dupla" />
-    <ListPreference
-        android:defaultValue="1"
-        android:entries="@array/velocidade_animacao_textos"
-        android:entryValues="@array/velocidade_animacao_valores"
-        android:key="velocidadeAnimacao"
-        android:title="Velocidade da Animação" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="animacaoRapida"
+        android:summary="Selecione para acelerar a distribuição, recolhimento e animação geral das cartas."
+        android:title="Animação Rápida" />
     <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
         android:defaultValue="-1"
         android:key="corFundoCarta"

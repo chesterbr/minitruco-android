@@ -162,7 +162,7 @@ public class TrucoActivity extends Activity {
         mesa.setCorFundoCarta(preferences.getInt("corFundoCarta", Color.WHITE));
         layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
-        mesa.velocidade = Integer.parseInt(preferences.getString("velocidadeAnimacao", "1"));
+        mesa.velocidade = preferences.getBoolean("animacaoRapida", false) ? 4 : 1;
         mesa.setTrucoActivity(this);
         // Inicializa componentes das classes visuais que dependem de métodos
         // disponíveis exclusivamente na Activity
