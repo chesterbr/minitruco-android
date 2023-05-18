@@ -214,14 +214,11 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Opção para desligar o "Você quer mesmo encerrar esse jogo?"<br/>
-            - Opção para acelerar a animação das cartas<br/>
-            - Frases dos balões sincronizadas entre os aparelhos no Bluetooth<br/>
-            - Performance Bluetooth melhorada (não precisa mais esperar quem criou a mesa
-              distribuir as cartas, menos lag com bots, etc.)<br/>
-            - Exibe nome correto da mão de 10/11 (ao invés de "mão de ferro", que é outra coisa)<br/>
-            - Mostra o valor correto no placar quando a mão de 10/11 é aceita (a pontuação estava
-              certa, só a exibição estava errada).
+            - Volta da Manilha Velha (clique no "Brasil" para escolher ela ou Baralho Limpo)<br/>
+            - Animações mais fluidas (até 60FPS) e distribuição/recolhimento mais rápidos<br/>
+            - Tela do jogo sem título/menu (= mais espaço para cartas)<br/>
+            - Escolha de cor das cartas (para resolver problemas de modo escuro)<br/>
+            - Bots mais ajustados para o truco mineiro<br/>
         ]]>
     </string>
 
