@@ -71,7 +71,7 @@ public class MesaView extends View {
      * @param fim
      *            timestamp de quando a animação vai acabar
      */
-    public static void notificaAnimacao(long fim) {
+    public void notificaAnimacao(long fim) {
         if (animandoAte < fim) {
             animandoAte = fim;
         }
@@ -823,7 +823,7 @@ public class MesaView extends View {
     /**
      * Timestamp em que as animações em curso irão acabar
      */
-    private static long animandoAte = System.currentTimeMillis();
+    private long animandoAte = System.currentTimeMillis();
 
     /**
      * Indica que é a vez do humano, e ele pode jogar
