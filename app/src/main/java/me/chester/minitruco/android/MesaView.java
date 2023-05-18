@@ -38,6 +38,8 @@ import me.chester.minitruco.core.Jogo;
  */
 public class MesaView extends View {
 
+    public static final int FPS_ANIMANDO = 60;
+    public static final int FPS_PARADO = 4;
     protected int velocidade;
     private int posicaoVez;
 
@@ -75,6 +77,7 @@ public class MesaView extends View {
         if (animandoAte < fim) {
             animandoAte = fim;
         }
+        threadAnimacao.interrupt(); // Hora de acordar e subir o frame rate!
     }
 
     /**
@@ -398,25 +401,26 @@ public class MesaView extends View {
      */
     final Thread threadAnimacao = new Thread(new Runnable() {
 
-        // Para economizar CPU/bateria, o jogo trabalha a um máximo de 4 FPS
-        // (1000/(200+50)) quando não tem nenhuma animação rolando, e sobe para
-        // um máximo de 20 FPS (1000/50) quando tem (é sempre um pouco menos
-        // porque periga não ter dado tempo de redesenhar a tela entre um
-        // postInvalidate() e outro.
         public void run() {
+            int tempoEntreFramesAnimando = 1000 / FPS_ANIMANDO;
+            int tempoEntreFramesParado = 1000 / FPS_PARADO;
             // Aguarda o jogo existir
             while (trucoActivity.jogo == null) {
                 sleep(200);
             }
-            // Roda até a activity-mãe se encerrar
+            // Roda até a activity-mãe se encerrar, num frame rate que depende
+            // de estarmos animando algo ou não (mas sempre atualiza, pra não
+            // perder mudanças por algum arredondaento de ms ou por serem
+            // instantâneas)
             while (!trucoActivity.isFinishing()) {
-                sleep(200);
-                do {
-                    if (visivel) {
-                        postInvalidate();
-                    }
-                    sleep(50);
-                } while (calcTempoAteFimAnimacaoMS() >= 0);
+                if (visivel) {
+                    postInvalidate();
+                }
+                if (calcTempoAteFimAnimacaoMS() >= 0) {
+                    sleep(tempoEntreFramesAnimando);
+                } else{
+                    sleep(tempoEntreFramesParado);
+                }
             }
         }
 
@@ -424,7 +428,8 @@ public class MesaView extends View {
             try {
                 Thread.sleep(tempoMS);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                // Não faz nada; vamos interromper esse sleep sempre que
+                // uma animação começar!
             }
 
         }
