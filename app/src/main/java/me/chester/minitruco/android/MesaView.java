@@ -732,7 +732,7 @@ public class MesaView extends View {
                     if (valorMao > 0) {
                         bmpIcone = iconesRodadas[valorMao + 10];
                     }
-                } else if (i != numRodadaPiscando || (agora % 250) % 2 == 0) {
+                } else if (i != numRodadaPiscando || (agora / 250) % 2 == 0) {
                     // Desenha se não for a rodada piscando, ou, se for, alterna o
                     // desenho a cada 250ms
                     bmpIcone = iconesRodadas[resultadoRodada[i - 1]];
