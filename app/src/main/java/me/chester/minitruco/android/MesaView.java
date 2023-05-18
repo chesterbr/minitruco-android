@@ -536,7 +536,7 @@ public class MesaView extends View {
         for (int i = 4; i <= 15; i++) {
             CartaVisual c = cartas[i];
             if ((c.top != topBaralho) || (c.left != leftBaralho)) {
-                c.movePara(leftBaralho, topBaralho, 130);
+                c.movePara(leftBaralho, topBaralho, 50);
                 c.setCarta(null);
                 c.descartada = false;
                 c.escura = false;
@@ -619,7 +619,7 @@ public class MesaView extends View {
             posicao = 2 - posicao;
         }
         carta.movePara(calcPosLeftCarta(numJogador, posicao),
-                calcPosTopCarta(numJogador, posicao), 150);
+                calcPosTopCarta(numJogador, posicao), 85);
     }
 
     /**
