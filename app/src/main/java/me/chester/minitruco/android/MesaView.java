@@ -143,7 +143,7 @@ public class MesaView extends View {
         if (!inicializada) {
             // Inicia as threads internas que cuidam de animações e de responder
             // a diálogos e faz a activity começar o jogo
-            animacaoJogo.start();
+            threadAnimacao.start();
             respondeDialogos.start();
             inicializada = true;
             if (this.trucoActivity != null) {
@@ -392,10 +392,11 @@ public class MesaView extends View {
     }
 
     /**
-     * Thread/runnable que faz as animações acontecerem.
+     * Thread/runnable que faz as animações acontecerem (invalidando
+     * o display -> forçando um redraw várias vezes por segundo)
      * <p>
      */
-    final Thread animacaoJogo = new Thread(new Runnable() {
+    final Thread threadAnimacao = new Thread(new Runnable() {
 
         // Para economizar CPU/bateria, o jogo trabalha a um máximo de 4 FPS
         // (1000/(200+50)) quando não tem nenhuma animação rolando, e sobe para
