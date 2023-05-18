@@ -54,13 +54,17 @@ public class TituloActivity extends BaseActivity {
     }
 
     /**
-     * Até a versão 2.3.9, a pessoa configurava se queria tento mineiro, baralho limpo ou
-     * manilha velha; a 2.4.0 trocou isso pelo modo de jogo. Esse método migra as opções
-     * antigas da melhor forma possível.
-     * <p>
-     * Seria bom deixar ele até que a maior parte das pessoas esteja >= 2.4.0.
+     * Atualiza opções que mudaram com o tempo
      */
     private void migraOpcoesLegadas() {
+        if (preferences.contains("velocidadeAnimacao")) {
+            String velocidadeAnimacao = preferences.getString("velocidadeAnimacao", "1");
+            preferences.edit()
+                       .putBoolean("animacaoRapida", velocidadeAnimacao.equals("4"))
+                       .remove("velocidadeAnimacao")
+                       .apply();
+
+        }
         if (preferences.contains("baralhoLimpo")) {
             boolean tentoMineiro = preferences.getBoolean("tentoMineiro", false);
             boolean manilhaVelha = preferences.getBoolean("manilhaVelha", false);
