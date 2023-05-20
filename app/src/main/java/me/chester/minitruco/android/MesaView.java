@@ -49,8 +49,8 @@ public class MesaView extends View {
     private final float density = getResources().getDisplayMetrics().density;
 
     private static final Random rand = new Random();
-    private int corFundoCarta;
-    private Paint paintIconesRodadas = new Paint();
+    private int corFundoCarta = Color.WHITE;
+    private final Paint paintIconesRodadas = new Paint();
 
     public MesaView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -118,7 +118,7 @@ public class MesaView extends View {
         // Na primeira chamada (inicialização), instanciamos as cartas
         if (!inicializada) {
             for (int i = 0; i < cartas.length; i++) {
-                cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null, corFundoCarta);
+                cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null, corFundoCarta, getResources());
                 cartas[i].movePara(leftBaralho, topBaralho);
             }
             cartas[0].visible = false;
@@ -150,7 +150,6 @@ public class MesaView extends View {
             // a diálogos e faz a activity começar o jogo
             threadAnimacao.start();
             respondeDialogos.start();
-            inicializada = true;
             if (this.trucoActivity != null) {
                 this.trucoActivity.criaEIniciaNovoJogo();
             }
@@ -182,33 +181,39 @@ public class MesaView extends View {
         int lado = CartaVisual.altura / 2;
         iconesRodadas = new Bitmap[23];
         iconesRodadas[0] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
         iconesRodadas[1] =  Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.placarrodada1)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.placarrodada1)).getBitmap(), lado, lado, true);
         iconesRodadas[2] =  Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
         iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
         // indice = valorMao + 10
         iconesRodadas[10] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
         iconesRodadas[11] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.valorrodada1)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.valorrodada1)).getBitmap(), lado, lado, true);
         iconesRodadas[12] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.valorrodada2)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.valorrodada2)).getBitmap(), lado, lado, true);
         iconesRodadas[13] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.valorrodada3)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.valorrodada3)).getBitmap(), lado, lado, true);
         iconesRodadas[14] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.valorrodada4)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.valorrodada4)).getBitmap(), lado, lado, true);
         iconesRodadas[16] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.valorrodada6)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.valorrodada6)).getBitmap(), lado, lado, true);
         iconesRodadas[19] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.valorrodada9)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.valorrodada9)).getBitmap(), lado, lado, true);
         iconesRodadas[20] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.valorrodada10)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.valorrodada10)).getBitmap(), lado, lado, true);
         iconesRodadas[22] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(trucoActivity, R.drawable.valorrodada12)).getBitmap(), lado, lado, true);
+            .getDrawable(getContext(), R.drawable.valorrodada12)).getBitmap(), lado, lado, true);
 
+        if (!inicializada && isInEditMode()) {
+            velocidade = 4;
+            distribuiMao();
+        }
+
+        inicializada = true;
 }
 
     /**
@@ -263,7 +268,7 @@ public class MesaView extends View {
      */
     public void mostraCartasMaoDeX(Carta[] cartasParceiro) {
         for (int i = 0; i <= 2; i++) {
-            cartas[10 + i].setCarta(cartasParceiro[i]);
+            cartas[10 + i].copiaCarta(cartasParceiro[i]);
         }
     }
 
@@ -510,13 +515,18 @@ public class MesaView extends View {
         // Atribui o valor correto às cartas do jogador e exibe
         for (int i = 0; i <= 2; i++) {
             CartaVisual c = cartas[4 + i];
-            c.setCarta(trucoActivity.jogadorHumano.getCartas()[i]);
+            if (isInEditMode()) {
+                c.setLetra("A23".charAt(i));
+                c.setNaipe(i);
+            } else {
+                c.copiaCarta(trucoActivity.jogadorHumano.getCartas()[i]);
+            }
             c.setFechada(false);
         }
 
         // Abre o vira, se for manilha nova
         if (!trucoActivity.jogo.getModo().isManilhaVelha()) {
-            cartas[0].setCarta(trucoActivity.jogo.cartaDaMesa);
+            cartas[0].copiaCarta(trucoActivity.jogo.cartaDaMesa);
             cartas[0].visible = true;
         }
 
@@ -539,7 +549,7 @@ public class MesaView extends View {
             CartaVisual c = cartas[i];
             if ((c.top != topBaralho) || (c.left != leftBaralho)) {
                 c.movePara(leftBaralho, topBaralho, 50);
-                c.setCarta(null);
+                c.copiaCarta(null);
                 c.descartada = false;
                 c.escura = false;
                 cartasJogadas.remove(c);
@@ -577,7 +587,7 @@ public class MesaView extends View {
         }
 
         // Executa a animação de descarte
-        cv.setCarta(c);
+        cv.copiaCarta(c);
         cv.movePara(leftFinal, topFinal, 200);
         cv.descartada = true;
         cartasJogadas.addElement(cv);
@@ -740,6 +750,10 @@ public class MesaView extends View {
                     bmpIcone = iconesRodadas[resultadoRodada[i - 1]];
                 }
 
+                if (isInEditMode()) {
+                    bmpIcone = iconesRodadas[i == 0 ? 11 : i];
+                }
+
                 if (bmpIcone != null) {
                     canvas.drawBitmap(bmpIcone,
                             MARGEM + (i % 2) * (1 + iconesRodadas[0].getWidth()),
@@ -776,7 +790,7 @@ public class MesaView extends View {
         desenhaBalao(canvas);
         desenhaIndicadorDeVez(canvas);
 
-        if (trucoActivity.jogo.isJogoAutomatico()) {
+        if (trucoActivity != null && trucoActivity.jogo.isJogoAutomatico()) {
             jogaCarta(0);
             jogaCarta(1);
             jogaCarta(2);

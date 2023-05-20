@@ -25,6 +25,9 @@ import me.chester.minitruco.core.Carta;
  * <p>
  * Esta classe faz o desenho da carta, executa sua animação, e ajusta sua
  * proporção para a resolução do celular.
+ * <p>
+ * Ela poderia até ser uma custom View, mas na real ela é parte integrante
+ * de MesaView, então vamos com uma classe mais simples.
  */
 public class CartaVisual extends Carta {
 
@@ -47,9 +50,12 @@ public class CartaVisual extends Carta {
      *            valor que esta carta terá (ex.: "Kc"). Se null, entra virada.
      * @param corFundo
      *            cor de fundo da carta
+     * @param resources
+     *            getResources() da mesa (para podermos recuperar bitmaps, etc.)
      */
-    public CartaVisual(MesaView mesa, int left, int top, String sCarta, int corFundo) {
+    public CartaVisual(MesaView mesa, int left, int top, String sCarta, int corFundo, Resources resources) {
         super(sCarta == null ? LETRA_NENHUMA + "" + NAIPE_NENHUM : sCarta);
+        this.resources = resources;
         this.mesa = mesa;
         this.corFundo = corFundo;
         movePara(left, top);
@@ -195,17 +201,14 @@ public class CartaVisual extends Carta {
     }
 
     /**
-     * Associa uma carta do jogo (i.e., não visual) a esse objeto carta visual
+     * Copia a letra, naipe e estado de fechamento de uma carta do jogo
+     * (i.e., não visual)
      *
      * @param c
-     *            carta a ser associada. Se <code>null</code>, desassocia a
-     *            carta visual de qualquer carta real.
+     *            carta a ser copiada. Se <code>null</code>, a carta visual
+     *            vira apenas uma carta "fechada"
      */
-    public void setCarta(Carta c) {
-        if (resources == null) {
-            throw new IllegalStateException(
-                    "CartaVisual tem que ter a propriedade resources inicializada");
-        }
+    public void copiaCarta(Carta c) {
         if (c == null) {
             this.setLetra(LETRA_NENHUMA);
             this.setNaipe(NAIPE_NENHUM);
@@ -366,10 +369,9 @@ public class CartaVisual extends Carta {
     public boolean destacada = false;
 
     /**
-     * Acessor dos resources da aplicação (deve ser setado antes de chamar
-     * onDraw por uma Activity que tenha acesso a getResources())
+     * Acessor dos resources da aplicação
      */
-    public static Resources resources;
+    private Resources resources;
 
     /**
      * Mesa à qual esta carta pertence
