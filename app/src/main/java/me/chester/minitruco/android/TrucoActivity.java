@@ -164,11 +164,6 @@ public class TrucoActivity extends Activity {
 
         mesa.velocidade = preferences.getBoolean("animacaoRapida", false) ? 4 : 1;
         mesa.setTrucoActivity(this);
-        // Inicializa componentes das classes visuais que dependem de métodos
-        // disponíveis exclusivamente na Activity
-        if (CartaVisual.resources == null) {
-            CartaVisual.resources = getResources();
-        }
     }
 
     @Override

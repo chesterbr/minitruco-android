@@ -116,7 +116,7 @@ public abstract class Jogador {
      * Ao receber esta mensagem, as cartas do jogador já foram atribuídas via
      * setCartas(), e a carta virada já está disponível via getCarta().
      */
-    public abstract void inicioMao();
+    public abstract void inicioMao(Jogador jogadorQueAbre);
 
     /**
      * Informa que uma partida começou. Não é obrigatório tratar - até porque o

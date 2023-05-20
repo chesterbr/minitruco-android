@@ -143,8 +143,9 @@ public class JogadorBluetooth extends Jogador implements Runnable {
         enviaMensagem("J " + j.getPosicao() + param);
     }
 
-    public void inicioMao() {
+    public void inicioMao(Jogador jogadorQueAbre) {
         StringBuffer comando = new StringBuffer("M");
+        comando.append(" ").append(jogadorQueAbre.getPosicao());
         for (int i = 0; i <= 2; i++)
             comando.append(" ").append(getCartas()[i]);
         // Se for manilha nova, também envia o "vira"

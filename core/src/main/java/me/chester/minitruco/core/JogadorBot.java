@@ -317,7 +317,7 @@ public class JogadorBot extends Jogador implements Runnable {
         // Não faz nada
     }
 
-    public void inicioMao() {
+    public void inicioMao(Jogador jogadorQueAbre) {
 
         // Guarda as cartas que estão na mão do jogador
         cartasRestantes.removeAllElements();
