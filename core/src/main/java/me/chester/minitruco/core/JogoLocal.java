@@ -182,7 +182,7 @@ public class JogoLocal extends Jogo {
         // Abre a primeira rodada, informando a carta da mesa e quem vai abrir
         posJogadorDaVez = jogadorQueAbre.getPosicao();
         for (int i = 3; i >= 0; i--) {
-            jogadores[i].inicioMao();
+            jogadores[i].inicioMao(jogadorQueAbre);
         }
 
         int rndFrase = Math.abs(rand.nextInt());

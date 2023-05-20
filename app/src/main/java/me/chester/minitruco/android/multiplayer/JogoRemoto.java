@@ -117,16 +117,16 @@ public class JogoRemoto extends Jogo {
                 // Gera as cartas e notifica
                 Carta[] cartas = new Carta[3];
                 for (int i = 0; i <= 2; i++) {
-                    cartas[i] = new Carta(tokens[i]);
+                    cartas[i] = new Carta(tokens[i + 1]);
                     baralho.tiraDoBaralho(cartas[i]);
                 }
                 if (!modo.isManilhaVelha()) {
-                    cartaDaMesa = new Carta(tokens[3]);
+                    cartaDaMesa = new Carta(tokens[4]);
                     baralho.tiraDoBaralho(cartaDaMesa);
                 }
                 setManilha(cartaDaMesa);
                 getJogadorHumano().setCartas(cartas);
-                getJogadorHumano().inicioMao();
+                getJogadorHumano().inicioMao(getJogador(Integer.parseInt(tokens[0])));
                 break;
             case 'J':
                 // Recupera o jogador que jogou a carta

@@ -76,7 +76,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     }
 
     @Override
-    public void inicioMao() {
+    public void inicioMao(Jogador jogadorQueAbre) {
         valorProximaAposta = 3;
         for (int i = 0; i <= 2; i++) {
             mesa.resultadoRodada[i] = 0;
@@ -84,6 +84,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         LOGGER.log(Level.INFO, "distribuindo a mão");
         mesa.distribuiMao();
         mesa.setValorMao(jogo.getModo().valorInicialDaMao());
+        mesa.setPosicaoVez(posicaoNaTela(jogadorQueAbre));
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
     }
@@ -132,6 +133,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
         mesa.setValorMao(0);
+        mesa.setPosicaoVez(0);
         mesa.recolheMao();
 
     }

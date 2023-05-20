@@ -31,7 +31,7 @@ public class JogadorDummy extends Jogador {
 
     }
 
-    public void inicioMao() {
+    public void inicioMao(Jogador jogadorQueAbre) {
 
     }
 

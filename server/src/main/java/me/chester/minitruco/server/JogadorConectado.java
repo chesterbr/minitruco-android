@@ -196,8 +196,9 @@ public class JogadorConectado extends Jogador implements Runnable {
     }
 
     @Override
-    public void inicioMao() {
+    public void inicioMao(Jogador jogadorQueAbre) {
         StringBuilder comando = new StringBuilder("M");
+        comando.append(" ").append(jogadorQueAbre.getPosicao());
         for (int i = 0; i <= 2; i++)
             comando.append(" ").append(getCartas()[i]);
         if (!jogo.getModo().isManilhaVelha()) {
