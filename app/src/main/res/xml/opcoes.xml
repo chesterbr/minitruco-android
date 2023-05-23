@@ -19,7 +19,8 @@
     <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
         android:defaultValue="-1"
         android:key="corFundoCarta"
-        android:title="Cor de fundo das cartas"/>
+        android:summary="Se o &quot;modo escuro&quot; do aparelho deixa estes elementos ilegíveis, ajuste aqui."
+        android:title="Cor de fundo das cartas e balões"/>
     <PreferenceCategory android:title="Opções de Desenvolvimento (sério, nem mexe aqui)">
         <EditTextPreference
             android:defaultValue="@string/opcoes_default_servidor"

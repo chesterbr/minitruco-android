@@ -49,7 +49,7 @@ public class MesaView extends View {
     private final float density = getResources().getDisplayMetrics().density;
 
     private static final Random rand = new Random();
-    private int corFundoCarta = Color.WHITE;
+    private int corFundoCartaBalao = Color.WHITE;
     private final Paint paintIconesRodadas = new Paint();
 
     public MesaView(Context context, AttributeSet attrs, int defStyle) {
@@ -118,7 +118,7 @@ public class MesaView extends View {
         // Na primeira chamada (inicialização), instanciamos as cartas
         if (!inicializada) {
             for (int i = 0; i < cartas.length; i++) {
-                cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null, corFundoCarta, getResources());
+                cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null, corFundoCartaBalao, getResources());
                 cartas[i].movePara(leftBaralho, topBaralho);
             }
             cartas[0].visible = false;
@@ -1029,7 +1029,7 @@ public class MesaView extends View {
                             altBalao, quadrantePonta, paint);
                 }
             }
-            paint.setColor(Color.WHITE);
+            paint.setColor(corFundoCartaBalao);
             desenhaElipseBalao(canvas, x, y, largBalao, altBalao,
                     quadrantePonta, paint);
 
@@ -1056,7 +1056,7 @@ public class MesaView extends View {
         valorMao = m;
     }
 
-    public void setCorFundoCarta(int corFundoCarta) {
-        this.corFundoCarta = corFundoCarta;
+    public void setCorFundoCartaBalao(int corFundoCartaBalao) {
+        this.corFundoCartaBalao = corFundoCartaBalao;
     }
 }
