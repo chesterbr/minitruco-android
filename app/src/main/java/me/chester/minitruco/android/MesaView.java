@@ -1029,7 +1029,7 @@ public class MesaView extends View {
                             altBalao, quadrantePonta, paint);
                 }
             }
-            paint.setColor(Color.WHITE);
+            paint.setColor(corFundoCarta);
             desenhaElipseBalao(canvas, x, y, largBalao, altBalao,
                     quadrantePonta, paint);
 
