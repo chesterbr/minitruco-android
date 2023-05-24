@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -117,6 +118,7 @@ public class TrucoActivity extends Activity {
         }
     };
     private SharedPreferences preferences;
+    private ImageView imageValorMao;
 
     /**
      * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
@@ -158,6 +160,8 @@ public class TrucoActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.truco);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        imageValorMao = findViewById(R.id.imageValorMao);
+        setValorMao(0);
         mesa = findViewById(R.id.MesaView01);
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
         layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
@@ -246,5 +250,37 @@ public class TrucoActivity extends Activity {
 
     public static boolean isViva() {
         return mIsViva;
+    }
+
+    public void setValorMao(int valor) {
+        runOnUiThread(() -> {
+            int image;
+            switch (valor) {
+                case 1:
+                    image = R.drawable.valorrodada1;
+                    break;
+                case 2:
+                    image = R.drawable.valorrodada2;
+                    break;
+                case 3:
+                    image = R.drawable.valorrodada3;
+                    break;
+                case 4:
+                    image = R.drawable.valorrodada4;
+                    break;
+                case 6:
+                    image = R.drawable.valorrodada6;
+                    break;
+                case 10:
+                    image = R.drawable.valorrodada10;
+                    break;
+                case 12:
+                    image = R.drawable.valorrodada12;
+                    break;
+                default:
+                    image = R.drawable.placarrodada0;
+            }
+            imageValorMao.setImageResource(image);
+        });
     }
 }

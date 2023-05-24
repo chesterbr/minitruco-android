@@ -59,7 +59,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
             mesa.mostrarPerguntaMaoDeX = false;
         }
         if (aceita) {
-            mesa.setValorMao(jogo.getModo().valorDaMaoDeX());
+            activity.setValorMao(jogo.getModo().valorDaMaoDeX());
         }
         mesa.diz(aceita ? "mao_de_x_sim" : "mao_de_x_nao", posicaoNaTela(j), 1500, rndFrase);
     }
@@ -83,7 +83,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         }
         LOGGER.log(Level.INFO, "distribuindo a mão");
         mesa.distribuiMao();
-        mesa.setValorMao(jogo.getModo().valorInicialDaMao());
+        activity.setValorMao(jogo.getModo().valorInicialDaMao());
         mesa.setPosicaoVez(posicaoNaTela(jogadorQueAbre));
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
@@ -132,7 +132,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
                 TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
-        mesa.setValorMao(0);
+        activity.setValorMao(0);
         mesa.setPosicaoVez(0);
         mesa.recolheMao();
 
@@ -165,7 +165,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         }
         mesa.mostrarPerguntaAumento = false;
         mesa.diz("aumento_sim", posicaoNaTela(j), 1500, rndFrase);
-        mesa.aceitouAumentoAposta(j, valor);
+        mesa.aceitouAumentoAposta();
+        activity.setValorMao(valor);
     }
 
     @Override

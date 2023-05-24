@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#1B8E3C"
     android:orientation="vertical"
     tools:ignore="RtlSymmetry,HardcodedText, RtlHardcoded">
@@ -113,15 +114,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/imageValorMao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0"
                     android:adjustViewBounds="true"
-                    android:contentDescription="TODO"
-                    android:src="@drawable/valorrodada1" />
+                    android:src="@drawable/valorrodada1"
+                    android:contentDescription="TODO" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -151,29 +154,16 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="placar"
+                android:text="👇12 x 8👆"
+                app:autoSizeTextType="uniform"
                 android:textColor="#000000"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="12 x 8"
-                android:textColor="#000000"
-                android:textStyle="bold" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -193,7 +183,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="1 x 0"
+                android:text="2 x 1"
                 android:textColor="#000000"
                 android:textStyle="bold" />
 

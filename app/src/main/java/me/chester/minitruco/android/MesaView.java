@@ -44,10 +44,6 @@ public class MesaView extends View {
     protected int velocidade;
     private int posicaoVez;
 
-    private int valorMao;
-
-    private final float density = getResources().getDisplayMetrics().density;
-
     private static final Random rand = new Random();
     private int corFundoCartaBalao = Color.WHITE;
     private final Paint paintIconesRodadas = new Paint();
@@ -188,25 +184,6 @@ public class MesaView extends View {
             .getDrawable(getContext(), R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
         iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
             .getDrawable(getContext(), R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
-        // indice = valorMao + 10
-        iconesRodadas[10] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
-        iconesRodadas[11] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada1)).getBitmap(), lado, lado, true);
-        iconesRodadas[12] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada2)).getBitmap(), lado, lado, true);
-        iconesRodadas[13] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada3)).getBitmap(), lado, lado, true);
-        iconesRodadas[14] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada4)).getBitmap(), lado, lado, true);
-        iconesRodadas[16] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada6)).getBitmap(), lado, lado, true);
-        iconesRodadas[19] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada9)).getBitmap(), lado, lado, true);
-        iconesRodadas[20] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada10)).getBitmap(), lado, lado, true);
-        iconesRodadas[22] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada12)).getBitmap(), lado, lado, true);
 
         if (!inicializada && isInEditMode()) {
             velocidade = 4;
@@ -532,8 +509,7 @@ public class MesaView extends View {
 
     }
 
-    public void aceitouAumentoAposta(Jogador j, int valor) {
-        valorMao = valor;
+    public void aceitouAumentoAposta() {
         if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
             statusVez = STATUS_VEZ_HUMANO_OK;
         }
@@ -737,21 +713,16 @@ public class MesaView extends View {
 
         // Ícones das rodadas
         if (iconesRodadas != null) {
-            for (int i = 0; i <= 3; i++) {
+            for (int i = 1; i <= 3; i++) {
                 Bitmap bmpIcone = null;
-                if (i == 0) {
-                    // O último ícone é o placar da rodada
-                    if (valorMao > 0) {
-                        bmpIcone = iconesRodadas[valorMao + 10];
-                    }
-                } else if (i != numRodadaPiscando || (agora / 250) % 2 == 0) {
+                if (i != numRodadaPiscando || (agora / 250) % 2 == 0) {
                     // Desenha se não for a rodada piscando, ou, se for, alterna o
                     // desenho a cada 250ms
                     bmpIcone = iconesRodadas[resultadoRodada[i - 1]];
                 }
 
                 if (isInEditMode()) {
-                    bmpIcone = iconesRodadas[i == 0 ? 11 : i];
+                    bmpIcone = iconesRodadas[i];
                 }
 
                 if (bmpIcone != null) {
@@ -1050,10 +1021,6 @@ public class MesaView extends View {
 
     public void setPosicaoVez(int posicaoVez) {
         this.posicaoVez = posicaoVez;
-    }
-
-    public void setValorMao(int m) {
-        valorMao = m;
     }
 
     public void setCorFundoCartaBalao(int corFundoCartaBalao) {
