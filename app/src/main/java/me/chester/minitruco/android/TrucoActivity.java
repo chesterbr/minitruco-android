@@ -64,10 +64,10 @@ public class TrucoActivity extends Activity {
             switch (msg.what) {
                 case MSG_ATUALIZA_PLACAR:
                     if (placar[0] != msg.arg1) {
-                        textViewNos.setBackgroundColor(Color.YELLOW);
+                        textViewNos.setTextColor(Color.YELLOW);
                     }
                     if (placar[1] != msg.arg2) {
-                        textViewRivais.setBackgroundColor(Color.YELLOW);
+                        textViewRivais.setTextColor(Color.YELLOW);
                     }
                     textViewNos.setText(Integer.toString(msg.arg1));
                     textViewRivais.setText(Integer.toString(msg.arg2));
@@ -75,8 +75,8 @@ public class TrucoActivity extends Activity {
                     placar[1] = msg.arg2;
                     break;
                 case MSG_TIRA_DESTAQUE_PLACAR:
-                    textViewNos.setBackgroundColor(Color.TRANSPARENT);
-                    textViewRivais.setBackgroundColor(Color.TRANSPARENT);
+                    textViewNos.setTextColor(Color.BLACK);
+                    textViewRivais.setTextColor(Color.BLACK);
                     break;
                 case MSG_OFERECE_NOVA_PARTIDA:
                     if (jogo instanceof JogoLocal) {
