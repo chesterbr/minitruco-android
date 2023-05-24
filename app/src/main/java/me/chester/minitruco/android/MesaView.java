@@ -102,8 +102,9 @@ public class MesaView extends View {
         // "pontos de referência" importantes (baralho decorativo, tamanho do
         // texto, etc.)
         CartaVisual.ajustaTamanho(w, h);
-        leftBaralho = w - CartaVisual.largura - MARGEM - 4;
-        topBaralho = MARGEM + 4;
+        int delta = CartaVisual.altura / 24;
+        leftBaralho = w - CartaVisual.largura - MARGEM - delta * 3;
+        topBaralho = MARGEM + delta;
         tamanhoFonte = 12.0f * (h / 270.0f);
 
         // Na primeira chamada (inicialização), instanciamos as cartas
@@ -132,8 +133,8 @@ public class MesaView extends View {
 
         // Posiciona o vira e as cartas decorativas do baralho, que são fixos
         cartas[0].movePara(leftBaralho, topBaralho);
-        cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
-        cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
+        cartas[1].movePara(leftBaralho + 2 * delta, topBaralho + 2 * delta);
+        cartas[2].movePara(leftBaralho + delta, topBaralho + delta);
         cartas[3].movePara(leftBaralho, topBaralho);
 
         if (!inicializada) {
@@ -484,7 +485,7 @@ public class MesaView extends View {
         }
 
         // Abre o vira, se for manilha nova
-        if (!trucoActivity.jogo.getModo().isManilhaVelha()) {
+        if (!isInEditMode() && !trucoActivity.jogo.getModo().isManilhaVelha()) {
             cartas[0].copiaCarta(trucoActivity.jogo.cartaDaMesa);
             cartas[0].visible = true;
         }
@@ -620,7 +621,7 @@ public class MesaView extends View {
      * @return Posição (y) da i-ésima carta na mão do jogador em questão
      */
     private int calcPosTopCarta(int numJogador, int i) {
-        int deslocamentoVerticalEntreCartas = 4;
+        int deslocamentoVerticalEntreCartas = CartaVisual.altura / 12;
         int topFinal = 0;
         switch (numJogador) {
         case 1:
