@@ -39,17 +39,6 @@ import me.chester.minitruco.core.JogoLocal;
  */
 public class TrucoActivity extends Activity {
 
-    private MesaView mesa;
-    private View layoutFimDeJogo;
-    private static boolean mIsViva = false;
-    boolean jogoAbortado = false;
-
-    JogadorHumano jogadorHumano;
-
-    Jogo jogo;
-
-    final int[] placar = new int[2];
-
     static final int MSG_ATUALIZA_PLACAR = 0;
     static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
     static final int MSG_OFERECE_NOVA_PARTIDA = 2;
@@ -58,67 +47,78 @@ public class TrucoActivity extends Activity {
     static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
     static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
     static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
-
+    private static boolean mIsViva = false;
+    final int[] placar = new int[2];
+    boolean jogoAbortado = false;
+    JogadorHumano jogadorHumano;
+    Jogo jogo;
+    private MesaView mesa;
+    private View layoutFimDeJogo;
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            TextView textViewPlacarJogo = findViewById(R.id.textViewPlacarJogo);
+            TextView textViewNos = findViewById(R.id.textViewNos);
+            TextView textViewRivais = findViewById(R.id.textViewRivais);
             Button btnAumento = findViewById(R.id.btnAumento);
             Button btnAbertaFechada = findViewById(R.id.btnAbertaFechada);
             Button btnNovaPartida = findViewById(R.id.btnNovaPartida);
             switch (msg.what) {
-            case MSG_ATUALIZA_PLACAR:
-                if (placar[0] != msg.arg1) {
-                    // é igual ao outro, mas aqui era onde quebrávamos nós x eles
-                    // se for colocar o destaque separado, é por aqui
-                    textViewPlacarJogo.setBackgroundColor(Color.YELLOW);
-                }
-                if (placar[1] != msg.arg2) {
-                    textViewPlacarJogo.setBackgroundColor(Color.YELLOW);
-                }
-                textViewPlacarJogo.setText("👇" + msg.arg1 + " x " + msg.arg2 + "👆");
-                placar[0] = msg.arg1;
-                placar[1] = msg.arg2;
-                break;
-            case MSG_TIRA_DESTAQUE_PLACAR:
-                textViewPlacarJogo.setBackgroundColor(Color.TRANSPARENT);
-                break;
-            case MSG_OFERECE_NOVA_PARTIDA:
-                if (jogo instanceof JogoLocal) {
-                    layoutFimDeJogo.setVisibility(View.VISIBLE);
-                    if (jogo.isJogoAutomatico()) {
-                        btnNovaPartida.performClick();
+                case MSG_ATUALIZA_PLACAR:
+                    if (placar[0] != msg.arg1) {
+                        textViewNos.setBackgroundColor(Color.YELLOW);
                     }
-                }
-                break;
-            case MSG_REMOVE_NOVA_PARTIDA:
-                layoutFimDeJogo.setVisibility(View.INVISIBLE);
-                break;
-            case MSG_MOSTRA_BOTAO_AUMENTO:
-                int chave = getResources().getIdentifier("botao_aumento_" +
-                    jogo.nomeNoTruco(jogadorHumano.valorProximaAposta),
-                "string", "me.chester.minitruco");
-                btnAumento.setText(getResources().getString(chave));
-                btnAumento.setVisibility(Button.VISIBLE);
-                break;
-            case MSG_ESCONDE_BOTAO_AUMENTO:
-                btnAumento.setVisibility(Button.GONE);
-                break;
-            case MSG_MOSTRA_BOTAO_ABERTA_FECHADA:
-                btnAbertaFechada.setText(mesa.vaiJogarFechada ? "Aberta"
+                    if (placar[1] != msg.arg2) {
+                        textViewRivais.setBackgroundColor(Color.YELLOW);
+                    }
+                    textViewNos.setText(Integer.toString(msg.arg1));
+                    textViewRivais.setText(Integer.toString(msg.arg2));
+                    placar[0] = msg.arg1;
+                    placar[1] = msg.arg2;
+                    break;
+                case MSG_TIRA_DESTAQUE_PLACAR:
+                    textViewNos.setBackgroundColor(Color.TRANSPARENT);
+                    textViewRivais.setBackgroundColor(Color.TRANSPARENT);
+                    break;
+                case MSG_OFERECE_NOVA_PARTIDA:
+                    if (jogo instanceof JogoLocal) {
+                        layoutFimDeJogo.setVisibility(View.VISIBLE);
+                        if (jogo.isJogoAutomatico()) {
+                            btnNovaPartida.performClick();
+                        }
+                    }
+                    break;
+                case MSG_REMOVE_NOVA_PARTIDA:
+                    layoutFimDeJogo.setVisibility(View.INVISIBLE);
+                    break;
+                case MSG_MOSTRA_BOTAO_AUMENTO:
+                    int chave = getResources().getIdentifier("botao_aumento_" +
+                            jogo.nomeNoTruco(jogadorHumano.valorProximaAposta),
+                        "string", "me.chester.minitruco");
+                    btnAumento.setText(getResources().getString(chave));
+                    btnAumento.setVisibility(Button.VISIBLE);
+                    break;
+                case MSG_ESCONDE_BOTAO_AUMENTO:
+                    btnAumento.setVisibility(Button.GONE);
+                    break;
+                case MSG_MOSTRA_BOTAO_ABERTA_FECHADA:
+                    btnAbertaFechada.setText(mesa.vaiJogarFechada ? "Aberta"
                         : "Fechada");
-                btnAbertaFechada.setVisibility(Button.VISIBLE);
-                break;
-            case MSG_ESCONDE_BOTAO_ABERTA_FECHADA:
-                btnAbertaFechada.setVisibility(Button.GONE);
-                break;
-            default:
-                break;
+                    btnAbertaFechada.setVisibility(Button.VISIBLE);
+                    break;
+                case MSG_ESCONDE_BOTAO_ABERTA_FECHADA:
+                    btnAbertaFechada.setVisibility(Button.GONE);
+                    break;
+                default:
+                    break;
             }
         }
     };
     private SharedPreferences preferences;
     private ImageView imageValorMao;
     private ImageView[] imagesResultadoRodada;
+
+    public static boolean isViva() {
+        return mIsViva;
+    }
 
     /**
      * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
@@ -146,7 +146,7 @@ public class TrucoActivity extends Activity {
     private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
         String modo = preferences.getString("modo", "P");
         boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
-        boolean jogoAutomatico =  preferences.getBoolean("jogoAutomatico", false);
+        boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
         Jogo novoJogo = new JogoLocal(humanoDecide, jogoAutomatico, modo);
         novoJogo.adiciona(jogadorHumano);
         for (int i = 2; i <= 4; i++) {
@@ -198,7 +198,7 @@ public class TrucoActivity extends Activity {
     public void abertaFechadaClickHandler(View v) {
         mesa.vaiJogarFechada = !mesa.vaiJogarFechada;
         handler.sendMessage(Message.obtain(handler,
-                MSG_MOSTRA_BOTAO_ABERTA_FECHADA));
+            MSG_MOSTRA_BOTAO_ABERTA_FECHADA));
     }
 
     @Override
@@ -235,9 +235,9 @@ public class TrucoActivity extends Activity {
         }
 
         View dialogPerguntaAntesDeFechar = getLayoutInflater()
-                .inflate(R.layout.dialog_sempre_confirma_fechar_jogo, null);
+            .inflate(R.layout.dialog_sempre_confirma_fechar_jogo, null);
         final CheckBox checkBoxPerguntarSempre = dialogPerguntaAntesDeFechar
-                .findViewById(R.id.checkBoxSempreConfirmaFecharJogo);
+            .findViewById(R.id.checkBoxSempreConfirmaFecharJogo);
         checkBoxPerguntarSempre.setOnCheckedChangeListener((button, isChecked) -> {
             preferences.edit().putBoolean("sempreConfirmaFecharJogo", isChecked).apply();
         });
@@ -250,10 +250,6 @@ public class TrucoActivity extends Activity {
             .setPositiveButton("Sim", (dialog, which) -> finish())
             .setNegativeButton("Não", null)
             .show();
-    }
-
-    public static boolean isViva() {
-        return mIsViva;
     }
 
     public void setValorMao(int valor) {
