@@ -1,85 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1B8E3C"
+    android:orientation="vertical"
+    tools:ignore="RtlSymmetry,HardcodedText, RtlHardcoded">
 
-    <me.chester.minitruco.android.MesaView
-        android:id="@+id/MesaView01"
+    <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-
-        <TextView
-            android:id="@+id/textview_eles"
-            android:layout_width="80sp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="4dp"
-            android:text="👇 9"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            android:typeface="sans" />
-
-        <TextView
-            android:gravity="right"
-            android:id="@+id/textview_nos"
-            android:layout_width="80sp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="4dp"
-            android:text="9 👇"
-            android:textColor="#000000"
-            android:textSize="20sp"
-            android:typeface="sans" />
-
-        <Button
-            android:id="@+id/btnAumento"
-            android:layout_width="80sp"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/textview_nos"
-            android:onClick="aumentoClickHandler"
-            android:text="yyyy"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/btnAbertaFechada"
-            android:layout_width="80sp"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/textview_eles"
-            android:layout_alignParentRight="true"
-            android:onClick="abertaFechadaClickHandler"
-            android:text="xxxxx"
-            android:textSize="12sp"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/layoutFimDeJogo"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:visibility="invisible" >
+        <me.chester.minitruco.android.MesaView
+            android:id="@+id/MesaView01"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
 
         <RelativeLayout
-            android:id="@+id/layoutBtnNovaPartida"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1" >
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:id="@+id/textview_eles"
+                android:layout_width="80sp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="4dp"
+                android:text="👇 9"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:typeface="sans" />
+
+            <TextView
+                android:id="@+id/textview_nos"
+                android:layout_width="80sp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="4dp"
+                android:gravity="right"
+                android:text="9 👇"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:typeface="sans" />
 
             <Button
-                android:id="@+id/btnNovaPartida"
-                android:layout_width="200sp"
+                android:id="@+id/btnAumento"
+                android:layout_width="80sp"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:onClick="novaPartidaClickHandler"
-                android:text="Nova Partida" />
-        </RelativeLayout>
-    </LinearLayout>
+                android:layout_above="@id/textview_nos"
+                android:onClick="aumentoClickHandler"
+                android:text="yyyy"
+                android:textSize="14sp"
+                android:visibility="gone" />
 
-</FrameLayout>
+            <Button
+                android:id="@+id/btnAbertaFechada"
+                android:layout_width="80sp"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/textview_eles"
+                android:layout_alignParentRight="true"
+                android:onClick="abertaFechadaClickHandler"
+                android:text="xxxxx"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutFimDeJogo"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <RelativeLayout
+                android:id="@+id/layoutBtnNovaPartida"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btnNovaPartida"
+                    android:layout_width="200sp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:onClick="novaPartidaClickHandler"
+                    android:text="Nova Partida" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutPlacar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="12dp"
+        android:background="@drawable/borda_placar"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/valorrodada1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/placarrodada1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/placarrodada2" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/placarrodada3" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="placar"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="12 x 8"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="partidas"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1 x 0"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>
