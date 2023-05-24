@@ -23,6 +23,12 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
+            <!-- TODO remover esses campos, mas tem que resolver
+                 onde ancorar os botões, de repente fazer isso
+                 quando for converter eles para elementos da
+                 MesaView; vide
+                 https://github.com/chesterbr/minitruco-android/issues/21 -->
+
             <TextView
                 android:id="@+id/textview_eles"
                 android:layout_width="80sp"
@@ -30,7 +36,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="4dp"
-                android:text="👇 9"
+                android:text=""
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:typeface="sans" />
@@ -42,7 +48,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="4dp"
                 android:gravity="right"
-                android:text="9 👇"
+                android:text=""
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:typeface="sans" />
@@ -158,6 +164,7 @@
         </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textViewPlacarJogo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
             android:layout_weight="1"

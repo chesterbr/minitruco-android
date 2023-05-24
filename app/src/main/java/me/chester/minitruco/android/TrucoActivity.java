@@ -61,27 +61,26 @@ public class TrucoActivity extends Activity {
 
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            TextView tvNos = findViewById(R.id.textview_nos);
-            TextView tvEles = findViewById(R.id.textview_eles);
+            TextView textViewPlacarJogo = findViewById(R.id.textViewPlacarJogo);
             Button btnAumento = findViewById(R.id.btnAumento);
             Button btnAbertaFechada = findViewById(R.id.btnAbertaFechada);
             Button btnNovaPartida = findViewById(R.id.btnNovaPartida);
             switch (msg.what) {
             case MSG_ATUALIZA_PLACAR:
                 if (placar[0] != msg.arg1) {
-                    tvNos.setBackgroundColor(Color.YELLOW);
+                    // é igual ao outro, mas aqui era onde quebrávamos nós x eles
+                    // se for colocar o destaque separado, é por aqui
+                    textViewPlacarJogo.setBackgroundColor(Color.YELLOW);
                 }
                 if (placar[1] != msg.arg2) {
-                    tvEles.setBackgroundColor(Color.YELLOW);
+                    textViewPlacarJogo.setBackgroundColor(Color.YELLOW);
                 }
-                tvNos.setText(msg.arg1 + " 👇");
-                tvEles.setText("👆 " + msg.arg2);
+                textViewPlacarJogo.setText("👇" + msg.arg1 + " x " + msg.arg2 + "👆");
                 placar[0] = msg.arg1;
                 placar[1] = msg.arg2;
                 break;
             case MSG_TIRA_DESTAQUE_PLACAR:
-                tvNos.setBackgroundColor(Color.TRANSPARENT);
-                tvEles.setBackgroundColor(Color.TRANSPARENT);
+                textViewPlacarJogo.setBackgroundColor(Color.TRANSPARENT);
                 break;
             case MSG_OFERECE_NOVA_PARTIDA:
                 if (jogo instanceof JogoLocal) {
