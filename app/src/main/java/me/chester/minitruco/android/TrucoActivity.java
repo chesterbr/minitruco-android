@@ -257,25 +257,25 @@ public class TrucoActivity extends Activity {
             int image;
             switch (valor) {
                 case 1:
-                    image = R.drawable.valorrodada1;
+                    image = R.drawable.vale1;
                     break;
                 case 2:
-                    image = R.drawable.valorrodada2;
+                    image = R.drawable.vale2;
                     break;
                 case 3:
-                    image = R.drawable.valorrodada3;
+                    image = R.drawable.vale3;
                     break;
                 case 4:
-                    image = R.drawable.valorrodada4;
+                    image = R.drawable.vale4;
                     break;
                 case 6:
-                    image = R.drawable.valorrodada6;
+                    image = R.drawable.vale6;
                     break;
                 case 10:
-                    image = R.drawable.valorrodada10;
+                    image = R.drawable.vale10;
                     break;
                 case 12:
-                    image = R.drawable.valorrodada12;
+                    image = R.drawable.vale12;
                     break;
                 default:
                     image = R.drawable.placarrodada0;
