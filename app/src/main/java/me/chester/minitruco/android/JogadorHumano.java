@@ -78,8 +78,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void inicioMao(Jogador jogadorQueAbre) {
         valorProximaAposta = 3;
-        for (int i = 0; i <= 2; i++) {
-            mesa.resultadoRodada[i] = 0;
+        for (int rodada = 1; rodada <= 3; rodada++) {
+            activity.setResultadoRodada(rodada, 0);
         }
         LOGGER.log(Level.INFO, "distribuindo a mão");
         mesa.distribuiMao();

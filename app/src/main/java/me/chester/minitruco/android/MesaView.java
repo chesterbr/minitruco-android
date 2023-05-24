@@ -2,7 +2,6 @@ package me.chester.minitruco.android;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,17 +9,13 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.core.content.ContextCompat;
-
 import java.util.Random;
 import java.util.Vector;
 
-import me.chester.minitruco.R;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
@@ -172,19 +167,6 @@ public class MesaView extends View {
             }
         }
 
-        // Se o tamanho da tela mudou (ex.: rotação), precisamos recalcular
-        // estes bitmaps
-        int lado = CartaVisual.altura / 2;
-        iconesRodadas = new Bitmap[23];
-        iconesRodadas[0] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
-        iconesRodadas[1] =  Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada1)).getBitmap(), lado, lado, true);
-        iconesRodadas[2] =  Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
-        iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
-
         if (!inicializada && isInEditMode()) {
             velocidade = 4;
             distribuiMao();
@@ -216,7 +198,7 @@ public class MesaView extends View {
      * @param numRodada
      *            rodada que finalizou
      * @param resultado
-     *            (0 a 3, vide {@link #resultadoRodada}
+     *            (0 = nenhum; 1 = vitória, 2 = derrota, 3 = empate)
      * @param jogadorQueTorna
      *            jogador cuja carta venceu a rodada
      */
@@ -231,7 +213,7 @@ public class MesaView extends View {
         for (CartaVisual c : cartas) {
             c.escura = c.descartada;
         }
-        resultadoRodada[numRodada - 1] = resultado;
+        trucoActivity.setResultadoRodada(numRodada, resultado);
         numRodadaPiscando = numRodada;
         rodadaPiscaAte = System.currentTimeMillis() + 1600;
         notificaAnimacao(rodadaPiscaAte);
@@ -711,29 +693,6 @@ public class MesaView extends View {
             numRodadaPiscando = 0;
         }
 
-        // Ícones das rodadas
-        if (iconesRodadas != null) {
-            for (int i = 1; i <= 3; i++) {
-                Bitmap bmpIcone = null;
-                if (i != numRodadaPiscando || (agora / 250) % 2 == 0) {
-                    // Desenha se não for a rodada piscando, ou, se for, alterna o
-                    // desenho a cada 250ms
-                    bmpIcone = iconesRodadas[resultadoRodada[i - 1]];
-                }
-
-                if (isInEditMode()) {
-                    bmpIcone = iconesRodadas[i];
-                }
-
-                if (bmpIcone != null) {
-                    canvas.drawBitmap(bmpIcone,
-                            MARGEM + (i % 2) * (1 + iconesRodadas[0].getWidth()),
-                            MARGEM + (i / 2) * (1 + iconesRodadas[0].getHeight()),
-                            paintIconesRodadas);
-                }
-            }
-        }
-
         // Caixa de diálogo (mão de 10/11 ou aumento)
         if (mostrarPerguntaMaoDeX || mostrarPerguntaAumento) {
             String textoPergunta;
@@ -791,16 +750,6 @@ public class MesaView extends View {
         canvas.drawText(texto, outerRect.centerX(), outerRect.centerY() - tamanhoFonte * 0.2f
                 + tamanhoFonte * 0.5f, paint);
     }
-
-    /**
-     * Cache dos ícones que informam o resultado das rodadas
-     */
-    public static Bitmap[] iconesRodadas;
-
-    /**
-     * Resultado das rodadas (0=não jogada; 1=vitória; 2=derrota; 3=empate)
-     */
-    protected final int[] resultadoRodada = { 0, 0, 0 };
 
     /**
      * Margem entre a mesa e as cartas

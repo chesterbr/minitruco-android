@@ -119,6 +119,7 @@ public class TrucoActivity extends Activity {
     };
     private SharedPreferences preferences;
     private ImageView imageValorMao;
+    private ImageView[] imagesResultadoRodada;
 
     /**
      * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
@@ -161,6 +162,10 @@ public class TrucoActivity extends Activity {
         setContentView(R.layout.truco);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         imageValorMao = findViewById(R.id.imageValorMao);
+        imagesResultadoRodada = new ImageView[3];
+        imagesResultadoRodada[0] = findViewById(R.id.imageResultadoRodada1);
+        imagesResultadoRodada[1] = findViewById(R.id.imageResultadoRodada2);
+        imagesResultadoRodada[2] = findViewById(R.id.imageResultadoRodada3);
         setValorMao(0);
         mesa = findViewById(R.id.MesaView01);
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
@@ -254,33 +259,54 @@ public class TrucoActivity extends Activity {
 
     public void setValorMao(int valor) {
         runOnUiThread(() -> {
-            int image;
+            int bitmap;
             switch (valor) {
                 case 1:
-                    image = R.drawable.vale1;
+                    bitmap = R.drawable.vale1;
                     break;
                 case 2:
-                    image = R.drawable.vale2;
+                    bitmap = R.drawable.vale2;
                     break;
                 case 3:
-                    image = R.drawable.vale3;
+                    bitmap = R.drawable.vale3;
                     break;
                 case 4:
-                    image = R.drawable.vale4;
+                    bitmap = R.drawable.vale4;
                     break;
                 case 6:
-                    image = R.drawable.vale6;
+                    bitmap = R.drawable.vale6;
                     break;
                 case 10:
-                    image = R.drawable.vale10;
+                    bitmap = R.drawable.vale10;
                     break;
                 case 12:
-                    image = R.drawable.vale12;
+                    bitmap = R.drawable.vale12;
                     break;
                 default:
-                    image = R.drawable.placarrodada0;
+                    bitmap = R.drawable.placarrodada0;
             }
-            imageValorMao.setImageResource(image);
+            imageValorMao.setImageResource(bitmap);
         });
     }
+
+    public void setResultadoRodada(int rodada, int resultado) {
+        runOnUiThread(() -> {
+            int bitmap;
+            switch (resultado) {
+                case 1:
+                    bitmap = R.drawable.placarrodada1;
+                    break;
+                case 2:
+                    bitmap = R.drawable.placarrodada2;
+                    break;
+                case 3:
+                    bitmap = R.drawable.placarrodada3;
+                    break;
+                default:
+                    bitmap = R.drawable.placarrodada0;
+            }
+            imagesResultadoRodada[rodada - 1].setImageResource(bitmap);
+        });
+    }
+
 }
