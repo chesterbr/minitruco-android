@@ -118,8 +118,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
         mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000, rndFrase);
         mesa.aguardaFimAnimacoes();
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_OFERECE_NOVA_PARTIDA));
+        activity.jogoFechado(numEquipeVencedora);
     }
 
     @Override

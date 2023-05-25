@@ -18,7 +18,6 @@ import java.util.Vector;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
-import me.chester.minitruco.core.Jogo;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -35,13 +34,132 @@ public class MesaView extends View {
 
     public static final int FPS_ANIMANDO = 60;
     public static final int FPS_PARADO = 4;
-    private final Paint paintPergunta = new Paint();
-    protected int velocidade;
-    private int posicaoVez;
+
+    /**
+     * Indica que é a vez do humano, e ele pode jogar
+     */
+    public static final int STATUS_VEZ_HUMANO_OK = 1;
+
+    /**
+     * Indica que é a vez de outro jogador
+     */
+    public static final int STATUS_VEZ_OUTRO = 0;
+
+    /**
+     * Indica que é a vez do humano, e ele está aguardando resposta (ex.: de
+     * aumento) para jogar
+     */
+    public static final int STATUS_VEZ_HUMANO_AGUARDANDO = -1;
+
+    /**
+     * Cartas que estão na mesa, na ordem de empilhamento. cartas[0] é o vira,
+     * cartas[1..3] são o baralho decorativo, cartas[4..6] são as do jogador na
+     * posição 1 (inferior), cartas[7..9] o jogador 2 e assim por diante para os
+     * jogadores 3 e 4.
+     * <p>
+     * TODO: refatorar esses magic numbers para algo melhor.
+     */
+    public final CartaVisual[] cartas = new CartaVisual[16];
+
+    /**
+     * Guarda as cartas que foram jogadas pelos jogadores (para saber em que
+     * ordem desenhar)
+     */
+    private final Vector<CartaVisual> cartasJogadas = new Vector<>(12);
 
     private static final Random rand = new Random();
+    private final Paint paintPergunta = new Paint();
+    public boolean mostrarPerguntaMaoDeX = false;
+    public boolean mostrarPerguntaAumento = false;
+    public boolean vaiJogarFechada;
+    protected int velocidade;
+    private int posicaoVez;
     private int corFundoCartaBalao = Color.WHITE;
-    private final Paint paintIconesRodadas = new Paint();
+    private TrucoActivity trucoActivity;
+    private Rect rectDialog;
+    private RectF rectBotaoSim;
+    private RectF rectBotaoNao;
+    private float tamanhoFonte;
+
+    /**
+     * É true se a view já está pronta para responder a solicitações do jogo
+     * (mover cartas, acionar balões, etc)
+     */
+    private boolean inicializada = false;
+
+    /**
+     * Posição do baralho (decorativo) na mesa
+     */
+    private int topBaralho, leftBaralho;
+
+    /**
+     * Timestamp em que as animações em curso irão acabar
+     */
+    private long animandoAte = System.currentTimeMillis();
+
+    /**
+     * Diz se é a vez do jogador humano dessa mesa ou de outro, e, no primeiro
+     * caso se está aguardando resposta de truco
+     */
+    private int statusVez = 0;
+
+    /**
+     * A mesa não é mais responsável pelos indicadores de rodada, mas precisa
+     * saber quando um deles termina de "piscar" para dar seguimento
+     */
+    private boolean isRodadaPiscando;
+    private long rodadaPiscaAte = System.currentTimeMillis();
+
+    /**
+     * Carta que "fez" a última rodada (para fins de destaque)
+     */
+    private CartaVisual cartaQueFez;
+
+    private int posicaoBalao = 1;
+    private long mostraBalaoAte = System.currentTimeMillis();
+    private String fraseBalao = null;
+    private boolean visivel = false;
+
+    /**
+     * Thread/runnable que faz as animações acontecerem (invalidando
+     * o display -> forçando um redraw várias vezes por segundo)
+     * <p>
+     */
+    final Thread threadAnimacao = new Thread(new Runnable() {
+
+        public void run() {
+            int tempoEntreFramesAnimando = 1000 / FPS_ANIMANDO;
+            int tempoEntreFramesParado = 1000 / FPS_PARADO;
+            // Aguarda o jogo existir
+            while (trucoActivity.jogo == null) {
+                sleep(200);
+            }
+            // Roda até a activity-mãe se encerrar, num frame rate que depende
+            // de estarmos animando algo ou não (mas sempre atualiza, pra não
+            // perder mudanças por algum arredondaento de ms ou por serem
+            // instantâneas)
+            while (!trucoActivity.isFinishing()) {
+                if (visivel) {
+                    postInvalidate();
+                }
+                if (calcTempoAteFimAnimacaoMS() >= 0) {
+                    sleep(tempoEntreFramesAnimando);
+                } else {
+                    sleep(tempoEntreFramesParado);
+                }
+            }
+        }
+
+        private void sleep(int tempoMS) {
+            try {
+                Thread.sleep(tempoMS);
+            } catch (InterruptedException e) {
+                // Não faz nada; vamos interromper esse sleep sempre que
+                // uma animação começar!
+            }
+
+        }
+    });
 
     public MesaView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -63,8 +181,7 @@ public class MesaView extends View {
      * Informa à mesa que uma animação começou (garantindo refreshes da tela
      * enquanto ela durar).
      *
-     * @param fim
-     *            timestamp de quando a animação vai acabar
+     * @param fim timestamp de quando a animação vai acabar
      */
     public void notificaAnimacao(long fim) {
         if (animandoAte < fim) {
@@ -78,8 +195,7 @@ public class MesaView extends View {
      */
     public void aguardaFimAnimacoes() {
         long milisecAteFimAnimacao;
-        while ((milisecAteFimAnimacao = animandoAte
-                - System.currentTimeMillis()) > 0) {
+        while ((milisecAteFimAnimacao = animandoAte - System.currentTimeMillis()) > 0) {
             try {
                 Thread.sleep(milisecAteFimAnimacao);
             } catch (InterruptedException e) {
@@ -121,15 +237,10 @@ public class MesaView extends View {
         int larguraDialog = CartaVisual.largura * 3;
         int topDialog = (h - alturaDialog) / 2;
         int leftDialog = (w - larguraDialog) / 2;
-        rectDialog = new Rect(leftDialog, topDialog,
-                leftDialog + larguraDialog, topDialog + alturaDialog);
+        rectDialog = new Rect(leftDialog, topDialog, leftDialog + larguraDialog, topDialog + alturaDialog);
         int alturaBotao = (int) (tamanhoFonte * 0.6f);
-        rectBotaoSim = new RectF(leftDialog + 8, topDialog + alturaDialog
-                - alturaBotao - 32, leftDialog + larguraDialog / 2 - 8,
-                topDialog + alturaDialog - 16);
-        rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8,
-                rectBotaoSim.top, leftDialog + larguraDialog - 8,
-                rectBotaoSim.bottom);
+        rectBotaoSim = new RectF(leftDialog + 8, topDialog + alturaDialog - alturaBotao - 32, leftDialog + larguraDialog / 2 - 8, topDialog + alturaDialog - 16);
+        rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8, rectBotaoSim.top, leftDialog + larguraDialog - 8, rectBotaoSim.bottom);
 
         // Posiciona o vira e as cartas decorativas do baralho, que são fixos
         cartas[0].movePara(leftBaralho, topBaralho);
@@ -138,10 +249,7 @@ public class MesaView extends View {
         cartas[3].movePara(leftBaralho, topBaralho);
 
         if (!inicializada) {
-            // Inicia as threads internas que cuidam de animações e de responder
-            // a diálogos e faz a activity começar o jogo
             threadAnimacao.start();
-            respondeDialogos.start();
             if (this.trucoActivity != null) {
                 this.trucoActivity.criaEIniciaNovoJogo();
             }
@@ -156,12 +264,10 @@ public class MesaView extends View {
                         if (trucoActivity.jogo.jogoFinalizado) {
                             cv.movePara(leftBaralho, topBaralho);
                         } else if (cv.descartada) {
-                            cv.movePara(calcPosLeftDescartada(numJogador),
-                                    calcPosTopDescartada(numJogador));
+                            cv.movePara(calcPosLeftDescartada(numJogador), calcPosTopDescartada(numJogador));
                         } else {
                             int pos = (i - 1) % 3;
-                            cv.movePara(calcPosLeftCarta(numJogador, pos),
-                                    calcPosTopCarta(numJogador, pos));
+                            cv.movePara(calcPosLeftCarta(numJogador, pos), calcPosTopCarta(numJogador, pos));
                         }
                     }
                 }
@@ -174,13 +280,12 @@ public class MesaView extends View {
         }
 
         inicializada = true;
-}
+    }
 
     /**
      * Recupera a carta visual correspondente a uma carta do jogo.
      *
-     * @param c
-     *            carta do jogo
+     * @param c carta do jogo
      * @return Carta visual com o valor desta, ou <code>null</code> se não achar
      */
     public CartaVisual getCartaVisual(Carta c) {
@@ -194,21 +299,16 @@ public class MesaView extends View {
 
     /**
      * Atualiza o resultado de uma rodada, destacando a carta vencedora e
-     * piscando a rodada atual por um instante.
+     * aguardando o tempo em que o placar vai piscar o marcador de rodada
      *
-     * @param numRodada
-     *            rodada que finalizou
-     * @param resultado
-     *            (0 = nenhum; 1 = vitória, 2 = derrota, 3 = empate)
-     * @param jogadorQueTorna
-     *            jogador cuja carta venceu a rodada
+     * @param numRodada       rodada que finalizou
+     * @param resultado       (0 = nenhum; 1 = vitória, 2 = derrota, 3 = empate)
+     * @param jogadorQueTorna jogador cuja carta venceu a rodada
      */
-    public void atualizaResultadoRodada(int numRodada, int resultado,
-            Jogador jogadorQueTorna) {
+    public void atualizaResultadoRodada(int numRodada, int resultado, Jogador jogadorQueTorna) {
         aguardaFimAnimacoes();
         if (resultado != 3) {
-            cartaQueFez = getCartaVisual(trucoActivity.jogo
-                    .getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
+            cartaQueFez = getCartaVisual(trucoActivity.jogo.getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
             cartaQueFez.destacada = true;
         }
         for (CartaVisual c : cartas) {
@@ -223,8 +323,7 @@ public class MesaView extends View {
     /**
      * Torna as cartas da mão de 10/11 visíveis
      *
-     * @param cartasParceiro
-     *            cartas do seu parceiro
+     * @param cartasParceiro cartas do seu parceiro
      */
     public void mostraCartasMaoDeX(Carta[] cartasParceiro) {
         for (int i = 0; i <= 2; i++) {
@@ -236,25 +335,20 @@ public class MesaView extends View {
      * Faz com que o balão mostre uma frase por um tempo para um jogador.
      * <p>
      * As frases estão no strings.xml no formato balao_<chave>, e são arrays de
-     * strings (das quais uma será sorteada para exibição).
+     * strings (das quais uma será selecionada para exibição).
      *
-     * @param chave
-     *            diz o tipo de texto que aparece no balão. Ex.: "aumento_3"
-     *            para pedido de truco.
-     * @param posicao
-     *            posição (1 a 4) do jogador que "dirá" a frase
-     * @param tempoMS
-     *            tempo em que ela aparecerá (reduzido se a velocidade das animações for > 1)
-     * @param rndFrase
-     *              Número "grande" que identifica a frase do strings.xml dita
-     *              pelo jogador (índice_da_frase = rndFrase % frases.length())
+     * @param chave    diz o tipo de texto que aparece no balão. Ex.: "aumento_3"
+     *                 para pedido de truco.
+     * @param posicao  posição (1 a 4) do jogador que "dirá" a frase
+     * @param tempoMS  tempo em que ela aparecerá (reduzido se a velocidade das animações for > 1)
+     * @param rndFrase Número "grande" que identifica a frase do strings.xml dita
+     *                 pelo jogador (índice_da_frase = rndFrase % frases.length())
      */
     public void diz(String chave, int posicao, int tempoMS, int rndFrase) {
         aguardaFimAnimacoes();
         mostraBalaoAte = System.currentTimeMillis() + tempoMS / Math.min(velocidade, 2);
         Resources res = getResources();
-        String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_"
-                + chave, "array", "me.chester.minitruco"));
+        String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_" + chave, "array", "me.chester.minitruco"));
         fraseBalao = frasesBalao[rndFrase % frasesBalao.length];
         posicaoBalao = posicao;
         notificaAnimacao(mostraBalaoAte);
@@ -267,58 +361,52 @@ public class MesaView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
-        case MotionEvent.ACTION_DOWN:
-            return true;
-        case MotionEvent.ACTION_UP:
-            if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
-                respondePergunta(true);
-            }
-            if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
-                respondePergunta(false);
-            }
-            // Verificamos primeiro a carta mais à direita porque ela é desenhada
-            // em cima da do meio, e esta em cima da carta à esquerda
-            for (int i = 6; i >= 4; i--) {
-                if (cartas[i].isDentro(event.getX(), event.getY())) {
-                    jogaCarta(i - 4);
+            case MotionEvent.ACTION_DOWN:
+                return true;
+            case MotionEvent.ACTION_UP:
+                if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
+                    respondePergunta(true);
                 }
-            }
-            return true;
-        default:
-            return super.onTouchEvent(event);
+                if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
+                    respondePergunta(false);
+                }
+                // Verificamos primeiro a carta mais à direita porque ela é desenhada
+                // em cima da do meio, e esta em cima da carta à esquerda
+                for (int i = 6; i >= 4; i--) {
+                    if (cartas[i].isDentro(event.getX(), event.getY())) {
+                        jogaCarta(i - 4);
+                    }
+                }
+                return true;
+            default:
+                return super.onTouchEvent(event);
         }
     }
 
     /**
-     * Responde pergunta em exibição (aceita truco, aceita mão de 10/11, etc.)
-     * e oculta a pergunta, desde que uma pergunta esteja sendo exibida.
+     * Encaminha resposta da pergunta em exibição (se houver uma) para o jogo
+     * em uma nova thread (para não travar a thread de UI) e oculta a caixa de
+     * diálogo com a pergunta.
      *
      * @param resposta resposta do jogador (true=sim, false=não)
      */
     public void respondePergunta(boolean resposta) {
-        if (mostrarPerguntaAumento) {
-            mostrarPerguntaAumento = false;
-            if (resposta) {
-                aceitarAumento = true;
-            } else {
-                recusarAumento = true;
+        new Thread(() -> {
+            if (mostrarPerguntaAumento) {
+                mostrarPerguntaAumento = false;
+                trucoActivity.jogo.respondeAumento(trucoActivity.jogadorHumano, resposta);
+            } else if (mostrarPerguntaMaoDeX) {
+                mostrarPerguntaMaoDeX = false;
+                trucoActivity.jogo.decideMaoDeX(trucoActivity.jogadorHumano, resposta);
             }
-        } else if (mostrarPerguntaMaoDeX) {
-            mostrarPerguntaMaoDeX = false;
-            if (resposta) {
-                aceitarMaoDeX = true;
-            } else {
-                recusarMaoDeX = true;
-            }
-        }
+        }).start();
     }
 
     /**
      * Joga a carta na posição indicada, desde que seja a vez do jogador humano
      * e a carta não tenha ainda sido descartada.
      *
-     * @param posicao
-     *            posição da carta na mão do jogador (0 a 2)
+     * @param posicao posição da carta na mão do jogador (0 a 2)
      */
     public void jogaCarta(int posicao) {
         CartaVisual carta = cartas[posicao + 4];
@@ -327,129 +415,20 @@ public class MesaView extends View {
 
         statusVez = STATUS_VEZ_OUTRO;
         carta.setFechada(vaiJogarFechada);
-        trucoActivity.jogo.jogaCarta(
-            trucoActivity.jogadorHumano, carta);
+        trucoActivity.jogo.jogaCarta(trucoActivity.jogadorHumano, carta);
     }
-
-    private TrucoActivity trucoActivity;
-
-    private Rect rectDialog;
-
-    private RectF rectBotaoSim;
-
-    private RectF rectBotaoNao;
-
-    private float tamanhoFonte;
-
-    /**
-     * Cartas que estão na mesa, na ordem de empilhamento. cartas[0] é o vira,
-     * cartas[1..3] são o baralho decorativo, cartas[4..6] são as do jogador na
-     * posição 1 (inferior), cartas[7..9] o jogador 2 e assim por diante para os
-     * jogadores 3 e 4.
-     * <p>
-     * TODO: refatorar esses magic numbers para algo melhor.
-     */
-    public final CartaVisual[] cartas = new CartaVisual[16];
-
-    /**
-     * É true se a view já está pronta para responder a solicitações do jogo
-     * (mover cartas, acionar balões, etc)
-     */
-    private boolean inicializada = false;
 
     private long calcTempoAteFimAnimacaoMS() {
         return animandoAte - System.currentTimeMillis();
     }
 
     /**
-     * Thread/runnable que faz as animações acontecerem (invalidando
-     * o display -> forçando um redraw várias vezes por segundo)
-     * <p>
-     */
-    final Thread threadAnimacao = new Thread(new Runnable() {
-
-        public void run() {
-            int tempoEntreFramesAnimando = 1000 / FPS_ANIMANDO;
-            int tempoEntreFramesParado = 1000 / FPS_PARADO;
-            // Aguarda o jogo existir
-            while (trucoActivity.jogo == null) {
-                sleep(200);
-            }
-            // Roda até a activity-mãe se encerrar, num frame rate que depende
-            // de estarmos animando algo ou não (mas sempre atualiza, pra não
-            // perder mudanças por algum arredondaento de ms ou por serem
-            // instantâneas)
-            while (!trucoActivity.isFinishing()) {
-                if (visivel) {
-                    postInvalidate();
-                }
-                if (calcTempoAteFimAnimacaoMS() >= 0) {
-                    sleep(tempoEntreFramesAnimando);
-                } else{
-                    sleep(tempoEntreFramesParado);
-                }
-            }
-        }
-
-        private void sleep(int tempoMS) {
-            try {
-                Thread.sleep(tempoMS);
-            } catch (InterruptedException e) {
-                // Não faz nada; vamos interromper esse sleep sempre que
-                // uma animação começar!
-            }
-
-        }
-    });
-
-    final Thread respondeDialogos = new Thread() {
-        @Override
-        public void run() {
-            // Aguarda o jogo existir
-            while (trucoActivity.jogo == null) {
-                try {
-                    sleep(250);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            // Roda até a activity-mãe se encerrar
-            while (!trucoActivity.isFinishing()) {
-                try {
-                    sleep(250);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Jogo jogo = trucoActivity.jogo;
-                if (recusarMaoDeX) {
-                    recusarMaoDeX = false;
-                    jogo.decideMaoDeX(trucoActivity.jogadorHumano, false);
-                }
-                if (aceitarMaoDeX) {
-                    aceitarMaoDeX = false;
-                    jogo.decideMaoDeX(trucoActivity.jogadorHumano, true);
-                }
-                if (recusarAumento) {
-                    recusarAumento = false;
-                    jogo.respondeAumento(trucoActivity.jogadorHumano, false);
-                }
-                if (aceitarAumento) {
-                    aceitarAumento = false;
-                    jogo.respondeAumento(trucoActivity.jogadorHumano, true);
-                }
-            }
-        }
-
-    };
-
-    /**
      * Permite à Activity informar se o humano está na própria vez e liberado para jogar,
      * se está na própria vez mas aguarda resposta de um truco, mão de 10/11, etc.,
      * ou se é a vez de outro jogador.
      *
-     * @param vezHumano
-     *            um entre STATUS_VEZ_HUMANO_OK, STATUS_VEZ_HUMANO_AGUARDANDO e
-     *            STATUS_VEZ_OUTRO
+     * @param vezHumano um entre STATUS_VEZ_HUMANO_OK, STATUS_VEZ_HUMANO_AGUARDANDO e
+     *                  STATUS_VEZ_OUTRO
      */
     public void setStatusVez(int vezHumano) {
         aguardaFimAnimacoes();
@@ -518,7 +497,6 @@ public class MesaView extends View {
 
     /**
      * Joga a carta no meio da mesa
-     *
      */
     public void descarta(Carta c, int posicao) {
 
@@ -545,6 +523,12 @@ public class MesaView extends View {
             }
         }
 
+        // Não deveria acontecer, mas como é só animação, podemos ignorar
+        // se a carta não estiver na mão
+        if (cv == null) {
+            return;
+        }
+
         // Executa a animação de descarte
         cv.copiaCarta(c);
         cv.movePara(leftFinal, topFinal, 200);
@@ -558,10 +542,58 @@ public class MesaView extends View {
     }
 
     /**
+     * Exibe uma carta na posição apropriada, animando
+     * <p>
      *
-     * @return posição (x) de uma carta descartada pelo jogador (no meio da
-     *         tela, mas puxando para a direçãod dele com um breve distúrbio
-     *         aleatório)
+     * @param carta      Carta a distribuir
+     * @param numJogador Posição do jogador, de 1 a 4 (1 = humano).
+     * @param posicao    posição da carta na mão do jogador (0 a 2)
+     */
+    private void entregaCarta(CartaVisual carta, int numJogador, int posicao) {
+        if (numJogador == 3 || numJogador == 4) {
+            posicao = 2 - posicao;
+        }
+        carta.movePara(calcPosLeftCarta(numJogador, posicao), calcPosTopCarta(numJogador, posicao), 85);
+    }
+
+    /**
+     * @return Coordenada x da i-ésima carta na mão do jogador em questão
+     */
+    private int calcPosLeftCarta(int numJogador, int i) {
+        int deslocamentoHorizontalEntreCartas = CartaVisual.largura * 7 / 8;
+        switch (numJogador) {
+            case 1:
+            case 3:
+                return (getWidth() / 2) - (CartaVisual.largura / 2) + (i - 1) * deslocamentoHorizontalEntreCartas;
+            case 2:
+                return getWidth() - CartaVisual.largura;
+            case 4:
+            default:
+                return 0;
+        }
+    }
+
+    /**
+     * @return Coordenada y da i-ésima carta na mão do jogador em questão
+     */
+    private int calcPosTopCarta(int numJogador, int i) {
+        int deslocamentoVerticalEntreCartas = CartaVisual.altura / 12;
+        switch (numJogador) {
+            case 1:
+                return getHeight() - CartaVisual.altura;
+            case 2:
+            case 4:
+                return getHeight() / 2 - CartaVisual.altura / 2 - (i - 1) * deslocamentoVerticalEntreCartas;
+            case 3:
+            default:
+                return 0;
+        }
+    }
+
+
+    /**
+     * @return Coordenada x de uma carta descartada pelo jogador, com uma
+     * pequena perturbação
      */
     private int calcPosLeftDescartada(int numJogador) {
         int leftFinal;
@@ -576,74 +608,8 @@ public class MesaView extends View {
     }
 
     /**
-     * Exibe uma carta na posição apropriada, animando
-     * <p>
-     * @param carta
-     *               Carta a distribuir
-     * @param numJogador
-     *            Posição do jogador, de 1 a 4 (1 = humano).
-     * @param posicao
-     *            posição da carta na mão do jogador (0 a 2)
-     */
-    private void entregaCarta(CartaVisual carta, int numJogador, int posicao) {
-        if (numJogador == 3 || numJogador == 4) {
-            posicao = 2 - posicao;
-        }
-        carta.movePara(calcPosLeftCarta(numJogador, posicao),
-                calcPosTopCarta(numJogador, posicao), 85);
-    }
-
-    /**
-     *
-     * @return Posição (x) da i-ésima carta na mão do jogador em questão
-     */
-    private int calcPosLeftCarta(int numJogador, int i) {
-        int deslocamentoHorizontalEntreCartas = CartaVisual.largura * 7 / 8;
-        int leftFinal = 0;
-        switch (numJogador) {
-        case 1:
-        case 3:
-            leftFinal = (getWidth() / 2) - (CartaVisual.largura / 2) + (i - 1)
-                    * deslocamentoHorizontalEntreCartas;
-            break;
-        case 2:
-            leftFinal = getWidth() - CartaVisual.largura;
-            break;
-        case 4:
-            leftFinal = 0;
-            break;
-        }
-        return leftFinal;
-    }
-
-    /**
-     *
-     * @return Posição (y) da i-ésima carta na mão do jogador em questão
-     */
-    private int calcPosTopCarta(int numJogador, int i) {
-        int deslocamentoVerticalEntreCartas = CartaVisual.altura / 12;
-        int topFinal = 0;
-        switch (numJogador) {
-        case 1:
-            topFinal = getHeight() - CartaVisual.altura;
-            break;
-        case 2:
-        case 4:
-            topFinal = getHeight() / 2 - CartaVisual.altura / 2 - (i - 1)
-                    * deslocamentoVerticalEntreCartas;
-            break;
-        case 3:
-            topFinal = 0;
-            break;
-        }
-        return topFinal;
-    }
-
-    /**
-     *
-     * @return posição (y) de uma carta descartada pelo jogador (no meio da
-     *         tela, mas puxando para a direçãod dele com um breve distúrbio
-     *         aleatório)
+     * @return Coordenada y de uma carta descartada pelo jogador, com uma
+     * pequena perturbação
      */
     private int calcPosTopDescartada(int numJogador) {
         int topFinal;
@@ -677,8 +643,7 @@ public class MesaView extends View {
 
         // Desenha as cartas restantes, e o vira por cima de todas
         for (CartaVisual carta : cartas) {
-            if (carta != null && !cartasJogadas.contains(carta)
-                    && carta != cartas[0]) {
+            if (carta != null && !cartasJogadas.contains(carta) && carta != cartas[0]) {
                 carta.draw(canvas);
             }
         }
@@ -712,8 +677,7 @@ public class MesaView extends View {
             paintPergunta.setTextSize(tamanhoFonte * 0.5f);
             paintPergunta.setTextAlign(Align.CENTER);
             paintPergunta.setStyle(Style.FILL);
-            canvas.drawText(textoPergunta, rectDialog.centerX(),
-                    rectDialog.top + paintPergunta.getTextSize() * 1.5f, paintPergunta);
+            canvas.drawText(textoPergunta, rectDialog.centerX(), rectDialog.top + paintPergunta.getTextSize() * 1.5f, paintPergunta);
             desenhaBotao("Sim", canvas, rectBotaoSim);
             desenhaBotao("Nao", canvas, rectBotaoNao);
         }
@@ -736,87 +700,17 @@ public class MesaView extends View {
         paint.setTextSize(tamanhoFonte * 0.75f);
         // Borda
         paint.setColor(Color.WHITE);
-        canvas.drawRoundRect(outerRect, tamanhoFonte * 4 / 5,
-                tamanhoFonte * 4 / 5, paint);
+        canvas.drawRoundRect(outerRect, tamanhoFonte * 4 / 5, tamanhoFonte * 4 / 5, paint);
         // Interior
         paint.setColor(Color.BLACK);
-        RectF innerRect = new RectF(outerRect.left + 4, outerRect.top + 4,
-                outerRect.right - 4, outerRect.bottom - 4);
-        canvas.drawRoundRect(innerRect, tamanhoFonte * 4 / 5,
-                tamanhoFonte * 4 / 5, paint);
+        RectF innerRect = new RectF(outerRect.left + 4, outerRect.top + 4, outerRect.right - 4, outerRect.bottom - 4);
+        canvas.drawRoundRect(innerRect, tamanhoFonte * 4 / 5, tamanhoFonte * 4 / 5, paint);
         // Texto
         paint.setStyle(Style.FILL);
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Align.CENTER);
-        canvas.drawText(texto, outerRect.centerX(), outerRect.centerY() - tamanhoFonte * 0.2f
-                + tamanhoFonte * 0.5f, paint);
+        canvas.drawText(texto, outerRect.centerX(), outerRect.centerY() - tamanhoFonte * 0.2f + tamanhoFonte * 0.5f, paint);
     }
-
-    /**
-     * Posição do baralho na mesa
-     */
-    private int topBaralho, leftBaralho;
-
-    /**
-     * Timestamp em que as animações em curso irão acabar
-     */
-    private long animandoAte = System.currentTimeMillis();
-
-    /**
-     * Indica que é a vez do humano, e ele pode jogar
-     */
-    public static final int STATUS_VEZ_HUMANO_OK = 1;
-
-    /**
-     * Indica que é a vez de outro jogador
-     */
-    public static final int STATUS_VEZ_OUTRO = 0;
-
-    /**
-     * Indica que é a vez do humano, e ele está aguardando resposta (ex.: de
-     * aumento) para jogar
-     */
-    public static final int STATUS_VEZ_HUMANO_AGUARDANDO = -1;
-
-    /**
-     * Diz se é a vez do jogador humano dessa mesa ou de outro, e, no primeiro
-     * caso se está aguardando resposta de truco
-     */
-    private int statusVez = 0;
-
-    /**
-     * Guarda as cartas que foram jogadas pelos jogadores (para saber em que
-     * ordem desenhar)
-     */
-    private final Vector<CartaVisual> cartasJogadas = new Vector<>(12);
-
-    /**
-     * A mesa não é mais responsável pelos indicadores de rodada, mas precisa
-     * saber quando um deles termina de "piscar" para dar seguimento
-     */
-    private boolean isRodadaPiscando;
-    private long rodadaPiscaAte = System.currentTimeMillis();
-
-    /**
-     * Carta que "fez" a última rodada (para fins de destaque)
-     */
-    private CartaVisual cartaQueFez;
-
-    public boolean mostrarPerguntaMaoDeX = false;
-
-    private boolean recusarMaoDeX = false;
-    private boolean aceitarMaoDeX = false;
-
-    public boolean mostrarPerguntaAumento = false;
-
-    private boolean recusarAumento = false;
-    private boolean aceitarAumento = false;
-
-    private int posicaoBalao = 1;
-
-    private long mostraBalaoAte = System.currentTimeMillis();
-
-    private String fraseBalao = null;
 
     private void desenhaIndicadorDeVez(Canvas canvas) {
         if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
@@ -827,22 +721,18 @@ public class MesaView extends View {
         paintSetaVez.setTextAlign(Align.CENTER);
         paintSetaVez.setTextSize(CartaVisual.altura / 3);
         switch (posicaoVez) {
-        case 1:
-            canvas.drawText("\u21E9", getWidth() / 2, getHeight()
-                    - CartaVisual.altura * 14 / 12, paintSetaVez);
-            break;
-        case 2:
-            canvas.drawText("\u21E8", getWidth() - CartaVisual.largura * 15
-                    / 12, getHeight() / 2, paintSetaVez);
-            break;
-        case 3:
-            canvas.drawText("\u21E7", getWidth() / 2,
-                    CartaVisual.altura * 16 / 12, paintSetaVez);
-            break;
-        case 4:
-            canvas.drawText("\u21E6", CartaVisual.largura * 15 / 12,
-                    getHeight() / 2, paintSetaVez);
-            break;
+            case 1:
+                canvas.drawText("\u21E9", getWidth() / 2, getHeight() - CartaVisual.altura * 14 / 12, paintSetaVez);
+                break;
+            case 2:
+                canvas.drawText("\u21E8", getWidth() - CartaVisual.largura * 15 / 12, getHeight() / 2, paintSetaVez);
+                break;
+            case 3:
+                canvas.drawText("\u21E7", getWidth() / 2, CartaVisual.altura * 16 / 12, paintSetaVez);
+                break;
+            case 4:
+                canvas.drawText("\u21E6", CartaVisual.largura * 15 / 12, getHeight() / 2, paintSetaVez);
+                break;
         }
     }
 
@@ -851,26 +741,18 @@ public class MesaView extends View {
      * porque também desenha a ponta. É chamada várias vezes para compor o
      * contorno, antes de estampar o texto
      *
-     * @param canvas
-     *            onde ele será desenhado
-     * @param x
-     *            esquerda
-     * @param y
-     *            topo
-     * @param largBalao
-     *            largura
-     * @param altBalao
-     *            altura
-     * @param quadrantePonta
-     *            Quadrante (cartesiano) onde aparece a ponta do balão (com
-     *            relação a ele mesmo)
+     * @param canvas         onde ele será desenhado
+     * @param x              esquerda
+     * @param y              topo
+     * @param largBalao      largura
+     * @param altBalao       altura
+     * @param quadrantePonta Quadrante (cartesiano) onde aparece a ponta do balão (com
+     *                       relação a ele mesmo)
      */
-    private void desenhaElipseBalao(Canvas canvas, int x, int y, int largBalao,
-            int altBalao, int quadrantePonta, Paint paint) {
+    private void desenhaElipseBalao(Canvas canvas, int x, int y, int largBalao, int altBalao, int quadrantePonta, Paint paint) {
         // Elipse principal
         paint.setAntiAlias(true);
-        canvas.drawArc(new RectF(x, y, x + largBalao - 1, y + altBalao - 1), 0,
-                360, false, paint);
+        canvas.drawArc(new RectF(x, y, x + largBalao - 1, y + altBalao - 1), 0, 360, false, paint);
         // Ponta (é um triângulo que desenhamos linha a linha)
         paint.setAntiAlias(false);
         int xi;
@@ -881,16 +763,14 @@ public class MesaView extends View {
                 xi = x - altBalao * 3 / 2 + i + largBalao;
             }
             int sinaly = quadrantePonta < 3 ? -1 : 1;
-            canvas.drawLine(xi, y + altBalao / 2, xi, y + altBalao / 2 + i
-                    * sinaly, paint);
+            canvas.drawLine(xi, y + altBalao / 2, xi, y + altBalao / 2 + i * sinaly, paint);
         }
     }
 
     /**
      * Desenha o balão no lugar certo, se ele estiver visível
      *
-     * @param canvas
-     *            canvas onde ele será (ou não) desenhado.
+     * @param canvas canvas onde ele será (ou não) desenhado.
      */
     private void desenhaBalao(Canvas canvas) {
         if (fraseBalao != null && mostraBalaoAte > System.currentTimeMillis()) {
@@ -904,34 +784,33 @@ public class MesaView extends View {
             paintFonte.setTextSize(tamanhoFonte);
             Rect bounds = new Rect();
             paintFonte.setColor(Color.BLACK);
-            paintFonte
-                    .getTextBounds(fraseBalao, 0, fraseBalao.length(), bounds);
+            paintFonte.getTextBounds(fraseBalao, 0, fraseBalao.length(), bounds);
 
             int largBalao = bounds.width() + 2 * MARGEM_BALAO_LEFT;
             int altBalao = bounds.height() + 2 * MARGEM_BALAO_TOP;
             int x = 0, y = 0;
             int quadrantePonta = 0;
             switch (posicaoBalao) {
-            case 1:
-                x = (canvas.getWidth() - largBalao) / 2 - CartaVisual.largura;
-                y = canvas.getHeight() - altBalao * 4 - 3;
-                quadrantePonta = 4;
-                break;
-            case 2:
-                x = canvas.getWidth() - largBalao - 3;
-                y = (canvas.getHeight() - altBalao) / 2;
-                quadrantePonta = 1;
-                break;
-            case 3:
-                x = (canvas.getWidth() - largBalao) / 2 + CartaVisual.largura;
-                y = 3 + altBalao / 2;
-                quadrantePonta = 2;
-                break;
-            case 4:
-                x = 3;
-                y = (canvas.getHeight() - altBalao) / 2 - CartaVisual.altura;
-                quadrantePonta = 3;
-                break;
+                case 1:
+                    x = (canvas.getWidth() - largBalao) / 2 - CartaVisual.largura;
+                    y = canvas.getHeight() - altBalao * 4 - 3;
+                    quadrantePonta = 4;
+                    break;
+                case 2:
+                    x = canvas.getWidth() - largBalao - 3;
+                    y = (canvas.getHeight() - altBalao) / 2;
+                    quadrantePonta = 1;
+                    break;
+                case 3:
+                    x = (canvas.getWidth() - largBalao) / 2 + CartaVisual.largura;
+                    y = 3 + altBalao / 2;
+                    quadrantePonta = 2;
+                    break;
+                case 4:
+                    x = 3;
+                    y = (canvas.getHeight() - altBalao) / 2 - CartaVisual.altura;
+                    quadrantePonta = 3;
+                    break;
             }
 
             // O balão tem que ser branco, com uma borda preta. Como
@@ -944,28 +823,21 @@ public class MesaView extends View {
             paint.setColor(Color.BLACK);
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    desenhaElipseBalao(canvas, x + i, y + j, largBalao,
-                            altBalao, quadrantePonta, paint);
+                    desenhaElipseBalao(canvas, x + i, y + j, largBalao, altBalao, quadrantePonta, paint);
                 }
             }
             paint.setColor(corFundoCartaBalao);
-            desenhaElipseBalao(canvas, x, y, largBalao, altBalao,
-                    quadrantePonta, paint);
+            desenhaElipseBalao(canvas, x, y, largBalao, altBalao, quadrantePonta, paint);
 
             // Finalmente, escreve o texto do balão
             paint.setAntiAlias(true);
-            canvas.drawText(fraseBalao, x + MARGEM_BALAO_LEFT, y + altBalao
-                    - MARGEM_BALAO_TOP - 2, paintFonte);
+            canvas.drawText(fraseBalao, x + MARGEM_BALAO_LEFT, y + altBalao - MARGEM_BALAO_TOP - 2, paintFonte);
 
         } else {
             fraseBalao = null;
         }
 
     }
-
-    private boolean visivel = false;
-
-    public boolean vaiJogarFechada;
 
     public void setPosicaoVez(int posicaoVez) {
         this.posicaoVez = posicaoVez;
