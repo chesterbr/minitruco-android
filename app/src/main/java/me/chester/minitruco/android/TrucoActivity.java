@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,9 +12,11 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -159,6 +162,7 @@ public class TrucoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.truco);
+        reorientaLayoutPlacar();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         imageValorMao = findViewById(R.id.imageValorMao);
         imagesResultadoRodada = new ImageView[3];
@@ -211,13 +215,24 @@ public class TrucoActivity extends Activity {
      * da mesa (abaixo em portrait e na lateral em landscape)
      */
     private void reorientaLayoutPlacar() {
-//        LinearLayout layoutTruco = findViewById(R.id.layoutTruco);
-//        FrameLayout layoutMesa = findViewById(R.id.layoutMesa);
+        LinearLayout layoutTruco = findViewById(R.id.layoutTruco);
+        LinearLayout layoutPlacar = findViewById(R.id.layoutPlacar);
 
-//        layoutMesa.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-//        layoutTruco.setOrientation(LinearLayout.HORIZONTAL);
+        int larguraBarraVertical;
 
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            layoutTruco.setOrientation(LinearLayout.HORIZONTAL);
+            layoutPlacar.setOrientation(LinearLayout.VERTICAL);
+            larguraBarraVertical = Resources.getSystem().getDisplayMetrics().heightPixels / 3;
+        } else {
+            layoutTruco.setOrientation(LinearLayout.VERTICAL);
+            layoutPlacar.setOrientation(LinearLayout.HORIZONTAL);
+            larguraBarraVertical = ViewGroup.LayoutParams.MATCH_PARENT;
+        }
 
+        ViewGroup.LayoutParams params = layoutPlacar.getLayoutParams();
+        params.width = larguraBarraVertical;
+        layoutPlacar.setLayoutParams(params);
     }
 
     @Override

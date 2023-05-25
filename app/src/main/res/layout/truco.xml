@@ -102,6 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="1dp"
             android:background="@drawable/borda_placar"
             android:orientation="vertical">
 
@@ -164,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_marginHorizontal="2dp"
+            android:layout_margin="1dp"
             android:gravity="center"
             android:background="@drawable/borda_placar"
             android:orientation="horizontal">
@@ -202,11 +203,11 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_margin="1dp"
             android:background="@drawable/borda_placar"
             android:orientation="vertical">
 
