@@ -77,8 +77,8 @@ public class TrucoActivity extends Activity {
                     if (placar[1] != msg.arg2) {
                         textViewRivais.setTextColor(Color.YELLOW);
                     }
-                    textViewNos.setText(Integer.toString(msg.arg1));
-                    textViewRivais.setText(Integer.toString(msg.arg2));
+                    textViewNos.setText((msg.arg1 < 10 ? " " : "") + Integer.toString(msg.arg1));
+                    textViewRivais.setText(Integer.toString(msg.arg2) + (msg.arg2 < 10 ? " " : ""));
                     placar[0] = msg.arg1;
                     placar[1] = msg.arg2;
                     break;
