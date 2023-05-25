@@ -352,7 +352,7 @@ public class TrucoActivity extends Activity {
     public void jogoFechado(int numEquipeVencedora) {
         runOnUiThread(() -> {
             String pontos[] = textViewPartidas.getText().toString().split(" x ");
-            if (numEquipeVencedora == 1) {
+            if (jogadorHumano.getEquipe() == numEquipeVencedora) {
                 textViewPartidas.setText((Integer.parseInt(pontos[0]) + 1) + " x " + pontos[1]);
             } else {
                 textViewPartidas.setText(pontos[0] + " x " + (Integer.parseInt(pontos[1]) + 1));
