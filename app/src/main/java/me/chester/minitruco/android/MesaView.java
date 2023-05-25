@@ -103,8 +103,8 @@ public class MesaView extends View {
         // texto, etc.)
         CartaVisual.ajustaTamanho(w, h);
         int delta = CartaVisual.altura / 24;
-        leftBaralho = w - CartaVisual.largura - MARGEM - delta * 3;
-        topBaralho = MARGEM + delta;
+        leftBaralho = w - CartaVisual.largura - delta * 3;
+        topBaralho = delta;
         tamanhoFonte = 12.0f * (h / 270.0f);
 
         // Na primeira chamada (inicialização), instanciamos as cartas
@@ -607,10 +607,10 @@ public class MesaView extends View {
                     * deslocamentoHorizontalEntreCartas;
             break;
         case 2:
-            leftFinal = getWidth() - CartaVisual.largura - MARGEM;
+            leftFinal = getWidth() - CartaVisual.largura;
             break;
         case 4:
-            leftFinal = MARGEM;
+            leftFinal = 0;
             break;
         }
         return leftFinal;
@@ -625,7 +625,7 @@ public class MesaView extends View {
         int topFinal = 0;
         switch (numJogador) {
         case 1:
-            topFinal = getHeight() - (CartaVisual.altura + MARGEM);
+            topFinal = getHeight() - CartaVisual.altura;
             break;
         case 2:
         case 4:
@@ -633,7 +633,7 @@ public class MesaView extends View {
                     * deslocamentoVerticalEntreCartas;
             break;
         case 3:
-            topFinal = MARGEM;
+            topFinal = 0;
             break;
         }
         return topFinal;
@@ -751,11 +751,6 @@ public class MesaView extends View {
         canvas.drawText(texto, outerRect.centerX(), outerRect.centerY() - tamanhoFonte * 0.2f
                 + tamanhoFonte * 0.5f, paint);
     }
-
-    /**
-     * Margem entre a mesa e as cartas
-     */
-    public static final int MARGEM = 2;
 
     /**
      * Posição do baralho na mesa
@@ -916,21 +911,21 @@ public class MesaView extends View {
             switch (posicaoBalao) {
             case 1:
                 x = (canvas.getWidth() - largBalao) / 2 - CartaVisual.largura;
-                y = canvas.getHeight() - altBalao * 4 - MARGEM - 3;
+                y = canvas.getHeight() - altBalao * 4 - 3;
                 quadrantePonta = 4;
                 break;
             case 2:
-                x = canvas.getWidth() - largBalao - MARGEM - 3;
+                x = canvas.getWidth() - largBalao - 3;
                 y = (canvas.getHeight() - altBalao) / 2;
                 quadrantePonta = 1;
                 break;
             case 3:
                 x = (canvas.getWidth() - largBalao) / 2 + CartaVisual.largura;
-                y = MARGEM + 3 + altBalao / 2;
+                y = 3 + altBalao / 2;
                 quadrantePonta = 2;
                 break;
             case 4:
-                x = MARGEM + 3;
+                x = 3;
                 y = (canvas.getHeight() - altBalao) / 2 - CartaVisual.altura;
                 quadrantePonta = 3;
                 break;
