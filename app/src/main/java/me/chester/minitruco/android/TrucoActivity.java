@@ -13,6 +13,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -330,6 +333,14 @@ public class TrucoActivity extends Activity {
                     bitmap = R.drawable.placarrodada0;
             }
             imagesResultadoRodada[rodada - 1].setImageResource(bitmap);
+            if (bitmap != R.drawable.placarrodada0) {
+                Animation animation = new AlphaAnimation(0, 1);
+                animation.setDuration(400);
+                animation.setInterpolator(new LinearInterpolator());
+                animation.setRepeatCount(2);
+                animation.setRepeatMode(Animation.RESTART);
+                imagesResultadoRodada[rodada - 1].startAnimation(animation);
+            }
         });
     }
 

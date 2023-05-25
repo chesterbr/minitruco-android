@@ -215,8 +215,8 @@ public class MesaView extends View {
             c.escura = c.descartada;
         }
         trucoActivity.setResultadoRodada(numRodada, resultado);
-        numRodadaPiscando = numRodada;
-        rodadaPiscaAte = System.currentTimeMillis() + 1600;
+        isRodadaPiscando = true;
+        rodadaPiscaAte = System.currentTimeMillis() + 1200;
         notificaAnimacao(rodadaPiscaAte);
     }
 
@@ -687,11 +687,11 @@ public class MesaView extends View {
         // Desliga o destaque da carta que fez a rodada e escurece as cartas já
         // descartadas (para não confundir com as próximas)
         long agora = System.currentTimeMillis();
-        if ((agora > rodadaPiscaAte) && (numRodadaPiscando > 0)) {
+        if ((agora > rodadaPiscaAte) && isRodadaPiscando) {
             if (cartaQueFez != null) {
                 cartaQueFez.destacada = false;
             }
-            numRodadaPiscando = 0;
+            isRodadaPiscando = false;
         }
 
         // Caixa de diálogo (mão de 10/11 ou aumento)
@@ -790,8 +790,11 @@ public class MesaView extends View {
      */
     private final Vector<CartaVisual> cartasJogadas = new Vector<>(12);
 
-    private int numRodadaPiscando = 0;
-
+    /**
+     * A mesa não é mais responsável pelos indicadores de rodada, mas precisa
+     * saber quando um deles termina de "piscar" para dar seguimento
+     */
+    private boolean isRodadaPiscando;
     private long rodadaPiscaAte = System.currentTimeMillis();
 
     /**
