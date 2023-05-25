@@ -80,14 +80,14 @@ public class TrucoActivity extends Activity {
                     break;
                 case MSG_OFERECE_NOVA_PARTIDA:
                     if (jogo instanceof JogoLocal) {
-                        layoutFimDeJogo.setVisibility(View.VISIBLE);
+                        btnNovaPartida.setVisibility(View.VISIBLE);
                         if (jogo.isJogoAutomatico()) {
                             btnNovaPartida.performClick();
                         }
                     }
                     break;
                 case MSG_REMOVE_NOVA_PARTIDA:
-                    layoutFimDeJogo.setVisibility(View.INVISIBLE);
+                    btnNovaPartida.setVisibility(View.INVISIBLE);
                     break;
                 case MSG_MOSTRA_BOTAO_AUMENTO:
                     int chave = getResources().getIdentifier("botao_aumento_" +
@@ -168,7 +168,6 @@ public class TrucoActivity extends Activity {
         setValorMao(0);
         mesa = findViewById(R.id.MesaView01);
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
-        layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
         mesa.velocidade = preferences.getBoolean("animacaoRapida", false) ? 4 : 1;
         mesa.setTrucoActivity(this);
@@ -204,6 +203,21 @@ public class TrucoActivity extends Activity {
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        reorientaLayoutPlacar();
+    }
+
+    /**
+     * Ajusta a barra de placar de forma a aproveitar ao máximo o espaço
+     * da mesa (abaixo em portrait e na lateral em landscape)
+     */
+    private void reorientaLayoutPlacar() {
+//        LinearLayout layoutTruco = findViewById(R.id.layoutTruco);
+//        FrameLayout layoutMesa = findViewById(R.id.layoutMesa);
+
+//        layoutMesa.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+//        layoutTruco.setOrientation(LinearLayout.HORIZONTAL);
+
+
     }
 
     @Override

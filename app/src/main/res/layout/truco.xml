@@ -5,23 +5,24 @@
     android:layout_height="match_parent"
     android:background="#1B8E3C"
     android:orientation="vertical"
-    tools:ignore="RtlSymmetry,HardcodedText, RtlHardcoded">
+    tools:ignore="RtlSymmetry,HardcodedText,RtlHardcoded,UsingOnClickInXml,NestedWeights,ContentDescription">
 
     <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="2"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="InefficientWeight">
 
         <me.chester.minitruco.android.MesaView
             android:id="@+id/MesaView01"
             android:layout_margin="6dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <!-- TODO remover esses campos, mas tem que resolver
                  onde ancorar os botões, de repente fazer isso
@@ -75,29 +76,14 @@
                 android:visibility="gone" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/layoutFimDeJogo"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:visibility="invisible">
-
-            <RelativeLayout
-                android:id="@+id/layoutBtnNovaPartida"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <Button
-                    android:id="@+id/btnNovaPartida"
-                    android:layout_width="200sp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:onClick="novaPartidaClickHandler"
-                    android:text="Nova Partida" />
-
-            </RelativeLayout>
-        </LinearLayout>
+        <Button
+            android:id="@+id/btnNovaPartida"
+            android:layout_width="200sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="novaPartidaClickHandler"
+            android:visibility="gone"
+            android:text="Nova Partida" />
 
     </FrameLayout>
 
@@ -105,9 +91,11 @@
         android:id="@+id/layoutPlacar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -140,7 +128,6 @@
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:contentDescription="TODO"
                     android:src="@drawable/vale1" />
 
                 <ImageView
@@ -149,7 +136,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:contentDescription="TODO"
                     android:src="@drawable/placarrodada1" />
 
                 <ImageView
@@ -158,7 +144,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:contentDescription="TODO"
                     android:src="@drawable/placarrodada2" />
 
                 <ImageView
@@ -191,7 +176,7 @@
                 android:layout_weight="1"
                 android:gravity="right|center"
                 android:textColor="#000000"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -200,7 +185,7 @@
                 android:text="x"
                 android:layout_weight="1"
                 android:textColor="#000000"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 android:gravity="center" />
 
@@ -211,7 +196,7 @@
                 android:text="7"
                 android:layout_weight="1"
                 android:textColor="#000000"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
