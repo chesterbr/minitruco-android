@@ -2,7 +2,6 @@ package me.chester.minitruco.android;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,17 +9,13 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.core.content.ContextCompat;
-
 import java.util.Random;
 import java.util.Vector;
 
-import me.chester.minitruco.R;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Jogo;
@@ -43,10 +38,6 @@ public class MesaView extends View {
     private final Paint paintPergunta = new Paint();
     protected int velocidade;
     private int posicaoVez;
-
-    private int valorMao;
-
-    private final float density = getResources().getDisplayMetrics().density;
 
     private static final Random rand = new Random();
     private int corFundoCartaBalao = Color.WHITE;
@@ -111,8 +102,9 @@ public class MesaView extends View {
         // "pontos de referência" importantes (baralho decorativo, tamanho do
         // texto, etc.)
         CartaVisual.ajustaTamanho(w, h);
-        leftBaralho = w - CartaVisual.largura - MARGEM - 4;
-        topBaralho = MARGEM + 4;
+        int delta = CartaVisual.altura / 24;
+        leftBaralho = w - CartaVisual.largura - delta * 3;
+        topBaralho = delta;
         tamanhoFonte = 12.0f * (h / 270.0f);
 
         // Na primeira chamada (inicialização), instanciamos as cartas
@@ -141,8 +133,8 @@ public class MesaView extends View {
 
         // Posiciona o vira e as cartas decorativas do baralho, que são fixos
         cartas[0].movePara(leftBaralho, topBaralho);
-        cartas[1].movePara(leftBaralho + 4, topBaralho + 4);
-        cartas[2].movePara(leftBaralho + 2, topBaralho + 2);
+        cartas[1].movePara(leftBaralho + 2 * delta, topBaralho + 2 * delta);
+        cartas[2].movePara(leftBaralho + delta, topBaralho + delta);
         cartas[3].movePara(leftBaralho, topBaralho);
 
         if (!inicializada) {
@@ -176,38 +168,6 @@ public class MesaView extends View {
             }
         }
 
-        // Se o tamanho da tela mudou (ex.: rotação), precisamos recalcular
-        // estes bitmaps
-        int lado = CartaVisual.altura / 2;
-        iconesRodadas = new Bitmap[23];
-        iconesRodadas[0] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
-        iconesRodadas[1] =  Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada1)).getBitmap(), lado, lado, true);
-        iconesRodadas[2] =  Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada2)).getBitmap(), lado, lado, true);
-        iconesRodadas[3] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada3)).getBitmap(), lado, lado, true);
-        // indice = valorMao + 10
-        iconesRodadas[10] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.placarrodada0)).getBitmap(), lado, lado, true);
-        iconesRodadas[11] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada1)).getBitmap(), lado, lado, true);
-        iconesRodadas[12] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada2)).getBitmap(), lado, lado, true);
-        iconesRodadas[13] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada3)).getBitmap(), lado, lado, true);
-        iconesRodadas[14] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada4)).getBitmap(), lado, lado, true);
-        iconesRodadas[16] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada6)).getBitmap(), lado, lado, true);
-        iconesRodadas[19] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada9)).getBitmap(), lado, lado, true);
-        iconesRodadas[20] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada10)).getBitmap(), lado, lado, true);
-        iconesRodadas[22] = Bitmap.createScaledBitmap(((BitmapDrawable) ContextCompat
-            .getDrawable(getContext(), R.drawable.valorrodada12)).getBitmap(), lado, lado, true);
-
         if (!inicializada && isInEditMode()) {
             velocidade = 4;
             distribuiMao();
@@ -239,7 +199,7 @@ public class MesaView extends View {
      * @param numRodada
      *            rodada que finalizou
      * @param resultado
-     *            (0 a 3, vide {@link #resultadoRodada}
+     *            (0 = nenhum; 1 = vitória, 2 = derrota, 3 = empate)
      * @param jogadorQueTorna
      *            jogador cuja carta venceu a rodada
      */
@@ -254,9 +214,9 @@ public class MesaView extends View {
         for (CartaVisual c : cartas) {
             c.escura = c.descartada;
         }
-        resultadoRodada[numRodada - 1] = resultado;
-        numRodadaPiscando = numRodada;
-        rodadaPiscaAte = System.currentTimeMillis() + 1600;
+        trucoActivity.setResultadoRodada(numRodada, resultado);
+        isRodadaPiscando = true;
+        rodadaPiscaAte = System.currentTimeMillis() + 1200;
         notificaAnimacao(rodadaPiscaAte);
     }
 
@@ -525,15 +485,14 @@ public class MesaView extends View {
         }
 
         // Abre o vira, se for manilha nova
-        if (!trucoActivity.jogo.getModo().isManilhaVelha()) {
+        if (!isInEditMode() && !trucoActivity.jogo.getModo().isManilhaVelha()) {
             cartas[0].copiaCarta(trucoActivity.jogo.cartaDaMesa);
             cartas[0].visible = true;
         }
 
     }
 
-    public void aceitouAumentoAposta(Jogador j, int valor) {
-        valorMao = valor;
+    public void aceitouAumentoAposta() {
         if (statusVez == STATUS_VEZ_HUMANO_AGUARDANDO) {
             statusVez = STATUS_VEZ_HUMANO_OK;
         }
@@ -648,10 +607,10 @@ public class MesaView extends View {
                     * deslocamentoHorizontalEntreCartas;
             break;
         case 2:
-            leftFinal = getWidth() - CartaVisual.largura - MARGEM;
+            leftFinal = getWidth() - CartaVisual.largura;
             break;
         case 4:
-            leftFinal = MARGEM;
+            leftFinal = 0;
             break;
         }
         return leftFinal;
@@ -662,11 +621,11 @@ public class MesaView extends View {
      * @return Posição (y) da i-ésima carta na mão do jogador em questão
      */
     private int calcPosTopCarta(int numJogador, int i) {
-        int deslocamentoVerticalEntreCartas = 4;
+        int deslocamentoVerticalEntreCartas = CartaVisual.altura / 12;
         int topFinal = 0;
         switch (numJogador) {
         case 1:
-            topFinal = getHeight() - (CartaVisual.altura + MARGEM);
+            topFinal = getHeight() - CartaVisual.altura;
             break;
         case 2:
         case 4:
@@ -674,7 +633,7 @@ public class MesaView extends View {
                     * deslocamentoVerticalEntreCartas;
             break;
         case 3:
-            topFinal = MARGEM;
+            topFinal = 0;
             break;
         }
         return topFinal;
@@ -728,39 +687,11 @@ public class MesaView extends View {
         // Desliga o destaque da carta que fez a rodada e escurece as cartas já
         // descartadas (para não confundir com as próximas)
         long agora = System.currentTimeMillis();
-        if ((agora > rodadaPiscaAte) && (numRodadaPiscando > 0)) {
+        if ((agora > rodadaPiscaAte) && isRodadaPiscando) {
             if (cartaQueFez != null) {
                 cartaQueFez.destacada = false;
             }
-            numRodadaPiscando = 0;
-        }
-
-        // Ícones das rodadas
-        if (iconesRodadas != null) {
-            for (int i = 0; i <= 3; i++) {
-                Bitmap bmpIcone = null;
-                if (i == 0) {
-                    // O último ícone é o placar da rodada
-                    if (valorMao > 0) {
-                        bmpIcone = iconesRodadas[valorMao + 10];
-                    }
-                } else if (i != numRodadaPiscando || (agora / 250) % 2 == 0) {
-                    // Desenha se não for a rodada piscando, ou, se for, alterna o
-                    // desenho a cada 250ms
-                    bmpIcone = iconesRodadas[resultadoRodada[i - 1]];
-                }
-
-                if (isInEditMode()) {
-                    bmpIcone = iconesRodadas[i == 0 ? 11 : i];
-                }
-
-                if (bmpIcone != null) {
-                    canvas.drawBitmap(bmpIcone,
-                            MARGEM + (i % 2) * (1 + iconesRodadas[0].getWidth()),
-                            MARGEM + (i / 2) * (1 + iconesRodadas[0].getHeight()),
-                            paintIconesRodadas);
-                }
-            }
+            isRodadaPiscando = false;
         }
 
         // Caixa de diálogo (mão de 10/11 ou aumento)
@@ -822,21 +753,6 @@ public class MesaView extends View {
     }
 
     /**
-     * Cache dos ícones que informam o resultado das rodadas
-     */
-    public static Bitmap[] iconesRodadas;
-
-    /**
-     * Resultado das rodadas (0=não jogada; 1=vitória; 2=derrota; 3=empate)
-     */
-    protected final int[] resultadoRodada = { 0, 0, 0 };
-
-    /**
-     * Margem entre a mesa e as cartas
-     */
-    public static final int MARGEM = 2;
-
-    /**
      * Posição do baralho na mesa
      */
     private int topBaralho, leftBaralho;
@@ -874,8 +790,11 @@ public class MesaView extends View {
      */
     private final Vector<CartaVisual> cartasJogadas = new Vector<>(12);
 
-    private int numRodadaPiscando = 0;
-
+    /**
+     * A mesa não é mais responsável pelos indicadores de rodada, mas precisa
+     * saber quando um deles termina de "piscar" para dar seguimento
+     */
+    private boolean isRodadaPiscando;
     private long rodadaPiscaAte = System.currentTimeMillis();
 
     /**
@@ -995,21 +914,21 @@ public class MesaView extends View {
             switch (posicaoBalao) {
             case 1:
                 x = (canvas.getWidth() - largBalao) / 2 - CartaVisual.largura;
-                y = canvas.getHeight() - altBalao * 4 - MARGEM - 3;
+                y = canvas.getHeight() - altBalao * 4 - 3;
                 quadrantePonta = 4;
                 break;
             case 2:
-                x = canvas.getWidth() - largBalao - MARGEM - 3;
+                x = canvas.getWidth() - largBalao - 3;
                 y = (canvas.getHeight() - altBalao) / 2;
                 quadrantePonta = 1;
                 break;
             case 3:
                 x = (canvas.getWidth() - largBalao) / 2 + CartaVisual.largura;
-                y = MARGEM + 3 + altBalao / 2;
+                y = 3 + altBalao / 2;
                 quadrantePonta = 2;
                 break;
             case 4:
-                x = MARGEM + 3;
+                x = 3;
                 y = (canvas.getHeight() - altBalao) / 2 - CartaVisual.altura;
                 quadrantePonta = 3;
                 break;
@@ -1050,10 +969,6 @@ public class MesaView extends View {
 
     public void setPosicaoVez(int posicaoVez) {
         this.posicaoVez = posicaoVez;
-    }
-
-    public void setValorMao(int m) {
-        valorMao = m;
     }
 
     public void setCorFundoCartaBalao(int corFundoCartaBalao) {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +12,14 @@ import android.os.Message;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,17 +45,6 @@ import me.chester.minitruco.core.JogoLocal;
  */
 public class TrucoActivity extends Activity {
 
-    private MesaView mesa;
-    private View layoutFimDeJogo;
-    private static boolean mIsViva = false;
-    boolean jogoAbortado = false;
-
-    JogadorHumano jogadorHumano;
-
-    Jogo jogo;
-
-    final int[] placar = new int[2];
-
     static final int MSG_ATUALIZA_PLACAR = 0;
     static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
     static final int MSG_OFERECE_NOVA_PARTIDA = 2;
@@ -57,66 +53,78 @@ public class TrucoActivity extends Activity {
     static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
     static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
     static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
-
+    private static boolean mIsViva = false;
+    final int[] placar = new int[2];
+    boolean jogoAbortado = false;
+    JogadorHumano jogadorHumano;
+    Jogo jogo;
+    private MesaView mesa;
+    private View layoutFimDeJogo;
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            TextView tvNos = findViewById(R.id.textview_nos);
-            TextView tvEles = findViewById(R.id.textview_eles);
+            TextView textViewNos = findViewById(R.id.textViewNos);
+            TextView textViewRivais = findViewById(R.id.textViewRivais);
             Button btnAumento = findViewById(R.id.btnAumento);
             Button btnAbertaFechada = findViewById(R.id.btnAbertaFechada);
             Button btnNovaPartida = findViewById(R.id.btnNovaPartida);
             switch (msg.what) {
-            case MSG_ATUALIZA_PLACAR:
-                if (placar[0] != msg.arg1) {
-                    tvNos.setBackgroundColor(Color.YELLOW);
-                }
-                if (placar[1] != msg.arg2) {
-                    tvEles.setBackgroundColor(Color.YELLOW);
-                }
-                tvNos.setText(msg.arg1 + " 👇");
-                tvEles.setText("👆 " + msg.arg2);
-                placar[0] = msg.arg1;
-                placar[1] = msg.arg2;
-                break;
-            case MSG_TIRA_DESTAQUE_PLACAR:
-                tvNos.setBackgroundColor(Color.TRANSPARENT);
-                tvEles.setBackgroundColor(Color.TRANSPARENT);
-                break;
-            case MSG_OFERECE_NOVA_PARTIDA:
-                if (jogo instanceof JogoLocal) {
-                    layoutFimDeJogo.setVisibility(View.VISIBLE);
-                    if (jogo.isJogoAutomatico()) {
-                        btnNovaPartida.performClick();
+                case MSG_ATUALIZA_PLACAR:
+                    if (placar[0] != msg.arg1) {
+                        textViewNos.setTextColor(Color.YELLOW);
                     }
-                }
-                break;
-            case MSG_REMOVE_NOVA_PARTIDA:
-                layoutFimDeJogo.setVisibility(View.INVISIBLE);
-                break;
-            case MSG_MOSTRA_BOTAO_AUMENTO:
-                int chave = getResources().getIdentifier("botao_aumento_" +
-                    jogo.nomeNoTruco(jogadorHumano.valorProximaAposta),
-                "string", "me.chester.minitruco");
-                btnAumento.setText(getResources().getString(chave));
-                btnAumento.setVisibility(Button.VISIBLE);
-                break;
-            case MSG_ESCONDE_BOTAO_AUMENTO:
-                btnAumento.setVisibility(Button.GONE);
-                break;
-            case MSG_MOSTRA_BOTAO_ABERTA_FECHADA:
-                btnAbertaFechada.setText(mesa.vaiJogarFechada ? "Aberta"
+                    if (placar[1] != msg.arg2) {
+                        textViewRivais.setTextColor(Color.YELLOW);
+                    }
+                    textViewNos.setText(Integer.toString(msg.arg1));
+                    textViewRivais.setText(Integer.toString(msg.arg2));
+                    placar[0] = msg.arg1;
+                    placar[1] = msg.arg2;
+                    break;
+                case MSG_TIRA_DESTAQUE_PLACAR:
+                    textViewNos.setTextColor(Color.BLACK);
+                    textViewRivais.setTextColor(Color.BLACK);
+                    break;
+                case MSG_OFERECE_NOVA_PARTIDA:
+                    if (jogo instanceof JogoLocal) {
+                        btnNovaPartida.setVisibility(View.VISIBLE);
+                        if (jogo.isJogoAutomatico()) {
+                            btnNovaPartida.performClick();
+                        }
+                    }
+                    break;
+                case MSG_REMOVE_NOVA_PARTIDA:
+                    btnNovaPartida.setVisibility(View.INVISIBLE);
+                    break;
+                case MSG_MOSTRA_BOTAO_AUMENTO:
+                    int chave = getResources().getIdentifier("botao_aumento_" +
+                            jogo.nomeNoTruco(jogadorHumano.valorProximaAposta),
+                        "string", "me.chester.minitruco");
+                    btnAumento.setText(getResources().getString(chave));
+                    btnAumento.setVisibility(Button.VISIBLE);
+                    break;
+                case MSG_ESCONDE_BOTAO_AUMENTO:
+                    btnAumento.setVisibility(Button.GONE);
+                    break;
+                case MSG_MOSTRA_BOTAO_ABERTA_FECHADA:
+                    btnAbertaFechada.setText(mesa.vaiJogarFechada ? "Aberta"
                         : "Fechada");
-                btnAbertaFechada.setVisibility(Button.VISIBLE);
-                break;
-            case MSG_ESCONDE_BOTAO_ABERTA_FECHADA:
-                btnAbertaFechada.setVisibility(Button.GONE);
-                break;
-            default:
-                break;
+                    btnAbertaFechada.setVisibility(Button.VISIBLE);
+                    break;
+                case MSG_ESCONDE_BOTAO_ABERTA_FECHADA:
+                    btnAbertaFechada.setVisibility(Button.GONE);
+                    break;
+                default:
+                    break;
             }
         }
     };
     private SharedPreferences preferences;
+    private ImageView imageValorMao;
+    private ImageView[] imagesResultadoRodada;
+
+    public static boolean isViva() {
+        return mIsViva;
+    }
 
     /**
      * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
@@ -144,7 +152,7 @@ public class TrucoActivity extends Activity {
     private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
         String modo = preferences.getString("modo", "P");
         boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
-        boolean jogoAutomatico =  preferences.getBoolean("jogoAutomatico", false);
+        boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
         Jogo novoJogo = new JogoLocal(humanoDecide, jogoAutomatico, modo);
         novoJogo.adiciona(jogadorHumano);
         for (int i = 2; i <= 4; i++) {
@@ -157,10 +165,16 @@ public class TrucoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.truco);
+        reorientaLayoutPlacar();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        imageValorMao = findViewById(R.id.imageValorMao);
+        imagesResultadoRodada = new ImageView[3];
+        imagesResultadoRodada[0] = findViewById(R.id.imageResultadoRodada1);
+        imagesResultadoRodada[1] = findViewById(R.id.imageResultadoRodada2);
+        imagesResultadoRodada[2] = findViewById(R.id.imageResultadoRodada3);
+        setValorMao(0);
         mesa = findViewById(R.id.MesaView01);
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
-        layoutFimDeJogo = findViewById(R.id.layoutFimDeJogo);
 
         mesa.velocidade = preferences.getBoolean("animacaoRapida", false) ? 4 : 1;
         mesa.setTrucoActivity(this);
@@ -190,12 +204,38 @@ public class TrucoActivity extends Activity {
     public void abertaFechadaClickHandler(View v) {
         mesa.vaiJogarFechada = !mesa.vaiJogarFechada;
         handler.sendMessage(Message.obtain(handler,
-                MSG_MOSTRA_BOTAO_ABERTA_FECHADA));
+            MSG_MOSTRA_BOTAO_ABERTA_FECHADA));
     }
 
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        reorientaLayoutPlacar();
+    }
+
+    /**
+     * Ajusta a barra de placar de forma a aproveitar ao máximo o espaço
+     * da mesa (abaixo em portrait e na lateral em landscape)
+     */
+    private void reorientaLayoutPlacar() {
+        LinearLayout layoutTruco = findViewById(R.id.layoutTruco);
+        LinearLayout layoutPlacar = findViewById(R.id.layoutPlacar);
+
+        int larguraBarraVertical;
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            layoutTruco.setOrientation(LinearLayout.HORIZONTAL);
+            layoutPlacar.setOrientation(LinearLayout.VERTICAL);
+            larguraBarraVertical = Resources.getSystem().getDisplayMetrics().heightPixels / 3;
+        } else {
+            layoutTruco.setOrientation(LinearLayout.VERTICAL);
+            layoutPlacar.setOrientation(LinearLayout.HORIZONTAL);
+            larguraBarraVertical = ViewGroup.LayoutParams.MATCH_PARENT;
+        }
+
+        ViewGroup.LayoutParams params = layoutPlacar.getLayoutParams();
+        params.width = larguraBarraVertical;
+        layoutPlacar.setLayoutParams(params);
     }
 
     @Override
@@ -227,9 +267,9 @@ public class TrucoActivity extends Activity {
         }
 
         View dialogPerguntaAntesDeFechar = getLayoutInflater()
-                .inflate(R.layout.dialog_sempre_confirma_fechar_jogo, null);
+            .inflate(R.layout.dialog_sempre_confirma_fechar_jogo, null);
         final CheckBox checkBoxPerguntarSempre = dialogPerguntaAntesDeFechar
-                .findViewById(R.id.checkBoxSempreConfirmaFecharJogo);
+            .findViewById(R.id.checkBoxSempreConfirmaFecharJogo);
         checkBoxPerguntarSempre.setOnCheckedChangeListener((button, isChecked) -> {
             preferences.edit().putBoolean("sempreConfirmaFecharJogo", isChecked).apply();
         });
@@ -244,7 +284,64 @@ public class TrucoActivity extends Activity {
             .show();
     }
 
-    public static boolean isViva() {
-        return mIsViva;
+    public void setValorMao(int valor) {
+        runOnUiThread(() -> {
+            int bitmap;
+            switch (valor) {
+                case 1:
+                    bitmap = R.drawable.vale1;
+                    break;
+                case 2:
+                    bitmap = R.drawable.vale2;
+                    break;
+                case 3:
+                    bitmap = R.drawable.vale3;
+                    break;
+                case 4:
+                    bitmap = R.drawable.vale4;
+                    break;
+                case 6:
+                    bitmap = R.drawable.vale6;
+                    break;
+                case 10:
+                    bitmap = R.drawable.vale10;
+                    break;
+                case 12:
+                    bitmap = R.drawable.vale12;
+                    break;
+                default:
+                    bitmap = R.drawable.placarrodada0;
+            }
+            imageValorMao.setImageResource(bitmap);
+        });
     }
+
+    public void setResultadoRodada(int rodada, int resultado) {
+        runOnUiThread(() -> {
+            int bitmap;
+            switch (resultado) {
+                case 1:
+                    bitmap = R.drawable.placarrodada1;
+                    break;
+                case 2:
+                    bitmap = R.drawable.placarrodada2;
+                    break;
+                case 3:
+                    bitmap = R.drawable.placarrodada3;
+                    break;
+                default:
+                    bitmap = R.drawable.placarrodada0;
+            }
+            imagesResultadoRodada[rodada - 1].setImageResource(bitmap);
+            if (bitmap != R.drawable.placarrodada0) {
+                Animation animation = new AlphaAnimation(0, 1);
+                animation.setDuration(400);
+                animation.setInterpolator(new LinearInterpolator());
+                animation.setRepeatCount(2);
+                animation.setRepeatMode(Animation.RESTART);
+                imagesResultadoRodada[rodada - 1].startAnimation(animation);
+            }
+        });
+    }
+
 }
