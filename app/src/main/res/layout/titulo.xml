@@ -26,6 +26,7 @@
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
         android:stretchColumns="*">
 
         <TableRow tools:ignore="UselessParent">
