@@ -1,5 +1,6 @@
 package me.chester.minitruco.android;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
@@ -59,7 +60,8 @@ public class TrucoActivity extends Activity {
     JogadorHumano jogadorHumano;
     Jogo jogo;
     private MesaView mesa;
-    private View layoutFimDeJogo;
+    private TextView textViewPartidas;
+
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             TextView textViewNos = findViewById(R.id.textViewNos);
@@ -167,15 +169,17 @@ public class TrucoActivity extends Activity {
         setContentView(R.layout.truco);
         reorientaLayoutPlacar();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        textViewPartidas = findViewById(R.id.textViewPartidas);
         imageValorMao = findViewById(R.id.imageValorMao);
         imagesResultadoRodada = new ImageView[3];
         imagesResultadoRodada[0] = findViewById(R.id.imageResultadoRodada1);
         imagesResultadoRodada[1] = findViewById(R.id.imageResultadoRodada2);
         imagesResultadoRodada[2] = findViewById(R.id.imageResultadoRodada3);
+
+        textViewPartidas.setText("0 x 0");
         setValorMao(0);
         mesa = findViewById(R.id.MesaView01);
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
-
         mesa.velocidade = preferences.getBoolean("animacaoRapida", false) ? 4 : 1;
         mesa.setTrucoActivity(this);
     }
@@ -344,4 +348,17 @@ public class TrucoActivity extends Activity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
+    public void jogoFechado(int numEquipeVencedora) {
+        runOnUiThread(() -> {
+            String pontos[] = textViewPartidas.getText().toString().split(" x ");
+            if (numEquipeVencedora == 1) {
+                textViewPartidas.setText((Integer.parseInt(pontos[0]) + 1) + " x " + pontos[1]);
+            } else {
+                textViewPartidas.setText(pontos[0] + " x " + (Integer.parseInt(pontos[1]) + 1));
+            }
+            handler.sendMessage(Message.obtain(handler,
+                MSG_OFERECE_NOVA_PARTIDA));
+        });
+    }
 }
