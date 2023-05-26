@@ -695,10 +695,10 @@ public class MesaView extends View {
             paintPergunta.setColor(Color.WHITE);
             paintPergunta.setStyle(Style.STROKE);
             canvas.drawRect(rectDialog, paintPergunta);
-            paintPergunta.setTextSize(tamanhoFonte * 0.5f);
+            paintPergunta.setTextSize(tamanhoFonte * 0.75f);
             paintPergunta.setTextAlign(Align.CENTER);
             paintPergunta.setStyle(Style.FILL);
-            canvas.drawText(textoPergunta, rectDialog.centerX(), rectDialog.top + paintPergunta.getTextSize() * 1.5f, paintPergunta);
+            canvas.drawText(textoPergunta, rectDialog.centerX(), rectDialog.top + paintPergunta.getTextSize() * 2.3f, paintPergunta);
             desenhaBotao("Sim", canvas, rectBotaoSim);
             desenhaBotao("Não", canvas, rectBotaoNao);
         }
