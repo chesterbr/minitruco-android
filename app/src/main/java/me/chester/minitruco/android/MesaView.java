@@ -715,19 +715,19 @@ public class MesaView extends View {
     }
 
     private void desenhaBotao(String texto, Canvas canvas, RectF outerRect) {
+        // TODO evitar instanciar objetos aqui (e no caller)
         Paint paint = new Paint();
-        paint.setStyle(Style.STROKE);
+        paint.setStyle(Style.FILL);
         paint.setAntiAlias(true);
         paint.setTextSize(tamanhoFonte * 0.75f);
         // Borda
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.GRAY);
         canvas.drawRoundRect(outerRect, tamanhoFonte * 4 / 5, tamanhoFonte * 4 / 5, paint);
         // Interior
-        paint.setColor(Color.BLACK);
+        paint.setColor(0xFF1D3929);
         RectF innerRect = new RectF(outerRect.left + 4, outerRect.top + 4, outerRect.right - 4, outerRect.bottom - 4);
         canvas.drawRoundRect(innerRect, tamanhoFonte * 4 / 5, tamanhoFonte * 4 / 5, paint);
         // Texto
-        paint.setStyle(Style.FILL);
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Align.CENTER);
         canvas.drawText(texto, outerRect.centerX(), outerRect.centerY() - tamanhoFonte * 0.2f + tamanhoFonte * 0.5f, paint);
