@@ -777,7 +777,7 @@ public class MesaView extends View {
         // Ponta (é um triângulo que desenhamos linha a linha)
         paint.setAntiAlias(false);
         int xi;
-        for (int i = 0; i < altBalao; i++) {
+        for (int i = altBalao / 4; i < altBalao; i++) {
             if (quadrantePonta == 2 || quadrantePonta == 3) {
                 xi = x + altBalao * 3 / 2 - i;
             } else {
