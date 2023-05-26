@@ -808,7 +808,7 @@ public class MesaView extends View {
             paintFonte.getTextBounds(fraseBalao, 0, fraseBalao.length(), bounds);
 
             int largBalao = bounds.width() + 2 * MARGEM_BALAO_LEFT;
-            int altBalao = bounds.height() + 2 * MARGEM_BALAO_TOP;
+            int altBalao = (int) (bounds.height() + 2.5 * MARGEM_BALAO_TOP);
             int x = 0, y = 0;
             int quadrantePonta = 0;
             switch (posicaoBalao) {
@@ -852,7 +852,7 @@ public class MesaView extends View {
 
             // Finalmente, escreve o texto do balão
             paint.setAntiAlias(true);
-            canvas.drawText(fraseBalao, x + MARGEM_BALAO_LEFT, y + altBalao - MARGEM_BALAO_TOP - 2, paintFonte);
+            canvas.drawText(fraseBalao, x + MARGEM_BALAO_LEFT, y + altBalao - MARGEM_BALAO_TOP - 4 * density, paintFonte);
 
         } else {
             fraseBalao = null;
