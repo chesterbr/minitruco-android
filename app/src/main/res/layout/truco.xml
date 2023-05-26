@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layoutTruco"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -113,8 +114,7 @@
                 android:gravity="center"
                 android:text="mão"
                 android:textColor="#000000"
-                android:textSize="11sp"
-                android:textStyle="bold" />
+                android:textSize="11sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -166,39 +166,44 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_margin="1dp"
+            android:paddingHorizontal="6dp"
             android:gravity="center"
             android:background="@drawable/borda_placar"
             android:orientation="horizontal">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewNos"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="9"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text=" 9"
+                android:layout_weight="3"
                 android:gravity="right|center"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                app:autoSizeTextType="uniform"
+                app:autoSizeStepGranularity="1sp"
                 android:textStyle="bold" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="x"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="-"
+                android:layout_weight="2"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                app:autoSizeTextType="uniform"
+                app:autoSizeStepGranularity="1sp"
                 android:textStyle="bold"
                 android:gravity="center" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewRivais"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="7"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="10"
+                android:layout_weight="3"
+                android:gravity="left|center"
                 android:textColor="#000000"
-                android:textSize="24sp"
+                app:autoSizeTextType="uniform"
+                app:autoSizeStepGranularity="1sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -211,21 +216,22 @@
             android:background="@drawable/borda_placar"
             android:orientation="vertical">
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="partidas"
                 android:textSize="11sp"
-                android:textColor="#000000"
-                android:textStyle="bold" />
+                android:textColor="#000000" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewPartidas"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="2 x 1"
+                app:autoSizeTextType="uniform"
+                app:autoSizeStepGranularity="1sp"
+                android:text="2 - 1"
                 android:textColor="#000000"
                 android:textStyle="bold" />
 

@@ -54,6 +54,7 @@ public class TrucoActivity extends Activity {
     static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
     static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
     static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
+    public static final String SEPARADOR_PLACAR_PARTIDAS = " x ";
     private static boolean mIsViva = false;
     final int[] placar = new int[2];
     boolean jogoAbortado = false;
@@ -77,8 +78,8 @@ public class TrucoActivity extends Activity {
                     if (placar[1] != msg.arg2) {
                         textViewRivais.setTextColor(Color.YELLOW);
                     }
-                    textViewNos.setText(Integer.toString(msg.arg1));
-                    textViewRivais.setText(Integer.toString(msg.arg2));
+                    textViewNos.setText((msg.arg1 < 10 ? " " : "") + Integer.toString(msg.arg1));
+                    textViewRivais.setText(Integer.toString(msg.arg2) + (msg.arg2 < 10 ? " " : ""));
                     placar[0] = msg.arg1;
                     placar[1] = msg.arg2;
                     break;
@@ -176,7 +177,7 @@ public class TrucoActivity extends Activity {
         imagesResultadoRodada[1] = findViewById(R.id.imageResultadoRodada2);
         imagesResultadoRodada[2] = findViewById(R.id.imageResultadoRodada3);
 
-        textViewPartidas.setText("0 x 0");
+        textViewPartidas.setText("0" + SEPARADOR_PLACAR_PARTIDAS + "0");
         setValorMao(0);
         mesa = findViewById(R.id.MesaView01);
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
@@ -351,11 +352,11 @@ public class TrucoActivity extends Activity {
     @SuppressLint("SetTextI18n")
     public void jogoFechado(int numEquipeVencedora) {
         runOnUiThread(() -> {
-            String pontos[] = textViewPartidas.getText().toString().split(" x ");
+            String pontos[] = textViewPartidas.getText().toString().split(SEPARADOR_PLACAR_PARTIDAS);
             if (jogadorHumano.getEquipe() == numEquipeVencedora) {
-                textViewPartidas.setText((Integer.parseInt(pontos[0]) + 1) + " x " + pontos[1]);
+                textViewPartidas.setText((Integer.parseInt(pontos[0]) + 1) + SEPARADOR_PLACAR_PARTIDAS + pontos[1]);
             } else {
-                textViewPartidas.setText(pontos[0] + " x " + (Integer.parseInt(pontos[1]) + 1));
+                textViewPartidas.setText(pontos[0] + SEPARADOR_PLACAR_PARTIDAS + (Integer.parseInt(pontos[1]) + 1));
             }
             handler.sendMessage(Message.obtain(handler,
                 MSG_OFERECE_NOVA_PARTIDA));

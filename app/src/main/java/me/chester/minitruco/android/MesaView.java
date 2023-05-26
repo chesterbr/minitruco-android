@@ -10,6 +10,8 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -69,6 +71,7 @@ public class MesaView extends View {
 
     private static final Random rand = new Random();
     private final Paint paintPergunta = new Paint();
+    private final float density = getResources().getDisplayMetrics().density;
     public boolean mostrarPerguntaMaoDeX = false;
     public boolean mostrarPerguntaAumento = false;
     public boolean vaiJogarFechada;
@@ -221,7 +224,12 @@ public class MesaView extends View {
         int delta = CartaVisual.altura / 24;
         leftBaralho = w - CartaVisual.largura - delta * 3;
         topBaralho = delta;
-        tamanhoFonte = 12.0f * (h / 270.0f);
+        DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
+        tamanhoFonte = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_PX,
+            Math.min(w, h) / 20f,
+            displayMetrics
+        );
 
         // Na primeira chamada (inicialização), instanciamos as cartas
         if (!inicializada) {
@@ -233,14 +241,27 @@ public class MesaView extends View {
         }
 
         // Define posição e tamanho da caixa de diálogo e seus botões
-        int alturaDialog = CartaVisual.altura;
-        int larguraDialog = CartaVisual.largura * 3;
+        int larguraDialog = (int) (tamanhoFonte * 11);
+        int alturaDialog = (int) (larguraDialog / 2.2f);
         int topDialog = (h - alturaDialog) / 2;
         int leftDialog = (w - larguraDialog) / 2;
         rectDialog = new Rect(leftDialog, topDialog, leftDialog + larguraDialog, topDialog + alturaDialog);
-        int alturaBotao = (int) (tamanhoFonte * 0.6f);
-        rectBotaoSim = new RectF(leftDialog + 8, topDialog + alturaDialog - alturaBotao - 32, leftDialog + larguraDialog / 2 - 8, topDialog + alturaDialog - 16);
-        rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8, rectBotaoSim.top, leftDialog + larguraDialog - 8, rectBotaoSim.bottom);
+        int alturaBotao = (int) (alturaDialog * 0.30f);
+        int margemBotao = (int) (8 * density);
+
+        int bottomBotao = rectDialog.bottom - margemBotao;
+        int topBotao = bottomBotao - alturaBotao;
+        int larguraBotao =  larguraDialog / 2 - margemBotao;
+        rectBotaoSim = new RectF(
+            leftDialog + margemBotao,
+            topBotao,
+            leftDialog + larguraBotao,
+            bottomBotao);
+        rectBotaoNao = new RectF(
+            rectBotaoSim.right + margemBotao,
+            topBotao,
+            rectBotaoSim.right + margemBotao + larguraBotao,
+            bottomBotao);
 
         // Posiciona o vira e as cartas decorativas do baralho, que são fixos
         cartas[0].movePara(leftBaralho, topBaralho);
@@ -674,12 +695,12 @@ public class MesaView extends View {
             paintPergunta.setColor(Color.WHITE);
             paintPergunta.setStyle(Style.STROKE);
             canvas.drawRect(rectDialog, paintPergunta);
-            paintPergunta.setTextSize(tamanhoFonte * 0.5f);
+            paintPergunta.setTextSize(tamanhoFonte * 0.75f);
             paintPergunta.setTextAlign(Align.CENTER);
             paintPergunta.setStyle(Style.FILL);
-            canvas.drawText(textoPergunta, rectDialog.centerX(), rectDialog.top + paintPergunta.getTextSize() * 1.5f, paintPergunta);
+            canvas.drawText(textoPergunta, rectDialog.centerX(), rectDialog.top + paintPergunta.getTextSize() * 2.3f, paintPergunta);
             desenhaBotao("Sim", canvas, rectBotaoSim);
-            desenhaBotao("Nao", canvas, rectBotaoNao);
+            desenhaBotao("Não", canvas, rectBotaoNao);
         }
 
         desenhaBalao(canvas);
@@ -694,19 +715,19 @@ public class MesaView extends View {
     }
 
     private void desenhaBotao(String texto, Canvas canvas, RectF outerRect) {
+        // TODO evitar instanciar objetos aqui (e no caller)
         Paint paint = new Paint();
-        paint.setStyle(Style.STROKE);
+        paint.setStyle(Style.FILL);
         paint.setAntiAlias(true);
         paint.setTextSize(tamanhoFonte * 0.75f);
         // Borda
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.GRAY);
         canvas.drawRoundRect(outerRect, tamanhoFonte * 4 / 5, tamanhoFonte * 4 / 5, paint);
         // Interior
-        paint.setColor(Color.BLACK);
+        paint.setColor(0xFF1D3929);
         RectF innerRect = new RectF(outerRect.left + 4, outerRect.top + 4, outerRect.right - 4, outerRect.bottom - 4);
         canvas.drawRoundRect(innerRect, tamanhoFonte * 4 / 5, tamanhoFonte * 4 / 5, paint);
         // Texto
-        paint.setStyle(Style.FILL);
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Align.CENTER);
         canvas.drawText(texto, outerRect.centerX(), outerRect.centerY() - tamanhoFonte * 0.2f + tamanhoFonte * 0.5f, paint);
@@ -756,7 +777,7 @@ public class MesaView extends View {
         // Ponta (é um triângulo que desenhamos linha a linha)
         paint.setAntiAlias(false);
         int xi;
-        for (int i = 0; i < altBalao; i++) {
+        for (int i = altBalao / 4; i < altBalao; i++) {
             if (quadrantePonta == 2 || quadrantePonta == 3) {
                 xi = x + altBalao * 3 / 2 - i;
             } else {
@@ -787,7 +808,7 @@ public class MesaView extends View {
             paintFonte.getTextBounds(fraseBalao, 0, fraseBalao.length(), bounds);
 
             int largBalao = bounds.width() + 2 * MARGEM_BALAO_LEFT;
-            int altBalao = bounds.height() + 2 * MARGEM_BALAO_TOP;
+            int altBalao = (int) (bounds.height() + 2.5 * MARGEM_BALAO_TOP);
             int x = 0, y = 0;
             int quadrantePonta = 0;
             switch (posicaoBalao) {
@@ -831,7 +852,7 @@ public class MesaView extends View {
 
             // Finalmente, escreve o texto do balão
             paint.setAntiAlias(true);
-            canvas.drawText(fraseBalao, x + MARGEM_BALAO_LEFT, y + altBalao - MARGEM_BALAO_TOP - 2, paintFonte);
+            canvas.drawText(fraseBalao, x + MARGEM_BALAO_LEFT, y + altBalao - MARGEM_BALAO_TOP - 4 * density, paintFonte);
 
         } else {
             fraseBalao = null;
