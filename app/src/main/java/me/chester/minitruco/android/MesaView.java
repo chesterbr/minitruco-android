@@ -10,6 +10,8 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -221,7 +223,12 @@ public class MesaView extends View {
         int delta = CartaVisual.altura / 24;
         leftBaralho = w - CartaVisual.largura - delta * 3;
         topBaralho = delta;
-        tamanhoFonte = 12.0f * (h / 270.0f);
+        DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
+        tamanhoFonte = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_PX,
+            Math.min(w, h) / 20f,
+            displayMetrics
+        );
 
         // Na primeira chamada (inicialização), instanciamos as cartas
         if (!inicializada) {
