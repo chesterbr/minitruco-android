@@ -241,8 +241,8 @@ public class MesaView extends View {
         }
 
         // Define posição e tamanho da caixa de diálogo e seus botões
-        int alturaDialog = CartaVisual.altura;
-        int larguraDialog = CartaVisual.largura * 3;
+        int larguraDialog = (int) (tamanhoFonte * 11);
+        int alturaDialog = (int) (larguraDialog / 2.2f);
         int topDialog = (h - alturaDialog) / 2;
         int leftDialog = (w - larguraDialog) / 2;
         rectDialog = new Rect(leftDialog, topDialog, leftDialog + larguraDialog, topDialog + alturaDialog);
