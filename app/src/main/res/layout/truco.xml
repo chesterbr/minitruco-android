@@ -114,8 +114,7 @@
                 android:gravity="center"
                 android:text="mão"
                 android:textColor="#000000"
-                android:textSize="11sp"
-                android:textStyle="bold" />
+                android:textSize="11sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -219,24 +218,20 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
+                android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="partidas"
-                app:autoSizeTextType="uniform"
-                app:autoSizeStepGranularity="1sp"
-                android:textColor="#000000"
-                android:textStyle="bold" />
+                android:textSize="11sp"
+                android:textColor="#000000" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewPartidas"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center"
                 app:autoSizeTextType="uniform"
                 app:autoSizeStepGranularity="1sp"
-                android:text="2 x 1"
+                android:text="2 - 1"
                 android:textColor="#000000"
                 android:textStyle="bold" />
 
