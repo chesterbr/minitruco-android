@@ -71,6 +71,7 @@ public class MesaView extends View {
 
     private static final Random rand = new Random();
     private final Paint paintPergunta = new Paint();
+    private final float density = getResources().getDisplayMetrics().density;
     public boolean mostrarPerguntaMaoDeX = false;
     public boolean mostrarPerguntaAumento = false;
     public boolean vaiJogarFechada;
@@ -245,9 +246,22 @@ public class MesaView extends View {
         int topDialog = (h - alturaDialog) / 2;
         int leftDialog = (w - larguraDialog) / 2;
         rectDialog = new Rect(leftDialog, topDialog, leftDialog + larguraDialog, topDialog + alturaDialog);
-        int alturaBotao = (int) (tamanhoFonte * 0.6f);
-        rectBotaoSim = new RectF(leftDialog + 8, topDialog + alturaDialog - alturaBotao - 32, leftDialog + larguraDialog / 2 - 8, topDialog + alturaDialog - 16);
-        rectBotaoNao = new RectF(leftDialog + larguraDialog / 2 + 8, rectBotaoSim.top, leftDialog + larguraDialog - 8, rectBotaoSim.bottom);
+        int alturaBotao = (int) (alturaDialog * 0.30f);
+        int margemBotao = (int) (8 * density);
+
+        int bottomBotao = rectDialog.bottom - margemBotao;
+        int topBotao = bottomBotao - alturaBotao;
+        int larguraBotao =  larguraDialog / 2 - margemBotao;
+        rectBotaoSim = new RectF(
+            leftDialog + margemBotao,
+            topBotao,
+            leftDialog + larguraBotao,
+            bottomBotao);
+        rectBotaoNao = new RectF(
+            rectBotaoSim.right + margemBotao,
+            topBotao,
+            rectBotaoSim.right + margemBotao + larguraBotao,
+            bottomBotao);
 
         // Posiciona o vira e as cartas decorativas do baralho, que são fixos
         cartas[0].movePara(leftBaralho, topBaralho);
@@ -686,7 +700,7 @@ public class MesaView extends View {
             paintPergunta.setStyle(Style.FILL);
             canvas.drawText(textoPergunta, rectDialog.centerX(), rectDialog.top + paintPergunta.getTextSize() * 1.5f, paintPergunta);
             desenhaBotao("Sim", canvas, rectBotaoSim);
-            desenhaBotao("Nao", canvas, rectBotaoNao);
+            desenhaBotao("Não", canvas, rectBotaoNao);
         }
 
         desenhaBalao(canvas);
