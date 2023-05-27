@@ -14,13 +14,17 @@
         android:smallScreens="true" />
     <!--
         Jogo via Bluetooth
+        As permissões BLUETOOTH e BLUETOOTH_ADMIN deveriam ser declaradas apenas até o SDK 30
+        (Android 11), mas alguns aparelhos Redmi/Poco com Android 12 estão crashando por
+        não ter a permissão declarada, então vamos estender ao SDK 31 e torcer para todos os
+        outros aparelhos de fato ignorarem isso.
     -->
     <uses-permission
         android:name="android.permission.BLUETOOTH"
-        android:maxSdkVersion="30" />
+        android:maxSdkVersion="31" />
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADMIN"
-        android:maxSdkVersion="30" />
+        android:maxSdkVersion="31" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission
