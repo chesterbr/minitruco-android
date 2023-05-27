@@ -259,7 +259,7 @@ public class TrucoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mIsViva = false;
-        if (!jogoAbortado) {
+        if (jogo != null && !jogoAbortado) {
             jogo.abortaJogo(1);
         }
     }
