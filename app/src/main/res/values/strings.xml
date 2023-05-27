@@ -214,11 +214,12 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Volta da Manilha Velha (clique no "Brasil" para escolher ela ou Baralho Limpo)<br/>
-            - Animações mais fluidas (até 60FPS) e distribuição/recolhimento mais rápidos<br/>
-            - Tela do jogo sem título/menu (= mais espaço para cartas)<br/>
-            - Escolha de cor das cartas (para resolver problemas de modo escuro)<br/>
-            - Bots mais ajustados para o truco mineiro<br/>
+            - Sempre mostra quem vai abrir a mão de 10/11<br/>
+            - Placar de partidas ganhas/perdidas<br/>
+            - Alinha todos os placares e marcadores na parte inferior/lateral<br/>
+            - Diversas correções e ajustes visuais nas cartas, balões e diálogos<br/>
+            - Correção de SecurityException em alguns Redmi com versões antigas e bugadas do Android 12<br/>
+            - Usa cor de fundo customizada das cartas nos balões<br/>
         ]]>
     </string>
 

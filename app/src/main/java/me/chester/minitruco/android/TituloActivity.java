@@ -204,7 +204,7 @@ public class TituloActivity extends BaseActivity {
     public void modoButtonClickHandler(View view) {
         if (view.getTag().equals("outros")) {
             new AlertDialog.Builder(this).setTitle("Modos Especiais")
-                .setMessage("Estes modos são jogados com a partida valendo 1 e o truco indo a 3, 6, 9 e 12).")
+                .setMessage("Estes modos são jogados com a partida valendo 1 e o truco indo a 3, depois 6, 9 e 12.")
                 .setNegativeButton("Baralho Limpo", (dialog, which) -> {
                     selecionaModo("L");
                 })
