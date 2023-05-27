@@ -1,5 +1,7 @@
 package me.chester.minitruco.android;
 
+import static android.util.TypedValue.COMPLEX_UNIT_DIP;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +12,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -220,27 +223,50 @@ public class TrucoActivity extends Activity {
 
     /**
      * Ajusta a barra de placar de forma a aproveitar ao máximo o espaço
-     * da mesa (abaixo em portrait e na lateral em landscape)
+     * da mesa (abaixo em portrait e na lateral em landscape).
+     * <p>
+     * (sim, eu poderia ter layouts separados, mas a duplicação de código
+     * ia ser monstra, e só tenho que ajustar as orientações dos layouts
+     * e atribuir valores manuais para os elementos dinâmicos; além disso
+     * eventualmente vai ser possível mudar a barra para o topo/esquerda,
+     * e aí vai ter que ser no código mesmo)
      */
     private void reorientaLayoutPlacar() {
         LinearLayout layoutTruco = findViewById(R.id.layoutTruco);
         LinearLayout layoutPlacar = findViewById(R.id.layoutPlacar);
+        LinearLayout layoutPlacarPartida = findViewById(R.id.layoutPlacarPartida);
+        LinearLayout layoutPlacarPartidas = findViewById(R.id.layoutPlacarPartidas);
 
-        int larguraBarraVertical;
+        int larguraPlacar;
+        int alturaPlacaresDinamicos;
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             layoutTruco.setOrientation(LinearLayout.HORIZONTAL);
             layoutPlacar.setOrientation(LinearLayout.VERTICAL);
-            larguraBarraVertical = Resources.getSystem().getDisplayMetrics().heightPixels / 3;
+            larguraPlacar = Resources.getSystem().getDisplayMetrics().heightPixels / 3;
+            alturaPlacaresDinamicos = (int) TypedValue.applyDimension(
+                COMPLEX_UNIT_DIP,
+                60,
+                getResources().getDisplayMetrics());
+
         } else {
             layoutTruco.setOrientation(LinearLayout.VERTICAL);
             layoutPlacar.setOrientation(LinearLayout.HORIZONTAL);
-            larguraBarraVertical = ViewGroup.LayoutParams.MATCH_PARENT;
+            larguraPlacar = ViewGroup.LayoutParams.MATCH_PARENT;
+            alturaPlacaresDinamicos = ViewGroup.LayoutParams.MATCH_PARENT;
         }
 
         ViewGroup.LayoutParams params = layoutPlacar.getLayoutParams();
-        params.width = larguraBarraVertical;
+        params.width = larguraPlacar;
         layoutPlacar.setLayoutParams(params);
+
+        ViewGroup.LayoutParams paramsPartida = layoutPlacarPartida.getLayoutParams();
+        paramsPartida.height = alturaPlacaresDinamicos;
+        layoutPlacarPartida.setLayoutParams(paramsPartida);
+
+        ViewGroup.LayoutParams paramsPartidas = layoutPlacarPartidas.getLayoutParams();
+        paramsPartidas.height = alturaPlacaresDinamicos;
+        layoutPlacarPartidas.setLayoutParams(paramsPartidas);
     }
 
     @Override
