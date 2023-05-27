@@ -162,6 +162,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layoutPlacarPartida"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -209,6 +210,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layoutPlacarPartidas"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -232,8 +234,7 @@
                 app:autoSizeTextType="uniform"
                 app:autoSizeStepGranularity="1sp"
                 android:text="2 - 1"
-                android:textColor="#000000"
-                android:textStyle="bold" />
+                android:textColor="#000000" />
 
         </LinearLayout>
 
