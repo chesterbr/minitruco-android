@@ -1,5 +1,7 @@
 # miniTruco Android
 
+<img src="gráficos/screenshot2.png" align="right" width="200"/>
+
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android.
 
 Ele é completamente gratuito, sem anúncios, leve e não precisa de internet para jogar sozinho. É possível jogar com outras pessoas via Bluetooth e (em breve) também pela internet.
@@ -8,7 +10,9 @@ A [versão oficial](https://play.google.com/store/apps/details?id=me.chester.min
 
 [![versão oficial no Google Play](disponivel-google-play-badge.png)](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt)
 
-É um software livre, desenvolvido por hobby no meu tempo pessoal (com valiosas colaborações de outras pessoas). Você pode usar e modificar seu código como quiser, dentro dos [termos da licença](LICENSE).
+É um software livre, sem fins lucrativos, desenvolvido por hobby e com :heart: no meu tempo pessoal (com valiosas colaborações de outras pessoas).
+
+Você pode usar e modificar seu código como quiser, dentro dos [termos da licença](LICENSE).
 
 ## Desenvolvendo e Contribuindo
 
