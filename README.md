@@ -1,6 +1,6 @@
 # miniTruco Android
 
-<img src="gráficos/screenshot2.png" align="right" width="200"/>
+<img src="gráficos/screenshot-readme.png" align="right" width="200"/>
 
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android.
 
