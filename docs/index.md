@@ -5,7 +5,7 @@ EM CONSTRUÇÃO (finge que tem uma gif dos anos 90 de men-at-work aqui)
 
 - [Introdução](#introdução)
 - [Contribuindo](#contribuindo)
-- [História e Filosofia](#história-e-filosofia)
+- [História, Objetivos e Design](#história-objetivos-e-design)
 - [Terminologia](#terminologia)
 - [Pré-requisitos e Configuração](#pré-requisitos-e-configuração)
 - [Organização](#organização)
@@ -15,6 +15,7 @@ EM CONSTRUÇÃO (finge que tem uma gif dos anos 90 de men-at-work aqui)
   - [Internet (em desenvolvimento)](#internet-em-desenvolvimento)
 - [Testes (ou falta de)](#testes-ou-falta-de)
 - [Estratégia dos bots](#estratégia-dos-bots)
+  - [Parágrafo que eu não sei onde vai](#parágrafo-que-eu-não-sei-onde-vai)
 
 
 ## Introdução
@@ -27,19 +28,23 @@ Você pode usar e modificar seu código como quiser, dentro dos [termos da licen
 
 Fique à vontade para [criar um issue](https://github.com/chesterbr/minitruco-android/issues) no GitHub se encontrar um problema de configuração, encontrar um *bug*, tiver uma sugestão ou quiser contribuir de qualquer forma.
 
-O código é bastante antigo (baseado na ainda mais antiga [versão Java ME](https://github.com/chesterbr/minitruco-j2me)), mas aos poucos estou tentando modernizar. [Pull requests](https://docs.github.com/pt/pull-requests) são bem-vindas, mas não há garantia de aceite (em particular devido à falta de testes automáticos, que me obriga a testar tudo muito cuidadosamente).
+[Pull requests](https://docs.github.com/pt/pull-requests) são bem-vindas, mas não há garantia de aceite (em particular devido à falta de testes automáticos, que me obriga a testar tudo muito cuidadosamente).
+
+O código é bastante antigo (baseado na ainda mais antiga [versão Java ME](https://github.com/chesterbr/minitruco-j2me)), mas aos poucos estou tentando modernizar.
 
 Uma área que sempre pode ser melhorada é a de estratégias (veja a seção "[Estratégia dos bots](#estratégia-dos-bots)"); correções de bugs específicos de celulares ajudam muito também, já que eu não tenho muitos à disposição.
 
-## História e Filosofia
+## História, Objetivos e Design
 
-O nome "miniTruco" é uma alusão ao fato de que a versão original rodava até em celulares com tela minúscula (através de um baralho desenhado [pixel](https://github.com/chesterbr/minitruco-j2me/blob/aabad635b34eee346cd7e12324f471c70ed16836/miniTruco/res/naipes.png) a [pixel](https://github.com/chesterbr/minitruco-j2me/blob/aabad635b34eee346cd7e12324f471c70ed16836/miniTruco/res/valores.png)), e foi mantido para enfatizar o compromisso de acessibilidade e inclusão. Os objetivos principais do projeto são:
+O nome "miniTruco" é uma alusão ao fato de que a versão original rodava até em celulares com pouca memória (64K) e tela minúscula (através de um baralho desenhado [pixel](https://github.com/chesterbr/minitruco-j2me/blob/aabad635b34eee346cd7e12324f471c70ed16836/miniTruco/res/naipes.png) a [pixel](https://github.com/chesterbr/minitruco-j2me/blob/aabad635b34eee346cd7e12324f471c70ed16836/miniTruco/res/valores.png)), e embora a realidade de hoje seja outra, o nome ainda simboliza o compromisso de com o minimalismo e a inclusão.
+
+Os **objetivos principais** do projeto são:
 
 - Rodar até nos aparelhos mais modestos que ainda estejam em uso no Brasil (com base nas estatísticas da Play Store)
 - Suportar o maior número viável de variantes locais (eu costumo dizer que truco pode ser usado como GPS, porque você anda um pouco e a regra muda)
-- Promover a inclusão que muitas vezes falta no próprio truco
+- Promover a inclusão (que às vezes falta até no truco "de verdade", por exemplo quando a irreverência cruza o limite e vira preconceito)
 
-Isto orienta algumas metas e decisões de design e implementação, tais como:
+Isto orienta algumas **decisões de design** e implementação, tais como:
 
 - Foco na plataforma Android, que é a mais popular no Brasil
 - Interface adaptável a diferentes resoluções, tamanho de tela e orientações
@@ -47,12 +52,13 @@ Isto orienta algumas metas e decisões de design e implementação, tais como:
 - Prioridade ao idioma português (tanto na interface quanto no código-fonte)
 - Uso de termos amigáveis para não-_gamers_, por exemplo, "internet" ao invés de "online", sempre que possível (exceções como "bot" e "Bluetooth" foram feitas por eu não ter encontrado tradução adequada)
 - Evitar a presunção de gênero ou qualquer outra característica pessoal da pessoa que joga
+- Não usar anúncios ou qualquer outro tipo de monetização, growth hack, promoção, coleta de dados, cadastro, parceria, mecânica de engajamento, clickbait, etc.
 
 ## Terminologia
 
 O [vocabulário típico do truco](https://www.jogosdorei.com.br/blog/girias-do-truco/) é usado sempre que possível, mas alguns termos são necessários para evitar ambiguidades e consolidar os diferentes modos de jogo:
 
-- **Aumento**: quando um jogador pede para aumentar o valor da rodada ("truco", que aumenta para 3 ou 4 pontos, "seis", "oito"/"nove" ou "doze"), conforme o modo de jogo.
+- **Aumento**: quando um jogador pede para aumentar o valor da rodada ("truco", que aumenta para 3 ou 4 pontos, "seis", "oito"/"nove" ou "doze", conforme o modo de jogo).
 - **Mão de X**: é a mão de 11 do truco paulista, ou mão de 10 do truco mineiro (quando apenas uma das duplas tem essa pontuação e pode optar por jogar ou não).
 
 ## Pré-requisitos e Configuração
@@ -80,9 +86,7 @@ O projeto está dividido em três módulos Gradle:
 ## Modelo de Classes (single player)
 
 
-(não sei onde vai esse parágrafo ainda)
 
-A interface do jogo em si é uma `View` customizada ([`MesaView`](../app/src/main/java/me/chester/minitruco/android/MesaView.java)) e todo o resto usa `Layout`s tradicionais ao invés de Compose/Flutter/etc. para suportar versões mais antigas do Android; à medida em que os números dessas forem diminuindo ou zerando, isso pode mudar.
 
 ## Multiplayer
 
@@ -126,4 +130,6 @@ Para testar uma estratégia, você pode substituir a lista de estratégias dispo
 
 
 
+### Parágrafo que eu não sei onde vai
 
+A interface do jogo em si é uma `View` customizada ([`MesaView`](../app/src/main/java/me/chester/minitruco/android/MesaView.java)) e todo o resto usa `Layout`s tradicionais ao invés de Compose/Flutter/etc. para suportar versões mais antigas do Android; à medida em que os números dessas forem diminuindo ou zerando, isso pode mudar.
