@@ -22,17 +22,21 @@ EM CONSTRUÇÃO (finge que tem uma gif dos anos 90 de men-at-work aqui)
 
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android. É um projeto de software livre, desenvolvido por hobby no meu tempo pessoal (com valiosas [colaborações](../README.md#créditos) de outras pessoas).
 
-Você pode usar e modificar seu código como quiser, dentro dos [termos da licença](../LICENSE). O objetivo deste documento é ajudar qualquer pessoa interessada a configurar, entender e/ou aprimorar este código.
+Você pode usar e modificar o código como quiser, dentro dos [termos da licença](../LICENSE). O objetivo deste documento é ajudar qualquer pessoa interessada a configurar, entender e/ou aprimorar este código.
 
 ## Contribuindo
 
-Fique à vontade para [criar um issue](https://github.com/chesterbr/minitruco-android/issues) no GitHub se encontrar um problema de configuração, encontrar um *bug*, tiver uma sugestão ou quiser contribuir de qualquer forma.
+Fique à vontade para [criar uma issue](https://github.com/chesterbr/minitruco-android/issues) no GitHub se encontrar um problema de configuração, encontrar um *bug*, tiver uma sugestão ou quiser contribuir de qualquer forma.
 
 [Pull requests](https://docs.github.com/pt/pull-requests) são bem-vindas, mas não há garantia de aceite (em particular devido à falta de testes automáticos, que me obriga a testar tudo muito cuidadosamente).
 
 O código é bastante antigo (baseado na ainda mais antiga [versão Java ME](https://github.com/chesterbr/minitruco-j2me)), mas aos poucos estou tentando modernizar.
 
 Uma área que sempre pode ser melhorada é a de estratégias (veja a seção "[Estratégia dos bots](#estratégia-dos-bots)"); correções de bugs específicos de celulares ajudam muito também, já que eu não tenho muitos à disposição.
+
+Existem vários issues [abertos](https://github.com/chesterbr/minitruco-android/issues) ([bugs](https://github.com/chesterbr/minitruco-android/issues?q=is%3Aopen+is%3Aissue+label%3Abug), melhorias e débitos técnicos); se você for trabalhar em algum deles com intenção de fazer um pull request, sugiro comentar no issue - terei prazer em orientar e coordenar esforços, o que otimiza o seu tempo e evita dificuldades na hora de fazer o merge. Se você quiser trabalhar em algo que não está listado, sugiro abrir uma issue para discutir antes.
+
+*(isso, claro, se você pretende contribuir com o código "oficial" e receber o devido crédito; no mais, a licença permite que você faça o que quiser com o código, desde que respeite os termos dela)*
 
 ## História, Objetivos e Design
 
