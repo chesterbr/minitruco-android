@@ -331,9 +331,9 @@ public abstract class Partida implements Runnable {
      * Aborta a partida por iniciativa daquele jogador
      *
      * @param posicao
-     *            posição (1 a 4) do jogador que motivou o abort
+     *            posição (1 a 4) do jogador que abandonou o jogo
      */
-     public abstract void abortaJogo(int posicao);
+     public abstract void abandona(int posicao);
 
     /**
      * Configuração que faz o jogador humano jogar automaticamente

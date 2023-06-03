@@ -555,7 +555,7 @@ public class PartidaLocal extends Partida {
     }
 
     @Override
-    public void abortaJogo(int posicao) {
+    public void abandona(int posicao) {
          jogoFinalizado = true;
         int rndFrase = Math.abs(rand.nextInt());
         for (Jogador j : jogadores) {

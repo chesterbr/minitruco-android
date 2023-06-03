@@ -178,7 +178,7 @@ public class Sala {
             if (jogadores[i] == j) {
                 // Finaliza partida em andamento, se houver.
                 if (partida != null) {
-                    partida.abortaJogo(j.getPosicao());
+                    partida.abandona(j.getPosicao());
                     liberaJogo();
                 }
                 // Desfaz link sala->jogador

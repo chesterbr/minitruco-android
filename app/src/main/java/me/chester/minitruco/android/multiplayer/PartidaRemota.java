@@ -272,7 +272,7 @@ public class PartidaRemota extends Partida {
     }
 
     @Override
-    public void abortaJogo(int posicao) {
+    public void abandona(int posicao) {
         // TODO eu acho que o if aqui é redundante (no geral, só o Jogador 1
         //.     faria isso mesmo); conferir em outros lugares
         if (posicao == 1) {

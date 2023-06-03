@@ -136,7 +136,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                         enviaLinha("Q");
                     });
                     if (partida != null) {
-                        partida.abortaJogo(0);
+                        partida.abandona(0);
                         partida = null;
                     }
                     String[] tokens = line.split(" ");

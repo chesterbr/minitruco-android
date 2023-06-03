@@ -348,7 +348,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
         atualizaDisplay();
         atualizaClientes();
         if (partida != null) {
-            partida.abortaJogo(slot + 2);
+            partida.abandona(slot + 2);
         }
     }
 

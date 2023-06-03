@@ -286,7 +286,7 @@ public class TrucoActivity extends Activity {
         super.onDestroy();
         mIsViva = false;
         if (partida != null && !jogoAbortado) {
-            partida.abortaJogo(1);
+            partida.abandona(1);
         }
     }
 

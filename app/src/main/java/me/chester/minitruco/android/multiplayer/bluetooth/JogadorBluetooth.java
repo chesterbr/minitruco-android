@@ -91,7 +91,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
                             partida.respondeAumento(this, true);
                             break;
                         case 'A':
-                            partida.abortaJogo(getPosicao());
+                            partida.abandona(getPosicao());
                             break;
                         case 'C':
                             partida.respondeAumento(this, false);

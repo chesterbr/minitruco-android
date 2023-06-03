@@ -142,7 +142,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
         } catch (IOException e) {
             if (!isFinishing()) {
                 if (partida != null) {
-                    partida.abortaJogo(0);
+                    partida.abandona(0);
                 }
                 LOGGER.log(Level.INFO, "desconectado");
                 msgErroFatal("Você foi desconectado");
@@ -170,7 +170,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 
     private void exibeMesaForaDoJogo(String parametros) {
         if (partida != null) {
-            partida.abortaJogo(0);
+            partida.abandona(0);
             partida = null;
         }
         // Exibe as informações recebidas fora do jogo
