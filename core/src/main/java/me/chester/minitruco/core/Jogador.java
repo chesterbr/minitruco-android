@@ -8,10 +8,9 @@ import java.util.Random;
 /**
  * Base para os diversos tipos de jogador que podem participar de um jogo.
  * <p>
- * Todo Jogador recebe notificações do jogo (por implementar Interessado)
- * <p>
- * A subclasse determina se o jogador é o usuário do celular, um jogador virtual
- * ou um jogador de outro celular conectado remotamente.
+ * Independente de ser o usuário do celular (JogadorHumano), um jogador virtual
+ * (JogadorBot) ou qualquer outro tipo, o jogador recebe notificações do Jogo
+ * e envia comandos a ele de forma assíncrona.
  */
 public abstract class Jogador {
 
