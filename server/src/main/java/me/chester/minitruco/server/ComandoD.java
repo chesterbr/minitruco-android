@@ -12,7 +12,7 @@ public class ComandoD extends Comando {
     public void executa(String[] args, JogadorConectado j) {
         if (!j.jogando)
             return;
-        j.getSala().getJogo().respondeAumento(j,true);
+        j.getSala().getPartida().respondeAumento(j,true);
     }
 
 }

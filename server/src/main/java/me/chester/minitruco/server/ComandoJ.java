@@ -29,7 +29,7 @@ public class ComandoJ extends Comando {
             if (carta != null && carta.toString().equals(args[1])) {
                 // Joga a carta. Se der certo o evento vai notificar a todos.
                 carta.setFechada(args.length > 2 && args[2].equals("T"));
-                j.getSala().getJogo().jogaCarta(j, carta);
+                j.getSala().getPartida().jogaCarta(j, carta);
             }
         }
     }

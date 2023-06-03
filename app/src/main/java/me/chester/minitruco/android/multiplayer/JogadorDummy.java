@@ -7,7 +7,7 @@ import me.chester.minitruco.core.Jogador;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Jogador (no cliente) que participa de um jogo bluetooth (além do
+ * Jogador (no cliente) que participa de um partida bluetooth (além do
  * JogadorHumano).
  * <p>
  * A classe não faz nada - é só para o JogadorHumano não se sentir sozinho

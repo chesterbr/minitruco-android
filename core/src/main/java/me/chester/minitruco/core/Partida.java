@@ -4,21 +4,24 @@ package me.chester.minitruco.core;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Jogo (partida) em andamento (independente de estar rodando local ou
- * remotamente).
+ * Representa uma partida de truco.
  * <p>
  * As implementações desta classe irão cuidar de executar o jogo (no caso de
- * <code>JogoLocal</code>) ou manter a comunicação com um jogo em execução
- * remota (<code>JogoRemoto</code>). Em qualquer caso, os objetos Jogador não
- * terão ciência de onde o jogo está se passando.
+ * <code>PartidaLocal</code>) ou manter a comunicação com uma partida em execução
+ * remota (<code>PartidaRemota</code>). Em qualquer caso, os objetos Jogador não
+ * terão ciência de onde a partida está se passando.
  * <p>
- * A classe é um Runnable para permitir tanto a execução em Thread (que "viverá"
- * o tempo de uma partida completa) quanto a chamada direta ao método run()
- * (para rodar um teste, por exemplo).
+ * Recebe <i>comandos</i> dos jogadores através de seus métodos (ex.:
+ * <code>jogaCarta()</code>, <code>aumentaAposta()</code>) e envia <i>notificações</i>
+ * a eles chamando métodos deles (Ex.: <code>inicioPartida()</code>, <code>cartaJogada()</code>).
+ * <p>
+ * A classe é um <code>Runnable</code> para permitir tanto a execução em Thread
+ * (que "viverá" o tempo de uma partida completa) quanto a chamada direta ao
+ * método <code>run()</code> (para rodar um teste, por exemplo).
  *
- * @see JogoLocal
+ * @see Jogador
  */
-public abstract class Jogo implements Runnable {
+public abstract class Partida implements Runnable {
 
     /**
      * Referência para determinar a ordem das cartas no truco
@@ -37,7 +40,7 @@ public abstract class Jogo implements Runnable {
      */
     int numRodadaAtual;
 
-    public Jogo(Modo modo) {
+    public Partida(Modo modo) {
         this.modo = modo;
     }
 
@@ -92,7 +95,7 @@ public abstract class Jogo implements Runnable {
     }
 
     /**
-     * Jogadores adicionados a este jogo
+     * Jogadores adicionados a esta partida
      */
     protected final Jogador[] jogadores = new Jogador[4];
 
@@ -125,14 +128,13 @@ public abstract class Jogo implements Runnable {
     /**
      * Inicia o jogo.
      * <p>
-     * O jogo deve ser inicializado numa thread separada da principal, desta
-     * forma é mais conveniente que ele seja o Runnable desta thread, daí o nome
-     * do método.
+     * Este método só vai retornar quando a partida for encerrada, então
+     * não deve ser chamado em threads que não querem esperar (Ex.: UI Thread)
      */
     public abstract void run();
 
     /**
-     * Informa que o jogador vai descartar aquela carta.
+     * Informa à partida que o jogador quer descartar aquela carta.
      * <p>
      * Tem que ser a vez dele e não pode haver ninguém trucando.
      * <p>
@@ -144,7 +146,7 @@ public abstract class Jogo implements Runnable {
     public abstract void jogaCarta(Jogador j, Carta c);
 
     /**
-     * Informa ao jogo o resultado de aceite daquela mão de 10/11
+     * Informa à partida a resposta daquele jogador a uma mão de 10/11
      *
      * @param j
      *            Jogador que está respondendo
@@ -155,8 +157,8 @@ public abstract class Jogo implements Runnable {
     public abstract void decideMaoDeX(Jogador j, boolean aceita);
 
     /**
-     * Informa que o jogador solicitou um aumento de aposta ("truco", "seis",
-     * etc.).
+     * Informa à partida que o jogador solicitou um aumento de aposta ("truco",
+     * "seis", etc.).
      * <p>
      * Os jogadores são notificados, e a aposta será efetivamente aumentada se
      * um dos adversários responder positivamente.
@@ -171,7 +173,7 @@ public abstract class Jogo implements Runnable {
     public abstract void aumentaAposta(Jogador j);
 
     /**
-     * Informa que o jogador respondeu a um pedido de aumento de aposta
+     * Informa à partida que o jogador respondeu a um pedido de aumento de aposta
      *
      * @param j
      *            Jogador que respondeu ao pedido
@@ -193,12 +195,12 @@ public abstract class Jogo implements Runnable {
     }
 
     /**
-     * Carta que determina a manilha (em jogo que não usa manilha velha)
+     * Carta que determina a manilha (em partida que não usa manilha velha)
      */
     public Carta cartaDaMesa;
 
     /**
-     * Atualiza um objeto que contém a situação do jogo (exceto pelas cartas do
+     * Atualiza um objeto que contém a situação da partida (exceto pelas cartas do
      * jogador)
      *
      * @param s
@@ -213,10 +215,10 @@ public abstract class Jogo implements Runnable {
     }
 
     /**
-     * Adiciona um jogador a este jogo.
+     * Adiciona um jogador a esta partida.
      * <p>
      * Ele será colocado na próxima posição disponível, e passa a receber
-     * eventos do jogo.
+     * eventos da partida.
      *
      * @param jogador
      *            Jogador que será adicionado (bot, humano, etc)
@@ -233,7 +235,7 @@ public abstract class Jogo implements Runnable {
         // Adiciona na lista e notifica a todos (incluindo ele) de sua presença
         jogadores[numJogadores] = jogador;
         numJogadores++;
-        jogador.jogo = this;
+        jogador.partida = this;
         jogador.setPosicao(numJogadores);
         for (Jogador j : jogadores) {
             if (j != null) {
@@ -263,8 +265,8 @@ public abstract class Jogo implements Runnable {
     protected final int[] pontosEquipe = { 0, 0 };
 
     /**
-     * Indica que o jogo foi finalizado (para evitar que os bots fiquem
-     * "rodando em falso" caso o jogo seja abortado
+     * Indica que a partida foi finalizada (para evitar que os bots fiquem
+     * "rodando em falso" caso a partida seja abortada
      */
     public boolean jogoFinalizado = false;
 
@@ -283,7 +285,7 @@ public abstract class Jogo implements Runnable {
      * Deve ser chamado a cada inicialização de mão.
      *
      * @param c
-     *            Carta virada. Ignorado se for jogo com manilha velha
+     *            Carta virada. Ignorado se for partida com manilha velha
      */
     public void setManilha(Carta c) {
 
@@ -318,24 +320,25 @@ public abstract class Jogo implements Runnable {
     }
 
     /**
-     * @return true se este jogo não tem nenhum jogador remoto (bluetooth, etc)
+     * @return true se esta partida não envolve nenhuma comunicação remota
+     * (bluetooth, internet, etc.)
      */
     public boolean semJogadoresRemotos() {
         return false;
     }
 
     /**
-     * Aborta o jogo por iniciativa daquele jogador
+     * Aborta a partida por iniciativa daquele jogador
      *
      * @param posicao
-     *            posição (1 a 4) do jogador que motivou o abort
+     *            posição (1 a 4) do jogador que abandonou o jogo
      */
-     public abstract void abortaJogo(int posicao);
+     public abstract void abandona(int posicao);
 
     /**
      * Configuração que faz o jogador humano jogar automaticamente
      *
-     * @return false (a não ser em JogoLocal _se_ a opção for habilitada)
+     * @return false (a não ser em PartidaLocal _se_ a opção for habilitada)
      */
     public boolean isJogoAutomatico() {
         return false;

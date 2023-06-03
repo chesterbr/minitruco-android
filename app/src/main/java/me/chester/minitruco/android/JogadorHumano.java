@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
-import me.chester.minitruco.core.Jogo;
-import me.chester.minitruco.core.JogoLocal;
+import me.chester.minitruco.core.Partida;
+import me.chester.minitruco.core.PartidaLocal;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -21,7 +21,7 @@ import me.chester.minitruco.core.JogoLocal;
  * Jogador que controla o celular.
  * <p>
  * Esta classe trabalha em conjunto com uma <code>TrucoActivity</code> e uma
- * <code>MesaView</code>, que mostram o jogo ao usuário, capturam seu input e
+ * <code>MesaView</code>, que mostram a partida ao usuário, capturam seu input e
  * executam as jogadas.
  */
 public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
@@ -59,13 +59,13 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
             mesa.mostrarPerguntaMaoDeX = false;
         }
         if (aceita) {
-            activity.setValorMao(jogo.getModo().valorDaMaoDeX());
+            activity.setValorMao(partida.getModo().valorDaMaoDeX());
         }
         mesa.diz(aceita ? "mao_de_x_sim" : "mao_de_x_nao", posicaoNaTela(j), 1500, rndFrase);
     }
 
     @Override
-    public void entrouNoJogo(Jogador i, Jogo j) {
+    public void entrouNoJogo(Jogador j, Partida p) {
 
     }
 
@@ -83,7 +83,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         }
         LOGGER.log(Level.INFO, "distribuindo a mão");
         mesa.distribuiMao();
-        activity.setValorMao(jogo.getModo().valorInicialDaMao());
+        activity.setValorMao(partida.getModo().valorInicialDaMao());
         mesa.setPosicaoVez(posicaoNaTela(jogadorQueAbre));
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
@@ -139,7 +139,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
     @Override
     public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
-        mesa.diz("aumento_" + jogo.nomeNoTruco(valor), posicaoNaTela(j),
+        mesa.diz("aumento_" + partida.nomeNoTruco(valor), posicaoNaTela(j),
                 1500 + 200 * (valor / 3), rndFrase);
         if (j.getEquipe() != this.getEquipe()) {
             LOGGER.log(Level.INFO, "pedindo para mostrar pergunta aumento");
@@ -150,14 +150,14 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
         if (j.getEquipe() == this.getEquipe()) {
-            // Num jogo sem bluetooth/etc, o bot não aumenta, só
+            // Numa partida sem bluetooth/etc, o bot não aumenta, só
             // sinaliza a intenção de aumentar
-            if (jogo instanceof JogoLocal && ((JogoLocal) jogo).isIgnoraDecisao(j)) {
+            if (partida instanceof PartidaLocal && ((PartidaLocal) partida).isIgnoraDecisao(j)) {
                 mesa.diz("aumento_quero", posicaoNaTela(j), 1500, rndFrase);
                 return;
             }
             // Nós aceitamos um truco, então podemos pedir aumento (se o valor atual ainda permitir)
-            valorProximaAposta = jogo.getModo().valorSeHouverAumento(valor);
+            valorProximaAposta = partida.getModo().valorSeHouverAumento(valor);
         } else {
             // Eles aceitaram um truco, temos que esperar eles pedirem
             valorProximaAposta = 0;
@@ -195,7 +195,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         LOGGER.log(Level.INFO, "vez do jogador " + posicaoNaTela(j));
         mesa.vaiJogarFechada = false;
         boolean mostraBtnAumento = (j instanceof JogadorHumano)
-                && (valorProximaAposta > 0) && jogo.isPlacarPermiteAumento();
+                && (valorProximaAposta > 0) && partida.isPlacarPermiteAumento();
         boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
                 && podeFechada;
         activity.handler.sendMessage(Message.obtain(activity.handler,
@@ -231,7 +231,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     /**
      * Retorna a posição do jogador na tela.
      * <p>
-     * Num jogo local, o 1 é o humano *e* a posição inferior da tela. Em jogos
+     * Num partida local, o 1 é o humano *e* a posição inferior da tela. Em jogos
      * remotos, o jogador 1 pode não ser o inferior, e esta função calcula a
      * posição que aquele jogador ocupa na tela sob o ponto de vista local.
      * <p>

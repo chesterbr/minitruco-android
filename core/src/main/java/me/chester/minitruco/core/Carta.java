@@ -6,8 +6,8 @@ package me.chester.minitruco.core;
 /**
  * Representa uma carta do truco.
  * <p>
- * É importante que ela não tenha qualquer referência ao jogo/jogadores, pois
- * é passada para <code>Estrategia</code> por meio de <code>SituacaoJogo</code>.
+ * É importante que ela não tenha qualquer referência a, Partida, Jogador, etc.,
+ * pois é passada para <code>Estrategia</code> por meio de <code>SituacaoJogo</code>.
  */
 public class Carta {
 
@@ -161,7 +161,7 @@ public class Carta {
      * @return valor que permite comparar duas cartas
      */
     public int getValorTruco(char letraManilha) {
-        return Jogo.getValorTruco(this, letraManilha);
+        return Partida.getValorTruco(this, letraManilha);
     }
 
     /**
@@ -178,7 +178,7 @@ public class Carta {
     }
 
     /**
-     * Escurece/clareia uma carta para indicar que ela não está/está em jogo
+     * Escurece/clareia uma carta para indicar que ela não está/está em partida
      *
      * @param cartaEmJogo
      *            true para clarear, false para escurecer
@@ -188,7 +188,7 @@ public class Carta {
     }
 
     /**
-     * Indica se a carta está em jogo, e, portanto, deve ficar "clarinha" (as
+     * Indica se a carta está em partida, e, portanto, deve ficar "clarinha" (as
      * cartas de rodadas passadas são escurecidas
      */
     public boolean isCartaEmJogo() {

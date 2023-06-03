@@ -38,7 +38,7 @@ class CartaTest {
     }
 
     @Test
-    @DisplayName("Atribui valor correto quando em jogo com manilha nova")
+    @DisplayName("Atribui valor correto quando em partida com manilha nova")
     void testGetValorTrucoManilhaNova() {
         char manilha = '6';
         assertEquals(1, new Carta("4e").getValorTruco(manilha));
@@ -74,7 +74,7 @@ class CartaTest {
     }
 
     @Test
-    @DisplayName("Atribui valor correto quando em jogo com manilha velha")
+    @DisplayName("Atribui valor correto quando em partida com manilha velha")
     void testGetValorTrucoManilhaVelha() {
         char manilha = SituacaoJogo.MANILHA_VELHA;
         assertEquals(1, new Carta("4e").getValorTruco(manilha));

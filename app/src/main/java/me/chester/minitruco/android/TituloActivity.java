@@ -21,7 +21,7 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
-import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -218,7 +218,7 @@ public class TituloActivity extends BaseActivity {
     }
 
     private void selecionaModo(String modo) {
-        ((TextView)findViewById(R.id.textViewModo)).setText(Jogo.textoModo(modo));
+        ((TextView)findViewById(R.id.textViewModo)).setText(Partida.textoModo(modo));
         preferences.edit().putString("modo", modo).apply();
     }
 }

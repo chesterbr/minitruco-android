@@ -8,36 +8,28 @@ import java.util.logging.Logger;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Jogo rodando no celular.
+ * Executa o jogo efetivamente.
  * <p>
- * Um jogador só passa a fazer parte do jogo se for adicionado a ele pelo método
- * <code>adiciona()</code>.
- * <p>
- * A classe notifica aos jogadores participantes os eventos relevantes (ex.:
- * início da partida, vez passando para um jogador, carta jogada, pedido de
- * truco), e os jogadores podem usar os métodos de entrada (ex.:
- * <code>jogaCarta()</code>, <code>aumentaAposta</code>, etc.) para interagir
- * com o jogo.
- * <p>
+ * A classe mantém todo o estado do jogo e toma todas as decisões.
  */
-public class JogoLocal extends Jogo {
+public class PartidaLocal extends Partida {
 
-    private final static Logger LOGGER = Logger.getLogger("JogoLocal");
+    private final static Logger LOGGER = Logger.getLogger("PartidaLocal");
 
     private final static Random rand = new Random();
 
     /**
-     * Cria um novo jogo.
+     * Cria uma nova partida.
      * <p>
-     * O jogo é criado, mas apenas inicia quando forem adicionados jogadores
+     * Ela só inicia quando forem adicionados os quatro jogadores.
      *
-     * @param humanoDecide   Se verdadeira e o jogo não tiver clientes remotos, um bot
+     * @param humanoDecide   Se verdadeira e a partida não tiver clientes remotos, um bot
      *                       parceiro de humano não pode aceitar aumento ou mão de 10/11
      * @param jogoAutomatico Se verdadeira, o humano "joga sozinho" (teste de stress)
      * @param modoStr        String de 1 caractere que determina
      *                       se o truco é paulista, mineiro, etc.
      */
-    public JogoLocal(boolean humanoDecide, boolean jogoAutomatico, String modoStr) {
+    public PartidaLocal(boolean humanoDecide, boolean jogoAutomatico, String modoStr) {
         super(Modo.fromString(modoStr));
         this.baralho = new Baralho(modo.isBaralhoLimpo());
         this.humanoDecide = humanoDecide;
@@ -45,7 +37,7 @@ public class JogoLocal extends Jogo {
     }
 
     /**
-     * Baralho que será usado durante esse jogo
+     * Baralho que será usado durante essa partida
      */
     private final Baralho baralho;
 
@@ -120,14 +112,14 @@ public class JogoLocal extends Jogo {
      */
     public void run() {
 
-        // Avisa os jogadores que o jogo vai começar
-        LOGGER.log(Level.INFO, "Jogo (.run) iniciado");
+        // Avisa os jogadores que a partida vai começar
+        LOGGER.log(Level.INFO, "Partida (.run) iniciada");
         for (Jogador interessado : jogadores) {
             interessado.inicioPartida(pontosEquipe[0], pontosEquipe[1]);
         }
 
         // Inicia a primeira rodada, usando o jogador na posição 1, e processa
-        // as jogadas até alguém ganhar ou o jogo ser abortado (o que pode
+        // as jogadas até alguém ganhar ou a partida ser abortada (o que pode
         // ocorrer em paralelo, daí os múltiplos checks a jogoFinalizado)
         iniciaMao(getJogador(1));
         while (pontosEquipe[0] < 12 && pontosEquipe[1] < 12 && !jogoFinalizado) {
@@ -140,7 +132,7 @@ public class JogoLocal extends Jogo {
                 alguemJogou = false;
             }
         }
-        LOGGER.log(Level.INFO, "Jogo (.run) finalizado");
+        LOGGER.log(Level.INFO, "Partida (.run) finalizada");
     }
 
     /**
@@ -207,7 +199,7 @@ public class JogoLocal extends Jogo {
 
     /**
      * Processa uma jogada e passa a vez para o próximo jogador (ou finaliza a
-     * rodoada/mão/jogo), notificando os jogadores apropriadamente
+     * rodoada/mão/partida), notificando os jogadores apropriadamente
      *
      */
     private void processaJogada() {
@@ -220,7 +212,7 @@ public class JogoLocal extends Jogo {
                 "; isAguardandoRespostaMaoDeX:" + isAguardandoRespostaMaoDeX() +
                 "; jogadorDaVez: "+getJogadorDaVez().getPosicao());
 
-        // Se o jogo acabou, a mesa não estiver completa, já houver alguém
+        // Se a partida acabou, a mesa não estiver completa, já houver alguém
         // trucando, estivermos aguardando ok da mão de 10/11 ou não for a vez do
         // cara, recusa
         if (jogoFinalizado || numJogadores < 4 || jogadorPedindoAumento != null
@@ -363,7 +355,7 @@ public class JogoLocal extends Jogo {
     }
 
     /**
-     * Conclui a mão atual, e, se o jogo não acabou, inicia uma nova.
+     * Conclui a mão atual, e, se a partida não acabou, inicia uma nova.
      *
      */
     private void fechaMao() {
@@ -372,7 +364,7 @@ public class JogoLocal extends Jogo {
                 + pontosEquipe[1]);
 
         // Notifica os interessados que a rodada acabou, e, se for o caso, que o
-        // jogo acabou também
+        // partida acabou também
         // A notificação é feita em ordem reversa para que um JogadorBluetooth não tenha
         // que esperar pelas animacões de um JogadorHumano
         int rndFrase = Math.abs(rand.nextInt());
@@ -439,7 +431,7 @@ public class JogoLocal extends Jogo {
         LOGGER.log(Level.INFO, "J" + j.getPosicao() + (aceita ? "" : " nao")
                 + " quer jogar mao de 11 ");
 
-        // Se for um bot parceiro de humano num jogo 100% local, trata como recusa
+        // Se for um bot parceiro de humano numa partida 100% local, trata como recusa
         // (quem decide mão de 10/11 é o humano) e nem notifica (silenciando o balão)
         if (isIgnoraDecisao(j)) {
             aceita = false;
@@ -478,7 +470,7 @@ public class JogoLocal extends Jogo {
      */
     public void aumentaAposta(Jogador j) {
 
-        // Se o jogo estiver fianlizado, a mesa não estiver completa, já houver
+        // Se a partida estiver finalizada, a mesa não estiver completa, já houver
         // alguém trucando, estivermos aguardando a mão de 10/11 ou não for a vez
         // do cara, recusa
         if ((jogoFinalizado) || (numJogadores < 4)
@@ -519,14 +511,14 @@ public class JogoLocal extends Jogo {
                 + (aceitou ? "aceitou" : "recusou"));
 
         int posParceiro = (j.getPosicao() + 1) % 4 + 1;
-        // Se, num jogo 100% local (só o humano e bots)
+        // Se, numa partida 100% local (só o humano e bots)
         // o bot parceiro do humano aceita, trata como recusa
         // (mas notifica humano do aceite)
         boolean ignorarAceite = isIgnoraDecisao(j) && aceitou;
         int rndFrase = Math.abs(rand.nextInt());
         if (aceitou && !ignorarAceite) {
             // Se o jogador aceitou, seta o novo valor, notifica a galera e tira
-            // o jogo da situtação de truco
+            // a partida da situtação de truco
             valorMao = modo.valorSeHouverAumento(valorMao);
             jogadorPedindoAumento = null;
             for (Jogador interessado : jogadores) {
@@ -563,7 +555,7 @@ public class JogoLocal extends Jogo {
     }
 
     @Override
-    public void abortaJogo(int posicao) {
+    public void abandona(int posicao) {
          jogoFinalizado = true;
         int rndFrase = Math.abs(rand.nextInt());
         for (Jogador j : jogadores) {
@@ -577,7 +569,7 @@ public class JogoLocal extends Jogo {
      * Determina se o jogador em questão deve ter sua decisão (aceite de aumento ou mão 11) ignorada.
      *
      * @param jogador jogador que acabou de tomar uma decisão
-     * @return true se o jogador for um bot cujo parceiro é humano em um jogo 100% local
+     * @return true se o jogador for um bot cujo parceiro é humano em um partida 100% local
      */
     public boolean isIgnoraDecisao(Jogador jogador) {
         int posParceiro = (jogador.getPosicao() + 1) % 4 + 1;
@@ -592,7 +584,7 @@ public class JogoLocal extends Jogo {
      *
      * @param i
      *            1 ou 2 para a respectiva equipe, 0 para ninguém aguardando mão
-     *            de 11 (jogo normal)
+     *            de 11 (partida normal)
      */
     private void setEquipeAguardandoMaoDeX(int i) {
         aguardandoRespostaMaoDeX[0] = aguardandoRespostaMaoDeX[2] = (i == 1);

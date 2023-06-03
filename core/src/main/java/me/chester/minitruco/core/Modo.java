@@ -36,7 +36,7 @@ public interface Modo {
     int valorDaMaoDeX();
 
     /**
-     * @return valor para o qual um jogo cujo valor seja valorMao vai se houver um aumento,
+     * @return valor para o qual um partida cujo valor seja valorMao vai se houver um aumento,
      *         ou 0 se estivermos num valor que não permite aumento (ex.: 12 no truco paulista)
      */
     int valorSeHouverAumento(int valorMao);

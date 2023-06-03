@@ -31,8 +31,8 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
-import me.chester.minitruco.android.multiplayer.JogoRemoto;
-import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.android.multiplayer.PartidaRemota;
+import me.chester.minitruco.core.Partida;
 
 public class ClienteInternetActivity extends Activity implements ClienteMultiplayer {
 
@@ -45,7 +45,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
     private SharedPreferences preferences;
 
     private static ClienteInternetActivity currentInstance;
-    private JogoRemoto jogo;
+    private PartidaRemota partida;
     private String modo;
     private int posJogador;
 
@@ -135,9 +135,9 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                     findViewById(R.id.btnQueroJogar).setOnClickListener(v -> {
                         enviaLinha("Q");
                     });
-                    if (jogo != null) {
-                        jogo.abortaJogo(0);
-                        jogo = null;
+                    if (partida != null) {
+                        partida.abandona(0);
+                        partida = null;
                     }
                     String[] tokens = line.split(" ");
                     String[] nomes = tokens[1].split(Pattern.quote("|"));
@@ -161,8 +161,8 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                         break;
                 }
                 break;
-            case 'P': // Jogo iniciado
-                // Se for o primeiro jogo nessa sala, temos que abrir a activity
+            case 'P': // Partida iniciada
+                // Se for a primeira partida nessa sala, temos que abrir a activity
                 while (!TrucoActivity.isViva()) {
                     startActivity(
                         new Intent(this, TrucoActivity.class)
@@ -174,14 +174,14 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                     }
                 }
                 // TODO checar se não tem chance de ficar preso no while acima
-                //      (acho que não , mas ainda teve uma vez que o jogo iniciou de bobeira)
+                //      (acho que não , mas ainda teve uma vez que a partida iniciou de bobeira)
 
-                // Não tem break mesmo, porque se *não* for o primeiro jogo, temos que
-                // deixar a activity encerrar (visualmente) o jogo anterior.
+                // Não tem break mesmo, porque se *não* for a primeira partida, temos que
+                // deixar a activity encerrar (visualmente) a partida anterior.
             default:
-                // Se chegou aqui, não é nossa, encaminha pro JogoRemoto
-                if (jogo != null) {
-                    jogo.processaNotificacao(line.charAt(0),
+                // Se chegou aqui, não é nossa, encaminha pra PartidaRemota
+                if (partida != null) {
+                    partida.processaNotificacao(line.charAt(0),
                             line.length() > 2 ? line.substring(2) : "");
                 }
         }
@@ -197,13 +197,13 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
         }
     }
 
-    public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
+    public static Partida criaNovoJogo(JogadorHumano jogadorHumano) {
         return currentInstance._criaNovoJogo(jogadorHumano);
     }
 
-    public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-        jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
-        return jogo;
+    public Partida _criaNovoJogo(JogadorHumano jogadorHumano) {
+        partida = new PartidaRemota(this, jogadorHumano, posJogador, modo);
+        return partida;
     }
 
     private void msgErroFatal(String msg, Throwable e) {

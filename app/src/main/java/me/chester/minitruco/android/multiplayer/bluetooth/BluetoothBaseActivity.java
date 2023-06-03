@@ -23,7 +23,7 @@ import java.util.UUID;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.BaseActivity;
 import me.chester.minitruco.android.TrucoActivity;
-import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -154,7 +154,7 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
                 textViewsJogadores[i].setText(apelidos[i]);
             }
             if (modo != null) {
-                textViewStatus.setText("Modo: " + Jogo.textoModo(modo));
+                textViewStatus.setText("Modo: " + Partida.textoModo(modo));
             }
             btnIniciar.setEnabled(getNumClientes() > 0);
         });

@@ -13,7 +13,7 @@ class JogadorBotTest {
 
     // TODO limpar esse código
     // TODO testar todas as cartas (só testa a primeira)
-    // TODO testar cartas jogadas (talvez acumular múltiplas situaçãoJogo e deixar o jogo ir até o fim?)
+    // TODO testar cartas jogadas (talvez acumular múltiplas situaçãoJogo e deixar a partida ir até o fim?)
     // esse teste faz pensar que talvez SituacaoJogo devesse se auto-preencher
     // (mas esse tipo de "jogo que joga sozinho" vai ser útil; creio que
     // a idéia aqui seja encapsular e otimizar esse formato para que testes possam
@@ -40,7 +40,7 @@ class JogadorBotTest {
                 return false;
             }
         };
-        Jogo j = new JogoLocal("P", false, false);
+        Partida j = new PartidaLocal(false, false, "P");
         // TODO Isso é gambiarra porque eu tirei o construtor que recebe
         // estratégia :facepalm:
         Field estrategiaDoBot = JogadorBot.class.getDeclaredField("estrategia");
