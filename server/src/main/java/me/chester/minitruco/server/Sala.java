@@ -14,11 +14,11 @@ import java.util.UUID;
 
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
-import me.chester.minitruco.core.Jogo;
-import me.chester.minitruco.core.JogoLocal;
+import me.chester.minitruco.core.Partida;
+import me.chester.minitruco.core.PartidaLocal;
 
 /**
- * Representa uma sala, onde ocorre um jogo
+ * Representa uma sala, onde ocorre um partida
  */
 public class Sala {
 
@@ -54,9 +54,9 @@ public class Sala {
 
     private Date[] timestamps = new Date[4];
     /**
-     * Jogo que está rodando nessa sala (se houver)
+     * Partida que está rodando nessa sala (se houver)
      */
-    private JogoLocal jogo = null;
+    private PartidaLocal partida = null;
 
     /**
      * Cria uma sala .
@@ -73,7 +73,7 @@ public class Sala {
     }
 
     /**
-     * Coloca o jogador em uma sala pública que tenha aquele modo de jogo
+     * Coloca o jogador em uma sala pública que tenha aquele modo de partida
      * criando uma caso estejam todas lotadas
      *
      */
@@ -168,7 +168,7 @@ public class Sala {
     /**
      * Remove um jogador da sala.
      * <p>
-     * Se houver um jogo em andamento, interrompe o mesmo.
+     * Se houver um partida em andamento, interrompe o mesmo.
      *
      * @param j Jogador a remover
      * @return true se removeu, false se ele não estava lá
@@ -176,9 +176,9 @@ public class Sala {
     public boolean remove(JogadorConectado j) {
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == j) {
-                // Finaliza jogo em andamento, se houver.
-                if (jogo != null) {
-                    jogo.abortaJogo(j.getPosicao());
+                // Finaliza partida em andamento, se houver.
+                if (partida != null) {
+                    partida.abortaJogo(j.getPosicao());
                     liberaJogo();
                 }
                 // Desfaz link sala->jogador
@@ -213,10 +213,10 @@ public class Sala {
     }
 
     /**
-     * Recupera o jogo que está rolando na sala (para dar comandos, etc.)
+     * Recupera a partida que está rolando na sala (para dar comandos, etc.)
      */
-    public Jogo getJogo() {
-        return jogo;
+    public Partida getPartida() {
+        return partida;
     }
 
     /**
@@ -258,12 +258,12 @@ public class Sala {
         sb.append(POSICAO_PLACEHOLDER);
         sb.append(' ');
 
-        // Modo de jogo
+        // Modo de partida
         sb.append(modo);
         sb.append(' ');
 
         // Status de "quero jogar" dos jogadores (posições vazias são T,
-        // indicando que serão preenchidas por robôs caso o jogo inicie)
+        // indicando que serão preenchidas por robôs caso a partida inicie)
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] instanceof JogadorConectado) {
                 if (((JogadorConectado) jogadores[i]).querJogar) {
@@ -287,13 +287,13 @@ public class Sala {
 
     /**
      * Verifica se a mesa está completa, i.e., se a sala tem 4 jogadores
-     * dispostos a jogar, e se já não tem um jogo rolando.
+     * dispostos a jogar, e se já não tem uma partida rolando.
      * <p>
      * Se isto acontecer, inicia a partida.
      */
     public void verificaMesaCompleta() {
-        // Se estamos em jogo, desencana
-        if (jogo != null) {
+        // Se estamos em partida, desencana
+        if (partida != null) {
             return;
         }
         // Todos os remotos conectados têm que querer jogar
@@ -311,17 +311,17 @@ public class Sala {
                 jogadores[i].setNome("[ROBO_" + (n++) + "]");
             }
         }
-        // Cria o jogo com as regras selecionadas, adiciona os jogadores na
+        // Cria a partida com as regras selecionadas, adiciona os jogadores na
         // ordem e inicia
-        jogo = new JogoLocal(false, false, modo);
+        partida = new PartidaLocal(false, false, modo);
         for (Jogador j : jogadores) {
-            jogo.adiciona(j);
+            partida.adiciona(j);
             if (j instanceof JogadorConectado) {
                 ((JogadorConectado) j).jogando = true;
             }
 
         }
-        Thread t = new Thread(jogo);
+        Thread t = new Thread(partida);
         t.start();
     }
 
@@ -355,7 +355,7 @@ public class Sala {
     }
 
     /**
-     * Desvincula o jogo da sala, eliminado eventuais bots
+     * Desvincula a partida da sala, eliminado eventuais bots
      */
     public synchronized void liberaJogo() {
         for (int i = 0; i <= 3; i++) {
@@ -363,7 +363,7 @@ public class Sala {
                 jogadores[i] = null;
             }
         }
-        this.jogo = null;
+        this.partida = null;
     }
 
     /**

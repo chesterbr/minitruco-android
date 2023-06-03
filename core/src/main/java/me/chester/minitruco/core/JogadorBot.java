@@ -33,7 +33,7 @@ public class JogadorBot extends Jogador implements Runnable {
 
     /**
      * Thread que processa as notificações recebidas pelo jogador (para não
-     * travar o jogo enquanto isso oacontece)
+     * travar a partida enquanto isso oacontece)
      */
     final Thread thread;
 
@@ -43,7 +43,7 @@ public class JogadorBot extends Jogador implements Runnable {
     private final Estrategia estrategia;
 
     /**
-     * Situação atual do jogo (para o estrategia)
+     * Situação atual da partida (para a estrategia)
      */
     final SituacaoJogo situacaoJogo = new SituacaoJogo();
 
@@ -89,7 +89,7 @@ public class JogadorBot extends Jogador implements Runnable {
     public void run() {
 
         LOGGER.log(Level.INFO, "JogadorBot " + this + " (.run) iniciado");
-        while (jogo == null || !jogo.jogoFinalizado) {
+        while (partida == null || !partida.jogoFinalizado) {
             sleep(100);
 
             if (minhaVez && !estouAguardandoRepostaAumento) {
@@ -101,7 +101,7 @@ public class JogadorBot extends Jogador implements Runnable {
                     sleep(random.nextInt(500));
                 }
 
-                // Atualiza a situação do jogo (incluindo as cartas na mão)
+                // Atualiza a situação da partida (incluindo as cartas na mão)
                 atualizaSituacaoJogo();
                 situacaoJogo.podeFechada = podeFechada;
 
@@ -122,7 +122,7 @@ public class JogadorBot extends Jogador implements Runnable {
                     LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
                             + " vai aumentar aposta");
                     estouAguardandoRepostaAumento = true;
-                    jogo.aumentaAposta(this);
+                    partida.aumentaAposta(this);
                     LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
                             + " aguardando resposta");
                     continue;
@@ -169,7 +169,7 @@ public class JogadorBot extends Jogador implements Runnable {
                 }
                 LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
                         + " (" + this.estrategia + ") vai pedir para jogar " + c);
-                jogo.jogaCarta(this, c);
+                partida.jogaCarta(this, c);
                 minhaVez = false;
             }
 
@@ -178,7 +178,7 @@ public class JogadorBot extends Jogador implements Runnable {
                 atualizaSituacaoJogo();
                 sleep(1000 + random.nextInt(1000));
                 // O sync/if é só pra evitar resposta dupla entre 2 bots
-                synchronized (jogo) {
+                synchronized (partida) {
                     if (situacaoJogo.posJogadorPedindoAumento != 0) {
                         boolean resposta = false;
                         try {
@@ -186,7 +186,7 @@ public class JogadorBot extends Jogador implements Runnable {
                         } catch (Exception e) {
                             LOGGER.log(Level.INFO, "Erro em aceite-aumento", e);
                         }
-                        jogo.respondeAumento(this, resposta);
+                        partida.respondeAumento(this, resposta);
                     }
                 }
             }
@@ -207,7 +207,7 @@ public class JogadorBot extends Jogador implements Runnable {
                             e);
                     respostaMaoDeX = random.nextBoolean();
                 }
-                jogo.decideMaoDeX(this, respostaMaoDeX);
+                partida.decideMaoDeX(this, respostaMaoDeX);
             }
 
             if (estouAguardandoRepostaAumento && (numRespostasAguardando == 0)) {
@@ -242,8 +242,8 @@ public class JogadorBot extends Jogador implements Runnable {
      * Atualiza a situação do jogo (para as estratégias)
      */
     private void atualizaSituacaoJogo() {
-        jogo.atualizaSituacao(situacaoJogo, this);
-        if (jogo.isPlacarPermiteAumento()) {
+        partida.atualizaSituacao(situacaoJogo, this);
+        if (partida.isPlacarPermiteAumento()) {
             situacaoJogo.valorProximaAposta = valorProximaAposta;
         } else {
             situacaoJogo.valorProximaAposta = 0;
@@ -326,7 +326,7 @@ public class JogadorBot extends Jogador implements Runnable {
         }
 
         // Libera o jogador para pedir truco (se nao estivermos em mao de 11)
-        valorProximaAposta = (jogo.isPlacarPermiteAumento() ? 3 : 0);
+        valorProximaAposta = (partida.isPlacarPermiteAumento() ? 3 : 0);
 
     }
 

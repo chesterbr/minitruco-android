@@ -11,12 +11,12 @@ import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
-import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.core.Partida;
 import me.chester.minitruco.core.Modo;
 import me.chester.minitruco.core.SituacaoJogo;
 
 /**
- * Representa, no cliente, o <code>Jogo</code> que está executando no servidor.
+ * Representa, no cliente (Bluetooth ou Internet), a <code>PartidaLocal</code> que está executando no servidor.
  * <p>
  * Ela tem duas responsabilidades:
  * <p>
@@ -24,16 +24,16 @@ import me.chester.minitruco.core.SituacaoJogo;
  *   do<code>ClienteActivity</code> em chamadas correspondentes no jogador
  *   (que, se for o <code>JogadorHumano</code>, vai representar na UI)
  * <p>
- * - Transformar as ações de UI solicitadas pelo <code>JogadorHumano</code>
- *   em comandos, enviando à <code>ClientActivity</code>
+ * - Transformar as chamadas feitas pelo <code>JogadorHumano</code> (em resposta
+ *   a ações executadas na UI) em comandos, enviando-os à <code>ClientActivity</code>
  * <p>
  * Desta forma, ela não se envolve com a conexão em si (que tem tempo de vida
- * maior que um jogo) e pode ser usada tanto em Bluetooth quanto em Internet
+ * maior que um partida) e pode ser usada tanto em Bluetooth quanto em Internet
  * (através do descendente apropriado de <code>ClienteActivity</code>).
  */
-public class JogoRemoto extends Jogo {
+public class PartidaRemota extends Partida {
 
-    private final static Logger LOGGER = Logger.getLogger("JogoRemoto");
+    private final static Logger LOGGER = Logger.getLogger("PartidaRemota");
     private final ClienteMultiplayer cliente;
     private JogadorHumano jogadorHumano;
     /**
@@ -44,7 +44,7 @@ public class JogoRemoto extends Jogo {
     private int numRodadaAtual;
 
     /**
-     * Cria um novo proxy de jogo que está rodando num servidor).
+     * Cria um novo proxy da partida que está rodando num servidor).
      * <p>
      * As posições diferentes da posição do jogador humano (que é o único
      * que realmente precisa ser notificado e escutado, pois é quem reproduz
@@ -61,7 +61,7 @@ public class JogoRemoto extends Jogo {
      *          String de 1 caractere recebida pelo servidor que determina
      *          se o truco é paulista, mineiro, etc.
      */
-    public JogoRemoto(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador, String modoStr) {
+    public PartidaRemota(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador, String modoStr) {
         super(Modo.fromString(modoStr));
         this.cliente = cliente;
 
@@ -77,7 +77,7 @@ public class JogoRemoto extends Jogo {
     }
 
     /**
-     * Retorna o jogador humano que está no jogo
+     * Retorna o jogador humano que está na partida
      *
      * @return objeto que representa o humano
      */
@@ -218,14 +218,14 @@ public class JogoRemoto extends Jogo {
                 getJogadorHumano().maoFechada(pontosEquipe);
                 break;
             case 'G':
-                // Fim de jogo
+                // Fim de partida
                 getJogadorHumano().jogoFechado(
                         Integer.parseInt(tokens[0]),
                         Integer.parseInt(tokens[1]));
 
                 break;
             case 'A':
-                // Jogo abortado por alguém
+                // Partida abortada por alguém
                 getJogadorHumano().jogoAbortado(
                         Integer.parseInt(tokens[0]),
                         Integer.parseInt(tokens[1]));
@@ -234,7 +234,7 @@ public class JogoRemoto extends Jogo {
     }
 
     /**
-     * Não implementado em jogo remoto (apenas o JogadorBot usa isso, e ele
+     * Não implementado em partida remota (apenas o JogadorBot usa isso, e ele
      * não participa desses jogos).
      */
     public void atualizaSituacao(SituacaoJogo s, Jogador j) {

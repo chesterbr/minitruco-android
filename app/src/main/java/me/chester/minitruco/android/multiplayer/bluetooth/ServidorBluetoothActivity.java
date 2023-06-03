@@ -27,8 +27,8 @@ import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.JogadorBot;
-import me.chester.minitruco.core.Jogo;
-import me.chester.minitruco.core.JogoLocal;
+import me.chester.minitruco.core.Partida;
+import me.chester.minitruco.core.PartidaLocal;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -49,7 +49,7 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
 
     private char status;
     private Thread threadMonitoraClientes;
-    private Jogo jogo;
+    private Partida partida;
     private boolean aguardandoDiscoverable = false;
     private Thread threadAguardaConexoes;
     private BluetoothServerSocket serverSocket;
@@ -347,29 +347,29 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
         status = STATUS_AGUARDANDO;
         atualizaDisplay();
         atualizaClientes();
-        if (jogo != null) {
-            jogo.abortaJogo(slot + 2);
+        if (partida != null) {
+            partida.abortaJogo(slot + 2);
         }
     }
 
-    public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
+    public static Partida criaNovoJogo(JogadorHumano jogadorHumano) {
         return currentInstance._criaNovoJogo(jogadorHumano);
     }
 
-    public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-        Jogo jogo = new JogoLocal(false, false, modo);
-        jogo.adiciona(jogadorHumano);
+    public Partida _criaNovoJogo(JogadorHumano jogadorHumano) {
+        Partida partida = new PartidaLocal(false, false, modo);
+        partida.adiciona(jogadorHumano);
         for (int i = 0; i <= 2; i++) {
             if (connClientes[i] != null) {
-                jogo.adiciona(new JogadorBluetooth(connClientes[i], this));
+                partida.adiciona(new JogadorBluetooth(connClientes[i], this));
             } else {
                 JogadorBot bot = new JogadorBot();
                 bot.setFingeQuePensa(false);
-                jogo.adiciona(bot);
+                partida.adiciona(bot);
             }
         }
-        this.jogo = jogo;
-        return jogo;
+        this.partida = partida;
+        return partida;
     }
 
     // Os métodos abaixo são synchronized para evitar trocas na mesa enquanto um

@@ -21,7 +21,7 @@ import me.chester.minitruco.core.Carta;
 
 /**
  * Uma carta que está sendo exibida no celular. É uma subclasse separada de
- * <code>Carta</code>para não gerar uma dependência não-Android no core do jogo.
+ * <code>Carta</code>para não gerar uma dependência não-Android no core.
  * <p>
  * Esta classe faz o desenho da carta, executa sua animação, e ajusta sua
  * proporção para a resolução do celular.
@@ -126,7 +126,7 @@ public class CartaVisual extends Carta {
     }
 
     /**
-     * Desenha a carta em uma superfície (tipicamente, a MesaView do jogo).
+     * Desenha a carta em uma superfície (tipicamente, a MesaView na TrucoActivity).
      * <p>
      * Caso a carta esteja em meio a uma animação, atualiza sua posição para
      * corresponder ao instante atual.
@@ -202,7 +202,6 @@ public class CartaVisual extends Carta {
 
     /**
      * Copia a letra, naipe e estado de fechamento de uma carta do jogo
-     * (i.e., não visual)
      *
      * @param c
      *            carta a ser copiada. Se <code>null</code>, a carta visual

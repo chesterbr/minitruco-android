@@ -29,7 +29,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 
     /**
      * Processa as mensagens vindas do cliente (i.e., do JogoBT no celular
-     * remoto), transformando-as novamente em eventos no Jogo local
+     * remoto), transformando-as novamente em eventos na PartidaLocal.
      */
     public void run() {
         // Aguarda a definição da posição (importante, pois ela determina o slot
@@ -77,24 +77,24 @@ public class JogadorBluetooth extends Jogador implements Runnable {
                                         && carta.toString().equals(args[1])) {
                                     carta.setFechada(args.length > 2
                                             && args[2].equals("T"));
-                                    jogo.jogaCarta(this, carta);
+                                    partida.jogaCarta(this, carta);
                                 }
                             }
                             break;
                         case 'H':
-                            jogo.decideMaoDeX(this, args[1].equals("T"));
+                            partida.decideMaoDeX(this, args[1].equals("T"));
                             break;
                         case 'T':
-                            jogo.aumentaAposta(this);
+                            partida.aumentaAposta(this);
                             break;
                         case 'D':
-                            jogo.respondeAumento(this, true);
+                            partida.respondeAumento(this, true);
                             break;
                         case 'A':
-                            jogo.abortaJogo(getPosicao());
+                            partida.abortaJogo(getPosicao());
                             break;
                         case 'C':
-                            jogo.respondeAumento(this, false);
+                            partida.respondeAumento(this, false);
                             break;
                         }
                         sbLinha.setLength(0);
@@ -118,14 +118,14 @@ public class JogadorBluetooth extends Jogador implements Runnable {
     /**
      * Manda uma linha de texto para o celular do cliente.
      * <p>
-     * Estas linhas representam eventos gerados pelo JogoLocal.
+     * Estas linhas representam eventos gerados pela PartidaLocal.
      *
      */
     public synchronized void enviaMensagem(String linha) {
         servidor.enviaMensagem(getPosicao() - 2, linha);
     }
 
-    // Os métodos restantes convertem as notificações do JogoLocal em mensagens
+    // Os métodos restantes convertem as notificações da PartidaLocal em mensagens
     // de texto, que serão reconvertidas em solicitações no cliente para o
     // JogadorHumano.
 
@@ -149,8 +149,8 @@ public class JogadorBluetooth extends Jogador implements Runnable {
         for (int i = 0; i <= 2; i++)
             comando.append(" ").append(getCartas()[i]);
         // Se for manilha nova, também envia o "vira"
-        if (!jogo.getModo().isManilhaVelha()) {
-            comando.append(" ").append(jogo.cartaDaMesa);
+        if (!partida.getModo().isManilhaVelha()) {
+            comando.append(" ").append(partida.cartaDaMesa);
         }
         enviaMensagem(comando.toString());
     }

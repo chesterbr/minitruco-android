@@ -8,18 +8,18 @@ package me.chester.minitruco.core;
  * se vai pedir aumento) e como ele responde a pedidos de truco e mão de 10/11.
  * <p>
  * Eses eventos chamam os métods definidos aqui, que recebem
- * <code>SituacaoJogo</code> - uma "fotografia" do jogo no momento em que a
+ * <code>SituacaoJogo</code> - uma "fotografia" da partida no momento em que a
  * ação foi solicitada.
  * <p></p>
  * Se for desejado guardar estado, o tempo de vida de
- * uma estratégia é o mesmo de <code>Jogo</code>, ou seja, o estado (não-
+ * uma estratégia é o mesmo de <code>Partida</code>, ou seja, o estado (não-
  * <code>static</code>) persistirá ao longo de uma partida, mas não entre
  * partidas.
  * TODO: rever o assertion acima
  * <p>
  * TODO: Instruções para fazer uma nova estratégia aparecer
  * <p>
- * Se você criar uma nova estratégia, pode contribui-la para o jogo (desde que
+ * Se você criar uma nova estratégia, pode contribui-la para a partida (desde que
  * concorde em licenciá-la sob os termos acima, baseados na licença "new BSD").
  * Você será creditado e manterá seus direitos autorais. Basta fazer um fork e
  * pull request no github ou entrar em contato com o Chester no cd@pobox.com.
@@ -38,7 +38,7 @@ public interface Estrategia {
      * <p>
      *
      * @param s
-     *            Situação do jogo no momento
+     *            Situação da partida no momento
      * @return posição da carta na mão a jogar (em letrasCartasJogador), ou -1
      *         para pedir truco
      */
@@ -51,7 +51,7 @@ public interface Estrategia {
      * partida (que ainda não foi aumentado)
      *
      * @param s
-     *            Situação do jogo no momento
+     *            Situação da partida no momento
      * @return true para aceitar, false para desistir
      */
     boolean aceitaTruco(SituacaoJogo s);

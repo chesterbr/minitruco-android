@@ -16,10 +16,10 @@ import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 
 /**
- * Representa um cliente conectado, dentro ou fora de um jogo.
+ * Representa um cliente conectado, dentro ou fora de uma partida.
  * <p>
- * A classe é capaz de processar os comandos do jogador, e, uma vez associada ao
- * jogo, interagir com ele.
+ * A classe é capaz de processar os comandos do jogador, e, uma vez associada à
+ * partida, interagir com ela.
  */
 public class JogadorConectado extends Jogador implements Runnable {
 
@@ -32,7 +32,7 @@ public class JogadorConectado extends Jogador implements Runnable {
     private final Socket cliente;
 
     /**
-     * Informa se o jogador está participando de um jogo
+     * Informa se o jogador está participando de uma partida
      */
     public boolean jogando = false;
     /**
@@ -85,7 +85,7 @@ public class JogadorConectado extends Jogador implements Runnable {
 
     // TODO: ver se não vai fazer falta
     // @Override
-    // public void jogadorAceito(Jogador j, Jogo jogo) {
+    // public void jogadorAceito(Jogador j, Partida partida) {
     // println("Y " + j.getPosicao());
     // }
 
@@ -201,8 +201,8 @@ public class JogadorConectado extends Jogador implements Runnable {
         comando.append(" ").append(jogadorQueAbre.getPosicao());
         for (int i = 0; i <= 2; i++)
             comando.append(" ").append(getCartas()[i]);
-        if (!jogo.getModo().isManilhaVelha()) {
-            comando.append(" ").append(jogo.cartaDaMesa);
+        if (!partida.getModo().isManilhaVelha()) {
+            comando.append(" ").append(partida.cartaDaMesa);
         }
         println(comando.toString());
     }
@@ -273,7 +273,7 @@ public class JogadorConectado extends Jogador implements Runnable {
     }
 
     /**
-     * Desvincula o jogo do jogador, e, se necessário, da sala
+     * Desvincula a partida do jogador, e, se necessário, da sala
      */
     private synchronized void desvinculaJogo() {
         querJogar = false;

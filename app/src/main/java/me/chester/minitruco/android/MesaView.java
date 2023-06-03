@@ -25,7 +25,7 @@ import me.chester.minitruco.core.Jogador;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Representa visualmente o andamento de um jogo, permitindo que o usuário
+ * Representa visualmente o andamento de uma partida, permitindo que o usuário
  * interaja.
  * <p>
  * Para simplificar o acesso, alguns métodos/propriedades são static - o que só
@@ -85,7 +85,7 @@ public class MesaView extends View {
     private float tamanhoFonte;
 
     /**
-     * É true se a view já está pronta para responder a solicitações do jogo
+     * É true se a view já está pronta para responder a solicitações da partida
      * (mover cartas, acionar balões, etc)
      */
     private boolean inicializada = false;
@@ -133,8 +133,8 @@ public class MesaView extends View {
         public void run() {
             int tempoEntreFramesAnimando = 1000 / FPS_ANIMANDO;
             int tempoEntreFramesParado = 1000 / FPS_PARADO;
-            // Aguarda o jogo existir
-            while (trucoActivity.jogo == null) {
+            // Aguarda a partida existir
+            while (trucoActivity.partida == null) {
                 sleep(200);
             }
             // Roda até a activity-mãe se encerrar, num frame rate que depende
@@ -282,7 +282,7 @@ public class MesaView extends View {
                     cv.resetBitmap();
                     if (i >= 4) {
                         int numJogador = (i - 1) / 3;
-                        if (trucoActivity.jogo.jogoFinalizado) {
+                        if (trucoActivity.partida.jogoFinalizado) {
                             cv.movePara(leftBaralho, topBaralho);
                         } else if (cv.descartada) {
                             cv.movePara(calcPosLeftDescartada(numJogador), calcPosTopDescartada(numJogador));
@@ -304,9 +304,9 @@ public class MesaView extends View {
     }
 
     /**
-     * Recupera a carta visual correspondente a uma carta do jogo.
+     * Recupera a carta visual correspondente a uma carta da partida.
      *
-     * @param c carta do jogo
+     * @param c carta da partida
      * @return Carta visual com o valor desta, ou <code>null</code> se não achar
      */
     public CartaVisual getCartaVisual(Carta c) {
@@ -329,7 +329,7 @@ public class MesaView extends View {
     public void atualizaResultadoRodada(int numRodada, int resultado, Jogador jogadorQueTorna) {
         aguardaFimAnimacoes();
         if (resultado != 3) {
-            cartaQueFez = getCartaVisual(trucoActivity.jogo.getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
+            cartaQueFez = getCartaVisual(trucoActivity.partida.getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
             cartaQueFez.destacada = true;
         }
         for (CartaVisual c : cartas) {
@@ -405,7 +405,7 @@ public class MesaView extends View {
     }
 
     /**
-     * Encaminha resposta da pergunta em exibição (se houver uma) para o jogo
+     * Encaminha resposta da pergunta em exibição (se houver uma) para a partida
      * em uma nova thread (para não travar a thread de UI) e oculta a caixa de
      * diálogo com a pergunta.
      *
@@ -415,10 +415,10 @@ public class MesaView extends View {
         new Thread(() -> {
             if (mostrarPerguntaAumento) {
                 mostrarPerguntaAumento = false;
-                trucoActivity.jogo.respondeAumento(trucoActivity.jogadorHumano, resposta);
+                trucoActivity.partida.respondeAumento(trucoActivity.jogadorHumano, resposta);
             } else if (mostrarPerguntaMaoDeX) {
                 mostrarPerguntaMaoDeX = false;
-                trucoActivity.jogo.decideMaoDeX(trucoActivity.jogadorHumano, resposta);
+                trucoActivity.partida.decideMaoDeX(trucoActivity.jogadorHumano, resposta);
             }
         }).start();
     }
@@ -436,7 +436,7 @@ public class MesaView extends View {
 
         statusVez = STATUS_VEZ_OUTRO;
         carta.setFechada(vaiJogarFechada);
-        trucoActivity.jogo.jogaCarta(trucoActivity.jogadorHumano, carta);
+        trucoActivity.partida.jogaCarta(trucoActivity.jogadorHumano, carta);
     }
 
     private long calcTempoAteFimAnimacaoMS() {
@@ -485,8 +485,8 @@ public class MesaView extends View {
         }
 
         // Abre o vira, se for manilha nova
-        if (!isInEditMode() && !trucoActivity.jogo.getModo().isManilhaVelha()) {
-            cartas[0].copiaCarta(trucoActivity.jogo.cartaDaMesa);
+        if (!isInEditMode() && !trucoActivity.partida.getModo().isManilhaVelha()) {
+            cartas[0].copiaCarta(trucoActivity.partida.cartaDaMesa);
             cartas[0].visible = true;
         }
 
@@ -537,7 +537,7 @@ public class MesaView extends View {
                 continue;
             }
             // ...e, no caso de um humano (ou parceiro em mão de 10/11), que
-            // corresponda à carta do jogo
+            // corresponda à carta da partida
             cv = cvCandidata;
             if (c.equals(cvCandidata)) {
                 break;
@@ -657,7 +657,7 @@ public class MesaView extends View {
             try {
                 cartasJogadas.elementAt(i).draw(canvas);
             } catch (ArrayIndexOutOfBoundsException e) {
-                // Não faz nada (o jogo encerrou no meio de um refresh,
+                // Não faz nada (a partida encerrou no meio de um refresh,
                 // por isso a carta não está lá)
             }
         }
@@ -686,7 +686,7 @@ public class MesaView extends View {
             if (mostrarPerguntaAumento) {
                 textoPergunta = "Aceita?"; // TODO descrever?
             } else {
-                textoPergunta = "Aceita mão de " + trucoActivity.jogo.getModo().pontuacaoParaMaoDeX();
+                textoPergunta = "Aceita mão de " + trucoActivity.partida.getModo().pontuacaoParaMaoDeX();
             }
             paintPergunta.setAntiAlias(true);
             paintPergunta.setColor(Color.BLACK);
@@ -706,7 +706,7 @@ public class MesaView extends View {
         desenhaBalao(canvas);
         desenhaIndicadorDeVez(canvas);
 
-        if (trucoActivity != null && trucoActivity.jogo.isJogoAutomatico()) {
+        if (trucoActivity != null && trucoActivity.partida.isJogoAutomatico()) {
             jogaCarta(0);
             jogaCarta(1);
             jogaCarta(2);

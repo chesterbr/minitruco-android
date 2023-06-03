@@ -34,8 +34,8 @@ import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivi
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
 import me.chester.minitruco.core.JogadorBot;
-import me.chester.minitruco.core.Jogo;
-import me.chester.minitruco.core.JogoLocal;
+import me.chester.minitruco.core.Partida;
+import me.chester.minitruco.core.PartidaLocal;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -43,8 +43,8 @@ import me.chester.minitruco.core.JogoLocal;
 /**
  * Activity onde os jogos (partidas) efetivamente acontecem..
  * <p>
- * Ela inicializa o jogo e exibe sa cartas, "balões" de texto e diálogos através
- * de uma <code>MesaView</code>.
+ * Ela inicializa a partida e exibe a <code>MesaView</code> (cartas, balões, etc)
+ * e os placares (mão, partida e partidas).
  * <p>
  */
 public class TrucoActivity extends Activity {
@@ -62,7 +62,7 @@ public class TrucoActivity extends Activity {
     final int[] placar = new int[2];
     boolean jogoAbortado = false;
     JogadorHumano jogadorHumano;
-    Jogo jogo;
+    Partida partida;
     private MesaView mesa;
     private TextView textViewPartidas;
 
@@ -91,9 +91,9 @@ public class TrucoActivity extends Activity {
                     textViewRivais.setTextColor(Color.BLACK);
                     break;
                 case MSG_OFERECE_NOVA_PARTIDA:
-                    if (jogo instanceof JogoLocal) {
+                    if (partida instanceof PartidaLocal) {
                         btnNovaPartida.setVisibility(View.VISIBLE);
-                        if (jogo.isJogoAutomatico()) {
+                        if (partida.isJogoAutomatico()) {
                             btnNovaPartida.performClick();
                         }
                     }
@@ -103,7 +103,7 @@ public class TrucoActivity extends Activity {
                     break;
                 case MSG_MOSTRA_BOTAO_AUMENTO:
                     int chave = getResources().getIdentifier("botao_aumento_" +
-                            jogo.nomeNoTruco(jogadorHumano.valorProximaAposta),
+                            partida.nomeNoTruco(jogadorHumano.valorProximaAposta),
                         "string", "me.chester.minitruco");
                     btnAumento.setText(getResources().getString(chave));
                     btnAumento.setVisibility(Button.VISIBLE);
@@ -133,38 +133,38 @@ public class TrucoActivity extends Activity {
     }
 
     /**
-     * Cria um novo jogo e dispara uma thread para ele. Para jogos multiplayer,
+     * Cria um nova partida e dispara uma thread para ele. Para jogos multiplayer,
      * a criação é terceirizada para a classe apropriada.
      * <p>
      * Este método é chamada pela primeira vez a partir da MesaView (para
-     * garantir que o jogo só role quando ela estiver inicializada) e dali em
+     * garantir que a partida só role quando a mesa estiver inicializada) e dali em
      * diante pelo botão de nova partida.
      */
     public void criaEIniciaNovoJogo() {
         jogadorHumano = new JogadorHumano(this, mesa);
         if (getIntent().hasExtra("servidorBluetooth")) {
-            jogo = ServidorBluetoothActivity.criaNovoJogo(jogadorHumano);
+            partida = ServidorBluetoothActivity.criaNovoJogo(jogadorHumano);
         } else if (getIntent().hasExtra("clienteBluetooth")) {
-            jogo = ClienteBluetoothActivity.criaNovoJogo(jogadorHumano);
+            partida = ClienteBluetoothActivity.criaNovoJogo(jogadorHumano);
         } else if (getIntent().hasExtra("clienteInternet")) {
-            jogo = ClienteInternetActivity.criaNovoJogo(jogadorHumano);
+            partida = ClienteInternetActivity.criaNovoJogo(jogadorHumano);
         } else {
-            jogo = criaNovoJogoSinglePlayer(jogadorHumano);
+            partida = criaNovoJogoSinglePlayer(jogadorHumano);
         }
-        (new Thread(jogo)).start();
+        (new Thread(partida)).start();
         mIsViva = true;
     }
 
-    private Jogo criaNovoJogoSinglePlayer(JogadorHumano humano) {
+    private Partida criaNovoJogoSinglePlayer(JogadorHumano humano) {
         String modo = preferences.getString("modo", "P");
         boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
         boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
-        Jogo novoJogo = new JogoLocal(humanoDecide, jogoAutomatico, modo);
-        novoJogo.adiciona(jogadorHumano);
+        Partida novaPartida = new PartidaLocal(humanoDecide, jogoAutomatico, modo);
+        novaPartida.adiciona(jogadorHumano);
         for (int i = 2; i <= 4; i++) {
-            novoJogo.adiciona(new JogadorBot());
+            novaPartida.adiciona(new JogadorBot());
         }
-        return novoJogo;
+        return novaPartida;
     }
 
     @Override
@@ -206,7 +206,7 @@ public class TrucoActivity extends Activity {
         // fazer uma acionamento duplo (e duplicar o aumento)
         findViewById(R.id.btnAumento).setVisibility(Button.GONE);
         mesa.setStatusVez(MesaView.STATUS_VEZ_HUMANO_AGUARDANDO);
-        jogo.aumentaAposta(jogadorHumano);
+        partida.aumentaAposta(jogadorHumano);
     }
 
     public void abertaFechadaClickHandler(View v) {
@@ -285,8 +285,8 @@ public class TrucoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mIsViva = false;
-        if (jogo != null && !jogoAbortado) {
-            jogo.abortaJogo(1);
+        if (partida != null && !jogoAbortado) {
+            partida.abortaJogo(1);
         }
     }
 

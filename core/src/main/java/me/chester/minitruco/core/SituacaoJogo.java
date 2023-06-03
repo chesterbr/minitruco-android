@@ -4,12 +4,12 @@ package me.chester.minitruco.core;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Fotografia da situação atual do jogo no momento em que um bot vai jogar,
+ * Fotografia da situação atual da partida no momento em que um bot vai jogar,
  * responder a um aumento ou decidir se joga uma mão de 10/11.
  * <p>
  * Ela garante que a estratégia não trapaceie, disponibilizando apenas o que
  * o bot vê: cartas na mão, histórico de cartas jogadas, placares da mão e
- * do jogo, etc. A única classe do truco que ela enxerga é <code>Carta</code>.
+ * da partida, etc. A única classe do truco que ela enxerga é <code>Carta</code>.
  */
 public class SituacaoJogo {
 
@@ -64,7 +64,7 @@ public class SituacaoJogo {
      * Letra da manilha (quando aplicável).
      * <p>
      * Esta propriedade deve ser usada APENAS para chamar o método
-     * Jogo.getValorTruco(), pois, no caso de jogo com manilha velha, seu valor
+     * Partida.getValorTruco(), pois, no caso de partida com manilha velha, seu valor
      * não é o de uma carta
      */
     public char manilha;

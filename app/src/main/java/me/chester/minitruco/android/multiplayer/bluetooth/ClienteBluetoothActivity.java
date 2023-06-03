@@ -20,8 +20,8 @@ import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
-import me.chester.minitruco.android.multiplayer.JogoRemoto;
-import me.chester.minitruco.core.Jogo;
+import me.chester.minitruco.android.multiplayer.PartidaRemota;
+import me.chester.minitruco.core.Partida;
 
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -42,7 +42,7 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
 
     private Thread threadConexao;
     private Thread threadMonitoraConexao;
-    private JogoRemoto jogo;
+    private PartidaRemota partida;
     private BluetoothSocket socket = null;
     private InputStream in;
     private OutputStream out;
@@ -128,8 +128,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
                             // também precisa ser processado pelo jogo anterior
                             // (para limpar o placar)
                         default:
-                            if (jogo != null) {
-                                jogo.processaNotificacao(tipoNotificacao,
+                            if (partida != null) {
+                                partida.processaNotificacao(tipoNotificacao,
                                         parametros);
                             }
                         }
@@ -141,8 +141,8 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             }
         } catch (IOException e) {
             if (!isFinishing()) {
-                if (jogo != null) {
-                    jogo.abortaJogo(0);
+                if (partida != null) {
+                    partida.abortaJogo(0);
                 }
                 LOGGER.log(Level.INFO, "desconectado");
                 msgErroFatal("Você foi desconectado");
@@ -169,9 +169,9 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
     }
 
     private void exibeMesaForaDoJogo(String parametros) {
-        if (jogo != null) {
-            jogo.abortaJogo(0);
-            jogo = null;
+        if (partida != null) {
+            partida.abortaJogo(0);
+            partida = null;
         }
         // Exibe as informações recebidas fora do jogo
         String[] tokens = parametros.split(" ");
@@ -254,13 +254,13 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
         }
     }
 
-    public static Jogo criaNovoJogo(JogadorHumano jogadorHumano) {
+    public static Partida criaNovoJogo(JogadorHumano jogadorHumano) {
         return currentInstance._criaNovoJogo(jogadorHumano);
     }
 
-    public Jogo _criaNovoJogo(JogadorHumano jogadorHumano) {
-        jogo = new JogoRemoto(this, jogadorHumano, posJogador, modo);
-        return jogo;
+    public Partida _criaNovoJogo(JogadorHumano jogadorHumano) {
+        partida = new PartidaRemota(this, jogadorHumano, posJogador, modo);
+        return partida;
     }
 
     /**

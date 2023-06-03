@@ -6,10 +6,10 @@ import java.util.Random;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Base para os diversos tipos de jogador que podem participar de um jogo.
+ * Base para os diversos tipos de jogador que podem participar de um partida.
  * <p>
  * Independente de ser o usuário do celular (JogadorHumano), um jogador virtual
- * (JogadorBot) ou qualquer outro tipo, o jogador recebe notificações do Jogo
+ * (JogadorBot) ou qualquer outro tipo, o jogador recebe notificações do Partida
  * e envia comandos a ele de forma assíncrona.
  */
 public abstract class Jogador {
@@ -23,16 +23,16 @@ public abstract class Jogador {
     private Carta[] cartas;
 
     /**
-     * Jogo que está sendo jogado por este jogador
+     * Partida da qual este jogador está participando no momento
      */
-    protected Jogo jogo;
+    protected Partida partida;
 
     /**
-     * Processa o evento de entrada no jogo (guardando o jogo)
+     * Processa o evento de entrada na partida (guardando a partida)
      */
-    public void entrouNoJogo(Jogador i, Jogo j) {
-        if (i.equals(this)) {
-            this.jogo = j;
+    public void entrouNoJogo(Jogador j, Partida p) {
+        if (j.equals(this)) {
+            this.partida = p;
         }
     }
 
@@ -50,7 +50,7 @@ public abstract class Jogador {
     }
 
     /**
-     * Recupera a posição do jogador no jogo
+     * Recupera a posição do jogador na partida
      *
      * @return número de 1 a 4 (não necessariamente a posição dele na mesa)
      */
@@ -64,7 +64,7 @@ public abstract class Jogador {
 
     /**
      * Recupera a equipe em que este jogador está (assumindo que ele já esteja
-     * aceito em um jogo)
+     * aceito em um partida)
      *
      * @return 1 ou 2
      */
@@ -199,10 +199,10 @@ public abstract class Jogador {
     public abstract void maoFechada(int[] pontosEquipe);
 
     /**
-     * Informa que o jogo foi concluído
+     * Informa que a partida foi concluído
      *
      * @param numEquipeVencedora
-     *            Equipe que ganhou o jogo (1 ou 2)
+     *            Equipe que ganhou a partida (1 ou 2)
      * @param rndFrase
      *              Número "grande" que identifica a frase do strings.xml dita
      *              pelo jogador (índice_da_frase = rndFrase % frases.length())
@@ -231,7 +231,7 @@ public abstract class Jogador {
     public abstract void informaMaoDeX(Carta[] cartasParceiro);
 
     /**
-     * Informa que o jogo foi abandonado por alguma causa externa (ex.: um
+     * Informa que a partida foi abandonado por alguma causa externa (ex.: um
      * jogador desistiu)
      *
      * @param posicao  Posição do jogador que abortou

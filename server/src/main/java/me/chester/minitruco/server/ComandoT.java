@@ -13,7 +13,7 @@ public class ComandoT extends Comando {
     public void executa(String[] args, JogadorConectado j) {
         if (!j.jogando)
             return;
-        j.getSala().getJogo().aumentaAposta(j);
+        j.getSala().getPartida().aumentaAposta(j);
     }
 
 }
