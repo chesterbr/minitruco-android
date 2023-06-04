@@ -2,8 +2,6 @@
 
 # miniTruco - Documentação para Desenvolvimento
 
-EM CONSTRUÇÃO (finge que tem uma gif dos anos 90 de men-at-work aqui)
-
 - [miniTruco - Documentação para Desenvolvimento](#minitruco---documentação-para-desenvolvimento)
   - [Introdução](#introdução)
   - [Contribuindo](#contribuindo)
@@ -13,9 +11,15 @@ EM CONSTRUÇÃO (finge que tem uma gif dos anos 90 de men-at-work aqui)
   - [Organização](#organização)
   - [Arquitetura de Classes](#arquitetura-de-classes)
     - [Partidas e Jogadores](#partidas-e-jogadores)
-      - [Jogo simples (single player)](#jogo-simples-single-player)
-      - [Jogo via Bluetooth](#jogo-via-bluetooth)
-    - [Internet (em desenvolvimento)](#internet-em-desenvolvimento)
+    - [Jogo simples (single player)](#jogo-simples-single-player)
+    - [Jogo via Bluetooth](#jogo-via-bluetooth)
+    - [Jogo via Internet](#jogo-via-internet)
+  - [Protocolo de comunicação multiplayer](#protocolo-de-comunicação-multiplayer)
+    - [Convenções](#convenções)
+    - [Comandos](#comandos)
+      - [Fora do jogo](#fora-do-jogo)
+      - [Durante o jogo](#durante-o-jogo)
+    - [Notificações](#notificações)
   - [Testes (ou falta de)](#testes-ou-falta-de)
   - [Estratégia dos bots](#estratégia-dos-bots)
     - [Parágrafo que eu não sei onde vai](#parágrafo-que-eu-não-sei-onde-vai)
@@ -111,7 +115,7 @@ direction TB
 
 Diferentes implementações são combinadas para suportar diferentes modos de jogo.
 
-#### Jogo simples (single player)
+### Jogo simples (single player)
 
 ```mermaid
 classDiagram
@@ -131,11 +135,12 @@ Vale observar que a UI só reage quando a partida notifica `JogadorHumano`. Por 
 
 Essa separação radical simplifica os jogadores (`JogadorHumano` não precisa entender as regras do jogo, `JogadorBot` só se preocupa em jogar), evita trapaças (`PartidaLocal` é a única autoridade) e permite total reuso no multiplayer, como veremos a seguir.
 
-#### Jogo via Bluetooth
+### Jogo via Bluetooth
 
 Para jogar via Bluetooth, um aparelho seleciona a opção "Criar Jogo", que abre uma `ServidorBluetoothActivity`. Esta aguarda por conexões de outros aparelhos, e quando um se conecta, ela cria um `JogadorBluetooth`.
 
-`JogadorBluetooth` recebe notificações da `PartidaLocal` da mesma forma que `JogadorHumano`, mas em vez de traduzir para a UI, ela traduz em comandos textuais, que são enviados ao outro aparelho via Bluetooth. Da mesma forma, ela recebe notificações textuais do outro aparelho e traduz em comandos para a partida.
+`JogadorBluetooth` recebe notificações da `PartidaLocal` da mesma forma que `JogadorHumano`, mas em vez de traduzir para a UI, ela traduz em comandos textuais<sup>1</sup>, que são enviados ao outro aparelho via Bluetooth. Da mesma forma, ela recebe notificações textuais do outro aparelho e traduz em comandos para a partida.
+
 
 ```mermaid
 classDiagram
@@ -157,9 +162,77 @@ classDiagram
 
 Parece complicado, mas a grande vantagem é que nem `PartidaLocal` (no servidor), nem `JogadorHumano` (no cliente) precisam saber que estão conversando via Bluetooth, graças aos _proxies_ `JogadorBluetooth` e `PartidaRemota`. Isso permite que o mesmo código seja usado para jogar localmente ou via Bluetooth, e também permite que o jogo seja jogado via Bluetooth ou internet.
 
-### Internet (em desenvolvimento)
+*<sup>1</sup> para detalhes sobre estes comandos e notificações textuais, veja a seção [Protocolo de comunicação multiplayer](#protocolo-de-comunicação-multiplayer).*
 
-TODO
+
+### Jogo via Internet
+
+TODO (jogo via internet ainda está em desenvolvimento)
+
+## Protocolo de comunicação multiplayer
+
+Quando o miniTruco foi criado (2005), poucas pessoas possuíam celulares e planos capazes de acessar a internet. Isso não só motivou a criação do jogo via Bluetooth, mas também me incentivou a desenvolver um protocolo de comunicação que fosse o mais leve possível.
+
+Idealmente isso seria feito serializando as chamadas e objetos com um protocolo binário (se fosse hoje em dia, algo como [Protobuf](https://protobuf.dev/)). Mas eu também queria que fosse possível interagir diretamente com o servidor via terminal (para testes, depuração e também por diversão), então acabei criando uma "linguagem" que define comandos e notificações em texto simples.
+
+TODO: instruções de como usar o servidor via terminal
+
+### Convenções
+
+- `<apelidos>`: Quatro sequências de caracteres (uma ou mais podendo ser "bot"), separadas por `|`. Exemplo: `john|bot|ringo|george`.
+- `<carta>`: Carta representada por letra (4, 5, 6, 7, Q, J, K, A, 2 ou 3) e naipe (c, e, o ou p). Exemplo: `2c`, `Qp`, `Kp`.
+- `<modo>`: `P` para truco paulista, `M` para truco mineiro, `V` para manilha velha ou `L` baralho limpo.
+- `<jogador>`: Posição de um jogador na sala/partida, de 1 a 4. É constante durante a partida, mas pode mudar fora dele (o servidor manda uma notificação `I` sempre que a formação da sala mudar).
+- `<equipe>`: Uma das duas equipes (duplas). Pode ser 1 (equpe dos jogadores 1 e 3) ou 2 (jogadores 2 e 4).
+- `<quer jogar>`: Quatro caracteres `T` ou `F` conforme cada posição queira iniciar a partida ou não
+- `<frase>`: número aleatório grande que permite que todos os clientes mostrem a mesma frase (o "balãozinho") para um evento. Por exemplo, se o jogador 1 pediu truco (paulista) e o número sorteado foi 12345678, todos irão receber `T 1 3 12345678`; se o cliente tem 8 frases possíveis para truco, ele calcula 12345678 % 8 = 6 e exibe a frase de índice 6. Dessa forma, todos os clientes mostram a mesma frase (se estiverem com a mesma versão do [strings.xml](../app/src/main/res/values/strings.xml)) e o servidor não tem que saber quantas frases tem cada tipo de mensagem.
+
+### Comandos
+
+#### Fora do jogo
+
+- `W`: recupera número de versão (e de repente outras infos no futuro)
+- `B <numero>`:  Informa o número do build do cliente, para que o servidor verifique compatibilidade
+- `N <apelido>`: Define o nome do jogador
+- `E PUB <modo>`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
+- `S`: - Sai da sala (encerrando a partida, se houver uma em andamento)
+- `Q`: - Quero Jogar
+
+#### Durante o jogo
+
+- `J carta _`: Joga uma carta na mesa (se _ = T, tenta jogar fechada)
+- `T`: Pede aumento de aposta
+- `D`: Desce (aceita aumento de aposta)
+- `C`: Corre (recusa aumento de aposta)
+- `H _`: decide se aceita ou recusa jogar em mão de 11 (_ = T para aceita e F para recusa)
+
+### Notificações
+
+- `W x.y`: `Versão do servidor (outras infos podem vir no futuro)
+- `X CI`: `Comando inválido
+- `X AI`: `Argumento inválido
+- `X FS`: `Você não está numa sala
+- `X NI`: `Nome inválido
+- `X NE`: `Nome já está em uso
+- `X NO`: `É preciso atribuir um nome para entrar na sala
+- `X JE sala`: `Você já está na sala de código `sala`
+- `N nome`: `Seu nome foi definido como `nome`
+- `I <apelidos> <modo> <jogador> <quero jogar>`: Info da sala. `<jogador>` é a posição do cliente. `<quer jogar>` só vem no jogo via internet
+- `P <jogador>`: Início da partida
+- `M <carta> <carta> <carta> <carta>`: Início da mão. Suas cartas são as três primeiras. A última, se houver, é o vira.
+- `V <jogador> _`: vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode
+- `J <jogador> <carta>`: Jogador jogou uma carta.jogada pela pessoa na posição indicada (se `<carta>` for omitido, foi jogada carta fechada)
+- `R <equipe> <jogador>`: Fim de rodada, indicando equipe vencedora e jogador que torna
+- `O pontosEquipe1 pontosEquipe2`: Fim de mão, seguido do placar atual do jogo
+- `G <equipe> <frase>`: Fim de jogo, indicando a equipe vencedora
+- `A <jogador>`:  Jogo abortado pelo jogador nesta posição
+- `T <jogador> <valor> <frase>`: Jogador pediu aumento. valor é 3 para truco, 6 para seis, etc.
+- `D <jogador> <valor> <frase>`: Jogador mandou descer (aceitou aumento) no valor indicado
+- `C <jogador> <frase>`: Jogador correu do pedido de aumento
+- `F <carta> <carta> <carta> <frase>`: Informa que estamos em mão de 10/11 e o adversário tem essas cartas
+- `H <jogador> <frase> _`: Informa que o jogador na posição acusou/recusou (_=T/F) mão de 10/11
+- `S`: Informa que o jogador saiu da sala
+
 ## Testes (ou falta de)
 
 Quando este projeto começou, eu não tinha qualquer conhecimento da cultura de testes no desenvolvimento de software - isso só veio quando ele já estava portado para Android - e o ferramental para este ambiente (ou minha capacidade de utilizar ele) era um tanto limitado.
