@@ -87,7 +87,44 @@ O projeto está dividido em três módulos Gradle:
 - `app`: contém a implementação do aplicativo Android
 - `server`: contém o servidor para jogo online (atualmente em desenvolvimento e com o acesso escondido no aplicativo).
 
-## Modelo de Classes (single player)
+## Arquitetura
+
+### Partidas e Jogadores
+
+Uma partida pode envolver jogadores humanos e/ou bots, e estes jogadores podem estar todos no mesmo dispositivo (single player) ou em dispositivos diferentes (multiplayer). Isso motivou a criação de duas classes abstratas:
+
+- `Partida` É responsável por coordenar as ações dos jogadores ao longo de uma partida de truco.
+- `Jogador` representa um jogador, e é responsável por interagir com o usuário (humano) ou com a estratégia (bot) e com a `Partida`.
+
+```mermaid
+classDiagram
+direction TB
+    Partida <|-- PartidaLocal
+    Partida <|-- PartidaRemota
+    Jogador <|-- JogadorHumano
+    Jogador <|-- JogadorBot
+    Jogador <|-- JogadorBluetooth
+    Jogador <|-- JogadorDummy
+```
+
+Diferentes implementações são combinadas para suportar diferentes modos de jogo.
+
+#### Jogo simples (single player)
+
+```mermaid
+classDiagram
+direction LR
+    PartidaLocal -- "1" JogadorHumano
+    PartidaLocal -- "3" JogadorBot
+    JogadorBot -- Estrategia
+```
+
+Neste modo (que é o padrão do jogo, iniciado ao tocar o botão "Jogar) as três classes mais fundamentais são usadas:
+
+- `PartidaLocal` mantém o estado do jogo (pontos, cartas jogadas, etc) e coordena as ações dos `Jogador`es, chamando métodos deles (_notificações_) sempre que algo acontece no jogo (ex.: início de rodada, alguém pediu aumento de truco, etc.) e esperando que eles respondam com _comandos_ (ex.: jogar uma carta, aceitar o truco, etc.) da mesma forma. Ela é conectada a um `JogadorHumano` e três `JogadorBot`.
+- `JogadorHumano` faz a ponte entre a partida e a UI do Android. Ele recebe as notificações da partida e traduz em elementos visuais (de `TrucoActivity` e `MesaView`). Quando o usuário interage com estes elementos, ela envia os comandos correspondentes à partida.
+- `JogadorBot` faz a ponte entre a partida e uma `Estrategia`. Da mesma forma que `JogadorHumano`, ela recebe as notificações da partida, mas se concentra basicamente em eventos que precisam de uma resposta (ex.: é a vez daquele bot), chamando métodos de `Estrategia` e, de acordo com a resposta, enviando comandos à partida.
+
 
 
 
