@@ -1,0 +1,32 @@
+O protocolo está documentado em docs/index.md
+
+Estes comandos e notificações estavam documentados na versão Java ME;
+provavelmente não serão implementados; quando eu tiver certeza disso
+apago este arquivo
+
+== Comandos
+
+E PRI ___ - Cria uma nova sala privada com as regras especificadas
+E PRI codigo - Entra na sala privada com o código especificado
+
+I numero - Obtém info da sala (se omitido numero, da sala em que estou)
+
+Comandos do gerente da sala (usuário mais antigo)
+R __ - Define regras da sala. Os dois _ são T e F, indicam, na ordem, baralho limpo e manilha velha (se T)
+O - Troca o parceiro
+K posicao - Chuta algúem para fora da sala
+V = Inverte os adversários
+
+Comandos do jogo:
+
+B - message broadcast
+B jogador mensagem - Message broadcast
+
+== Notificações
+
+X CH - Sala cheia, escolha outra
+X SI - Sala inválida
+X JO - Você está em jogo, não pode fazer isso
+X JI - Jogador (posicao) invalida (deve ser de 1 a 4)
+
+E sala - Informa que o jogador entrou na sala com este número (um I vem logo em seguida)
