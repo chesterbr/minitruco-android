@@ -15,11 +15,11 @@ A [versão oficial](https://play.google.com/store/apps/details?id=me.chester.min
 
 É um software livre, sem fins lucrativos, desenvolvido por hobby e com :heart: no meu tempo pessoal (com valiosas colaborações de outras pessoas).
 
-Você pode usar e modificar o código como quiser, dentro dos [termos da licença BSD](LICENSE). Consulte a **[documentação para desenvolvimento](docs/index.md)** para saber mais sobre o funcionamento dele e como contribuir.
+Você pode usar e modificar o código como quiser, dentro dos [termos da licença BSD](LICENSE). Consulte a **[documentação para desenvolvimento](docs/desenvolvimento.md)** para saber mais sobre o funcionamento e como contribuir.
 
 ## Créditos
 
-- Idéia, desenvolvimento, manutenção e arte: **[Carlos Duarte do Nascimento](https://chester.me)** ([@chesterbr](https://github.com/chesterbr))
+- Idéia, desenvolvimento, manutenção e arte: **[Carlos Duarte do Nascimento](https://chester.me/sobre)** ([@chesterbr](https://github.com/chesterbr))
 - Imagens de carta, fundo e logotipo: **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani))
 - Tento mineiro: **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram))
 - Estratégias de bots atuais:
