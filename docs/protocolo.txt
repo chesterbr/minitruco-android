@@ -1,4 +1,4 @@
-O protocolo está documentado em docs/index.md
+O protocolo está documentado em docs/desenvolvimento.md
 
 Estes comandos e notificações estavam documentados na versão Java ME;
 provavelmente não serão implementados; quando eu tiver certeza disso

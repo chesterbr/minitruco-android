@@ -3,6 +3,8 @@
 
 - [Introdução](#introdução)
 - [Contribuindo](#contribuindo)
+  - [No que eu posso contribuir?](#no-que-eu-posso-contribuir)
+  - [Como contribuir](#como-contribuir)
 - [Diretrizes e decisões](#diretrizes-e-decisões)
 - [Ambiente de Desenvolvimento](#ambiente-de-desenvolvimento)
   - [Convenções de código](#convenções-de-código)
@@ -31,21 +33,27 @@ O nome "miniTruco" é uma alusão ao fato de que a [versão original](https://gi
 
 Você pode usar e modificar o código como quiser, dentro dos [termos da licença](../LICENSE). O objetivo deste documento é ajudar qualquer pessoa interessada a configurar, entender e/ou aprimorar este código.
 
-
+Saiba mais sobre o autor aqui: https://chester.me/sobre/
 
 ## Contribuindo
 
-Fique à vontade para [criar uma issue](https://github.com/chesterbr/minitruco-android/issues) no GitHub se encontrar um problema de configuração, encontrar um _bug_, tiver uma sugestão ou quiser contribuir de qualquer forma.
-
-[Pull requests](https://docs.github.com/pt/pull-requests) são bem-vindas, mas não há garantia de aceite (em particular devido à falta de testes automáticos, que me obriga a testar tudo muito cuidadosamente).
-
-O código é bastante antigo (baseado na ainda mais antiga [versão Java ME](https://github.com/chesterbr/minitruco-j2me)), mas aos poucos estou tentando modernizar.
+### No que eu posso contribuir?
 
 Uma área que sempre pode ser melhorada é a de estratégias (veja a seção "[Estratégia dos bots](#estratégia-dos-bots)"); correções de bugs específicos de celulares ajudam muito também, já que eu não tenho muitos à disposição.
 
-Existem vários issues [abertos](https://github.com/chesterbr/minitruco-android/issues) ([bugs](https://github.com/chesterbr/minitruco-android/issues?q=is%3Aopen+is%3Aissue+label%3Abug), melhorias e débitos técnicos); se você for trabalhar em algum deles com intenção de fazer um pull request, sugiro comentar no issue - terei prazer em orientar e coordenar esforços, o que otimiza o seu tempo e evita dificuldades na hora de fazer o merge. Se você quiser trabalhar em algo que não está listado, sugiro abrir uma issue para discutir antes.
+A cobertura e infra-estrutura de testes também são áreas que precisam de amor, ainda mais porque tenho pouca experiência com isso em Android e Java (e o código não foi originalmente escrito com testes em mente); vide a seção "[Testes (ou falta de)](#testes-ou-falta-de)".
 
-_(isso, claro, se você pretende contribuir com o código "oficial" e receber o devido crédito; no mais, a licença permite que você faça o que quiser com o código, desde que respeite os termos dela)_
+Devido ao compromisso de rodar no maior número de celulares possível, não pretendo incluir coisas como vozes e gráficos super sofisticados. No entanto, colaborações para melhorar os gráficos/UI que não excluam aparelhos mais simples e versões mais antigas do Android são bem-vindas.
+
+No mais, existem vários issues [abertos](https://github.com/chesterbr/minitruco-android/issues) ([bugs](https://github.com/chesterbr/minitruco-android/issues?q=is%3Aopen+is%3Aissue+label%3Abug), [melhorias](https://github.com/chesterbr/minitruco-android/issues?q=is%3Aopen+is%3Aissue+label%3Amelhoria) e [débitos técnicos](https://github.com/chesterbr/minitruco-android/issues?q=is%3Aopen+is%3Aissue+label%3A%22d%C3%A9bito+t%C3%A9cnico%22)). Fique à vontade para comentar neles, ou para criar um novo caso tenha algum sugestão/problema não coberto por eles.
+
+### Como contribuir
+
+[Pull requests](https://docs.github.com/pt/pull-requests) são bem-vindas, mas não há garantia de aceite (em particular devido à baixa cobertura de testes, que me obriga a testar tudo muito cuidadosamente).
+
+Se você for trabalhar em algum issue com intenção de fazer um pull request, sugiro comentar no issue primeiro, evitando duplicação de esforços e dificuldades na hora de fazer o merge.
+
+Familiarize-se com esta documentação, com as regras do truco e com o código-fonte antes de começar a contribuir. Se tiver alguma dúvida, pode abrir um issue ou entrar em contato comigo de outra forma.
 
 ## Diretrizes e decisões
 
