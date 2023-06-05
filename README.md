@@ -1,6 +1,6 @@
 # miniTruco Android
 
-<img src="gráficos/screenshot-readme.png" align="right" width="200"/>
+<img src="docs/screenshots/screenshot-readme.png" align="right" width="200"/>
 
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android.
 
@@ -10,7 +10,7 @@ O jogo suporta as variantes mais comuns do truco (paulista e mineiro), com opç�
 
 A [versão oficial](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt) está disponível no Google Play:
 
-[![versão oficial no Google Play](gráficos/disponivel-google-play-badge.png)](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt)
+[![versão oficial no Google Play](docs/assets/disponivel-google-play-badge.png)](https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt)
 
 É um software livre, sem fins lucrativos, desenvolvido por hobby e com :heart: no meu tempo pessoal (com valiosas colaborações de outras pessoas).
 
