@@ -34,8 +34,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
     int valorProximaAposta;
 
-    public JogadorHumano(TrucoActivity partida, MesaView mesa) {
-        this.activity = partida;
+    public JogadorHumano(TrucoActivity activity, MesaView mesa) {
+        this.activity = activity;
         this.mesa = mesa;
     }
 
