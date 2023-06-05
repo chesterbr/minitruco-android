@@ -90,6 +90,10 @@ public class MesaView extends View {
      */
     private boolean inicializada = false;
 
+    public boolean isInicializada() {
+        return inicializada;
+    }
+
     /**
      * Posição do baralho (decorativo) na mesa
      */
@@ -271,9 +275,6 @@ public class MesaView extends View {
 
         if (!inicializada) {
             threadAnimacao.start();
-            if (this.trucoActivity != null) {
-                this.trucoActivity.criaEIniciaNovoJogo();
-            }
         } else {
             // Rolou um resize, reposiciona as cartas não-decorativas
             for (int i = 0; i <= 15; i++) {

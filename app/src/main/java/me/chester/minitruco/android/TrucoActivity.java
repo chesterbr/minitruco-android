@@ -140,7 +140,7 @@ public class TrucoActivity extends Activity {
      * garantir que a partida só role quando a mesa estiver inicializada) e dali em
      * diante pelo botão de nova partida.
      */
-    public void criaEIniciaNovoJogo() {
+    private void criaEIniciaNovoJogo() {
         jogadorHumano = new JogadorHumano(this, mesa);
         if (getIntent().hasExtra("servidorBluetooth")) {
             partida = ServidorBluetoothActivity.criaNovoJogo(jogadorHumano);
@@ -186,6 +186,18 @@ public class TrucoActivity extends Activity {
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
         mesa.velocidade = preferences.getBoolean("animacaoRapida", false) ? 4 : 1;
         mesa.setTrucoActivity(this);
+
+        // O jogo só deve efetivamente iniciar quando a mesa estiver pronta
+        new Thread(() -> {
+            while (!mesa.isInicializada()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            criaEIniciaNovoJogo();
+        }).start();
     }
 
     @Override
