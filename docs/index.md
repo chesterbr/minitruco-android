@@ -1,34 +1,37 @@
 <!-- omit in toc -->
-
 # miniTruco - Documentação para Desenvolvimento
 
-- [miniTruco - Documentação para Desenvolvimento](#minitruco---documentação-para-desenvolvimento)
-  - [Introdução](#introdução)
-  - [Contribuindo](#contribuindo)
-  - [História, Objetivos e Design](#história-objetivos-e-design)
-  - [Terminologia](#terminologia)
-  - [Pré-requisitos e Configuração](#pré-requisitos-e-configuração)
-  - [Organização](#organização)
-  - [Arquitetura de Classes](#arquitetura-de-classes)
-    - [Partidas e Jogadores](#partidas-e-jogadores)
-    - [Jogo simples (single player)](#jogo-simples-single-player)
-    - [Jogo via Bluetooth](#jogo-via-bluetooth)
-    - [Jogo via Internet](#jogo-via-internet)
-  - [Protocolo de comunicação multiplayer](#protocolo-de-comunicação-multiplayer)
-    - [Convenções](#convenções)
-    - [Comandos](#comandos)
-      - [Fora do jogo](#fora-do-jogo)
-      - [Durante o jogo](#durante-o-jogo)
-    - [Notificações](#notificações)
+- [Introdução](#introdução)
+- [Contribuindo](#contribuindo)
+- [Diretrizes e decisões](#diretrizes-e-decisões)
+- [Ambiente de Desenvolvimento](#ambiente-de-desenvolvimento)
+  - [Convenções de código](#convenções-de-código)
   - [Testes (ou falta de)](#testes-ou-falta-de)
-  - [Estratégia dos bots](#estratégia-dos-bots)
-    - [Parágrafo que eu não sei onde vai](#parágrafo-que-eu-não-sei-onde-vai)
+- [Organização do Projeto](#organização-do-projeto)
+- [Terminologia](#terminologia)
+- [Arquitetura de Classes](#arquitetura-de-classes)
+  - [Partidas e Jogadores](#partidas-e-jogadores)
+  - [Jogo simples (single player)](#jogo-simples-single-player)
+  - [Jogo via Bluetooth](#jogo-via-bluetooth)
+  - [Jogo via Internet](#jogo-via-internet)
+- [Protocolo de comunicação multiplayer](#protocolo-de-comunicação-multiplayer)
+  - [Convenções](#convenções)
+  - [Comandos](#comandos)
+    - [Fora do jogo](#fora-do-jogo)
+    - [Durante o jogo](#durante-o-jogo)
+  - [Notificações](#notificações)
+- [Estratégia dos bots](#estratégia-dos-bots)
+  - [Assets gráficos](#assets-gráficos)
 
 ## Introdução
 
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android. É um projeto de software livre, desenvolvido por hobby no meu tempo pessoal (com valiosas [colaborações](../README.md#créditos) de outras pessoas).
 
+O nome "miniTruco" é uma alusão ao fato de que a [versão original](https://github.com/chesterbr/minitruco-j2me) (feita para [Java ME](https://en.wikipedia.org/wiki/Java_Platform,_Micro_Edition) e depois portada para Android) rodava até em celulares com pouca memória (64K) e tela minúscula (através de um baralho desenhado [pixel](https://github.com/chesterbr/minitruco-j2me/blob/aabad635b34eee346cd7e12324f471c70ed16836/miniTruco/res/naipes.png) a [pixel](https://github.com/chesterbr/minitruco-j2me/blob/aabad635b34eee346cd7e12324f471c70ed16836/miniTruco/res/valores.png)). Embora a realidade dos aparelhos de hoje seja outra, o nome ainda simboliza o compromisso com o minimalismo e a inclusão.
+
 Você pode usar e modificar o código como quiser, dentro dos [termos da licença](../LICENSE). O objetivo deste documento é ajudar qualquer pessoa interessada a configurar, entender e/ou aprimorar este código.
+
+
 
 ## Contribuindo
 
@@ -44,36 +47,29 @@ Existem vários issues [abertos](https://github.com/chesterbr/minitruco-android/
 
 _(isso, claro, se você pretende contribuir com o código "oficial" e receber o devido crédito; no mais, a licença permite que você faça o que quiser com o código, desde que respeite os termos dela)_
 
-## História, Objetivos e Design
+## Diretrizes e decisões
 
-O nome "miniTruco" é uma alusão ao fato de que a versão original rodava até em celulares com pouca memória (64K) e tela minúscula (através de um baralho desenhado [pixel](https://github.com/chesterbr/minitruco-j2me/blob/aabad635b34eee346cd7e12324f471c70ed16836/miniTruco/res/naipes.png) a [pixel](https://github.com/chesterbr/minitruco-j2me/blob/aabad635b34eee346cd7e12324f471c70ed16836/miniTruco/res/valores.png)), e embora a realidade de hoje seja outra, o nome ainda simboliza o compromisso de com o minimalismo e a inclusão.
+As **diretrizes do projeto** são:
 
-Os **objetivos principais** do projeto são:
+- Rodar até nos aparelhos mais modestos e versões mais antigas do Android que ainda estejam em uso no Brasil (com base nas estatísticas da Play Store).
+- Suportar o maior número viável de variantes locais (eu costumo dizer que truco pode ser usado como GPS, porque você anda um pouco e a regra muda).
+- Promover a inclusão (que às vezes falta até no truco "de verdade", por exemplo quando a irreverência cruza o limite e vira preconceito).
 
-- Rodar até nos aparelhos mais modestos que ainda estejam em uso no Brasil (com base nas estatísticas da Play Store)
-- Suportar o maior número viável de variantes locais (eu costumo dizer que truco pode ser usado como GPS, porque você anda um pouco e a regra muda)
-- Promover a inclusão (que às vezes falta até no truco "de verdade", por exemplo quando a irreverência cruza o limite e vira preconceito)
+Isto orienta algumas **decisões de design e implementação**, tais como:
 
-Isto orienta algumas **decisões de design** e implementação, tais como:
-
-- Foco na plataforma Android, que é a mais popular no Brasil
-- Interface adaptável a diferentes resoluções, tamanho de tela e orientações
-- Suportar o jogo local (contra bots), via Bluetooth (sem o uso de internet) ou online (este último em desenvolvimento)
-- Prioridade ao idioma português (tanto na interface quanto no código-fonte)
-- Uso de termos amigáveis para não-_gamers_, por exemplo, "internet" ao invés de "online", sempre que possível (exceções como "bot" e "Bluetooth" foram feitas por eu não ter encontrado tradução adequada)
-- Evitar a presunção de gênero ou qualquer outra característica pessoal da pessoa que joga
+- Foco na plataforma Android, que é a mais popular no Brasil.
+- Interface adaptável a diferentes resoluções, tamanho de tela e orientações.
+- Suportar o jogo local (contra bots), via Bluetooth (sem o uso de internet) ou online (este último em desenvolvimento).
+- Prioridade ao idioma português (tanto na interface quanto no código-fonte).
+- Uso de termos amigáveis para não-_gamers_, por exemplo, "internet" ao invés de "online", sempre que possível (exceções como "bot" e "Bluetooth" foram feitas por eu não ter encontrado tradução adequada).
+- Evitar a presunção de gênero ou qualquer outra característica pessoal da pessoa que joga.
 - Não usar anúncios ou qualquer outro tipo de monetização, growth hack, promoção, coleta de dados, cadastro, parceria, mecânica de engajamento, clickbait, etc.
+- Uso de `Layout`s tradicionais ao invés de Compose/Flutter/etc. para suportar versões mais antigas do Android, com a UI principal do jogo em uma `View` customizada ([`MesaView`](../app/src/main/java/me/chester/minitruco/android/MesaView.java)).
+- Permanecer no [Java](https://www.java.com/pt-BR/) e (por ora) não migrar para [Kotlin](https://kotlinlang.org/) (ao menos não enquanto eu não me convencer do [compromisso do Google](https://killedbygoogle.com/) com a linguagem).
 
-## Terminologia
+Estas duas últimas decisões podem ser influenciadas pela possibilidade de migrar para outras plataformas no futuro (ex.: [iOS](https://www.apple.com/br/ios/), [Windows](https://www.microsoft.com/pt-br/windows), [Linux](https://www.linux.org/), [Web](https://developer.mozilla.org/pt-BR/docs/Web)), mas por enquanto não há planos concretos nesse sentido.
 
-O [vocabulário típico do truco](https://www.jogosdorei.com.br/blog/girias-do-truco/) é usado sempre que possível, mas alguns termos são necessários para evitar ambiguidades e consolidar os diferentes modos de jogo:
-
-- **Aumento**: quando um jogador pede para aumentar o valor da rodada ("truco", que aumenta para 3 ou 4 pontos, "seis", "oito"/"nove" ou "doze", conforme o modo de jogo).
-- **Mão de X**: é a mão de 11 do truco paulista, ou mão de 10 do truco mineiro (quando apenas uma das duplas tem essa pontuação e pode optar por jogar ou não).
-
-## Pré-requisitos e Configuração
-
-O jogo foi [inicialmente](https://github.com/chesterbr/minitruco-j2me) desenvolvido para [Java ME](https://en.wikipedia.org/wiki/Java_Platform,_Micro_Edition), e depois portado para Android. Isso aconteceu antes da existência do [Kotlin](https://kotlinlang.org/), portanto o código é baseado em [Java](https://www.java.com/pt-BR/) (e eu não pretendo migrar enquanto não me convencer do [compromisso do Google](https://killedbygoogle.com/) com a linguagem).
+## Ambiente de Desenvolvimento
 
 O projeto usa o [Gradle](https://gradle.org/) para gerenciamento de dependências e build. A IDE usada atualmente é o [Android Studio](https://developer.android.com/studio), mas pode ser importado em outras IDEs que suportem Gradle.
 
@@ -81,17 +77,34 @@ Em princípio, basta abrir o projeto no Android Studio e toda a configuração d
 
 Eu recomendo testar em dispositivos físicos mesmo, em particular se for usar Bluetooth (o emulador do Android Studio até simula Bluetooth, mas mas só em versões recentes do Android, e limitado a dois dispositivos), mas é totalmente possível desenvolver sem um.
 
+### Convenções de código
+
 Comentários, variáveis e afins usam o português do Brasil, o mesmo valendo para mensagens de commit. Por conta disso, é recomendado desligar, no Android Studio a checagem de ortografia (`Preferences` => `Editor` => `Inspections` => `Proofreading` => `Typo`), pois ela assume inglês.
 
 As convenções de código estão no arquivo [`.editorConfig`](../.editorConfig), e o Android Studio deve adotar elas automaticamente. Sim, você vai encontrar código que não adere a elas ainda; eu estou tentando melhorar isso aos poucos.
 
-## Organização
+### Testes (ou falta de)
+
+Quando este projeto começou, eu não tinha qualquer conhecimento da cultura de testes no desenvolvimento de software - isso só veio quando ele já estava portado para Android - e o ferramental para este ambiente (ou minha capacidade de utilizar ele) era um tanto limitado.
+
+Com o isolamento do módulo  `core` foi possível adicionar o [JUnit 5](https://junit.org/junit5/) e um primeiro conjunto de testes unitários (mais uma tentativa de teste de integração).
+
+O próximo passo será ampliar a cobertura de testes no `core`, e depois expandir para outros módulos e rodar os testes automaticamente. Esse processo pode ser acompanhado em [#41](https://github.com/chesterbr/minitruco-android/issues/41), e toda ajuda é bem-vinda.
+
+## Organização do Projeto
 
 O projeto está dividido em três módulos Gradle:
 
 - `core`: contém a lógica do jogo, independente de plataforma
 - `app`: contém a implementação do aplicativo Android
 - `server`: contém o servidor para jogo online (atualmente em desenvolvimento e com o acesso escondido no aplicativo).
+
+## Terminologia
+
+O [vocabulário típico do truco](https://www.jogosdorei.com.br/blog/girias-do-truco/) é usado sempre que possível, mas alguns termos são necessários para evitar ambiguidades e consolidar os diferentes modos de jogo:
+
+- **Aumento**: quando um jogador pede para aumentar o valor da rodada ("truco", que aumenta para 3 ou 4 pontos, "seis", "oito"/"nove" ou "doze", conforme o modo de jogo).
+- **Mão de X**: é a mão de 11 do truco paulista, ou mão de 10 do truco mineiro (quando apenas uma das duplas tem essa pontuação e pode optar por jogar ou não).
 
 ## Arquitetura de Classes
 
@@ -233,16 +246,6 @@ TODO: instruções de como usar o servidor via terminal
 - `H <jogador> <frase> _`: Informa que o jogador na posição acusou/recusou (_=T/F) mão de 10/11
 - `S`: Informa que o jogador saiu da sala
 
-## Testes (ou falta de)
-
-Quando este projeto começou, eu não tinha qualquer conhecimento da cultura de testes no desenvolvimento de software - isso só veio quando ele já estava portado para Android - e o ferramental para este ambiente (ou minha capacidade de utilizar ele) era um tanto limitado.
-
-Por conta disso (e também tendo em vista a expansão para outras plataformas), o primeiro passo que eu tomei foi isolar o módulo `core` com as classes que representam a lógica do jogo, e que não dependem de nenhuma plataforma específica.
-
-Em seguida, adicionei o [JUnit 5](https://junit.org/junit5/) e um primeiro conjunto de testes unitários (mais uma tentativa de teste de integração) no módulo `core`.
-
-O próximo passo será melhorar isso e ampliar a cobertura de testes. Esse processo pode ser acompanhado em [#41](https://github.com/chesterbr/minitruco-android/issues/41) e será atualizado aqui.
-
 ## Estratégia dos bots
 
 Por ter consciência da minha condição de... ~~🦆~~ _aham_... jogador sub-ótimo de truco, desde o início o jogo foi pensado de forma a facilitar a implementação de estratégias de bots por gente mais capacitada.
@@ -265,6 +268,8 @@ Estas classes recebem como parâmetro um objeto [`SituacaoJogo`](../core/src/mai
 
 Para testar uma estratégia, você pode substituir a lista de estratégias disponíveis no [`Jogo`](../core/src/main/java/me/chester/minitruco/core/Jogo.java) por uma lista com apenas a estratégia que você quer testar. Você pode ativar a opção "Jogo Automático" para que o `JogadorHumano` jogue sozinho, e deixar o pau comer. Também pode escrever testes unitários (basta criar uma `SituacaoJogo` e passar para sua classe). Eu gostaria de no futuro ter maneiras melhores de testar uma estratégia (ex.: um modo que colocasse elas umas contra as outras).
 
-### Parágrafo que eu não sei onde vai
+### Assets gráficos
 
-A interface do jogo em si é uma `View` customizada ([`MesaView`](../app/src/main/java/me/chester/minitruco/android/MesaView.java)) e todo o resto usa `Layout`s tradicionais ao invés de Compose/Flutter/etc. para suportar versões mais antigas do Android; à medida em que os números dessas forem diminuindo ou zerando, isso pode mudar.
+Os assets originais ficam em [`docs/assets`](../docs/assets), em formatos vetoriais ([`.svg`](https://www.lifewire.com/svg-file-4120603) e [`.ora`](https://www.lifewire.com/ora-file-2622117)) para que possam ser recriados em `.png` à medida em que os aparelhos tenham resoluções maiores.
+
+Alguns assets (ex.: resultado da rodada) foram criados através de captura de fontes de símbolos. O arquivo [`placar.rtf`](../docs/assets/placar.rtf) contém os símbolos utilizados nas fontes e cores corretas, com o mesmo objetivo de gerar os assets novamente caso seja necessário.
