@@ -200,14 +200,6 @@ public class TrucoActivity extends Activity {
         }).start();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.truco, menu);
-        return true;
-    }
-
     public void novaPartidaClickHandler(View v) {
         Message.obtain(handler, MSG_REMOVE_NOVA_PARTIDA).sendToTarget();
         criaEIniciaNovoJogo();

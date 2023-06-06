@@ -57,7 +57,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                     + this.getString(R.string.texto_sobre));
             return true;
         case R.id.menuitem_sair_titulo:
-        case R.id.menuitem_sair_truco:
             finish();
             return true;
         default:
