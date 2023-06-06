@@ -1,0 +1,7 @@
+// Este arquivo permite gerar o .jar do servidor sem se enroscar com
+// com tretas de Android (dependências, versão de Java, etc). Basta rodar:
+//
+//   ./gradlew --settings-file server-only-gradle-settings build
+//
+include ':core'
+include ':server'
