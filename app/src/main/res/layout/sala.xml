@@ -95,7 +95,7 @@
         android:layout_weight="2"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <Button
             android:id="@+id/btnTrocar"
