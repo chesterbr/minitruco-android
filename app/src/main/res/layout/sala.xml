@@ -98,6 +98,18 @@
         android:visibility="gone">
 
         <Button
+            android:id="@+id/btnTrocar"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="Troca Parceiro" />
+
+        <Button
+            android:id="@+id/btnInverter"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="Inverte Adversários" />
+
+        <Button
             android:id="@+id/btnIniciarBluetooth"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
