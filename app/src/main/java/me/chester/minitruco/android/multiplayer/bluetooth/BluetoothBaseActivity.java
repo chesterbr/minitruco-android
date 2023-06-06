@@ -161,6 +161,8 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
                 textViewStatus.setText("Modo: " + Partida.textoModo(modo));
             }
             btnIniciar.setEnabled(getNumClientes() > 0);
+            btnInverter.setEnabled(getNumClientes() > 0);
+            btnTrocar.setEnabled(getNumClientes() > 0);
         });
     }
 
