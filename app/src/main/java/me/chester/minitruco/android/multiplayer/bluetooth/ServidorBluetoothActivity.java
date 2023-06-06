@@ -81,6 +81,8 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
             status = STATUS_EM_JOGO;
             iniciaTrucoActivitySePreciso();
         });
+        btnInverter.setOnClickListener(v -> inverteAdversarios());
+        btnTrocar.setOnClickListener(v -> trocaParceiro());
         registerReceiver(receiverMantemDiscoverable, new IntentFilter(
                 BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
         pedePraHabilitarDiscoverableSePreciso();
