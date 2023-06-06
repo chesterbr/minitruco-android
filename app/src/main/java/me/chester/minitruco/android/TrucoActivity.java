@@ -13,8 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -198,14 +196,6 @@ public class TrucoActivity extends Activity {
             }
             criaEIniciaNovoJogo();
         }).start();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.truco, menu);
-        return true;
     }
 
     public void novaPartidaClickHandler(View v) {

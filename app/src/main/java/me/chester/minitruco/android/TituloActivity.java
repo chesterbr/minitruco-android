@@ -6,11 +6,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,7 +31,6 @@ import me.chester.minitruco.core.Partida;
 public class TituloActivity extends BaseActivity {
 
     SharedPreferences preferences;
-    Boolean mostrarMenuBluetooth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +44,29 @@ public class TituloActivity extends BaseActivity {
         mostraNotificacaoInicial();
         migraOpcoesLegadas();
 
+        findViewById(R.id.btnAjuda).setOnClickListener(v -> {
+            mostraAlertBox(this.getString(R.string.titulo_instrucoes),
+                this.getString(R.string.texto_instrucoes));
+        });
+
+        findViewById(R.id.btnSobre).setOnClickListener(v -> {
+            int partidas = preferences.getInt("statPartidas", 0);
+            int vitorias = preferences.getInt("statVitorias", 0);
+            int derrotas = preferences.getInt("statDerrotas", 0);
+            String versao;
+            try {
+                versao = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            String stats_versao = "Esta é a versão " + versao
+                + " do jogo. Você já iniciou " + partidas
+                + " partidas, ganhou " + vitorias + " e perdeu " + derrotas
+                + ".<br/><br/>";
+            mostraAlertBox(this.getString(R.string.titulo_sobre), stats_versao
+                + this.getString(R.string.texto_sobre));
+        });
         // TODO ver se tem um modo mais central de garantir este default (e outros)
         //      (provavelmente quando migrar esse PreferenceManager deprecado
         //      e começar a centralizar as preferencias nesta view)
@@ -60,9 +80,9 @@ public class TituloActivity extends BaseActivity {
         if (preferences.contains("velocidadeAnimacao")) {
             String velocidadeAnimacao = preferences.getString("velocidadeAnimacao", "1");
             preferences.edit()
-                       .putBoolean("animacaoRapida", velocidadeAnimacao.equals("4"))
-                       .remove("velocidadeAnimacao")
-                       .apply();
+                .putBoolean("animacaoRapida", velocidadeAnimacao.equals("4"))
+                .remove("velocidadeAnimacao")
+                .apply();
 
         }
         if (preferences.contains("baralhoLimpo")) {
@@ -78,11 +98,11 @@ public class TituloActivity extends BaseActivity {
                 modo = "P";
             }
             preferences.edit()
-                       .putString("modo", modo)
-                       .remove("tentoMineiro")
-                       .remove("baralhoLimpo")
-                       .remove("manilhaVelha")
-                       .apply();
+                .putString("modo", modo)
+                .remove("tentoMineiro")
+                .remove("baralhoLimpo")
+                .remove("manilhaVelha")
+                .apply();
         }
     }
 
@@ -111,8 +131,8 @@ public class TituloActivity extends BaseActivity {
     }
 
     private void habilitaBluetoothSeExistir() {
-        mostrarMenuBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
-        findViewById(R.id.btnBluetoothContainer).setVisibility(mostrarMenuBluetooth ? View.VISIBLE : View.GONE);
+        findViewById(R.id.btnBluetooth).setVisibility(
+            BluetoothAdapter.getDefaultAdapter() != null ? View.VISIBLE : View.GONE);
     }
 
     private void botoesHabilitados(boolean status) {
@@ -121,53 +141,26 @@ public class TituloActivity extends BaseActivity {
         findViewById(R.id.btnOpcoes).setActivated(status);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.titulo, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menuitem_bluetooth).setVisible(mostrarMenuBluetooth);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.menuitem_opcoes) {
-            opcoesButtonClickHandler(null);
-            return true;
-        } else if (itemId == R.id.menuitem_bluetooth) {
-            bluetoothButtonClickHandler(null);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void perguntaCriarOuProcurarBluetooth() {
         botoesHabilitados(false);
         OnClickListener listener = (dialog, which) -> {
             botoesHabilitados(true);
             switch (which) {
-            case AlertDialog.BUTTON_NEGATIVE:
-                startActivity(new Intent(TituloActivity.this,
+                case AlertDialog.BUTTON_NEGATIVE:
+                    startActivity(new Intent(TituloActivity.this,
                         ServidorBluetoothActivity.class));
-                break;
-            case AlertDialog.BUTTON_POSITIVE:
-                startActivity(new Intent(TituloActivity.this,
+                    break;
+                case AlertDialog.BUTTON_POSITIVE:
+                    startActivity(new Intent(TituloActivity.this,
                         ClienteBluetoothActivity.class));
-                break;
+                    break;
             }
         };
         new AlertDialog.Builder(this).setTitle("Bluetooth")
-                .setMessage("Para jogar via Bluetooth, um celular deve criar o jogo e os outros devem procurá-lo.\n\nCertifique-se de que todos os celulares estejam pareados com o celular que criar o jogo.")
-                .setNegativeButton("Criar Jogo", listener)
-                .setPositiveButton("Procurar Jogo", listener)
-                .show();
+            .setMessage("Para jogar via Bluetooth, um celular deve criar o jogo e os outros devem procurá-lo.\n\nCertifique-se de que todos os celulares estejam pareados com o celular que criar o jogo.")
+            .setNegativeButton("Criar Jogo", listener)
+            .setPositiveButton("Procurar Jogo", listener)
+            .show();
     }
 
     public void jogarClickHandler(View v) {
@@ -185,7 +178,7 @@ public class TituloActivity extends BaseActivity {
 
     public void opcoesButtonClickHandler(View v) {
         Intent settingsActivity = new Intent(getBaseContext(),
-                OpcoesActivity.class);
+            OpcoesActivity.class);
         startActivity(settingsActivity);
     }
 
@@ -218,7 +211,7 @@ public class TituloActivity extends BaseActivity {
     }
 
     private void selecionaModo(String modo) {
-        ((TextView)findViewById(R.id.textViewModo)).setText(Partida.textoModo(modo));
+        ((TextView) findViewById(R.id.textViewModo)).setText(Partida.textoModo(modo));
         preferences.edit().putString("modo", modo).apply();
     }
 }

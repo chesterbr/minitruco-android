@@ -98,10 +98,24 @@
         android:visibility="gone">
 
         <Button
+            android:id="@+id/btnTrocar"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="Trocar Parceiro" />
+
+        <Button
+            android:id="@+id/btnInverter"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:text="Inverter Adversários" />
+
+        <Button
             android:id="@+id/btnIniciarBluetooth"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:text="Iniciar Jogo" />
+            android:focusedByDefault="true"
+            android:textStyle="bold"
+            android:text="Jogar" />
     </LinearLayout>
 
     <LinearLayout

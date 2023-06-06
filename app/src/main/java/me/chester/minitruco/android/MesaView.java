@@ -715,7 +715,7 @@ public class MesaView extends View {
         desenhaBalao(canvas);
         desenhaIndicadorDeVez(canvas);
 
-        if (trucoActivity != null && trucoActivity.partida.isJogoAutomatico()) {
+        if (trucoActivity != null && trucoActivity.partida != null && trucoActivity.partida.isJogoAutomatico()) {
             jogaCarta(0);
             jogaCarta(1);
             jogaCarta(2);

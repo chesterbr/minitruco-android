@@ -81,35 +81,13 @@ public class ServidorBluetoothActivity extends BluetoothBaseActivity {
             status = STATUS_EM_JOGO;
             iniciaTrucoActivitySePreciso();
         });
+        btnInverter.setOnClickListener(v -> inverteAdversarios());
+        btnTrocar.setOnClickListener(v -> trocaParceiro());
         registerReceiver(receiverMantemDiscoverable, new IntentFilter(
                 BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
         pedePraHabilitarDiscoverableSePreciso();
         if (!aguardandoDiscoverable) {
             iniciaThreads();
-        }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.servidorbluetooth, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO colocar botões ao invés de itens de menu
-        switch (item.getItemId()) {
-            case R.id.menuitem_troca_parceiro:
-                trocaParceiro();
-                return true;
-            case R.id.menuitem_inverte_adversarios:
-                inverteAdversarios();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 

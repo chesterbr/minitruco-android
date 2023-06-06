@@ -79,6 +79,8 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
     protected final String[] apelidos = new String[4];
     protected String modo;
     protected Button btnIniciar;
+    protected Button btnInverter;
+    protected Button btnTrocar;
     protected View layoutIniciar;
     private TextView textViewMensagem;
     private TextView textViewStatus;
@@ -90,6 +92,8 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
         setContentView(R.layout.sala);
         layoutIniciar = findViewById(R.id.layoutIniciar);
         btnIniciar = findViewById(R.id.btnIniciarBluetooth);
+        btnInverter = findViewById(R.id.btnInverter);
+        btnTrocar = findViewById(R.id.btnTrocar);
         textViewMensagem = findViewById(R.id.textViewMensagem);
         textViewStatus = findViewById(R.id.textViewStatus);
         textViewsJogadores = new TextView[4];
@@ -157,6 +161,8 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
                 textViewStatus.setText("Modo: " + Partida.textoModo(modo));
             }
             btnIniciar.setEnabled(getNumClientes() > 0);
+            btnInverter.setEnabled(getNumClientes() > 0);
+            btnTrocar.setEnabled(getNumClientes() > 0);
         });
     }
 
