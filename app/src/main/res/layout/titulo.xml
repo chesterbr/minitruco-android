@@ -96,31 +96,31 @@
                 android:layout_gravity="center"
                 android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/versao_app"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:autoLink="web"
-                android:gravity="center"
-                android:text="versao x.y"
-                android:paddingBottom="4dp"
-                android:textColor="#FFFFFFFF"
-                android:textColorLink="#FF3F28A4"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/versao_app"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="web"
+                    android:gravity="center"
+                    android:paddingBottom="4dp"
+                    android:text="versao x.y"
+                    android:textColor="#FFFFFFFF"
+                    android:textColorLink="#FF3F28A4"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/url_site"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:autoLink="web"
-                android:gravity="center"
-                android:linksClickable="true"
-                android:text="cd@pobox.com\nhttps://chester.me"
-                android:textColor="#FF3F28A4"
-                android:textColorLink="#FF3F28A4"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/url_site"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:autoLink="web"
+                    android:gravity="center"
+                    android:linksClickable="true"
+                    android:text="cd@pobox.com\nhttps://chester.me"
+                    android:textColor="#FF3F28A4"
+                    android:textColorLink="#FF3F28A4"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </TableRow>
 
@@ -134,56 +134,93 @@
 
         <Button
             android:id="@+id/btnJogar"
-            android:layout_width="120sp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="jogarClickHandler"
             android:focusedByDefault="true"
-            android:text="Jogar"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnInternet"
-            android:layout_width="120sp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:onClick="internetButtonClickHandler"
-            android:text="Internet"
-            android:visibility="gone" />
+            android:onClick="jogarClickHandler"
+            android:padding="0dp"
+            android:text="💬\u00A0JOGAR"
+            android:textStyle="bold"
+            tools:ignore="UnusedAttribute,VisualLintButtonSize" />
 
         <LinearLayout
-            android:id="@+id/btnBluetoothContainer"
-            android:layout_width="50sp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:id="@+id/jogarOnlineContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnInternet"
+                android:layout_width="120sp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/baseline_wifi_24"
+                android:drawableLeft="@drawable/baseline_wifi_24"
+                android:onClick="internetButtonClickHandler"
+                android:paddingStart="16dp"
+                android:paddingLeft="16dp"
+                android:text="Internet"
+                android:visibility="gone" />
+
 
             <Button
                 android:id="@+id/btnBluetooth"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:drawableStart="@drawable/baseline_bluetooth_24"
+                android:drawableLeft="@drawable/baseline_bluetooth_24"
                 android:minHeight="52dp"
-                android:drawableStart="@android:drawable/stat_sys_data_bluetooth"
-                android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
-                android:onClick="bluetoothButtonClickHandler" />
+                android:onClick="bluetoothButtonClickHandler"
+                android:paddingEnd="20dp"
+                android:paddingRight="20dp"
+                android:text="Bluetooth" />
+
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="50sp"
+            android:layout_width="105dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnAjuda"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/baseline_help_outline_24"
+                android:drawableLeft="@drawable/baseline_help_outline_24"
+                android:onClick="opcoesButtonClickHandler"
+                android:paddingStart="9sp"
+                android:paddingLeft="9sp"
+                android:text="Ajuda" />
+
+            <Button
+                android:id="@+id/btnSobre"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/baseline_info_24"
+                android:drawableLeft="@drawable/baseline_info_24"
+                android:onClick="opcoesButtonClickHandler"
+                android:paddingStart="9sp"
+                android:paddingLeft="9sp"
+                android:text="Sobre" />
 
             <Button
                 android:id="@+id/btnOpcoes"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableStart="@android:drawable/ic_menu_preferences"
-                android:drawableLeft="@android:drawable/ic_menu_preferences"
+                android:drawableStart="@drawable/baseline_settings_24"
+                android:drawableLeft="@drawable/baseline_settings_24"
                 android:onClick="opcoesButtonClickHandler"
                 android:paddingStart="9sp"
-                android:paddingLeft="9sp" />
+                android:paddingLeft="9sp"
+                android:text="Opções" />
+
         </LinearLayout>
 
     </LinearLayout>
