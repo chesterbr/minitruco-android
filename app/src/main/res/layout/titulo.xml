@@ -102,7 +102,6 @@
                     android:layout_height="wrap_content"
                     android:autoLink="web"
                     android:gravity="center"
-                    android:paddingBottom="4dp"
                     android:text="versao x.y"
                     android:textColor="#FFFFFFFF"
                     android:textColorLink="#FF3F28A4"
@@ -110,13 +109,24 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="feito com ❤️\n por Chester"
+                    android:lines="2"
+                    android:textColorLink="#FF3F28A4"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
                     android:id="@+id/url_site"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
-                    android:autoLink="web"
+                    android:autoLink="email"
                     android:gravity="center"
                     android:linksClickable="true"
-                    android:text="cd@pobox.com\nhttps://chester.me"
+                    android:text="cd@pobox.com"
                     android:textColor="#FF3F28A4"
                     android:textColorLink="#FF3F28A4"
                     android:textSize="16sp"
