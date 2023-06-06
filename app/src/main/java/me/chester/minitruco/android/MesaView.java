@@ -28,6 +28,10 @@ import me.chester.minitruco.core.Jogador;
  * Representa visualmente o andamento de uma partida, permitindo que o usuário
  * interaja.
  * <p>
+ * Os eventos visuais são disparados pelo <code>JogadorHumano</code>, e as
+ * acões do usuário são repassadas para a <code>Partida</code> (ambas as
+ * referências são obtidas da <code>TrucoActivity</code>).
+ *
  * Para simplificar o acesso, alguns métodos/propriedades são static - o que só
  * reitera que só deve existir uma instância desta View.
  * <p>
@@ -72,8 +76,8 @@ public class MesaView extends View {
     private static final Random rand = new Random();
     private final Paint paintPergunta = new Paint();
     private final float density = getResources().getDisplayMetrics().density;
-    public boolean mostrarPerguntaMaoDeX = false;
-    public boolean mostrarPerguntaAumento = false;
+    private boolean mostrarPerguntaMaoDeX = false;
+    private boolean mostrarPerguntaAumento = false;
     public boolean vaiJogarFechada;
     protected int velocidade;
     private int posicaoVez;
@@ -343,14 +347,15 @@ public class MesaView extends View {
     }
 
     /**
-     * Torna as cartas da mão de 10/11 visíveis
+     * Torna as cartas da mão de 10/11 visíveis e exibe a pergunta de aceite
      *
      * @param cartasParceiro cartas do seu parceiro
      */
-    public void mostraCartasMaoDeX(Carta[] cartasParceiro) {
+    public void maoDeX(Carta[] cartasParceiro) {
         for (int i = 0; i <= 2; i++) {
             cartas[10 + i].copiaCarta(cartasParceiro[i]);
         }
+        mostrarPerguntaMaoDeX = true;
     }
 
     /**
@@ -867,5 +872,28 @@ public class MesaView extends View {
 
     public void setCorFundoCartaBalao(int corFundoCartaBalao) {
         this.corFundoCartaBalao = corFundoCartaBalao;
+    }
+
+    /**
+     * Faz o jogador na posição indicada pedir um aumento de aposta.
+     * <p>
+     * Se a posição for de um dos adversários do humano, mostra a pergunta.
+     *
+     * @param posicao  posição (1 a 4) do jogador que "dirá" a frase
+     * @param valor    valor para o qual está querendo aumentar
+     * @param rndFrase Número "grande" que identifica a frase do strings.xml dita
+     *                 pelo jogador (índice_da_frase = rndFrase % frases.length())
+     */
+    public void pedeAumento(int posicao, int valor, int rndFrase) {
+        diz("aumento_" + trucoActivity.partida.nomeNoTruco(valor), posicao,
+                1500 + 200 * (valor / 3), rndFrase);
+        if (posicao == 2 || posicao == 4) {
+            mostrarPerguntaAumento = true;
+        }
+    }
+
+    public void escondePergunta() {
+        mostrarPerguntaAumento = false;
+        mostrarPerguntaMaoDeX = false;
     }
 }
