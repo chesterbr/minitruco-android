@@ -119,7 +119,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                     setContentView(R.layout.internet_menu);
                     findViewById(R.id.btnEntrarSalaPublica).setOnClickListener(v -> {
                         // TODO pegar as regras das preferências
-                        enviaLinha("E PUB FFF");
+                        enviaLinha("E PUB P");
                     });
                     ((TextView) findViewById(R.id.textViewInternetTitulo)).setText(
                         "Conectado como " + line.substring(2) + ". Regras:"
