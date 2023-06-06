@@ -79,6 +79,7 @@ public class MesaView extends View {
     private boolean mostrarPerguntaMaoDeX = false;
     private boolean mostrarPerguntaAumento = false;
     private String perguntaAumento;
+    private String perguntaMaoDeX;
     public boolean vaiJogarFechada;
     protected int velocidade;
     private int posicaoVez;
@@ -356,6 +357,7 @@ public class MesaView extends View {
         for (int i = 0; i <= 2; i++) {
             cartas[10 + i].copiaCarta(cartasParceiro[i]);
         }
+        perguntaMaoDeX = "Aceita mão de " + trucoActivity.partida.getModo().pontuacaoParaMaoDeX() + "?";
         mostrarPerguntaMaoDeX = true;
     }
 
@@ -693,7 +695,7 @@ public class MesaView extends View {
             if (mostrarPerguntaAumento) {
                 textoPergunta = perguntaAumento;
             } else {
-                textoPergunta = "Aceita mão de " + trucoActivity.partida.getModo().pontuacaoParaMaoDeX();
+                textoPergunta = perguntaMaoDeX;
             }
             paintPergunta.setAntiAlias(true);
             paintPergunta.setColor(Color.BLACK);
