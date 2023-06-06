@@ -113,19 +113,17 @@
         <item>Cansei</item>
     </string-array>
 
-    <string name="titulo_instrucoes">Bem-vindo!</string>
-    <string name="texto_instrucoes">
-        <![CDATA[
-        Estas instruções podem ser lidas a qualquer momento no menu <b>Instruções</b>.
-        Role a tela, tem bastante coisa!
-        <br/><br/>
-        O miniTruco é um <u>software livre</u> de truco, jogado em duplas, com os parceiros
-        frente a frente. O objetivo é fazer a sua dupla de jogadores alcançar
+    <string name="titulo_instrucoes">Instruções</string>
+    <string name="texto_instrucoes"><![CDATA[
+
+        <b><u>Regra Geral</u></b>:
+        O miniTruco é jogado por duas duplas (você e mais três "bots" ou amigos), com os parceiros
+        frente a frente. Cada jogador começa com uma \"mão\" de três cartas e, na sua vez, escolhe
+        uma para jogar.
+        <br/><br/>A dupla que jogar a carta de maior valor ganha a rodada, e quem jogar
+        esta carta inicia a rodada seguinte. A \"melhor de três\" encerra a mão e a equipe
+        ganha os pontos daquela mão. O objetivo é fazer a sua dupla alcançar
         12 pontos antes da dupla adversária.
-        <br/><br/>
-        Cada jogador começa com uma \"mão\" de três cartas e, na sua vez, escolhe
-        uma para jogar. A dupla que jogou a maior carta ganha a rodada, e o
-        vencedor inicia a rodada seguinte. A \"melhor de três\" ganha um ponto, encerrando a mão.
         <br/><br/>
         <b><u>Ordem/valor das cartas</u></b>:
         Dentre as cartas normais, 4 é a de menor valor, seguida de
@@ -168,14 +166,22 @@
         o aceite dos aumentos e da mão de 11. O parceiro diz se aceitaria o aumento ou não -
         mas a escolha é sua.
         <br/><br/>
-        <b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram ele. Todos tem
-        que estar com a mesma versão do miniTruco, e é necessário parear os celulares antes.
-        O modo (paulista, mineiro ou baralho limpo) é o que estiver configurando no celular que
-        cria o jogo, e este também pode rearranjar as posições antes de começar.
+        <b><u>Variantes</u></b>: Além dos já mencionados truco pauilsta e truco mineiro (que você
+        seleciona tocando o ícone do mapa de SP ou MG), é possível tocar o ícone do Brasil e
+        selecionar "baralho limpo" (joga sem as cartas 4, 5, 6 e 7) ou "manilha velha" (joga com
+        a manilha do truco mineiro). Estes modos usam os pontos do paulista (mão vale 1, truco 3,
+        aumentos vão a 6, 9 e 12), e não podem ser usados ao mesmo tempo porque algumas das
+        manilhas velhas fazem parte do baralho sujo).
         <br/><br/>
-        <b><u>Baralho Limpo</u></b>: Além do truco pauilsta e do truco mineiro, um terceiro modo
+        <b><u>Manilha Fixa</u></b>: Outra opção é jogar apenas com as manilhas sujas, mas mantendo
+        a Além do truco pauilsta e do truco mineiro, um terceiro modo
         permite jogar com o baralho  \"limpo\" (sem as cartas 4, 5, 6 e 7). As regras são as do
         truco paulista (porque quase todas as manilhas do mineiro são "sujas").
+        <br/><br/>
+        <b><u>Bluetooth</u></b>: Um celular deve criar o jogo, e até três procuram ele. Todos tem
+        que estar com a mesma versão do miniTruco, e é necessário parear os celulares antes.
+        O modo (paulista, mineiro, baralho limpo, manilha velha) é o que estiver configurando no celular que
+        cria o jogo, e este também pode rearranjar as posições antes de começar.
         <br/><br/>
         <b><u>Diferenças do miniTruco</u></b>: No jogo físico, jogadores podem trucar a qualquer
         hora; no miniTruco você só truca na sua vez. Não existem sinais (por enquanto), e não é
@@ -184,14 +190,13 @@
         não faz a "mão de ferro" (quando o truco mineiro empata em 10x10 ou o paulista em 11x11),
         na qual se joga sem ver as próprias cartas).
         <br/><br/>
-        <b><u>Sugestões e comentários</u></b>: O meu e-mail está na tela de título, você pode me
-        escrever com sugestões e comentários, desde que seja de forma educada. Lembre-se que o
+        <b><u>Problemas, dúvidas e sugestões</u></b>: O meu e-mail está na tela de título, você pode me
+        escrever, desde que seja de forma educada. Lembre-se que o
         jogo é inteiramente gratuito e sem publicidade; é algo que eu faço como hobby sem
         pedir nada em troca. É super válido sugerir melhorias e informar bugs, tanto por e-mail
         quanto em avaliações na Play Store, mas peço para não penalizar o jogo injustamente (ex.:
         1 estrela porque o jogo tem um detalhe que você não curtiu).
-        ]]>
-    </string>
+        ]]></string>
     <string name="titulo_sobre">Sobre o miniTruco</string>
     <string name="texto_sobre"><![CDATA[
         miniTruco-android: Copyright © 2005-2023 Carlos Duarte do Nascimento (Chester) - cd@pobox.com
