@@ -78,6 +78,7 @@ public class MesaView extends View {
     private final float density = getResources().getDisplayMetrics().density;
     private boolean mostrarPerguntaMaoDeX = false;
     private boolean mostrarPerguntaAumento = false;
+    private String perguntaAumento;
     public boolean vaiJogarFechada;
     protected int velocidade;
     private int posicaoVez;
@@ -690,7 +691,7 @@ public class MesaView extends View {
         if (mostrarPerguntaMaoDeX || mostrarPerguntaAumento) {
             String textoPergunta;
             if (mostrarPerguntaAumento) {
-                textoPergunta = "Aceita?"; // TODO descrever?
+                textoPergunta = perguntaAumento;
             } else {
                 textoPergunta = "Aceita mão de " + trucoActivity.partida.getModo().pontuacaoParaMaoDeX();
             }
@@ -885,9 +886,11 @@ public class MesaView extends View {
      *                 pelo jogador (índice_da_frase = rndFrase % frases.length())
      */
     public void pedeAumento(int posicao, int valor, int rndFrase) {
-        diz("aumento_" + trucoActivity.partida.nomeNoTruco(valor), posicao,
+        String valorStr = trucoActivity.partida.nomeNoTruco(valor);
+        diz("aumento_" + valorStr, posicao,
                 1500 + 200 * (valor / 3), rndFrase);
         if (posicao == 2 || posicao == 4) {
+            perguntaAumento = "Aceita " + valorStr + "?";
             mostrarPerguntaAumento = true;
         }
     }
