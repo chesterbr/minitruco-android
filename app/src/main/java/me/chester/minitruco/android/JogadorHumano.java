@@ -34,15 +34,14 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
     int valorProximaAposta;
 
-    public JogadorHumano(TrucoActivity partida, MesaView mesa) {
-        this.activity = partida;
+    public JogadorHumano(TrucoActivity activity, MesaView mesa) {
+        this.activity = activity;
         this.mesa = mesa;
     }
 
     @Override
     public void cartaJogada(Jogador j, Carta c) {
-        mesa.mostrarPerguntaMaoDeX = false;
-        mesa.mostrarPerguntaAumento = false;
+        mesa.escondePergunta();
         mesa.setPosicaoVez(0);
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
@@ -56,7 +55,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
         if (posicaoNaTela(j) == 3 && aceita) {
-            mesa.mostrarPerguntaMaoDeX = false;
+            mesa.escondePergunta();
         }
         if (aceita) {
             activity.setValorMao(partida.getModo().valorDaMaoDeX());
@@ -71,8 +70,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
     @Override
     public void informaMaoDeX(Carta[] cartasParceiro) {
-        mesa.mostraCartasMaoDeX(cartasParceiro);
-        mesa.mostrarPerguntaMaoDeX = true;
+        mesa.maoDeX(cartasParceiro);
     }
 
     @Override
@@ -139,12 +137,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
     @Override
     public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
-        mesa.diz("aumento_" + partida.nomeNoTruco(valor), posicaoNaTela(j),
-                1500 + 200 * (valor / 3), rndFrase);
-        if (j.getEquipe() != this.getEquipe()) {
-            LOGGER.log(Level.INFO, "pedindo para mostrar pergunta aumento");
-            mesa.mostrarPerguntaAumento = true;
-        }
+        LOGGER.log(Level.INFO, "pedindo para mostrar pergunta aumento");
+        mesa.pedeAumento(posicaoNaTela(j), valor, rndFrase);
     }
 
     @Override
@@ -162,7 +156,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
             // Eles aceitaram um truco, temos que esperar eles pedirem
             valorProximaAposta = 0;
         }
-        mesa.mostrarPerguntaAumento = false;
+        mesa.escondePergunta();
         mesa.diz("aumento_sim", posicaoNaTela(j), 1500, rndFrase);
         mesa.aceitouAumentoAposta();
         activity.setValorMao(valor);
@@ -184,8 +178,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
                 resultado = 1;
             }
         }
-        mesa.mostrarPerguntaMaoDeX = false;
-        mesa.mostrarPerguntaAumento = false;
+        mesa.escondePergunta();
         mesa.setPosicaoVez(0);
         mesa.atualizaResultadoRodada(numRodada, resultado, jogadorQueTorna);
     }
