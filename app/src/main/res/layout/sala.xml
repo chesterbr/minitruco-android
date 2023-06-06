@@ -95,25 +95,27 @@
         android:layout_weight="2"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <Button
             android:id="@+id/btnTrocar"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:text="Troca Parceiro" />
+            android:text="Trocar Parceiro" />
 
         <Button
             android:id="@+id/btnInverter"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:text="Inverte Adversários" />
+            android:text="Inverter Adversários" />
 
         <Button
             android:id="@+id/btnIniciarBluetooth"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:text="Iniciar Jogo" />
+            android:focusedByDefault="true"
+            android:textStyle="bold"
+            android:text="Jogar" />
     </LinearLayout>
 
     <LinearLayout
