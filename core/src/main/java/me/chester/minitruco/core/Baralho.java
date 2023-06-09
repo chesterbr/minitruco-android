@@ -35,7 +35,7 @@ public class Baralho {
     /**
      * Sorteia uma carta do baralho.
      * <p>
-     * O método não verifica se o baralho foi todo sorteado. Para truco não há
+     * O método não verifica se o baralho foi inteiramente sorteado. Para truco não há
      * problema, mas outros jogos podem eventualmente retornar um null nesse
      * caso.
      *
