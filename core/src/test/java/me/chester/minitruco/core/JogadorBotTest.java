@@ -7,8 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
-import java.lang.reflect.Field;
-
 class JogadorBotTest {
 
     // TODO limpar esse código
@@ -41,12 +39,7 @@ class JogadorBotTest {
             }
         };
         Partida j = new PartidaLocal(false, false, "P");
-        // TODO Isso é gambiarra porque eu tirei o construtor que recebe
-        // estratégia :facepalm:
-        Field estrategiaDoBot = JogadorBot.class.getDeclaredField("estrategia");
-        estrategiaDoBot.setAccessible(true);
-        JogadorBot bot = new JogadorBot();
-        estrategiaDoBot.set(bot, e);
+        JogadorBot bot = new JogadorBot(e);
         j.adiciona(bot);
         j.adiciona(new JogadorBot());
         j.adiciona(new JogadorBot());
