@@ -184,6 +184,7 @@ public class TrucoActivity extends Activity {
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
         mesa.velocidade = preferences.getBoolean("animacaoRapida", false) ? 4 : 1;
         mesa.setTrucoActivity(this);
+        mesa.setIndiceDesenhoCartaFechada(preferences.getInt("indiceDesenhoCartaFechada", 0));
 
         // O jogo só deve efetivamente iniciar quando a mesa estiver pronta
         new Thread(() -> {

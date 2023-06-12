@@ -190,6 +190,10 @@ public class MesaView extends View {
         this.trucoActivity = trucoActivity;
     }
 
+    public void setIndiceDesenhoCartaFechada(int indice) {
+        CartaVisual.setIndiceDesenhoCartaFechada(indice);
+    }
+
     /**
      * Informa à mesa que uma animação começou (garantindo refreshes da tela
      * enquanto ela durar).
@@ -244,7 +248,7 @@ public class MesaView extends View {
         // Na primeira chamada (inicialização), instanciamos as cartas
         if (!inicializada) {
             for (int i = 0; i < cartas.length; i++) {
-                cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null, corFundoCartaBalao, getResources());
+                cartas[i] = new CartaVisual(this, leftBaralho, topBaralho, null, corFundoCartaBalao);
                 cartas[i].movePara(leftBaralho, topBaralho);
             }
             cartas[0].visible = false;

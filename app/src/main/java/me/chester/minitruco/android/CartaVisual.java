@@ -1,6 +1,7 @@
 package me.chester.minitruco.android;
 
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import me.chester.minitruco.R;
 import me.chester.minitruco.core.Carta;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -34,6 +36,8 @@ public class CartaVisual extends Carta {
     private final static Logger LOGGER = Logger.getLogger("CartaVisual");
 
     public static final int COR_MESA = Color.argb(255, 27, 142, 60);
+    private static int indiceDesenhoCartaFechada;
+    private final int[] resourceIdsDesenhoCartaFechada;
     private final Paint paintCarta = new Paint();
     private final Paint paintCartaEscura = new Paint();
     private final RectF rectCarta = new RectF();
@@ -50,15 +54,25 @@ public class CartaVisual extends Carta {
      *            valor que esta carta terá (ex.: "Kc"). Se null, entra virada.
      * @param corFundo
      *            cor de fundo da carta
-     * @param resources
-     *            getResources() da mesa (para podermos recuperar bitmaps, etc.)
      */
-    public CartaVisual(MesaView mesa, int left, int top, String sCarta, int corFundo, Resources resources) {
+    public CartaVisual(MesaView mesa, int left, int top, String sCarta, int corFundo) {
         super(sCarta == null ? LETRA_NENHUMA + "" + NAIPE_NENHUM : sCarta);
-        this.resources = resources;
         this.mesa = mesa;
         this.corFundo = corFundo;
+        this.resources = mesa.getResources();
+
+        resourceIdsDesenhoCartaFechada = new int[resources.getIntArray(R.array.baralhos_ids).length];
+        TypedArray ta = resources.obtainTypedArray(R.array.baralhos_ids);
+        for (int i = 0; i < resourceIdsDesenhoCartaFechada.length; i++) {
+            resourceIdsDesenhoCartaFechada[i] = ta.getResourceId(i, 0);
+        }
+        ta.recycle();
+
         movePara(left, top);
+    }
+
+    public static void setIndiceDesenhoCartaFechada(int indice) {
+        CartaVisual.indiceDesenhoCartaFechada = indice;
     }
 
     /**
@@ -234,8 +248,8 @@ public class CartaVisual extends Carta {
                 valor = this.toString();
             }
             this.bitmap = bitmapCache.get(valor);
-            Bitmap bmpOrig = BitmapFactory.decodeResource(resources,
-                    getCartaResourceByValor(valor));
+            int id = valor.equals("fundo") ? resourceIdsDesenhoCartaFechada[indiceDesenhoCartaFechada] : getResourceIdCartaPorString(valor);
+            Bitmap bmpOrig = BitmapFactory.decodeResource(resources, id);
             Bitmap bmpFinal = Bitmap.createScaledBitmap(bmpOrig, largura,
                     altura, true);
             bitmapCache.put(valor, bmpFinal);
@@ -276,7 +290,7 @@ public class CartaVisual extends Carta {
      * @return ID de resource do bitmap
      */
     @SuppressWarnings("rawtypes")
-    private static int getCartaResourceByValor(String valor) {
+    private static int getResourceIdCartaPorString(String valor) {
         valor = valor.toLowerCase();
         try {
             for (Class c : Class.forName("me.chester.minitruco.R").getClasses()) {
