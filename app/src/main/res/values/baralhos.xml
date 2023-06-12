@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="baralhos_nomes">
+        <item>Vermelho</item>
+        <item>Azul</item>
+        <item>Verde</item>
+        <item>Preto</item>
+        <item>Android</item>
+    </string-array>
+
+    <integer-array name="baralhos_ids">
+        <item>@drawable/baralho_vermelho</item>
+        <item>@drawable/baralho_azul</item>
+        <item>@drawable/baralho_verde</item>
+        <item>@drawable/baralho_preto</item>
+        <item>@drawable/baralho_android</item>
+    </integer-array>
+</resources>
