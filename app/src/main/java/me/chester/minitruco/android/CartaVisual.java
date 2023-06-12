@@ -73,11 +73,11 @@ public class CartaVisual extends Carta {
     public static void ajustaTamanho(int larguraCanvas, int alturaCanvas) {
         // A carta "canônica" tem 180x252, e tem que caber 6 delas
         // na largura e 5 na altura. Motivo: a largura pede 1 carta para cada
-        // jogador da dupla, 0.5 carta de folga e 3 cartas de área de descarte;
-        // a altura idem, mas com 2 cartas na área de descarte.
+        // jogador da dupla, 3 cartas de área de descarte e 0.5 carta de folga
+        // em cada lado. A altura idem, mas com 2 cartas na área de descarte.
         //
-        // A estratégia é pegar o menor entre o ratio que faz caber na largura
-        // e o que faz caber na largura
+        // A estratégia é pegar o menor ratio entre o que faz caber na largura
+        // e o que faz caber na altura
         double ratioLargura = larguraCanvas / (180 * 6.0);
         double ratioAltura = alturaCanvas / (252 * 5.0);
         double ratioCarta = Math.min(ratioLargura, ratioAltura);

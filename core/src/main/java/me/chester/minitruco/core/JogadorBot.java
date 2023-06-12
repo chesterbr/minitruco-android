@@ -21,11 +21,11 @@ public class JogadorBot extends Jogador implements Runnable {
 
     public JogadorBot() {
         // TODO se ficarmos com múltiplas estratégias, mover esse sorteio p/ Estrategia
-        if (random.nextBoolean()) {
-            estrategia = new EstrategiaSellani();
-        } else {
-            estrategia = new EstrategiaGasparotto();
-        }
+        this(random.nextBoolean() ? new EstrategiaSellani() : new EstrategiaGasparotto());
+    }
+
+    public JogadorBot(Estrategia e) {
+        estrategia = e;
         LOGGER.info("Estrategia: " + estrategia.getClass().getName());
         thread = new Thread(this);
         thread.start();

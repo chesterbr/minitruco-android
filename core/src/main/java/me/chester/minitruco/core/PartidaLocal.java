@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 /**
  * Executa o jogo efetivamente.
  * <p>
- * A classe mantém todo o estado do jogo e toma todas as decisões.
+ * A classe mantém o estado do jogo e toma todas as decisões.
  */
 public class PartidaLocal extends Partida {
 
@@ -525,7 +525,7 @@ public class PartidaLocal extends Partida {
                 interessado.aceitouAumentoAposta(j, valorMao, rndFrase);
             }
         } else {
-            // Primeiro notifica todo mundo da recusa
+            // Primeiro notifica todos os jogadores da recusa
             // (se for um aceite ignorado, diz pro humano que aceitou, só pra ele saber o que seria feito)
             for (Jogador interessado : jogadores) {
                 if (aceitou && ignorarAceite && (interessado == jogadores[posParceiro - 1])) {
