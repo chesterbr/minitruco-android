@@ -31,16 +31,13 @@
         android:name="android.permission.BLUETOOTH_SCAN"
         android:usesPermissionFlags="neverForLocation"
         tools:targetApi="s" />
-    <!--
-        Jogo via internet
-    -->
+    <!--         Jogo via internet -->
     <!--
         Vamos deixar comentado enquanto não lançamos isso, para evitar
         pedir uma permissão sem necessidade.
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     -->
-
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
@@ -55,6 +52,9 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/miniTrucoTheme">
+        <activity
+            android:name=".android.EscolheBaralhoActivity"
+            android:exported="false" />
         <activity
             android:name=".android.multiplayer.internet.ClienteInternetActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
