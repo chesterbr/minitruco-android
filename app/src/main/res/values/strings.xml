@@ -200,14 +200,9 @@
     <string name="titulo_sobre">Sobre o miniTruco</string>
     <string name="texto_sobre"><![CDATA[
         miniTruco-android: Copyright © 2005-2023 Carlos Duarte do Nascimento (Chester) - cd@pobox.com
-        <br/><br/>Seleção manual de servidor Bluetooth: Copyright © 2016 Rodolfo Vasconcelos
-        <br/><br/>Tento mineiro: Copyright © 2011 Guilherme Caram
-        <br/><br/>Imagens de carta, fundo e logotipo: Copyright © 2010-2011 Vanessa Sabino (Bani)
-        <br/><br/>Estratégias de bots: Copyright © 2006-2011 Leonardo Sellani, Sandro Gasparotto
-        <br/><br/>Estratégia de bot (antiga): Copyright © 2006-2011 Willian Gigliotti
-        <br/><br/>Color Picker © 2016 Jared Rummler / © 2015 Daniel Nilsson - Licensed under the Apache License, Version 2.0 (https://github.com/jaredrummler/ColorPicker/blob/master/LICENSE)
         <br/><br/>
-        Código-fonte: http://github.com/chesterbr/minitruco-android
+        <br/><br/>Contribudores(as): Guilherme Caram, Leonardo Sellani, Sandro Gasparotto, Willian Gigliotti, Rodolfo Vasconcelos, Vanessa Sabino (Bani), Asteras.
+        <br/><br/>Código-fonte e maiores detalhes: http://github.com/chesterbr/minitruco-android
         <br/><br/>
         <br/><br/>Todos os direitos reservados.
         <br/><br/>A redistribuiçã̃o e o uso nas formas binária e código fonte, com ou sem modificações, são permitidos contanto que as condições abaixo sejam cumpridas:

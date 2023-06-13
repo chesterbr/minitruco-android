@@ -1,7 +1,7 @@
 # miniTruco Android
 
 
-[<img alt="screenshot do jogo" align="right" width="200" src="docs/screenshots/screenshot-readme.png" />](docs/screenshots/screenshot-readme-large.png)
+[<img alt="screenshot do jogo" align="right" src="docs/screenshots/screenshot-readme.png" />](docs/screenshots/screenshot-readme-large.png)
 
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android.
 
@@ -19,13 +19,21 @@ Você pode usar e modificar o código como quiser, dentro dos [termos da licenç
 
 ## Créditos
 
-- Idéia, desenvolvimento, manutenção e arte: **[Carlos Duarte do Nascimento](https://chester.me/sobre)** ([@chesterbr](https://github.com/chesterbr))
-- Imagens de carta, fundo e logotipo: **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani))
-- Tento mineiro: **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram))
-- Estratégias de bots atuais:
-  - **[Leonardo Sellani](https://www.linkedin.com/in/leonardosellani/)**
-  - **[Sandro Gasparoto](https://www.linkedin.com/in/sgasparoto/)**
-- Estratégia de bot antiga: **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**
-- Seleção manual de servidor Bluetooth: **[Rodolfo Vasconcelos](https://www.linkedin.com/in/rodolfo-de-andrade-vasconcelos/)**
-- [Color Picker](https://github.com/jaredrummler/ColorPicker) © 2016 Jared Rummler / © 2015 Daniel Nilsson
-  Licensed under the [Apache License, Version 2.0](https://github.com/jaredrummler/ColorPicker/blob/master/LICENSE)
+**[Carlos Duarte do Nascimento](https://chester.me/sobre)** ([@chesterbr](https://github.com/chesterbr)): idéia, desenvolvimento, manutenção e artes diversas.
+
+### Colaborações em uso
+
+- **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani)): logotipo, cartas e baralho "Android"
+- **[Acturko](https://www.fiverr.com/acturko)**: baralhos em estilo tradicional
+- **[Leonardo Sellani](https://www.linkedin.com/in/leonardosellani/)**: estratégia de bot
+- **[Sandro Gasparoto](https://www.linkedin.com/in/sgasparoto/)**: estratégia de bot
+- **[Rodolfo Vasconcelos](https://www.linkedin.com/in/rodolfo-de-andrade-vasconcelos/)**: Seleção manual de servidor Bluetooth
+
+### Colaborações anteriores
+
+- **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**: Estratégia de bot
+- **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram)): Tento mineiro original
+
+### Software de terceiros
+
+- [Color Picker](https://github.com/jaredrummler/ColorPicker) © 2016 Jared Rummler / © 2015 Daniel Nilsson. Licensed under the [Apache License, Version 2.0](https://github.com/jaredrummler/ColorPicker/blob/master/LICENSE).
