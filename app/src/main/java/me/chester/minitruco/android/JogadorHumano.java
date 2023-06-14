@@ -45,8 +45,6 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         mesa.setPosicaoVez(0);
         mesa.escondeBotaoAumento();
         mesa.escondeBotaoAbertaFechada();
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
         mesa.descarta(c, posicaoNaTela(j));
         LOGGER.log(Level.INFO, "Jogador na posicao de tela " + posicaoNaTela(j)
                 + " jogou " + c);
@@ -126,8 +124,6 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         mesa.escondeBotaoAumento();
         mesa.escondeBotaoAbertaFechada();
         activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-        activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
         activity.setValorMao(0);
         mesa.setPosicaoVez(0);
@@ -200,9 +196,6 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         } else {
             mesa.escondeBotaoAbertaFechada();
         }
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                mostraBtnAumento ? TrucoActivity.MSG_MOSTRA_BOTAO_AUMENTO
-                        : TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
         mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
                 : MesaView.STATUS_VEZ_OUTRO);
         mesa.setPosicaoVez(posicaoNaTela(j));
