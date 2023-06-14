@@ -88,6 +88,8 @@ public class MesaView extends View {
     private Rect rectDialog;
     private RectF rectBotaoSim;
     private RectF rectBotaoNao;
+    private RectF rectBotaoAumento;
+    private RectF rectBotaoAbertaFechada;
     private float tamanhoFonte;
 
     /**
@@ -276,6 +278,21 @@ public class MesaView extends View {
             topBotao,
             rectBotaoSim.right + margemBotao + larguraBotao,
             bottomBotao);
+
+        // Define posição e tamanho dos botões de aumento e carta aberta/fechada
+        // (são quadrados cujo lado é a altura da carta)
+        rectBotaoAumento = new RectF(
+            margemBotao,
+            h - margemBotao - CartaVisual.altura,
+            margemBotao + CartaVisual.altura,
+            h - margemBotao
+        );
+        rectBotaoAbertaFechada = new RectF(
+            w - margemBotao - CartaVisual.altura,
+            rectBotaoAumento.top,
+            w - margemBotao,
+            rectBotaoAumento.bottom
+        );
 
         // Posiciona o vira e as cartas decorativas do baralho, que são fixos
         cartas[0].movePara(leftBaralho, topBaralho);
@@ -718,6 +735,9 @@ public class MesaView extends View {
 
         desenhaBalao(canvas);
         desenhaIndicadorDeVez(canvas);
+        desenhaBotao("Truco!", canvas, rectBotaoAumento);
+        desenhaBotao("Aberta", canvas, rectBotaoAbertaFechada);
+
 
         if (trucoActivity != null && trucoActivity.partida != null && trucoActivity.partida.isJogoAutomatico()) {
             jogaCarta(0);
