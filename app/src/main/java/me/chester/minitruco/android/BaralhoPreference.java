@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceViewHolder;
 
 import me.chester.minitruco.R;
@@ -79,6 +78,11 @@ public class BaralhoPreference extends Preference {
             .setView(dialogView)
             .create();
         gridView.setAdapter(new BaralhosAdapter(dialog));
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            persistInt(position);
+            atualizaPreviewDoBaralhoEscolhido();
+            dialog.dismiss();
+        });
         dialog.show();
     }
 
@@ -96,18 +100,10 @@ public class BaralhoPreference extends Preference {
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            LayoutInflater inflater = LayoutInflater.from(getContext()); // or (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = LayoutInflater.from(getContext());
             View viewItem = inflater.inflate(R.layout.baralho_preference_item, null);
             viewItem.findViewById(R.id.imagem).setBackgroundResource(ids[position]);
             ((TextView)viewItem.findViewById(R.id.texto)).setText(nomes[position]);
-            viewItem.setOnClickListener(v -> {
-                PreferenceManager.getDefaultSharedPreferences(getContext())
-                    .edit()
-                    .putInt("indiceDesenhoCartaFechada", position)
-                    .apply();
-                atualizaPreviewDoBaralhoEscolhido();
-                dialog.dismiss();
-            });
             return viewItem;
         }
     }
