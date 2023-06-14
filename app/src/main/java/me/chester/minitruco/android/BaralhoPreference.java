@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -73,12 +73,12 @@ public class BaralhoPreference extends Preference {
         super.onClick();
 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.baralho_preference_lista, null);
-        ListView listView = dialogView.findViewById(R.id.listViewBaralho);
+        GridView gridView = dialogView.findViewById(R.id.gridViewBaralho);
         AlertDialog dialog = new AlertDialog.Builder(getContext())
             .setTitle("Selecione um Baralho")
             .setView(dialogView)
             .create();
-        listView.setAdapter(new BaralhosAdapter(dialog));
+        gridView.setAdapter(new BaralhosAdapter(dialog));
         dialog.show();
     }
 

@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/listViewBaralho"
+    <GridView
+        android:id="@+id/gridViewBaralho"
+        android:numColumns="auto_fit"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
