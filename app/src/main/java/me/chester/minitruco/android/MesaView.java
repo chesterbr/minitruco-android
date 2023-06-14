@@ -425,20 +425,25 @@ public class MesaView extends View {
             case MotionEvent.ACTION_DOWN:
                 return true;
             case MotionEvent.ACTION_UP:
-                if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+                if (rectBotaoSim.contains(x, y)) {
                     respondePergunta(true);
                 }
-                if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
+                if (rectBotaoNao.contains(x, y)) {
                     respondePergunta(false);
                 }
-                if (mostrarBotaoAbertaFechada && rectBotaoAbertaFechada.contains((int) event.getX(), (int) event.getY())) {
-                if (rectBotaoAbertaFechada.contains((int) event.getX(), (int) event.getY())) {
+                if (mostrarBotaoAumento && rectBotaoAumento.contains(x, y)) {
+                    mostrarBotaoAumento = false;
+                    trucoActivity.partida.aumentaAposta(trucoActivity.jogadorHumano);
+                }
+                if (mostrarBotaoAbertaFechada && rectBotaoAbertaFechada.contains(x, y)) {
                     vaiJogarFechada = !vaiJogarFechada;
                 }
                 // Verificamos primeiro a carta mais à direita porque ela é desenhada
                 // em cima da do meio, e esta em cima da carta à esquerda
                 for (int i = 6; i >= 4; i--) {
-                    if (cartas[i].isDentro(event.getX(), event.getY())) {
+                    if (cartas[i].isDentro(x, y)) {
                         jogaCarta(i - 4);
                     }
                 }

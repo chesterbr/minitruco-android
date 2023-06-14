@@ -194,7 +194,7 @@ public class CartaVisual extends Carta {
      * @param y coordenada y do ponto
      * @return true se estiver na carta, false se não.
      */
-    public boolean isDentro(float x, float y) {
+    public boolean isDentro(int x, int y) {
         return (x >= this.left && x <= this.left + largura && y >= this.top && y <= this.top + altura);
     }
 
