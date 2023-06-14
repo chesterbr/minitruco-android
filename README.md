@@ -23,16 +23,16 @@ Você pode usar e modificar o código como quiser, dentro dos [termos da licenç
 
 ### Colaborações em uso
 
-- **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani)): logotipo, cartas e baralho "Android"
 - **[Acturko](https://www.fiverr.com/acturko)**: baralhos em estilo tradicional
 - **[Leonardo Sellani](https://www.linkedin.com/in/leonardosellani/)**: estratégia de bot
-- **[Sandro Gasparoto](https://www.linkedin.com/in/sgasparoto/)**: estratégia de bot
 - **[Rodolfo Vasconcelos](https://www.linkedin.com/in/rodolfo-de-andrade-vasconcelos/)**: Seleção manual de servidor Bluetooth
+- **[Sandro Gasparoto](https://www.linkedin.com/in/sgasparoto/)**: estratégia de bot
+- **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani)): logotipo, cartas e baralho "Android"
 
 ### Colaborações anteriores
 
-- **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**: Estratégia de bot
 - **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram)): Tento mineiro original
+- **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**: Estratégia de bot
 
 ### Software de terceiros
 

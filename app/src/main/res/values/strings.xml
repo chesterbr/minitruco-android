@@ -200,17 +200,17 @@
     <string name="titulo_sobre">Sobre o miniTruco</string>
     <string name="texto_sobre"><![CDATA[
         miniTruco-android: Copyright © 2005-2023 Carlos Duarte do Nascimento (Chester) - cd@pobox.com
+        <br/><br/>Código-fonte e maiores detalhes: https://github.com/chesterbr/minitruco-android
+        <br/><br/>Contribudores(as): Asteras, Guilherme Caram, Leonardo Sellani, Rodolfo Vasconcelos, Sandro Gasparotto, Vanessa Sabino (Bani), Willian Gigliotti.
         <br/><br/>
-        <br/><br/>Contribudores(as): Guilherme Caram, Leonardo Sellani, Sandro Gasparotto, Willian Gigliotti, Rodolfo Vasconcelos, Vanessa Sabino (Bani), Asteras.
-        <br/><br/>Color Picker © 2016 Jared Rummler / © 2015 Daniel Nilsson - Licensed under the Apache License, Version 2.0 (https://github.com/jaredrummler/ColorPicker/blob/master/LICENSE)
-        <br/><br/>Código-fonte e maiores detalhes: http://github.com/chesterbr/minitruco-android
-        <br/><br/>
+        <br/><br/>Licenciado sob a licença BSD de 3 clausulas (https://opensource.org/licenses/BSD-3-Clause)
         <br/><br/>Todos os direitos reservados.
         <br/><br/>A redistribuiçã̃o e o uso nas formas binária e código fonte, com ou sem modificações, são permitidos contanto que as condições abaixo sejam cumpridas:
         <br/><br/>- Redistribuições do código fonte devem conter o aviso de direitos autorais acima, esta lista de condições e o aviso de isenção de garantias subsequente.
         <br/><br/>- Redistribuições na forma binária devem reproduzir o aviso de direitos autorais acima, esta lista de condições e o aviso de isenção de garantias subsequente na documentação e/ou materiais fornecidos com a distribuição.
-        <br/><br/>- Nem o nome do Chester nem o nome dos contribuidores podem ser utilizados para endossar ou promover produtos derivados deste software sem autorização prévia específica por escrito.
+        <br/><br/>- Nem o nome do detendor dos direitos, nem o nome dos(das) contribuidores(as) podem ser utilizados para endossar ou promover produtos derivados deste software sem autorização prévia específica por escrito.
         <br/><br/>
+        <br/><br/>Color Picker © 2016 Jared Rummler / © 2015 Daniel Nilsson - Licensed under the Apache License, Version 2.0 (https://github.com/jaredrummler/ColorPicker/blob/master/LICENSE)
     ]]></string>
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
