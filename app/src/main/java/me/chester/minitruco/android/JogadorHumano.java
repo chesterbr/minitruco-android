@@ -182,19 +182,15 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void vez(Jogador j, boolean podeFechada) {
         LOGGER.log(Level.INFO, "vez do jogador " + posicaoNaTela(j));
-        boolean mostraBtnAumento = (j instanceof JogadorHumano)
-                && (valorProximaAposta > 0) && partida.isPlacarPermiteAumento();
-        boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
-                && podeFechada;
-        if (mostraBtnAumento) {
-            mesa.mostraBotaoAumento(valorProximaAposta);
-        } else {
-            mesa.escondeBotaoAumento();
-        }
-        if (mostraBtnAbertaFechada) {
-            mesa.mostraBotaoAbertaFechada();
-        } else {
-            mesa.escondeBotaoAbertaFechada();
+        mesa.escondeBotaoAumento();
+        mesa.escondeBotaoAbertaFechada();
+        if (j instanceof JogadorHumano) {
+            if ((valorProximaAposta > 0) && partida.isPlacarPermiteAumento()) {
+                mesa.mostraBotaoAumento(valorProximaAposta);
+            }
+            if (podeFechada) {
+                mesa.mostraBotaoAbertaFechada();
+            }
         }
         mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
                 : MesaView.STATUS_VEZ_OUTRO);
