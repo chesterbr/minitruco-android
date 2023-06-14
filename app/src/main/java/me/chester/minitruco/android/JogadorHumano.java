@@ -190,7 +190,6 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void vez(Jogador j, boolean podeFechada) {
         LOGGER.log(Level.INFO, "vez do jogador " + posicaoNaTela(j));
-        mesa.vaiJogarFechada = false;
         boolean mostraBtnAumento = (j instanceof JogadorHumano)
                 && (valorProximaAposta > 0) && partida.isPlacarPermiteAumento();
         boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)

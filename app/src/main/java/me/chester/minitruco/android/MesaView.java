@@ -741,7 +741,7 @@ public class MesaView extends View {
             desenhaBotao("Truco!", canvas, rectBotaoAumento);
         }
         if (mostrarBotaoAbertaFechada) {
-            desenhaBotao("Aberta", canvas, rectBotaoAbertaFechada);
+            desenhaBotao(vaiJogarFechada ? "Aberta" : "Fechada", canvas, rectBotaoAbertaFechada);
         }
 
 
@@ -932,12 +932,25 @@ public class MesaView extends View {
         mostrarPerguntaMaoDeX = false;
     }
 
+    /**
+     * Mostra o botão de aumento com o texto apropriado ("truco", "seis", etc.)
+     * o
+     * @param valorProximaAposta valor para o qual se está querendo aumentar
+     */
     public void mostraBotaoAumento(int valorProximaAposta) {
+        // TODO trocar o texto
         mostrarBotaoAumento = true;
     }
 
+    /**
+     * Mostra o botão que permite jogar uma carta aberta ou fechada.
+     * <p>
+     * Ele é mostrado no estado padrão (aberta) e, se o jogador clicar nele,
+     * ele alterna entre aberta e fechada.
+     */
     public void mostraBotaoAbertaFechada() {
         mostrarBotaoAbertaFechada = true;
+        vaiJogarFechada = false;
     }
 
     public void escondeBotaoAumento() {
