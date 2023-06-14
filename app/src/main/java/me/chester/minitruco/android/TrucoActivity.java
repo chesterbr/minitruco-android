@@ -174,6 +174,11 @@ public class TrucoActivity extends Activity {
         mesa.velocidade = preferences.getBoolean("animacaoRapida", false) ? 4 : 1;
         mesa.setTrucoActivity(this);
         mesa.setIndiceDesenhoCartaFechada(preferences.getInt("indiceDesenhoCartaFechada", 0));
+        mesa.setTextoAumento(3, getString(R.string.botao_aumento_truco));
+        mesa.setTextoAumento(6, getString(R.string.botao_aumento_seis));
+        mesa.setTextoAumento(9, getString(R.string.botao_aumento_nove));
+        mesa.setTextoAumento(10, getString(R.string.botao_aumento_dez));
+        mesa.setTextoAumento(12, getString(R.string.botao_aumento_doze));
 
         // O jogo só deve efetivamente iniciar quando a mesa estiver pronta
         new Thread(() -> {

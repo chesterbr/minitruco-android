@@ -15,6 +15,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
@@ -83,6 +84,7 @@ public class MesaView extends View {
     private String perguntaAumento;
     private String perguntaMaoDeX;
     public boolean vaiJogarFechada;
+    private int valorProximaAposta;
     protected int velocidade;
     private int posicaoVez;
     private int corFundoCartaBalao = Color.WHITE;
@@ -99,6 +101,12 @@ public class MesaView extends View {
      * (mover cartas, acionar balões, etc)
      */
     private boolean inicializada = false;
+
+    /**
+     * Guarda o texto do botão de aumento para cada valor de aumento (ex.:
+     * "truco" para 3, "seis" para 6, etc)
+     */
+    private HashMap<Integer, String> textosBotaoAumento = new HashMap<>();
 
     public boolean isInicializada() {
         return inicializada;
@@ -741,7 +749,7 @@ public class MesaView extends View {
         desenhaBalao(canvas);
         desenhaIndicadorDeVez(canvas);
         if (mostrarBotaoAumento) {
-            desenhaBotao("Truco!", canvas, rectBotaoAumento);
+            desenhaBotao(textosBotaoAumento.get(valorProximaAposta), canvas, rectBotaoAumento);
         }
         if (mostrarBotaoAbertaFechada) {
             desenhaBotao(vaiJogarFechada ? "Aberta" : "Fechada", canvas, rectBotaoAbertaFechada);
@@ -941,7 +949,7 @@ public class MesaView extends View {
      * @param valorProximaAposta valor para o qual se está querendo aumentar
      */
     public void mostraBotaoAumento(int valorProximaAposta) {
-        // TODO trocar o texto
+        this.valorProximaAposta = valorProximaAposta;
         mostrarBotaoAumento = true;
     }
 
@@ -962,5 +970,14 @@ public class MesaView extends View {
 
     public void escondeBotaoAbertaFechada() {
         mostrarBotaoAbertaFechada = false;
+    }
+
+    /**
+     * Configura a mesa para mostrar o texto especificado quando o próximo
+     * aumento for do valor indicado. Ex.: "truco" para 3 (ou 4), "seis" para 6,
+     * etc.
+     */
+    public void setTextoAumento(int valor, String texto) {
+        textosBotaoAumento.put(valor, texto);
     }
 }
