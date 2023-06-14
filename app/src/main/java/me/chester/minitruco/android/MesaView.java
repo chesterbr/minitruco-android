@@ -761,7 +761,8 @@ public class MesaView extends View {
             desenhaBotao(vaiJogarFechada ? "Aberta" : "Fechada", canvas, rectBotaoAbertaFechada);
         }
 
-
+        // TODO: modo automático nunca pede truco (e crasha bonito se a gente
+        //  tenta pedir aqui; de qualquer forma, mover isso pra outro lugar)
         if (trucoActivity != null && trucoActivity.partida != null && trucoActivity.partida.isJogoAutomatico()) {
             jogaCarta(0);
             jogaCarta(1);
