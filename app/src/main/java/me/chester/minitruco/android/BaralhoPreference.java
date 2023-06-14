@@ -74,20 +74,23 @@ public class BaralhoPreference extends Preference {
 
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.baralho_preference_lista, null);
         ListView listView = dialogView.findViewById(R.id.listViewBaralho);
-        listView.setAdapter(new BaralhosAdapter());
-        new AlertDialog.Builder(getContext())
-            .setTitle("Selecionar um Baralho")
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+            .setTitle("Selecione um Baralho")
             .setView(dialogView)
-            .setPositiveButton("Selecionar", null)
-            .show();
+            .create();
+        listView.setAdapter(new BaralhosAdapter(dialog));
+        dialog.show();
     }
 
     /**
      * Gera cada item (view) da lista de baralhos, com o nome e a imagem.
      */
     private class BaralhosAdapter extends ArrayAdapter<String> {
-        public BaralhosAdapter() {
+        private final AlertDialog dialog;
+
+        public BaralhosAdapter(AlertDialog dialog) {
             super(BaralhoPreference.this.getContext(), 0, BaralhoPreference.this.nomes);
+            this.dialog = dialog;
         }
 
         @NonNull
@@ -103,7 +106,7 @@ public class BaralhoPreference extends Preference {
                     .putInt("indiceDesenhoCartaFechada", position)
                     .apply();
                 atualizaPreviewDoBaralhoEscolhido();
-//                    finish();
+                dialog.dismiss();
             });
             return viewItem;
         }
