@@ -113,6 +113,7 @@ O [vocabulário típico do truco](https://www.jogosdorei.com.br/blog/girias-do-t
 
 - **Aumento**: quando um jogador pede para aumentar o valor da rodada ("truco", que aumenta para 3 ou 4 pontos, "seis", "oito"/"nove" ou "doze", conforme o modo de jogo).
 - **Mão de X**: é a mão de 11 do truco paulista, ou mão de 10 do truco mineiro (quando apenas uma das duplas tem essa pontuação e pode optar por jogar ou não).
+- **Baralho**: visualmente, é o bitmap desenhado quando a carta está fechada (valor virado para baixo). Três dessas cartas são desenhadas no canto superior direito para simbolizar o baralho todo. Não confundir com a classe [`Baralho`](../core/src/main/java/me/chester/minitruco/core/Baralho.java), que faz parte do core e é quem sorteia as [`Carta`](../core/src/main/java/me/chester/minitruco/core/Carta.java)s.
 
 ## Arquitetura de Classes
 

@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="sempreConfirmaFecharJogo"
-        android:summary="Se esta opção estiver desligada e o botão ou gesto de voltar for acionado, o jogo encerra imediatamente."
-        android:title="Sempre perguntar ao fechar um jogo" />
-    <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="humanoDecide"
-        android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de 10/11. Ele só diz se iria, mas o humano é que decide."
-        android:title="Humano decide pela dupla" />
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="animacaoRapida"
-        android:summary="Selecione para acelerar a distribuição, recolhimento e animação geral das cartas."
-        android:title="Animação Rápida" />
-    <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
-        android:defaultValue="-1"
-        android:key="corFundoCarta"
-        android:summary="Se o &quot;modo escuro&quot; do aparelho deixa estes elementos ilegíveis, ajuste aqui."
-        android:title="Cor de fundo das cartas e balões"/>
-    <PreferenceCategory android:title="Opções de Desenvolvimento (sério, nem mexe aqui)">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Visual">
+        <me.chester.minitruco.android.BaralhoPreference
+            android:defaultValue="0"
+            android:key="indiceDesenhoCartaFechada"
+            android:summary="Escolha o desenho atrás das cartas"
+            android:title="Baralho" />
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="-1"
+            android:key="corFundoCarta"
+            android:summary="Se o &quot;modo escuro&quot; do aparelho deixa estes elementos ilegíveis, ajuste aqui"
+            android:title="Cor de fundo das cartas e balões" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="animacaoRapida"
+            android:summary="Selecione para acelerar a distribuição, recolhimento e animação geral das cartas"
+            android:title="Animação Rápida" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Jogo">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="sempreConfirmaFecharJogo"
+            android:summary="Se esta opção estiver desligada e o botão ou gesto de voltar for acionado, o jogo encerra imediatamente"
+            android:title="Sempre perguntar ao fechar um jogo" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="humanoDecide"
+            android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de 10/11. Ele só diz se iria, mas o humano é que decide"
+            android:title="Humano decide pela dupla" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Desenvolvimento (️☠=PRE-RI-GO, não mexa)">
         <EditTextPreference
             android:defaultValue="@string/opcoes_default_servidor"
             android:key="servidor"
@@ -29,7 +39,7 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="jogoAutomatico"
-            android:summary="Joga uma carta ou pede truco automaticamente (e aleatoriamente) apenas em jogo local."
+            android:summary="Joga uma carta ou pede truco automaticamente (e aleatoriamente) apenas em jogo local"
             android:title="Jogo Automático" />
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>
