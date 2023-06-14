@@ -494,16 +494,17 @@ public class MesaView extends View {
     }
 
     /**
-     * Permite à Activity informar se o humano está na própria vez e liberado para jogar,
-     * se está na própria vez mas aguarda resposta de um truco, mão de 10/11, etc.,
-     * ou se é a vez de outro jogador.
+     * Recebe a informação de que é a vez de alguém jogar.
      *
-     * @param vezHumano um entre STATUS_VEZ_HUMANO_OK, STATUS_VEZ_HUMANO_AGUARDANDO e
-     *                  STATUS_VEZ_OUTRO
+     * @param humano true se for a vez do humano, false se for a vez de outro jogador
      */
-    public void setStatusVez(int vezHumano) {
+    public void vez(boolean humano) {
         aguardaFimAnimacoes();
-        this.statusVez = vezHumano;
+        if (humano) {
+            statusVez = STATUS_VEZ_HUMANO_OK;
+        } else {
+            statusVez = STATUS_VEZ_OUTRO;
+        }
     }
 
     /**

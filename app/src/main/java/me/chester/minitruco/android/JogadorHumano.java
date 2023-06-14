@@ -192,8 +192,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
                 mesa.mostraBotaoAbertaFechada();
             }
         }
-        mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
-                : MesaView.STATUS_VEZ_OUTRO);
+        mesa.vez(j.equals(this));
         mesa.setPosicaoVez(posicaoNaTela(j));
     }
 
