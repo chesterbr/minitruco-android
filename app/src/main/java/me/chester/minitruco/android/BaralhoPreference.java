@@ -75,7 +75,7 @@ public class BaralhoPreference extends Preference {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.baralho_preference_lista, null);
         GridView gridView = dialogView.findViewById(R.id.gridViewBaralho);
         AlertDialog dialog = new AlertDialog.Builder(getContext())
-            .setTitle("Selecione um Baralho")
+            .setTitle("Selecione um baralho")
             .setView(dialogView)
             .create();
         gridView.setAdapter(new BaralhosAdapter(dialog));
