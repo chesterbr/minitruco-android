@@ -53,8 +53,6 @@ public class TrucoActivity extends Activity {
     static final int MSG_REMOVE_NOVA_PARTIDA = 3;
     static final int MSG_MOSTRA_BOTAO_AUMENTO = 4;
     static final int MSG_ESCONDE_BOTAO_AUMENTO = 5;
-    static final int MSG_MOSTRA_BOTAO_ABERTA_FECHADA = 6;
-    static final int MSG_ESCONDE_BOTAO_ABERTA_FECHADA = 7;
     public static final String SEPARADOR_PLACAR_PARTIDAS = " x ";
     private static boolean mIsViva = false;
     final int[] placar = new int[2];
@@ -69,7 +67,6 @@ public class TrucoActivity extends Activity {
             TextView textViewNos = findViewById(R.id.textViewNos);
             TextView textViewRivais = findViewById(R.id.textViewRivais);
             Button btnAumento = findViewById(R.id.btnAumento);
-            Button btnAbertaFechada = findViewById(R.id.btnAbertaFechada);
             Button btnNovaPartida = findViewById(R.id.btnNovaPartida);
             switch (msg.what) {
                 case MSG_ATUALIZA_PLACAR:
@@ -108,14 +105,6 @@ public class TrucoActivity extends Activity {
                     break;
                 case MSG_ESCONDE_BOTAO_AUMENTO:
                     btnAumento.setVisibility(Button.GONE);
-                    break;
-                case MSG_MOSTRA_BOTAO_ABERTA_FECHADA:
-                    btnAbertaFechada.setText(mesa.vaiJogarFechada ? "Aberta"
-                        : "Fechada");
-                    btnAbertaFechada.setVisibility(Button.VISIBLE);
-                    break;
-                case MSG_ESCONDE_BOTAO_ABERTA_FECHADA:
-                    btnAbertaFechada.setVisibility(Button.GONE);
                     break;
                 default:
                     break;
@@ -210,12 +199,6 @@ public class TrucoActivity extends Activity {
         findViewById(R.id.btnAumento).setVisibility(Button.GONE);
         mesa.setStatusVez(MesaView.STATUS_VEZ_HUMANO_AGUARDANDO);
         partida.aumentaAposta(jogadorHumano);
-    }
-
-    public void abertaFechadaClickHandler(View v) {
-        mesa.vaiJogarFechada = !mesa.vaiJogarFechada;
-        handler.sendMessage(Message.obtain(handler,
-            MSG_MOSTRA_BOTAO_ABERTA_FECHADA));
     }
 
     @Override

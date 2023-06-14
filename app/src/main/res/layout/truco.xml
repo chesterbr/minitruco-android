@@ -66,16 +66,6 @@
                 android:textSize="14sp"
                 android:visibility="gone" />
 
-            <Button
-                android:id="@+id/btnAbertaFechada"
-                android:layout_width="80sp"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/textview_eles"
-                android:layout_alignParentRight="true"
-                android:onClick="abertaFechadaClickHandler"
-                android:text="xxxxx"
-                android:textSize="12sp"
-                android:visibility="gone" />
         </RelativeLayout>
 
         <Button
