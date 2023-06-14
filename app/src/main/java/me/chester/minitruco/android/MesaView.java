@@ -423,6 +423,9 @@ public class MesaView extends View {
                 if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
                     respondePergunta(false);
                 }
+                if (rectBotaoAbertaFechada.contains((int) event.getX(), (int) event.getY())) {
+                    vaiJogarFechada = !vaiJogarFechada;
+                }
                 // Verificamos primeiro a carta mais à direita porque ela é desenhada
                 // em cima da do meio, e esta em cima da carta à esquerda
                 for (int i = 6; i >= 4; i--) {
