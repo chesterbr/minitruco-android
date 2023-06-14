@@ -431,6 +431,7 @@ public class MesaView extends View {
                 if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
                     respondePergunta(false);
                 }
+                if (mostrarBotaoAbertaFechada && rectBotaoAbertaFechada.contains((int) event.getX(), (int) event.getY())) {
                 if (rectBotaoAbertaFechada.contains((int) event.getX(), (int) event.getY())) {
                     vaiJogarFechada = !vaiJogarFechada;
                 }
