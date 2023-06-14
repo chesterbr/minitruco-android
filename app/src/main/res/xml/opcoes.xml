@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="Visual">
-        <Preference
+        <me.chester.minitruco.android.BaralhoPreference
             android:defaultValue="0"
             android:key="indiceDesenhoCartaFechada"
             android:summary="Escolha o desenho atrás das cartas"
-            android:title="Baralho">
-            <intent
-                android:targetClass="me.chester.minitruco.android.EscolheBaralhoActivity"
-                android:targetPackage="me.chester.minitruco" />
-        </Preference>
+            android:title="Baralho" />
         <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
             android:defaultValue="-1"
             android:key="corFundoCarta"
@@ -35,7 +31,7 @@
             android:title="Humano decide pela dupla" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Desenvolvimento (sério, nem mexe aqui)">
+    <PreferenceCategory android:title="Desenvolvimento (️☠=PRE-RI-GO, não mexa)">
         <EditTextPreference
             android:defaultValue="@string/opcoes_default_servidor"
             android:key="servidor"
