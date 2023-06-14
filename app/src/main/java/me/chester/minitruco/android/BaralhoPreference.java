@@ -57,7 +57,7 @@ public class BaralhoPreference extends Preference {
     }
 
     private void atualizaPreviewDoBaralhoEscolhido() {
-        int indice = getSharedPreferences().getInt("indiceDesenhoCartaFechada", 0);
+        int indice = getPersistedInt(0);
         TypedArray ta = getContext().getResources().obtainTypedArray(R.array.baralhos_ids);
         int drawable = ta.getResourceId((Integer) indice, 0);
         ImageView preview = (ImageView) holder.findViewById(R.id.imageViewBaralhoPreview);
