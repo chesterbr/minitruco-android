@@ -23,9 +23,9 @@ Você pode usar e modificar o código como quiser, dentro dos [termos da licenç
 
 - **[Acturko](https://www.fiverr.com/acturko)**: baralhos em estilo tradicional
 - **[Leonardo Sellani](https://www.linkedin.com/in/leonardosellani/)**: estratégia de bot
-- **[Rodolfo Vasconcelos](https://www.linkedin.com/in/rodolfo-de-andrade-vasconcelos/)**: Seleção manual de servidor Bluetooth
+- **[Rodolfo Vasconcelos](https://www.linkedin.com/in/rodolfo-de-andrade-vasconcelos/)**: seleção manual de servidor Bluetooth
 - **[Sandro Gasparoto](https://www.linkedin.com/in/sgasparoto/)**: estratégia de bot
-- **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani)): logotipo, cartas e baralho "Android"
+- **[Vanessa Sabino](https://baniverso.com)** ([@bani](https://github.com/bani)): logotipo, cartas e baralho [Android](https://www.digitaltrends.com/mobile/who-is-bugdroid-the-story-of-androids-mascot/)
 
 ### Colaborações anteriores
 
