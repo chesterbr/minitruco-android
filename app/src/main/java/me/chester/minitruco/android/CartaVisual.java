@@ -41,19 +41,15 @@ public class CartaVisual extends Carta {
     private final Paint paintCarta = new Paint();
     private final Paint paintCartaEscura = new Paint();
     private final RectF rectCarta = new RectF();
-    private int corFundo;
+    private final int corFundo;
 
     /**
      * Cria uma nova carta na posição indicada
      *
-     * @param left
-     *            posição em relação à esquerda
-     * @param top
-     *            posição em relação ao topo
-     * @param sCarta
-     *            valor que esta carta terá (ex.: "Kc"). Se null, entra virada.
-     * @param corFundo
-     *            cor de fundo da carta
+     * @param left     posição em relação à esquerda
+     * @param top      posição em relação ao topo
+     * @param sCarta   valor que esta carta terá (ex.: "Kc"). Se null, entra virada.
+     * @param corFundo cor de fundo da carta
      */
     public CartaVisual(MesaView mesa, int left, int top, String sCarta, int corFundo) {
         super(sCarta == null ? LETRA_NENHUMA + "" + NAIPE_NENHUM : sCarta);
@@ -79,10 +75,8 @@ public class CartaVisual extends Carta {
      * Ajusta a altura/largura das cartas para caberem na mesa (considerando a
      * folga necessária para o descarte as cartas ao redor dele)
      *
-     * @param larguraCanvas
-     *            largura da mesa
-     * @param alturaCanvas
-     *            altura da mesa
+     * @param larguraCanvas largura da mesa
+     * @param alturaCanvas  altura da mesa
      */
     public static void ajustaTamanho(int larguraCanvas, int alturaCanvas) {
         // A carta "canônica" tem 180x252, e tem que caber 6 delas
@@ -97,8 +91,7 @@ public class CartaVisual extends Carta {
         double ratioCarta = Math.min(ratioLargura, ratioAltura);
         largura = (int) (180 * ratioCarta);
         altura = (int) (252 * ratioCarta);
-        LOGGER.log(Level.INFO, "Tamanho (largura x altura):" + largura + ","
-                + altura);
+        LOGGER.log(Level.INFO, "Tamanho (largura x altura):" + largura + "," + altura);
     }
 
     /**
@@ -106,10 +99,8 @@ public class CartaVisual extends Carta {
      * <p>
      * Qualuqer animação em curso será cancelada.
      *
-     * @param left
-     *            posição em relação à esquerda
-     * @param top
-     *            posição em relação ao topo
+     * @param left posição em relação à esquerda
+     * @param top  posição em relação ao topo
      */
 
     public void movePara(int left, int top) {
@@ -123,12 +114,9 @@ public class CartaVisual extends Carta {
      * O método só guarda esses valores - o movimento real acontece à medida em
      * que a carta é redesenhada (isto é, no método draw).
      *
-     * @param left
-     *            posição em relação à esquerda
-     * @param top
-     *            posição em relação ao topo
-     * @param tempoMS
-     *            quantidade de milissegundos que a animação deve durar.
+     * @param left    posição em relação à esquerda
+     * @param top     posição em relação ao topo
+     * @param tempoMS quantidade de milissegundos que a animação deve durar.
      */
     public void movePara(int left, int top, int tempoMS) {
         mesa.aguardaFimAnimacoes();
@@ -144,7 +132,6 @@ public class CartaVisual extends Carta {
      * <p>
      * Caso a carta esteja em meio a uma animação, atualiza sua posição para
      * corresponder ao instante atual.
-     *
      */
     public void draw(Canvas canvas) {
         if (!visible) {
@@ -203,23 +190,19 @@ public class CartaVisual extends Carta {
     /**
      * Diz se um ponto do canvas está dentro dessa carta ou não.
      *
-     * @param x
-     *            coordenada x do ponto
-     * @param y
-     *            coordenada y do ponto
+     * @param x coordenada x do ponto
+     * @param y coordenada y do ponto
      * @return true se estiver na carta, false se não.
      */
     public boolean isDentro(float x, float y) {
-        return (x >= this.left && x <= this.left + largura && y >= this.top && y <= this.top
-                + altura);
+        return (x >= this.left && x <= this.left + largura && y >= this.top && y <= this.top + altura);
     }
 
     /**
      * Copia a letra, naipe e estado de fechamento de uma carta do jogo
      *
-     * @param c
-     *            carta a ser copiada. Se <code>null</code>, a carta visual
-     *            vira apenas uma carta "fechada"
+     * @param c carta a ser copiada. Se <code>null</code>, a carta visual
+     *          vira apenas uma carta "fechada"
      */
     public void copiaCarta(Carta c) {
         if (c == null) {
@@ -242,16 +225,14 @@ public class CartaVisual extends Carta {
      */
     private Bitmap getBitmap() {
         if (this.bitmap == null || this.bitmap.isRecycled()) {
-            String valor = "fundo";
-            if ((!isFechada()) && (getLetra() != LETRA_NENHUMA)
-                    && (getNaipe() != NAIPE_NENHUM)) {
+            String valor = "fechada";
+            if ((!isFechada()) && (getLetra() != LETRA_NENHUMA) && (getNaipe() != NAIPE_NENHUM)) {
                 valor = this.toString();
             }
             this.bitmap = bitmapCache.get(valor);
-            int id = valor.equals("fundo") ? resourceIdsDesenhoCartaFechada[indiceDesenhoCartaFechada] : getResourceIdCartaPorString(valor);
-            Bitmap bmpOrig = BitmapFactory.decodeResource(resources, id);
-            Bitmap bmpFinal = Bitmap.createScaledBitmap(bmpOrig, largura,
-                    altura, true);
+            int bmpOriginalResourceId = getResourceIdCartaPorString(valor);
+            Bitmap bmpOriginal = BitmapFactory.decodeResource(resources, bmpOriginalResourceId);
+            Bitmap bmpFinal = Bitmap.createScaledBitmap(bmpOriginal, largura, altura, true);
             bitmapCache.put(valor, bmpFinal);
             this.bitmap = bmpFinal;
         }
@@ -283,14 +264,16 @@ public class CartaVisual extends Carta {
     }
 
     /**
-     * Recupera o bitmap da carta a partir dos resources
+     * Recupera o resource id do bitmap original de uma carta
      *
-     * @param valor
-     *            string que representa o bitmap. Ex.: "Ko" para rei de ouros.
+     * @param valor string que representa o bitmap. Ex.: "Ko" para rei de ouros. Pode ser "fechada" para carta fechada.
      * @return ID de resource do bitmap
      */
     @SuppressWarnings("rawtypes")
-    private static int getResourceIdCartaPorString(String valor) {
+    private int getResourceIdCartaPorString(String valor) {
+        if (valor.equals("fechada")) {
+            return resourceIdsDesenhoCartaFechada[indiceDesenhoCartaFechada];
+        }
         valor = valor.toLowerCase();
         try {
             for (Class c : Class.forName("me.chester.minitruco.R").getClasses()) {
@@ -298,12 +281,9 @@ public class CartaVisual extends Carta {
                     return c.getField("carta" + valor).getInt(null);
                 }
             }
-            throw new FileNotFoundException("Carta não encontrada. Valor: "
-                    + valor);
+            throw new FileNotFoundException("Carta não encontrada. Valor: " + valor);
         } catch (Exception e) {
-            throw new RuntimeException(
-                    "Erro irrecuperável ao obter carta pelo valor. Valor: "
-                            + valor, e);
+            throw new RuntimeException("Erro irrecuperável ao obter carta pelo valor. Valor: " + valor, e);
         }
     }
 
@@ -384,7 +364,7 @@ public class CartaVisual extends Carta {
     /**
      * Acessor dos resources da aplicação
      */
-    private Resources resources;
+    private final Resources resources;
 
     /**
      * Mesa à qual esta carta pertence
