@@ -78,6 +78,8 @@ public class MesaView extends View {
     private final float density = getResources().getDisplayMetrics().density;
     private boolean mostrarPerguntaMaoDeX = false;
     private boolean mostrarPerguntaAumento = false;
+    private boolean mostrarBotaoAumento = false;
+    private boolean mostrarBotaoAbertaFechada = false;
     private String perguntaAumento;
     private String perguntaMaoDeX;
     public boolean vaiJogarFechada;
@@ -735,8 +737,12 @@ public class MesaView extends View {
 
         desenhaBalao(canvas);
         desenhaIndicadorDeVez(canvas);
-        desenhaBotao("Truco!", canvas, rectBotaoAumento);
-        desenhaBotao("Aberta", canvas, rectBotaoAbertaFechada);
+        if (mostrarBotaoAumento) {
+            desenhaBotao("Truco!", canvas, rectBotaoAumento);
+        }
+        if (mostrarBotaoAbertaFechada) {
+            desenhaBotao("Aberta", canvas, rectBotaoAbertaFechada);
+        }
 
 
         if (trucoActivity != null && trucoActivity.partida != null && trucoActivity.partida.isJogoAutomatico()) {
@@ -924,5 +930,21 @@ public class MesaView extends View {
     public void escondePergunta() {
         mostrarPerguntaAumento = false;
         mostrarPerguntaMaoDeX = false;
+    }
+
+    public void mostraBotaoAumento(int valorProximaAposta) {
+        mostrarBotaoAumento = true;
+    }
+
+    public void mostraBotaoAbertaFechada() {
+        mostrarBotaoAbertaFechada = true;
+    }
+
+    public void escondeBotaoAumento() {
+        mostrarBotaoAumento = false;
+    }
+
+    public void escondeBotaoAbertaFechada() {
+        mostrarBotaoAbertaFechada = false;
     }
 }

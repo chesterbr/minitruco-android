@@ -43,6 +43,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     public void cartaJogada(Jogador j, Carta c) {
         mesa.escondePergunta();
         mesa.setPosicaoVez(0);
+        mesa.escondeBotaoAumento();
+        mesa.escondeBotaoAbertaFechada();
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
         activity.handler.sendMessage(Message.obtain(activity.handler,
@@ -123,6 +125,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     public void maoFechada(int[] pontosEquipe) {
         int pontosNos = pontosEquipe[getEquipe() - 1];
         int pontosEles = pontosEquipe[getEquipeAdversaria() - 1];
+        mesa.escondeBotaoAumento();
+        mesa.escondeBotaoAbertaFechada();
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
         activity.handler.sendMessage(Message.obtain(activity.handler,
@@ -191,6 +195,16 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
                 && (valorProximaAposta > 0) && partida.isPlacarPermiteAumento();
         boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
                 && podeFechada;
+        if (mostraBtnAumento) {
+            mesa.mostraBotaoAumento(valorProximaAposta);
+        } else {
+            mesa.escondeBotaoAumento();
+        }
+        if (mostraBtnAbertaFechada) {
+            mesa.mostraBotaoAbertaFechada();
+        } else {
+            mesa.escondeBotaoAbertaFechada();
+        }
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 mostraBtnAumento ? TrucoActivity.MSG_MOSTRA_BOTAO_AUMENTO
                         : TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
