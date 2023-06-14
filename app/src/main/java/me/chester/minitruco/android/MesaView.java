@@ -435,6 +435,7 @@ public class MesaView extends View {
                 }
                 if (mostrarBotaoAumento && rectBotaoAumento.contains(x, y)) {
                     mostrarBotaoAumento = false;
+                    statusVez = STATUS_VEZ_HUMANO_AGUARDANDO;
                     trucoActivity.partida.aumentaAposta(trucoActivity.jogadorHumano);
                 }
                 if (mostrarBotaoAbertaFechada && rectBotaoAbertaFechada.contains(x, y)) {
