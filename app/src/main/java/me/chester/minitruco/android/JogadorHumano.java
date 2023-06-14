@@ -184,7 +184,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         LOGGER.log(Level.INFO, "vez do jogador " + posicaoNaTela(j));
         mesa.escondeBotaoAumento();
         mesa.escondeBotaoAbertaFechada();
-        if (j instanceof JogadorHumano) {
+        if (j.equals(this)) {
             if ((valorProximaAposta > 0) && partida.isPlacarPermiteAumento()) {
                 mesa.mostraBotaoAumento(valorProximaAposta);
             }
