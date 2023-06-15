@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="opcoes_default_servidor">minitruco.chester.me</string>
+
+    <string-array name="fonte_nomes">
+        <item>Normal</item>
+        <item>Grande</item>
+        <item>Enorme</item>
+    </string-array>
+
+    <string-array name="fonte_valores">
+        <item>1</item>
+        <item>5</item>
+        <item>8</item>
+    </string-array>
+
     <string-array name="baralhos_nomes">
         <item>Verde</item>
         <item>Vermelho</item>
