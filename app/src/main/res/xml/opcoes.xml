@@ -18,7 +18,6 @@
             android:key="escalaFonte"
             android:summary="Aumente o tamanho da fonte dos balões, botões e perguntas do jogo"
             android:title="Tamanho do Texto" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="animacaoRapida"
