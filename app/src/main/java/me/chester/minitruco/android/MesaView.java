@@ -95,6 +95,7 @@ public class MesaView extends View {
     private RectF rectBotaoAumento;
     private RectF rectBotaoAbertaFechada;
     private float tamanhoFonte;
+    private float divisorTamanhoFonte = 20;
 
     /**
      * É true se a view já está pronta para responder a solicitações da partida
@@ -207,6 +208,17 @@ public class MesaView extends View {
     }
 
     /**
+     * Ajusta (aumenta) o tamanho da fonte dos textos dos balões, botões, etc
+     *
+     * @param escala valor de 1 (escala normal) a 8 (pode até ser mais, mas
+     *               aí a interface quebra muito; mesmo 8 já fica estourado em
+     *               telas muito pequenas); não é exatamente linear
+     */
+    public void setEscalaFonte(int escala) {
+        divisorTamanhoFonte = 21f - escala;
+    }
+
+    /**
      * Informa à mesa que uma animação começou (garantindo refreshes da tela
      * enquanto ela durar).
      *
@@ -253,7 +265,7 @@ public class MesaView extends View {
         DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
         tamanhoFonte = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_PX,
-            Math.min(w, h) / 20f,
+            Math.min(w, h) / divisorTamanhoFonte,
             displayMetrics
         );
 

@@ -159,6 +159,7 @@ public class TrucoActivity extends Activity {
         mesa = findViewById(R.id.MesaView01);
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
         mesa.velocidade = preferences.getBoolean("animacaoRapida", false) ? 4 : 1;
+        mesa.setEscalaFonte(Integer.parseInt(preferences.getString("escalaFonte", "1")));
         mesa.setTrucoActivity(this);
         mesa.setIndiceDesenhoCartaFechada(preferences.getInt("indiceDesenhoCartaFechada", 0));
         mesa.setTextoAumento(3, getString(R.string.botao_aumento_truco));
