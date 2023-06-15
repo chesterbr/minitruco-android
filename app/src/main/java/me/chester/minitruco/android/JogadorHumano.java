@@ -43,10 +43,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     public void cartaJogada(Jogador j, Carta c) {
         mesa.escondePergunta();
         mesa.setPosicaoVez(0);
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
+        mesa.escondeBotaoAumento();
+        mesa.escondeBotaoAbertaFechada();
         mesa.descarta(c, posicaoNaTela(j));
         LOGGER.log(Level.INFO, "Jogador na posicao de tela " + posicaoNaTela(j)
                 + " jogou " + c);
@@ -123,10 +121,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     public void maoFechada(int[] pontosEquipe) {
         int pontosNos = pontosEquipe[getEquipe() - 1];
         int pontosEles = pontosEquipe[getEquipeAdversaria() - 1];
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
+        mesa.escondeBotaoAumento();
+        mesa.escondeBotaoAbertaFechada();
         activity.handler.sendMessage(Message.obtain(activity.handler,
                 TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
         activity.setValorMao(0);
@@ -186,21 +182,17 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void vez(Jogador j, boolean podeFechada) {
         LOGGER.log(Level.INFO, "vez do jogador " + posicaoNaTela(j));
-        mesa.vaiJogarFechada = false;
-        boolean mostraBtnAumento = (j instanceof JogadorHumano)
-                && (valorProximaAposta > 0) && partida.isPlacarPermiteAumento();
-        boolean mostraBtnAbertaFechada = (j instanceof JogadorHumano)
-                && podeFechada;
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                mostraBtnAumento ? TrucoActivity.MSG_MOSTRA_BOTAO_AUMENTO
-                        : TrucoActivity.MSG_ESCONDE_BOTAO_AUMENTO));
-        activity.handler
-                .sendMessage(Message
-                        .obtain(activity.handler,
-                                mostraBtnAbertaFechada ? TrucoActivity.MSG_MOSTRA_BOTAO_ABERTA_FECHADA
-                                        : TrucoActivity.MSG_ESCONDE_BOTAO_ABERTA_FECHADA));
-        mesa.setStatusVez(j instanceof JogadorHumano ? MesaView.STATUS_VEZ_HUMANO_OK
-                : MesaView.STATUS_VEZ_OUTRO);
+        mesa.escondeBotaoAumento();
+        mesa.escondeBotaoAbertaFechada();
+        if (j.equals(this)) {
+            if ((valorProximaAposta > 0) && partida.isPlacarPermiteAumento()) {
+                mesa.mostraBotaoAumento(valorProximaAposta);
+            }
+            if (podeFechada) {
+                mesa.mostraBotaoAbertaFechada();
+            }
+        }
+        mesa.vez(j.equals(this));
         mesa.setPosicaoVez(posicaoNaTela(j));
     }
 

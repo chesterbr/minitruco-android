@@ -15,6 +15,7 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
@@ -78,9 +79,12 @@ public class MesaView extends View {
     private final float density = getResources().getDisplayMetrics().density;
     private boolean mostrarPerguntaMaoDeX = false;
     private boolean mostrarPerguntaAumento = false;
+    private boolean mostrarBotaoAumento = false;
+    private boolean mostrarBotaoAbertaFechada = false;
     private String perguntaAumento;
     private String perguntaMaoDeX;
     public boolean vaiJogarFechada;
+    private int valorProximaAposta;
     protected int velocidade;
     private int posicaoVez;
     private int corFundoCartaBalao = Color.WHITE;
@@ -88,13 +92,22 @@ public class MesaView extends View {
     private Rect rectDialog;
     private RectF rectBotaoSim;
     private RectF rectBotaoNao;
+    private RectF rectBotaoAumento;
+    private RectF rectBotaoAbertaFechada;
     private float tamanhoFonte;
+    private float divisorTamanhoFonte = 20;
 
     /**
      * É true se a view já está pronta para responder a solicitações da partida
      * (mover cartas, acionar balões, etc)
      */
     private boolean inicializada = false;
+
+    /**
+     * Guarda o texto do botão de aumento para cada valor de aumento (ex.:
+     * "truco" para 3, "seis" para 6, etc)
+     */
+    private HashMap<Integer, String> textosBotaoAumento = new HashMap<>();
 
     public boolean isInicializada() {
         return inicializada;
@@ -195,6 +208,17 @@ public class MesaView extends View {
     }
 
     /**
+     * Ajusta (aumenta) o tamanho da fonte dos textos dos balões, botões, etc
+     *
+     * @param escala valor de 1 (escala normal) a 8 (pode até ser mais, mas
+     *               aí a interface quebra muito; mesmo 8 já fica estourado em
+     *               telas muito pequenas); não é exatamente linear
+     */
+    public void setEscalaFonte(int escala) {
+        divisorTamanhoFonte = 21f - escala;
+    }
+
+    /**
      * Informa à mesa que uma animação começou (garantindo refreshes da tela
      * enquanto ela durar).
      *
@@ -241,7 +265,7 @@ public class MesaView extends View {
         DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
         tamanhoFonte = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_PX,
-            Math.min(w, h) / 20f,
+            Math.min(w, h) / divisorTamanhoFonte,
             displayMetrics
         );
 
@@ -276,6 +300,21 @@ public class MesaView extends View {
             topBotao,
             rectBotaoSim.right + margemBotao + larguraBotao,
             bottomBotao);
+
+        // Define posição e tamanho dos botões de aumento e carta aberta/fechada
+        // (são quadrados cujo lado é a altura da carta)
+        rectBotaoAumento = new RectF(
+            margemBotao,
+            h - margemBotao - CartaVisual.altura,
+            margemBotao + CartaVisual.altura,
+            h - margemBotao
+        );
+        rectBotaoAbertaFechada = new RectF(
+            w - margemBotao - CartaVisual.altura,
+            rectBotaoAumento.top,
+            w - margemBotao,
+            rectBotaoAumento.bottom
+        );
 
         // Posiciona o vira e as cartas decorativas do baralho, que são fixos
         cartas[0].movePara(leftBaralho, topBaralho);
@@ -398,16 +437,26 @@ public class MesaView extends View {
             case MotionEvent.ACTION_DOWN:
                 return true;
             case MotionEvent.ACTION_UP:
-                if (rectBotaoSim.contains((int) event.getX(), (int) event.getY())) {
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+                if (rectBotaoSim.contains(x, y)) {
                     respondePergunta(true);
                 }
-                if (rectBotaoNao.contains((int) event.getX(), (int) event.getY())) {
+                if (rectBotaoNao.contains(x, y)) {
                     respondePergunta(false);
+                }
+                if (mostrarBotaoAumento && rectBotaoAumento.contains(x, y)) {
+                    mostrarBotaoAumento = false;
+                    statusVez = STATUS_VEZ_HUMANO_AGUARDANDO;
+                    trucoActivity.partida.aumentaAposta(trucoActivity.jogadorHumano);
+                }
+                if (mostrarBotaoAbertaFechada && rectBotaoAbertaFechada.contains(x, y)) {
+                    vaiJogarFechada = !vaiJogarFechada;
                 }
                 // Verificamos primeiro a carta mais à direita porque ela é desenhada
                 // em cima da do meio, e esta em cima da carta à esquerda
                 for (int i = 6; i >= 4; i--) {
-                    if (cartas[i].isDentro(event.getX(), event.getY())) {
+                    if (cartas[i].isDentro(x, y)) {
                         jogaCarta(i - 4);
                     }
                 }
@@ -457,16 +506,17 @@ public class MesaView extends View {
     }
 
     /**
-     * Permite à Activity informar se o humano está na própria vez e liberado para jogar,
-     * se está na própria vez mas aguarda resposta de um truco, mão de 10/11, etc.,
-     * ou se é a vez de outro jogador.
+     * Recebe a informação de que é a vez de alguém jogar.
      *
-     * @param vezHumano um entre STATUS_VEZ_HUMANO_OK, STATUS_VEZ_HUMANO_AGUARDANDO e
-     *                  STATUS_VEZ_OUTRO
+     * @param humano true se for a vez do humano, false se for a vez de outro jogador
      */
-    public void setStatusVez(int vezHumano) {
+    public void vez(boolean humano) {
         aguardaFimAnimacoes();
-        this.statusVez = vezHumano;
+        if (humano) {
+            statusVez = STATUS_VEZ_HUMANO_OK;
+        } else {
+            statusVez = STATUS_VEZ_OUTRO;
+        }
     }
 
     /**
@@ -718,7 +768,15 @@ public class MesaView extends View {
 
         desenhaBalao(canvas);
         desenhaIndicadorDeVez(canvas);
+        if (mostrarBotaoAumento) {
+            desenhaBotao(textosBotaoAumento.get(valorProximaAposta), canvas, rectBotaoAumento);
+        }
+        if (mostrarBotaoAbertaFechada) {
+            desenhaBotao(vaiJogarFechada ? "Aberta" : "Fechada", canvas, rectBotaoAbertaFechada);
+        }
 
+        // TODO: modo automático nunca pede truco (e crasha bonito se a gente
+        //  tenta pedir aqui; de qualquer forma, mover isso pra outro lugar)
         if (trucoActivity != null && trucoActivity.partida != null && trucoActivity.partida.isJogoAutomatico()) {
             jogaCarta(0);
             jogaCarta(1);
@@ -904,5 +962,43 @@ public class MesaView extends View {
     public void escondePergunta() {
         mostrarPerguntaAumento = false;
         mostrarPerguntaMaoDeX = false;
+    }
+
+    /**
+     * Mostra o botão de aumento com o texto apropriado ("truco", "seis", etc.)
+     * o
+     * @param valorProximaAposta valor para o qual se está querendo aumentar
+     */
+    public void mostraBotaoAumento(int valorProximaAposta) {
+        this.valorProximaAposta = valorProximaAposta;
+        mostrarBotaoAumento = true;
+    }
+
+    /**
+     * Mostra o botão que permite jogar uma carta aberta ou fechada.
+     * <p>
+     * Ele é mostrado no estado padrão (aberta) e, se o jogador clicar nele,
+     * ele alterna entre aberta e fechada.
+     */
+    public void mostraBotaoAbertaFechada() {
+        mostrarBotaoAbertaFechada = true;
+        vaiJogarFechada = false;
+    }
+
+    public void escondeBotaoAumento() {
+        mostrarBotaoAumento = false;
+    }
+
+    public void escondeBotaoAbertaFechada() {
+        mostrarBotaoAbertaFechada = false;
+    }
+
+    /**
+     * Configura a mesa para mostrar o texto especificado quando o próximo
+     * aumento for do valor indicado. Ex.: "truco" para 3 (ou 4), "seis" para 6,
+     * etc.
+     */
+    public void setTextoAumento(int valor, String texto) {
+        textosBotaoAumento.put(valor, texto);
     }
 }

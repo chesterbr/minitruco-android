@@ -24,8 +24,6 @@ import me.chester.minitruco.R;
 
 /**
  * Permite ao usuário escolher um baralho (i.e., o desenho da carta fechada).
- * <p>
- * Os nomes e resources das opções são definidos em /res/values/baralhos.xml.
  */
 public class BaralhoPreference extends Preference {
 

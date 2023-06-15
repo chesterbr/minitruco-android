@@ -11,6 +11,13 @@
             android:key="corFundoCarta"
             android:summary="Se o &quot;modo escuro&quot; do aparelho deixa estes elementos ilegíveis, ajuste aqui"
             android:title="Cor de fundo das cartas e balões" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/fonte_nomes"
+            android:entryValues="@array/fonte_valores"
+            android:key="escalaFonte"
+            android:summary="Aumente o tamanho da fonte dos balões, botões e perguntas do jogo"
+            android:title="Tamanho do Texto" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="animacaoRapida"
