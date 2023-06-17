@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.HashSet;
@@ -151,13 +152,17 @@ public class JogadorConectado extends Jogador implements Runnable {
                 try {
                     Comando c = (Comando) Class.forName(
                             "me.chester.minitruco.server.Comando"
-                                    + comando).newInstance();
+                                    + comando).getDeclaredConstructor().newInstance();
                     c.executa(args, this);
                 } catch (ClassNotFoundException e) {
                     println("X CI");
                 } catch (InstantiationException e) {
                     println("X CI");
                 } catch (IllegalAccessException e) {
+                    println("X CI");
+                } catch (InvocationTargetException e) {
+                    println("X CI");
+                } catch (NoSuchMethodException e) {
                     println("X CI");
                 }
             }
