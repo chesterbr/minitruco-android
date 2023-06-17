@@ -257,7 +257,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
 
         runOnUiThread(() -> {
             new AlertDialog.Builder(this)
-                    .setIcon(R.drawable.icon)
+                    .setIcon(R.mipmap.ic_launcher)
                     .setTitle("Nome")
                     .setMessage(mensagem)
                     .setView(editNomeJogador)
