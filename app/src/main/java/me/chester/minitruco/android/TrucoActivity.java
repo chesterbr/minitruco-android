@@ -47,7 +47,6 @@ import me.chester.minitruco.core.PartidaLocal;
  */
 public class TrucoActivity extends Activity {
 
-    static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
     static final int MSG_OFERECE_NOVA_PARTIDA = 2;
     static final int MSG_REMOVE_NOVA_PARTIDA = 3;
     public static final String SEPARADOR_PLACAR_PARTIDAS = " x ";
@@ -65,10 +64,6 @@ public class TrucoActivity extends Activity {
     final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MSG_TIRA_DESTAQUE_PLACAR:
-                    textViewNos.setTextColor(Color.BLACK);
-                    textViewRivais.setTextColor(Color.BLACK);
-                    break;
                 case MSG_OFERECE_NOVA_PARTIDA:
                     if (partida instanceof PartidaLocal) {
                         btnNovaPartida.setVisibility(View.VISIBLE);
@@ -87,8 +82,8 @@ public class TrucoActivity extends Activity {
     };
 
     /**
-     * Atualiza o placar com a nova pontuação. Se houve mudança, pinta o placar
-     * do time que fez a pontuação.
+     * Atualiza o placar com a nova pontuação. Se houve mudança, destaca o
+     * placar do time que pontuou.
      *
      * @param pontosNos pontos da dupla do jogador humano
      * @param pontosRivais pontos da outra dupla
@@ -107,6 +102,17 @@ public class TrucoActivity extends Activity {
             placar[1] = pontosRivais;
         });
     }
+
+    /**
+     * Remove o destaque do placar do time que pontuou (se houver um).
+     */
+    void tiraDestaqueDoPlacar() {
+        runOnUiThread(() -> {
+            textViewNos.setTextColor(Color.BLACK);
+            textViewRivais.setTextColor(Color.BLACK);
+        });
+    }
+
 
     private SharedPreferences preferences;
     private ImageView imageValorMao;

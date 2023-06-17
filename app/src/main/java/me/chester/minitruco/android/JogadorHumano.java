@@ -2,7 +2,6 @@ package me.chester.minitruco.android;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Message;
 
 import androidx.preference.PreferenceManager;
 
@@ -81,8 +80,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         mesa.distribuiMao();
         activity.setValorMao(partida.getModo().valorInicialDaMao());
         mesa.setPosicaoVez(posicaoNaTela(jogadorQueAbre));
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
+        activity.tiraDestaqueDoPlacar();
     }
 
     @Override
