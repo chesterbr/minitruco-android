@@ -116,14 +116,13 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void maoFechada(int[] pontosEquipe) {
         int pontosNos = pontosEquipe[getEquipe() - 1];
-        int pontosEles = pontosEquipe[getEquipeAdversaria() - 1];
+        int pontosRivais = pontosEquipe[getEquipeAdversaria() - 1];
+        activity.atualizaPlacar(pontosNos, pontosRivais);
+        activity.setValorMao(0);
         mesa.escondeBotaoAumento();
         mesa.escondeBotaoAbertaFechada();
-        activity.atualizaPlacar(pontosNos, pontosEles);
-        activity.setValorMao(0);
         mesa.setPosicaoVez(0);
         mesa.recolheMao();
-
     }
 
     @Override
