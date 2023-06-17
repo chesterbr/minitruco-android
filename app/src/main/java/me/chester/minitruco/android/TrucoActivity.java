@@ -10,8 +10,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +45,6 @@ import me.chester.minitruco.core.PartidaLocal;
  */
 public class TrucoActivity extends Activity {
 
-    static final int MSG_OFERECE_NOVA_PARTIDA = 2;
     public static final String SEPARADOR_PLACAR_PARTIDAS = " x ";
     private static boolean mIsViva = false;
     final int[] placar = new int[2];
@@ -59,23 +56,6 @@ public class TrucoActivity extends Activity {
     TextView textViewNos;
     TextView textViewRivais;
     Button btnNovaPartida;
-
-    final Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_OFERECE_NOVA_PARTIDA:
-                    if (partida instanceof PartidaLocal) {
-                        btnNovaPartida.setVisibility(View.VISIBLE);
-                        if (partida.isJogoAutomatico()) {
-                            btnNovaPartida.performClick();
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     /**
      * Atualiza o placar com a nova pontuação. Se houve mudança, destaca o
@@ -370,8 +350,12 @@ public class TrucoActivity extends Activity {
             } else {
                 textViewPartidas.setText(pontos[0] + SEPARADOR_PLACAR_PARTIDAS + (Integer.parseInt(pontos[1]) + 1));
             }
-            handler.sendMessage(Message.obtain(handler,
-                MSG_OFERECE_NOVA_PARTIDA));
+            if (partida instanceof PartidaLocal) {
+                btnNovaPartida.setVisibility(View.VISIBLE);
+                if (partida.isJogoAutomatico()) {
+                    btnNovaPartida.performClick();
+                }
+            }
         });
     }
 }
