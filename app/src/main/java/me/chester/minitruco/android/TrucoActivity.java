@@ -10,8 +10,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,10 +45,6 @@ import me.chester.minitruco.core.PartidaLocal;
  */
 public class TrucoActivity extends Activity {
 
-    static final int MSG_ATUALIZA_PLACAR = 0;
-    static final int MSG_TIRA_DESTAQUE_PLACAR = 1;
-    static final int MSG_OFERECE_NOVA_PARTIDA = 2;
-    static final int MSG_REMOVE_NOVA_PARTIDA = 3;
     public static final String SEPARADOR_PLACAR_PARTIDAS = " x ";
     private static boolean mIsViva = false;
     final int[] placar = new int[2];
@@ -59,45 +53,43 @@ public class TrucoActivity extends Activity {
     Partida partida;
     private MesaView mesa;
     private TextView textViewPartidas;
+    TextView textViewNos;
+    TextView textViewRivais;
+    Button btnNovaPartida;
 
-    final Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            TextView textViewNos = findViewById(R.id.textViewNos);
-            TextView textViewRivais = findViewById(R.id.textViewRivais);
-            Button btnNovaPartida = findViewById(R.id.btnNovaPartida);
-            switch (msg.what) {
-                case MSG_ATUALIZA_PLACAR:
-                    if (placar[0] != msg.arg1) {
-                        textViewNos.setTextColor(Color.YELLOW);
-                    }
-                    if (placar[1] != msg.arg2) {
-                        textViewRivais.setTextColor(Color.YELLOW);
-                    }
-                    textViewNos.setText((msg.arg1 < 10 ? " " : "") + Integer.toString(msg.arg1));
-                    textViewRivais.setText(Integer.toString(msg.arg2) + (msg.arg2 < 10 ? " " : ""));
-                    placar[0] = msg.arg1;
-                    placar[1] = msg.arg2;
-                    break;
-                case MSG_TIRA_DESTAQUE_PLACAR:
-                    textViewNos.setTextColor(Color.BLACK);
-                    textViewRivais.setTextColor(Color.BLACK);
-                    break;
-                case MSG_OFERECE_NOVA_PARTIDA:
-                    if (partida instanceof PartidaLocal) {
-                        btnNovaPartida.setVisibility(View.VISIBLE);
-                        if (partida.isJogoAutomatico()) {
-                            btnNovaPartida.performClick();
-                        }
-                    }
-                    break;
-                case MSG_REMOVE_NOVA_PARTIDA:
-                    btnNovaPartida.setVisibility(View.INVISIBLE);
-                    break;
-                default:
-                    break;
+    /**
+     * Atualiza o placar com a nova pontuação. Se houve mudança, destaca o
+     * placar do time que pontuou.
+     *
+     * @param pontosNos pontos da dupla do jogador humano
+     * @param pontosRivais pontos da outra dupla
+     */
+    void atualizaPlacar(int pontosNos, int pontosRivais) {
+        runOnUiThread(() -> {
+            if (placar[0] != pontosNos) {
+                textViewNos.setTextColor(Color.YELLOW);
             }
-        }
-    };
+            if (placar[1] != pontosRivais) {
+                textViewRivais.setTextColor(Color.YELLOW);
+            }
+            textViewNos.setText((pontosNos < 10 ? " " : "") + Integer.toString(pontosNos));
+            textViewRivais.setText(Integer.toString(pontosRivais) + (pontosRivais < 10 ? " " : ""));
+            placar[0] = pontosNos;
+            placar[1] = pontosRivais;
+        });
+    }
+
+    /**
+     * Remove o destaque do placar do time que pontuou (se houver um).
+     */
+    void tiraDestaqueDoPlacar() {
+        runOnUiThread(() -> {
+            textViewNos.setTextColor(Color.BLACK);
+            textViewRivais.setTextColor(Color.BLACK);
+        });
+    }
+
+
     private SharedPreferences preferences;
     private ImageView imageValorMao;
     private ImageView[] imagesResultadoRodada;
@@ -148,6 +140,9 @@ public class TrucoActivity extends Activity {
         reorientaLayoutPlacar();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         textViewPartidas = findViewById(R.id.textViewPartidas);
+        textViewNos = findViewById(R.id.textViewNos);
+        textViewRivais = findViewById(R.id.textViewRivais);
+        btnNovaPartida = findViewById(R.id.btnNovaPartida);
         imageValorMao = findViewById(R.id.imageValorMao);
         imagesResultadoRodada = new ImageView[3];
         imagesResultadoRodada[0] = findViewById(R.id.imageResultadoRodada1);
@@ -182,7 +177,7 @@ public class TrucoActivity extends Activity {
     }
 
     public void novaPartidaClickHandler(View v) {
-        Message.obtain(handler, MSG_REMOVE_NOVA_PARTIDA).sendToTarget();
+        btnNovaPartida.setVisibility(View.INVISIBLE);
         criaEIniciaNovoJogo();
     }
 
@@ -355,8 +350,12 @@ public class TrucoActivity extends Activity {
             } else {
                 textViewPartidas.setText(pontos[0] + SEPARADOR_PLACAR_PARTIDAS + (Integer.parseInt(pontos[1]) + 1));
             }
-            handler.sendMessage(Message.obtain(handler,
-                MSG_OFERECE_NOVA_PARTIDA));
+            if (partida instanceof PartidaLocal) {
+                btnNovaPartida.setVisibility(View.VISIBLE);
+                if (partida.isJogoAutomatico()) {
+                    btnNovaPartida.performClick();
+                }
+            }
         });
     }
 }

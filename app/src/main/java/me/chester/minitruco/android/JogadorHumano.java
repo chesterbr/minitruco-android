@@ -2,7 +2,6 @@ package me.chester.minitruco.android;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Message;
 
 import androidx.preference.PreferenceManager;
 
@@ -81,8 +80,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         mesa.distribuiMao();
         activity.setValorMao(partida.getModo().valorInicialDaMao());
         mesa.setPosicaoVez(posicaoNaTela(jogadorQueAbre));
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_TIRA_DESTAQUE_PLACAR));
+        activity.tiraDestaqueDoPlacar();
     }
 
     @Override
@@ -90,9 +88,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         incrementaEstatistica("statPartidas");
         activity.placar[0] = placarEquipe1;
         activity.placar[1] = placarEquipe2;
-        activity.handler.sendMessage(Message
-                .obtain(activity.handler, TrucoActivity.MSG_ATUALIZA_PLACAR,
-                        placarEquipe1, placarEquipe2));
+        activity.atualizaPlacar(placarEquipe1, placarEquipe2);
     }
 
     @Override
@@ -120,15 +116,13 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void maoFechada(int[] pontosEquipe) {
         int pontosNos = pontosEquipe[getEquipe() - 1];
-        int pontosEles = pontosEquipe[getEquipeAdversaria() - 1];
+        int pontosRivais = pontosEquipe[getEquipeAdversaria() - 1];
+        activity.atualizaPlacar(pontosNos, pontosRivais);
+        activity.setValorMao(0);
         mesa.escondeBotaoAumento();
         mesa.escondeBotaoAbertaFechada();
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
-        activity.setValorMao(0);
         mesa.setPosicaoVez(0);
         mesa.recolheMao();
-
     }
 
     @Override
