@@ -48,7 +48,6 @@ import me.chester.minitruco.core.PartidaLocal;
 public class TrucoActivity extends Activity {
 
     static final int MSG_OFERECE_NOVA_PARTIDA = 2;
-    static final int MSG_REMOVE_NOVA_PARTIDA = 3;
     public static final String SEPARADOR_PLACAR_PARTIDAS = " x ";
     private static boolean mIsViva = false;
     final int[] placar = new int[2];
@@ -71,9 +70,6 @@ public class TrucoActivity extends Activity {
                             btnNovaPartida.performClick();
                         }
                     }
-                    break;
-                case MSG_REMOVE_NOVA_PARTIDA:
-                    btnNovaPartida.setVisibility(View.INVISIBLE);
                     break;
                 default:
                     break;
@@ -201,7 +197,7 @@ public class TrucoActivity extends Activity {
     }
 
     public void novaPartidaClickHandler(View v) {
-        Message.obtain(handler, MSG_REMOVE_NOVA_PARTIDA).sendToTarget();
+        btnNovaPartida.setVisibility(View.INVISIBLE);
         criaEIniciaNovoJogo();
     }
 
