@@ -90,9 +90,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         incrementaEstatistica("statPartidas");
         activity.placar[0] = placarEquipe1;
         activity.placar[1] = placarEquipe2;
-        activity.handler.sendMessage(Message
-                .obtain(activity.handler, TrucoActivity.MSG_ATUALIZA_PLACAR,
-                        placarEquipe1, placarEquipe2));
+        activity.atualizaPlacar(placarEquipe1, placarEquipe2);
     }
 
     @Override
@@ -123,8 +121,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         int pontosEles = pontosEquipe[getEquipeAdversaria() - 1];
         mesa.escondeBotaoAumento();
         mesa.escondeBotaoAbertaFechada();
-        activity.handler.sendMessage(Message.obtain(activity.handler,
-                TrucoActivity.MSG_ATUALIZA_PLACAR, pontosNos, pontosEles));
+        activity.atualizaPlacar(pontosNos, pontosEles);
         activity.setValorMao(0);
         mesa.setPosicaoVez(0);
         mesa.recolheMao();
