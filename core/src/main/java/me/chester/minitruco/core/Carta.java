@@ -69,8 +69,6 @@ public class Carta {
 
     private static final String LETRAS_VALIDAS = "A23456789JQK";
 
-    private boolean cartaEmJogo = true;
-
     private char letra = LETRA_NENHUMA;
 
     private int naipe = NAIPE_NENHUM;
@@ -111,10 +109,6 @@ public class Carta {
 
     public int getNaipe() {
         return naipe;
-    }
-
-    public int getValor() {
-        return LETRAS_VALIDAS.indexOf(letra);
     }
 
     /**
@@ -175,24 +169,6 @@ public class Carta {
      */
     public String toString() {
         return letra + "" + ("coepx").charAt(naipe);
-    }
-
-    /**
-     * Escurece/clareia uma carta para indicar que ela não está/está em partida
-     *
-     * @param cartaEmJogo
-     *            true para clarear, false para escurecer
-     */
-    public void setCartaEmJogo(boolean cartaEmJogo) {
-        this.cartaEmJogo = cartaEmJogo;
-    }
-
-    /**
-     * Indica se a carta está em partida, e, portanto, deve ficar "clarinha" (as
-     * cartas de rodadas passadas são escurecidas
-     */
-    public boolean isCartaEmJogo() {
-        return cartaEmJogo;
     }
 
 }

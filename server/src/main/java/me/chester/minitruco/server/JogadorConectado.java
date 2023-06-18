@@ -24,8 +24,6 @@ import me.chester.minitruco.core.Jogador;
  */
 public class JogadorConectado extends Jogador implements Runnable {
 
-    public static final String IF_MODIFIED_SINCE_HTTP_HEADER = "If-Modified-Since: ";
-
     /**
      * Nomes de jogadores online (para evitar duplicidade)
      */

@@ -10,9 +10,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 
 import androidx.preference.PreferenceManager;
@@ -24,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.chester.minitruco.BuildConfig;
-import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;

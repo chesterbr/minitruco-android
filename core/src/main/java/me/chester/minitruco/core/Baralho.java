@@ -28,10 +28,6 @@ public class Baralho {
         this.limpo = limpo;
     }
 
-    public boolean isLimpo() {
-        return limpo;
-    }
-
     /**
      * Sorteia uma carta do baralho.
      * <p>
