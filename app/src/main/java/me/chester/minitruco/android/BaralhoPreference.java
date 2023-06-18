@@ -88,11 +88,9 @@ public class BaralhoPreference extends Preference {
      * Gera cada item (view) da lista de baralhos, com o nome e a imagem.
      */
     private class BaralhosAdapter extends ArrayAdapter<String> {
-        private final AlertDialog dialog;
 
         public BaralhosAdapter(AlertDialog dialog) {
             super(BaralhoPreference.this.getContext(), 0, BaralhoPreference.this.nomes);
-            this.dialog = dialog;
         }
 
         @NonNull

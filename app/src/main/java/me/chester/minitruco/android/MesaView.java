@@ -107,7 +107,7 @@ public class MesaView extends View {
      * Guarda o texto do botão de aumento para cada valor de aumento (ex.:
      * "truco" para 3, "seis" para 6, etc)
      */
-    private HashMap<Integer, String> textosBotaoAumento = new HashMap<>();
+    private final HashMap<Integer, String> textosBotaoAumento = new HashMap<>();
 
     public boolean isInicializada() {
         return inicializada;

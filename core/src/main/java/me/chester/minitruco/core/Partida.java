@@ -31,7 +31,7 @@ public abstract class Partida implements Runnable {
     /**
      * Modalidade do jogo (paulista, mineiro, baralho limpo, manilha velha...)
      */
-    protected Modo modo;
+    protected final Modo modo;
 
     /**
      * Rodada que estamos jogando (de 1 a 3).

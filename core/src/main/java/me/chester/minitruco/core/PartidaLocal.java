@@ -177,7 +177,6 @@ public class PartidaLocal extends Partida {
             jogadores[i].inicioMao(jogadorQueAbre);
         }
 
-        int rndFrase = Math.abs(rand.nextInt());
         if (pontosEquipe[0] == modo.pontuacaoParaMaoDeX()
                 ^ pontosEquipe[1] == modo.pontuacaoParaMaoDeX()) {
             if (pontosEquipe[0] == modo.pontuacaoParaMaoDeX()) {

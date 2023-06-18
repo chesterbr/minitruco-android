@@ -72,8 +72,8 @@ public class TrucoActivity extends Activity {
             if (placar[1] != pontosRivais) {
                 textViewRivais.setTextColor(Color.YELLOW);
             }
-            textViewNos.setText((pontosNos < 10 ? " " : "") + Integer.toString(pontosNos));
-            textViewRivais.setText(Integer.toString(pontosRivais) + (pontosRivais < 10 ? " " : ""));
+            textViewNos.setText((pontosNos < 10 ? " " : "") + pontosNos);
+            textViewRivais.setText(pontosRivais + (pontosRivais < 10 ? " " : ""));
             placar[0] = pontosNos;
             placar[1] = pontosRivais;
         });
@@ -344,7 +344,7 @@ public class TrucoActivity extends Activity {
     @SuppressLint("SetTextI18n")
     public void jogoFechado(int numEquipeVencedora) {
         runOnUiThread(() -> {
-            String pontos[] = textViewPartidas.getText().toString().split(SEPARADOR_PLACAR_PARTIDAS);
+            String[] pontos = textViewPartidas.getText().toString().split(SEPARADOR_PLACAR_PARTIDAS);
             if (jogadorHumano.getEquipe() == numEquipeVencedora) {
                 textViewPartidas.setText((Integer.parseInt(pontos[0]) + 1) + SEPARADOR_PLACAR_PARTIDAS + pontos[1]);
             } else {

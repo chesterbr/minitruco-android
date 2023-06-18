@@ -10,7 +10,7 @@ package me.chester.minitruco.core;
  */
 public interface Modo {
 
-    public static Modo fromString(String modoStr) {
+    static Modo fromString(String modoStr) {
         switch (modoStr) {
             case "M":
                 return new ModoMineiro();

@@ -94,12 +94,6 @@ public abstract class Jogador {
     }
 
     /**
-     * Estratégias suportadas pelos jbots
-     */
-    static final Estrategia[] ESTRATEGIAS = { new EstrategiaGasparotto(),
-            new EstrategiaSellani() };
-
-    /**
      * Informa que uma carta foi jogada na mesa.
      *
      * @param j

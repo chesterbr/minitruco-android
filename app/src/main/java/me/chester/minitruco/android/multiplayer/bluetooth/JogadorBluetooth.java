@@ -210,24 +210,4 @@ public class JogadorBluetooth extends Jogador implements Runnable {
         finaliza();
     }
 
-    public void jogoAbortadoPorComando() {
-        enviaMensagem("AB");
-    }
-
-    public void setGameLevel(int gameLevel) {
-        // n�o precisa tratar
-    }
-
-    public void setNickEstrategia() {
-        // n�o precisa tratar
-    }
-
-    public String getNickEstrategia() {
-        // n�o precisa tratar
-        return getNome(); // just to avoid unexpected usage of this method
-    }
-
-    public void mensagemEstrategia(Jogador j, String s) {
-        // n�o precisa tratar
-    }
 }
