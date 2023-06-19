@@ -76,7 +76,7 @@ public class MesaView extends View {
 
     private static final Random rand = new Random();
     private final Paint paintPergunta = new Paint();
-    private final float density = getResources().getDisplayMetrics().density;
+    private float density;
     private boolean mostrarPerguntaMaoDeX = false;
     private boolean mostrarPerguntaAumento = false;
     private boolean mostrarBotaoAumento = false;
@@ -85,7 +85,7 @@ public class MesaView extends View {
     private String perguntaMaoDeX;
     public boolean vaiJogarFechada;
     private int valorProximaAposta;
-    protected int velocidade;
+    protected int velocidade = 1;
     private int posicaoVez;
     private int corFundoCartaBalao = Color.WHITE;
     private TrucoActivity trucoActivity;
@@ -108,6 +108,13 @@ public class MesaView extends View {
      * "truco" para 3, "seis" para 6, etc)
      */
     private final HashMap<Integer, String> textosBotaoAumento = new HashMap<>();
+
+    /**
+     * Guarda o índice da última frase escolhida para cada tipo de balão (ex.:
+     * balão de pedido de aumento, balão de aceite, etc.), para evitar repetir
+     * a mesma frase imediatamente.
+     */
+    private final HashMap<String, Integer> ultimaFrase = new HashMap<>();
 
     public boolean isInicializada() {
         return inicializada;
@@ -143,7 +150,7 @@ public class MesaView extends View {
 
     private int posicaoBalao = 1;
     private long mostraBalaoAte = System.currentTimeMillis();
-    private String fraseBalao = null;
+    String fraseBalao = null;
     private boolean visivel = false;
 
     /**
@@ -189,14 +196,21 @@ public class MesaView extends View {
 
     public MesaView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init(context);
     }
 
     public MesaView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     public MesaView(Context context) {
         super(context);
+        init(context);
+    }
+
+    private void init(Context context) {
+        this.density = context.getResources().getDisplayMetrics().density;
     }
 
     public void setTrucoActivity(TrucoActivity trucoActivity) {
@@ -422,7 +436,13 @@ public class MesaView extends View {
         mostraBalaoAte = System.currentTimeMillis() + tempoMS / Math.min(velocidade, 2);
         Resources res = getResources();
         String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_" + chave, "array", "me.chester.minitruco"));
-        fraseBalao = frasesBalao[rndFrase % frasesBalao.length];
+        int indiceFrase;
+        do {
+            indiceFrase = rndFrase % frasesBalao.length;
+            rndFrase++;
+        } while (frasesBalao.length > 1 && ultimaFrase.containsKey(chave) && ultimaFrase.get(chave) == indiceFrase);
+        ultimaFrase.put(chave, indiceFrase);
+        fraseBalao = frasesBalao[indiceFrase];
         posicaoBalao = posicao;
         notificaAnimacao(mostraBalaoAte);
     }
