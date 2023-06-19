@@ -198,7 +198,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
      *            identificador da estatística (ex.: "statPartidas" para número
      *            de partidas jogadas)
      */
-    private void incrementaEstatistica(String chave) {
+    void incrementaEstatistica(String chave) {
         SharedPreferences preferences = PreferenceManager
                 .getDefaultSharedPreferences(activity);
         int partidas = preferences.getInt(chave, 0);
