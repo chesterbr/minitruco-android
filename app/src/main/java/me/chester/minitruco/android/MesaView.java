@@ -440,7 +440,7 @@ public class MesaView extends View {
         do {
             indiceFrase = rndFrase % frasesBalao.length;
             rndFrase++;
-        } while (ultimaFrase.containsKey(chave) && ultimaFrase.get(chave) == indiceFrase);
+        } while (frasesBalao.length > 1 && ultimaFrase.containsKey(chave) && ultimaFrase.get(chave) == indiceFrase);
         ultimaFrase.put(chave, indiceFrase);
         fraseBalao = frasesBalao[indiceFrase];
         posicaoBalao = posicao;
