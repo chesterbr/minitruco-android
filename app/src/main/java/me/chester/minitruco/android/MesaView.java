@@ -76,7 +76,7 @@ public class MesaView extends View {
 
     private static final Random rand = new Random();
     private final Paint paintPergunta = new Paint();
-    private final float density = getResources().getDisplayMetrics().density;
+    private float density;
     private boolean mostrarPerguntaMaoDeX = false;
     private boolean mostrarPerguntaAumento = false;
     private boolean mostrarBotaoAumento = false;
@@ -189,14 +189,21 @@ public class MesaView extends View {
 
     public MesaView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init(context);
     }
 
     public MesaView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     public MesaView(Context context) {
         super(context);
+        init(context);
+    }
+
+    private void init(Context context) {
+        this.density = context.getResources().getDisplayMetrics().density;
     }
 
     public void setTrucoActivity(TrucoActivity trucoActivity) {
