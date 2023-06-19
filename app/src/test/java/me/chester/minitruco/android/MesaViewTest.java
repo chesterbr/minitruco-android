@@ -45,4 +45,23 @@ class MesaViewTest {
         mesaView.diz("beatle", 1, 1, 4);
         assertEquals("john", mesaView.fraseBalao);
     }
+
+    @Test
+    void dizEscolheFraseDoBalaoBaseadaNoTipo() {
+        mesaView.diz("beatle", 1, 1, 0);
+        assertEquals("john", mesaView.fraseBalao);
+        mesaView.diz("cor", 1, 1, 0);
+        assertEquals("azul", mesaView.fraseBalao);
+    }
+
+    @Test
+    void dizNaoRepeteFraseDeUmMesmoTipoDeBalao() {
+        mesaView.diz("beatle", 1, 1, 0);
+        assertEquals("john", mesaView.fraseBalao);
+        mesaView.diz("beatle", 1, 1, 0);
+        assertEquals("paul", mesaView.fraseBalao);
+        mesaView.diz("beatle", 1, 1, 0);
+        assertEquals("john", mesaView.fraseBalao);
+    }
+
 }

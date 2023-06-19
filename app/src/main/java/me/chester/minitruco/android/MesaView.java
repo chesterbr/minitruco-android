@@ -109,6 +109,13 @@ public class MesaView extends View {
      */
     private final HashMap<Integer, String> textosBotaoAumento = new HashMap<>();
 
+    /**
+     * Guarda o índice da última frase escolhida para cada tipo de balão (ex.:
+     * balão de pedido de aumento, balão de aceite, etc.), para evitar repetir
+     * a mesma frase imediatamente.
+     */
+    private final HashMap<String, Integer> ultimaFrase = new HashMap<>();
+
     public boolean isInicializada() {
         return inicializada;
     }
@@ -429,7 +436,13 @@ public class MesaView extends View {
         mostraBalaoAte = System.currentTimeMillis() + tempoMS / Math.min(velocidade, 2);
         Resources res = getResources();
         String[] frasesBalao = res.getStringArray(res.getIdentifier("balao_" + chave, "array", "me.chester.minitruco"));
-        fraseBalao = frasesBalao[rndFrase % frasesBalao.length];
+        int indiceFrase;
+        do {
+            indiceFrase = rndFrase % frasesBalao.length;
+            rndFrase++;
+        } while (ultimaFrase.containsKey(chave) && ultimaFrase.get(chave) == indiceFrase);
+        ultimaFrase.put(chave, indiceFrase);
+        fraseBalao = frasesBalao[indiceFrase];
         posicaoBalao = posicao;
         notificaAnimacao(mostraBalaoAte);
     }
