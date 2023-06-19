@@ -85,7 +85,7 @@ public class MesaView extends View {
     private String perguntaMaoDeX;
     public boolean vaiJogarFechada;
     private int valorProximaAposta;
-    protected int velocidade;
+    protected int velocidade = 1;
     private int posicaoVez;
     private int corFundoCartaBalao = Color.WHITE;
     private TrucoActivity trucoActivity;
@@ -143,7 +143,7 @@ public class MesaView extends View {
 
     private int posicaoBalao = 1;
     private long mostraBalaoAte = System.currentTimeMillis();
-    private String fraseBalao = null;
+    String fraseBalao = null;
     private boolean visivel = false;
 
     /**
