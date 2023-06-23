@@ -180,7 +180,11 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
     protected void msgErroFatal(String mensagem) {
         runOnUiThread(() -> {
             encerraTrucoActivity();
-            new AlertDialog.Builder(BluetoothBaseActivity.this)
+            BluetoothBaseActivity context = BluetoothBaseActivity.this;
+            if (context == null || context.isFinishing()) {
+                return;
+            }
+            new AlertDialog.Builder(context)
                 .setTitle("Erro")
                 .setMessage(mensagem)
                 .setOnCancelListener(dialog -> finish())
