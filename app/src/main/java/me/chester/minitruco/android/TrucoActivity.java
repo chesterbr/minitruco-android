@@ -5,6 +5,10 @@ import static android.util.TypedValue.COMPLEX_UNIT_DIP;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -46,6 +50,7 @@ import me.chester.minitruco.core.PartidaLocal;
 public class TrucoActivity extends Activity {
 
     public static final String SEPARADOR_PLACAR_PARTIDAS = " x ";
+    public static final String BROADCAST_IDENTIFIER = "me.chester.minitruco.EVENTO_TRUCO_ACTIVITY";
     private static boolean mIsViva = false;
     final int[] placar = new int[2];
     boolean jogoAbortado = false;
@@ -176,6 +181,20 @@ public class TrucoActivity extends Activity {
         }).start();
     }
 
+    /**
+     * Permite que um cliente bluetooth/internet encerre a atividade ao
+     * detectar uma desconexão.
+     */
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String evento = intent.getStringExtra("evento");
+            if (evento.equals("desconectado")) {
+                finish();
+            }
+        }
+    };
+
     public void novaPartidaClickHandler(View v) {
         btnNovaPartida.setVisibility(View.INVISIBLE);
         criaEIniciaNovoJogo();
@@ -238,6 +257,7 @@ public class TrucoActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(broadcastReceiver);
         mesa.setVisivel(false);
     }
 
@@ -245,6 +265,7 @@ public class TrucoActivity extends Activity {
     protected void onResume() {
         super.onResume();
         mesa.setVisivel(true);
+        registerReceiver(broadcastReceiver, new IntentFilter(BROADCAST_IDENTIFIER));
     }
 
     @Override

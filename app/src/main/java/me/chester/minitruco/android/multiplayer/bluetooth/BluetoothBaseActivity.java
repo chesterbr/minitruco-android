@@ -178,15 +178,22 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
     }
 
     protected void msgErroFatal(String mensagem) {
-        runOnUiThread(() ->
+        runOnUiThread(() -> {
+            encerraTrucoActivity();
             new AlertDialog.Builder(BluetoothBaseActivity.this)
-                    .setTitle("Erro")
-                    .setMessage(mensagem)
-                    .setOnCancelListener(dialog -> finish())
-                    .setNeutralButton("Ok",
-                            (dialog, which) -> finish())
-                    .show()
-        );
+                .setTitle("Erro")
+                .setMessage(mensagem)
+                .setOnCancelListener(dialog -> finish())
+                .setNeutralButton("Ok",
+                    (dialog, which) -> finish())
+                .show();
+        });
+    }
+
+    private void encerraTrucoActivity() {
+        Intent intent = new Intent(TrucoActivity.BROADCAST_IDENTIFIER);
+        intent.putExtra("evento", "desconectado");
+        sendBroadcast(intent);
     }
 
     protected abstract int getNumClientes();
