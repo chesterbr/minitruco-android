@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 
 import androidx.preference.PreferenceManager;
@@ -126,6 +127,15 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
             LOGGER.log(Level.INFO, "Activity destruída antes do receiver ser registrado");
         }
         encerraConexoes();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Dá um tempinho para os clientes se prepararem antes de permitir
+        // o início de uma nova partida
+        btnIniciar.setEnabled(false);
+        new Handler().postDelayed(() -> atualizaDisplay(), 4000);
     }
 
     public void run() {
