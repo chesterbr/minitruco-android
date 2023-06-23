@@ -30,7 +30,7 @@ import me.chester.minitruco.core.PartidaLocal;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 @SuppressLint("MissingPermission")  // super.onCreate checa as permissões
-public class ServidorBluetoothActivity extends BluetoothBaseActivity {
+public class ServidorBluetoothActivity extends BaseBluetoothActivity {
 
     private final static Logger LOGGER = Logger.getLogger("ServidorBluetoothActivity");
 
