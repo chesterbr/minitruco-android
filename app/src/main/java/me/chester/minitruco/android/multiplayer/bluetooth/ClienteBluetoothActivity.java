@@ -342,12 +342,15 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             return;
         }
 
-        new AlertDialog.Builder(this).setTitle("Escolha o celular que criou o jogo")
-                .setItems(criaArrayComNomeDosAparelhosPareados(), (dialog, posicaoNaLista) -> {
-                    servidor = dispositivosPareados.get(posicaoNaLista);
-                    threadConexao = new Thread(ClienteBluetoothActivity.this);
-                    threadConexao.start();
-                }).show();
+        new AlertDialog.Builder(this)
+            .setTitle("Escolha o celular que criou o jogo")
+            .setItems(criaArrayComNomeDosAparelhosPareados(), (dialog, posicaoNaLista) -> {
+                servidor = dispositivosPareados.get(posicaoNaLista);
+                threadConexao = new Thread(ClienteBluetoothActivity.this);
+                threadConexao.start();
+            })
+            .setOnCancelListener(dialog -> finish())
+            .show();
     }
 
 }
