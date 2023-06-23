@@ -32,7 +32,7 @@ import me.chester.minitruco.core.Partida;
  * Tarefas comuns ao cliente e ao servidor Bluetooth: mostrar quem está
  * conectado, garantir que o bt está ligado e as permissões cedidas, etc.
  */
-public abstract class BluetoothBaseActivity extends BaseActivity implements
+public abstract class BaseBluetoothActivity extends BaseActivity implements
         Runnable {
 
     public static String[] BLUETOOTH_PERMISSIONS;
@@ -178,15 +178,26 @@ public abstract class BluetoothBaseActivity extends BaseActivity implements
     }
 
     protected void msgErroFatal(String mensagem) {
-        runOnUiThread(() ->
-            new AlertDialog.Builder(BluetoothBaseActivity.this)
-                    .setTitle("Erro")
-                    .setMessage(mensagem)
-                    .setOnCancelListener(dialog -> finish())
-                    .setNeutralButton("Ok",
-                            (dialog, which) -> finish())
-                    .show()
-        );
+        runOnUiThread(() -> {
+            encerraTrucoActivity();
+            BaseBluetoothActivity context = BaseBluetoothActivity.this;
+            if (context == null || context.isFinishing()) {
+                return;
+            }
+            new AlertDialog.Builder(context)
+                .setTitle("Erro")
+                .setMessage(mensagem)
+                .setOnCancelListener(dialog -> finish())
+                .setNeutralButton("Ok",
+                    (dialog, which) -> finish())
+                .show();
+        });
+    }
+
+    private void encerraTrucoActivity() {
+        Intent intent = new Intent(TrucoActivity.BROADCAST_IDENTIFIER);
+        intent.putExtra("evento", "desconectado");
+        sendBroadcast(intent);
     }
 
     protected abstract int getNumClientes();

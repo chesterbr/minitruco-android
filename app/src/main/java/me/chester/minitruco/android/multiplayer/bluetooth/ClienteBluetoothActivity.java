@@ -28,7 +28,7 @@ import me.chester.minitruco.core.Partida;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 @SuppressLint("MissingPermission") // super.onCreate checa as permissões
-public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
+public class ClienteBluetoothActivity extends BaseBluetoothActivity implements
         Runnable, ClienteMultiplayer {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteBluetoothActivity");
@@ -342,12 +342,15 @@ public class ClienteBluetoothActivity extends BluetoothBaseActivity implements
             return;
         }
 
-        new AlertDialog.Builder(this).setTitle("Escolha o celular que criou o jogo")
-                .setItems(criaArrayComNomeDosAparelhosPareados(), (dialog, posicaoNaLista) -> {
-                    servidor = dispositivosPareados.get(posicaoNaLista);
-                    threadConexao = new Thread(ClienteBluetoothActivity.this);
-                    threadConexao.start();
-                }).show();
+        new AlertDialog.Builder(this)
+            .setTitle("Escolha o celular que criou o jogo")
+            .setItems(criaArrayComNomeDosAparelhosPareados(), (dialog, posicaoNaLista) -> {
+                servidor = dispositivosPareados.get(posicaoNaLista);
+                threadConexao = new Thread(ClienteBluetoothActivity.this);
+                threadConexao.start();
+            })
+            .setOnCancelListener(dialog -> finish())
+            .show();
     }
 
 }
