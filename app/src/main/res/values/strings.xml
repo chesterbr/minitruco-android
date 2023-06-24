@@ -208,12 +208,12 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Baralho configurável com cartas em várias cores<br/>
-            - Botões de truco e carta fechada maiores<br/>
-            - Opção para aumentar o tamanho dos textos do jogo (botões, balões, perguntas)<br/>
-            - Todos os menus agora estão em botões<br/>
-            - Pergunta de "Aceita?" diz o que foi pedido (truco, seis, etc.)<br/>
-            (algumas destas mudanças não subiram na 2.5.0, peço desculpas 😣 - agora foram todas)
+            - Não repete a mesma frase imediatamente (ex.: quando a dupla recusa truco)<br/>
+            - Botões do Bluetooth agora visíveis com o celular deitado (paisagem)<br/>
+            - Corrigido erro quando criador inicia jogo antes do cliente estar pronto<br/>
+            - Ao perder a conexão, celular que entrou no jogo agora mostra mensagem imediatamente<br/>
+            - Corrigidos dois erros que fechavam o aplicativo ao iniciar ou encerrar partida<br/>
+            - Ícone do aplicativo alinhado com versões novas do Android<br/>
         ]]>
     </string>
 
