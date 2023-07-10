@@ -171,7 +171,7 @@
                 android:paddingStart="16dp"
                 android:paddingLeft="16dp"
                 android:text="Internet"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
 
             <Button
