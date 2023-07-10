@@ -16,6 +16,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void mostraAlertBox(String titulo, String texto) {
         runOnUiThread(() -> {
+            if (this == null || this.isFinishing()) {
+                return;
+            }
             new AlertDialog.Builder(this).setTitle(titulo)
                     .setMessage(Html.fromHtml(texto))
                     .setNeutralButton("Ok", (dialog, which) -> {
