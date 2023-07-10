@@ -22,7 +22,9 @@ import java.util.UUID;
 
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.BaseActivity;
+import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.TrucoActivity;
+import me.chester.minitruco.android.multiplayer.ActivityMultiplayer;
 import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -33,7 +35,7 @@ import me.chester.minitruco.core.Partida;
  * conectado, garantir que o bt está ligado e as permissões cedidas, etc.
  */
 public abstract class BaseBluetoothActivity extends BaseActivity implements
-        Runnable {
+        Runnable, ActivityMultiplayer<BaseBluetoothActivity> {
 
     public static String[] BLUETOOTH_PERMISSIONS;
     static {
@@ -89,6 +91,7 @@ public abstract class BaseBluetoothActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CriadorDePartida.setActivity(this);
         setContentView(R.layout.sala);
         layoutIniciar = findViewById(R.id.layoutIniciar);
         btnIniciar = findViewById(R.id.btnIniciarBluetooth);
@@ -109,8 +112,14 @@ public abstract class BaseBluetoothActivity extends BaseActivity implements
         } else {
             permissionsLauncher.launch(permissoesFaltantes);
         }
-
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CriadorDePartida.setActivity(this);
+    }
+
     private String[] permissoesBluetoothFaltantes() {
         // Antes do Android 6, permissões eram declaradas no manifest, e a app simplesmente
         // assumia que foi autorizada. A vida era simples. Eu sinto falta disso.
@@ -205,11 +214,7 @@ public abstract class BaseBluetoothActivity extends BaseActivity implements
     protected void iniciaTrucoActivitySePreciso() {
         if (!TrucoActivity.isViva()) {
             Intent intent = new Intent(this, TrucoActivity.class);
-            if (this instanceof ClienteBluetoothActivity) {
-                intent.putExtra("clienteBluetooth", true);
-            } else {
-                intent.putExtra("servidorBluetooth", true);
-            }
+            intent.putExtra("multiplayer", true);
             startActivity(intent);
         }
     }

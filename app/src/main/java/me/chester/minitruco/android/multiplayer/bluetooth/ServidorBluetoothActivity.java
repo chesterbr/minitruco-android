@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
@@ -42,8 +41,6 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
     private static final int REQUEST_ENABLE_DISCOVERY = 1;
     private static final String APELIDO_BOT = "bot";
 
-    private static ServidorBluetoothActivity currentInstance;
-
     private char status;
     private Thread threadMonitoraClientes;
     private Partida partida;
@@ -60,12 +57,6 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
             pedePraHabilitarDiscoverableSePreciso();
         }
     };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        currentInstance = this;
-    }
 
     @Override
     void iniciaAtividadeBluetooth() {
@@ -336,11 +327,7 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
         }
     }
 
-    public static Partida criaNovoJogo(JogadorHumano jogadorHumano) {
-        return currentInstance._criaNovoJogo(jogadorHumano);
-    }
-
-    public Partida _criaNovoJogo(JogadorHumano jogadorHumano) {
+    public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
         Partida partida = new PartidaLocal(false, false, modo);
         partida.adiciona(jogadorHumano);
         for (int i = 0; i <= 2; i++) {
