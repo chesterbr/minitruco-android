@@ -4,6 +4,8 @@ package me.chester.minitruco.android.multiplayer;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 
+import android.app.Activity;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,8 +13,8 @@ import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
-import me.chester.minitruco.core.Partida;
 import me.chester.minitruco.core.Modo;
+import me.chester.minitruco.core.Partida;
 import me.chester.minitruco.core.SituacaoJogo;
 
 /**
@@ -34,7 +36,7 @@ import me.chester.minitruco.core.SituacaoJogo;
 public class PartidaRemota extends Partida {
 
     private final static Logger LOGGER = Logger.getLogger("PartidaRemota");
-    private final ClienteMultiplayer cliente;
+    private final ActivityMultiplayer<Activity> cliente;
     private JogadorHumano jogadorHumano;
     /**
      * Esse baralho é apenas para sortear cartas quando alguém joga uma fechada
@@ -49,6 +51,7 @@ public class PartidaRemota extends Partida {
      * As posições diferentes da posição do jogador humano (que é o único
      * que realmente precisa ser notificado e escutado, pois é quem reproduz
      * e coleta os eventos de UI) são preenchidas com <code>JogadorDummy</code>.
+     *
      * @param cliente
      *          Faz a comunicação com a camada físico (Bluetooth, Internet)
      * @param jogadorHumano
@@ -61,7 +64,7 @@ public class PartidaRemota extends Partida {
      *          String de 1 caractere recebida pelo servidor que determina
      *          se o truco é paulista, mineiro, etc.
      */
-    public PartidaRemota(ClienteMultiplayer cliente, JogadorHumano jogadorHumano, int posJogador, String modoStr) {
+    public PartidaRemota(ActivityMultiplayer<Activity> cliente, JogadorHumano jogadorHumano, int posJogador, String modoStr) {
         super(Modo.fromString(modoStr));
         this.cliente = cliente;
 

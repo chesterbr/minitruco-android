@@ -30,9 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
-import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
-import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
 import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
 import me.chester.minitruco.core.PartidaLocal;
@@ -113,12 +110,8 @@ public class TrucoActivity extends Activity {
      */
     private void criaEIniciaNovoJogo() {
         jogadorHumano = new JogadorHumano(this, mesa);
-        if (getIntent().hasExtra("servidorBluetooth")) {
-            partida = ServidorBluetoothActivity.criaNovoJogo(jogadorHumano);
-        } else if (getIntent().hasExtra("clienteBluetooth")) {
-            partida = ClienteBluetoothActivity.criaNovoJogo(jogadorHumano);
-        } else if (getIntent().hasExtra("clienteInternet")) {
-            partida = ClienteInternetActivity.criaNovoJogo(jogadorHumano);
+        if (getIntent().hasExtra("multiplayer")) {
+            partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
         } else {
             partida = criaNovoJogoSinglePlayer(jogadorHumano);
         }

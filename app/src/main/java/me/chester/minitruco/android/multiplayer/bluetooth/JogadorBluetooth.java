@@ -117,12 +117,11 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 
     /**
      * Manda uma linha de texto para o celular do cliente.
-     * <p>
-     * Estas linhas representam eventos gerados pela PartidaLocal.
      *
+     * @param linha representa um evento gerado pela PartidaLocal.
      */
-    public synchronized void enviaMensagem(String linha) {
-        servidor.enviaMensagem(getPosicao() - 2, linha);
+    public synchronized void enviaLinha(String linha) {
+        servidor.enviaLinha(getPosicao() - 2, linha);
     }
 
     // Os métodos restantes convertem as notificações da PartidaLocal em mensagens
@@ -140,7 +139,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
         } else {
             param = " " + c;
         }
-        enviaMensagem("J " + j.getPosicao() + param);
+        enviaLinha("J " + j.getPosicao() + param);
     }
 
     public void inicioMao(Jogador jogadorQueAbre) {
@@ -152,40 +151,40 @@ public class JogadorBluetooth extends Jogador implements Runnable {
         if (!partida.getModo().isManilhaVelha()) {
             comando.append(" ").append(partida.cartaDaMesa);
         }
-        enviaMensagem(comando.toString());
+        enviaLinha(comando.toString());
     }
 
     public void inicioPartida(int p1, int p2) {
-        enviaMensagem("P");
+        enviaLinha("P");
     }
 
     public void vez(Jogador j, boolean podeFechada) {
-        enviaMensagem("V " + j.getPosicao() + ' ' + (podeFechada ? 'T' : 'F'));
+        enviaLinha("V " + j.getPosicao() + ' ' + (podeFechada ? 'T' : 'F'));
     }
 
     public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
-        enviaMensagem("T " + j.getPosicao() + ' ' + valor + ' ' + rndFrase);
+        enviaLinha("T " + j.getPosicao() + ' ' + valor + ' ' + rndFrase);
     }
 
     public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
-        enviaMensagem("D " + j.getPosicao() + ' ' + valor + ' ' + rndFrase);
+        enviaLinha("D " + j.getPosicao() + ' ' + valor + ' ' + rndFrase);
     }
 
     public void recusouAumentoAposta(Jogador j, int rndFrase) {
-        enviaMensagem("C " + j.getPosicao() + ' ' + rndFrase);
+        enviaLinha("C " + j.getPosicao() + ' ' + rndFrase);
     }
 
     public void rodadaFechada(int numRodada, int resultado,
             Jogador jogadorQueTorna) {
-        enviaMensagem("R " + resultado + ' ' + jogadorQueTorna.getPosicao());
+        enviaLinha("R " + resultado + ' ' + jogadorQueTorna.getPosicao());
     }
 
     public void maoFechada(int[] pontosEquipe) {
-        enviaMensagem("O " + pontosEquipe[0] + ' ' + pontosEquipe[1]);
+        enviaLinha("O " + pontosEquipe[0] + ' ' + pontosEquipe[1]);
     }
 
     public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
-        enviaMensagem("H " + j.getPosicao() + (aceita ? " T" : " F") + ' ' + rndFrase);
+        enviaLinha("H " + j.getPosicao() + (aceita ? " T" : " F") + ' ' + rndFrase);
     }
 
     public void informaMaoDeX(Carta[] cartasParceiro) {
@@ -195,18 +194,18 @@ public class JogadorBluetooth extends Jogador implements Runnable {
             if (i != 2)
                 sbComando.append(' ');
         }
-        enviaMensagem(sbComando.toString());
+        enviaLinha(sbComando.toString());
     }
 
     // Eventos de fim-de-jogo
 
     public void jogoFechado(int numEquipeVencedora, int rndFrase) {
-        enviaMensagem("G " + numEquipeVencedora + " " + rndFrase);
+        enviaLinha("G " + numEquipeVencedora + " " + rndFrase);
         finaliza();
     }
 
     public void jogoAbortado(int posicao, int rndFrase) {
-        enviaMensagem("A " + posicao + ' ' + rndFrase);
+        enviaLinha("A " + posicao + ' ' + rndFrase);
         finaliza();
     }
 

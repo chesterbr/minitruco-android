@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.TrucoActivity;
-import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
 import me.chester.minitruco.core.Partida;
 
@@ -29,13 +28,11 @@ import me.chester.minitruco.core.Partida;
 
 @SuppressLint("MissingPermission") // super.onCreate checa as permissões
 public class ClienteBluetoothActivity extends BaseBluetoothActivity implements
-        Runnable, ClienteMultiplayer {
+        Runnable {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteBluetoothActivity");
 
     private static final int REQUEST_ENABLE_BT = 1;
-
-    private static ClienteBluetoothActivity currentInstance;
 
     private List<BluetoothDevice> dispositivosPareados;
     private BluetoothDevice servidor;
@@ -47,12 +44,6 @@ public class ClienteBluetoothActivity extends BaseBluetoothActivity implements
     private InputStream in;
     private OutputStream out;
     private int posJogador;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        currentInstance = this;
-    }
 
     @Override
     void iniciaAtividadeBluetooth() {
@@ -254,11 +245,7 @@ public class ClienteBluetoothActivity extends BaseBluetoothActivity implements
         }
     }
 
-    public static Partida criaNovoJogo(JogadorHumano jogadorHumano) {
-        return currentInstance._criaNovoJogo(jogadorHumano);
-    }
-
-    public Partida _criaNovoJogo(JogadorHumano jogadorHumano) {
+    public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
         partida = new PartidaRemota(this, jogadorHumano, posJogador, modo);
         return partida;
     }

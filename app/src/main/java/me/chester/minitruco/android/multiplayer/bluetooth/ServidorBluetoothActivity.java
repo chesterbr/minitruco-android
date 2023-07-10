@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
@@ -42,8 +41,6 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
     private static final int REQUEST_ENABLE_DISCOVERY = 1;
     private static final String APELIDO_BOT = "bot";
 
-    private static ServidorBluetoothActivity currentInstance;
-
     private char status;
     private Thread threadMonitoraClientes;
     private Partida partida;
@@ -60,12 +57,6 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
             pedePraHabilitarDiscoverableSePreciso();
         }
     };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        currentInstance = this;
-    }
 
     @Override
     void iniciaAtividadeBluetooth() {
@@ -259,9 +250,7 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
                     while (status != STATUS_BLUETOOTH_ENCERRADO) {
                         // Envia um comando vazio (apenas para testar a conexão
                         // e processar qualquer desconexão que tenha ocorrido)
-                        for (int i = 0; i <= 2; i++) {
-                            enviaMensagem(i, "");
-                        }
+                        enviaLinha("");
                         try {
                             sleep(2000);
                         } catch (InterruptedException e) {
@@ -306,7 +295,7 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
         String comando = sbComando.toString();
         // Envia a notificação para cada jogador (com sua posição)
         for (int i = 0; i <= 2; i++) {
-            enviaMensagem(i, comando + (i + 2));
+            enviaLinha(i, comando + (i + 2));
         }
     }
 
@@ -336,11 +325,7 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
         }
     }
 
-    public static Partida criaNovoJogo(JogadorHumano jogadorHumano) {
-        return currentInstance._criaNovoJogo(jogadorHumano);
-    }
-
-    public Partida _criaNovoJogo(JogadorHumano jogadorHumano) {
+    public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
         Partida partida = new PartidaLocal(false, false, modo);
         partida.adiciona(jogadorHumano);
         for (int i = 0; i <= 2; i++) {
@@ -360,7 +345,8 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
     // jogador está entrando no jogo (ou uma desconexão é descoberta por envio
     // de mensagem)
 
-    public synchronized void enviaMensagem(int slot, String comando) {
+    @Override
+    public synchronized void enviaLinha(int slot, String comando) {
         if (outClientes[slot] != null) {
             if (comando.length() > 0) {
                 LOGGER.log(Level.INFO, "enviando comando " + comando
@@ -374,6 +360,13 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
                 LOGGER.log(Level.INFO, "exceção ao enviar mensagem", e);
                 desconecta(slot);
             }
+        }
+    }
+
+    @Override
+    public void enviaLinha(String linha) {
+        for (int i = 0; i <= 2; i++) {
+            enviaLinha(i, "");
         }
     }
 
