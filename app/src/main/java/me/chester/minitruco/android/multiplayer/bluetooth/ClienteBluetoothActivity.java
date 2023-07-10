@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.TrucoActivity;
-import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
 import me.chester.minitruco.core.Partida;
 
@@ -29,7 +28,7 @@ import me.chester.minitruco.core.Partida;
 
 @SuppressLint("MissingPermission") // super.onCreate checa as permissões
 public class ClienteBluetoothActivity extends BaseBluetoothActivity implements
-        Runnable, ClienteMultiplayer {
+        Runnable {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteBluetoothActivity");
 

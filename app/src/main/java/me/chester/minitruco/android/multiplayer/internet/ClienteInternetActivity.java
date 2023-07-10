@@ -32,11 +32,10 @@ import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.android.multiplayer.ActivityMultiplayer;
-import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
 import me.chester.minitruco.core.Partida;
 
-public class ClienteInternetActivity extends Activity implements ClienteMultiplayer, ActivityMultiplayer<Activity> {
+public class ClienteInternetActivity extends Activity implements ActivityMultiplayer<Activity> {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteInternetActivity");
 

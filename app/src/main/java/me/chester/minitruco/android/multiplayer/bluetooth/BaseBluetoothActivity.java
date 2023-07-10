@@ -1,6 +1,7 @@
 package me.chester.minitruco.android.multiplayer.bluetooth;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -35,7 +36,7 @@ import me.chester.minitruco.core.Partida;
  * conectado, garantir que o bt está ligado e as permissões cedidas, etc.
  */
 public abstract class BaseBluetoothActivity extends BaseActivity implements
-        Runnable, ActivityMultiplayer<BaseBluetoothActivity> {
+        Runnable, ActivityMultiplayer<Activity> {
 
     public static String[] BLUETOOTH_PERMISSIONS;
     static {

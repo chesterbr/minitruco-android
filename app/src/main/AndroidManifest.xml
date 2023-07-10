@@ -37,9 +37,9 @@
     <!--
         Vamos deixar comentado enquanto não lançamos isso, para evitar
         pedir uma permissão sem necessidade.
+    -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    -->
 
     <uses-feature
         android:name="android.hardware.touchscreen"

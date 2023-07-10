@@ -191,6 +191,10 @@ Parece complicado, mas a grande vantagem é que nem `PartidaLocal` (no servidor)
 
 TODO (jogo via internet ainda está em desenvolvimento)
 
+### Sockets e Activities no jogo multiplayer
+
+Todas as `ActivityMultiplayer` mencionadas acima precisam manter o(s) socket(s) nos quais elas estão conectadas, e fazer a ponte entre os `Jogador`es e estes. Para gerenciar isso, a classe [`CriadorDePartida`](../app/src/main/java/me/chester/minitruco/android/CriadorDePartida.java) mantém uma referência à `ActivityMultiplayer` em uso no momento e consolida a criação de novas partidas.
+
 ## Protocolo de comunicação multiplayer
 
 Quando o miniTruco foi criado (2005), poucas pessoas possuíam celulares e planos capazes de acessar a internet. Isso não só motivou a criação do jogo via Bluetooth, mas também me incentivou a desenvolver um protocolo de comunicação que fosse o mais leve possível.
