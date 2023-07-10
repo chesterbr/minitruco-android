@@ -30,7 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
 import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
 import me.chester.minitruco.core.PartidaLocal;
@@ -113,8 +112,6 @@ public class TrucoActivity extends Activity {
         jogadorHumano = new JogadorHumano(this, mesa);
         if (getIntent().hasExtra("multiplayer")) {
             partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
-        } else if (getIntent().hasExtra("clienteInternet")) {
-            partida = ClienteInternetActivity.criaNovoJogo(jogadorHumano);
         } else {
             partida = criaNovoJogoSinglePlayer(jogadorHumano);
         }

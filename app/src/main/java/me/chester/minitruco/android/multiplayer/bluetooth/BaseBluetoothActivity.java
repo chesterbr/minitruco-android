@@ -213,9 +213,9 @@ public abstract class BaseBluetoothActivity extends BaseActivity implements
 
     protected void iniciaTrucoActivitySePreciso() {
         if (!TrucoActivity.isViva()) {
-            Intent intent = new Intent(this, TrucoActivity.class);
-            intent.putExtra("multiplayer", true);
-            startActivity(intent);
+            startActivity(
+                new Intent(this, TrucoActivity.class)
+                    .putExtra("multiplayer", true));
         }
     }
 

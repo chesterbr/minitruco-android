@@ -28,13 +28,15 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.TrucoActivity;
+import me.chester.minitruco.android.multiplayer.ActivityMultiplayer;
 import me.chester.minitruco.android.multiplayer.ClienteMultiplayer;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
 import me.chester.minitruco.core.Partida;
 
-public class ClienteInternetActivity extends Activity implements ClienteMultiplayer {
+public class ClienteInternetActivity extends Activity implements ClienteMultiplayer, ActivityMultiplayer<Activity> {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteInternetActivity");
 
@@ -44,7 +46,6 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
     private BufferedReader in;
     private SharedPreferences preferences;
 
-    private static ClienteInternetActivity currentInstance;
     private PartidaRemota partida;
     private String modo;
     private int posJogador;
@@ -52,7 +53,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentInstance = this;
+        CriadorDePartida.setActivity(this);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.internet_conectando);
@@ -68,6 +69,12 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                 desconecta();
             }
         }).start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+       CriadorDePartida.setActivity(this);
     }
 
     @Override
@@ -166,7 +173,7 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
                 while (!TrucoActivity.isViva()) {
                     startActivity(
                         new Intent(this, TrucoActivity.class)
-                            .putExtra("clienteInternet", true));
+                            .putExtra("multiplayer", true));
                     try {
                         Thread.sleep(300);
                     } catch (InterruptedException e) {
@@ -197,11 +204,8 @@ public class ClienteInternetActivity extends Activity implements ClienteMultipla
         }
     }
 
-    public static Partida criaNovoJogo(JogadorHumano jogadorHumano) {
-        return currentInstance._criaNovoJogo(jogadorHumano);
-    }
-
-    public Partida _criaNovoJogo(JogadorHumano jogadorHumano) {
+    @Override
+    public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
         partida = new PartidaRemota(this, jogadorHumano, posJogador, modo);
         return partida;
     }
