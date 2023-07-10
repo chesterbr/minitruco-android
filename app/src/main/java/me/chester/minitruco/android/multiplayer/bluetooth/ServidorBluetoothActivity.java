@@ -370,11 +370,6 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
         }
     }
 
-//
-//    public void enviaLinha(int slot, String linha) {
-//        super.enviaLinha(slot, linha);
-//    }
-
     private synchronized int encaixaEmUmSlot(BluetoothSocket socket)
             throws IOException {
         for (int i = 0; i <= 2; i++) {
