@@ -96,6 +96,7 @@ public class MesaView extends View {
     private RectF rectBotaoAbertaFechada;
     private float tamanhoFonte;
     private float divisorTamanhoFonte = 20;
+    private int ultimoYdaPergunta = -1;
 
     /**
      * É true se a view já está pronta para responder a solicitações da partida
@@ -453,12 +454,16 @@ public class MesaView extends View {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (rectDialog.contains(x, y)) {
+                    ultimoYdaPergunta = y;
+                }
                 return true;
             case MotionEvent.ACTION_UP:
-                int x = (int) event.getX();
-                int y = (int) event.getY();
+                ultimoYdaPergunta = -1;
                 if (rectBotaoSim.contains(x, y)) {
                     respondePergunta(true);
                 }
@@ -479,6 +484,18 @@ public class MesaView extends View {
                     if (cartas[i].isDentro(x, y)) {
                         jogaCarta(i - 4);
                     }
+                }
+                return true;
+            case MotionEvent.ACTION_MOVE:
+                if (ultimoYdaPergunta > -1 && (mostrarPerguntaMaoDeX || mostrarPerguntaAumento)) {
+                    int dy = y - ultimoYdaPergunta;
+                    ultimoYdaPergunta = y;
+                    rectDialog.top = rectDialog.top + dy;
+                    rectDialog.bottom = rectDialog.bottom + dy;
+                    rectBotaoSim.top = rectBotaoSim.top + dy;
+                    rectBotaoSim.bottom = rectBotaoSim.bottom + dy;
+                    rectBotaoNao.top = rectBotaoNao.top + dy;
+                    rectBotaoNao.bottom = rectBotaoNao.bottom + dy;
                 }
                 return true;
             default:
@@ -778,10 +795,12 @@ public class MesaView extends View {
             paintPergunta.setColor(Color.WHITE);
             paintPergunta.setStyle(Style.STROKE);
             canvas.drawRect(rectDialog, paintPergunta);
+
             paintPergunta.setTextSize(tamanhoFonte * 0.75f);
             paintPergunta.setTextAlign(Align.CENTER);
             paintPergunta.setStyle(Style.FILL);
             canvas.drawText(textoPergunta, rectDialog.centerX(), rectDialog.top + paintPergunta.getTextSize() * 2.3f, paintPergunta);
+
             desenhaBotao("Sim", canvas, rectBotaoSim);
             desenhaBotao("Não", canvas, rectBotaoNao);
         }
