@@ -25,7 +25,7 @@ class CartaTest {
     @DisplayName("Representa adequadamente como String")
     void testToString() {
         Carta c = new Carta('K', Carta.NAIPE_ESPADAS);
-        assertEquals("Je", c.toString());
+        assertEquals("Ke", c.toString());
     }
 
     @Test
