@@ -25,6 +25,12 @@ android {
     testOptions {
         unitTests.all {
             useJUnitPlatform()
+            testLogging {
+                outputs.upToDateWhen { false }
+                events "passed", "failed", "skipped", "standardError"
+                showCauses true
+                showExceptions true
+            }
         }
     }
 }
