@@ -488,6 +488,11 @@ public class MesaView extends View {
             case MotionEvent.ACTION_MOVE:
                 if (ultimoyDaPergunta > -1 && (mostrarPerguntaMaoDeX || mostrarPerguntaAumento)) {
                     int dy = y - ultimoyDaPergunta;
+                    if (rectPergunta.top + dy < 0) {
+                        dy = -rectPergunta.top;
+                    } else if (rectPergunta.bottom + dy > getHeight()) {
+                        dy = getHeight() - rectPergunta.bottom;
+                    }
                     ultimoyDaPergunta = y;
                     rectPergunta.top = rectPergunta.top + dy;
                     rectPergunta.bottom = rectPergunta.bottom + dy;
