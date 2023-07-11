@@ -276,8 +276,7 @@ public class PartidaRemota extends Partida {
 
     @Override
     public void abandona(int posicao) {
-        // TODO eu acho que o if aqui é redundante (no geral, só o Jogador 1
-        //.     faria isso mesmo); conferir em outros lugares
+        // O if é necessário porque o caller pode nem saber quem pediu pra abandonar
         if (posicao == 1) {
             cliente.enviaLinha("A");
         }

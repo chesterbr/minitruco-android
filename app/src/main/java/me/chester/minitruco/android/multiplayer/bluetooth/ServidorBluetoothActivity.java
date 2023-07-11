@@ -318,11 +318,11 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
             apelidos[slot + 1] = APELIDO_BOT;
         }
         status = STATUS_AGUARDANDO;
-        atualizaDisplay();
-        atualizaClientes();
         if (partida != null) {
             partida.abandona(slot + 2);
         }
+        atualizaDisplay();
+        atualizaClientes();
     }
 
     public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
