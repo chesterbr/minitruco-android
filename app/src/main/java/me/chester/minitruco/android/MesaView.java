@@ -89,14 +89,14 @@ public class MesaView extends View {
     private int posicaoVez;
     private int corFundoCartaBalao = Color.WHITE;
     private TrucoActivity trucoActivity;
-    private Rect rectDialog;
+    private Rect rectPergunta;
     private RectF rectBotaoSim;
     private RectF rectBotaoNao;
     private RectF rectBotaoAumento;
     private RectF rectBotaoAbertaFechada;
     private float tamanhoFonte;
     private float divisorTamanhoFonte = 20;
-    private int ultimoYdaPergunta = -1;
+    private int ultimoyDaPergunta = -1;
 
     /**
      * É true se a view já está pronta para responder a solicitações da partida
@@ -293,22 +293,21 @@ public class MesaView extends View {
             cartas[0].visible = false;
         }
 
-        // Define posição e tamanho da caixa de diálogo e seus botões
-        int larguraDialog = (int) (tamanhoFonte * 11);
-        int alturaDialog = (int) (larguraDialog / 2.2f);
-        int topDialog = (h - alturaDialog) / 2;
-        int leftDialog = (w - larguraDialog) / 2;
-        rectDialog = new Rect(leftDialog, topDialog, leftDialog + larguraDialog, topDialog + alturaDialog);
-        int alturaBotao = (int) (alturaDialog * 0.30f);
+        // Define posição e tamanho da caixa de pergunta e seus botões
+        int larguraPergunta = (int) (tamanhoFonte * 11);
+        int alturaPergunta = (int) (larguraPergunta / 2.2f);
+        int topPergunta = (h - alturaPergunta) / 2;
+        int leftPergunta = (w - larguraPergunta) / 2;
+        rectPergunta = new Rect(leftPergunta, topPergunta, leftPergunta + larguraPergunta, topPergunta + alturaPergunta);
+        int alturaBotao = (int) (alturaPergunta * 0.30f);
         int margemBotao = (int) (8 * density);
-
-        int bottomBotao = rectDialog.bottom - margemBotao;
+        int bottomBotao = rectPergunta.bottom - margemBotao;
         int topBotao = bottomBotao - alturaBotao;
-        int larguraBotao =  larguraDialog / 2 - margemBotao;
+        int larguraBotao =  larguraPergunta / 2 - margemBotao;
         rectBotaoSim = new RectF(
-            leftDialog + margemBotao,
+            leftPergunta + margemBotao,
             topBotao,
-            leftDialog + larguraBotao,
+            leftPergunta + larguraBotao,
             bottomBotao);
         rectBotaoNao = new RectF(
             rectBotaoSim.right + margemBotao,
@@ -458,12 +457,12 @@ public class MesaView extends View {
         int y = (int) event.getY();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (rectDialog.contains(x, y)) {
-                    ultimoYdaPergunta = y;
+                if (rectPergunta.contains(x, y)) {
+                    ultimoyDaPergunta = y;
                 }
                 return true;
             case MotionEvent.ACTION_UP:
-                ultimoYdaPergunta = -1;
+                ultimoyDaPergunta = -1;
                 if (rectBotaoSim.contains(x, y)) {
                     respondePergunta(true);
                 }
@@ -487,11 +486,11 @@ public class MesaView extends View {
                 }
                 return true;
             case MotionEvent.ACTION_MOVE:
-                if (ultimoYdaPergunta > -1 && (mostrarPerguntaMaoDeX || mostrarPerguntaAumento)) {
-                    int dy = y - ultimoYdaPergunta;
-                    ultimoYdaPergunta = y;
-                    rectDialog.top = rectDialog.top + dy;
-                    rectDialog.bottom = rectDialog.bottom + dy;
+                if (ultimoyDaPergunta > -1 && (mostrarPerguntaMaoDeX || mostrarPerguntaAumento)) {
+                    int dy = y - ultimoyDaPergunta;
+                    ultimoyDaPergunta = y;
+                    rectPergunta.top = rectPergunta.top + dy;
+                    rectPergunta.bottom = rectPergunta.bottom + dy;
                     rectBotaoSim.top = rectBotaoSim.top + dy;
                     rectBotaoSim.bottom = rectBotaoSim.bottom + dy;
                     rectBotaoNao.top = rectBotaoNao.top + dy;
@@ -791,15 +790,15 @@ public class MesaView extends View {
             paintPergunta.setAntiAlias(true);
             paintPergunta.setColor(Color.BLACK);
             paintPergunta.setStyle(Style.FILL);
-            canvas.drawRect(rectDialog, paintPergunta);
+            canvas.drawRect(rectPergunta, paintPergunta);
             paintPergunta.setColor(Color.WHITE);
             paintPergunta.setStyle(Style.STROKE);
-            canvas.drawRect(rectDialog, paintPergunta);
+            canvas.drawRect(rectPergunta, paintPergunta);
 
             paintPergunta.setTextSize(tamanhoFonte * 0.75f);
             paintPergunta.setTextAlign(Align.CENTER);
             paintPergunta.setStyle(Style.FILL);
-            canvas.drawText(textoPergunta, rectDialog.centerX(), rectDialog.top + paintPergunta.getTextSize() * 2.3f, paintPergunta);
+            canvas.drawText(textoPergunta, rectPergunta.centerX(), rectPergunta.top + paintPergunta.getTextSize() * 2.3f, paintPergunta);
 
             desenhaBotao("Sim", canvas, rectBotaoSim);
             desenhaBotao("Não", canvas, rectBotaoNao);
