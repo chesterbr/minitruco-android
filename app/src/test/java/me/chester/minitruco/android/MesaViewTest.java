@@ -2,7 +2,6 @@ package me.chester.minitruco.android;
 
 import static android.util.DisplayMetrics.DENSITY_XHIGH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -39,7 +38,7 @@ class MesaViewTest {
     @Test
     void dizEscolheFraseDoBalaoBaseadaEmRndFrase() {
         mesaView.diz("beatle", 1, 1, 0);
-        assertNotEquals("john", mesaView.fraseBalao);
+        assertEquals("john", mesaView.fraseBalao);
         mesaView.diz("beatle", 1, 1, 1);
         assertEquals("paul", mesaView.fraseBalao);
         mesaView.diz("beatle", 1, 1, 2);
