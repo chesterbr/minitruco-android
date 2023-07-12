@@ -36,6 +36,11 @@
             android:key="humanoDecide"
             android:summary="Em jogo local, se esta opção estiver ligada, o parceiro bot não pode aceitar truco ou mão de 10/11. Ele só diz se iria, mas o humano é que decide"
             android:title="Humano decide pela dupla" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="limpaPlacarPartidas"
+            android:summary="Se esta opção estiver ligada, o placar de partidas é zerado sempre que um jogo local é iniciado"
+            android:title="Limpa placar de partidas" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Desenvolvimento (️☠=PRE-RI-GO, não mexa)">
