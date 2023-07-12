@@ -162,13 +162,25 @@
             android:background="@drawable/borda_placar"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="partidas"
-                android:textSize="11sp"
-                android:textColor="#000000" />
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="partidas"
+                    android:textColor="#000000"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:src="@drawable/botao_limpar_placar" />
+
+            </FrameLayout>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textViewPartidas"
