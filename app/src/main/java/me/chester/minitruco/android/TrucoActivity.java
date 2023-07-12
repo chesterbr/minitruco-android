@@ -164,10 +164,6 @@ public class TrucoActivity extends Activity {
         mesa.setTextoAumento(10, getString(R.string.botao_aumento_dez));
         mesa.setTextoAumento(12, getString(R.string.botao_aumento_doze));
 
-        findViewById(R.id.layoutPlacarPartidas).setOnClickListener(v -> {
-            confirmaLimpezaDoPlacarDePartidas();
-        });
-
         // O jogo só deve efetivamente iniciar quando a mesa estiver pronta
         new Thread(() -> {
             while (!mesa.isInicializada()) {
@@ -402,17 +398,60 @@ public class TrucoActivity extends Activity {
         return !preferences.getBoolean("limpaPlacarPartidas", false);
     }
 
+    /**
+     * Se o jogo for single-player e o usuário tiver optado por não limpar o
+     * placar, recupera o placar de partidas anterior e dá a opção de limpar.
+     */
     private void inicializaPlacarDePartidas() {
         if (placarDePartidasPersistente()) {
             setPlacarDePartidas(
                 preferences.getInt("statVitorias", 0),
                 preferences.getInt("statDerrotas", 0)
             );
+            findViewById(R.id.image_limpar_placar).setVisibility(View.VISIBLE);
+            findViewById(R.id.layoutPlacarPartidas).setOnClickListener(v -> {
+                confirmaLimpezaDoPlacarDePartidas();
+            });
         } else {
             setPlacarDePartidas(0, 0);
+            findViewById(R.id.image_limpar_placar).setVisibility(View.GONE);
+            findViewById(R.id.layoutPlacarPartidas).setOnClickListener(null);
         }
     }
 
+    public void confirmaLimpezaDoPlacarDePartidas() {
+        View dialogLimparSempre = getLayoutInflater()
+            .inflate(R.layout.dialog_sempre_limpa_placar_partidas, null);
+        final CheckBox checkBoxLimparSempre = dialogLimparSempre
+            .findViewById(R.id.checkBoxSempreLimpaPlacarPartidas);
+        checkBoxLimparSempre.setChecked(
+            preferences.getBoolean("limpaPlacarPartidas", false)
+        );
+
+        new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle("Limpar placar de partidas")
+            .setMessage("Você quer mesmo limpar o placar de partidas?")
+            .setView(dialogLimparSempre)
+            .setPositiveButton("Sim", (dialog, which) -> {
+                setPlacarDePartidas(0, 0);
+                if (checkBoxLimparSempre.isChecked()) {
+                    preferences.edit().putBoolean("limpaPlacarPartidas", true).apply();
+                    inicializaPlacarDePartidas();
+                }
+            })
+            .setNegativeButton("Não", null)
+            .show();
+    }
+
+
+    /**
+     * Atualiza o placar de partidas visualmente e, se for persistente,
+     * salva o placar no SharedPreferences
+     *
+     * @param vitorias primeiro número do placar
+     * @param derrotas segundo número do placar
+     */
     private void setPlacarDePartidas(int vitorias, int derrotas) {
         if (placarDePartidasPersistente()) {
             preferences.edit().putInt("statVitorias", vitorias).apply();
@@ -427,29 +466,5 @@ public class TrucoActivity extends Activity {
     private int[] getPlacarDePartidas() {
         String[] pontos = textViewPartidas.getText().toString().split(SEPARADOR_PLACAR_PARTIDAS);
         return new int[]{Integer.parseInt(pontos[0]), Integer.parseInt(pontos[1])};
-    }
-
-    public void confirmaLimpezaDoPlacarDePartidas() {
-        View dialogLimparSempre = getLayoutInflater()
-            .inflate(R.layout.dialog_sempre_limpa_placar_partidas, null);
-        final CheckBox checkBoxLimparSempre = dialogLimparSempre
-            .findViewById(R.id.checkBoxSempreLimpaPlacarPartidas);
-        checkBoxLimparSempre.setChecked(
-            preferences.getBoolean("limpaPlacarPartidas", false)
-        );
-        checkBoxLimparSempre.setOnCheckedChangeListener((button, isChecked) -> {
-            preferences.edit().putBoolean("limpaPlacarPartidas", isChecked).apply();
-        });
-
-        new AlertDialog.Builder(this)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setTitle("Limpar placar de partidas")
-            .setMessage("Você quer mesmo limpar o placar de partidas?")
-            .setView(dialogLimparSempre)
-            .setPositiveButton("Sim", (dialog, which) -> {
-                setPlacarDePartidas(0, 0);
-            })
-            .setNegativeButton("Não", null)
-            .show();
     }
 }
