@@ -147,7 +147,7 @@ public class TrucoActivity extends Activity {
         imagesResultadoRodada[1] = findViewById(R.id.imageResultadoRodada2);
         imagesResultadoRodada[2] = findViewById(R.id.imageResultadoRodada3);
 
-        textViewPartidas.setText("0" + SEPARADOR_PLACAR_PARTIDAS + "0");
+        inicializaPlacarDePartidas();
         setValorMao(0);
         mesa = findViewById(R.id.MesaView01);
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
@@ -162,7 +162,7 @@ public class TrucoActivity extends Activity {
         mesa.setTextoAumento(12, getString(R.string.botao_aumento_doze));
 
         findViewById(R.id.layoutPlacarPartidas).setOnClickListener(v -> {
-            onLimparPlacarDePartidasPressed();
+            confirmaLimpezaDoPlacarDePartidas();
         });
 
         // O jogo só deve efetivamente iniciar quando a mesa estiver pronta
@@ -299,33 +299,6 @@ public class TrucoActivity extends Activity {
             .show();
     }
 
-    public void onLimparPlacarDePartidasPressed() {
-
-        View dialogLimparSempre = getLayoutInflater()
-            .inflate(R.layout.dialog_sempre_limpa_placar_partidas, null);
-        final CheckBox checkBoxLimparSempre = dialogLimparSempre
-            .findViewById(R.id.checkBoxSempreLimpaPlacarPartidas);
-        checkBoxLimparSempre.setChecked(
-            preferences.getBoolean("sempreLimpaPlacarPartidas", false)
-        );
-
-        checkBoxLimparSempre.setOnCheckedChangeListener((button, isChecked) -> {
-            preferences.edit().putBoolean("sempreLimpaPlacarPartidas", isChecked).apply();
-        });
-
-        new AlertDialog.Builder(this)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .setTitle("Limpar placar de partidas")
-            .setMessage("Você quer mesmo limpar o placar de partidas?")
-            .setView(dialogLimparSempre)
-            .setPositiveButton("Sim", (dialog, which) -> {
-//                partida.limpaPlacarDePartidas();
-//                atualizaPlacarDePartidas();
-            })
-            .setNegativeButton("Não", null)
-            .show();
-    }
-
     public void setValorMao(int valor) {
         runOnUiThread(() -> {
             int bitmap;
@@ -389,11 +362,11 @@ public class TrucoActivity extends Activity {
     @SuppressLint("SetTextI18n")
     public void jogoFechado(int numEquipeVencedora) {
         runOnUiThread(() -> {
-            String[] pontos = textViewPartidas.getText().toString().split(SEPARADOR_PLACAR_PARTIDAS);
+            int[] pontos = getPlacarDePartidas();
             if (jogadorHumano.getEquipe() == numEquipeVencedora) {
-                textViewPartidas.setText((Integer.parseInt(pontos[0]) + 1) + SEPARADOR_PLACAR_PARTIDAS + pontos[1]);
+                setPlacarDePartidas(pontos[0] + 1, pontos[1]);
             } else {
-                textViewPartidas.setText(pontos[0] + SEPARADOR_PLACAR_PARTIDAS + (Integer.parseInt(pontos[1]) + 1));
+                setPlacarDePartidas(pontos[0], pontos[1] + 1);
             }
             if (partida instanceof PartidaLocal) {
                 btnNovaPartida.setVisibility(View.VISIBLE);
@@ -402,5 +375,68 @@ public class TrucoActivity extends Activity {
                 }
             }
         });
+    }
+
+    /**
+     * Determina se o placar de partidas deve ser salvo/recuperado
+     *
+     * @return true se o jogo for single-player e o usuário tiver optado por
+     *         não limpar o placar de partidas a cada novo jogo
+     */
+    private boolean placarDePartidasPersistente() {
+        if (getIntent().hasExtra("multiplayer")) {
+            return false;
+        }
+        return !preferences.getBoolean("limpaPlacarPartidas", false);
+    }
+
+    private void inicializaPlacarDePartidas() {
+        if (placarDePartidasPersistente()) {
+            setPlacarDePartidas(
+                preferences.getInt("statVitorias", 0),
+                preferences.getInt("statDerrotas", 0)
+            );
+        } else {
+            setPlacarDePartidas(0, 0);
+        }
+    }
+
+    private void setPlacarDePartidas(int vitorias, int derrotas) {
+        if (placarDePartidasPersistente()) {
+            preferences.edit().putInt("statVitorias", vitorias).apply();
+            preferences.edit().putInt("statDerrotas", derrotas).apply();
+        }
+        runOnUiThread(() -> {
+            textViewPartidas.setText(vitorias + SEPARADOR_PLACAR_PARTIDAS + derrotas);
+        });
+    }
+
+    private int[] getPlacarDePartidas() {
+        String[] pontos = textViewPartidas.getText().toString().split(SEPARADOR_PLACAR_PARTIDAS);
+        return new int[]{Integer.parseInt(pontos[0]), Integer.parseInt(pontos[1])};
+    }
+
+    public void confirmaLimpezaDoPlacarDePartidas() {
+        View dialogLimparSempre = getLayoutInflater()
+            .inflate(R.layout.dialog_sempre_limpa_placar_partidas, null);
+        final CheckBox checkBoxLimparSempre = dialogLimparSempre
+            .findViewById(R.id.checkBoxSempreLimpaPlacarPartidas);
+        checkBoxLimparSempre.setChecked(
+            preferences.getBoolean("limpaPlacarPartidas", false)
+        );
+        checkBoxLimparSempre.setOnCheckedChangeListener((button, isChecked) -> {
+            preferences.edit().putBoolean("limpaPlacarPartidas", isChecked).apply();
+        });
+
+        new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle("Limpar placar de partidas")
+            .setMessage("Você quer mesmo limpar o placar de partidas?")
+            .setView(dialogLimparSempre)
+            .setPositiveButton("Sim", (dialog, which) -> {
+                setPlacarDePartidas(0, 0);
+            })
+            .setNegativeButton("Não", null)
+            .show();
     }
 }
