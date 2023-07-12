@@ -161,6 +161,10 @@ public class TrucoActivity extends Activity {
         mesa.setTextoAumento(10, getString(R.string.botao_aumento_dez));
         mesa.setTextoAumento(12, getString(R.string.botao_aumento_doze));
 
+        findViewById(R.id.layoutPlacarPartidas).setOnClickListener(v -> {
+            onLimparPlacarDePartidasPressed();
+        });
+
         // O jogo só deve efetivamente iniciar quando a mesa estiver pronta
         new Thread(() -> {
             while (!mesa.isInicializada()) {
@@ -291,6 +295,33 @@ public class TrucoActivity extends Activity {
             .setView(dialogPerguntaAntesDeFechar)
             .setMessage("Você quer mesmo encerrar este jogo?")
             .setPositiveButton("Sim", (dialog, which) -> finish())
+            .setNegativeButton("Não", null)
+            .show();
+    }
+
+    public void onLimparPlacarDePartidasPressed() {
+
+        View dialogLimparSempre = getLayoutInflater()
+            .inflate(R.layout.dialog_sempre_limpa_placar_partidas, null);
+        final CheckBox checkBoxLimparSempre = dialogLimparSempre
+            .findViewById(R.id.checkBoxSempreLimpaPlacarPartidas);
+        checkBoxLimparSempre.setChecked(
+            preferences.getBoolean("sempreLimpaPlacarPartidas", false)
+        );
+
+        checkBoxLimparSempre.setOnCheckedChangeListener((button, isChecked) -> {
+            preferences.edit().putBoolean("sempreLimpaPlacarPartidas", isChecked).apply();
+        });
+
+        new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle("Limpar placar de partidas")
+            .setMessage("Você quer mesmo limpar o placar de partidas?")
+            .setView(dialogLimparSempre)
+            .setPositiveButton("Sim", (dialog, which) -> {
+//                partida.limpaPlacarDePartidas();
+//                atualizaPlacarDePartidas();
+            })
             .setNegativeButton("Não", null)
             .show();
     }
