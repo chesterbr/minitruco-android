@@ -60,7 +60,7 @@ public class TituloActivity extends BaseActivity {
             }
             String stats_versao = "Esta é a versão " + versao
                 + " do jogo. Você já iniciou " + partidas
-                + " partidas.<br/><br/>";
+                + " partidas (locais ou multiplayer).<br/><br/>";
             mostraAlertBox(this.getString(R.string.titulo_sobre), stats_versao
                 + this.getString(R.string.texto_sobre));
         });

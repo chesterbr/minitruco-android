@@ -109,6 +109,9 @@ public class TrucoActivity extends Activity {
      * diante pelo botão de nova partida.
      */
     private void criaEIniciaNovoJogo() {
+        preferences.edit().putInt("statPartidas",
+            preferences.getInt("statPartidas", 0) + 1
+        ).apply();
         jogadorHumano = new JogadorHumano(this, mesa);
         if (getIntent().hasExtra("multiplayer")) {
             partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
@@ -406,6 +409,7 @@ public class TrucoActivity extends Activity {
             preferences.edit().putInt("statVitorias", vitorias).apply();
             preferences.edit().putInt("statDerrotas", derrotas).apply();
         }
+
         runOnUiThread(() -> {
             textViewPartidas.setText(vitorias + SEPARADOR_PLACAR_PARTIDAS + derrotas);
         });
