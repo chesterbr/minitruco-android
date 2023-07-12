@@ -107,7 +107,6 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void jogoFechado(int numEquipeVencedora, int rndFrase) {
         boolean ganhei = (numEquipeVencedora == this.getEquipe());
-        incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
         mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000, rndFrase);
         mesa.aguardaFimAnimacoes();
         activity.jogoFechado(numEquipeVencedora);
