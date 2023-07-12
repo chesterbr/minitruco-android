@@ -93,7 +93,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
             mesa.aguardaFimAnimacoes();
         }
         if (activity != null) {
-            activity.jogoAbortado = true;
+            activity.partidaAbortada = true;
             activity.finish();
         }
     }

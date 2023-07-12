@@ -50,7 +50,7 @@ public class TrucoActivity extends Activity {
     public static final String BROADCAST_IDENTIFIER = "me.chester.minitruco.EVENTO_TRUCO_ACTIVITY";
     private static boolean mIsViva = false;
     final int[] placar = new int[2];
-    boolean jogoAbortado = false;
+    boolean partidaAbortada = false;
     JogadorHumano jogadorHumano;
     Partida partida;
     private MesaView mesa;
@@ -108,7 +108,7 @@ public class TrucoActivity extends Activity {
      * garantir que a partida só role quando a mesa estiver inicializada) e dali em
      * diante pelo botão de nova partida.
      */
-    private void criaEIniciaNovoJogo() {
+    private void criaEIniciaNovaPartida() {
         preferences.edit().putInt("statPartidas",
             preferences.getInt("statPartidas", 0) + 1
         ).apply();
@@ -116,13 +116,13 @@ public class TrucoActivity extends Activity {
         if (getIntent().hasExtra("multiplayer")) {
             partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
         } else {
-            partida = criaNovoJogoSinglePlayer(jogadorHumano);
+            partida = criaNovaPartidaSinglePlayer(jogadorHumano);
         }
         (new Thread(partida)).start();
         mIsViva = true;
     }
 
-    private Partida criaNovoJogoSinglePlayer(JogadorHumano humano) {
+    private Partida criaNovaPartidaSinglePlayer(JogadorHumano humano) {
         String modo = preferences.getString("modo", "P");
         boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
         boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
@@ -177,7 +177,7 @@ public class TrucoActivity extends Activity {
                     throw new RuntimeException(e);
                 }
             }
-            criaEIniciaNovoJogo();
+            criaEIniciaNovaPartida();
         }).start();
     }
 
@@ -197,7 +197,7 @@ public class TrucoActivity extends Activity {
 
     public void novaPartidaClickHandler(View v) {
         btnNovaPartida.setVisibility(View.INVISIBLE);
-        criaEIniciaNovoJogo();
+        criaEIniciaNovaPartida();
     }
 
     @Override
@@ -272,7 +272,7 @@ public class TrucoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mIsViva = false;
-        if (partida != null && !jogoAbortado) {
+        if (partida != null && !partidaAbortada) {
             partida.abandona(1);
         }
     }
