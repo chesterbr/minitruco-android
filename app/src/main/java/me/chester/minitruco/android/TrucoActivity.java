@@ -272,6 +272,15 @@ public class TrucoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mIsViva = false;
+        // Se a Activity for fechada com uma partida em andamento, contabiliza a
+        // partida para a equipe adversária.
+        // Isso é relevante se o placar de partidas for persistente.
+        if (btnNovaPartida.getVisibility() != View.VISIBLE) {
+            int[] pontos = getPlacarDePartidas();
+            setPlacarDePartidas(pontos[0], pontos[1] + 1);
+        }
+        // Encerra qualquer partida em andamento (tanto para liberar recursos
+        // quanto para notificar os outros jogadores em jogo multiplayer)
         if (partida != null && !partidaAbortada) {
             partida.abandona(1);
         }
