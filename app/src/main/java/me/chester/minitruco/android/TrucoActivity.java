@@ -268,16 +268,13 @@ public class TrucoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mIsViva = false;
-        // Se a activity for fechada antes da finalização normal, contabiliza
-        // para a equipe adversária.
-        // Isso é relevante se o placar de partidas for persistente.
-        if (!partida.finalizada) {
+        if (partida != null && !partidaAbortada && !partida.finalizada) {
+            // Usuário fechou partida em andamento, contabiliza derrota
+            // (para o placar de partidas do single-player)...
             int[] pontos = getPlacarDePartidas();
             setPlacarDePartidas(pontos[0], pontos[1] + 1);
-        }
-        // Notifica o abandono da partida (caso outra pessoa já não tenha
-        // feito isso), avisando outros jogadores e encerrando a conexão/thread.
-        if (partida != null && !partidaAbortada) {
+            // ...e notifica os outros jogadores (para que todos voltem
+            // para a sala no multiplayer)
             partida.abandona(1);
         }
     }
