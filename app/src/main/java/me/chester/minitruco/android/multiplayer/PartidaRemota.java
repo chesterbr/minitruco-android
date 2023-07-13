@@ -222,6 +222,7 @@ public class PartidaRemota extends Partida {
                 break;
             case 'G':
                 // Fim de partida
+                finalizada = true;
                 getJogadorHumano().jogoFechado(
                         Integer.parseInt(tokens[0]),
                         Integer.parseInt(tokens[1]));

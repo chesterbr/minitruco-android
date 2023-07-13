@@ -1,10 +1,5 @@
 package me.chester.minitruco.android;
 
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-
-import androidx.preference.PreferenceManager;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -85,7 +80,6 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
     @Override
     public void inicioPartida(int placarEquipe1, int placarEquipe2) {
-        incrementaEstatistica("statPartidas");
         activity.placar[0] = placarEquipe1;
         activity.placar[1] = placarEquipe2;
         activity.atualizaPlacar(placarEquipe1, placarEquipe2);
@@ -99,7 +93,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
             mesa.aguardaFimAnimacoes();
         }
         if (activity != null) {
-            activity.jogoAbortado = true;
+            activity.partidaAbortada = true;
             activity.finish();
         }
     }
@@ -107,7 +101,6 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
     @Override
     public void jogoFechado(int numEquipeVencedora, int rndFrase) {
         boolean ganhei = (numEquipeVencedora == this.getEquipe());
-        incrementaEstatistica(ganhei ? "statVitorias" : "statDerrotas");
         mesa.diz(ganhei ? "vitoria" : "derrota", 1, 1000, rndFrase);
         mesa.aguardaFimAnimacoes();
         activity.jogoFechado(numEquipeVencedora);
@@ -188,23 +181,6 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         }
         mesa.vez(j.equals(this));
         mesa.setPosicaoVez(posicaoNaTela(j));
-    }
-
-    /**
-     * Soma um a uma estatística (no. de partidas jogadas, no. de vitórias,
-     * etc.)
-     *
-     * @param chave
-     *            identificador da estatística (ex.: "statPartidas" para número
-     *            de partidas jogadas)
-     */
-    void incrementaEstatistica(String chave) {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(activity);
-        int partidas = preferences.getInt(chave, 0);
-        Editor editor = preferences.edit();
-        editor.putInt(chave, ++partidas);
-        editor.apply();
     }
 
     /**

@@ -4,12 +4,12 @@
     android:layout_height="match_parent">
 
     <CheckBox
-        android:id="@+id/checkBoxSempreConfirmaFecharJogo"
+        android:id="@+id/checkBoxSempreLimpaPlacarPartidas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginVertical="4dp"
         android:layout_marginHorizontal="18dp"
-        android:checked="true"
-        android:text="Sempre perguntar ao fechar um jogo" />
+        android:checked="false"
+        android:text="Sempre limpar o placar de partidas quando começar a jogar" />
 </LinearLayout>

@@ -1,9 +1,7 @@
 package me.chester.minitruco.android;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -26,8 +24,6 @@ class JogadorHumanoTest {
 
     @Test
     void dizFraseDeVitoriaOuDerrotaNoFimDoJogo() {
-        doNothing().when(jogadorHumano).incrementaEstatistica(any());
-
         doReturn(1).when(jogadorHumano).getEquipe();
         jogadorHumano.jogoFechado(1, 0);
         jogadorHumano.jogoFechado(2, 0);

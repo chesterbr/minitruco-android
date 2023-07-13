@@ -51,8 +51,6 @@ public class TituloActivity extends BaseActivity {
 
         findViewById(R.id.btnSobre).setOnClickListener(v -> {
             int partidas = preferences.getInt("statPartidas", 0);
-            int vitorias = preferences.getInt("statVitorias", 0);
-            int derrotas = preferences.getInt("statDerrotas", 0);
             String versao;
             try {
                 versao = getPackageManager()
@@ -62,8 +60,7 @@ public class TituloActivity extends BaseActivity {
             }
             String stats_versao = "Esta é a versão " + versao
                 + " do jogo. Você já iniciou " + partidas
-                + " partidas, ganhou " + vitorias + " e perdeu " + derrotas
-                + ".<br/><br/>";
+                + " partidas (locais ou multiplayer).<br/><br/>";
             mostraAlertBox(this.getString(R.string.titulo_sobre), stats_versao
                 + this.getString(R.string.texto_sobre));
         });

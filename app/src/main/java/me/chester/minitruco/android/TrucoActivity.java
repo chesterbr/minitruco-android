@@ -50,7 +50,7 @@ public class TrucoActivity extends Activity {
     public static final String BROADCAST_IDENTIFIER = "me.chester.minitruco.EVENTO_TRUCO_ACTIVITY";
     private static boolean mIsViva = false;
     final int[] placar = new int[2];
-    boolean jogoAbortado = false;
+    boolean partidaAbortada = false;
     JogadorHumano jogadorHumano;
     Partida partida;
     private MesaView mesa;
@@ -108,18 +108,21 @@ public class TrucoActivity extends Activity {
      * garantir que a partida só role quando a mesa estiver inicializada) e dali em
      * diante pelo botão de nova partida.
      */
-    private void criaEIniciaNovoJogo() {
+    private void criaEIniciaNovaPartida() {
+        preferences.edit().putInt("statPartidas",
+            preferences.getInt("statPartidas", 0) + 1
+        ).apply();
         jogadorHumano = new JogadorHumano(this, mesa);
         if (getIntent().hasExtra("multiplayer")) {
             partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
         } else {
-            partida = criaNovoJogoSinglePlayer(jogadorHumano);
+            partida = criaNovaPartidaSinglePlayer(jogadorHumano);
         }
         (new Thread(partida)).start();
         mIsViva = true;
     }
 
-    private Partida criaNovoJogoSinglePlayer(JogadorHumano humano) {
+    private Partida criaNovaPartidaSinglePlayer(JogadorHumano humano) {
         String modo = preferences.getString("modo", "P");
         boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
         boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
@@ -147,7 +150,7 @@ public class TrucoActivity extends Activity {
         imagesResultadoRodada[1] = findViewById(R.id.imageResultadoRodada2);
         imagesResultadoRodada[2] = findViewById(R.id.imageResultadoRodada3);
 
-        textViewPartidas.setText("0" + SEPARADOR_PLACAR_PARTIDAS + "0");
+        inicializaPlacarDePartidas();
         setValorMao(0);
         mesa = findViewById(R.id.MesaView01);
         mesa.setCorFundoCartaBalao(preferences.getInt("corFundoCarta", Color.WHITE));
@@ -170,7 +173,7 @@ public class TrucoActivity extends Activity {
                     throw new RuntimeException(e);
                 }
             }
-            criaEIniciaNovoJogo();
+            criaEIniciaNovaPartida();
         }).start();
     }
 
@@ -190,7 +193,7 @@ public class TrucoActivity extends Activity {
 
     public void novaPartidaClickHandler(View v) {
         btnNovaPartida.setVisibility(View.INVISIBLE);
-        criaEIniciaNovoJogo();
+        criaEIniciaNovaPartida();
     }
 
     @Override
@@ -265,14 +268,24 @@ public class TrucoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mIsViva = false;
-        if (partida != null && !jogoAbortado) {
+        // Se a activity for fechada antes da finalização normal, contabiliza
+        // para a equipe adversária.
+        // Isso é relevante se o placar de partidas for persistente.
+        if (!partida.finalizada) {
+            int[] pontos = getPlacarDePartidas();
+            setPlacarDePartidas(pontos[0], pontos[1] + 1);
+        }
+        // Notifica o abandono da partida (caso outra pessoa já não tenha
+        // feito isso), avisando outros jogadores e encerrando a conexão/thread.
+        if (partida != null && !partidaAbortada) {
             partida.abandona(1);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (!preferences.getBoolean("sempreConfirmaFecharJogo", true)) {
+        boolean naoPrecisaConfirmar = !preferences.getBoolean("sempreConfirmaFecharJogo", true);
+        if (partida.finalizada || naoPrecisaConfirmar) {
             finish();
             return;
         }
@@ -281,16 +294,18 @@ public class TrucoActivity extends Activity {
             .inflate(R.layout.dialog_sempre_confirma_fechar_jogo, null);
         final CheckBox checkBoxPerguntarSempre = dialogPerguntaAntesDeFechar
             .findViewById(R.id.checkBoxSempreConfirmaFecharJogo);
-        checkBoxPerguntarSempre.setOnCheckedChangeListener((button, isChecked) -> {
-            preferences.edit().putBoolean("sempreConfirmaFecharJogo", isChecked).apply();
-        });
 
         new AlertDialog.Builder(this)
             .setIcon(android.R.drawable.ic_dialog_alert)
             .setTitle("Encerrar")
             .setView(dialogPerguntaAntesDeFechar)
-            .setMessage("Você quer mesmo encerrar este jogo?")
-            .setPositiveButton("Sim", (dialog, which) -> finish())
+            .setMessage("Você quer mesmo desistir dessa partida?")
+            .setPositiveButton("Sim", (dialog, which) -> {
+                if (!checkBoxPerguntarSempre.isChecked()) {
+                    preferences.edit().putBoolean("sempreConfirmaFecharJogo", false).apply();
+                }
+                finish();
+            })
             .setNegativeButton("Não", null)
             .show();
     }
@@ -358,11 +373,11 @@ public class TrucoActivity extends Activity {
     @SuppressLint("SetTextI18n")
     public void jogoFechado(int numEquipeVencedora) {
         runOnUiThread(() -> {
-            String[] pontos = textViewPartidas.getText().toString().split(SEPARADOR_PLACAR_PARTIDAS);
+            int[] pontos = getPlacarDePartidas();
             if (jogadorHumano.getEquipe() == numEquipeVencedora) {
-                textViewPartidas.setText((Integer.parseInt(pontos[0]) + 1) + SEPARADOR_PLACAR_PARTIDAS + pontos[1]);
+                setPlacarDePartidas(pontos[0] + 1, pontos[1]);
             } else {
-                textViewPartidas.setText(pontos[0] + SEPARADOR_PLACAR_PARTIDAS + (Integer.parseInt(pontos[1]) + 1));
+                setPlacarDePartidas(pontos[0], pontos[1] + 1);
             }
             if (partida instanceof PartidaLocal) {
                 btnNovaPartida.setVisibility(View.VISIBLE);
@@ -371,5 +386,85 @@ public class TrucoActivity extends Activity {
                 }
             }
         });
+    }
+
+    /**
+     * Determina se o placar de partidas deve ser salvo/recuperado
+     *
+     * @return true se o jogo for single-player e o usuário tiver optado por
+     *         não limpar o placar de partidas a cada novo jogo
+     */
+    private boolean placarDePartidasPersistente() {
+        if (getIntent().hasExtra("multiplayer")) {
+            return false;
+        }
+        return !preferences.getBoolean("limpaPlacarPartidas", false);
+    }
+
+    /**
+     * Se o jogo for single-player e o usuário tiver optado por não limpar o
+     * placar, recupera o placar de partidas anterior e dá a opção de limpar.
+     */
+    private void inicializaPlacarDePartidas() {
+        if (placarDePartidasPersistente()) {
+            setPlacarDePartidas(
+                preferences.getInt("statVitorias", 0),
+                preferences.getInt("statDerrotas", 0)
+            );
+            findViewById(R.id.image_limpar_placar).setVisibility(View.VISIBLE);
+            findViewById(R.id.layoutPlacarPartidas).setOnClickListener(v -> {
+                confirmaLimpezaDoPlacarDePartidas();
+            });
+        } else {
+            setPlacarDePartidas(0, 0);
+            findViewById(R.id.image_limpar_placar).setVisibility(View.GONE);
+            findViewById(R.id.layoutPlacarPartidas).setOnClickListener(null);
+        }
+    }
+
+    public void confirmaLimpezaDoPlacarDePartidas() {
+        View dialogLimparSempre = getLayoutInflater()
+            .inflate(R.layout.dialog_sempre_limpa_placar_partidas, null);
+        final CheckBox checkBoxLimparSempre = dialogLimparSempre
+            .findViewById(R.id.checkBoxSempreLimpaPlacarPartidas);
+
+        new AlertDialog.Builder(this)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle("Limpar placar de partidas")
+            .setMessage("Você quer mesmo limpar o placar de partidas?")
+            .setView(dialogLimparSempre)
+            .setPositiveButton("Sim", (dialog, which) -> {
+                setPlacarDePartidas(0, 0);
+                if (checkBoxLimparSempre.isChecked()) {
+                    preferences.edit().putBoolean("limpaPlacarPartidas", true).apply();
+                    inicializaPlacarDePartidas();
+                }
+            })
+            .setNegativeButton("Não", null)
+            .show();
+    }
+
+
+    /**
+     * Atualiza o placar de partidas visualmente e, se for persistente,
+     * salva o placar no SharedPreferences
+     *
+     * @param vitorias primeiro número do placar
+     * @param derrotas segundo número do placar
+     */
+    private void setPlacarDePartidas(int vitorias, int derrotas) {
+        if (placarDePartidasPersistente()) {
+            preferences.edit().putInt("statVitorias", vitorias).apply();
+            preferences.edit().putInt("statDerrotas", derrotas).apply();
+        }
+
+        runOnUiThread(() -> {
+            textViewPartidas.setText(vitorias + SEPARADOR_PLACAR_PARTIDAS + derrotas);
+        });
+    }
+
+    private int[] getPlacarDePartidas() {
+        String[] pontos = textViewPartidas.getText().toString().split(SEPARADOR_PLACAR_PARTIDAS);
+        return new int[]{Integer.parseInt(pontos[0]), Integer.parseInt(pontos[1])};
     }
 }
