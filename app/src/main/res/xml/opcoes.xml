@@ -29,8 +29,8 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="sempreConfirmaFecharJogo"
-            android:summary="Se esta opção estiver desligada e o botão ou gesto de voltar for acionado, o jogo encerra imediatamente"
-            android:title="Sempre perguntar ao fechar um jogo" />
+            android:summary="Pede confirmação antes de ceder um jogo em andamento."
+            android:title="Confirmar fechamento do jogo" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="humanoDecide"
@@ -40,7 +40,7 @@
             android:defaultValue="false"
             android:key="limpaPlacarPartidas"
             android:summary="Se esta opção estiver ligada, o placar de partidas é zerado sempre que um jogo local é iniciado"
-            android:title="Limpa placar de partidas" />
+            android:title="Sempre limpar placar de partidas" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Desenvolvimento (️☠=PRE-RI-GO, não mexa)">
