@@ -89,7 +89,7 @@ public class JogadorBot extends Jogador implements Runnable {
     public void run() {
 
         LOGGER.log(Level.INFO, "JogadorBot " + this + " (.run) iniciado");
-        while (partida == null || !partida.jogoFinalizado) {
+        while (partida == null || !partida.finalizada) {
             sleep(100);
 
             if (minhaVez && !estouAguardandoRepostaAumento) {

@@ -271,7 +271,7 @@ public class TrucoActivity extends Activity {
         // Se a activity for fechada antes da finalização normal, contabiliza
         // para a equipe adversária.
         // Isso é relevante se o placar de partidas for persistente.
-        if (!partida.jogoFinalizado) {
+        if (!partida.finalizada) {
             int[] pontos = getPlacarDePartidas();
             setPlacarDePartidas(pontos[0], pontos[1] + 1);
         }
@@ -285,7 +285,7 @@ public class TrucoActivity extends Activity {
     @Override
     public void onBackPressed() {
         boolean naoPrecisaConfirmar = !preferences.getBoolean("sempreConfirmaFecharJogo", true);
-        if (partida.jogoFinalizado || naoPrecisaConfirmar) {
+        if (partida.finalizada || naoPrecisaConfirmar) {
             finish();
             return;
         }

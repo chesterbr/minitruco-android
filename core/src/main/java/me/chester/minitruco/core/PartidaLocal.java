@@ -120,13 +120,13 @@ public class PartidaLocal extends Partida {
 
         // Inicia a primeira rodada, usando o jogador na posição 1, e processa
         // as jogadas até alguém ganhar ou a partida ser abortada (o que pode
-        // ocorrer em paralelo, daí os múltiplos checks a jogoFinalizado)
+        // ocorrer em paralelo, daí os múltiplos checks a finalizada)
         iniciaMao(getJogador(1));
-        while (pontosEquipe[0] < 12 && pontosEquipe[1] < 12 && !jogoFinalizado) {
-            while ((!alguemJogou) && (!jogoFinalizado)) {
+        while (pontosEquipe[0] < 12 && pontosEquipe[1] < 12 && !finalizada) {
+            while ((!alguemJogou) && (!finalizada)) {
                 sleep();
             }
-            if (!jogoFinalizado) {
+            if (!finalizada) {
                 LOGGER.log(Level.INFO, "alguém jogou!");
                 processaJogada();
                 alguemJogou = false;
@@ -214,7 +214,7 @@ public class PartidaLocal extends Partida {
         // Se a partida acabou, a mesa não estiver completa, já houver alguém
         // trucando, estivermos aguardando ok da mão de 10/11 ou não for a vez do
         // cara, recusa
-        if (jogoFinalizado || numJogadores < 4 || jogadorPedindoAumento != null
+        if (finalizada || numJogadores < 4 || jogadorPedindoAumento != null
                 || (isAguardandoRespostaMaoDeX())
                 || !j.equals(getJogadorDaVez())) {
             return;
@@ -372,10 +372,10 @@ public class PartidaLocal extends Partida {
             interessado.maoFechada(pontosEquipe);
             if (pontosEquipe[0] > modo.pontuacaoParaMaoDeX()) {
                 interessado.jogoFechado(1, rndFrase);
-                jogoFinalizado = true;
+                finalizada = true;
             } else if (pontosEquipe[1] > modo.pontuacaoParaMaoDeX()) {
                 interessado.jogoFechado(2, rndFrase);
-                jogoFinalizado = true;
+                finalizada = true;
             }
         }
 
@@ -424,7 +424,7 @@ public class PartidaLocal extends Partida {
         // Só entra se estivermos jogando e se estivermos agurardando resposta
         // daquele jogador para a pergunta (isso é importante para evitar duplo
         // início)
-        if (jogoFinalizado || !aguardandoRespostaMaoDeX[j.getPosicao() - 1])
+        if (finalizada || !aguardandoRespostaMaoDeX[j.getPosicao() - 1])
             return;
 
         LOGGER.log(Level.INFO, "J" + j.getPosicao() + (aceita ? "" : " nao")
@@ -472,7 +472,7 @@ public class PartidaLocal extends Partida {
         // Se a partida estiver finalizada, a mesa não estiver completa, já houver
         // alguém trucando, estivermos aguardando a mão de 10/11 ou não for a vez
         // do cara, recusa
-        if ((jogoFinalizado) || (numJogadores < 4)
+        if ((finalizada) || (numJogadores < 4)
                 || (jogadorPedindoAumento != null)
                 || isAguardandoRespostaMaoDeX() || !j.equals(getJogadorDaVez())) {
             return;
@@ -555,7 +555,7 @@ public class PartidaLocal extends Partida {
 
     @Override
     public void abandona(int posicao) {
-         jogoFinalizado = true;
+        finalizada = true;
         int rndFrase = Math.abs(rand.nextInt());
         for (Jogador j : jogadores) {
             if (j != null) {

@@ -268,7 +268,7 @@ public abstract class Partida implements Runnable {
      * Indica que a partida foi finalizada (para evitar que os bots fiquem
      * "rodando em falso" caso a partida seja abortada
      */
-    public boolean jogoFinalizado = false;
+    public boolean finalizada = false;
 
     /**
      * @return Letra correspondente à manilha, ou constante em caso de manilha
