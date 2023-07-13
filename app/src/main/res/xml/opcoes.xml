@@ -29,7 +29,7 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="sempreConfirmaFecharJogo"
-            android:summary="Pede confirmação antes de ceder um jogo em andamento."
+            android:summary="Pede confirmação antes de ceder uma partida em andamento."
             android:title="Confirmar fechamento do jogo" />
         <CheckBoxPreference
             android:defaultValue="true"
