@@ -424,9 +424,6 @@ public class TrucoActivity extends Activity {
             .inflate(R.layout.dialog_sempre_limpa_placar_partidas, null);
         final CheckBox checkBoxLimparSempre = dialogLimparSempre
             .findViewById(R.id.checkBoxSempreLimpaPlacarPartidas);
-        checkBoxLimparSempre.setChecked(
-            preferences.getBoolean("limpaPlacarPartidas", false)
-        );
 
         new AlertDialog.Builder(this)
             .setIcon(android.R.drawable.ic_dialog_alert)
