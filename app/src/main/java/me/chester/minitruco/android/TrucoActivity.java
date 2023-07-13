@@ -293,16 +293,18 @@ public class TrucoActivity extends Activity {
             .inflate(R.layout.dialog_sempre_confirma_fechar_jogo, null);
         final CheckBox checkBoxPerguntarSempre = dialogPerguntaAntesDeFechar
             .findViewById(R.id.checkBoxSempreConfirmaFecharJogo);
-        checkBoxPerguntarSempre.setOnCheckedChangeListener((button, isChecked) -> {
-            preferences.edit().putBoolean("sempreConfirmaFecharJogo", isChecked).apply();
-        });
 
         new AlertDialog.Builder(this)
             .setIcon(android.R.drawable.ic_dialog_alert)
             .setTitle("Encerrar")
             .setView(dialogPerguntaAntesDeFechar)
-            .setMessage("Você quer mesmo encerrar este jogo?")
-            .setPositiveButton("Sim", (dialog, which) -> finish())
+            .setMessage("Você quer mesmo desistir dessa partida?")
+            .setPositiveButton("Sim", (dialog, which) -> {
+                if (!checkBoxPerguntarSempre.isChecked()) {
+                    preferences.edit().putBoolean("sempreConfirmaFecharJogo", false).apply();
+                }
+                finish();
+            })
             .setNegativeButton("Não", null)
             .show();
     }
