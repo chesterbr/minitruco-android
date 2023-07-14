@@ -427,8 +427,8 @@ public class TrucoActivity extends Activity {
 
         new AlertDialog.Builder(this)
             .setIcon(android.R.drawable.ic_dialog_alert)
-            .setTitle("Limpar placar de partidas")
-            .setMessage("Você quer mesmo limpar o placar de partidas?")
+            .setTitle("Zerar placar de partidas")
+            .setMessage("Você quer mesmo voltar o placar de partidas para 0 x 0?")
             .setView(dialogLimparSempre)
             .setPositiveButton("Sim", (dialog, which) -> {
                 setPlacarDePartidas(0, 0);
