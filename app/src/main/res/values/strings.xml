@@ -208,12 +208,9 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Não repete a mesma frase imediatamente (ex.: quando a dupla recusa truco)<br/>
-            - Botões do Bluetooth agora visíveis com o celular deitado (paisagem)<br/>
-            - Corrigido erro quando criador inicia jogo antes do cliente estar pronto<br/>
-            - Ao perder a conexão, celular que entrou no jogo agora mostra mensagem imediatamente<br/>
-            - Corrigidos dois erros que fechavam o aplicativo ao iniciar ou encerrar partida<br/>
-            - Ícone do aplicativo alinhado com versões novas do Android<br/>
+            - Placar de partidas agora mostra vitórias e derrotas desde que o jogo foi instalado (você pode clicar nele para limpar e/ou configurar para começar em 0x0, como fazia antes).<br/>
+            - Pergunta de truco agora pode ser arrastada (para poder ver as cartas abaixo dela)<br/>
+            - Celular que procura jogo Bluetooth não causa mais erro na partida seguinte ao sair no final de uma partida.<br/>
         ]]>
     </string>
 
