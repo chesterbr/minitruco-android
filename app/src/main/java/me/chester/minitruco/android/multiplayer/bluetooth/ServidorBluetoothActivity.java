@@ -264,7 +264,7 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
     }
 
     private void inicializaDisplay() {
-        apelidos[0] = btAdapter.getName().replace(" ","_");
+        apelidos[0] = sanitizaNome(btAdapter.getName());
         apelidos[1] = APELIDO_BOT;
         apelidos[2] = APELIDO_BOT;
         apelidos[3] = APELIDO_BOT;
@@ -376,8 +376,7 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
             if (connClientes[i] == null) {
                 connClientes[i] = socket;
                 outClientes[i] = socket.getOutputStream();
-                apelidos[i + 1] = socket.getRemoteDevice().getName()
-                        .replace(' ', '_');
+                apelidos[i + 1] = sanitizaNome(socket.getRemoteDevice().getName());
                 status = i == 2 ? STATUS_LOTADO : STATUS_AGUARDANDO;
                 return i;
             }
@@ -418,4 +417,13 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
         atualizaClientes();
     }
 
+    public static String sanitizaNome(String nome) {
+        return (nome == null ? "" : nome)
+            .replaceAll("[-_ \r\n]"," ")
+            .trim()
+            .replaceAll("[^a-zA-Z0-9À-ÿ ]", "")
+            .trim()
+            .replaceAll(" +","_")
+            .replaceAll("^[-_ ]*$", "Jogador(a)");
+    }
 }
