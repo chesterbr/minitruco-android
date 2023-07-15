@@ -282,7 +282,7 @@ public class TrucoActivity extends Activity {
     @Override
     public void onBackPressed() {
         boolean naoPrecisaConfirmar = !preferences.getBoolean("sempreConfirmaFecharJogo", true);
-        if (partida.finalizada || naoPrecisaConfirmar) {
+        if (partida == null || partida.finalizada || naoPrecisaConfirmar) {
             finish();
             return;
         }
