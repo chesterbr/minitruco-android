@@ -346,7 +346,7 @@ public class MesaView extends View {
                     cv.resetBitmap();
                     if (i >= 4) {
                         int numJogador = (i - 1) / 3;
-                        if (trucoActivity.partida.finalizada) {
+                        if (trucoActivity != null && trucoActivity.partida != null && trucoActivity.partida.finalizada) {
                             cv.movePara(leftBaralho, topBaralho);
                         } else if (cv.descartada) {
                             cv.movePara(calcPosLeftDescartada(numJogador), calcPosTopDescartada(numJogador));
@@ -394,7 +394,9 @@ public class MesaView extends View {
         aguardaFimAnimacoes();
         if (resultado != 3) {
             cartaQueFez = getCartaVisual(trucoActivity.partida.getCartasDaRodada(numRodada)[jogadorQueTorna.getPosicao() - 1]);
-            cartaQueFez.destacada = true;
+            if (cartaQueFez != null) {
+                cartaQueFez.destacada = true;
+            }
         }
         for (CartaVisual c : cartas) {
             c.escura = c.descartada;
