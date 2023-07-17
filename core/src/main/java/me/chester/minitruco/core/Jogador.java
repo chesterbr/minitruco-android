@@ -27,6 +27,16 @@ public abstract class Jogador {
      */
     protected Partida partida;
 
+    public static String sanitizaNome(String nome) {
+        return (nome == null ? "" : nome)
+            .replaceAll("[-_ \r\n]"," ")
+            .trim()
+            .replaceAll("[^a-zA-Z0-9À-ÿ ]", "")
+            .trim()
+            .replaceAll(" +","_")
+            .replaceAll("^[-_ ]*$", "Jogador(a)");
+    }
+
     /**
      * Processa o evento de entrada na partida (guardando a partida)
      */

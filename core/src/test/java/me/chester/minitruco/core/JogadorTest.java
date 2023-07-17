@@ -1,13 +1,13 @@
-package me.chester.minitruco.android.multiplayer.bluetooth;
+package me.chester.minitruco.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class ServidorBluetoothActivityTest {
+public class JogadorTest {
 
     private static String sanitizaNome(String nome) {
-        return ServidorBluetoothActivity.sanitizaNome(nome);
+        return Jogador.sanitizaNome(nome);
     }
 
     @Test

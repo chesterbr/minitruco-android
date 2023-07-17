@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
 import me.chester.minitruco.core.PartidaLocal;
@@ -264,7 +265,7 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
     }
 
     private void inicializaDisplay() {
-        apelidos[0] = sanitizaNome(btAdapter.getName());
+        apelidos[0] = Jogador.sanitizaNome(btAdapter.getName());
         apelidos[1] = APELIDO_BOT;
         apelidos[2] = APELIDO_BOT;
         apelidos[3] = APELIDO_BOT;
@@ -376,7 +377,7 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
             if (connClientes[i] == null) {
                 connClientes[i] = socket;
                 outClientes[i] = socket.getOutputStream();
-                apelidos[i + 1] = sanitizaNome(socket.getRemoteDevice().getName());
+                apelidos[i + 1] = Jogador.sanitizaNome(socket.getRemoteDevice().getName());
                 status = i == 2 ? STATUS_LOTADO : STATUS_AGUARDANDO;
                 return i;
             }
@@ -417,13 +418,4 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
         atualizaClientes();
     }
 
-    public static String sanitizaNome(String nome) {
-        return (nome == null ? "" : nome)
-            .replaceAll("[-_ \r\n]"," ")
-            .trim()
-            .replaceAll("[^a-zA-Z0-9À-ÿ ]", "")
-            .trim()
-            .replaceAll(" +","_")
-            .replaceAll("^[-_ ]*$", "Jogador(a)");
-    }
 }
