@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.preference.PreferenceManager;
@@ -40,7 +41,7 @@ public class TituloActivity extends BaseActivity {
         ((TextView) findViewById(R.id.versao_app)).setText("versão " + BuildConfig.VERSION_NAME);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        habilitaBluetoothSeExistir();
+        configuraBotoesMultiplayer();
         mostraNotificacaoInicial();
         migraOpcoesLegadas();
 
@@ -127,9 +128,25 @@ public class TituloActivity extends BaseActivity {
 
     }
 
-    private void habilitaBluetoothSeExistir() {
-        findViewById(R.id.btnBluetooth).setVisibility(
-            BluetoothAdapter.getDefaultAdapter() != null ? View.VISIBLE : View.GONE);
+    private void configuraBotoesMultiplayer() {
+        boolean temBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
+        boolean temInternet = true;
+
+        Button btnBluetooth = findViewById(R.id.btnBluetooth);
+        Button btnInternet = findViewById(R.id.btnInternet);
+        btnBluetooth.setVisibility(temBluetooth ? View.VISIBLE : View.GONE);
+        btnInternet.setVisibility(temInternet ? View.VISIBLE : View.GONE);
+        if (temBluetooth) {
+            btnBluetooth.setOnClickListener(v -> {
+                perguntaCriarOuProcurarBluetooth();
+            });
+        }
+        if (temInternet) {
+            btnInternet.setOnClickListener(v -> {
+                startActivity(new Intent(getBaseContext(),
+                    ClienteInternetActivity.class));
+            });
+        }
     }
 
     private void botoesHabilitados(boolean status) {
@@ -163,14 +180,6 @@ public class TituloActivity extends BaseActivity {
     public void jogarClickHandler(View v) {
         Intent intent = new Intent(TituloActivity.this, TrucoActivity.class);
         startActivity(intent);
-    }
-
-    public void internetButtonClickHandler(View v) {
-        startActivity(new Intent(getBaseContext(), ClienteInternetActivity.class));
-    }
-
-    public void bluetoothButtonClickHandler(View v) {
-        perguntaCriarOuProcurarBluetooth();
     }
 
     public void opcoesButtonClickHandler(View v) {
