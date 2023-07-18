@@ -53,5 +53,8 @@ public class JogadorTest {
             sanitizaNome("!!$$|1234567890123456789012345"));
         assertEquals("1234567890123456789012345",
             sanitizaNome("!!$$|1234567890123456789012345excesso"));
+        // Não deixa underscore no final se truncar no espaço
+        assertEquals("1234567890_234567890_234",
+            sanitizaNome("1234567890 234567890 234 6"));
     }
 }
