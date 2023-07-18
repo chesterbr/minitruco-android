@@ -224,7 +224,7 @@ public class JogadorConectado extends Jogador implements Runnable {
 
     @Override
     public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
-        println("H " + j.getPosicao() + (aceita ? " T" : " F"));
+        println("H " + j.getPosicao() + (aceita ? " T" : " F") + ' ' + rndFrase);
     }
 
     @Override
