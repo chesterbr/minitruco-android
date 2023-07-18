@@ -118,19 +118,9 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
                     "nome_multiplayer", null));
                 break;
             case 'N': // Nome foi aceito
-                runOnUiThread(() -> {
-                    setContentView(R.layout.internet_menu);
-                    findViewById(R.id.btnEntrarSalaPublica).setOnClickListener(v -> {
-                        // TODO pegar as regras das preferências
-                        enviaLinha("E PUB P");
-                    });
-                    ((TextView) findViewById(R.id.textViewInternetTitulo)).setText(
-                        "Conectado como " + line.substring(2) + ". Regras:"
-                    );
-                    ((TextView) findViewById(R.id.textViewInternetRegras)).setText(
-                        "TODO mostrar as regras aqui"
-                    );
-                });
+                // Já vamos entrar de cara numa sala pública (se a pessoa quiser
+                // fazer outra coisa, ela usa o botão apropriado)
+                enviaLinha("E PUB " + preferences.getString("modo", "P"));
                 break;
             case 'I': // Entrou numa sala (ou ela foi atualizada)
                 runOnUiThread(() -> {
