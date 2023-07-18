@@ -1,5 +1,6 @@
 package me.chester.minitruco.server;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -19,13 +20,24 @@ class ComandoNTest {
     void verificaResposta(String linha, String resposta) {
         Mockito.reset(jogadorConectado);
         Comando.interpreta(linha, jogadorConectado);
-        verify(jogadorConectado).println(resposta);
+        verify(jogadorConectado).println(eq(resposta));
     }
 
     @Test
-    void testNomesInvalidos() {
-        verificaResposta("N", "X NI");
-        verificaResposta("N ", "X NI");
-        verificaResposta("N !@#$", "X NI");
+    void testNomesInvalidosViramNomeDefault() {
+        verificaResposta("N", "N Jogador(a)");
+        verificaResposta("N ", "N Jogador(a)");
+        verificaResposta("N !@#$", "N Jogador(a)");
+    }
+
+    @Test
+    void testSanitizaNome() {
+        verificaResposta("N joão do pulo 23!", "N joão_do_pulo_23");
+    }
+
+    @Test
+    void testAtribuiNome() {
+        Comando.interpreta("N joselito", jogadorConectado);
+        verify(jogadorConectado).setNome("joselito");
     }
 }
