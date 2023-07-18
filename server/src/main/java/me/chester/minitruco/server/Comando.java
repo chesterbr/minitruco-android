@@ -3,8 +3,6 @@ package me.chester.minitruco.server;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Superclasse de todos os comandos que podem ser emitidos por um cliente.
  * <p>
@@ -37,32 +35,36 @@ public abstract class Comando {
      * @see /docs/desenvolvimento.md#protocolo-de-comunicação-multiplayer
      */
     public static void interpreta(String linha, JogadorConectado j) {
+        if (linha==null) return;
+        if (linha.isEmpty()) return;
+
         // Quebra a solicitação em tokens
         String[] args = linha.split(" ");
-        if (args.length == 0 || args[0].length() == 0) {
-            return;
-        }
+        if (args.length == 0) return;
+        if (args[0].length() != 1) return;
 
-        // Encontra a implementação do comando solicitado e chama
-        if (args[0].length() != 1) {
-            return;
-        }
-        char comando = Character.toUpperCase(args[0].charAt(0));
-        try {
-            Comando c = (Comando) Class.forName(
-                    "me.chester.minitruco.server.Comando"
-                            + comando).getDeclaredConstructor().newInstance();
+        char letraComando = Character.toUpperCase(args[0].charAt(0));
+        Comando c = comandoParaLetra(letraComando);
+        if (c != null) {
             c.executa(args, j);
-        } catch (ClassNotFoundException e) {
+        } else {
             j.println("X CI");
-        } catch (InstantiationException e) {
-            j.println("X CI");
-        } catch (IllegalAccessException e) {
-            j.println("X CI");
-        } catch (InvocationTargetException e) {
-            j.println("X CI");
-        } catch (NoSuchMethodException e) {
-            j.println("X CI");
+        }
+    }
+
+    /**
+     * Retorna uma instância da subclasse de Comando correspondente à letra
+     *
+     * @param letra um comando, sem parâmetros. Ex.: "N"
+     * @return instância da classe correspondente. Ex.: ComandoN
+     */
+    static Comando comandoParaLetra(char letra) {
+        try {
+            return (Comando) Class.forName(
+                "me.chester.minitruco.server.Comando"
+                    + letra).getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            return null;
         }
     }
 
