@@ -30,7 +30,6 @@ public class ComandoN extends Comando {
         String nome = Jogador.sanitizaNome(
             (comando + "  ").substring(2)
         );
-        // TODO limitar tamanho no sanitizador
         j.setNome(nome);
         j.println("N " + nome);
     }

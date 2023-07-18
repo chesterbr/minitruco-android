@@ -34,6 +34,7 @@ public abstract class Jogador {
             .replaceAll("[^a-zA-Z0-9À-ÿ ]", "")
             .trim()
             .replaceAll(" +","_")
+            .replaceAll("^(.{0,25}).*$", "$1")
             .replaceAll("^[-_ ]*$", "Jogador(a)");
     }
 
