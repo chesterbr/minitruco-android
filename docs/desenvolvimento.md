@@ -219,7 +219,7 @@ TODO: instruções de como usar o servidor via terminal
 
 - `W`: recupera número de versão (e de repente outras infos no futuro)
 - `B <numero>`:  Informa o número do build do cliente, para que o servidor verifique compatibilidade
-- `N <apelido>`: Define o nome do jogador
+- `N <apelido>`: Define o nome do jogador (se for inválido, define o default)
 - `E PUB <modo>`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
 - `S`: - Sai da sala (encerrando a partida, se houver uma em andamento)
 - `Q`: - Quero Jogar
@@ -238,8 +238,6 @@ TODO: instruções de como usar o servidor via terminal
 - `X CI`: `Comando inválido
 - `X AI`: `Argumento inválido
 - `X FS`: `Você não está numa sala
-- `X NI`: `Nome inválido
-- `X NE`: `Nome já está em uso
 - `X NO`: `É preciso atribuir um nome para entrar na sala
 - `X JE sala`: `Você já está na sala de código `sala`
 - `N nome`: `Seu nome foi definido como `nome`

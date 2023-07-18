@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.HashSet;
@@ -118,50 +117,20 @@ public class JogadorConectado extends Jogador implements Runnable {
             out = new PrintStream(cliente.getOutputStream());
             // Imprime info do servidor (como mensagem de boas-vindas)
             (new ComandoW()).executa(null, this);
-            while (true) {
-                String s = null;
+            String linha = "";
+            while (linha != null) {
                 try {
-                    s = in.readLine();
+                    linha = in.readLine();
+                    Comando.interpreta(linha, this);
                 } catch (SocketTimeoutException e) {
                     // A linha é só pra garantir que, no caso de uma conexão presa
-                    // o teste abaixo dela dê erro (seja no if, seja exception)
+                    // o teste abaixo dela dê erro (seja no if, seja exception no print)
                     println("");
                     if (!cliente.isConnected()) {
                         ServerLogger.evento("Desconexao detectada durante timeout");
                         return;
                     }
                     continue;
-                }
-                if (s == null) {
-                    // Desconexão
-                    return;
-                }
-                // Quebra a solicitação em tokens
-                String[] args = s.split(" ");
-                if (args.length == 0 || args[0].length() == 0) {
-                    continue;
-                }
-
-                // Encontra a implementação do comando solicitado e chama
-                if (args[0].length() != 1) {
-                    continue;
-                }
-                char comando = Character.toUpperCase(args[0].charAt(0));
-                try {
-                    Comando c = (Comando) Class.forName(
-                            "me.chester.minitruco.server.Comando"
-                                    + comando).getDeclaredConstructor().newInstance();
-                    c.executa(args, this);
-                } catch (ClassNotFoundException e) {
-                    println("X CI");
-                } catch (InstantiationException e) {
-                    println("X CI");
-                } catch (IllegalAccessException e) {
-                    println("X CI");
-                } catch (InvocationTargetException e) {
-                    println("X CI");
-                } catch (NoSuchMethodException e) {
-                    println("X CI");
                 }
             }
         } catch (IOException e) {

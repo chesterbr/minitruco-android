@@ -1,13 +1,13 @@
-package me.chester.minitruco.android.multiplayer.bluetooth;
+package me.chester.minitruco.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class ServidorBluetoothActivityTest {
+public class JogadorTest {
 
     private static String sanitizaNome(String nome) {
-        return ServidorBluetoothActivity.sanitizaNome(nome);
+        return Jogador.sanitizaNome(nome);
     }
 
     @Test
@@ -16,8 +16,8 @@ public class ServidorBluetoothActivityTest {
         assertEquals("Pixel_2_XL", sanitizaNome("Pixel 2 XL"));
         assertEquals("Kindle_Fire", sanitizaNome("Kindle Fire"));
         assertEquals("João_Da_Silva_123", sanitizaNome("João Da Silva_123"));
-        assertEquals("é_í_ó_ú_ã_õ_ç_á_à_â_ê_ô_ü_ñ", sanitizaNome("é í ó ú ã õ ç á à â ê ô ü ñ"));
-        assertEquals("É_Í_Ó_Ú_Ã_Õ_Ç_Á_À_Â_Ê_Ô_Ü_Ñ", sanitizaNome("É Í Ó Ú Ã Õ Ç Á À Â Ê Ô Ü Ñ"));
+        assertEquals("éíóúãõ_ç_á_à_â_ê_ô_ü_ñ", sanitizaNome("éíóúãõ ç á à â ê ô ü ñ"));
+        assertEquals("ÉÍÓÚÃÕ_Ç_Á_À_Â_Ê_Ô_Ü_Ñ", sanitizaNome("ÉÍÓÚÃÕ Ç Á À Â Ê Ô Ü Ñ"));
         assertEquals("Carlos_san", sanitizaNome("こんにちは, Carlos-san!"));
         assertEquals("Carlos", sanitizaNome("💩Carlos💩"));
         assertEquals("1_2_3_4", sanitizaNome("-1_2-3 4-"));
@@ -45,5 +45,16 @@ public class ServidorBluetoothActivityTest {
         assertEquals("Jogador(a)", sanitizaNome("-------"));
         assertEquals("Jogador(a)", sanitizaNome("💩"));
         assertEquals("Jogador(a)", sanitizaNome("誰かの名前を日本語で"));
+    }
+
+    @Test
+    void sanitizaNomeLimitaTamanhoEm25CaracteresValidos() {
+        assertEquals("1234567890123456789012345",
+            sanitizaNome("!!$$|1234567890123456789012345"));
+        assertEquals("1234567890123456789012345",
+            sanitizaNome("!!$$|1234567890123456789012345excesso"));
+        // Não deixa underscore no final se truncar no espaço
+        assertEquals("1234567890_234567890_234",
+            sanitizaNome("1234567890 234567890 234 6"));
     }
 }

@@ -28,6 +28,25 @@ public abstract class Jogador {
     protected Partida partida;
 
     /**
+     * Garante que o nome do jogador tenha tamanho e caracteres seguros.
+     *
+     * @param nome Nome a ser sanitizado
+     * @return nome apenas com alfanuméricos acentuados, underscores e <= 25
+     *         caracteres; se não houverem caracteres válidos, nome default.
+     */
+    public static String sanitizaNome(String nome) {
+        return (nome == null ? "" : nome)
+            .replaceAll("[-_ \r\n]"," ")
+            .trim()
+            .replaceAll("[^a-zA-Z0-9À-ÿ ]", "")
+            .trim()
+            .replaceAll(" +","_")
+            .replaceAll("^(.{0,25}).*$", "$1")
+            .replaceAll("_$","")
+            .replaceAll("^[-_ ]*$", "Jogador(a)");
+    }
+
+    /**
      * Processa o evento de entrada na partida (guardando a partida)
      */
     public void entrouNoJogo(Jogador j, Partida p) {

@@ -27,4 +27,45 @@ public abstract class Comando {
      */
     public abstract void executa(String[] args, JogadorConectado j);
 
+    /**
+     * Interpreta uma linha de comando e executa com a classe apropriada
+     *
+     * @param linha comando recebido do cliente (ex.: "N Carlos" para "meu nome é Carlos")
+     * @param j Jogador que solicitou o comando
+     * @see /docs/desenvolvimento.md#protocolo-de-comunicação-multiplayer
+     */
+    public static void interpreta(String linha, JogadorConectado j) {
+        if (linha==null) return;
+        if (linha.isEmpty()) return;
+
+        // Quebra a solicitação em tokens
+        String[] args = linha.split(" ");
+        if (args.length == 0) return;
+        if (args[0].length() != 1) return;
+
+        char letraComando = Character.toUpperCase(args[0].charAt(0));
+        Comando c = comandoParaLetra(letraComando);
+        if (c != null) {
+            c.executa(args, j);
+        } else {
+            j.println("X CI");
+        }
+    }
+
+    /**
+     * Retorna uma instância da subclasse de Comando correspondente à letra
+     *
+     * @param letra um comando, sem parâmetros. Ex.: "N"
+     * @return instância da classe correspondente. Ex.: ComandoN
+     */
+    static Comando comandoParaLetra(char letra) {
+        try {
+            return (Comando) Class.forName(
+                "me.chester.minitruco.server.Comando"
+                    + letra).getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
