@@ -157,14 +157,6 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
                 break;
             case 'X': // Erro tratável
                 switch(line) {
-                    case "X NE": // Nome já existe
-                        pedeNome();
-                        break;
-                    case "X NI":
-                        // TODO sinalizar como invalido, tambem fazer
-                        // algo parecido no NE acima
-                        pedeNome();
-                        break;
                 }
                 break;
             case 'P': // Partida iniciada
