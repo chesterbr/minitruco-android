@@ -1,15 +1,10 @@
 package me.chester.minitruco.android.multiplayer.internet;
 
-import static android.provider.Settings.Global.DEVICE_NAME;
-import static android.text.InputType.TYPE_CLASS_TEXT;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -118,7 +113,9 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
         LOGGER.log(Level.INFO, "recebeu: " + line);
         switch (line.charAt(0)) {
             case 'W': // O servidor manda um W quando conecta
-                pedeNome();
+                // Envia o nome que já foi sanitizado e salvo na TituloActivity
+                enviaLinha("N " + preferences.getString(
+                    "nome_multiplayer", null));
                 break;
             case 'N': // Nome foi aceito
                 runOnUiThread(() -> {
@@ -223,49 +220,6 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
             LOGGER.log(Level.INFO, "enviou: " + comando);
         }).start();
     }
-
-    private void pedeNome() {
-        String nome = null;
-        String mensagem;
-        if (editNomeJogador == null) {
-            mensagem = "Qual nome você gostaria de usar?";
-            // TODO armazenar último nome usado e recuperar aqui
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-                nome = Settings.System.getString(getContentResolver(), DEVICE_NAME);
-            }
-            if (nome == null) {
-                // Não-documentado e só funciona se tiver Bluetooth, cf https://stackoverflow.com/a/67949517/64635
-                nome = Settings.Secure.getString(getContentResolver(), "bluetooth_name");
-            }
-            if (nome == null) {
-                nome = "um nome aleatório";
-            }
-
-        } else {
-            mensagem = "Nome já usado ou inválido, tente outro:";
-            nome = editNomeJogador.getText().toString() + (int)(1 + Math.random() * 99);
-        }
-        editNomeJogador = new EditText(this);
-        editNomeJogador.setInputType(TYPE_CLASS_TEXT);
-        editNomeJogador.setMaxLines(1);
-        editNomeJogador.setText(nome);
-
-        runOnUiThread(() -> {
-            new AlertDialog.Builder(this)
-                    .setIcon(R.mipmap.ic_launcher)
-                    .setTitle("Nome")
-                    .setMessage(mensagem)
-                    .setView(editNomeJogador)
-                    .setPositiveButton("Ok", (dialog, which) -> defineNome())
-                    .setNegativeButton("Cancela", null) // TODO desconectar
-                    .show();
-        });
-    }
-
-    private void defineNome() {
-        enviaLinha("N " + editNomeJogador.getText().toString());
-    }
-
 
     // TODO botão de back tem que
     //  - Sair da sala se estiver jogando

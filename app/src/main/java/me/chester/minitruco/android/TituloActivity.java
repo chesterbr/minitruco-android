@@ -1,5 +1,8 @@
 package me.chester.minitruco.android;
 
+import static android.provider.Settings.Global.DEVICE_NAME;
+import static android.text.InputType.TYPE_CLASS_TEXT;
+
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface.OnClickListener;
@@ -9,10 +12,13 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.core.util.Consumer;
 import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.BuildConfig;
@@ -20,6 +26,7 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
+import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -143,10 +150,51 @@ public class TituloActivity extends BaseActivity {
         }
         if (temInternet) {
             btnInternet.setOnClickListener(v -> {
-                startActivity(new Intent(getBaseContext(),
-                    ClienteInternetActivity.class));
+                pedeNome((nome) -> {
+                    startActivity(new Intent(getBaseContext(),
+                        ClienteInternetActivity.class));
+                });
             });
         }
+    }
+
+    private void pedeNome(Consumer<String> callback) {
+        // Se já temos um nome guardado, é ele
+        String nome = preferences.getString("nome_multiplayer", null);
+        // Senão, tentamos pegar o nome do dispositivo
+        if (nome == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            nome = Settings.System.getString(getContentResolver(), DEVICE_NAME);
+        }
+        // Se não deu certo, tentamos pegar o nome Bluetooth
+        if (nome == null) {
+            // Não-documentado e só funciona se tiver Bluetooth, cf https://stackoverflow.com/a/67949517/64635
+            nome = Settings.Secure.getString(getContentResolver(), "bluetooth_name");
+        }
+        // Se nada disso deu certo, o sanitizador coloca o nome default
+        nome = Jogador.sanitizaNome(nome);
+
+        // Faz a pergunta sugerindo o nome encontrado
+        EditText editNomeJogador = new EditText(this);
+        editNomeJogador.setInputType(TYPE_CLASS_TEXT);
+        editNomeJogador.setMaxLines(1);
+        editNomeJogador.setText(nome);
+
+        runOnUiThread(() -> {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle("Nome")
+                    .setMessage("Qual nome você gostaria de usar?")
+                    .setView(editNomeJogador)
+                    .setPositiveButton("Ok", (d, w) -> {
+                        final String nomeFinal = Jogador.sanitizaNome(
+                            editNomeJogador.getText().toString());
+                        preferences.edit().putString("nome_multiplayer",
+                            nomeFinal).apply();
+                        callback.accept(nomeFinal);
+                    })
+                    .setNegativeButton("Cancela", null)
+                    .show();
+        });
     }
 
     private void botoesHabilitados(boolean status) {
