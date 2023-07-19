@@ -241,7 +241,7 @@ public class JogadorConectado extends Jogador implements Runnable {
     @Override
     public void jogoAbortado(int posicao, int rndFrase) {
         desvinculaJogo();
-        println("A " + posicao);
+        println("A " + posicao + ' ' + rndFrase);
     }
 
     /**
