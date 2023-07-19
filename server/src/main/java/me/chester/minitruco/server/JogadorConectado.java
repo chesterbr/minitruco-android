@@ -8,8 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.Set;
+import java.net.SocketTimeoutException;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -22,10 +21,6 @@ import me.chester.minitruco.core.Jogador;
  */
 public class JogadorConectado extends Jogador implements Runnable {
 
-    /**
-     * Nomes de jogadores online (para evitar duplicidade)
-     */
-    private static final Set<String> nomes = new HashSet<>();
     private final Socket cliente;
 
     /**
@@ -53,38 +48,6 @@ public class JogadorConectado extends Jogador implements Runnable {
     public JogadorConectado(Socket cliente) {
         this.cliente = cliente;
     }
-
-    /**
-     * Verifica se um nome está em uso por algum jogador
-     *
-     * @param nome nome a verificar
-     * @return true se já está em uso, false caso contrário
-     */
-    public static boolean isNomeEmUso(String nome) {
-        return nomes.contains(nome.toUpperCase());
-    }
-
-    /**
-     * Impede que um nome seja usado
-     *
-     */
-    public static void bloqueiaNome(String nome) {
-        nomes.add(nome.toUpperCase());
-    }
-
-    /**
-     * Libera o uso de um nome
-     *
-     */
-    public static void liberaNome(String nome) {
-        nomes.remove(nome.toUpperCase());
-    }
-
-    // TODO: ver se não vai fazer falta
-    // @Override
-    // public void jogadorAceito(Jogador j, Partida partida) {
-    // println("Y " + j.getPosicao());
-    // }
 
     /**
      * Envia uma linha de texto para o cliente (tipicamente o resultado de um
@@ -130,14 +93,8 @@ public class JogadorConectado extends Jogador implements Runnable {
             // Meio improvável de rolar, however...
             ServerLogger.evento(e, "Erro de I/O no loop principal do jogador");
         } finally {
-            // Ao final, remove o usuário de qualquer sala em que esteja,
-            // remove seu nome da lista de nomes usados e loga
-            if (getSala() != null) {
-                Comando.interpreta("A", this);
-            }
-            if (!getNome().equals("unnamed")) {
-                liberaNome(getNome());
-            }
+            // Encerra partida (se houver), notificando os outros jogadores
+            Comando.interpreta("A", this);
             ServerLogger.evento(this, "finalizou thread");
         }
 
@@ -263,24 +220,6 @@ public class JogadorConectado extends Jogador implements Runnable {
      */
     public void setSala(Sala sala) {
         this.sala = sala;
-    }
-
-    /**
-     * Atribui um nome ao jogador (apenas se não houver outro com o mesmo nome)
-     */
-    @Override
-    public synchronized void setNome(String nome) {
-        // Se já existir, desencana
-        if (isNomeEmUso(nome)) {
-            return;
-        }
-        // Se já tinha um nome, libera o seu uso
-        if (!this.getNome().equals("unnamed")) {
-            liberaNome(this.getNome());
-        }
-        // Seta o novo nome e evita novos usos
-        super.setNome(nome);
-        bloqueiaNome(nome);
     }
 
     public String getIp() {
