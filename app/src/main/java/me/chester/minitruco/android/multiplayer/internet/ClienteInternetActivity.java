@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -50,7 +51,7 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
         CriadorDePartida.setActivity(this);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        setContentView(R.layout.internet_conectando);
+        setContentView(R.layout.sala);
 
         new Thread(() -> {
             try {
@@ -124,8 +125,10 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
                 break;
             case 'I': // Entrou numa sala (ou ela foi atualizada)
                 runOnUiThread(() -> {
-                    setContentView(R.layout.internet_sala);
-                    findViewById(R.id.btnQueroJogar).setOnClickListener(v -> {
+                    // TODO esse botão só deveria aparecer pro gerente,
+                    //      e vamos mudar o protocolo um pouco
+                    findViewById(R.id.layoutIniciar).setVisibility(View.VISIBLE);
+                    findViewById(R.id.btnIniciarBluetooth).setOnClickListener(v -> {
                         enviaLinha("Q");
                     });
                     if (partida != null) {
