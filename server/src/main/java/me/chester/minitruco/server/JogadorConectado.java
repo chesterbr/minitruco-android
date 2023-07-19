@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -122,15 +121,9 @@ public class JogadorConectado extends Jogador implements Runnable {
                 try {
                     linha = in.readLine();
                     Comando.interpreta(linha, this);
-                } catch (SocketTimeoutException e) {
-                    // A linha é só pra garantir que, no caso de uma conexão presa
-                    // o teste abaixo dela dê erro (seja no if, seja exception no print)
-                    println("");
-                    if (!cliente.isConnected()) {
-                        ServerLogger.evento("Desconexao detectada durante timeout");
-                        return;
-                    }
-                    continue;
+                } catch (IOException e) {
+                    linha = null;
+                    ServerLogger.evento(this, "desconectado");
                 }
             }
         } catch (IOException e) {
@@ -140,12 +133,12 @@ public class JogadorConectado extends Jogador implements Runnable {
             // Ao final, remove o usuário de qualquer sala em que esteja,
             // remove seu nome da lista de nomes usados e loga
             if (getSala() != null) {
-                (new ComandoS()).executa(null, this);
+                Comando.interpreta("A", this);
             }
             if (!getNome().equals("unnamed")) {
                 liberaNome(getNome());
             }
-            ServerLogger.evento(this, "desconectou");
+            ServerLogger.evento(this, "finalizou thread");
         }
 
     }
