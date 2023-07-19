@@ -37,6 +37,20 @@ public class Sala {
 
     private static final Set<Sala> salasPublicasLotadas = new HashSet<>();
 
+    public static void limpaSalas() {
+        Set<Sala> todasAsSalas = new HashSet<>();
+        todasAsSalas.addAll(salasPrivadas.values());
+        todasAsSalas.addAll(salasPublicasDisponiveis);
+        todasAsSalas.addAll(salasPublicasLotadas);
+        for(Sala sala : todasAsSalas) {
+            for (Jogador j : sala.jogadores) {
+                if (j instanceof JogadorConectado) {
+                    sala.remove((JogadorConectado) j);
+                }
+            }
+        }
+    }
+
     /**
      * Código usado para os amigos acharem a sala; null se for uma sala pública
      */
