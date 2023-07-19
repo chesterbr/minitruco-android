@@ -197,6 +197,7 @@ public class Sala {
                 }
                 // Desfaz link sala->jogador
                 jogadores[i] = null;
+                timestamps[i] = null;
                 // Desfaz link jogador->sala
                 j.setSala(null);
                 j.querJogar = false;
@@ -254,7 +255,7 @@ public class Sala {
      *
      * @return String no formato "I ..." definido em protocolo.txt
      */
-    private String getInfo() {
+    public String getInfo() {
         StringBuilder sb = new StringBuilder();
         // I numsala
         // TODO codigo da sala privada
@@ -289,12 +290,10 @@ public class Sala {
                 sb.append('T');
             }
         }
-        sb.append(' ');
 
-//        TODO ver se vamos ter esse conceito de gerente
 //        // Posição do gerente
-//        sb.append(getPosicao(getGerente()));
-//        sb.append(' ');
+        sb.append(' ');
+        sb.append(getPosicao(getGerente()));
 
         return sb.toString();
     }

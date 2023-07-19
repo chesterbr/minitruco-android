@@ -3,7 +3,10 @@ package me.chester.minitruco.server;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import static java.lang.Thread.sleep;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,5 +83,42 @@ class SalaTest {
         assertEquals(j1.getSala(), j4.getSala());
         assertNotEquals(j1.getSala(), j2.getSala());
         assertNotEquals(j1.getSala(), j3.getSala());
+    }
+
+    @Test
+    void testGetInfo() {
+        j1.setNome("john");
+        j2.setNome("paul");
+        j3.setNome("george");
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.adiciona(j3);
+        assertEquals("I john|paul|george|bot $POSICAO P FFFT 1", s.getInfo());
+        s.remove(j1);
+        j2.querJogar = true;
+        assertEquals("I bot|paul|george|bot $POSICAO P TTFT 2", s.getInfo());
+    }
+
+    @Test
+    void testGerente() throws InterruptedException {
+        // Os sleeps garantem timestamps diferentes para fins de teste
+        // (precisão de java.util.Date é de 1ms); IRL, se houver um
+        // empate (bem improvável), o que a classe decidir está bom.
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1); sleep(1);
+        assertEquals(j1, s.getGerente());
+        s.adiciona(j2); sleep(1);
+        s.adiciona(j3); sleep(1);
+        assertEquals(j1, s.getGerente());
+        s.remove(j1); sleep(1);
+        assertEquals(j2, s.getGerente());
+        s.adiciona(j1); sleep(1);
+        assertEquals(j2, s.getGerente());
+        s.remove(j2); sleep(1);
+        assertEquals(j3, s.getGerente());
+        s.remove(j1); sleep(1);
+        s.remove(j3); sleep(1);
+        assertNull(s.getGerente());
     }
 }
