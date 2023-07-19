@@ -201,14 +201,33 @@ Quando o miniTruco foi criado (2005), poucas pessoas possuíam celulares e plano
 
 Idealmente isso seria feito serializando as chamadas e objetos com um protocolo binário (se fosse hoje em dia, algo como [Protobuf](https://protobuf.dev/)). Mas eu também queria que fosse possível interagir diretamente com o servidor via terminal (para testes, depuração e também por diversão), então acabei criando uma "linguagem" que define comandos e notificações em texto simples.
 
-TODO: instruções de como usar o servidor via terminal
+O protocolo consiste em _comandos_ enviados pelo cliente (ex.: `J 3c` para "`J`ogar o `3` de `c`opas") e _notificações_ enviadas pelo servidor (ex.: `V 2 F` para "`v`ez do jogador na posição `2`, que não pode (`F`alse) jogar fechada). Os clientes devem processar as notificações assincronamente, e podem enviar comandos a qualquer momento, desde que faça sentido (ex.: o comando `J` só funciona se um jogo estiver em andamento e for a vez do jogador).
+
+### Jogando via nc/telnet
+
+Você pode jogar via nc ou telnet. Para isso:
+
+1) Comente a linha `iniciaMonitorDeConexao()` em `JogadorConectado` (senão você vai ter que responder às notificações de keepalive, o que é humanamente muito difícil)
+
+2) Rode o servidor localmente. Você pode fazer isso com `./gradlew :server:run` (ou, em Windows, `gradlew.bat :server:run`). Alternativamente, rode a classe `MiniTrucoServer` no Android Studio.
+
+3) Abra um ou mais terminais e rode `nc localhost 6912` (ou `telnet localhost 6912`). Cada terminal será um jogador.
+
+4) Cada jogador deve se identificar com um nome, enviando um comando `N` (ex.: `N joselito`), entrar em uma sala com as regras desejadas (ex.: `E PUB P`)
+
+5) O gerente (primeiro jogador a entrar na sala) inicia o jogo com `Q`
+
+6) Dali pra frente é observar as notificações enviadas e os comandos apropriados. Veja a lista completa abaixo.
+
+TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
+
 
 ### Convenções
 
-- `<apelidos>`: Quatro sequências de caracteres (uma ou mais podendo ser "bot"), separadas por `|`. Exemplo: `john|bot|ringo|george`.
+- `<nomes>`: Quatro sequências de caracteres, separadas por `|`. Exemplo: `john|bot|ringo|george`.
 - `<carta>`: Carta representada por letra (4, 5, 6, 7, Q, J, K, A, 2 ou 3) e naipe (c, e, o ou p). Exemplo: `2c`, `Qp`, `Kp`.
 - `<modo>`: `P` para truco paulista, `M` para truco mineiro, `V` para manilha velha ou `L` baralho limpo.
-- `<jogador>`: Posição de um jogador na sala/partida, de 1 a 4. É constante durante a partida, mas pode mudar fora dele (o servidor manda uma notificação `I` sempre que a formação da sala mudar).
+- `<jogador>`: Posição de um jogador na sala/partida, de 1 a 4. É constante durante a partida, mas pode mudar fora dela (o servidor manda uma notificação `I` sempre que a formação da sala mudar).
 - `<equipe>`: Uma das duas equipes (duplas). Pode ser 1 (equpe dos jogadores 1 e 3) ou 2 (jogadores 2 e 4).
 - `<quer jogar>`: Quatro caracteres `T` ou `F` conforme cada posição queira iniciar a partida ou não
 - `<frase>`: número aleatório grande que permite que todos os clientes mostrem a mesma frase (o "balãozinho") para um evento. Por exemplo, se o jogador 1 pediu truco (paulista) e o número sorteado foi 12345678, todos irão receber `T 1 3 12345678`; se o cliente tem 8 frases possíveis para truco, ele calcula 12345678 % 8 = 6 e exibe a frase de índice 6. Dessa forma, todos os clientes mostram a mesma frase (se estiverem com a mesma versão do [strings.xml](../app/src/main/res/values/strings.xml)) e o servidor não tem que saber quantas frases tem cada tipo de mensagem.
@@ -219,7 +238,7 @@ TODO: instruções de como usar o servidor via terminal
 
 - `W`: recupera número de versão (e de repente outras infos no futuro)
 - `B <numero>`:  Informa o número do build do cliente, para que o servidor verifique compatibilidade
-- `N <apelido>`: Define o nome do jogador (se for inválido, define o default)
+- `N <nome>`: Define o nome do jogador (é sanitizado; se for 100% inválido recebe um default)
 - `E PUB <modo>`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
 - `S`: - Sai da sala (encerrando a partida, se houver uma em andamento)
 - `Q`: - Inicia a partida (se o jogador for o gerente e não houver uma em andamento)
@@ -232,6 +251,10 @@ TODO: instruções de como usar o servidor via terminal
 - `C`: Corre (recusa aumento de aposta)
 - `H _`: decide se aceita ou recusa jogar em mão de 11 (_ = T para aceita e F para recusa)
 
+#### Outros
+
+- `K <numero>`: responde a uma notificação de keepalive do servidor para evitar que a conexão caia por inatividade (apenas internet)
+
 ### Notificações
 
 - `W x.y`: `Versão do servidor (outras infos podem vir no futuro)
@@ -239,9 +262,9 @@ TODO: instruções de como usar o servidor via terminal
 - `X AI`: `Argumento inválido
 - `X FS`: `Você não está numa sala
 - `X NO`: `É preciso atribuir um nome para entrar na sala
-- `X JE sala`: `Você já está na sala de código `sala`
-- `N nome`: `Seu nome foi definido como `nome`
-- `I <apelidos> <modo> <jogador> <quero jogar>`: Info da sala. `<jogador>` é a posição do cliente. `<quer jogar>` só vem no jogo via internet
+- `X JE sala`: Você já está na sala de código `sala`
+- `N nome`: Seu nome foi definido como `nome`
+- `I <apelidos> <modo> <jogador> <quero jogar> <gerente>`: Info da sala. `<jogador>` é a posição do cliente. `<gerente>` é a posição do gerente (só no jogo internet)
 - `P <jogador>`: Início da partida
 - `M <carta> <carta> <carta> <carta>`: Início da mão. Suas cartas são as três primeiras. A última, se houver, é o vira.
 - `V <jogador> _`: vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode
@@ -256,6 +279,7 @@ TODO: instruções de como usar o servidor via terminal
 - `F <carta> <carta> <carta> <frase>`: Informa que estamos em mão de 10/11 e o adversário tem essas cartas
 - `H <jogador> <frase> _`: Informa que o jogador na posição acusou/recusou (_=T/F) mão de 10/11
 - `S`: Informa que o jogador saiu da sala
+- `K <numero>`: Keepalive - cliente deve responder igual, isto é, `K <numero>` para não ser desconectado (apenas internet)
 
 ## Estratégia dos bots
 
