@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -280,6 +281,23 @@ public class PartidaRemota extends Partida {
         // O if é necessário porque o caller pode nem saber quem pediu pra abandonar
         if (posicao == 1) {
             cliente.enviaLinha("A");
+        }
+    }
+
+    private boolean humanoGerente;
+
+    public void setHumanoGerente(boolean humanoGerente) {
+        this.humanoGerente = humanoGerente;
+    }
+
+    @Override
+    public boolean isHumanoGerente() {
+        if (cliente instanceof ClienteBluetoothActivity) {
+            // Cliente Bluetooth nunca é o gerente
+            return false;
+        } else {
+            // O servidor diz se o cliente internet é o gerente
+            return humanoGerente;
         }
     }
 

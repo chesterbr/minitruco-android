@@ -376,7 +376,7 @@ public class TrucoActivity extends Activity {
             } else {
                 setPlacarDePartidas(pontos[0], pontos[1] + 1);
             }
-            if (partida instanceof PartidaLocal) {
+            if (partida.isHumanoGerente()) {
                 btnNovaPartida.setVisibility(View.VISIBLE);
                 if (partida.isJogoAutomatico()) {
                     btnNovaPartida.performClick();

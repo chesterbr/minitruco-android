@@ -45,6 +45,7 @@ public class ClienteInternetActivity extends BaseActivity implements ActivityMul
     private PartidaRemota partida;
     private String modo;
     private int posJogador;
+    private boolean humanoGerente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,8 +140,9 @@ public class ClienteInternetActivity extends BaseActivity implements ActivityMul
                     posJogador = Integer.parseInt(tokens[2]);
                     modo = tokens[3];
                     int posGerente = Integer.parseInt(tokens[5]);
+                    humanoGerente = (posGerente == posJogador);
                     findViewById(R.id.layoutIniciar).setVisibility(
-                        posJogador == posGerente ? View.VISIBLE : View.GONE);
+                        humanoGerente ? View.VISIBLE : View.GONE);
                 });
                 break;
             case 'X': // Erro tratável
@@ -189,6 +191,7 @@ public class ClienteInternetActivity extends BaseActivity implements ActivityMul
     @Override
     public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
         partida = new PartidaRemota(this, jogadorHumano, posJogador, modo);
+        partida.setHumanoGerente(humanoGerente);
         return partida;
     }
 

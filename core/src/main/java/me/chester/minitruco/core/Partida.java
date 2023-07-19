@@ -345,6 +345,14 @@ public abstract class Partida implements Runnable {
     }
 
     /**
+     * Caso esta partida esteja rodando em um celular, diz se o jogador humano
+     * pode iniciar uma nova partida ao final da atual.
+     *
+     * @return true se o jogador humano é o gerente da partida, false se não
+     */
+    public abstract boolean isHumanoGerente();
+
+    /**
      * Retorna o nome usado para um determinado valor quando estamos pedindo aumento
      * de aposta. Por exemplo, 3 (no truco paulista) ou 4 (no truco mineiro)
      * se chamam "truco".
