@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.BaseActivity;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.TrucoActivity;
@@ -31,7 +32,7 @@ import me.chester.minitruco.android.multiplayer.ActivityMultiplayer;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
 import me.chester.minitruco.core.Partida;
 
-public class ClienteInternetActivity extends Activity implements ActivityMultiplayer<Activity> {
+public class ClienteInternetActivity extends BaseActivity implements ActivityMultiplayer<Activity> {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteInternetActivity");
 
@@ -104,15 +105,11 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
         try {
             line = in.readLine();
         } catch (IOException e) {
-            msgErroFatal("Erro de comunicação.", e);
             return;
         }
         if (line == null) {
             desconecta();
             msgErroFatal("Você foi desconectado.", null);
-            return;
-        }
-        if (line.length() == 0) { // O servidor manda linhas vazias periodicamente para fins de keepalive
             return;
         }
         LOGGER.log(Level.INFO, "recebeu: " + line);
@@ -149,6 +146,9 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
             case 'X': // Erro tratável
                 switch(line) {
                 }
+                break;
+            case 'K': // Keepalive, apenas temos que devolver a notificação como comando
+                enviaLinha(line);
                 break;
             case 'P': // Partida iniciada
                 // Se for a primeira partida nessa sala, temos que abrir a activity
@@ -194,6 +194,7 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
 
     private void msgErroFatal(String msg, Throwable e) {
         runOnUiThread(() -> {
+            encerraTrucoActivity();
             if (isFinishing()) {
                 return;
             }

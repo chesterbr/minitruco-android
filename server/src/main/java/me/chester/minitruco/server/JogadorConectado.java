@@ -132,7 +132,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                 keepAlive = System.currentTimeMillis();
                 out.println("K " + keepAlive);
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }

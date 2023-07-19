@@ -1,6 +1,7 @@
 package me.chester.minitruco.android;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.text.Html;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,4 +27,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
     }
 
+    protected void encerraTrucoActivity() {
+        Intent intent = new Intent(TrucoActivity.BROADCAST_IDENTIFIER);
+        intent.putExtra("evento", "desconectado");
+        sendBroadcast(intent);
+    }
 }

@@ -204,12 +204,6 @@ public abstract class BaseBluetoothActivity extends BaseActivity implements
         });
     }
 
-    private void encerraTrucoActivity() {
-        Intent intent = new Intent(TrucoActivity.BROADCAST_IDENTIFIER);
-        intent.putExtra("evento", "desconectado");
-        sendBroadcast(intent);
-    }
-
     protected abstract int getNumClientes();
 
     protected void iniciaTrucoActivitySePreciso() {
