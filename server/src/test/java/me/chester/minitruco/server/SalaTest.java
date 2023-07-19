@@ -6,10 +6,16 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static java.lang.Thread.sleep;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.net.Socket;
 
 import me.chester.minitruco.core.Partida;
 
@@ -21,16 +27,22 @@ class SalaTest {
     void setUp() {
         Sala.limpaSalas();
 
-        j1 = new JogadorConectado(null);
-        j2 = new JogadorConectado(null);
-        j3 = new JogadorConectado(null);
-        j4 = new JogadorConectado(null);
-        j5 = new JogadorConectado(null);
-        j6 = new JogadorConectado(null);
-        j7 = new JogadorConectado(null);
-        j8 = new JogadorConectado(null);
-        j9 = new JogadorConectado(null);
-        j10 = new JogadorConectado(null);
+        j1 = spy(new JogadorConectado(mock(Socket.class)));
+        j2 = new JogadorConectado(mock(Socket.class));
+        j3 = new JogadorConectado(mock(Socket.class));
+        j4 = new JogadorConectado(mock(Socket.class));
+        j5 = new JogadorConectado(mock(Socket.class));
+        j6 = new JogadorConectado(mock(Socket.class));
+        j7 = new JogadorConectado(mock(Socket.class));
+        j8 = new JogadorConectado(mock(Socket.class));
+        j9 = new JogadorConectado(mock(Socket.class));
+        j10 = new JogadorConectado(mock(Socket.class));
+
+        // Mocks para jogadores que podem iniciar/encerrar partida
+        doNothing().when(j1).println(any());
+//        doNothing().when(j2).println(any());
+//        doNothing().when(j3).println(any());
+//        doNothing().when(j4).println(any());
     }
 
     @Test
@@ -85,6 +97,14 @@ class SalaTest {
         assertEquals(j1.getSala(), j4.getSala());
         assertNotEquals(j1.getSala(), j2.getSala());
         assertNotEquals(j1.getSala(), j3.getSala());
+    }
+
+    @Test
+    void testNaoColocaJogadorEmSalaComJogoEmAndamento() {
+        Sala s1 = Sala.colocaEmSalaPublica(j1, "P");
+        s1.iniciaPartida(j1);
+        Sala s2 = Sala.colocaEmSalaPublica(j2, "P");
+        assertNotEquals(s1, s2);
     }
 
     @Test

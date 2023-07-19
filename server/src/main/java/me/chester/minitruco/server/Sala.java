@@ -44,6 +44,10 @@ public class Sala {
         todasAsSalas.addAll(salasPublicasDisponiveis);
         todasAsSalas.addAll(salasPublicasLotadas);
         for(Sala sala : todasAsSalas) {
+            Partida partida = sala.getPartida();
+            if (partida != null) {
+                partida.abandona(0);
+            }
             for (Jogador j : sala.jogadores) {
                 if (j instanceof JogadorConectado) {
                     sala.remove((JogadorConectado) j);
@@ -94,7 +98,7 @@ public class Sala {
      */
     public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, String modo) {
         Sala sala = salasPublicasDisponiveis.stream().filter(s ->
-            s.modo.equals(modo)
+            s.modo.equals(modo) && (s.getPartida() == null)
         ).findFirst().orElse(null);
         if (sala == null) {
             sala = new Sala(true, modo);
