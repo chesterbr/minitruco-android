@@ -222,7 +222,7 @@ TODO: instruções de como usar o servidor via terminal
 - `N <apelido>`: Define o nome do jogador (se for inválido, define o default)
 - `E PUB <modo>`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
 - `S`: - Sai da sala (encerrando a partida, se houver uma em andamento)
-- `Q`: - Quero Jogar
+- `Q`: - Inicia a partida (se o jogador for o gerente e não houver uma em andamento)
 
 #### Durante o jogo
 

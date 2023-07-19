@@ -3,6 +3,8 @@ package me.chester.minitruco.server;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
+import static me.chester.minitruco.core.JogadorBot.APELIDO_BOT;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +24,6 @@ import me.chester.minitruco.core.PartidaLocal;
  */
 public class Sala {
 
-    private static final String APELIDO_BOT = "bot";
     private static final String POSICAO_PLACEHOLDER = "$POSICAO";
 
     /**
@@ -261,8 +262,8 @@ public class Sala {
         // TODO codigo da sala privada
         sb.append("I ");
 
-        // Nomes dos jogadores, separados por pipe (posições vazias são strings
-        // vazias)
+        // Nomes dos jogadores, separados por pipe (posições vazias são bots -
+        // ou, mais precisamente, vão ser bots quando o jogo começar
         for (int i = 0; i <= 3; i++) {
             sb.append(i == 0 ? "" : '|');
             sb.append(jogadores[i] == null ? APELIDO_BOT : jogadores[i].getNome());
@@ -299,29 +300,23 @@ public class Sala {
     }
 
     /**
-     * Verifica se a mesa está completa, i.e., se a sala tem 4 jogadores
-     * dispostos a jogar, e se já não tem uma partida rolando.
-     * <p>
-     * Se isto acontecer, inicia a partida.
+     * Inicia a partida (completando a mesa com bots), caso ela ainda
+     * não tenha iniciado e o jogador que solicitou seja o gerente.
+     *
+     * @param solicitante Jogador que solicitou o início da partida.
      */
-    public void verificaMesaCompleta() {
-        // Se estamos em partida, desencana
+    public void iniciaPartida(Jogador solicitante) {
         if (partida != null) {
             return;
         }
-        // Todos os remotos conectados têm que querer jogar
-        for (int i = 0; i <= 3; i++) {
-            if ((jogadores[i] instanceof JogadorConectado)
-                    && !((JogadorConectado) jogadores[i]).querJogar) {
-                return;
-            }
+        if (solicitante != getGerente()) {
+            return;
         }
         // Completa as posições vazias com bots
         int n = 1;
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == null) {
                 jogadores[i] = new JogadorBot();
-                jogadores[i].setNome("[ROBO_" + (n++) + "]");
             }
         }
         // Cria a partida com as regras selecionadas, adiciona os jogadores na

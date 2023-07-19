@@ -3,13 +3,15 @@ package me.chester.minitruco.server;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import static java.lang.Thread.sleep;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import me.chester.minitruco.core.Partida;
 
 class SalaTest {
 
@@ -120,5 +122,28 @@ class SalaTest {
         s.remove(j1); sleep(1);
         s.remove(j3); sleep(1);
         assertNull(s.getGerente());
+    }
+
+    @Test
+    void testIniciaPartida() {
+        Sala s = new Sala(true, "P");
+        assertNull(s.getPartida());
+
+        s.iniciaPartida(j1);
+        assertNull(s.getPartida()); // Não está na sala
+
+        s.adiciona(j1);
+        s.adiciona(j2);
+
+        s.iniciaPartida(j2);
+        assertNull(s.getPartida()); // Não é o gerente
+
+        s.iniciaPartida(j1);
+        assertNotNull(s.getPartida());
+
+        // Se já houver partida rolando, não inicia uma nova
+        Partida p = s.getPartida();
+        s.iniciaPartida(j1);
+        assertEquals(p, s.getPartida());
     }
 }

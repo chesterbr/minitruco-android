@@ -52,6 +52,10 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.sala);
+        findViewById(R.id.btnIniciarBluetooth).setOnClickListener(v -> {
+            enviaLinha("Q");
+        });
+
 
         new Thread(() -> {
             try {
@@ -125,12 +129,6 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
                 break;
             case 'I': // Entrou numa sala (ou ela foi atualizada)
                 runOnUiThread(() -> {
-                    // TODO esse botão só deveria aparecer pro gerente,
-                    //      e vamos mudar o protocolo um pouco
-                    findViewById(R.id.layoutIniciar).setVisibility(View.VISIBLE);
-                    findViewById(R.id.btnIniciarBluetooth).setOnClickListener(v -> {
-                        enviaLinha("Q");
-                    });
                     if (partida != null) {
                         partida.abandona(0);
                         partida = null;
@@ -143,6 +141,9 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
                     ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[3]);
                     posJogador = Integer.parseInt(tokens[2]);
                     modo = tokens[3];
+                    int posGerente = Integer.parseInt(tokens[5]);
+                    findViewById(R.id.layoutIniciar).setVisibility(
+                        posJogador == posGerente ? View.VISIBLE : View.GONE);
                 });
                 break;
             case 'X': // Erro tratável
@@ -193,6 +194,9 @@ public class ClienteInternetActivity extends Activity implements ActivityMultipl
 
     private void msgErroFatal(String msg, Throwable e) {
         runOnUiThread(() -> {
+            if (isFinishing()) {
+                return;
+            }
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_delete)
                     .setTitle("Erro")

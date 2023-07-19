@@ -1,5 +1,7 @@
 package me.chester.minitruco.android.multiplayer.bluetooth;
 
+import static me.chester.minitruco.core.JogadorBot.APELIDO_BOT;
+
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothServerSocket;
@@ -40,7 +42,6 @@ public class ServidorBluetoothActivity extends BaseBluetoothActivity {
     private static final char STATUS_EM_JOGO = 'J';
     private static final char STATUS_BLUETOOTH_ENCERRADO = 'X';
     private static final int REQUEST_ENABLE_DISCOVERY = 1;
-    private static final String APELIDO_BOT = "bot";
 
     private char status;
     private Thread threadMonitoraClientes;
