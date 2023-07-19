@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -67,39 +66,100 @@ public class JogadorConectado extends Jogador implements Runnable {
      * Aguarda comandos do jogador e os executa
      */
     public void run() {
-        ServerLogger.evento(this, "conectou");
+        ServerLogger.evento(this, "conectou, iniciando thread");
+
         try {
-            // Configura um timeout para evitar conexões presas
-            ServerLogger.evento(this, "timeout antes:" + cliente.getSoTimeout());
-            cliente.setSoTimeout(10000);
-            ServerLogger.evento(this, "timeout depois:" + cliente.getSoTimeout());
-            // Prepara o buffer de saída
+            cliente.setSoTimeout(0);
+            // Prepara os buffers de entrada e saída
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     cliente.getInputStream()));
             out = new PrintStream(cliente.getOutputStream());
+            iniciaMonitorDeConexao();
             // Imprime info do servidor (como mensagem de boas-vindas)
             (new ComandoW()).executa(null, this);
             String linha = "";
             while (linha != null) {
                 try {
                     linha = in.readLine();
-                    Comando.interpreta(linha, this);
                 } catch (IOException e) {
-                    linha = null;
-                    ServerLogger.evento(this, "desconectado");
+                    // Como o SO_TIMEOUT está em zero, podemos assumir desconexão
+                    break;
                 }
+                if (("K " + keepAlive).equals(linha)) {
+                    keepAlive = 0;
+                    continue;
+                }
+                Comando.interpreta(linha, this);
             }
         } catch (IOException e) {
-            // Meio improvável de rolar, however...
-            ServerLogger.evento(e, "Erro de I/O no loop principal do jogador");
+            ServerLogger.evento(e, "Erro de I/O inesperado loop principal do jogador");
         } finally {
-            // Encerra partida (se houver), notificando os outros jogadores
+            finalizaMonitorDeConexao();
+            Sala s = getSala();
+            // Se houver um jogo em andamento (e ainda tivermos comunicação), encerra
             Comando.interpreta("A", this);
-            ServerLogger.evento(this, "finalizou thread");
+            if (s != null) {
+                // Dá um tempo para o cliente receber o comando A e mostrar o balão de "adeus"
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                // Garante que o jogador saiu da sala, e os clientes vão ser notificados
+                s.remove(this);
+                s.mandaInfoParaTodos();
+                ServerLogger.evento(this, "finalizou thread");
+            }
         }
 
     }
 
+    private long keepAlive;
+    private Thread threadMonitorDeConexao;
+
+    /**
+     * Configura uma thread para testar a conexão (enviando uma linha em branco
+     * que o cliente deve ignorar) de tempos em tempos.
+     * <p>
+     * Isso evita um timeout no cliente e permite desbloquear o readLine()
+     * sem depender do timeout do socket, que é pouco confiável.
+     */
+    private void iniciaMonitorDeConexao() {
+        Thread threadPrincipal = Thread.currentThread();
+        threadMonitorDeConexao = new Thread(() -> {
+            ServerLogger.evento(this, "Iniciando monitor de conexão");
+            while (true) {
+                keepAlive = System.currentTimeMillis();
+                out.println("K " + keepAlive);
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                if (keepAlive != 0) {
+                    try {
+                        ServerLogger.evento(this, "Keepalive não respondido, fechando socket");
+                        cliente.close();
+                        threadPrincipal.interrupt();
+                    } catch (IOException e) {
+                        ServerLogger.evento(e, "Erro de I/O inesperado no monitor de conexão");
+                    }
+                    break;
+                }
+            }
+            ServerLogger.evento(this, "Monitor de conexão finalizado");
+            threadMonitorDeConexao = null;
+        });
+        threadMonitorDeConexao.start();
+    }
+
+    private void finalizaMonitorDeConexao() {
+        Thread t = threadMonitorDeConexao;
+        if (threadMonitorDeConexao != null) {
+            ServerLogger.evento("Interrompendo monitor de conexão");
+            t.interrupt();
+        }
+    }
 
 
     @Override
