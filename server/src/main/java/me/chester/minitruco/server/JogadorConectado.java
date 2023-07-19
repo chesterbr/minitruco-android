@@ -50,14 +50,15 @@ public class JogadorConectado extends Jogador implements Runnable {
 
     /**
      * Envia uma linha de texto para o cliente (tipicamente o resultado de um
-     * comando)
+     * comando, ou um keepalive)
      *
      * @param linha linha de texto a enviar
      */
-    public void println(String linha) {
+    public synchronized void println(String linha) {
         out.print(linha);
         out.print("\r\n");
-        if (linha.length() > 0) {
+        // Não fazemos log de keepalive
+        if (!linha.startsWith("K")) {
             ServerLogger.evento(this, linha);
         }
     }
@@ -130,7 +131,7 @@ public class JogadorConectado extends Jogador implements Runnable {
             ServerLogger.evento(this, "Iniciando monitor de conexão");
             while (true) {
                 keepAlive = System.currentTimeMillis();
-                out.println("K " + keepAlive);
+                println("K " + keepAlive);
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
