@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -25,7 +26,7 @@ class ComandoATest {
     }
 
     @Test
-    void testAbortaEncerraPartidaENotifica() {
+    void testAbortaEncerraPartidaENotificaSemAtualizarSala() {
         Sala s = new Sala(true, "P");
         s.adiciona(j1);
         s.adiciona(j2);
@@ -36,16 +37,19 @@ class ComandoATest {
         assertNull(s.getPartida());
         verify(j1).println(argThat((String msg) -> msg.matches("A 2 .+")));
         verify(j2).println(argThat((String msg) -> msg.matches("A 2 .+")));
+        verify(j1, never()).println(argThat((String msg) -> msg.startsWith("I ")));
     }
 
     @Test
-    void testAbortaEmSalaMasForaDeJogoÉIgnorado() {
+    void testAbortaEmSalaMasForaDeJogoAtualizaSalaParaOutrosJogadores() {
         Sala s = new Sala(true, "P");
         s.adiciona(j1);
         s.adiciona(j2);
+        reset();
         Comando.interpreta("A", j2);
         verify(j1, never()).println(argThat((String msg) -> msg.startsWith("A")));
         verify(j2, never()).println(argThat((String msg) -> msg.startsWith("A")));
+        verify(j1).println(argThat((String msg) -> msg.startsWith("I ")));
     }
 
     @Test

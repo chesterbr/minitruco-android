@@ -124,6 +124,7 @@ public class ClienteInternetActivity extends SalaActivity {
                 break;
             case 'I': // Entrou numa sala (ou ela foi atualizada)
                 runOnUiThread(() -> {
+                    encerraTrucoActivity();
                     if (partida != null) {
                         partida.abandona(0);
                         partida = null;

@@ -10,8 +10,14 @@ public class ComandoA extends Comando {
 
     @Override
     public void executa(String[] args, JogadorConectado j) {
-        if (!j.jogando)
+        Sala sala = j.getSala();
+        if (sala == null) {
             return;
-        j.getSala().getPartida().abandona(j.getPosicao());
+        }
+        if (sala.getPartida() == null) {
+            sala.mandaInfoParaTodos();
+        } else {
+            sala.getPartida().abandona(j.getPosicao());
+        }
     }
 }
