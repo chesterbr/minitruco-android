@@ -67,4 +67,20 @@ public abstract class SalaActivity extends AppCompatActivity {
      * @param slot especifica qual das conexões remotas deve receber a mensagem
      */
     public abstract void enviaLinha(int slot, String linha);
+
+    protected void iniciaTrucoActivitySePreciso() {
+        if (!TrucoActivity.isViva()) {
+            startActivity(
+                new Intent(this, TrucoActivity.class)
+                    .putExtra("multiplayer", true));
+        }
+    }
+
+    protected void sleep(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            // não precisa tratar
+        }
+    }
 }

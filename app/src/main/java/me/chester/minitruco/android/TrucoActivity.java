@@ -250,15 +250,18 @@ public class TrucoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mIsViva = false;
-        if (partida != null && !partidaAbortada && !partida.finalizada) {
+        if (partida == null) {
+            return;
+        }
+        if (!partidaAbortada && !partida.finalizada) {
             // Usuário fechou partida em andamento, contabiliza derrota
-            // (para o placar de partidas do single-player)...
+            // (para o placar de partidas do single-player)
             int[] pontos = getPlacarDePartidas();
             setPlacarDePartidas(pontos[0], pontos[1] + 1);
-            // ...e notifica os outros jogadores (para que todos voltem
-            // para a sala no multiplayer)
-            partida.abandona(1);
         }
+        // Mesmo que já esteja encerrada, é preciso avisar para que os
+        // jogadores restantes voltem para a sala.
+        partida.abandona(1);
     }
 
     @Override

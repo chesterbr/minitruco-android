@@ -1,7 +1,6 @@
 package me.chester.minitruco.android.multiplayer.internet;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -157,22 +156,15 @@ public class ClienteInternetActivity extends SalaActivity {
                 enviaLinha(line);
                 break;
             case 'P': // Partida iniciada
-                // Se for a primeira partida nessa sala, temos que abrir a activity
+                iniciaTrucoActivitySePreciso();
+                // Enquanto não tiver a activity iniciada, melhor não processar
+                // nenhuma mensagem
                 while (!TrucoActivity.isViva()) {
-                    startActivity(
-                        new Intent(this, TrucoActivity.class)
-                            .putExtra("multiplayer", true));
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        // TODO consolidar esses sleeps
-                    }
+                    sleep(100);
                 }
-                // TODO checar se não tem chance de ficar preso no while acima
-                //      (acho que não , mas ainda teve uma vez que a partida iniciou de bobeira)
-
-                // Não tem break mesmo, porque se *não* for a primeira partida, temos que
-                // deixar a activity encerrar (visualmente) a partida anterior.
+                // Não tem mesmo um break aqui, o início de partida
+                // também precisa ser processado pelo jogo anterior
+                // (para limpar o placar)
             default:
                 // Se chegou aqui, não é nossa, encaminha pra PartidaRemota
                 if (partida != null) {
