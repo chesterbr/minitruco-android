@@ -278,7 +278,7 @@ public class PartidaRemota extends Partida {
     @Override
     public void abandona(int posicao) {
         // O if é necessário porque o caller pode nem saber quem pediu pra abandonar
-        if (posicao == 1) {
+        if (posicao == getJogadorHumano().getPosicao()) {
             cliente.enviaLinha("A");
         }
     }
