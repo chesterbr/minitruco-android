@@ -107,12 +107,12 @@ public class TrucoActivity extends Activity {
      * garantir que a partida só role quando a mesa estiver inicializada) e dali em
      * diante pelo botão de nova partida.
      */
-    private void criaEIniciaNovaPartida() {
+    private void iniciaNovaPartida() {
         preferences.edit().putInt("statPartidas",
             preferences.getInt("statPartidas", 0) + 1
         ).apply();
         jogadorHumano = new JogadorHumano(this, mesa);
-        partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
+        partida = CriadorDePartida.iniciaNovaPartida(jogadorHumano);
         mIsViva = true;
     }
 
@@ -155,7 +155,7 @@ public class TrucoActivity extends Activity {
                     throw new RuntimeException(e);
                 }
             }
-            criaEIniciaNovaPartida();
+            iniciaNovaPartida();
         }).start();
     }
 
@@ -175,7 +175,7 @@ public class TrucoActivity extends Activity {
 
     public void novaPartidaClickHandler(View v) {
         btnNovaPartida.setVisibility(View.INVISIBLE);
-        criaEIniciaNovaPartida();
+        iniciaNovaPartida();
     }
 
     @Override

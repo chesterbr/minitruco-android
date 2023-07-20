@@ -35,7 +35,7 @@ public class CriadorDePartida {
      *         possível criar (por exemplo, se a sala estiver sendo fechada).
      *
      */
-    public static Partida criaNovaPartida(JogadorHumano jogadorHumano) {
+    public static Partida iniciaNovaPartida(JogadorHumano jogadorHumano) {
         if (sala == null || sala.isFinishing()) {
             return null;
         }
