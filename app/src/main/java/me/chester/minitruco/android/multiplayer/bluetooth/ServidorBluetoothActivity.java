@@ -146,7 +146,6 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
             while (status == STATUS_EM_JOGO) {
                 sleep(500);
             }
-            atualizaDisplay();
             atualizaClientes();
             if (status == STATUS_LOTADO) {
                 setMensagem(null);
@@ -283,8 +282,7 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         return numClientes;
     }
 
-    private void atualizaClientes() {
-
+    void atualizaClientes() {
         // Monta o comando de dados no formato:
         // I apelido1|apelido2|apelido3|apelido4 regras
         StringBuilder sbComando = new StringBuilder("I ");
@@ -299,6 +297,9 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         for (int i = 0; i <= 2; i++) {
             enviaLinha(i, comando + (i + 2));
         }
+        // Como nós não vamos receber a notificação, vamos fazer o que
+        // eles fazem
+        atualizaDisplay();
     }
 
     void desconecta(int slot) {
@@ -323,7 +324,6 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         if (partida != null) {
             partida.abandona(slot + 2);
         }
-        atualizaDisplay();
         atualizaClientes();
     }
 
@@ -397,7 +397,6 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         temp = apelidos[1];
         apelidos[1] = apelidos[3];
         apelidos[3] = (String) temp;
-        atualizaDisplay();
         atualizaClientes();
     }
 
@@ -415,7 +414,6 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         apelidos[3] = apelidos[2];
         apelidos[2] = apelidos[1];
         apelidos[1] = (String) temp;
-        atualizaDisplay();
         atualizaClientes();
     }
 
