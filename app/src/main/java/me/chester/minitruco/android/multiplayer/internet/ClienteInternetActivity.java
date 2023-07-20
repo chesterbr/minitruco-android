@@ -194,6 +194,7 @@ public class ClienteInternetActivity extends SalaActivity {
 
     @Override
     public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
+        enviaLinha("Q");
         partida = new PartidaRemota(this, jogadorHumano, posJogador, modo);
         partida.setHumanoGerente(humanoGerente);
         return partida;

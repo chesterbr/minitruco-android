@@ -3,7 +3,6 @@ package me.chester.minitruco.android.multiplayer.bluetooth;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import java.util.UUID;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.SalaActivity;
-import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -205,21 +203,5 @@ public abstract class BluetoothActivity extends SalaActivity implements
     }
 
     protected abstract int getNumClientes();
-
-    protected void iniciaTrucoActivitySePreciso() {
-        if (!TrucoActivity.isViva()) {
-            startActivity(
-                new Intent(this, TrucoActivity.class)
-                    .putExtra("multiplayer", true));
-        }
-    }
-
-    protected void sleep(int ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            // não precisa tratar
-        }
-    }
 
 }
