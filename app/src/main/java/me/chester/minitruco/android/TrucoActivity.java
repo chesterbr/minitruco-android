@@ -113,7 +113,6 @@ public class TrucoActivity extends Activity {
         ).apply();
         jogadorHumano = new JogadorHumano(this, mesa);
         partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
-        (new Thread(partida)).start();
         mIsViva = true;
     }
 

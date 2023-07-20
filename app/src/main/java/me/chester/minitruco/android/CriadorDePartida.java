@@ -26,11 +26,22 @@ public class CriadorDePartida {
         CriadorDePartida.sala = sala;
     }
 
+    /**
+     * Solicita à sala que crie uma nova partida e inicia uma thread para ela
+     *
+     * @param jogadorHumano Jogador humano que irá intermediar a interação
+     *                      do usuário com a partida.
+     * @return a partida criada (e já rodando numa thread), ou null se não for
+     *         possível criar (por exemplo, se a sala estiver sendo fechada).
+     *
+     */
     public static Partida criaNovaPartida(JogadorHumano jogadorHumano) {
         if (sala == null || sala.isFinishing()) {
             return null;
         }
-        return sala.criaNovaPartida(jogadorHumano);
+        Partida partida = sala.criaNovaPartida(jogadorHumano);
+        (new Thread(partida)).start();
+        return partida;
     }
 
 }
