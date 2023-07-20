@@ -3,7 +3,6 @@ package me.chester.minitruco.android;
 import static android.provider.Settings.Global.DEVICE_NAME;
 import static android.text.InputType.TYPE_CLASS_TEXT;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface.OnClickListener;
@@ -24,7 +23,6 @@ import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.multiplayer.Sala;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
@@ -40,7 +38,7 @@ import me.chester.minitruco.core.PartidaLocal;
  * Tela inicial do jogo. Permite mudar opções, inciar uma partida single-player
  * (atuando com a sua "sala") ou iniciar uma partida multiplayer.
  */
-public class TituloActivity extends BaseActivity implements Sala<Activity> {
+public class TituloActivity extends SalaActivity {
 
     SharedPreferences preferences;
 

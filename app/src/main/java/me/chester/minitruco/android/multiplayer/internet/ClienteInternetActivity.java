@@ -1,6 +1,5 @@
 package me.chester.minitruco.android.multiplayer.internet;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,15 +23,14 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.BaseActivity;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.SalaActivity;
 import me.chester.minitruco.android.TrucoActivity;
-import me.chester.minitruco.android.multiplayer.Sala;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
 import me.chester.minitruco.core.Partida;
 
-public class ClienteInternetActivity extends BaseActivity implements Sala<Activity> {
+public class ClienteInternetActivity extends SalaActivity {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteInternetActivity");
 

@@ -1,8 +1,5 @@
 package me.chester.minitruco.android;
 
-import android.app.Activity;
-
-import me.chester.minitruco.android.multiplayer.Sala;
 import me.chester.minitruco.core.Partida;
 
 /**
@@ -12,7 +9,7 @@ import me.chester.minitruco.core.Partida;
  */
 public class CriadorDePartida {
 
-    private static Sala<Activity> sala;
+    private static SalaActivity sala;
 
     /**
      * Prepara o CriadorDePartida para criar o tipo de partida apropriado
@@ -25,12 +22,12 @@ public class CriadorDePartida {
      * @param sala em modo multiplayer, a activity que exibe a sala;
      *                          null no single player.
      */
-    public static void setActivitySala(Sala sala) {
+    public static void setActivitySala(SalaActivity sala) {
         CriadorDePartida.sala = sala;
     }
 
     public static Partida criaNovaPartida(JogadorHumano jogadorHumano) {
-        if (sala == null || ((Activity) sala).isFinishing()) {
+        if (sala == null || sala.isFinishing()) {
             return null;
         }
         return sala.criaNovaPartida(jogadorHumano);

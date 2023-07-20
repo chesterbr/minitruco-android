@@ -4,12 +4,11 @@ package me.chester.minitruco.android.multiplayer;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 
-import android.app.Activity;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.SalaActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.core.Baralho;
 import me.chester.minitruco.core.Carta;
@@ -37,7 +36,7 @@ import me.chester.minitruco.core.SituacaoJogo;
 public class PartidaRemota extends Partida {
 
     private final static Logger LOGGER = Logger.getLogger("PartidaRemota");
-    private final Sala<Activity> cliente;
+    private final SalaActivity cliente;
     private JogadorHumano jogadorHumano;
     /**
      * Esse baralho é apenas para sortear cartas quando alguém joga uma fechada
@@ -65,7 +64,7 @@ public class PartidaRemota extends Partida {
      *          String de 1 caractere recebida pelo servidor que determina
      *          se o truco é paulista, mineiro, etc.
      */
-    public PartidaRemota(Sala<Activity> cliente, JogadorHumano jogadorHumano, int posJogador, String modoStr) {
+    public PartidaRemota(SalaActivity cliente, JogadorHumano jogadorHumano, int posJogador, String modoStr) {
         super(Modo.fromString(modoStr));
         this.cliente = cliente;
 

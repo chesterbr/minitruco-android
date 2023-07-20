@@ -1,7 +1,6 @@
 package me.chester.minitruco.android.multiplayer.bluetooth;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -22,10 +21,9 @@ import java.util.List;
 import java.util.UUID;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.android.BaseActivity;
 import me.chester.minitruco.android.CriadorDePartida;
+import me.chester.minitruco.android.SalaActivity;
 import me.chester.minitruco.android.TrucoActivity;
-import me.chester.minitruco.android.multiplayer.Sala;
 import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -35,8 +33,8 @@ import me.chester.minitruco.core.Partida;
  * Tarefas comuns ao cliente e ao servidor Bluetooth: mostrar quem está
  * conectado, garantir que o bt está ligado e as permissões cedidas, etc.
  */
-public abstract class BaseBluetoothActivity extends BaseActivity implements
-        Runnable, Sala<Activity> {
+public abstract class BaseBluetoothActivity extends SalaActivity implements
+        Runnable {
 
     public static String[] BLUETOOTH_PERMISSIONS;
     static {
