@@ -37,7 +37,7 @@ import me.chester.minitruco.core.SituacaoJogo;
 public class PartidaRemota extends Partida {
 
     private final static Logger LOGGER = Logger.getLogger("PartidaRemota");
-    private final ActivityMultiplayer<Activity> cliente;
+    private final Sala<Activity> cliente;
     private JogadorHumano jogadorHumano;
     /**
      * Esse baralho é apenas para sortear cartas quando alguém joga uma fechada
@@ -65,7 +65,7 @@ public class PartidaRemota extends Partida {
      *          String de 1 caractere recebida pelo servidor que determina
      *          se o truco é paulista, mineiro, etc.
      */
-    public PartidaRemota(ActivityMultiplayer<Activity> cliente, JogadorHumano jogadorHumano, int posJogador, String modoStr) {
+    public PartidaRemota(Sala<Activity> cliente, JogadorHumano jogadorHumano, int posJogador, String modoStr) {
         super(Modo.fromString(modoStr));
         this.cliente = cliente;
 

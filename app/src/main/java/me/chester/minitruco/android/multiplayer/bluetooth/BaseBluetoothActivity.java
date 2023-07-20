@@ -25,7 +25,7 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.android.BaseActivity;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.TrucoActivity;
-import me.chester.minitruco.android.multiplayer.ActivityMultiplayer;
+import me.chester.minitruco.android.multiplayer.Sala;
 import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -36,7 +36,7 @@ import me.chester.minitruco.core.Partida;
  * conectado, garantir que o bt está ligado e as permissões cedidas, etc.
  */
 public abstract class BaseBluetoothActivity extends BaseActivity implements
-        Runnable, ActivityMultiplayer<Activity> {
+        Runnable, Sala<Activity> {
 
     public static String[] BLUETOOTH_PERMISSIONS;
     static {
@@ -92,7 +92,7 @@ public abstract class BaseBluetoothActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CriadorDePartida.setActivity(this);
+        CriadorDePartida.setActivitySala(this);
         setContentView(R.layout.sala);
         layoutIniciar = findViewById(R.id.layoutIniciar);
         btnIniciar = findViewById(R.id.btnIniciarBluetooth);
@@ -118,7 +118,7 @@ public abstract class BaseBluetoothActivity extends BaseActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        CriadorDePartida.setActivity(this);
+        CriadorDePartida.setActivitySala(this);
     }
 
     private String[] permissoesBluetoothFaltantes() {

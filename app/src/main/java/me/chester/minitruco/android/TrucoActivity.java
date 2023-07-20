@@ -30,9 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
-import me.chester.minitruco.core.PartidaLocal;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -101,8 +99,9 @@ public class TrucoActivity extends Activity {
     }
 
     /**
-     * Cria um nova partida e dispara uma thread para ele. Para jogos multiplayer,
-     * a criação é terceirizada para a classe apropriada.
+     * Cria um nova partida e dispara uma thread para ela.
+     * <p>
+     * A criação é, na prática, terceirizada para o CriadorDePartida.
      * <p>
      * Este método é chamada pela primeira vez a partir da MesaView (para
      * garantir que a partida só role quando a mesa estiver inicializada) e dali em
@@ -113,25 +112,9 @@ public class TrucoActivity extends Activity {
             preferences.getInt("statPartidas", 0) + 1
         ).apply();
         jogadorHumano = new JogadorHumano(this, mesa);
-        if (getIntent().hasExtra("multiplayer")) {
-            partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
-        } else {
-            partida = criaNovaPartidaSinglePlayer(jogadorHumano);
-        }
+        partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
         (new Thread(partida)).start();
         mIsViva = true;
-    }
-
-    private Partida criaNovaPartidaSinglePlayer(JogadorHumano humano) {
-        String modo = preferences.getString("modo", "P");
-        boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
-        boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
-        Partida novaPartida = new PartidaLocal(humanoDecide, jogoAutomatico, modo);
-        novaPartida.adiciona(jogadorHumano);
-        for (int i = 2; i <= 4; i++) {
-            novaPartida.adiciona(new JogadorBot());
-        }
-        return novaPartida;
     }
 
     @Override

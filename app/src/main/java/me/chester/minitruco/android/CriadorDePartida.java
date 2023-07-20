@@ -2,26 +2,38 @@ package me.chester.minitruco.android;
 
 import android.app.Activity;
 
-import me.chester.minitruco.android.multiplayer.ActivityMultiplayer;
+import me.chester.minitruco.android.multiplayer.Sala;
 import me.chester.minitruco.core.Partida;
 
 /**
- * Cria uma nova partida, associando-a (e seu JogadorHumano) à activity
- * chamadora (servidor Bluetooth, cliente Bluetooth ou cliente Internet).
+ * Centraliza a criação de novas partidas, guardando uma referência à
+ * Sala para qual a criação (e a comunicação remota, se houver)
+ * será delegada.
  */
 public class CriadorDePartida {
 
-    private static ActivityMultiplayer<Activity> activity;
+    private static Sala<Activity> sala;
 
-    public static void setActivity(ActivityMultiplayer activityChamadora) {
-        activity = activityChamadora;
+    /**
+     * Prepara o CriadorDePartida para criar o tipo de partida apropriado
+     * para o modo correspondente à activity chamadora (guardando a instância
+     * para associar às partidas).
+     * <p>
+     * É recomendável setar no onCreate() e no onResume() da activity chaamdora,
+     * para garantir que a instância atual seja sempre a correta.
+     *
+     * @param sala em modo multiplayer, a activity que exibe a sala;
+     *                          null no single player.
+     */
+    public static void setActivitySala(Sala sala) {
+        CriadorDePartida.sala = sala;
     }
 
     public static Partida criaNovaPartida(JogadorHumano jogadorHumano) {
-        if (activity == null || ((Activity)activity).isFinishing()) {
+        if (sala == null || ((Activity) sala).isFinishing()) {
             return null;
         }
-        return activity.criaNovaPartida(jogadorHumano);
+        return sala.criaNovaPartida(jogadorHumano);
     }
 
 }

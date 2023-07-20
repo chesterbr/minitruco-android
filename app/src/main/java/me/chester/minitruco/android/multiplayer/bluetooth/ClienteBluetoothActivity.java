@@ -212,6 +212,10 @@ public class ClienteBluetoothActivity extends BaseBluetoothActivity implements
         }
     }
 
+    public void enviaLinha(int slot, String linha) {
+        throw new RuntimeException("ClienteBluetooth só tem uma conexão");
+    }
+
     /**
      * Recupera a posição "visual" correspondente a uma posição de jogo (i.e.,
      * uma posição no servidor)

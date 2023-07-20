@@ -28,11 +28,11 @@ import me.chester.minitruco.android.BaseActivity;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.TrucoActivity;
-import me.chester.minitruco.android.multiplayer.ActivityMultiplayer;
+import me.chester.minitruco.android.multiplayer.Sala;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
 import me.chester.minitruco.core.Partida;
 
-public class ClienteInternetActivity extends BaseActivity implements ActivityMultiplayer<Activity> {
+public class ClienteInternetActivity extends BaseActivity implements Sala<Activity> {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteInternetActivity");
 
@@ -50,7 +50,7 @@ public class ClienteInternetActivity extends BaseActivity implements ActivityMul
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CriadorDePartida.setActivity(this);
+        CriadorDePartida.setActivitySala(this);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.sala);
@@ -75,7 +75,7 @@ public class ClienteInternetActivity extends BaseActivity implements ActivityMul
     @Override
     protected void onResume() {
         super.onResume();
-       CriadorDePartida.setActivity(this);
+        CriadorDePartida.setActivitySala(this);
     }
 
     @Override
@@ -226,6 +226,11 @@ public class ClienteInternetActivity extends BaseActivity implements ActivityMul
             out.flush();
             LOGGER.log(Level.INFO, "enviou: " + comando);
         }).start();
+    }
+
+    @Override
+    public void enviaLinha(int slot, String linha) {
+        throw new RuntimeException("ClienteInternet só tem uma conexão");
     }
 
     // TODO botão de back tem que

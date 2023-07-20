@@ -3,6 +3,7 @@ package me.chester.minitruco.android;
 import static android.provider.Settings.Global.DEVICE_NAME;
 import static android.text.InputType.TYPE_CLASS_TEXT;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface.OnClickListener;
@@ -23,20 +24,23 @@ import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.multiplayer.Sala;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
 import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
+import me.chester.minitruco.core.PartidaLocal;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Tela inicial do jogo. Permite mudar opções e inciar uma partida (
- * <code>TrucoActivity</code>).
+ * Tela inicial do jogo. Permite mudar opções, inciar uma partida single-player
+ * (atuando com a sua "sala") ou iniciar uma partida multiplayer.
  */
-public class TituloActivity extends BaseActivity {
+public class TituloActivity extends BaseActivity implements Sala<Activity> {
 
     SharedPreferences preferences;
 
@@ -226,6 +230,7 @@ public class TituloActivity extends BaseActivity {
     }
 
     public void jogarClickHandler(View v) {
+        CriadorDePartida.setActivitySala(this);
         Intent intent = new Intent(TituloActivity.this, TrucoActivity.class);
         startActivity(intent);
     }
@@ -262,5 +267,34 @@ public class TituloActivity extends BaseActivity {
     private void selecionaModo(String modo) {
         ((TextView) findViewById(R.id.textViewModo)).setText(Partida.textoModo(modo));
         preferences.edit().putString("modo", modo).apply();
+    }
+
+    @Override
+    public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
+        String modo = preferences.getString("modo", "P");
+        boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
+        boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
+        Partida novaPartida = new PartidaLocal(humanoDecide, jogoAutomatico, modo);
+        novaPartida.adiciona(jogadorHumano);
+        for (int i = 2; i <= 4; i++) {
+            novaPartida.adiciona(new JogadorBot());
+        }
+        return novaPartida;
+    }
+
+    @Override
+    public void enviaLinha(String linha) {
+        throw new RuntimeException("Jogo single-player não possui conexão");
+    }
+
+    @Override
+    public void enviaLinha(int slot, String linha) {
+        throw new RuntimeException("Jogo single-player não possui conexão");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CriadorDePartida.setActivitySala(this);
     }
 }
