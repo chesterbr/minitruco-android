@@ -70,10 +70,12 @@ public abstract class SalaActivity extends AppCompatActivity {
         }
     }
 
-    protected void encerraTrucoActivity() {
-        Intent intent = new Intent(TrucoActivity.BROADCAST_IDENTIFIER);
-        intent.putExtra("evento", "desconectado");
-        sendBroadcast(intent);
+    public void encerraTrucoActivity() {
+        if (TrucoActivity.isViva()) {
+            Intent intent = new Intent(TrucoActivity.BROADCAST_IDENTIFIER);
+            intent.putExtra("evento", "desconectado");
+            sendBroadcast(intent);
+        }
     }
 
     protected void sleep(int ms) {
