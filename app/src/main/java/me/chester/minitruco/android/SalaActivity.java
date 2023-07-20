@@ -33,12 +33,6 @@ public abstract class SalaActivity extends AppCompatActivity {
         });
     }
 
-    protected void encerraTrucoActivity() {
-        Intent intent = new Intent(TrucoActivity.BROADCAST_IDENTIFIER);
-        intent.putExtra("evento", "desconectado");
-        sendBroadcast(intent);
-    }
-
     /**
      * Cria uma nova partida.
      * <p>
@@ -74,6 +68,12 @@ public abstract class SalaActivity extends AppCompatActivity {
                 new Intent(this, TrucoActivity.class)
                     .putExtra("multiplayer", true));
         }
+    }
+
+    protected void encerraTrucoActivity() {
+        Intent intent = new Intent(TrucoActivity.BROADCAST_IDENTIFIER);
+        intent.putExtra("evento", "desconectado");
+        sendBroadcast(intent);
     }
 
     protected void sleep(int ms) {
