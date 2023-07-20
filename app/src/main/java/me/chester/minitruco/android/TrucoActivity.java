@@ -261,7 +261,7 @@ public class TrucoActivity extends Activity {
         }
         // Mesmo que já esteja encerrada, é preciso avisar para que os
         // jogadores restantes voltem para a sala.
-        partida.abandona(1);
+        partida.abandona(jogadorHumano.getPosicao());
     }
 
     @Override
