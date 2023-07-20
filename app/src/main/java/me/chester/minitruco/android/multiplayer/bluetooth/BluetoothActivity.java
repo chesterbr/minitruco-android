@@ -30,10 +30,12 @@ import me.chester.minitruco.core.Partida;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Tarefas comuns ao cliente e ao servidor Bluetooth: mostrar quem está
- * conectado, garantir que o bt está ligado e as permissões cedidas, etc.
+ * Activity que atua como cliente ou servidor Bluetooth
+ * <p>
+ * Esta classe consolida as partes comuns a ambos: exibir os nomes dos jogadores,
+ * garantir que o Bluetooth está ligado e as permissões cedidas, etc.
  */
-public abstract class BaseBluetoothActivity extends SalaActivity implements
+public abstract class BluetoothActivity extends SalaActivity implements
         Runnable {
 
     public static String[] BLUETOOTH_PERMISSIONS;
@@ -188,7 +190,7 @@ public abstract class BaseBluetoothActivity extends SalaActivity implements
     protected void msgErroFatal(String mensagem) {
         runOnUiThread(() -> {
             encerraTrucoActivity();
-            BaseBluetoothActivity context = BaseBluetoothActivity.this;
+            BluetoothActivity context = BluetoothActivity.this;
             if (context == null || context.isFinishing()) {
                 return;
             }

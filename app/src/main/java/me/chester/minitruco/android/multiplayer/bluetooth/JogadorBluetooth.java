@@ -58,7 +58,7 @@ public class JogadorBluetooth extends Jogador implements Runnable {
                     break;
                 // Lê o próximo caractre
                 c = in.read();
-                if (c != BaseBluetoothActivity.SEPARADOR_REC) {
+                if (c != BluetoothActivity.SEPARADOR_REC) {
                     // Acumula caracteres até formar uma linha
                     sbLinha.append((char) c);
                 } else {
