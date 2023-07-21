@@ -1,5 +1,6 @@
 package me.chester.minitruco.android;
 
+import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
 import static android.provider.Settings.Global.DEVICE_NAME;
 import static android.text.InputType.TYPE_CLASS_TEXT;
 
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -153,11 +155,31 @@ public class TituloActivity extends SalaActivity {
         }
         if (temInternet) {
             btnInternet.setOnClickListener(v -> {
-                pedeNome((nome) -> {
-                    startActivity(new Intent(getBaseContext(),
-                        ClienteInternetActivity.class));
-                });
+                if (conectadoNaInternet()) {
+                    pedeNome((nome) -> {
+                        startActivity(new Intent(getBaseContext(),
+                            ClienteInternetActivity.class));
+                    });
+                } else {
+                    mostraAlertBox("Sem conexão",
+                        "Não foi possível conectar à Internet. Verifique sua conexão e tente novamente.");
+                }
             });
+        }
+    }
+
+    private boolean conectadoNaInternet() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                return cm.getNetworkCapabilities(cm.getActiveNetwork()).hasCapability(NET_CAPABILITY_INTERNET);
+            } else {
+                // Android < 6, vamos assumir que tem internet
+                // (se não conectar só vai vir uma mensagem feia mesmo)
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
         }
     }
 
