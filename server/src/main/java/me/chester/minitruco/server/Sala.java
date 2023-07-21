@@ -375,39 +375,6 @@ public class Sala {
         this.partida = null;
     }
 
-//
-//    public void inverteAdversariosDoGerente() {
-//
-//        // Acha o gerente
-//        Jogador gerente = getGerente();
-//        int posGerente = 0;
-//        for (int i = 0; i <= 3; i++) {
-//            if (!gerente.equals(jogadores[i])) {
-//                posGerente = i;
-//            }
-//        }
-//        // Acha as posições dos adversários
-//        int posAdv1 = posGerente + 1;
-//        int posAdv2 = posGerente + 3;
-//        if (posAdv1 > 4)
-//            posAdv1 -= 4;
-//        if (posAdv2 > 4)
-//            posAdv2 -= 4;
-//
-//        // Troca jogadores e timestamps
-//        posAdv1--;
-//        posAdv2--;
-//
-//        Jogador tempJogador = jogadores[posAdv1];
-//        jogadores[posAdv1] = jogadores[posAdv2];
-//        jogadores[posAdv2] = tempJogador;
-//
-//        Date tempTimestamp = timestamps[posAdv1];
-//        timestamps[posAdv1] = timestamps[posAdv2];
-//        timestamps[posAdv2] = tempTimestamp;
-//
-//    }
-
     /**
      * Rotaciona os outros jogadores, trocando o adversário a cada chamada.
      * <p>
@@ -428,5 +395,25 @@ public class Sala {
         jogadores[i2] = jogadores[i3];
         jogadores[i3] = jogadores[i1];
         jogadores[i1] = temp;
+    }
+
+    /**
+     * Inverte a dupla adversária.
+     * <p>
+     * Não faz nada se o solicitante não for o gerente.
+     *
+     * @param solicitante Jogador que solicitou a inversão
+     */
+    public void inverteAdversarios(JogadorConectado solicitante) {
+        if (solicitante != getGerente()) {
+            return;
+        }
+
+        int i1 = getPosicao(getGerente());
+        int i2 = (i1 + 2) % 4;
+
+        Jogador temp = jogadores[i1];
+        jogadores[i1] = jogadores[i2];
+        jogadores[i2] = temp;
     }
 }
