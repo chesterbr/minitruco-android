@@ -54,7 +54,12 @@ public class ClienteInternetActivity extends SalaActivity {
         findViewById(R.id.btnIniciarBluetooth).setOnClickListener(v -> {
             enviaLinha("Q");
         });
-
+        findViewById(R.id.btnInverter).setOnClickListener(v -> {
+            enviaLinha("R I");
+        });
+        findViewById(R.id.btnTrocar).setOnClickListener(v -> {
+            enviaLinha("R T");
+        });
 
         new Thread(() -> {
             try {
