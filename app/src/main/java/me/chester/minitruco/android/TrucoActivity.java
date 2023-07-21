@@ -30,9 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.R;
-import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
-import me.chester.minitruco.core.PartidaLocal;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -101,37 +99,21 @@ public class TrucoActivity extends Activity {
     }
 
     /**
-     * Cria um nova partida e dispara uma thread para ele. Para jogos multiplayer,
-     * a criação é terceirizada para a classe apropriada.
+     * Cria um nova partida e dispara uma thread para ela.
+     * <p>
+     * A criação é, na prática, terceirizada para o CriadorDePartida.
      * <p>
      * Este método é chamada pela primeira vez a partir da MesaView (para
      * garantir que a partida só role quando a mesa estiver inicializada) e dali em
      * diante pelo botão de nova partida.
      */
-    private void criaEIniciaNovaPartida() {
+    private void iniciaNovaPartida() {
         preferences.edit().putInt("statPartidas",
             preferences.getInt("statPartidas", 0) + 1
         ).apply();
         jogadorHumano = new JogadorHumano(this, mesa);
-        if (getIntent().hasExtra("multiplayer")) {
-            partida = CriadorDePartida.criaNovaPartida(jogadorHumano);
-        } else {
-            partida = criaNovaPartidaSinglePlayer(jogadorHumano);
-        }
-        (new Thread(partida)).start();
+        partida = CriadorDePartida.iniciaNovaPartida(jogadorHumano);
         mIsViva = true;
-    }
-
-    private Partida criaNovaPartidaSinglePlayer(JogadorHumano humano) {
-        String modo = preferences.getString("modo", "P");
-        boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
-        boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
-        Partida novaPartida = new PartidaLocal(humanoDecide, jogoAutomatico, modo);
-        novaPartida.adiciona(jogadorHumano);
-        for (int i = 2; i <= 4; i++) {
-            novaPartida.adiciona(new JogadorBot());
-        }
-        return novaPartida;
     }
 
     @Override
@@ -173,7 +155,7 @@ public class TrucoActivity extends Activity {
                     throw new RuntimeException(e);
                 }
             }
-            criaEIniciaNovaPartida();
+            iniciaNovaPartida();
         }).start();
     }
 
@@ -193,7 +175,7 @@ public class TrucoActivity extends Activity {
 
     public void novaPartidaClickHandler(View v) {
         btnNovaPartida.setVisibility(View.INVISIBLE);
-        criaEIniciaNovaPartida();
+        iniciaNovaPartida();
     }
 
     @Override
@@ -268,15 +250,18 @@ public class TrucoActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         mIsViva = false;
-        if (partida != null && !partidaAbortada && !partida.finalizada) {
+        if (partida == null) {
+            return;
+        }
+        if (!partidaAbortada && !partida.finalizada) {
             // Usuário fechou partida em andamento, contabiliza derrota
-            // (para o placar de partidas do single-player)...
+            // (para o placar de partidas do single-player)
             int[] pontos = getPlacarDePartidas();
             setPlacarDePartidas(pontos[0], pontos[1] + 1);
-            // ...e notifica os outros jogadores (para que todos voltem
-            // para a sala no multiplayer)
-            partida.abandona(1);
         }
+        // Mesmo que já esteja encerrada, é preciso avisar para que os
+        // jogadores restantes voltem para a sala.
+        partida.abandona(jogadorHumano.getPosicao());
     }
 
     @Override
@@ -376,7 +361,7 @@ public class TrucoActivity extends Activity {
             } else {
                 setPlacarDePartidas(pontos[0], pontos[1] + 1);
             }
-            if (partida instanceof PartidaLocal) {
+            if (partida.isHumanoGerente()) {
                 btnNovaPartida.setVisibility(View.VISIBLE);
                 if (partida.isJogoAutomatico()) {
                     btnNovaPartida.performClick();

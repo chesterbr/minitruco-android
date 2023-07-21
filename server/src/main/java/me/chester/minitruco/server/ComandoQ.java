@@ -6,6 +6,7 @@ package me.chester.minitruco.server;
 /**
  * Informa ao servidor que o jogador deseja iniciar a partida na sala em que está.
  * <p>
+ * Ignorado se não for o gerente da sala (mas dá erro se não estivermos numa sala).
  */
 
 public class ComandoQ extends Comando {
@@ -14,10 +15,8 @@ public class ComandoQ extends Comando {
     public void executa(String[] args, JogadorConectado j) {
 
         Sala s = j.getSala();
-        if (s!=null) {
-            j.querJogar = true;
-            s.mandaInfoParaTodos();
-            s.verificaMesaCompleta();
+        if (s != null) {
+            s.iniciaPartida(j);
         } else {
             j.println("X FS");
         }

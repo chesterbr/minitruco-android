@@ -1,5 +1,8 @@
 package me.chester.minitruco.android;
 
+import static android.provider.Settings.Global.DEVICE_NAME;
+import static android.text.InputType.TYPE_CLASS_TEXT;
+
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface.OnClickListener;
@@ -9,9 +12,13 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.core.util.Consumer;
 import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.BuildConfig;
@@ -19,16 +26,19 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
+import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
+import me.chester.minitruco.core.PartidaLocal;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Tela inicial do jogo. Permite mudar opções e inciar uma partida (
- * <code>TrucoActivity</code>).
+ * Tela inicial do jogo. Permite mudar opções, inciar uma partida single-player
+ * (atuando com a sua "sala") ou iniciar uma partida multiplayer.
  */
-public class TituloActivity extends BaseActivity {
+public class TituloActivity extends SalaActivity {
 
     SharedPreferences preferences;
 
@@ -40,7 +50,7 @@ public class TituloActivity extends BaseActivity {
         ((TextView) findViewById(R.id.versao_app)).setText("versão " + BuildConfig.VERSION_NAME);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        habilitaBluetoothSeExistir();
+        configuraBotoesMultiplayer();
         mostraNotificacaoInicial();
         migraOpcoesLegadas();
 
@@ -127,9 +137,66 @@ public class TituloActivity extends BaseActivity {
 
     }
 
-    private void habilitaBluetoothSeExistir() {
-        findViewById(R.id.btnBluetooth).setVisibility(
-            BluetoothAdapter.getDefaultAdapter() != null ? View.VISIBLE : View.GONE);
+    private void configuraBotoesMultiplayer() {
+        boolean temBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
+        boolean temInternet = false;
+
+        Button btnBluetooth = findViewById(R.id.btnBluetooth);
+        Button btnInternet = findViewById(R.id.btnInternet);
+        btnBluetooth.setVisibility(temBluetooth ? View.VISIBLE : View.GONE);
+        btnInternet.setVisibility(temInternet ? View.VISIBLE : View.GONE);
+        if (temBluetooth) {
+            btnBluetooth.setOnClickListener(v -> {
+                perguntaCriarOuProcurarBluetooth();
+            });
+        }
+        if (temInternet) {
+            btnInternet.setOnClickListener(v -> {
+                pedeNome((nome) -> {
+                    startActivity(new Intent(getBaseContext(),
+                        ClienteInternetActivity.class));
+                });
+            });
+        }
+    }
+
+    private void pedeNome(Consumer<String> callback) {
+        // Se já temos um nome guardado, é ele
+        String nome = preferences.getString("nome_multiplayer", null);
+        // Senão, tentamos pegar o nome do dispositivo
+        if (nome == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            nome = Settings.System.getString(getContentResolver(), DEVICE_NAME);
+        }
+        // Se não deu certo, tentamos pegar o nome Bluetooth
+        if (nome == null) {
+            // Não-documentado e só funciona se tiver Bluetooth, cf https://stackoverflow.com/a/67949517/64635
+            nome = Settings.Secure.getString(getContentResolver(), "bluetooth_name");
+        }
+        // Se nada disso deu certo, o sanitizador coloca o nome default
+        nome = Jogador.sanitizaNome(nome);
+
+        // Faz a pergunta sugerindo o nome encontrado
+        EditText editNomeJogador = new EditText(this);
+        editNomeJogador.setInputType(TYPE_CLASS_TEXT);
+        editNomeJogador.setMaxLines(1);
+        editNomeJogador.setText(nome);
+
+        runOnUiThread(() -> {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.mipmap.ic_launcher)
+                    .setTitle("Nome")
+                    .setMessage("Qual nome você gostaria de usar?")
+                    .setView(editNomeJogador)
+                    .setPositiveButton("Ok", (d, w) -> {
+                        final String nomeFinal = Jogador.sanitizaNome(
+                            editNomeJogador.getText().toString());
+                        preferences.edit().putString("nome_multiplayer",
+                            nomeFinal).apply();
+                        callback.accept(nomeFinal);
+                    })
+                    .setNegativeButton("Cancela", null)
+                    .show();
+        });
     }
 
     private void botoesHabilitados(boolean status) {
@@ -161,16 +228,9 @@ public class TituloActivity extends BaseActivity {
     }
 
     public void jogarClickHandler(View v) {
+        CriadorDePartida.setActivitySala(this);
         Intent intent = new Intent(TituloActivity.this, TrucoActivity.class);
         startActivity(intent);
-    }
-
-    public void internetButtonClickHandler(View v) {
-        startActivity(new Intent(getBaseContext(), ClienteInternetActivity.class));
-    }
-
-    public void bluetoothButtonClickHandler(View v) {
-        perguntaCriarOuProcurarBluetooth();
     }
 
     public void opcoesButtonClickHandler(View v) {
@@ -205,5 +265,34 @@ public class TituloActivity extends BaseActivity {
     private void selecionaModo(String modo) {
         ((TextView) findViewById(R.id.textViewModo)).setText(Partida.textoModo(modo));
         preferences.edit().putString("modo", modo).apply();
+    }
+
+    @Override
+    public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
+        String modo = preferences.getString("modo", "P");
+        boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
+        boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
+        Partida novaPartida = new PartidaLocal(humanoDecide, jogoAutomatico, modo);
+        novaPartida.adiciona(jogadorHumano);
+        for (int i = 2; i <= 4; i++) {
+            novaPartida.adiciona(new JogadorBot());
+        }
+        return novaPartida;
+    }
+
+    @Override
+    public void enviaLinha(String linha) {
+        throw new RuntimeException("Jogo single-player não possui conexão");
+    }
+
+    @Override
+    public void enviaLinha(int slot, String linha) {
+        throw new RuntimeException("Jogo single-player não possui conexão");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CriadorDePartida.setActivitySala(this);
     }
 }

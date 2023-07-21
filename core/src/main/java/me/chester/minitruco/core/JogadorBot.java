@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  */
 public class JogadorBot extends Jogador implements Runnable {
     private final static Logger LOGGER = Logger.getLogger("JogadorBot");
+    public static final String APELIDO_BOT = "bot";
 
     private boolean fingeQuePensa = true;
 
@@ -27,6 +28,7 @@ public class JogadorBot extends Jogador implements Runnable {
     public JogadorBot(Estrategia e) {
         estrategia = e;
         LOGGER.info("Estrategia: " + estrategia.getClass().getName());
+        setNome(APELIDO_BOT);
         thread = new Thread(this);
         thread.start();
     }

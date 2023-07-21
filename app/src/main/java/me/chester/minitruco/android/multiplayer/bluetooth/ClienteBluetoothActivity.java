@@ -27,7 +27,7 @@ import me.chester.minitruco.core.Partida;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 @SuppressLint("MissingPermission") // super.onCreate checa as permissões
-public class ClienteBluetoothActivity extends BaseBluetoothActivity implements
+public class ClienteBluetoothActivity extends BluetoothActivity implements
         Runnable {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteBluetoothActivity");
@@ -160,6 +160,7 @@ public class ClienteBluetoothActivity extends BaseBluetoothActivity implements
     }
 
     private void exibeMesaForaDoJogo(String parametros) {
+        encerraTrucoActivity();
         if (partida != null) {
             partida.abandona(0);
             partida = null;
@@ -210,6 +211,10 @@ public class ClienteBluetoothActivity extends BaseBluetoothActivity implements
                 throw new RuntimeException(ex);
             }
         }
+    }
+
+    public void enviaLinha(int slot, String linha) {
+        throw new RuntimeException("ClienteBluetooth só tem uma conexão");
     }
 
     /**

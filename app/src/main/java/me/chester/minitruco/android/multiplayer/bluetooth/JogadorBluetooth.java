@@ -4,9 +4,11 @@ import android.bluetooth.BluetoothSocket;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 
@@ -17,13 +19,15 @@ public class JogadorBluetooth extends Jogador implements Runnable {
     private final static Logger LOGGER = Logger.getLogger("JogadorBluetooth");
 
     private InputStream in;
-    private final BluetoothSocket socket;
     private final ServidorBluetoothActivity servidor;
+    public final BluetoothSocket socket;
+    public final OutputStream out;
 
     public JogadorBluetooth(BluetoothSocket socket,
-            ServidorBluetoothActivity servidor) {
+            ServidorBluetoothActivity servidor) throws IOException {
         this.socket = socket;
         this.servidor = servidor;
+        this.out = socket.getOutputStream();
         new Thread(this).start();
     }
 
@@ -32,33 +36,26 @@ public class JogadorBluetooth extends Jogador implements Runnable {
      * remoto), transformando-as novamente em eventos na PartidaLocal.
      */
     public void run() {
-        // Aguarda a definição da posição (importante, pois ela determina o slot
-        // no servidor para o envio de mensagens)
-        while (getPosicao() == 0) {
-            Thread.yield();
-        }
+        LOGGER.log(Level.INFO, "iniciando thread");
+        // TODO: será que eu poderia usar linhas normais? Esse lance do
+        //       separador é herança do Java ME; provavelmente Bluetooth
+        //       de Android não tem problemas com terminador de linha
         // Caractere lido e buffer que acumula a linha lida
         int c;
         StringBuffer sbLinha = new StringBuffer();
         try {
             in = socket.getInputStream();
-            // O loop dura enquanto o InputStream não for null. Sim, eu poderia
-            // usar uma leitura mais eficiente, com blocking, mas aí não consigo
-            // detectar o fim da partida (sem perder o primeiro caractere do
-            // primeiro comando da partida seguinte)
-            do {
-                while (in != null && in.available() == 0) {
+            while (true) {
+                while (in.available() == 0) {
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
                         // Alguém já tratou isso um dia?
                     }
                 }
-                if (in == null)
-                    break;
                 // Lê o próximo caractre
                 c = in.read();
-                if (c != BaseBluetoothActivity.SEPARADOR_REC) {
+                if (c != BluetoothActivity.SEPARADOR_REC) {
                     // Acumula caracteres até formar uma linha
                     sbLinha.append((char) c);
                 } else {
@@ -96,23 +93,22 @@ public class JogadorBluetooth extends Jogador implements Runnable {
                         case 'C':
                             partida.respondeAumento(this, false);
                             break;
+                        case 'B':
+                            int versaoCliente = Integer.parseInt(args[1]);
+                            int versaoServidor = BuildConfig.VERSION_CODE;
+                            if (versaoCliente != versaoServidor) {
+                                servidor.desconectaPorVersaoIncompativel(this);
+                            }
+                            break;
                         }
                         sbLinha.setLength(0);
                     }
                 }
-            } while (in != null);
+            }
         } catch (IOException e) {
-            LOGGER.log(Level.INFO, "Exceção no jogador (fim de jogo?)", e);
-            // Não precisa tratar - ou é fim de jogo, ou o servidor cuida
+            LOGGER.log(Level.INFO, "IOException " + e.getMessage() + " => desconexão");
         }
-        LOGGER.log(Level.INFO, "encerrando loop JogadorBT");
-    }
-
-    /**
-     * Encerra a thread principal, efetivamente finalizando o JogadorBT
-     */
-    void finaliza() {
-        in = null;
+        LOGGER.log(Level.INFO, "encerrando thread");
     }
 
     /**
@@ -201,12 +197,10 @@ public class JogadorBluetooth extends Jogador implements Runnable {
 
     public void jogoFechado(int numEquipeVencedora, int rndFrase) {
         enviaLinha("G " + numEquipeVencedora + " " + rndFrase);
-        finaliza();
     }
 
     public void jogoAbortado(int posicao, int rndFrase) {
         enviaLinha("A " + posicao + ' ' + rndFrase);
-        finaliza();
     }
 
 }

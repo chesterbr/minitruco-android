@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
-import java.util.HashSet;
-import java.util.Set;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -23,10 +20,6 @@ import me.chester.minitruco.core.Jogador;
  */
 public class JogadorConectado extends Jogador implements Runnable {
 
-    /**
-     * Nomes de jogadores online (para evitar duplicidade)
-     */
-    private static final Set<String> nomes = new HashSet<>();
     private final Socket cliente;
 
     /**
@@ -56,47 +49,16 @@ public class JogadorConectado extends Jogador implements Runnable {
     }
 
     /**
-     * Verifica se um nome está em uso por algum jogador
-     *
-     * @param nome nome a verificar
-     * @return true se já está em uso, false caso contrário
-     */
-    public static boolean isNomeEmUso(String nome) {
-        return nomes.contains(nome.toUpperCase());
-    }
-
-    /**
-     * Impede que um nome seja usado
-     *
-     */
-    public static void bloqueiaNome(String nome) {
-        nomes.add(nome.toUpperCase());
-    }
-
-    /**
-     * Libera o uso de um nome
-     *
-     */
-    public static void liberaNome(String nome) {
-        nomes.remove(nome.toUpperCase());
-    }
-
-    // TODO: ver se não vai fazer falta
-    // @Override
-    // public void jogadorAceito(Jogador j, Partida partida) {
-    // println("Y " + j.getPosicao());
-    // }
-
-    /**
      * Envia uma linha de texto para o cliente (tipicamente o resultado de um
-     * comando)
+     * comando, ou um keepalive)
      *
      * @param linha linha de texto a enviar
      */
-    public void println(String linha) {
+    public synchronized void println(String linha) {
         out.print(linha);
         out.print("\r\n");
-        if (linha.length() > 0) {
+        // Não fazemos log de keepalive
+        if (!linha.startsWith("K")) {
             ServerLogger.evento(this, linha);
         }
     }
@@ -105,51 +67,100 @@ public class JogadorConectado extends Jogador implements Runnable {
      * Aguarda comandos do jogador e os executa
      */
     public void run() {
-        ServerLogger.evento(this, "conectou");
+        ServerLogger.evento(this, "conectou, iniciando thread");
+
         try {
-            // Configura um timeout para evitar conexões presas
-            ServerLogger.evento(this, "timeout antes:" + cliente.getSoTimeout());
-            cliente.setSoTimeout(10000);
-            ServerLogger.evento(this, "timeout depois:" + cliente.getSoTimeout());
-            // Prepara o buffer de saída
+            cliente.setSoTimeout(0);
+            // Prepara os buffers de entrada e saída
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     cliente.getInputStream()));
             out = new PrintStream(cliente.getOutputStream());
+            iniciaMonitorDeConexao();
             // Imprime info do servidor (como mensagem de boas-vindas)
             (new ComandoW()).executa(null, this);
             String linha = "";
             while (linha != null) {
                 try {
                     linha = in.readLine();
-                    Comando.interpreta(linha, this);
-                } catch (SocketTimeoutException e) {
-                    // A linha é só pra garantir que, no caso de uma conexão presa
-                    // o teste abaixo dela dê erro (seja no if, seja exception no print)
-                    println("");
-                    if (!cliente.isConnected()) {
-                        ServerLogger.evento("Desconexao detectada durante timeout");
-                        return;
-                    }
+                } catch (IOException e) {
+                    // Como o SO_TIMEOUT está em zero, podemos assumir desconexão
+                    break;
+                }
+                if (("K " + keepAlive).equals(linha)) {
+                    keepAlive = 0;
                     continue;
                 }
+                Comando.interpreta(linha, this);
             }
         } catch (IOException e) {
-            // Meio improvável de rolar, however...
-            ServerLogger.evento(e, "Erro de I/O no loop principal do jogador");
+            ServerLogger.evento(e, "Erro de I/O inesperado loop principal do jogador");
         } finally {
-            // Ao final, remove o usuário de qualquer sala em que esteja,
-            // remove seu nome da lista de nomes usados e loga
-            if (getSala() != null) {
-                (new ComandoS()).executa(null, this);
+            finalizaMonitorDeConexao();
+            Sala s = getSala();
+            // Se houver um jogo em andamento (e ainda tivermos comunicação), encerra
+            Comando.interpreta("A", this);
+            if (s != null) {
+                // Dá um tempo para o cliente receber o comando A e mostrar o balão de "adeus"
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                // Garante que o jogador saiu da sala, e os clientes vão ser notificados
+                s.remove(this);
+                s.mandaInfoParaTodos();
+                ServerLogger.evento(this, "finalizou thread");
             }
-            if (!getNome().equals("unnamed")) {
-                liberaNome(getNome());
-            }
-            ServerLogger.evento(this, "desconectou");
         }
 
     }
 
+    private long keepAlive;
+    private Thread threadMonitorDeConexao;
+
+    /**
+     * Configura uma thread para testar a conexão, que envia um keepalive
+     * para o cliente a cada 5 segundos.
+     * <p>
+     * Isso evita um timeout no cliente e permite desbloquear o readLine()
+     * sem depender do timeout do socket, que é pouco confiável.
+     */
+    private void iniciaMonitorDeConexao() {
+        Thread threadPrincipal = Thread.currentThread();
+        threadMonitorDeConexao = new Thread(() -> {
+            ServerLogger.evento(this, "Iniciando monitor de conexão");
+            while (true) {
+                keepAlive = System.currentTimeMillis();
+                println("K " + keepAlive);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                if (keepAlive != 0) {
+                    try {
+                        ServerLogger.evento(this, "Keepalive não respondido, fechando socket");
+                        cliente.close();
+                        threadPrincipal.interrupt();
+                    } catch (IOException e) {
+                        ServerLogger.evento(e, "Erro de I/O inesperado no monitor de conexão");
+                    }
+                    break;
+                }
+            }
+            ServerLogger.evento(this, "Monitor de conexão finalizado");
+            threadMonitorDeConexao = null;
+        });
+        threadMonitorDeConexao.start();
+    }
+
+    private void finalizaMonitorDeConexao() {
+        Thread t = threadMonitorDeConexao;
+        if (threadMonitorDeConexao != null) {
+            ServerLogger.evento("Interrompendo monitor de conexão");
+            t.interrupt();
+        }
+    }
 
 
     @Override
@@ -224,7 +235,7 @@ public class JogadorConectado extends Jogador implements Runnable {
 
     @Override
     public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
-        println("H " + j.getPosicao() + (aceita ? " T" : " F"));
+        println("H " + j.getPosicao() + (aceita ? " T" : " F") + ' ' + rndFrase);
     }
 
     @Override
@@ -241,7 +252,7 @@ public class JogadorConectado extends Jogador implements Runnable {
     @Override
     public void jogoAbortado(int posicao, int rndFrase) {
         desvinculaJogo();
-        println("A " + posicao);
+        println("A " + posicao + ' ' + rndFrase);
     }
 
     /**
@@ -270,24 +281,6 @@ public class JogadorConectado extends Jogador implements Runnable {
      */
     public void setSala(Sala sala) {
         this.sala = sala;
-    }
-
-    /**
-     * Atribui um nome ao jogador (apenas se não houver outro com o mesmo nome)
-     */
-    @Override
-    public synchronized void setNome(String nome) {
-        // Se já existir, desencana
-        if (isNomeEmUso(nome)) {
-            return;
-        }
-        // Se já tinha um nome, libera o seu uso
-        if (!this.getNome().equals("unnamed")) {
-            liberaNome(this.getNome());
-        }
-        // Seta o novo nome e evita novos usos
-        super.setNome(nome);
-        bloqueiaNome(nome);
     }
 
     public String getIp() {
