@@ -1,6 +1,7 @@
 package me.chester.minitruco.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,16 +36,38 @@ public class JogadorTest {
         assertEquals("crashy_on_iOS_Power_h_0", sanitizaNome("crashy on iOS: Powerلُلُصّبُلُلصّبُررً ॣ ॣh ॣ ॣ冗🏳0🌈️జ్ఞ‌ా\uDB40\uDC00 "));
     }
 
+    void assertNomeDefault(String nome) {
+        String regex = "^sem_nome_\\d{1,4}$";
+        assertTrue(nome.matches(regex), nome + " não deu match em " + regex);
+    }
+
     @Test
     void sanitizaNomeUsaDefaultSeNãoTiverCaracteresVálidos() {
-        assertEquals("Jogador(a)", sanitizaNome(null));
-        assertEquals("Jogador(a)", sanitizaNome(""));
-        assertEquals("Jogador(a)", sanitizaNome("_"));
-        assertEquals("Jogador(a)", sanitizaNome("-"));
-        assertEquals("Jogador(a)", sanitizaNome("___--__"));
-        assertEquals("Jogador(a)", sanitizaNome("-------"));
-        assertEquals("Jogador(a)", sanitizaNome("💩"));
-        assertEquals("Jogador(a)", sanitizaNome("誰かの名前を日本語で"));
+        assertNomeDefault(sanitizaNome(null));
+        assertNomeDefault(sanitizaNome(""));
+        assertNomeDefault(sanitizaNome("_"));
+        assertNomeDefault(sanitizaNome("-"));
+        assertNomeDefault(sanitizaNome("___--__"));
+        assertNomeDefault(sanitizaNome("-------"));
+        assertNomeDefault(sanitizaNome("💩"));
+        assertNomeDefault(sanitizaNome("誰かの名前を日本語で"));
+    }
+
+    @Test
+    void sanitizaNomeÉIdempotente() {
+        String[] nomes = new String[]{
+            "nome",
+            "nome_com_underscore",
+            "nome-com-hífen",
+            "nome com espaços",
+            "nome com espaços e _ e - e 💩 e 123",
+            null,
+            "",
+            "sem_nome_123"};
+        for (String nome : nomes) {
+            String sanitizado = sanitizaNome(nome);
+            assertEquals(sanitizado, sanitizaNome(sanitizado));
+        }
     }
 
     @Test

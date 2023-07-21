@@ -43,7 +43,7 @@ public abstract class Jogador {
             .replaceAll(" +","_")
             .replaceAll("^(.{0,25}).*$", "$1")
             .replaceAll("_$","")
-            .replaceAll("^[-_ ]*$", "Jogador(a)");
+            .replaceAll("^[-_ ]*$", "sem_nome_"+(1 + random.nextInt(999)));
     }
 
     /**

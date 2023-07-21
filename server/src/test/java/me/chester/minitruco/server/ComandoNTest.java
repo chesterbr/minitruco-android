@@ -1,6 +1,7 @@
 package me.chester.minitruco.server;
 
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -20,14 +21,19 @@ class ComandoNTest {
     void verificaResposta(String linha, String resposta) {
         Mockito.reset(jogadorConectado);
         Comando.interpreta(linha, jogadorConectado);
-        verify(jogadorConectado).println(eq(resposta));
+        if (resposta == "<nome default>") {
+            String regex = "^N sem_nome_\\d{1,4}$";
+            verify(jogadorConectado).println(matches(regex));
+        } else {
+            verify(jogadorConectado).println(eq(resposta));
+        }
     }
 
     @Test
     void testNomesInvalidosViramNomeDefault() {
-        verificaResposta("N", "N Jogador(a)");
-        verificaResposta("N ", "N Jogador(a)");
-        verificaResposta("N !@#$", "N Jogador(a)");
+        verificaResposta("N", "<nome default>");
+        verificaResposta("N ", "<nome default>");
+        verificaResposta("N !@#$", "<nome default>");
     }
 
     @Test
