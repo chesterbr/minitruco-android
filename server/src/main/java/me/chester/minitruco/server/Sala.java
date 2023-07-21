@@ -381,10 +381,11 @@ public class Sala {
      * Não faz nada se o solicitante não for o gerente.
      *
      * @param solicitante Jogador que solicitou a rotação
+     * @return true se rotacionou, false se não (porque o solicitante não é o gerente)
      */
-    public void trocaParceiro(JogadorConectado solicitante) {
+    public boolean trocaParceiro(JogadorConectado solicitante) {
         if (solicitante != getGerente()) {
-            return;
+            return false;
         }
 
         int i1 = getPosicao(getGerente());
@@ -395,6 +396,8 @@ public class Sala {
         jogadores[i2] = jogadores[i3];
         jogadores[i3] = jogadores[i1];
         jogadores[i1] = temp;
+
+        return true;
     }
 
     /**
@@ -403,10 +406,11 @@ public class Sala {
      * Não faz nada se o solicitante não for o gerente.
      *
      * @param solicitante Jogador que solicitou a inversão
+     * @return true se inverteu, false se não (porque o solicitante não é o gerente)
      */
-    public void inverteAdversarios(JogadorConectado solicitante) {
+    public boolean inverteAdversarios(JogadorConectado solicitante) {
         if (solicitante != getGerente()) {
-            return;
+            return false;
         }
 
         int i1 = getPosicao(getGerente());
@@ -415,5 +419,7 @@ public class Sala {
         Jogador temp = jogadores[i1];
         jogadores[i1] = jogadores[i2];
         jogadores[i2] = temp;
+
+        return true;
     }
 }

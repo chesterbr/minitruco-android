@@ -230,18 +230,18 @@ class SalaTest {
     }
 
     @Test
-    void testTrocaParceiroSimples() {
+    void testTrocaParceiroSimplesRetornaTrueETroca() {
         Sala s = criaSalaComGerenteNaPosicao1();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
-        s.trocaParceiro(jj1);
+        assertTrue(s.trocaParceiro(jj1));
         assertPosicoes(s, jj1, jj3, jj4, jj2);
     }
 
     @Test
-    void testTrocaParceiroIgnoraNaoGerente() {
+    void testTrocaParceiroRetornaFalsoEIgnoraSeNaoForGerente() {
         Sala s = criaSalaComGerenteNaPosicao2();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
-        s.trocaParceiro(jj1);
+        assertFalse(s.trocaParceiro(jj1));
         assertPosicoes(s, jj1, jj2, jj3, jj4);
     }
 
@@ -279,18 +279,18 @@ class SalaTest {
     }
 
     @Test
-    void testInverteAdversariosSimples() {
+    void testInverteAdversariosSimplesRetornaTrueEInverte() {
         Sala s = criaSalaComGerenteNaPosicao1();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
-        s.inverteAdversarios(jj1);
+        assertTrue(s.inverteAdversarios(jj1));
         assertPosicoes(s, jj1, jj4, jj3, jj2);
     }
 
     @Test
-    void testInverteAdversariosIgnoraNaoGerente() {
+    void testInverteAdversariosIgnoraNaoGerenteERetornaFalse() {
         Sala s = criaSalaComGerenteNaPosicao2();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
-        s.inverteAdversarios(jj1);
+        assertFalse(s.inverteAdversarios(jj1));
         assertPosicoes(s, jj1, jj2, jj3, jj4);
     }
 
