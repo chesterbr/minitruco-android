@@ -62,9 +62,9 @@ class SalaTest {
         Sala.limpaSalas();
 
         j1 = spy(new JogadorConectado(mock(Socket.class)));
-        j2 = new JogadorConectado(mock(Socket.class));
-        j3 = new JogadorConectado(mock(Socket.class));
-        j4 = new JogadorConectado(mock(Socket.class));
+        j2 = spy(new JogadorConectado(mock(Socket.class)));
+        j3 = spy(new JogadorConectado(mock(Socket.class)));
+        j4 = spy(new JogadorConectado(mock(Socket.class)));
         j5 = new JogadorConectado(mock(Socket.class));
         j6 = new JogadorConectado(mock(Socket.class));
         j7 = new JogadorConectado(mock(Socket.class));
@@ -76,17 +76,24 @@ class SalaTest {
         j3.setNome("j3");
         j4.setNome("j4");
 
-        // Mocks para jogadores que podem iniciar/encerrar partida
-        doNothing().when(j1).println(any());
-
-        jj1 = new JogadorConectado(null);
-        jj2 = new JogadorConectado(null);
-        jj3 = new JogadorConectado(null);
-        jj4 = new JogadorConectado(null);
+        jj1 = spy(new JogadorConectado(null));
+        jj2 = spy(new JogadorConectado(null));
+        jj3 = spy(new JogadorConectado(null));
+        jj4 = spy(new JogadorConectado(null));
         jj1.setNome("jj1");
         jj2.setNome("jj2");
         jj3.setNome("jj3");
         jj4.setNome("jj4");
+
+        // Mocks para jogadores que podem estar em partida iniciada/encerada
+        doNothing().when(j1).println(any());
+        doNothing().when(j2).println(any());
+        doNothing().when(j3).println(any());
+        doNothing().when(j4).println(any());
+        doNothing().when(jj1).println(any());
+        doNothing().when(jj2).println(any());
+        doNothing().when(jj3).println(any());
+        doNothing().when(jj4).println(any());
     }
 
     // Isso é importante para não haver ambiguidade sobre
@@ -238,8 +245,17 @@ class SalaTest {
     }
 
     @Test
-    void testTrocaParceiroRetornaFalsoEIgnoraSeNaoForGerente() {
+    void testTrocaParceiroRetornaFalseEIgnoraSeNaoForGerente() {
         Sala s = criaSalaComGerenteNaPosicao2();
+        assertPosicoes(s, jj1, jj2, jj3, jj4);
+        assertFalse(s.trocaParceiro(jj1));
+        assertPosicoes(s, jj1, jj2, jj3, jj4);
+    }
+
+    @Test
+    void testTrocaParceiroRetornaFalseEIgnoraSeEstiverJogando() {
+        Sala s = criaSalaComGerenteNaPosicao1();
+        s.iniciaPartida(jj1);
         assertPosicoes(s, jj1, jj2, jj3, jj4);
         assertFalse(s.trocaParceiro(jj1));
         assertPosicoes(s, jj1, jj2, jj3, jj4);
@@ -287,12 +303,23 @@ class SalaTest {
     }
 
     @Test
-    void testInverteAdversariosIgnoraNaoGerenteERetornaFalse() {
+    void testInverteAdversariosRetornaFalseEIgnoraSeNaoForGerente() {
         Sala s = criaSalaComGerenteNaPosicao2();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
         assertFalse(s.inverteAdversarios(jj1));
         assertPosicoes(s, jj1, jj2, jj3, jj4);
     }
+
+    @Test
+    void testInverteAdversariosRetornaFalseEIgnoraSeEstiverJogando() {
+        Sala s = criaSalaComGerenteNaPosicao1();
+        s.iniciaPartida(jj1);
+        assertPosicoes(s, jj1, jj2, jj3, jj4);
+        assertFalse(s.inverteAdversarios(jj1));
+        assertPosicoes(s, jj1, jj2, jj3, jj4);
+    }
+
+
 
     @Test
     void testInverteAdversariosComGerenteNaPosicao2() {

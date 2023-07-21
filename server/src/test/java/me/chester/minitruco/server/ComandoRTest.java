@@ -1,6 +1,7 @@
 package me.chester.minitruco.server;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -54,6 +55,28 @@ class ComandoRTest {
         Comando.interpreta("R T", j2);
         Comando.interpreta("R I", j2);
         verify(j1, never()).println(any());
+        verify(j2, never()).println(any());
+        verify(j3, never()).println(any());
+    }
+
+    @Test
+    void testIgnoraSeNaoEstaEmUmaSala() {
+        sala.remove(j1);
+        Comando.interpreta("R T", j1);
+        Comando.interpreta("R I", j1);
+        verify(j1, never()).println(any());
+        verify(j2, never()).println(any());
+        verify(j3, never()).println(any());
+    }
+
+    @Test
+    void testIgnoraSeJogoEmAndamento() {
+        sala.iniciaPartida(j1);
+        Comando.interpreta("R T", j1);
+        Comando.interpreta("R I", j1);
+        verify(j1, never()).println(startsWith("I "));
+        verify(j2, never()).println(startsWith("I "));
+        verify(j3, never()).println(startsWith("I "));
     }
 
     @Test
@@ -64,6 +87,8 @@ class ComandoRTest {
         Comando.interpreta("R R R", j1);
         Comando.interpreta("R WTF", j1);
         verify(j1, never()).println(any());
+        verify(j2, never()).println(any());
+        verify(j3, never()).println(any());
     }
 
 }

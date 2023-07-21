@@ -377,14 +377,13 @@ public class Sala {
 
     /**
      * Rotaciona os outros jogadores, trocando o adversário a cada chamada.
-     * <p>
-     * Não faz nada se o solicitante não for o gerente.
      *
      * @param solicitante Jogador que solicitou a rotação
-     * @return true se rotacionou, false se não (porque o solicitante não é o gerente)
+     * @return true se rotacionou, false se o solicitante não for o gerente, ou
+     *         houver jogo em andamento
      */
     public boolean trocaParceiro(JogadorConectado solicitante) {
-        if (solicitante != getGerente()) {
+        if (solicitante != getGerente() || getPartida() != null) {
             return false;
         }
 
@@ -402,14 +401,13 @@ public class Sala {
 
     /**
      * Inverte a dupla adversária.
-     * <p>
-     * Não faz nada se o solicitante não for o gerente.
      *
      * @param solicitante Jogador que solicitou a inversão
-     * @return true se inverteu, false se não (porque o solicitante não é o gerente)
+     * @return true se inverteu, false se o solicitante não for o gerente, ou
+     *         houver jogo em andamento
      */
     public boolean inverteAdversarios(JogadorConectado solicitante) {
-        if (solicitante != getGerente()) {
+        if (solicitante != getGerente() || getPartida() != null) {
             return false;
         }
 
