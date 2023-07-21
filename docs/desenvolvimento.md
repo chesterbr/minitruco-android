@@ -318,7 +318,7 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 #### Dentro da sala (fora de jogo e gerente)
 
-- `R R`: Reconfigura a sala rotacionando os não-gerentes (troca de parceiro)
+- `R T`: Reconfigura a sala rotacionando os não-gerentes (troca de parceiro)
 - `R I`: Reconfigura a sala invertendo os adversários
 - `Q`: ("quero jogar") - inicia a partida
 
