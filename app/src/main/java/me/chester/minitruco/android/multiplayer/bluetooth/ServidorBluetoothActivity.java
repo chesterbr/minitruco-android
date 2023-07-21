@@ -275,7 +275,7 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
      * @param jogador jogador a desconectar
      */
     void desconecta(JogadorBluetooth jogador) {
-        LOGGER.log(Level.INFO, "desconecta() jogador na posição" + jogador.getPosicao());
+        LOGGER.log(Level.INFO, "desconecta()");
         try {
             jogador.socket.close();
         } catch (Exception e) {
