@@ -64,6 +64,11 @@ public abstract class Jogador {
         return nome;
     }
 
+    @Override
+    public String toString() {
+        return super.toString()+"["+nome+"]";
+    }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
