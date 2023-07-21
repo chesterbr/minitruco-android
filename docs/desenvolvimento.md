@@ -14,13 +14,20 @@
 - [Arquitetura de Classes](#arquitetura-de-classes)
   - [Partidas e Jogadores](#partidas-e-jogadores)
   - [Jogo simples (single player)](#jogo-simples-single-player)
+  - [Jogo Multiplayer](#jogo-multiplayer)
+    - [Diferenças conceituais em relação ao single-player](#diferenças-conceituais-em-relação-ao-single-player)
+    - [Implementação](#implementação)
   - [Jogo via Bluetooth](#jogo-via-bluetooth)
   - [Jogo via Internet](#jogo-via-internet)
 - [Protocolo de comunicação multiplayer](#protocolo-de-comunicação-multiplayer)
+  - [Jogando via nc/telnet](#jogando-via-nctelnet)
   - [Convenções](#convenções)
   - [Comandos](#comandos)
-    - [Fora do jogo](#fora-do-jogo)
+    - [Fora da sala](#fora-da-sala)
+    - [Dentro da sala (fora de jogo)](#dentro-da-sala-fora-de-jogo)
+    - [Dentro da sala (fora de jogo e gerente)](#dentro-da-sala-fora-de-jogo-e-gerente)
     - [Durante o jogo](#durante-o-jogo)
+    - [A qualquer momento](#a-qualquer-momento)
   - [Notificações](#notificações)
 - [Estratégia dos bots](#estratégia-dos-bots)
   - [Assets gráficos](#assets-gráficos)
@@ -114,7 +121,8 @@ O [vocabulário típico do truco](https://www.jogosdorei.com.br/blog/girias-do-t
 - **Aumento**: quando um jogador pede para aumentar o valor da rodada ("truco", que aumenta para 3 ou 4 pontos, "seis", "oito"/"nove" ou "doze", conforme o modo de jogo).
 - **Mão de X**: é a mão de 11 do truco paulista, ou mão de 10 do truco mineiro (quando apenas uma das duplas tem essa pontuação e pode optar por jogar ou não).
 - **Baralho**: visualmente, é o bitmap desenhado quando a carta está fechada (valor virado para baixo). Três dessas cartas são desenhadas no canto superior direito para simbolizar o baralho todo. Não confundir com a classe [`Baralho`](../core/src/main/java/me/chester/minitruco/core/Baralho.java), que faz parte do core e é quem sorteia as [`Carta`](../core/src/main/java/me/chester/minitruco/core/Carta.java)s.
-
+- **Posição**: visualmente, o jogo define a posição de um jogador como um número de 1 a 4. A posição 1 está na parte inferior da tela, a 2 na direita, a 3 acima e a 4 à esquerda. As posições 1 e 3 formam uma dupla, e as posições 2 e 4 formam a outra.
+-
 ## Arquitetura de Classes
 
 ### Partidas e Jogadores
@@ -153,47 +161,111 @@ Neste modo (que é o padrão do jogo, iniciado ao tocar o botão "Jogar) as trê
 - `JogadorHumano` faz a ponte entre a partida e a UI do Android. Ele recebe as notificações da partida e traduz em elementos visuais (de `TrucoActivity` e `MesaView`). Quando o usuário interage com estes elementos, ela envia os comandos correspondentes à partida.
 - `JogadorBot` faz a ponte entre a partida e uma `Estrategia`. Da mesma forma que `JogadorHumano`, ela recebe as notificações da partida, mas se concentra basicamente em eventos que precisam de uma resposta (ex.: é a vez daquele bot), chamando métodos de `Estrategia` e, de acordo com a resposta, enviando comandos à partida.
 
-Vale observar que a UI só reage quando a partida notifica `JogadorHumano`. Por exemplo, se ele pede truco, o balão só aparece quando a partida manda a notificação dizendo "jogador X pediu truco". Isso também vale para eventos dos outros jogadores: quando um bot joga uma carta, a animação aparece quando `JogadorHumano` recebe a notfiifição de "jogador Y jogou a carta Ij".
+Vale observar que a UI só reage quando a partida notifica `JogadorHumano`. Por exemplo, se ele pede truco, o balão só aparece quando a partida manda a notificação dizendo "jogador X pediu truco". Isso também vale para eventos dos outros jogadores: quando um bot joga uma carta, a animação aparece quando `JogadorHumano` recebe a notfifição de "jogador Y jogou a carta Ij".
 
-Essa separação radical simplifica os jogadores (`JogadorHumano` não precisa entender as regras do jogo, `JogadorBot` só se preocupa em jogar), evita trapaças (`PartidaLocal` é a única autoridade) e permite total reuso no multiplayer, como veremos a seguir.
+Neste modo, o `JogadorHumano` sempre estará na posição 1 da `PartidaLocal`, e os bots nas posições 2, 3 e 4; estas posições são exibidas como descrito em [Terminologia](#terminologia): a 1 na parte de baixo da tela, a 2 na direita, a 3 acima e a 4 à esquerda.
+
+Essa separação radical de classes simplifica os jogadores (`JogadorHumano` não precisa entender as regras do jogo, `JogadorBot` só se preocupa em jogar), evita trapaças (`PartidaLocal` é a única autoridade) e permite total reuso no multiplayer, como veremos a seguir.
+
+### Jogo Multiplayer
+
+#### Diferenças conceituais em relação ao single-player
+
+É importante observar que o jogo multiplayer introduz algumas complexidades para entender a motivação da arquitetura de classes mais complexa:
+
+O jogo multiplayer pode acontecer via Bluetooth ou pela internet. Do ponto de vista do usuário, os jogadores entram em uma "sala de jogo". Um deles (o "gerente") pode mudar os outros de lugar e é quem pode iniciar uma nova partida (tanto a partir da sala de jogo, quanto no botão "Nova Partida" que aparece quando uma se encerra).
+
+Todos os aparelhos enxergam a mesa do seu ponto de vista, ou seja, se temos os jogadores A, B, C e D, com B à direita de A, C à direita de B e D à direita de C, o jogador A vê a mesa assim:
+
+```
+  C
+
+D    B
+
+  A
+```
+
+mas o jogador B vê assim:
+
+```
+  D
+
+A    C
+
+  B
+```
+
+#### Implementação
+
+Para que todos os aparelhos e bots "enxerguem" a partida como se fosse local, foi criada a classe `PartidaRemota`. Ela atua como um _proxy_ da `PartidaLocal`, que recebe as notificações desta em formato texto e transforma em chamadas de métdodos para o `Jogador` apropriado (em particular o `JogadorHumano`, que vai reproduzir esses eventos na UI). Ela também faz o inverso: converte métodos de comando que o `JogadorHumano` chama em comandos textuais para que possam ser encaminhados para o outro lado.
+
+Existem, portanto, quatro formatos de jogo: single-player (que sempre roda a partida local), Bluetooth rodando a partida local ("Criar Jogo" na UI), Bluetooth rodando a partida remotamente ("Procurar jogo" na UI)  e internet (que sempre roda a partida remota). Cada um desses formatos é representado por uma classe descendente de `SalaActivity`, que cria a `Partida` apropriada (local ou remota), com os `Jogador`es apropriados (vide abaixo), gerenciando a conexão com o(s) outro(s) aparelho(s) ou com o servidor de internet:
+
+```mermaid
+classDiagram
+    SalaActivity <|-- TituloActivity
+    SalaActivity <|-- BluetoothActivity
+    BluetoothActivity <|-- ServidorBluetoothActivity
+    BluetoothActivity <|-- ClienteBluetoothActivity
+    SalaActivity <|-- InternetActivity
+
+    SalaActivity : +criaNovaPartida(...)
+
+    <<Abstract>> SalaActivity
+    <<Abstract>> BluetoothActivity
+```
+
+Pode parecer estranho que uma `Activity` faça isso, mas a UI depende muito de qual dos modos acima estamos utilizando, então há pouca vantagem em separar (talvez eu faça isso no futuro para melhorar a testabilidade).
+
+Todas as salas exibem os jogadores remotos e, quando aplicável, as opções do gerente, com exceção da `TituloActivity` (a "sala" do single-player, que não tem nada disso e só precisa que a partida seja criada).
+
+Como a criação da partida depende de a `TrucoActivity` estar rodando (e ela não sabe qual o modo de jogo atual), o [`CriadorDePartida`](../app/src/main/java/me/chester/minitruco/android/SalaActivity.java) mantém uma referência à `SalaActivity` atual, e delega para ela a criação da partida.
 
 ### Jogo via Bluetooth
 
-Para jogar via Bluetooth, um aparelho seleciona a opção "Criar Jogo", que abre uma `ServidorBluetoothActivity`. Esta aguarda por conexões de outros aparelhos, e quando um se conecta, ela cria um `JogadorBluetooth`.
-
-`JogadorBluetooth` recebe notificações da `PartidaLocal` da mesma forma que `JogadorHumano`, mas em vez de traduzir para a UI, ela traduz em comandos textuais<sup>1</sup>, que são enviados ao outro aparelho via Bluetooth. Da mesma forma, ela recebe notificações textuais do outro aparelho e traduz em comandos para a partida.
-
+O jogo via Bluetooth começa quando um aparelho eleciona a opção "Criar Jogo", que abre uma `ServidorBluetoothActivity`. Esta aguarda por conexões de outros aparelhos, e sempre que um deles se conecta, ela cria um `JogadorBluetooth` e repassa a conexão para ele. Os comandos textuais recebidos nesta conexão são traduzidos para comandos na `PartidaLocal`, e as notificações desta são traduzidas para comandos textuais e enviadas ao outro aparelho:
 
 ```mermaid
 classDiagram
-direction LR
     PartidaLocal -- "1" JogadorHumano
     PartidaLocal -- "3" JogadorBluetooth
     JogadorBluetooth -- ServidorBluetoothActivity
-    note for ServidorBluetoothActivity "conversa com cliente\nvia Bluetooth"
+    note for ServidorBluetoothActivity "conversa com cliente\nvia socket Bluetooth"
 ```
 
-De forma análoga, o aparelho que seleciona a opção "Procurar Jogo" abre uma `ClienteBluetoothActivity`, que se conecta no aparelho servidor. Aqui quem faz a tradução de notificações e comandos para o protocolo textual é `PartidaRemota`:
+Já o aparelho que seleciona a opção "Procurar Jogo" abre uma `ClienteBluetoothActivity`, que se conecta no aparelho servidor. Aqui quem faz a tradução de notificações e comandos para o protocolo textual é `PartidaRemota`, conforme descrito na seção anterior.
+
+Os outros jogadores (que podem ser clientes ou servidores) são representados por `JogadorDummy` (eles não precisam fazer nada, já que `JogadorHumano` é quem reproduz suas ações na UI, como acontece no single-player em relação aos `JogadorCPU`). Ficamos assim:
 
 ```mermaid
 classDiagram
-    PartidaRemota -- ClienteBluetoothActivity
     PartidaRemota -- "1" JogadorHumano
-    note for ClienteBluetoothActivity "conversa com servidor\nvia Bluetooth"
+    PartidaRemota -- "3" JogadorDummy
+    PartidaRemota -- ClienteBluetoothActivity
+    note for ClienteBluetoothActivity "conversa com servidor\nvia socket Bluetooth"
 ```
 
-Parece complicado, mas a grande vantagem é que nem `PartidaLocal` (no servidor), nem `JogadorHumano` (no cliente) precisam saber que estão conversando via Bluetooth, graças aos _proxies_ `JogadorBluetooth` e `PartidaRemota`. Isso permite que o mesmo código seja usado para jogar localmente ou via Bluetooth, e também permite que o jogo seja jogado via Bluetooth ou internet.
+Parece complicado, mas a grande vantagem é que nem `PartidaLocal` (no servidor), nem `JogadorHumano` (no cliente) precisam saber que estão conversando via Bluetooth, graças aos _proxies_ `JogadorBluetooth` e `PartidaRemota`.
 
 *<sup>1</sup> para detalhes sobre estes comandos e notificações textuais, veja a seção [Protocolo de comunicação multiplayer](#protocolo-de-comunicação-multiplayer).*
 
-
 ### Jogo via Internet
 
-TODO (jogo via internet ainda está em desenvolvimento)
+A `ClienteInternetActivity` vai se comportar de forma parecida com a `ClienteBluetoothActivity`, isto é, usando uma `PartidaRemota` como _proxy_ da `PartidaLocal` no servidor, um `JogadorHumano` para interfacear com a UI e três `JogadorDummy` para representar os outros jogadores (bots ou outros clientes na internet).
 
-### Sockets e Activities no jogo multiplayer
+A diferença é que a conexão é feita via internet, e não via Bluetooth (para a `PartidaLocal` é tudo um [`socket`](https://docs.oracle.com/javase/8/docs/api/java/net/Socket.html)).
 
-Todas as `ActivityMultiplayer` mencionadas acima precisam manter o(s) socket(s) nos quais elas estão conectadas, e fazer a ponte entre os `Jogador`es e estes. Para gerenciar isso, a classe [`CriadorDePartida`](../app/src/main/java/me/chester/minitruco/android/CriadorDePartida.java) mantém uma referência à `ActivityMultiplayer` em uso no momento e consolida a criação de novas partidas.
+```mermaid
+classDiagram
+    PartidaRemota -- "1" JogadorHumano
+    PartidaRemota -- "3" JogadorDummy
+    PartidaRemota -- ClienteInternetActivity
+    note for ClienteInternetActivity "conversa com servidor\nvia socket internet"
+```
+
+O servidor internet é um módulo completamente separado, que não roda em Android.
+
+TODO: documentar o servidor internet
 
 ## Protocolo de comunicação multiplayer
 
@@ -234,14 +306,21 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 ### Comandos
 
-#### Fora do jogo
+#### Fora da sala
 
 - `W`: recupera número de versão (e de repente outras infos no futuro)
 - `B <numero>`:  Informa o número do build do cliente, para que o servidor verifique compatibilidade
 - `N <nome>`: Define o nome do jogador (é sanitizado; se for 100% inválido recebe um default)
 - `E PUB <modo>`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
-- `S`: - Sai da sala (encerrando a partida, se houver uma em andamento)
-- `Q`: - Inicia a partida (se o jogador for o gerente e não houver uma em andamento)
+
+#### Dentro da sala (fora de jogo)
+- `S`: Sai da sala (encerrando a partida, se houver uma em andamento)
+
+#### Dentro da sala (fora de jogo e gerente)
+
+- `R R`: Reconfigura a sala rotacionando os não-gerentes (troca de parceiro)
+- `R I`: Reconfigura a sala invertendo os adversários
+- `Q`: ("quero jogar") - inicia a partida
 
 #### Durante o jogo
 
@@ -251,7 +330,7 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `C`: Corre (recusa aumento de aposta)
 - `H _`: decide se aceita ou recusa jogar em mão de 11 (_ = T para aceita e F para recusa)
 
-#### Outros
+#### A qualquer momento
 
 - `K <numero>`: responde a uma notificação de keepalive do servidor para evitar que a conexão caia por inatividade (apenas internet)
 
