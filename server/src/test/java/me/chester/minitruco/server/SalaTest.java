@@ -58,7 +58,7 @@ class SalaTest {
     }
 
     @BeforeEach
-    void setUp() throws InterruptedException {
+    void setUp() {
         Sala.limpaSalas();
 
         j1 = spy(new JogadorConectado(mock(Socket.class)));
@@ -227,30 +227,6 @@ class SalaTest {
         Partida p = s.getPartida();
         s.iniciaPartida(j1);
         assertEquals(p, s.getPartida());
-    }
-
-    private Sala criaSalaCheiaComJ2Gerente() {
-        Sala s = new Sala(true, "P");
-        s.adiciona(j1);
-        s.adiciona(j2);
-        s.adiciona(j3);
-        s.adiciona(j4);
-        s.remove(j1);
-        s.adiciona(j1);
-        assertPosicoes(s, j1, j2, j3, j4);
-        assertEquals(j2, s.getGerente());
-
-        return s;
-    }
-
-    private Sala criaSalaCheiaComJ3Gerente() {
-        Sala s = criaSalaCheiaComJ2Gerente();
-        s.remove(j2);
-        s.adiciona(j2);
-        assertPosicoes(s, j1, j2, j3, j4);
-        assertEquals(j3, s.getGerente());
-
-        return s;
     }
 
     @Test
