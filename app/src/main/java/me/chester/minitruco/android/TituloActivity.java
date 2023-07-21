@@ -139,7 +139,7 @@ public class TituloActivity extends SalaActivity {
 
     private void configuraBotoesMultiplayer() {
         boolean temBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
-        boolean temInternet = true;
+        boolean temInternet = false;
 
         Button btnBluetooth = findViewById(R.id.btnBluetooth);
         Button btnInternet = findViewById(R.id.btnInternet);
