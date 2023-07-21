@@ -119,8 +119,8 @@ public class JogadorConectado extends Jogador implements Runnable {
     private Thread threadMonitorDeConexao;
 
     /**
-     * Configura uma thread para testar a conexão (enviando uma linha em branco
-     * que o cliente deve ignorar) de tempos em tempos.
+     * Configura uma thread para testar a conexão, que envia um keepalive
+     * para o cliente a cada 5 segundos.
      * <p>
      * Isso evita um timeout no cliente e permite desbloquear o readLine()
      * sem depender do timeout do socket, que é pouco confiável.
