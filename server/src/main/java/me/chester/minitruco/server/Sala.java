@@ -120,7 +120,7 @@ public class Sala {
      * @return true se tudo correr bem, false se a sala estiver lotada ou o
      * jogador já estiver em outra sala
      */
-    public boolean adiciona(JogadorConectado j) {
+    public synchronized boolean adiciona(JogadorConectado j) {
         // Se o jogador já está numa sala, não permite
         if (j.getSala() != null) {
             return false;
@@ -153,7 +153,7 @@ public class Sala {
      * @return Jogador mais antigo, ou null se a sala não tiver jogadores
      * remotos
      */
-    public Jogador getGerente() {
+    public synchronized Jogador getGerente() {
         JogadorConectado g = null;
         for (int i = 0; i <= 3; i++) {
             if (!(jogadores[i] instanceof JogadorConectado)) {
@@ -172,7 +172,7 @@ public class Sala {
      *
      * @return Número de Pessoas
      */
-    public int getNumPessoas() {
+    public synchronized int getNumPessoas() {
         int numPessoas = 0;
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] != null) {
@@ -190,7 +190,7 @@ public class Sala {
      * @param j Jogador a remover
      * @return true se removeu, false se ele não estava lá
      */
-    public boolean remove(JogadorConectado j) {
+    public synchronized boolean remove(JogadorConectado j) {
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == j) {
                 // Finaliza partida em andamento, se houver.
@@ -239,7 +239,7 @@ public class Sala {
     /**
      * Manda a notificação de informação da sala ("I ...") para todos os membros.
      */
-    public void mandaInfoParaTodos() {
+    public synchronized void mandaInfoParaTodos() {
         String mensagem = getInfo();
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] instanceof JogadorConectado) {
@@ -249,6 +249,7 @@ public class Sala {
         }
     }
 
+    // TODO só é public para testes; reescrever eles pra testar mandaInfoParaTodos ao inves deste
     /**
      * Monta a string de informação da sala.
      * <p>
@@ -306,7 +307,7 @@ public class Sala {
      *
      * @param solicitante Jogador que solicitou o início da partida.
      */
-    public void iniciaPartida(Jogador solicitante) {
+    public synchronized void iniciaPartida(Jogador solicitante) {
         if (partida != null) {
             return;
         }
@@ -340,7 +341,7 @@ public class Sala {
      * @param j Jogador consultado
      * @return posição de 1 a 4, ou 0 se o jogador não está na sala
      */
-    public int getPosicao(Jogador j) {
+    public synchronized int getPosicao(Jogador j) {
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == j) {
                 return i + 1;
@@ -356,7 +357,7 @@ public class Sala {
      * @return objeto que representa o jogador, ou null se a posição for
      * inválida ou não estiver ocupada
      */
-    public Jogador getJogador(int i) {
+    public synchronized Jogador getJogador(int i) {
         if (i >= 1 && i <= 4)
             return jogadores[i - 1];
         else
@@ -382,7 +383,7 @@ public class Sala {
      * @return true se rotacionou, false se o solicitante não for o gerente, ou
      *         houver jogo em andamento
      */
-    public boolean trocaParceiro(JogadorConectado solicitante) {
+    public synchronized boolean trocaParceiro(JogadorConectado solicitante) {
         if (solicitante != getGerente() || getPartida() != null) {
             return false;
         }
@@ -406,7 +407,7 @@ public class Sala {
      * @return true se inverteu, false se o solicitante não for o gerente, ou
      *         houver jogo em andamento
      */
-    public boolean inverteAdversarios(JogadorConectado solicitante) {
+    public synchronized boolean inverteAdversarios(JogadorConectado solicitante) {
         if (solicitante != getGerente() || getPartida() != null) {
             return false;
         }
