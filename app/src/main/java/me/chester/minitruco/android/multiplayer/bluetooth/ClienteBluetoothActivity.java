@@ -160,6 +160,7 @@ public class ClienteBluetoothActivity extends BluetoothActivity implements
     }
 
     private void exibeMesaForaDoJogo(String parametros) {
+        encerraTrucoActivity();
         if (partida != null) {
             partida.abandona(0);
             partida = null;
