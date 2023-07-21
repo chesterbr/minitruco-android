@@ -3,13 +3,12 @@ package me.chester.minitruco.server;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
+import static java.lang.Thread.sleep;
 import static me.chester.minitruco.core.JogadorBot.APELIDO_BOT;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -67,11 +66,7 @@ public class Sala {
      * Jogadores presentes na sala
      */
     private Jogador[] jogadores = new Jogador[4];
-    /**
-     * Timestamp de entrada de cada jogador (usada para determinar o gerente)
-     */
 
-    private Date[] timestamps = new Date[4];
     /**
      * Partida que está rodando nessa sala (se houver)
      */
@@ -125,7 +120,7 @@ public class Sala {
      * @return true se tudo correr bem, false se a sala estiver lotada ou o
      * jogador já estiver em outra sala
      */
-    public boolean adiciona(JogadorConectado j) {
+    public synchronized boolean adiciona(JogadorConectado j) {
         // Se o jogador já está numa sala, não permite
         if (j.getSala() != null) {
             return false;
@@ -133,9 +128,15 @@ public class Sala {
         // Procura um lugarzinho na sala. Se achar, adiciona
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == null) {
+                // Garante timestamps diferentes (Date tem resolução de 1ms)
+                try {
+                    sleep(1);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 // Link sala->jogador
                 jogadores[i] = j;
-                timestamps[i] = new Date();
+                j.timestampSala = new Date();
                 // Link jogador->sala
                 j.setSala(this);
                 atualizaColecoesDeSalas();
@@ -152,21 +153,18 @@ public class Sala {
      * @return Jogador mais antigo, ou null se a sala não tiver jogadores
      * remotos
      */
-    public Jogador getGerente() {
-        int posGerente = -1;
+    public synchronized Jogador getGerente() {
+        JogadorConectado g = null;
         for (int i = 0; i <= 3; i++) {
-            if (jogadores[i] instanceof JogadorConectado) {
-                if (posGerente == -1
-                        || timestamps[i].before(timestamps[posGerente])) {
-                    posGerente = i;
-                }
+            if (!(jogadores[i] instanceof JogadorConectado)) {
+                continue;
+            }
+            JogadorConectado j = (JogadorConectado) jogadores[i];
+            if (g == null || j.timestampSala.before(g.timestampSala)) {
+                g = j;
             }
         }
-        if (posGerente != -1) {
-            return jogadores[posGerente];
-        } else {
-            return null;
-        }
+        return g;
     }
 
     /**
@@ -174,7 +172,7 @@ public class Sala {
      *
      * @return Número de Pessoas
      */
-    public int getNumPessoas() {
+    public synchronized int getNumPessoas() {
         int numPessoas = 0;
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] != null) {
@@ -192,7 +190,7 @@ public class Sala {
      * @param j Jogador a remover
      * @return true se removeu, false se ele não estava lá
      */
-    public boolean remove(JogadorConectado j) {
+    public synchronized boolean remove(JogadorConectado j) {
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == j) {
                 // Finaliza partida em andamento, se houver.
@@ -202,7 +200,6 @@ public class Sala {
                 }
                 // Desfaz link sala->jogador
                 jogadores[i] = null;
-                timestamps[i] = null;
                 // Desfaz link jogador->sala
                 j.setSala(null);
                 j.querJogar = false;
@@ -242,7 +239,7 @@ public class Sala {
     /**
      * Manda a notificação de informação da sala ("I ...") para todos os membros.
      */
-    public void mandaInfoParaTodos() {
+    public synchronized void mandaInfoParaTodos() {
         String mensagem = getInfo();
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] instanceof JogadorConectado) {
@@ -252,6 +249,7 @@ public class Sala {
         }
     }
 
+    // TODO só é public para testes; reescrever eles pra testar mandaInfoParaTodos ao inves deste
     /**
      * Monta a string de informação da sala.
      * <p>
@@ -309,7 +307,7 @@ public class Sala {
      *
      * @param solicitante Jogador que solicitou o início da partida.
      */
-    public void iniciaPartida(Jogador solicitante) {
+    public synchronized void iniciaPartida(Jogador solicitante) {
         if (partida != null) {
             return;
         }
@@ -343,7 +341,7 @@ public class Sala {
      * @param j Jogador consultado
      * @return posição de 1 a 4, ou 0 se o jogador não está na sala
      */
-    public int getPosicao(Jogador j) {
+    public synchronized int getPosicao(Jogador j) {
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == j) {
                 return i + 1;
@@ -359,7 +357,7 @@ public class Sala {
      * @return objeto que representa o jogador, ou null se a posição for
      * inválida ou não estiver ocupada
      */
-    public Jogador getJogador(int i) {
+    public synchronized Jogador getJogador(int i) {
         if (i >= 1 && i <= 4)
             return jogadores[i - 1];
         else
@@ -379,74 +377,48 @@ public class Sala {
     }
 
     /**
-     * Troca o parceiro do gerente da sala (fazendo um rodízio de todo mundo
-     * menos o gerente)
+     * Rotaciona os outros jogadores, trocando o adversário a cada chamada.
+     *
+     * @param solicitante Jogador que solicitou a rotação
+     * @return true se rotacionou, false se o solicitante não for o gerente, ou
+     *         houver jogo em andamento
      */
-    public void trocaParceiroDoGerente() {
-
-        Jogador gerente = getGerente();
-
-        // Cria uma lista das posições a trocar, duplicando a primeira no final
-        List<Integer> posicoes = new ArrayList<>();
-        int posGerente = 0;
-        for (int i = 1; i <= 4; i++) {
-            if (!gerente.equals(this.getJogador(i))) {
-                posicoes.add(i);
-            } else {
-                posGerente = i;
-            }
-        }
-        posicoes.add(posicoes.get(0));
-
-        // Cria novos arrays de jogadores/timestamps, rotacionando as posições
-        // com base na lista acima (jogando o próximo da lista no atual)
-        Jogador[] novosJogadores = new Jogador[4];
-        Date[] novosTimestamps = new Date[4];
-        for (int i = 0; i <= 2; i++) {
-            novosJogadores[posicoes.get(i) - 1] = getJogador(posicoes
-                    .get(i + 1));
-            novosTimestamps[posicoes.get(i) - 1] = timestamps[posicoes
-                    .get(i + 1) - 1];
+    public synchronized boolean trocaParceiro(JogadorConectado solicitante) {
+        if (solicitante != getGerente() || getPartida() != null) {
+            return false;
         }
 
-        // Complementa a lista com o gerente e troca a lista atual por essa
-        novosJogadores[posGerente - 1] = gerente;
-        novosTimestamps[posGerente - 1] = timestamps[posGerente - 1];
-        jogadores = novosJogadores;
-        timestamps = novosTimestamps;
+        int i1 = getPosicao(getGerente());
+        int i2 = (i1 + 1) % 4;
+        int i3 = (i2 + 1) % 4;
 
+        Jogador temp = jogadores[i2];
+        jogadores[i2] = jogadores[i3];
+        jogadores[i3] = jogadores[i1];
+        jogadores[i1] = temp;
+
+        return true;
     }
 
-    public void inverteAdversariosDoGerente() {
-
-        // Acha o gerente
-        Jogador gerente = getGerente();
-        int posGerente = 0;
-        for (int i = 0; i <= 3; i++) {
-            if (!gerente.equals(jogadores[i])) {
-                posGerente = i;
-            }
+    /**
+     * Inverte a dupla adversária.
+     *
+     * @param solicitante Jogador que solicitou a inversão
+     * @return true se inverteu, false se o solicitante não for o gerente, ou
+     *         houver jogo em andamento
+     */
+    public synchronized boolean inverteAdversarios(JogadorConectado solicitante) {
+        if (solicitante != getGerente() || getPartida() != null) {
+            return false;
         }
-        // Acha as posições dos adversários
-        int posAdv1 = posGerente + 1;
-        int posAdv2 = posGerente + 3;
-        if (posAdv1 > 4)
-            posAdv1 -= 4;
-        if (posAdv2 > 4)
-            posAdv2 -= 4;
 
-        // Troca jogadores e timestamps
-        posAdv1--;
-        posAdv2--;
+        int i1 = getPosicao(getGerente());
+        int i2 = (i1 + 2) % 4;
 
-        Jogador tempJogador = jogadores[posAdv1];
-        jogadores[posAdv1] = jogadores[posAdv2];
-        jogadores[posAdv2] = tempJogador;
+        Jogador temp = jogadores[i1];
+        jogadores[i1] = jogadores[i2];
+        jogadores[i2] = temp;
 
-        Date tempTimestamp = timestamps[posAdv1];
-        timestamps[posAdv1] = timestamps[posAdv2];
-        timestamps[posAdv2] = tempTimestamp;
-
+        return true;
     }
-
 }

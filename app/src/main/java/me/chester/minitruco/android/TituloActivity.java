@@ -1,5 +1,6 @@
 package me.chester.minitruco.android;
 
+import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
 import static android.provider.Settings.Global.DEVICE_NAME;
 import static android.text.InputType.TYPE_CLASS_TEXT;
 
@@ -10,10 +11,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -152,11 +155,31 @@ public class TituloActivity extends SalaActivity {
         }
         if (temInternet) {
             btnInternet.setOnClickListener(v -> {
-                pedeNome((nome) -> {
-                    startActivity(new Intent(getBaseContext(),
-                        ClienteInternetActivity.class));
-                });
+                if (conectadoNaInternet()) {
+                    pedeNome((nome) -> {
+                        startActivity(new Intent(getBaseContext(),
+                            ClienteInternetActivity.class));
+                    });
+                } else {
+                    mostraAlertBox("Sem conexão",
+                        "Não foi possível conectar à Internet. Verifique sua conexão e tente novamente.");
+                }
             });
+        }
+    }
+
+    private boolean conectadoNaInternet() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                return cm.getNetworkCapabilities(cm.getActiveNetwork()).hasCapability(NET_CAPABILITY_INTERNET);
+            } else {
+                // Android < 6, vamos assumir que tem internet
+                // (se não conectar só vai vir uma mensagem feia mesmo)
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -182,7 +205,7 @@ public class TituloActivity extends SalaActivity {
         editNomeJogador.setText(nome);
 
         runOnUiThread(() -> {
-            new AlertDialog.Builder(this)
+            AlertDialog dialogNome = new AlertDialog.Builder(this)
                     .setIcon(R.mipmap.ic_launcher)
                     .setTitle("Nome")
                     .setMessage("Qual nome você gostaria de usar?")
@@ -195,7 +218,20 @@ public class TituloActivity extends SalaActivity {
                         callback.accept(nomeFinal);
                     })
                     .setNegativeButton("Cancela", null)
-                    .show();
+                    .create();
+
+            // Evita mostrar o teclado de cara em alguns Androids mais antigos
+            // (não funciona em todos, mas evita a "dança" do diálogo em alguns)
+            dialogNome.setOnShowListener(d -> {
+                Button btnOk = dialogNome.getButton(AlertDialog.BUTTON_POSITIVE);
+                btnOk.setFocusable(true);
+                btnOk.setFocusableInTouchMode(true);
+                btnOk.requestFocus();
+
+            });
+            dialogNome.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+            dialogNome.show();
         });
     }
 

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.Date;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -30,6 +31,11 @@ public class JogadorConectado extends Jogador implements Runnable {
      * Informa se o jogador autorizou o início da partida na sala
      */
     public boolean querJogar = false;
+
+    /**
+     * Timestamp da última vez que o jogador entrou na sala
+     */
+    public Date timestampSala;
 
     private Sala sala;
 

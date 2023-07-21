@@ -17,12 +17,6 @@ public class ComandoS extends Comando {
         if (s != null) {
             s.remove(j);
             j.println("S");
-            // TODO: ao esvaziar uma sala completamente, liberar ela?
-//            if (s.getNumPessoas() == 0) {
-//                // Se esvaziou a sala, volta as regras para o default
-//                s.baralhoLimpo = false;
-//                s.manilhaVelha = false;
-//            }
             s.mandaInfoParaTodos();
         } else {
             j.println("X FS");
