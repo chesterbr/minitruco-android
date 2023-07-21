@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -182,7 +183,7 @@ public class TituloActivity extends SalaActivity {
         editNomeJogador.setText(nome);
 
         runOnUiThread(() -> {
-            new AlertDialog.Builder(this)
+            AlertDialog dialogNome = new AlertDialog.Builder(this)
                     .setIcon(R.mipmap.ic_launcher)
                     .setTitle("Nome")
                     .setMessage("Qual nome você gostaria de usar?")
@@ -195,7 +196,20 @@ public class TituloActivity extends SalaActivity {
                         callback.accept(nomeFinal);
                     })
                     .setNegativeButton("Cancela", null)
-                    .show();
+                    .create();
+
+            // Evita mostrar o teclado de cara em alguns Androids mais antigos
+            // (não funciona em todos, mas evita a "dança" do diálogo em alguns)
+            dialogNome.setOnShowListener(d -> {
+                Button btnOk = dialogNome.getButton(AlertDialog.BUTTON_POSITIVE);
+                btnOk.setFocusable(true);
+                btnOk.setFocusableInTouchMode(true);
+                btnOk.requestFocus();
+
+            });
+            dialogNome.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+            dialogNome.show();
         });
     }
 
