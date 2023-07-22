@@ -60,8 +60,9 @@ public class MiniTrucoServer {
      */
     public static void aceitaConexoes() {
         ServerLogger.evento("Servidor inicializado e escutando na porta " + PORTA_SERVIDOR);
+        ServerSocket s = null;
         try {
-            ServerSocket s = new ServerSocket(PORTA_SERVIDOR);
+            s = new ServerSocket(PORTA_SERVIDOR);
             // Vamos checar a cada 1s se recebemos um interrupt
             s.setSoTimeout(1000);
             while (true) {
@@ -80,8 +81,15 @@ public class MiniTrucoServer {
                 (new Thread(j)).start();
             }
         } catch (IOException e) {
-            ServerLogger.evento(e, "Erro de I/O no ServerSocket, saindo do programa");
+            ServerLogger.evento(e, "Erro de I/O no ServerSocket");
         } finally {
+            if (s != null) {
+                try {
+                    s.close();
+                } catch (IOException e) {
+                    ServerLogger.evento(e, "Erro de I/O ao fechar ServerSocket");
+                }
+            }
             ServerLogger.evento("Servidor não está mais escutando; aguardando finalização dos jogadores conectados.");
         }
     }
