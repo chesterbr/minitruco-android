@@ -50,7 +50,7 @@ trap 'shutdown_suave_do_servidor; exit 0' SIGTERM
 
 while true; do
     inicia_servidor
-    inotifywait -e delete_self "$jar"
+    inotifywait -e modify "$jar"
     shutdown_suave_do_servidor
     while [ ! -e "$jar" ]; do
         sleep 1
