@@ -44,7 +44,7 @@ public class MiniTrucoServer {
 
         // Quando *todas* as threads encerrarem, loga o evento final
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            ServerLogger.evento("Servidor finalizando");
+            ServerLogger.evento("Servidor finalizado; JVM desligando. Tchau.");
         }));
 
         // A thread inicial termina por aqui, mas o servidor continua rodandno
