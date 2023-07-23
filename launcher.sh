@@ -1,16 +1,13 @@
 #!/bin/bash
 
-# Inicia o servidor do miniTruco e monitora o JAR dele (que é deletado
-# e recriado pelo processo de deploy).
+# Inicia o servidor do miniTruco e o reinicia quando o JAR é modificado.
 #
-# Quando o JAR é deletado, o script envia um sinal SIGUSR1 para o servidor,
-# o que faz o servidor entrar em "shutdown suave" (libera a porta imediatamente,
-# mas finaliza as partidas em andamento antes de se auto-encerrar)
+# Esse reinício é feito com um "soft shutdown" do servidor (enviando um SIGUSR1
+# para que ele libere a porta) e subindo uma nova instância imediatamente*; dessa
+# forma os jogadores podem finalizar partidas em andamento, mas novas conexões
+# vão para o servidor novo.
 #
-# Quando o JAR é recriado, o script inicia outra instância do servidor.
-#
-# Desta forma, o servidor pode ser atualizado sem interromper as partidas e
-# com downtime mínimo (apenas o tempo entre o clean e o build do JAR).
+# * na real uns 2-3 segundos pra garantir que o .jar novo está finalizado
 
 if [ -z "$1" ]; then
     echo "Erro: é necessário fornecer o caminho do arquivo JAR como parâmetro."
@@ -41,19 +38,27 @@ servidor_em_execucao() {
     fi
 }
 
+aguarda_mudanca_no_jar() {
+    (inotifywait -e modify "$jar") & # em background para não bloquer o SIGTERM
+    inotify_pid=$!
+    wait $inotify_pid
+}
+
+aguarda_o_novo_jar_estar_pronto() {
+    while [ ! -e "$jar" ]; do
+        sleep 1
+    done
+    sleep 2 # Para ter certeza que o jar foi completamente salvo
+}
+
 # Se o launcher for finalizado, finaliza o servidor também
 trap 'shutdown_suave_do_servidor; exit 0' SIGTERM
 
 ###### O script efetivamente começa aqui ######
 
-# Verifica se o arquivo JAR existe
-
 while true; do
     inicia_servidor
-    inotifywait -e modify "$jar"
+    aguarda_mudanca_no_jar
     shutdown_suave_do_servidor
-    while [ ! -e "$jar" ]; do
-        sleep 1
-    done
-    sleep 2 # Para ter certeza que o jar foi completamente salvo
+    aguarda_o_novo_jar_estar_pronto
 done
