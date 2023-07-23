@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.preference.PreferenceManager;
 
@@ -160,6 +161,15 @@ public class ClienteInternetActivity extends SalaActivity {
                 break;
             case 'K': // Keepalive, apenas temos que devolver a notificação como comando
                 enviaLinha(line);
+                break;
+            case '!': // Mensagem
+                if (line.length() > 4 && line.startsWith("! I ")) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(getApplicationContext(),
+                            line.substring(4),
+                            Toast.LENGTH_LONG).show();
+                    });
+                }
                 break;
             case 'P': // Partida iniciada
                 iniciaTrucoActivitySePreciso();
