@@ -219,6 +219,15 @@ class SalaTest {
         assertNull(s.getPartida());
     }
 
+    @Test
+    void testIniciaPartida() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+
+        s.iniciaPartida(j1);
+    }
+
    @Test
    void testSalaNaoIniciaPartidaSozinha() {
         Sala s = new Sala(true, "P");
@@ -244,6 +253,16 @@ class SalaTest {
 
         assertEquals(s.getGerente(), j1);
         s.iniciaPartida(j2);
+        assertNull(s.getPartida());
+    }
+
+    @Test
+    void testSalaNaoIniciaPartidaSeServidorEstiverSendoDesligado() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        JogadorConectado.servidorSendoDesligado = true;
+        s.iniciaPartida(j1);
         assertNull(s.getPartida());
     }
 

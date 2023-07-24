@@ -302,8 +302,12 @@ public class Sala {
     }
 
     /**
-     * Inicia a partida (completando a mesa com bots), caso ela ainda
-     * não tenha iniciado e o jogador que solicitou seja o gerente.
+     * Inicia a partida (completando a mesa com bots), desde que:
+     * <ul>
+     *   <li>não haja uma partida em andamento</li>
+     *   <li>o solicitante seja o gerente</li>
+     *   <li>o servidor não esteja sendo desligado</li>
+     * </ul>
      *
      * @param solicitante Jogador que solicitou o início da partida.
      */
@@ -312,6 +316,9 @@ public class Sala {
             return;
         }
         if (solicitante != getGerente()) {
+            return;
+        }
+        if (JogadorConectado.servidorSendoDesligado) {
             return;
         }
         // Completa as posições vazias com bots
