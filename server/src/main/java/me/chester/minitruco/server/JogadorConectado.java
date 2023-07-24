@@ -21,6 +21,7 @@ import me.chester.minitruco.core.Jogador;
  */
 public class JogadorConectado extends Jogador implements Runnable {
 
+    public static final int TEMPO_KEEPALIVE = 5000;
     private final Socket cliente;
 
     /**
@@ -33,17 +34,26 @@ public class JogadorConectado extends Jogador implements Runnable {
     public boolean querJogar = false;
 
     /**
-     * Timestamp da última vez que o jogador entrou na sala
+     * Sala em que o jogador se encontra (null se nenhuma)
+     */
+    private Sala sala;
+
+    /**
+     * Timestamp de quando o jogador entrou na sala
      */
     public Date timestampSala;
-
-    private Sala sala;
 
     /**
      * Buffer de saída do jogador (para onde devemos "printar" os resultados dos
      * comandos)
      */
     private PrintStream out;
+
+    /**
+     * Se true, notifica jogadores em partida de tempos em tempos que o servidor
+     * será desligado, e desconecta jogadores fora de partida.
+     */
+    public static boolean servidorSendoDesligado = false;
 
     /**
      * Cria um novo jogador
@@ -61,8 +71,8 @@ public class JogadorConectado extends Jogador implements Runnable {
      * @param linha linha de texto a enviar
      */
     public synchronized void println(String linha) {
-        out.print(linha);
-        out.print("\r\n");
+        out.println(linha);
+        out.flush();
         // Não fazemos log de keepalive
         if (!linha.startsWith("K")) {
             ServerLogger.evento(this, linha);
@@ -81,7 +91,7 @@ public class JogadorConectado extends Jogador implements Runnable {
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     cliente.getInputStream()));
             out = new PrintStream(cliente.getOutputStream());
-            iniciaMonitorDeConexao();
+            iniciaThreadAuxiliar();
             // Imprime info do servidor (como mensagem de boas-vindas)
             (new ComandoW()).executa(null, this);
             String linha = "";
@@ -101,7 +111,6 @@ public class JogadorConectado extends Jogador implements Runnable {
         } catch (IOException e) {
             ServerLogger.evento(e, "Erro de I/O inesperado loop principal do jogador");
         } finally {
-            finalizaMonitorDeConexao();
             Sala s = getSala();
             // Se houver um jogo em andamento (e ainda tivermos comunicação), encerra
             Comando.interpreta("A", this);
@@ -117,6 +126,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                 s.mandaInfoParaTodos();
                 ServerLogger.evento(this, "finalizou thread");
             }
+            finalizaThreadAuxiliar();
         }
 
     }
@@ -125,32 +135,46 @@ public class JogadorConectado extends Jogador implements Runnable {
     private Thread threadMonitorDeConexao;
 
     /**
-     * Configura uma thread para testar a conexão, que envia um keepalive
-     * para o cliente a cada 5 segundos.
-     * <p>
-     * Isso evita um timeout no cliente e permite desbloquear o readLine()
-     * sem depender do timeout do socket, que é pouco confiável.
+     * Configura uma thread que executa tarefas do jogador, tais como:
+     * <ul>
+     *     <li>Enviar um keepalive para o cliente a cada 5s (evitando
+     *         timeout e bloqueio do readLine())</li>
+     *     <li>Se o servidor estiver sendo desligado (porque uma versão
+     *         atualizada subiu), desconecta jogadores fora de partida
+     *         e mantém os outros informados enquanto durar a partida.</li>
+     * </ul>
      */
-    private void iniciaMonitorDeConexao() {
+    private void iniciaThreadAuxiliar() {
         Thread threadPrincipal = Thread.currentThread();
         threadMonitorDeConexao = new Thread(() -> {
             ServerLogger.evento(this, "Iniciando monitor de conexão");
+            boolean avisouQueVaiDesconectarNoFimDaPartida = false;
             while (true) {
+                //// Checagem de servidor dando shutdown
+                if (servidorSendoDesligado) {
+                    if (!jogando) {
+                        println("! I Servidor atualizado. Conecte novamente para jogar.");
+                        desconecta();
+                        threadPrincipal.interrupt();
+                        break;
+                    } else if (!avisouQueVaiDesconectarNoFimDaPartida) {
+                        println("! I Servidor atualizado. Finalize esta partida e conecte novamente.");
+                        avisouQueVaiDesconectarNoFimDaPartida = true;
+                    }
+                }
+
+                //// Checagem de keepalive
                 keepAlive = System.currentTimeMillis();
                 println("K " + keepAlive);
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(TEMPO_KEEPALIVE);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
                 if (keepAlive != 0) {
-                    try {
-                        ServerLogger.evento(this, "Keepalive não respondido, fechando socket");
-                        cliente.close();
-                        threadPrincipal.interrupt();
-                    } catch (IOException e) {
-                        ServerLogger.evento(e, "Erro de I/O inesperado no monitor de conexão");
-                    }
+                    ServerLogger.evento(this, "Keepalive não respondido, fechando socket");
+                    desconecta();
+                    threadPrincipal.interrupt();
                     break;
                 }
             }
@@ -160,14 +184,20 @@ public class JogadorConectado extends Jogador implements Runnable {
         threadMonitorDeConexao.start();
     }
 
-    private void finalizaMonitorDeConexao() {
-        Thread t = threadMonitorDeConexao;
+    private void finalizaThreadAuxiliar() {
         if (threadMonitorDeConexao != null) {
             ServerLogger.evento("Interrompendo monitor de conexão");
-            t.interrupt();
+            threadMonitorDeConexao.interrupt();
         }
     }
 
+    private void desconecta() {
+        try {
+            cliente.close();
+        } catch (IOException e) {
+            ServerLogger.evento(e, "Erro de I/O inesperado ao fechar socket");
+        }
+    }
 
     @Override
     public void cartaJogada(Jogador j, Carta c) {
