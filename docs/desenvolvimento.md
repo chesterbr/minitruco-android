@@ -360,7 +360,7 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `S`: Informa que o jogador saiu da sala
 - `K <numero>`: Keepalive - cliente deve responder igual, isto é, `K <numero>` para não ser desconectado (apenas internet)
 - `! <modo> <mensagem>`: Exibir mensagem para o cliente. Modos:
-  - `T`: exibir temporariamente (ex.: num toast Android). Podem vir outras mensagens/notificações e/ou o servidor pode desconectar em seguida; o cliente tem que lidar com isso.
+  - `I`: exibir imediatamente por alguns segundos (ex.: num toast Android). Podem vir outras mensagens/notificações e/ou o servidor pode desconectar em seguida; o cliente tem que lidar com isso.
 
 
 ## Estratégia dos bots
