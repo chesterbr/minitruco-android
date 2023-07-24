@@ -148,23 +148,22 @@ public class JogadorConectado extends Jogador implements Runnable {
         Thread threadPrincipal = Thread.currentThread();
         threadMonitorDeConexao = new Thread(() -> {
             ServerLogger.evento(this, "Iniciando monitor de conexão");
-            boolean avisouServidorSendoDesligado = false;
+            boolean avisouQueVaiDesconectarNoFimDaPartida = false;
             while (true) {
+                //// Checagem de servidor dando shutdown
                 if (servidorSendoDesligado) {
                     if (!jogando) {
                         println("! I Servidor atualizado. Conecte novamente para jogar.");
-                        try {
-                            cliente.close();
-                        } catch (IOException e) {
-                            ServerLogger.evento(e, "Erro de I/O inesperado ao desconectar jogador");
-                        }
+                        desconecta();
                         threadPrincipal.interrupt();
                         break;
-                    } else if (!avisouServidorSendoDesligado) {
+                    } else if (!avisouQueVaiDesconectarNoFimDaPartida) {
                         println("! I Servidor atualizado. Finalize esta partida e conecte novamente.");
-                        avisouServidorSendoDesligado = true;
+                        avisouQueVaiDesconectarNoFimDaPartida = true;
                     }
                 }
+
+                //// Checagem de keepalive
                 keepAlive = System.currentTimeMillis();
                 println("K " + keepAlive);
                 try {
@@ -173,13 +172,9 @@ public class JogadorConectado extends Jogador implements Runnable {
                     Thread.currentThread().interrupt();
                 }
                 if (keepAlive != 0) {
-                    try {
-                        ServerLogger.evento(this, "Keepalive não respondido, fechando socket");
-                        cliente.close();
-                        threadPrincipal.interrupt();
-                    } catch (IOException e) {
-                        ServerLogger.evento(e, "Erro de I/O inesperado no monitor de conexão");
-                    }
+                    ServerLogger.evento(this, "Keepalive não respondido, fechando socket");
+                    desconecta();
+                    threadPrincipal.interrupt();
                     break;
                 }
             }
@@ -196,6 +191,13 @@ public class JogadorConectado extends Jogador implements Runnable {
         }
     }
 
+    private void desconecta() {
+        try {
+            cliente.close();
+        } catch (IOException e) {
+            ServerLogger.evento(e, "Erro de I/O inesperado ao fechar socket");
+        }
+    }
 
     @Override
     public void cartaJogada(Jogador j, Carta c) {
