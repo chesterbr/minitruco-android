@@ -214,26 +214,67 @@ class SalaTest {
     }
 
     @Test
-    void testIniciaPartida() {
+    void testSalaInicializaSemPartida() {
         Sala s = new Sala(true, "P");
         assertNull(s.getPartida());
+    }
 
+   @Test
+   void testSalaNaoIniciaPartidaSozinha() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.adiciona(j3);
+        s.adiciona(j4);
+        assertNull(s.getPartida());
+    }
+
+    @Test
+    void testSalaNaoIniciaPartidaSeJogadorNaoEstiverNela() {
+        Sala s = new Sala(true, "P");
         s.iniciaPartida(j1);
-        assertNull(s.getPartida()); // Não está na sala
+        assertNull(s.getPartida());
+    }
 
+    @Test
+    void testSalaNaoIniciaPartidaSeJogadorNaoForGerente() {
+        Sala s = new Sala(true, "P");
         s.adiciona(j1);
         s.adiciona(j2);
 
+        assertEquals(s.getGerente(), j1);
         s.iniciaPartida(j2);
-        assertNull(s.getPartida()); // Não é o gerente
+        assertNull(s.getPartida());
+    }
+
+    @Test
+    void testSalaNaoIniciaPartidaSeJaHouverUmaEmAndamento() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
 
         s.iniciaPartida(j1);
-        assertNotNull(s.getPartida());
-
-        // Se já houver partida rolando, não inicia uma nova
         Partida p = s.getPartida();
+        assertEquals(p, s.getPartida());
+
         s.iniciaPartida(j1);
         assertEquals(p, s.getPartida());
+    }
+
+    @Test
+    void testSalaPodeIniciarNovaPartidaQuandoAPrimeiraFinaliza() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+
+        s.iniciaPartida(j1);
+        Partida p = s.getPartida();
+
+        p.abandona(1);
+        assertNull(s.getPartida());
+        s.iniciaPartida(j1);
+        assertNotNull(s.getPartida());
+        assertNotEquals(p, s.getPartida());
     }
 
     @Test
