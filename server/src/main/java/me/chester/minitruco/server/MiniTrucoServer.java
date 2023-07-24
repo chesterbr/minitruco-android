@@ -40,6 +40,8 @@ public class MiniTrucoServer {
         Signal.handle(new Signal("USR1"), signal -> {
             ServerLogger.evento("Recebido sinal USR1 - interrompendo threadAceitaConxoes");
             threadAceitaConexoes.interrupt();
+            ServerLogger.evento("Avisando jogadores conectados que o servidor está sendo desligado");
+            JogadorConectado.servidorSendoDesligado = true;
         });
 
         // Quando *todas* as threads encerrarem, loga o evento final
