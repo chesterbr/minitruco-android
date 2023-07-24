@@ -261,8 +261,13 @@ class SalaTest {
         Sala s = new Sala(true, "P");
         s.adiciona(j1);
         s.adiciona(j2);
-        JogadorConectado.servidorSendoDesligado = true;
-        s.iniciaPartida(j1);
+        try {
+            JogadorConectado.servidorSendoDesligado = true;
+            s.iniciaPartida(j1);
+        } finally {
+            // Evita side effect em outros testes
+            JogadorConectado.servidorSendoDesligado = false;
+        }
         assertNull(s.getPartida());
     }
 
