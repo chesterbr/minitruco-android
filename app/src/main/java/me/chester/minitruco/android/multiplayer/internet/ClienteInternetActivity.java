@@ -116,7 +116,10 @@ public class ClienteInternetActivity extends SalaActivity {
             msgErroFatal("Você foi desconectado.", null);
             return;
         }
-        LOGGER.log(Level.INFO, "recebeu: " + line);
+        if (!line.startsWith("K ")) {
+            // Não loga o keepalive (evita poluir o log)
+            LOGGER.log(Level.INFO, "recebeu: " + line);
+        }
         switch (line.charAt(0)) {
             case 'W': // O servidor manda um W quando conecta
                 // Envia o nome que já foi sanitizado e salvo na TituloActivity
@@ -231,7 +234,10 @@ public class ClienteInternetActivity extends SalaActivity {
             out.write(comando);
             out.write('\n');
             out.flush();
-            LOGGER.log(Level.INFO, "enviou: " + comando);
+            // Não loga o keepalive (evita poluir o log)
+            if (!comando.startsWith("K ")) {
+                LOGGER.log(Level.INFO, "enviou: " + comando);
+            }
         }).start();
     }
 
