@@ -37,7 +37,7 @@ public class JogadorTest {
     }
 
     void assertNomeDefault(String nome) {
-        String regex = "^sem_nome_\\d{1,4}$";
+        String regex = "^sem_nome_\\d{1,3}$";
         assertTrue(nome.matches(regex), nome + " não deu match em " + regex);
     }
 
