@@ -166,7 +166,7 @@ public class ClienteInternetActivity extends SalaActivity {
                 enviaLinha(line);
                 break;
             case '!': // Mensagem
-                if (line.length() > 4 && line.startsWith("! I ")) {
+                if (line.length() > 4 && line.startsWith("! T ")) {
                     runOnUiThread(() -> {
                         Toast.makeText(getApplicationContext(),
                             line.substring(4),

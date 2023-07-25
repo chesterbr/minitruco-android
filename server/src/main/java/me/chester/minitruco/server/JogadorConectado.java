@@ -149,12 +149,12 @@ public class JogadorConectado extends Jogador implements Runnable {
                 //// Checagem de servidor dando shutdown
                 if (servidorSendoDesligado) {
                     if (!jogando) {
-                        println("! I Servidor atualizado. Conecte novamente para jogar.");
+                        println("! T Servidor atualizado. Conecte novamente para jogar.");
                         desconecta();
                         threadPrincipal.interrupt();
                         break;
                     } else if (!avisouQueVaiDesconectarNoFimDaPartida) {
-                        println("! I Servidor atualizado. Finalize esta partida e conecte novamente.");
+                        println("! T Servidor atualizado. Finalize esta partida e conecte novamente.");
                         avisouQueVaiDesconectarNoFimDaPartida = true;
                     }
                 }
