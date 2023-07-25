@@ -37,7 +37,7 @@ public class JogadorTest {
     }
 
     void assertNomeDefault(String nome) {
-        String regex = "^sem_nome_\\d{1,4}$";
+        String regex = "^sem_nome_\\d{1,3}$";
         assertTrue(nome.matches(regex), nome + " não deu match em " + regex);
     }
 
@@ -51,6 +51,11 @@ public class JogadorTest {
         assertNomeDefault(sanitizaNome("-------"));
         assertNomeDefault(sanitizaNome("💩"));
         assertNomeDefault(sanitizaNome("誰かの名前を日本語で"));
+    }
+
+    @Test
+    void sanitizaNomeUsaDefaultSeForUmNomeReservado() {
+        assertNomeDefault(sanitizaNome("bot"));
     }
 
     @Test

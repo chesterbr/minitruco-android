@@ -17,7 +17,7 @@ O jogo suporta as variantes mais comuns do truco (paulista e mineiro), com opç�
 
 É um software livre, sem fins lucrativos, desenvolvido por hobby e com :heart: no meu tempo pessoal (com valiosas colaborações de outras pessoas).
 
-Você pode usar e modificar o código como quiser, dentro dos [termos da licença BSD](LICENSE). Consulte a **[documentação para desenvolvimento](docs/desenvolvimento.md)** para saber mais sobre o funcionamento e como contribuir.
+Você pode usar e modificar o código como quiser, dentro dos [termos da licença BSD](LICENSE). Consulte a **[documentação para desenvolvimento](docs/documentacao-para-desenvolvimento.md)** para saber mais sobre o funcionamento e como contribuir.
 
 ## Créditos
 

@@ -301,7 +301,6 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `<modo>`: `P` para truco paulista, `M` para truco mineiro, `V` para manilha velha ou `L` baralho limpo.
 - `<jogador>`: Posição de um jogador na sala/partida, de 1 a 4. É constante durante a partida, mas pode mudar fora dela (o servidor manda uma notificação `I` sempre que a formação da sala mudar).
 - `<equipe>`: Uma das duas equipes (duplas). Pode ser 1 (equpe dos jogadores 1 e 3) ou 2 (jogadores 2 e 4).
-- `<quer jogar>`: Quatro caracteres `T` ou `F` conforme cada posição queira iniciar a partida ou não
 - `<frase>`: número aleatório grande que permite que todos os clientes mostrem a mesma frase (o "balãozinho") para um evento. Por exemplo, se o jogador 1 pediu truco (paulista) e o número sorteado foi 12345678, todos irão receber `T 1 3 12345678`; se o cliente tem 8 frases possíveis para truco, ele calcula 12345678 % 8 = 6 e exibe a frase de índice 6. Dessa forma, todos os clientes mostram a mesma frase (se estiverem com a mesma versão do [strings.xml](../app/src/main/res/values/strings.xml)) e o servidor não tem que saber quantas frases tem cada tipo de mensagem.
 
 ### Comandos
@@ -343,7 +342,7 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `X NO`: `É preciso atribuir um nome para entrar na sala
 - `X JE sala`: Você já está na sala de código `sala`
 - `N nome`: Seu nome foi definido como `nome`
-- `I <apelidos> <modo> <jogador> <quero jogar> <gerente>`: Info da sala. `<jogador>` é a posição do cliente. `<gerente>` é a posição do gerente (só no jogo internet)
+- `I <apelidos> <modo> <jogador> <gerente>`: Info da sala. `<jogador>` é a posição do cliente. `<gerente>` é a posição do gerente (só no jogo internet)
 - `P <jogador>`: Início da partida
 - `M <carta> <carta> <carta> <carta>`: Início da mão. Suas cartas são as três primeiras. A última, se houver, é o vira.
 - `V <jogador> _`: vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode
@@ -360,7 +359,7 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `S`: Informa que o jogador saiu da sala
 - `K <numero>`: Keepalive - cliente deve responder igual, isto é, `K <numero>` para não ser desconectado (apenas internet)
 - `! <modo> <mensagem>`: Exibir mensagem para o cliente. Modos:
-  - `I`: exibir imediatamente por alguns segundos (ex.: num toast Android). Podem vir outras mensagens/notificações e/ou o servidor pode desconectar em seguida; o cliente tem que lidar com isso.
+  - `T`: exibir uma notificação temporária estilo "toast". Podem vir outras mensagens/notificações e/ou o servidor pode desconectar em seguida; o cliente tem que lidar com isso.
 
 
 ## Estratégia dos bots

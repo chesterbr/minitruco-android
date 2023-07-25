@@ -202,7 +202,6 @@ public class Sala {
                 jogadores[i] = null;
                 // Desfaz link jogador->sala
                 j.setSala(null);
-                j.querJogar = false;
                 atualizaColecoesDeSalas();
                 return true;
             }
@@ -280,22 +279,7 @@ public class Sala {
         sb.append(modo);
         sb.append(' ');
 
-        // Status de "quero jogar" dos jogadores (posições vazias são T,
-        // indicando que serão preenchidas por robôs caso a partida inicie)
-        for (int i = 0; i <= 3; i++) {
-            if (jogadores[i] instanceof JogadorConectado) {
-                if (((JogadorConectado) jogadores[i]).querJogar) {
-                    sb.append('T');
-                } else {
-                    sb.append('F');
-                }
-            } else {
-                sb.append('T');
-            }
-        }
-
-//        // Posição do gerente
-        sb.append(' ');
+        // Posição do gerente
         sb.append(getPosicao(getGerente()));
 
         return sb.toString();

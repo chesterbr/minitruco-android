@@ -33,21 +33,6 @@ public class ComandoE extends Comando {
                 } else {
                     j.println("X AI");
                 }
-//                Sala s = Sala.getSala(Integer.parseInt(args[1]));
-//                if (s == null) {
-//                    j.println("X SI");
-//                } else if (j.getNome().equals("unnamed")) {
-//                    j.println("X NO");
-//                } else if (s.adiciona(j)) {
-//                    j.querJogar = false;
-//                    // j.enviaTexto("A "+s.getNumSala()+" "+s.getPosicao(j));
-//                    // s.notificaJogadores("E "+s.getPosicao(j)+"
-//                    // "+j.getNome());
-//                    j.println("E "+s.getNumSala());
-//                    s.notificaJogadores(s.getInfo());
-//                } else {
-//                    j.println("X CH");
-//                }
             }
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             j.println("X AI");

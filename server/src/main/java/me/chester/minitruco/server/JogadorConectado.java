@@ -28,10 +28,6 @@ public class JogadorConectado extends Jogador implements Runnable {
      * Informa se o jogador está participando de uma partida
      */
     public boolean jogando = false;
-    /**
-     * Informa se o jogador autorizou o início da partida na sala
-     */
-    public boolean querJogar = false;
 
     /**
      * Sala em que o jogador se encontra (null se nenhuma)
@@ -153,12 +149,12 @@ public class JogadorConectado extends Jogador implements Runnable {
                 //// Checagem de servidor dando shutdown
                 if (servidorSendoDesligado) {
                     if (!jogando) {
-                        println("! I Servidor atualizado. Conecte novamente para jogar.");
+                        println("! T Servidor atualizado. Conecte novamente para jogar.");
                         desconecta();
                         threadPrincipal.interrupt();
                         break;
                     } else if (!avisouQueVaiDesconectarNoFimDaPartida) {
-                        println("! I Servidor atualizado. Finalize esta partida e conecte novamente.");
+                        println("! T Servidor atualizado. Finalize esta partida e conecte novamente.");
                         avisouQueVaiDesconectarNoFimDaPartida = true;
                     }
                 }
@@ -295,7 +291,6 @@ public class JogadorConectado extends Jogador implements Runnable {
      * Desvincula a partida do jogador, e, se necessário, da sala
      */
     private synchronized void desvinculaJogo() {
-        querJogar = false;
         jogando = false;
         Sala s = getSala();
         if (s != null)
