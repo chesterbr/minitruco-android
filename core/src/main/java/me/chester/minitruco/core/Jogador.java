@@ -36,6 +36,7 @@ public abstract class Jogador {
      */
     public static String sanitizaNome(String nome) {
         return (nome == null ? "" : nome)
+            .replaceAll("^bot$", "")
             .replaceAll("[-_ \r\n]"," ")
             .trim()
             .replaceAll("[^a-zA-Z0-9À-ÿ ]", "")

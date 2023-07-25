@@ -54,6 +54,11 @@ public class JogadorTest {
     }
 
     @Test
+    void sanitizaNomeUsaDefaultSeForUmNomeReservado() {
+        assertNomeDefault(sanitizaNome("bot"));
+    }
+
+    @Test
     void sanitizaNomeÉIdempotente() {
         String[] nomes = new String[]{
             "nome",
