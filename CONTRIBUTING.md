@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to this game! While the documentation and code may be primarily in Portuguese, contributions from anyone are welcome, regardless of language proficiency. Here's how you can contribute:
 
-1. Check the [contribution guidelines](docs/desenvolvimento.md#contribuindo) in the development documentation for instructions.
+1. Check the [contribution guidelines](docs/documentacao-para-desenvolvimento.md#contribuindo) in the development documentation for instructions.
 
 2. Be sure to understand [the truco card game](https://www.pagat.com/put/truco_br.html) in general, as well as the rules and variants implemented in this game.
 
