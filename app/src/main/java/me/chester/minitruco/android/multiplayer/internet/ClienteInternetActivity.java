@@ -152,7 +152,7 @@ public class ClienteInternetActivity extends SalaActivity {
                     p = (p + 1) % 4;
                     ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
                     modo = tokens[3];
-                    int posGerente = Integer.parseInt(tokens[5]);
+                    int posGerente = Integer.parseInt(tokens[4]);
                     humanoGerente = (posGerente == posJogador);
                     findViewById(R.id.layoutIniciar).setVisibility(
                         humanoGerente ? View.VISIBLE : View.GONE);
