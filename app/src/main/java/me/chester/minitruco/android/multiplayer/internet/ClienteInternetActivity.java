@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.JogadorHumano;
@@ -97,6 +98,11 @@ public class ClienteInternetActivity extends SalaActivity {
                     socket.getOutputStream())), true);
             in = new BufferedReader(new InputStreamReader(
                     socket.getInputStream()));
+            // Envia a versão do app para o servidor ver se é compatível
+            enviaLinha("B " + BuildConfig.VERSION_CODE);
+            // Envia o nome que já foi sanitizado e salvo na TituloActivity
+            enviaLinha("N " + preferences.getString(
+                "nome_multiplayer", null));
         } catch (IOException e) {
             msgErroFatal("Não foi possivel conectar.", e);
             return false;
@@ -121,11 +127,6 @@ public class ClienteInternetActivity extends SalaActivity {
             LOGGER.log(Level.INFO, "recebeu: " + line);
         }
         switch (line.charAt(0)) {
-            case 'W': // O servidor manda um W quando conecta
-                // Envia o nome que já foi sanitizado e salvo na TituloActivity
-                enviaLinha("N " + preferences.getString(
-                    "nome_multiplayer", null));
-                break;
             case 'N': // Nome foi aceito
                 // Já vamos entrar de cara numa sala pública (se a pessoa quiser
                 // fazer outra coisa, ela usa o botão apropriado)

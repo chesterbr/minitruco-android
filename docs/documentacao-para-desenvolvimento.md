@@ -307,7 +307,6 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 #### Fora da sala
 
-- `W`: recupera número de versão (e de repente outras infos no futuro)
 - `B <numero>`:  Informa o número do build do cliente, para que o servidor verifique compatibilidade
 - `N <nome>`: Define o nome do jogador (é sanitizado; se for 100% inválido recebe um default)
 - `E PUB <modo>`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado

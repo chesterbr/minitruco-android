@@ -88,8 +88,6 @@ public class JogadorConectado extends Jogador implements Runnable {
                     cliente.getInputStream()));
             out = new PrintStream(cliente.getOutputStream());
             iniciaThreadAuxiliar();
-            // Imprime info do servidor (como mensagem de boas-vindas)
-            (new ComandoW()).executa(null, this);
             String linha = "";
             while (linha != null) {
                 try {
@@ -187,7 +185,7 @@ public class JogadorConectado extends Jogador implements Runnable {
         }
     }
 
-    private void desconecta() {
+    public void desconecta() {
         try {
             cliente.close();
         } catch (IOException e) {
