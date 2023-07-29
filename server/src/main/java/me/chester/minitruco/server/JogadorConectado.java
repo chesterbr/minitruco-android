@@ -185,7 +185,7 @@ public class JogadorConectado extends Jogador implements Runnable {
         }
     }
 
-    private void desconecta() {
+    public void desconecta() {
         try {
             cliente.close();
         } catch (IOException e) {

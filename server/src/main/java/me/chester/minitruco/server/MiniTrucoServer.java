@@ -18,6 +18,8 @@ public class MiniTrucoServer {
      */
     public static final int PORTA_SERVIDOR = 6912;
 
+    // Na real é o próximo, mas ok, esse nem tem o botão de internet
+    public static final int BUILD_MINIMO_CLIENTE = 20503;
 
     /**
      * Ponto de entrada do servidor. Apenas dispara a thread que aceita
