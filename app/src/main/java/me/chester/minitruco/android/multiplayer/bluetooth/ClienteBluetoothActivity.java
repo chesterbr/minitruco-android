@@ -97,7 +97,7 @@ public class ClienteBluetoothActivity extends BluetoothActivity implements
         try {
             in = socket.getInputStream();
             out = socket.getOutputStream();
-            enviaLinha("B " + (BuildConfig.VERSION_CODE));
+            enviaLinha("B " + BuildConfig.VERSION_CODE);
             while ((c = in.read()) != -1) {
                 if (c == SEPARADOR_REC) {
                     if (sbLinha.length() > 0) {
