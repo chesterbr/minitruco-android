@@ -18,10 +18,6 @@ public class MiniTrucoServer {
      */
     public static final int PORTA_SERVIDOR = 6912;
 
-    /**
-     * Versão do servidor (3.0 é a primeira pós-J2ME)
-     */
-    public static final String VERSAO_SERVER = "3.0";
 
     /**
      * Ponto de entrada do servidor. Apenas dispara a thread que aceita
