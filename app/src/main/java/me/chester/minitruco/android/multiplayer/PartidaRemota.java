@@ -295,8 +295,8 @@ public class PartidaRemota extends Partida {
             // Cliente Bluetooth nunca é o gerente
             return false;
         } else {
-            // O servidor diz se o cliente internet é o gerente
-            return humanoGerente;
+            // Cliente Internet é o gerente se for o jogador na posição 1
+            return getJogadorHumano().getPosicao() == 1;
         }
     }
 

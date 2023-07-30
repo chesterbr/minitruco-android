@@ -44,7 +44,6 @@ public class ClienteInternetActivity extends SalaActivity {
     private PartidaRemota partida;
     private String modo;
     private int posJogador;
-    private boolean humanoGerente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,10 +152,8 @@ public class ClienteInternetActivity extends SalaActivity {
                     p = (p + 1) % 4;
                     ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
                     modo = tokens[3];
-                    int posGerente = Integer.parseInt(tokens[4]);
-                    humanoGerente = (posGerente == posJogador);
                     findViewById(R.id.layoutIniciar).setVisibility(
-                        humanoGerente ? View.VISIBLE : View.GONE);
+                        posJogador == 1 ? View.VISIBLE : View.GONE);
                 });
                 break;
             case 'X': // Erro tratável
@@ -208,7 +205,6 @@ public class ClienteInternetActivity extends SalaActivity {
     public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
         enviaLinha("Q");
         partida = new PartidaRemota(this, jogadorHumano, posJogador, modo);
-        partida.setHumanoGerente(humanoGerente);
         return partida;
     }
 
