@@ -61,7 +61,8 @@ public class Sala {
     final String modo;
 
     /**
-     * Jogadores presentes na sala
+     * Jogadores presentes na sala; as posições 1 a 4 são os índices 0 a 3,
+     * e a posição 1 (índice 0) é o gerente da sala.
      */
     private Jogador[] jogadores = new Jogador[4];
 
@@ -139,24 +140,13 @@ public class Sala {
     }
 
     /**
-     * Recupera o gerente da sala, i.e., o <code>JogadorRemoto</code> mais
-     * antigo nela
+     * Recupera o gerente da sala (o jogador que pode trocar/inverter posições
+     * e iniciar a partida)
      *
-     * @return Jogador mais antigo, ou null se a sala não tiver jogadores
-     * remotos
+     * @return `JogadorConectado` na posição 1, ou null se a sala estiver vazia
      */
     public synchronized Jogador getGerente() {
-        JogadorConectado g = null;
-        for (int i = 0; i <= 3; i++) {
-            if (!(jogadores[i] instanceof JogadorConectado)) {
-                continue;
-            }
-            JogadorConectado j = (JogadorConectado) jogadores[i];
-            if (g == null || j.timestampSala.before(g.timestampSala)) {
-                g = j;
-            }
-        }
-        return g;
+        return jogadores[0];
     }
 
     /**
