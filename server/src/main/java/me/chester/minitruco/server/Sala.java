@@ -35,6 +35,11 @@ public class Sala {
 
     private static final Set<Sala> salasPublicasLotadas = new HashSet<>();
 
+    /**
+     * Limpa todas as salas, interrompendo as partidas e removendo os jogadores.
+     * <p>
+     * Usada mais para evitar efeitos colaterais entre testes.
+     */
     public static void limpaSalas() {
         Set<Sala> todasAsSalas = new HashSet<>();
         todasAsSalas.addAll(salasPrivadas.values());
@@ -45,7 +50,7 @@ public class Sala {
             if (partida != null) {
                 partida.abandona(0);
             }
-            for (Jogador j : sala.jogadores) {
+            for (Jogador j : sala.jogadores.clone()) {
                 if (j instanceof JogadorConectado) {
                     sala.remove((JogadorConectado) j);
                 }
