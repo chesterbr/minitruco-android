@@ -361,7 +361,11 @@ public class TrucoActivity extends Activity {
             } else {
                 setPlacarDePartidas(pontos[0], pontos[1] + 1);
             }
-            if (partida.isHumanoGerente()) {
+            // Exibe o botão sempre no single-player (onde o humano está
+            // sempre na posição 1 da partida), e no multiplayer apenas
+            // se o jogador for o gerente da sala internet ou se for o
+            // servidor bluetooth (em ambos os casos, estará na posição 1).
+            if (jogadorHumano.getPosicao() == 1) {
                 btnNovaPartida.setVisibility(View.VISIBLE);
                 if (partida.isJogoAutomatico()) {
                     btnNovaPartida.performClick();
