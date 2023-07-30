@@ -3,10 +3,8 @@ package me.chester.minitruco.server;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
-import static java.lang.Thread.sleep;
 import static me.chester.minitruco.core.JogadorBot.APELIDO_BOT;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -129,15 +127,8 @@ public class Sala {
         // Procura um lugarzinho na sala. Se achar, adiciona
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == null) {
-                // Garante timestamps diferentes (Date tem resolução de 1ms)
-                try {
-                    sleep(1);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
                 // Link sala->jogador
                 jogadores[i] = j;
-                j.timestampSala = new Date();
                 // Link jogador->sala
                 j.setSala(this);
                 atualizaColecoesDeSalas();

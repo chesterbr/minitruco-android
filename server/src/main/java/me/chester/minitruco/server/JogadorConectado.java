@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.Date;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -33,11 +32,6 @@ public class JogadorConectado extends Jogador implements Runnable {
      * Sala em que o jogador se encontra (null se nenhuma)
      */
     private Sala sala;
-
-    /**
-     * Timestamp de quando o jogador entrou na sala
-     */
-    public Date timestampSala;
 
     /**
      * Buffer de saída do jogador (para onde devemos "printar" os resultados dos
