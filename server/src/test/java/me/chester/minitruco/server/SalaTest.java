@@ -37,7 +37,7 @@ class SalaTest {
         assertArrayEquals(esperados, reais);
     }
 
-    private Sala criaSalaComGerenteNaPosicao1() {
+    private Sala criaSalaCheiaComJj1Gerente() {
         Sala sala = new Sala(true, "P");
         sala.adiciona(jj1);
         sala.adiciona(jj2);
@@ -45,15 +45,6 @@ class SalaTest {
         sala.adiciona(jj4);
         assertPosicoes(sala, jj1, jj2, jj3, jj4);
         assertEquals(jj1, sala.getGerente());
-        return sala;
-    }
-
-    private Sala criaSalaComGerenteNaPosicao2() {
-        Sala sala = criaSalaComGerenteNaPosicao1();
-        sala.remove(jj1);
-        sala.adiciona(jj1);
-        assertPosicoes(sala, jj1, jj2, jj3, jj4);
-        assertEquals(jj2, sala.getGerente());
         return sala;
     }
 
@@ -96,22 +87,8 @@ class SalaTest {
         doNothing().when(jj4).println(any());
     }
 
-    // Isso é importante para não haver ambiguidade sobre
-    // quem é o gerente da sala
     @Test
-    void testAdicionaUsaTimestampsSequenciais() {
-        Sala s = new Sala(true, "P");
-        s.adiciona(j1);
-        s.adiciona(j2);
-        s.adiciona(j3);
-        s.adiciona(j4);
-        assertTrue(j1.timestampSala.before(j2.timestampSala));
-        assertTrue(j2.timestampSala.before(j3.timestampSala));
-        assertTrue(j3.timestampSala.before(j4.timestampSala));
-    }
-
-    @Test
-    void testGerenteÉSempreOUsuarioMaisAntigoNaSala() {
+    void testGerenteÉSempreOUsuarioNaPosicao1() {
         Sala s = new Sala(true, "P");
         assertNull(s.getGerente());
         s.adiciona(j1);
@@ -129,16 +106,16 @@ class SalaTest {
         s.adiciona(j3);
         assertEquals(j2, s.getGerente());
         s.remove(j2);
-        assertEquals(j4, s.getGerente());
-        s.remove(j4);
         assertEquals(j3, s.getGerente());
         s.remove(j3);
+        assertEquals(j4, s.getGerente());
+        s.remove(j4);
         assertNull(s.getGerente());
     }
 
     @Test
     void testRemoveMantemPosicao1PreenchidaSemAlterarPosicoesRelativas() {
-        Sala s = criaSalaComGerenteNaPosicao1();
+        Sala s = criaSalaCheiaComJj1Gerente();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
         s.remove(jj3);
         assertPosicoes(s, jj1, jj2, null, jj4);
@@ -153,7 +130,7 @@ class SalaTest {
 
     @Test
     void testRemoveUltimoJogador() {
-        Sala s = criaSalaComGerenteNaPosicao1();
+        Sala s = criaSalaCheiaComJj1Gerente();
         s.remove(jj1);
         s.remove(jj2);
         s.remove(jj3);
@@ -234,7 +211,7 @@ class SalaTest {
         s.adiciona(j3);
         assertEquals("I john|paul|george|bot $POSICAO P 1", s.getInfo());
         s.remove(j1);
-        assertEquals("I bot|paul|george|bot $POSICAO P 2", s.getInfo());
+        assertEquals("I paul|george|bot|bot $POSICAO P 1", s.getInfo());
     }
 
     @Test
@@ -327,7 +304,7 @@ class SalaTest {
 
     @Test
     void testTrocaParceiroSimplesRetornaTrueETroca() {
-        Sala s = criaSalaComGerenteNaPosicao1();
+        Sala s = criaSalaCheiaComJj1Gerente();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
         assertTrue(s.trocaParceiro(jj1));
         assertPosicoes(s, jj1, jj3, jj4, jj2);
@@ -335,15 +312,15 @@ class SalaTest {
 
     @Test
     void testTrocaParceiroRetornaFalseEIgnoraSeNaoForGerente() {
-        Sala s = criaSalaComGerenteNaPosicao2();
+        Sala s = criaSalaCheiaComJj1Gerente();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
-        assertFalse(s.trocaParceiro(jj1));
+        assertFalse(s.trocaParceiro(jj2));
         assertPosicoes(s, jj1, jj2, jj3, jj4);
     }
 
     @Test
     void testTrocaParceiroRetornaFalseEIgnoraSeEstiverJogando() {
-        Sala s = criaSalaComGerenteNaPosicao1();
+        Sala s = criaSalaCheiaComJj1Gerente();
         s.iniciaPartida(jj1);
         assertPosicoes(s, jj1, jj2, jj3, jj4);
         assertFalse(s.trocaParceiro(jj1));
@@ -352,69 +329,63 @@ class SalaTest {
 
     @Test
     void testTrocaParceiroNaoAlteraQuemÉOGerente() {
-        Sala s = criaSalaComGerenteNaPosicao2();
-        assertEquals(jj2, s.getGerente());
-        s.trocaParceiro(jj2);
-        assertEquals(jj2, s.getGerente());
-    }
-
-    @Test
-    void testTrocaParceiroComGerenteNaPosicao2() {
-        Sala s = criaSalaComGerenteNaPosicao2();
-        assertPosicoes(s, jj1, jj2, jj3, jj4);
-        s.trocaParceiro(jj2);
-        assertPosicoes(s, jj3, jj2, jj4, jj1);
-        s.trocaParceiro(jj2);
-        assertPosicoes(s, jj4, jj2, jj1, jj3);
-        s.trocaParceiro(jj2);
-        assertPosicoes(s, jj1, jj2, jj3, jj4);
+        Sala s = criaSalaCheiaComJj1Gerente();
+        assertEquals(jj1, s.getGerente());
+        s.trocaParceiro(jj1);
+        assertEquals(jj1, s.getGerente());
     }
 
     @Test
     void testTrocaParceiroEmSalaComVaga() {
-        Sala s = criaSalaComGerenteNaPosicao2();
+        Sala s = criaSalaCheiaComJj1Gerente();
         s.remove(jj3);
         assertPosicoes(s, jj1, jj2, null, jj4);
-        s.trocaParceiro(jj2);
-        assertPosicoes(s, null, jj2, jj4, jj1);
-        s.trocaParceiro(jj2);
-        assertPosicoes(s, jj4, jj2, jj1, null);
-        s.trocaParceiro(jj2);
+        s.trocaParceiro(jj1);
+        assertPosicoes(s, jj1, null, jj4, jj2);
+        s.trocaParceiro(jj1);
+        assertPosicoes(s, jj1, jj4, jj2, null);
+        s.trocaParceiro(jj1);
         assertPosicoes(s, jj1, jj2, null, jj4);
+    }
+
+    @Test
+    void testTrocaParceiroEmSalaComDuasVagas() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.remove(jj2);
+        s.remove(jj4);
+        assertPosicoes(s, jj1, null, jj3, null);
+        s.trocaParceiro(jj1);
+        assertPosicoes(s, jj1, jj3, null, null);
+        s.trocaParceiro(jj1);
+        assertPosicoes(s, jj1, null, null, jj3);
+        s.trocaParceiro(jj1);
+        assertPosicoes(s, jj1, null, jj3, null);
     }
 
     @Test
     void testInverteAdversariosSimplesRetornaTrueEInverte() {
-        Sala s = criaSalaComGerenteNaPosicao1();
+        Sala s = criaSalaCheiaComJj1Gerente();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
         assertTrue(s.inverteAdversarios(jj1));
         assertPosicoes(s, jj1, jj4, jj3, jj2);
+        assertTrue(s.inverteAdversarios(jj1));
+        assertPosicoes(s, jj1, jj2, jj3, jj4);
     }
 
     @Test
     void testInverteAdversariosRetornaFalseEIgnoraSeNaoForGerente() {
-        Sala s = criaSalaComGerenteNaPosicao2();
+        Sala s = criaSalaCheiaComJj1Gerente();
         assertPosicoes(s, jj1, jj2, jj3, jj4);
-        assertFalse(s.inverteAdversarios(jj1));
+        assertFalse(s.inverteAdversarios(jj2));
         assertPosicoes(s, jj1, jj2, jj3, jj4);
     }
 
     @Test
     void testInverteAdversariosRetornaFalseEIgnoraSeEstiverJogando() {
-        Sala s = criaSalaComGerenteNaPosicao1();
+        Sala s = criaSalaCheiaComJj1Gerente();
         s.iniciaPartida(jj1);
         assertPosicoes(s, jj1, jj2, jj3, jj4);
         assertFalse(s.inverteAdversarios(jj1));
-        assertPosicoes(s, jj1, jj2, jj3, jj4);
-    }
-
-    @Test
-    void testInverteAdversariosComGerenteNaPosicao2() {
-        Sala s = criaSalaComGerenteNaPosicao2();
-        assertPosicoes(s, jj1, jj2, jj3, jj4);
-        s.inverteAdversarios(jj2);
-        assertPosicoes(s, jj3, jj2, jj1, jj4);
-        s.inverteAdversarios(jj2);
         assertPosicoes(s, jj1, jj2, jj3, jj4);
     }
 }
