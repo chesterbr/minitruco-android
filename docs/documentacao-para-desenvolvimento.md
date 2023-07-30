@@ -173,9 +173,11 @@ Essa separação radical de classes simplifica os jogadores (`JogadorHumano` nã
 
 É importante observar que o jogo multiplayer introduz algumas complexidades para entender a motivação da arquitetura de classes mais complexa:
 
-O jogo multiplayer pode acontecer via Bluetooth ou pela internet. Do ponto de vista do usuário, os jogadores entram em uma "sala de jogo". Um deles (o "gerente") pode mudar os outros de lugar e é quem pode iniciar uma nova partida (tanto a partir da sala de jogo, quanto no botão "Nova Partida" que aparece quando uma se encerra).
+O jogo multiplayer pode acontecer via Bluetooth ou pela internet. Quando um jogador se conecta no servidor internet, inicia um jogo Bluetooth ou se conecta no jogo iniciado pelo coleguinha, ele visualiza uma "sala de jogo", com os nomes nas posições do baralho.
 
-Todos os aparelhos enxergam a mesa do seu ponto de vista, ou seja, se temos os jogadores A, B, C e D, com B à direita de A, C à direita de B e D à direita de C, o jogador A vê a mesa assim:
+Isso já tem uma consequência: como todos os aparelhos enxergam a mesa do seu ponto de vista, a posição do jogador na sala/partida pode não bater com a "posição" visual, como definida acima (1 = inferior, 2 = esquerda, 3 = superior, 4 = direita).
+
+Por exemplo, digamos que temos os jogadores A, B, C e D nas posições 1, 2, 3 e 4 da partida, respectivamente, o jogador A vai exibir a mesa conforme esperado:
 
 ```
   C
@@ -185,7 +187,7 @@ D    B
   A
 ```
 
-mas o jogador B vê assim:
+mas o jogador B vai exibir assim (que é como ele enxerga):
 
 ```
   D
@@ -194,6 +196,10 @@ A    C
 
   B
 ```
+
+Na partida, o jogador A está na posição 1 em todos os aparelhos, o B está na posição 2, etc.; mas é responsabilidade do `MesaView` identificar a posição do jogador local (que é sempre uma instância de `JogadorHumano`) e "traduzir" as posições para exibir baralho, cartas jogadas, balões, etc.
+
+Em qualquer modalidade (single ou multiplayer), o jogador na posição 1 é especial (chamamos ele de "gerente"); ele é o único que pode reposicionar os outros jogadores e iniciar partidas (a partir da sala, ou quando a partida finaliza).
 
 #### Implementação
 
@@ -287,7 +293,7 @@ Você pode jogar via nc ou telnet. Para isso:
 
 4) Cada jogador deve se identificar com um nome, enviando um comando `N` (ex.: `N joselito`), entrar em uma sala com as regras desejadas (ex.: `E PUB P`)
 
-5) O gerente (primeiro jogador a entrar na sala) inicia o jogo com `Q`
+5) O gerente (jogador na posição 1 da sala) inicia o jogo com `Q`
 
 6) Dali pra frente é observar as notificações enviadas e os comandos apropriados. Veja a lista completa abaixo.
 
@@ -341,7 +347,7 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `X NO`: `É preciso atribuir um nome para entrar na sala
 - `X JE sala`: Você já está na sala de código `sala`
 - `N nome`: Seu nome foi definido como `nome`
-- `I <apelidos> <modo> <jogador> <gerente>`: Info da sala. `<jogador>` é a posição do cliente. `<gerente>` é a posição do gerente (só no jogo internet)
+- `I <apelidos> <modo> <jogador>`: Info da sala. `<jogador>` é a posição do cliente.
 - `P <jogador>`: Início da partida
 - `M <carta> <carta> <carta> <carta>`: Início da mão. Suas cartas são as três primeiras. A última, se houver, é o vira.
 - `V <jogador> _`: vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode

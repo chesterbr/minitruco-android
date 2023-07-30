@@ -1,5 +1,8 @@
 package me.chester.minitruco.server;
 
+/* SPDX-License-Identifier: BSD-3-Clause */
+/* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
+
 /**
  * Pergunta ao servidor se o cliente é compatível ou precisa de atualização.
  * <p>

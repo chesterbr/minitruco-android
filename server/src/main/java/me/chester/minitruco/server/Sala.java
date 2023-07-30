@@ -3,10 +3,8 @@ package me.chester.minitruco.server;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
-import static java.lang.Thread.sleep;
 import static me.chester.minitruco.core.JogadorBot.APELIDO_BOT;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -37,6 +35,11 @@ public class Sala {
 
     private static final Set<Sala> salasPublicasLotadas = new HashSet<>();
 
+    /**
+     * Limpa todas as salas, interrompendo as partidas e removendo os jogadores.
+     * <p>
+     * Usada mais para evitar efeitos colaterais entre testes.
+     */
     public static void limpaSalas() {
         Set<Sala> todasAsSalas = new HashSet<>();
         todasAsSalas.addAll(salasPrivadas.values());
@@ -47,7 +50,7 @@ public class Sala {
             if (partida != null) {
                 partida.abandona(0);
             }
-            for (Jogador j : sala.jogadores) {
+            for (Jogador j : sala.jogadores.clone()) {
                 if (j instanceof JogadorConectado) {
                     sala.remove((JogadorConectado) j);
                 }
@@ -63,7 +66,8 @@ public class Sala {
     final String modo;
 
     /**
-     * Jogadores presentes na sala
+     * Jogadores presentes na sala; as posições 1 a 4 são os índices 0 a 3,
+     * e a posição 1 (índice 0) é o gerente da sala.
      */
     private Jogador[] jogadores = new Jogador[4];
 
@@ -113,7 +117,8 @@ public class Sala {
     }
 
     /**
-     * Adiciona um jogador na sala, garantindo os links bidirecionais e, se necessário,
+     * Adiciona um jogador na primeira posição disponível da sala,
+     * garantindo os links bidirecionais e, se necessário,
      * trocando entre a lista das lotadas e das disponíveis.
      *
      * @param j Jogador a adicionar
@@ -128,15 +133,8 @@ public class Sala {
         // Procura um lugarzinho na sala. Se achar, adiciona
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == null) {
-                // Garante timestamps diferentes (Date tem resolução de 1ms)
-                try {
-                    sleep(1);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
                 // Link sala->jogador
                 jogadores[i] = j;
-                j.timestampSala = new Date();
                 // Link jogador->sala
                 j.setSala(this);
                 atualizaColecoesDeSalas();
@@ -147,24 +145,13 @@ public class Sala {
     }
 
     /**
-     * Recupera o gerente da sala, i.e., o <code>JogadorRemoto</code> mais
-     * antigo nela
+     * Recupera o gerente da sala (o jogador que pode trocar/inverter posições
+     * e iniciar a partida)
      *
-     * @return Jogador mais antigo, ou null se a sala não tiver jogadores
-     * remotos
+     * @return `JogadorConectado` na posição 1, ou null se a sala estiver vazia
      */
     public synchronized Jogador getGerente() {
-        JogadorConectado g = null;
-        for (int i = 0; i <= 3; i++) {
-            if (!(jogadores[i] instanceof JogadorConectado)) {
-                continue;
-            }
-            JogadorConectado j = (JogadorConectado) jogadores[i];
-            if (g == null || j.timestampSala.before(g.timestampSala)) {
-                g = j;
-            }
-        }
-        return g;
+        return jogadores[0];
     }
 
     /**
@@ -183,9 +170,13 @@ public class Sala {
     }
 
     /**
-     * Remove um jogador da sala.
+     * Remove um jogador da sala, rompendo os links bidirecionais e atualizando
+     * as listas de salas.
      * <p>
-     * Se houver um partida em andamento, interrompe o mesmo.
+     * Se houver um partida em andamento, interrompe a mesma.
+     * <p>
+     * A sala é rotacionada de forma que o jogador mais antigo (e, portanto,
+     * o gerente) esteja na posição 1.
      *
      * @param j Jogador a remover
      * @return true se removeu, false se ele não estava lá
@@ -202,6 +193,14 @@ public class Sala {
                 jogadores[i] = null;
                 // Desfaz link jogador->sala
                 j.setSala(null);
+                // Se a posição 1 ficou vazia (mas ainda tem gente na sala),
+                // rotaciona até que alguém a ocupe (será o novo gerente)
+                while (getNumPessoas() > 0 && jogadores[0] == null) {
+                    for (int x = 1; x <= 3; x++) {
+                        jogadores[x - 1] = jogadores[x];
+                        jogadores[x] = null;
+                    }
+                }
                 atualizaColecoesDeSalas();
                 return true;
             }
@@ -277,10 +276,6 @@ public class Sala {
 
         // Modo de partida
         sb.append(modo);
-        sb.append(' ');
-
-        // Posição do gerente
-        sb.append(getPosicao(getGerente()));
 
         return sb.toString();
     }

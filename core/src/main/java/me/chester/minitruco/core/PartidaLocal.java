@@ -722,12 +722,4 @@ public class PartidaLocal extends Partida {
     public boolean isJogoAutomatico() {
         return jogoAutomatico;
     }
-
-    @Override
-    public boolean isHumanoGerente() {
-        // Se estamos num celular, das duas uma: ou é um jogo single-player,
-        // ou o servidor Bluetooth (em ambos os casos, o humano é o gerente)
-        return true;
-    }
-
 }
