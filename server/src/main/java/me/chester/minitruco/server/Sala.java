@@ -276,10 +276,6 @@ public class Sala {
 
         // Modo de partida
         sb.append(modo);
-        sb.append(' ');
-
-        // Posição do gerente
-        sb.append(getPosicao(getGerente()));
 
         return sb.toString();
     }
