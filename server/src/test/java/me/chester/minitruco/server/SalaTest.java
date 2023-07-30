@@ -137,6 +137,31 @@ class SalaTest {
     }
 
     @Test
+    void testRemoveMantemPosicao1PreenchidaSemAlterarPosicoesRelativas() {
+        Sala s = criaSalaComGerenteNaPosicao1();
+        assertPosicoes(s, jj1, jj2, jj3, jj4);
+        s.remove(jj3);
+        assertPosicoes(s, jj1, jj2, null, jj4);
+        s.remove(jj1);
+        assertPosicoes(s, jj2, null, jj4, null);
+        s.adiciona(jj1);
+        s.adiciona(jj3);
+        assertPosicoes(s, jj2, jj1, jj4, jj3);
+        s.remove(jj2);
+        assertPosicoes(s, jj1, jj4, jj3, null);
+    }
+
+    @Test
+    void testRemoveUltimoJogador() {
+        Sala s = criaSalaComGerenteNaPosicao1();
+        s.remove(jj1);
+        s.remove(jj2);
+        s.remove(jj3);
+        s.remove(jj4);
+        assertPosicoes(s, null, null, null, null);
+    }
+
+    @Test
     void testColocaEmSalaPublicaRetornaSalaDeDestino() {
         Sala s = Sala.colocaEmSalaPublica(j1, "P");
         assertEquals(s, j1.getSala());
@@ -382,8 +407,6 @@ class SalaTest {
         assertFalse(s.inverteAdversarios(jj1));
         assertPosicoes(s, jj1, jj2, jj3, jj4);
     }
-
-
 
     @Test
     void testInverteAdversariosComGerenteNaPosicao2() {

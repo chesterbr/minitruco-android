@@ -113,7 +113,8 @@ public class Sala {
     }
 
     /**
-     * Adiciona um jogador na sala, garantindo os links bidirecionais e, se necessário,
+     * Adiciona um jogador na primeira posição disponível da sala,
+     * garantindo os links bidirecionais e, se necessário,
      * trocando entre a lista das lotadas e das disponíveis.
      *
      * @param j Jogador a adicionar
@@ -183,9 +184,13 @@ public class Sala {
     }
 
     /**
-     * Remove um jogador da sala.
+     * Remove um jogador da sala, rompendo os links bidirecionais e atualizando
+     * as listas de salas.
      * <p>
-     * Se houver um partida em andamento, interrompe o mesmo.
+     * Se houver um partida em andamento, interrompe a mesma.
+     * <p>
+     * A sala é rotacionada de forma que o jogador mais antigo (e, portanto,
+     * o gerente) esteja na posição 1.
      *
      * @param j Jogador a remover
      * @return true se removeu, false se ele não estava lá
@@ -202,6 +207,14 @@ public class Sala {
                 jogadores[i] = null;
                 // Desfaz link jogador->sala
                 j.setSala(null);
+                // Se a posição 1 ficou vazia (mas ainda tem gente na sala),
+                // rotaciona até que alguém a ocupe (será o novo gerente)
+                while (getNumPessoas() > 0 && jogadores[0] == null) {
+                    for (int x = 1; x <= 3; x++) {
+                        jogadores[x - 1] = jogadores[x];
+                        jogadores[x] = null;
+                    }
+                }
                 atualizaColecoesDeSalas();
                 return true;
             }
