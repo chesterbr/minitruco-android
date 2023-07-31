@@ -3,9 +3,12 @@ package me.chester.minitruco.android;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.text.Html;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import me.chester.minitruco.R;
 import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -84,5 +87,24 @@ public abstract class SalaActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             // não precisa tratar
         }
+    }
+
+    /**
+     * Mostra mensagem permanente em uma caixa no meio da tela.
+     * <p>
+     * Requer layout que contenha textViewMensagem (ex.: sala.xml).
+     *
+     * @param mensagem Mensagem a mostrar, ou null para esconder a caixa
+     */
+    protected void setMensagem(String mensagem) {
+        runOnUiThread(() -> {
+            TextView textViewMensagem = findViewById(R.id.textViewMensagem);
+            if (mensagem == null) {
+                textViewMensagem.setVisibility(View.GONE);
+            } else {
+                textViewMensagem.setVisibility(View.VISIBLE);
+                textViewMensagem.setText(mensagem);
+            }
+        });
     }
 }

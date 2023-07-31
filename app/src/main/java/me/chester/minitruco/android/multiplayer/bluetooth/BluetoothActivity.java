@@ -83,7 +83,6 @@ public abstract class BluetoothActivity extends SalaActivity implements
     protected Button btnInverter;
     protected Button btnTrocar;
     protected View layoutIniciar;
-    private TextView textViewMensagem;
     private TextView textViewStatus;
     private TextView[] textViewsJogadores;
 
@@ -96,7 +95,6 @@ public abstract class BluetoothActivity extends SalaActivity implements
         btnIniciar = findViewById(R.id.btnIniciarBluetooth);
         btnInverter = findViewById(R.id.btnInverter);
         btnTrocar = findViewById(R.id.btnTrocar);
-        textViewMensagem = findViewById(R.id.textViewMensagem);
         textViewStatus = findViewById(R.id.textViewStatus);
         textViewsJogadores = new TextView[4];
         textViewsJogadores[0] = findViewById(R.id.textViewJogador1);
@@ -171,17 +169,6 @@ public abstract class BluetoothActivity extends SalaActivity implements
             btnIniciar.setEnabled(getNumClientes() > 0);
             btnInverter.setEnabled(getNumClientes() > 0);
             btnTrocar.setEnabled(getNumClientes() > 0);
-        });
-    }
-
-    protected void setMensagem(String mensagem) {
-        runOnUiThread(() -> {
-            if (mensagem == null) {
-                textViewMensagem.setVisibility(View.GONE);
-            } else {
-                textViewMensagem.setVisibility(View.VISIBLE);
-                textViewMensagem.setText(mensagem);
-            }
         });
     }
 
