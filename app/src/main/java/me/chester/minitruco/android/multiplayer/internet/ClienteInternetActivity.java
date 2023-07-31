@@ -140,7 +140,8 @@ public class ClienteInternetActivity extends SalaActivity {
                     }
                     String[] tokens = line.split(" ");
                     String[] nomes = tokens[1].split(Pattern.quote("|"));
-                    posJogador = Integer.parseInt(tokens[2]);
+                    modo = tokens[2];
+                    posJogador = Integer.parseInt(tokens[3]);
                     // Ajusta os nomes para que o jogador local fique sempre na
                     // parte inferior da tela (textViewJogador1)
                     int p = (posJogador - 1) % 4;
@@ -151,7 +152,6 @@ public class ClienteInternetActivity extends SalaActivity {
                     ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[p]);
                     p = (p + 1) % 4;
                     ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
-                    modo = tokens[3];
                     findViewById(R.id.layoutIniciar).setVisibility(
                         posJogador == 1 ? View.VISIBLE : View.GONE);
                 });
