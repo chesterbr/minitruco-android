@@ -167,13 +167,11 @@ public class ClienteBluetoothActivity extends BluetoothActivity implements
         }
         // Exibe as informações recebidas fora do jogo
         String[] tokens = parametros.split(" ");
-        posJogador = Integer.parseInt(tokens[2]);
+        String apelidos[] = tokens[0].split("\\|");
         modo = tokens[1];
-        if (modo.length() != 1) {
-            msgErroFatal("O celular que criou o jogo está com uma versão muito antiga do miniTruco. Peça para atualizar e tente novamente.");
-            return;
-        }
-        encaixaApelidosNaMesa(tokens[0].split("\\|"));
+        posJogador = Integer.parseInt(tokens[2]);
+        encaixaApelidosNaMesa(apelidos);
+        LOGGER.log(Level.INFO, "posJogador=" + posJogador);
         atualizaDisplay();
     }
 
