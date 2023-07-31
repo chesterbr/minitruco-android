@@ -256,7 +256,7 @@ public class Sala {
      *
      * @return String no formato "I ..." definido em protocolo.txt
      */
-    public String getInfo() {
+    private String getInfo() {
         StringBuilder sb = new StringBuilder();
         // I apelido1|apelido2|apelido3|apelido4 posicao_do_jogador modo
         // TODO codigo da sala privada
