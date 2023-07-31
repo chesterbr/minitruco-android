@@ -211,9 +211,9 @@ class SalaTest {
         s.adiciona(j2);
         s.adiciona(j3);
         s.mandaInfoParaTodos();
-        verify(j1).println("I john|paul|george|bot P 1");
-        verify(j2).println("I john|paul|george|bot P 2");
-        verify(j3).println("I john|paul|george|bot P 3");
+        verify(j1).println("I john|paul|george|bot P 1 PUB");
+        verify(j2).println("I john|paul|george|bot P 2 PUB");
+        verify(j3).println("I john|paul|george|bot P 3 PUB");
     }
 
     @Test

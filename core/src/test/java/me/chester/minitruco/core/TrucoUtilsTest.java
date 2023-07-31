@@ -1,11 +1,14 @@
 package me.chester.minitruco.core;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 class TrucoUtilsTest {
 
@@ -18,9 +21,18 @@ class TrucoUtilsTest {
 
     @Test
     void testMontaNotificacaoI() {
+        // Sim, esse teste assume o valor do placeholder; isso é proposital
+        // para pedir cuidado ao mexer nesse valor
         assertEquals(
-            "I j1|j2|j3|j4 P " + TrucoUtils.POSICAO_PLACEHOLDER,
-            TrucoUtils.montaNotificacaoI(nomes, "P")
+            "I j1|j2|j3|j4 P $POSICAO PRI-123",
+            TrucoUtils.montaNotificacaoI(nomes, "P", "PRI-123")
+        );
+        Collections.reverse(Arrays.asList(nomes));
+        nomes[2] = null;
+        nomes[3] = "";
+        assertEquals(
+            "I j4|j3|bot|bot M $POSICAO BLT",
+            TrucoUtils.montaNotificacaoI(nomes, "M", "BLT")
         );
 
     }
@@ -33,8 +45,8 @@ class TrucoUtilsTest {
             when(jogadores[i].getNome()).thenReturn(nomes[i]);
         }
         assertEquals(
-                TrucoUtils.montaNotificacaoI(jogadores, "P"),
-                TrucoUtils.montaNotificacaoI(nomes, "P")
+                TrucoUtils.montaNotificacaoI(jogadores, "M", "BLT"),
+                TrucoUtils.montaNotificacaoI(nomes, "M", "BLT")
         );
     }
 }

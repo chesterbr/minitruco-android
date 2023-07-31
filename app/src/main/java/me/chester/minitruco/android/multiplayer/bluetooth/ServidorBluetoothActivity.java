@@ -255,7 +255,7 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         // precisamos atualizar ele antes
         atualizaDisplay();
 
-        String comando = montaNotificacaoI(apelidos, modo);
+        String comando = montaNotificacaoI(apelidos, modo, "BLT");
         // Envia a notificação para cada jogador (com sua posição)
         for (int i = 0; i <= 2; i++) {
             enviaLinha(i, comando.replace(POSICAO_PLACEHOLDER,

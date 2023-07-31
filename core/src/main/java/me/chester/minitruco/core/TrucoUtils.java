@@ -22,12 +22,13 @@ public class TrucoUtils {
      * Chamadores devem substituir o valor em POSICAO_PLACEHOLDER pela posição
      * do jogdaor para o qual a informação será enviada.
      *
-     * @param nomes array de Jogador ou de nomes
+     * @param nomes array de Jogador ou de nomes (sanitizados)
      * @param modo modo de partida (ver `Partida` e subclasses)
-     *
+     * @param sala string que diz o tipo e código da sala (ex.: "BLT" para
+     *             bluetooth, "PRI-1234" para sala privada com código 1234)
      * @return String no formato "I ..." definido em protocolo.txt
      */
-    public static String montaNotificacaoI(Object[] nomes, String modo) {
+    public static String montaNotificacaoI(Object[] nomes, String modo, String sala) {
         StringBuilder sb = new StringBuilder("I ");
         for (int i = 0; i <= 3; i++) {
             String nome = nomes[i] instanceof Jogador ? ((Jogador) nomes[i])
@@ -38,14 +39,12 @@ public class TrucoUtils {
             sb.append(i == 0 ? "" : '|');
             sb.append(nome);
         }
-        sb.append(' ');
-
-        // Modo de partida
-        sb.append(modo);
-        sb.append(' ');
-
-        // Posição do jogador que solicitou a informação
-        sb.append(POSICAO_PLACEHOLDER);
+        sb.append(' ')
+          .append(modo)
+          .append(' ')
+          .append(POSICAO_PLACEHOLDER)
+          .append(' ')
+          .append(sala);
 
         return sb.toString();
     }

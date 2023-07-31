@@ -237,7 +237,8 @@ public class Sala {
      * Manda a notificação de informação da sala ("I ...") para todos os membros.
      */
     public synchronized void mandaInfoParaTodos() {
-        String mensagem = montaNotificacaoI(jogadores, modo);
+        String strSala = (codigo == null) ? "PUB" : "PRI-" + codigo;
+        String mensagem = montaNotificacaoI(jogadores, modo, strSala);
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] instanceof JogadorConectado) {
                 ((JogadorConectado) jogadores[i]).println(
