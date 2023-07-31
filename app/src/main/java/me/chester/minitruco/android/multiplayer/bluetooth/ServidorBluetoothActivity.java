@@ -1,6 +1,8 @@
 package me.chester.minitruco.android.multiplayer.bluetooth;
 
 import static me.chester.minitruco.core.JogadorBot.APELIDO_BOT;
+import static me.chester.minitruco.core.TrucoUtils.POSICAO_PLACEHOLDER;
+import static me.chester.minitruco.core.TrucoUtils.montaNotificacaoI;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
@@ -253,19 +255,11 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         // precisamos atualizar ele antes
         atualizaDisplay();
 
-        // Monta o comando de dados no formato:
-        // I apelido1|apelido2|apelido3|apelido4 modo posicao_do_jogador
-        StringBuilder sbComando = new StringBuilder("I ");
-        for (int i = 0; i <= 3; i++) {
-            sbComando.append(apelidos[i]);
-            sbComando.append(i < 3 ? '|' : ' ');
-        }
-        sbComando.append(modo);
-        sbComando.append(' ');
-        String comando = sbComando.toString();
+        String comando = montaNotificacaoI(apelidos, modo);
         // Envia a notificação para cada jogador (com sua posição)
         for (int i = 0; i <= 2; i++) {
-            enviaLinha(i, comando + (i + 2));
+            enviaLinha(i, comando.replace(POSICAO_PLACEHOLDER,
+                Integer.toString(i + 2)));
         }
     }
 
