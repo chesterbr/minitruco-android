@@ -209,9 +209,9 @@ class SalaTest {
         s.adiciona(j1);
         s.adiciona(j2);
         s.adiciona(j3);
-        assertEquals("I john|paul|george|bot $POSICAO P", s.getInfo());
+        assertEquals("I john|paul|george|bot P $POSICAO", s.getInfo());
         s.remove(j1);
-        assertEquals("I paul|george|bot|bot $POSICAO P", s.getInfo());
+        assertEquals("I paul|george|bot|bot P $POSICAO", s.getInfo());
     }
 
     @Test

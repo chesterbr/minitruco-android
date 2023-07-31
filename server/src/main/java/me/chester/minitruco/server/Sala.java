@@ -270,12 +270,12 @@ public class Sala {
         }
         sb.append(' ');
 
-        // Posição do jogador que solicitou a informação
-        sb.append(POSICAO_PLACEHOLDER);
-        sb.append(' ');
-
         // Modo de partida
         sb.append(modo);
+        sb.append(' ');
+
+        // Posição do jogador que solicitou a informação
+        sb.append(POSICAO_PLACEHOLDER);
 
         return sb.toString();
     }
