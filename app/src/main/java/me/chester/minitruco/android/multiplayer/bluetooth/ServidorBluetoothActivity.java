@@ -254,7 +254,7 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         atualizaDisplay();
 
         // Monta o comando de dados no formato:
-        // I apelido1|apelido2|apelido3|apelido4 regras
+        // I apelido1|apelido2|apelido3|apelido4 modo posicao_do_jogador
         StringBuilder sbComando = new StringBuilder("I ");
         for (int i = 0; i <= 3; i++) {
             sbComando.append(apelidos[i]);

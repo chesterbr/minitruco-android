@@ -258,7 +258,7 @@ public class Sala {
      */
     public String getInfo() {
         StringBuilder sb = new StringBuilder();
-        // I numsala
+        // I apelido1|apelido2|apelido3|apelido4 posicao_do_jogador modo
         // TODO codigo da sala privada
         sb.append("I ");
 
