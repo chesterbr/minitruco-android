@@ -18,6 +18,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -44,6 +45,7 @@ public class ClienteInternetActivity extends SalaActivity {
     private PartidaRemota partida;
     private String modo;
     private int posJogador;
+    private boolean contagemRegressivaParaIniciar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +126,9 @@ public class ClienteInternetActivity extends SalaActivity {
         if (!line.startsWith("K ")) {
             // Não loga o keepalive (evita poluir o log)
             LOGGER.log(Level.INFO, "recebeu: " + line);
+            // Qualquer outra notificação cancela a contagem regressiva
+            contagemRegressivaParaIniciar = false;
+            setMensagem(null);
         }
         switch (line.charAt(0)) {
             case 'N': // Nome foi aceito
@@ -154,8 +159,28 @@ public class ClienteInternetActivity extends SalaActivity {
                     ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[p]);
                     p = (p + 1) % 4;
                     ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
+
                     findViewById(R.id.layoutIniciar).setVisibility(
                         posJogador == 1 ? View.VISIBLE : View.GONE);
+
+                    boolean isGerente = posJogador == 1;
+                    if (Arrays.asList(nomes).contains("bot")) {
+                        setMensagem("Aguardando mesa completa ou gerente iniciar");
+                    } else {
+                        contagemRegressivaParaIniciar = true;
+                        new Thread(() -> {
+                            for (int i = 10; i > 0; i--) {
+                                setMensagem("Mesa completa. Auto-iniciando em " + i);
+                                sleep(1000);
+                                if (!contagemRegressivaParaIniciar) {
+                                    return;
+                                }
+                            }
+                            if (isGerente) {
+                                enviaLinha("Q");
+                            }
+                        }).start();
+                    }
                 });
                 break;
             case 'X': // Erro tratável
