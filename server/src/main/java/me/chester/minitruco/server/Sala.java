@@ -3,7 +3,8 @@ package me.chester.minitruco.server;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
-import static me.chester.minitruco.core.JogadorBot.APELIDO_BOT;
+import static me.chester.minitruco.core.TrucoUtils.POSICAO_PLACEHOLDER;
+import static me.chester.minitruco.core.TrucoUtils.montaNotificacaoI;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,8 +21,6 @@ import me.chester.minitruco.core.PartidaLocal;
  * Representa uma sala, onde ocorre um partida
  */
 public class Sala {
-
-    private static final String POSICAO_PLACEHOLDER = "$POSICAO";
 
     /**
      * Salas criadas por usuários (a chave é o código da sala)
@@ -238,46 +237,14 @@ public class Sala {
      * Manda a notificação de informação da sala ("I ...") para todos os membros.
      */
     public synchronized void mandaInfoParaTodos() {
-        String mensagem = getInfo();
+        String strSala = (codigo == null) ? "PUB" : "PRI-" + codigo;
+        String mensagem = montaNotificacaoI(jogadores, modo, strSala);
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] instanceof JogadorConectado) {
                 ((JogadorConectado) jogadores[i]).println(
                     mensagem.replace(POSICAO_PLACEHOLDER, String.valueOf(i + 1)));
             }
         }
-    }
-
-    // TODO só é public para testes; reescrever eles pra testar mandaInfoParaTodos ao inves deste
-    /**
-     * Monta a string de informação da sala.
-     * <p>
-     * Chamadores devem substituir a string POSICAO_PLACEHOLDER pela posição do jogdaor
-     * para o qual a informação será enviada.
-     *
-     * @return String no formato "I ..." definido em protocolo.txt
-     */
-    public String getInfo() {
-        StringBuilder sb = new StringBuilder();
-        // I numsala
-        // TODO codigo da sala privada
-        sb.append("I ");
-
-        // Nomes dos jogadores, separados por pipe (posições vazias são bots -
-        // ou, mais precisamente, vão ser bots quando o jogo começar
-        for (int i = 0; i <= 3; i++) {
-            sb.append(i == 0 ? "" : '|');
-            sb.append(jogadores[i] == null ? APELIDO_BOT : jogadores[i].getNome());
-        }
-        sb.append(' ');
-
-        // Posição do jogador que solicitou a informação
-        sb.append(POSICAO_PLACEHOLDER);
-        sb.append(' ');
-
-        // Modo de partida
-        sb.append(modo);
-
-        return sb.toString();
     }
 
     /**

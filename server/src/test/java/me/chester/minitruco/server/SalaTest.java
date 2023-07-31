@@ -11,6 +11,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -201,7 +202,7 @@ class SalaTest {
     }
 
     @Test
-    void testGetInfo() {
+    void testMandaInfoParaTodos() {
         j1.setNome("john");
         j2.setNome("paul");
         j3.setNome("george");
@@ -209,9 +210,10 @@ class SalaTest {
         s.adiciona(j1);
         s.adiciona(j2);
         s.adiciona(j3);
-        assertEquals("I john|paul|george|bot $POSICAO P", s.getInfo());
-        s.remove(j1);
-        assertEquals("I paul|george|bot|bot $POSICAO P", s.getInfo());
+        s.mandaInfoParaTodos();
+        verify(j1).println("I john|paul|george|bot P 1 PUB");
+        verify(j2).println("I john|paul|george|bot P 2 PUB");
+        verify(j3).println("I john|paul|george|bot P 3 PUB");
     }
 
     @Test

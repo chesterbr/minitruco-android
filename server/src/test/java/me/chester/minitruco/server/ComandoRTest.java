@@ -37,17 +37,17 @@ class ComandoRTest {
     @Test
     void testTrocaParceirosDoGerente() {
         Comando.interpreta("R T", j1);
-        verify(j1).println("I j1|j3|bot|j2 1 P");
-        verify(j2).println("I j1|j3|bot|j2 4 P");
-        verify(j3).println("I j1|j3|bot|j2 2 P");
+        verify(j1).println("I j1|j3|bot|j2 P 1 PUB");
+        verify(j2).println("I j1|j3|bot|j2 P 4 PUB");
+        verify(j3).println("I j1|j3|bot|j2 P 2 PUB");
     }
 
     @Test
     void testInverteAdversariosDoGerente() {
         Comando.interpreta("R I", j1);
-        verify(j1).println("I j1|bot|j3|j2 1 P");
-        verify(j2).println("I j1|bot|j3|j2 4 P");
-        verify(j3).println("I j1|bot|j3|j2 3 P");
+        verify(j1).println("I j1|bot|j3|j2 P 1 PUB");
+        verify(j2).println("I j1|bot|j3|j2 P 4 PUB");
+        verify(j3).println("I j1|bot|j3|j2 P 3 PUB");
     }
 
     @Test
