@@ -302,10 +302,11 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 ### Convenções
 
-- `<nomes>`: Quatro sequências de caracteres, separadas por `|`. Exemplo: `john|bot|ringo|george`.
 - `<carta>`: Carta representada por letra (4, 5, 6, 7, Q, J, K, A, 2 ou 3) e naipe (c, e, o ou p). Exemplo: `2c`, `Qp`, `Kp`.
+- `<nomes>`: Quatro sequências de caracteres, separadas por `|`. Exemplo: `john|bot|ringo|george`.
 - `<modo>`: `P` para truco paulista, `M` para truco mineiro, `V` para manilha velha ou `L` baralho limpo.
 - `<jogador>`: Posição de um jogador na sala/partida, de 1 a 4. É constante durante a partida, mas pode mudar fora dela (o servidor manda uma notificação `I` sempre que a formação da sala mudar).
+- `<sala>` : Informa o tipo de sala em que estamos conectados. Pode ser `BLT` (bluetooth), `PUB` (pública) ou `PRI-nnnnn` (privada, com o código nnnnn).
 - `<equipe>`: Uma das duas equipes (duplas). Pode ser 1 (equpe dos jogadores 1 e 3) ou 2 (jogadores 2 e 4).
 - `<frase>`: número aleatório grande que permite que todos os clientes mostrem a mesma frase (o "balãozinho") para um evento. Por exemplo, se o jogador 1 pediu truco (paulista) e o número sorteado foi 12345678, todos irão receber `T 1 3 12345678`; se o cliente tem 8 frases possíveis para truco, ele calcula 12345678 % 8 = 6 e exibe a frase de índice 6. Dessa forma, todos os clientes mostram a mesma frase (se estiverem com a mesma versão do [strings.xml](../app/src/main/res/values/strings.xml)) e o servidor não tem que saber quantas frases tem cada tipo de mensagem.
 
@@ -347,7 +348,7 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `X NO`: `É preciso atribuir um nome para entrar na sala
 - `X JE sala`: Você já está na sala de código `sala`
 - `N nome`: Seu nome foi definido como `nome`
-- `I <apelidos> <modo> <jogador>`: Info da sala. `<jogador>` é a posição do cliente.
+- `I <nomes> <modo> <jogador> <sala>`: Informações da sala (vide detalhes em "convenções")
 - `P <jogador>`: Início da partida
 - `M <carta> <carta> <carta> <carta>`: Início da mão. Suas cartas são as três primeiras. A última, se houver, é o vira.
 - `V <jogador> _`: vez da pessoa na posição indicada. _ = T se pode jogar fechada, false se não pode
