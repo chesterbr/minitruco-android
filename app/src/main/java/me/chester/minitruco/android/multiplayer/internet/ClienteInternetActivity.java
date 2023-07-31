@@ -142,6 +142,8 @@ public class ClienteInternetActivity extends SalaActivity {
                     String[] nomes = tokens[1].split(Pattern.quote("|"));
                     modo = tokens[2];
                     posJogador = Integer.parseInt(tokens[3]);
+
+                    ((TextView) findViewById(R.id.textViewStatus)).setText("Modo: " + Partida.textoModo(modo));
                     // Ajusta os nomes para que o jogador local fique sempre na
                     // parte inferior da tela (textViewJogador1)
                     int p = (posJogador - 1) % 4;
