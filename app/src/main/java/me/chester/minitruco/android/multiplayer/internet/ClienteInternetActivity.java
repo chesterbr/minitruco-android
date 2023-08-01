@@ -18,7 +18,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -137,51 +136,7 @@ public class ClienteInternetActivity extends SalaActivity {
                 enviaLinha("E PUB " + preferences.getString("modo", "P"));
                 break;
             case 'I': // Entrou numa sala (ou ela foi atualizada)
-                runOnUiThread(() -> {
-                    encerraTrucoActivity();
-                    if (partida != null) {
-                        partida.abandona(0);
-                        partida = null;
-                    }
-                    String[] tokens = line.split(" ");
-                    String[] nomes = tokens[1].split(Pattern.quote("|"));
-                    modo = tokens[2];
-                    posJogador = Integer.parseInt(tokens[3]);
-
-                    ((TextView) findViewById(R.id.textViewStatus)).setText("Modo: " + Partida.textoModo(modo));
-                    // Ajusta os nomes para que o jogador local fique sempre na
-                    // parte inferior da tela (textViewJogador1)
-                    int p = (posJogador - 1) % 4;
-                    ((TextView) findViewById(R.id.textViewJogador1)).setText(nomes[p]);
-                    p = (p + 1) % 4;
-                    ((TextView) findViewById(R.id.textViewJogador2)).setText(nomes[p]);
-                    p = (p + 1) % 4;
-                    ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[p]);
-                    p = (p + 1) % 4;
-                    ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
-
-                    findViewById(R.id.layoutIniciar).setVisibility(
-                        posJogador == 1 ? View.VISIBLE : View.GONE);
-
-                    boolean isGerente = posJogador == 1;
-                    if (Arrays.asList(nomes).contains("bot")) {
-                        setMensagem("Aguardando mesa completa ou gerente iniciar");
-                    } else {
-                        contagemRegressivaParaIniciar = true;
-                        new Thread(() -> {
-                            for (int i = 10; i > 0; i--) {
-                                setMensagem("Mesa completa. Auto-iniciando em " + i);
-                                sleep(1000);
-                                if (!contagemRegressivaParaIniciar) {
-                                    return;
-                                }
-                            }
-                            if (isGerente) {
-                                enviaLinha("Q");
-                            }
-                        }).start();
-                    }
-                });
+                exibeMesaForaDoJogo(line);
                 break;
             case 'X': // Erro tratável
                 switch(line) {
@@ -216,6 +171,76 @@ public class ClienteInternetActivity extends SalaActivity {
                             line.length() > 2 ? line.substring(2) : "");
                 }
         }
+    }
+
+    private void exibeMesaForaDoJogo(String line) {
+        runOnUiThread(() -> {
+            String[] tokens = line.split(" ");
+            String[] nomes = tokens[1].split(Pattern.quote("|"));
+            modo = tokens[2];
+            posJogador = Integer.parseInt(tokens[3]);
+            boolean isGerente = posJogador == 1;
+
+            // Volta pra mesa (se já não estiver nela)
+            encerraTrucoActivity();
+            if (partida != null) {
+                partida.abandona(0);
+                partida = null;
+            }
+
+            // Ajusta os nomes para que o jogador local fique sempre na
+            // parte inferior da tela (textViewJogador1)
+            int p = (posJogador - 1) % 4;
+            ((TextView) findViewById(R.id.textViewJogador1)).setText(nomes[p]);
+            p = (p + 1) % 4;
+            ((TextView) findViewById(R.id.textViewJogador2)).setText(nomes[p]);
+            p = (p + 1) % 4;
+            ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[p]);
+            p = (p + 1) % 4;
+            ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
+
+            // Atualiza outros itens do display
+            ((TextView) findViewById(R.id.textViewStatus)).setText("Modo: " + Partida.textoModo(modo));
+            findViewById(R.id.layoutIniciar).setVisibility(
+                isGerente ? View.VISIBLE : View.GONE);
+
+            int numJogadores = 4;
+            for (String nome : nomes) {
+                if (nome.equals("bot")) {
+                    numJogadores--;
+                }
+            }
+
+            // Tem que ter pelo menos um jogador para deixar o gerente iniciar
+            // TODO decidir se vai ser isso mesmo, ou se aguardamos a sala encher
+            findViewById(R.id.btnIniciar).setEnabled(numJogadores > 1);
+
+            switch (numJogadores) {
+                case 1:
+                    setMensagem("Aguardando outra pessoa entrar...");
+                    break;
+                case 2:
+                case 3:
+                    setMensagem("Aguardando mais pessoas...");
+                    break;
+                case 4:
+                    // Auto-inicia se a sala estiver cheia (dando um tempo para
+                    // o gerente organizar ou dar kick de jogadores)
+                    contagemRegressivaParaIniciar = true;
+                    new Thread(() -> {
+                        for (int i = 10; i > 0; i--) {
+                            setMensagem("Mesa completa. Auto-iniciando em " + i);
+                            sleep(1000);
+                            if (!contagemRegressivaParaIniciar) {
+                                return;
+                            }
+                        }
+                        if (isGerente) {
+                            enviaLinha("Q");
+                        }
+                    }).start();
+            }
+        });
     }
 
     private void desconecta() {
