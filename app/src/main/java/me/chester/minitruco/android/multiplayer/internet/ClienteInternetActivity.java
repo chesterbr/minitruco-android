@@ -45,6 +45,7 @@ public class ClienteInternetActivity extends SalaActivity {
     private String modo;
     private int posJogador;
     private boolean contagemRegressivaParaIniciar;
+    private int numJogadores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,18 @@ public class ClienteInternetActivity extends SalaActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.sala);
         findViewById(R.id.btnIniciar).setOnClickListener(v -> {
-            enviaLinha("Q");
+            if (numJogadores == 4) {
+                enviaLinha("Q");
+            } else {
+                new AlertDialog.Builder(this)
+                    .setTitle("Mesa não está cheia")
+                    .setMessage("Você prefere esperar mais gente, ou jogar com bots?")
+                    .setPositiveButton("Jogar", (dialog, which) -> {
+                        enviaLinha("Q");
+                    })
+                    .setNegativeButton("Esperar", null)
+                    .show();
+            }
         });
         findViewById(R.id.btnInverter).setOnClickListener(v -> {
             enviaLinha("R I");
@@ -204,7 +216,7 @@ public class ClienteInternetActivity extends SalaActivity {
             findViewById(R.id.layoutIniciar).setVisibility(
                 isGerente ? View.VISIBLE : View.GONE);
 
-            int numJogadores = 4;
+            numJogadores = 4;
             for (String nome : nomes) {
                 if (nome.equals("bot")) {
                     numJogadores--;
