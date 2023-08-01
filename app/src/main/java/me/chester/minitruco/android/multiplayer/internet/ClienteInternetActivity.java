@@ -211,9 +211,11 @@ public class ClienteInternetActivity extends SalaActivity {
                 }
             }
 
-            // Tem que ter pelo menos um jogador para deixar o gerente iniciar
-            // TODO decidir se vai ser isso mesmo, ou se aguardamos a sala encher
+            // Tem que ter pelo menos um jogador para deixar o gerente
+            // iniciar uma partida ou mexer no layout
             findViewById(R.id.btnIniciar).setEnabled(numJogadores > 1);
+            findViewById(R.id.btnInverter).setEnabled(numJogadores > 1);
+            findViewById(R.id.btnTrocar).setEnabled(numJogadores > 1);
 
             switch (numJogadores) {
                 case 1:
