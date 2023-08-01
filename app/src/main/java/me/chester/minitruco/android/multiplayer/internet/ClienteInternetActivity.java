@@ -54,7 +54,7 @@ public class ClienteInternetActivity extends SalaActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         setContentView(R.layout.sala);
-        findViewById(R.id.btnIniciarBluetooth).setOnClickListener(v -> {
+        findViewById(R.id.btnIniciar).setOnClickListener(v -> {
             enviaLinha("Q");
         });
         findViewById(R.id.btnInverter).setOnClickListener(v -> {

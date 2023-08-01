@@ -92,7 +92,7 @@ public abstract class BluetoothActivity extends SalaActivity implements
         CriadorDePartida.setActivitySala(this);
         setContentView(R.layout.sala);
         layoutIniciar = findViewById(R.id.layoutIniciar);
-        btnIniciar = findViewById(R.id.btnIniciarBluetooth);
+        btnIniciar = findViewById(R.id.btnIniciar);
         btnInverter = findViewById(R.id.btnInverter);
         btnTrocar = findViewById(R.id.btnTrocar);
         textViewStatus = findViewById(R.id.textViewStatus);
