@@ -3,7 +3,6 @@ package me.chester.minitruco.android.multiplayer.internet;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.preference.PreferenceManager;
@@ -32,15 +31,11 @@ public class ClienteInternetActivity extends SalaActivity {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteInternetActivity");
 
-    public EditText editNomeJogador;
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private SharedPreferences preferences;
 
-    private PartidaRemota partida;
-    private String modo;
-    private int posJogador;
     private boolean contagemRegressivaParaIniciar;
 
     @Override
