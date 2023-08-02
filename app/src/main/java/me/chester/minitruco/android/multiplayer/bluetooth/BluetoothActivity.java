@@ -6,9 +6,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,10 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import me.chester.minitruco.R;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.SalaActivity;
-import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -78,31 +73,13 @@ public abstract class BluetoothActivity extends SalaActivity implements
 
     protected BluetoothAdapter btAdapter;
     protected final String[] apelidos = new String[4];
-    protected String modo;
-    protected Button btnIniciar;
-    protected Button btnInverter;
-    protected Button btnTrocar;
-    protected View layoutIniciar;
-    private TextView textViewMensagem;
-    private TextView textViewStatus;
-    private TextView[] textViewsJogadores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CriadorDePartida.setActivitySala(this);
-        setContentView(R.layout.sala);
-        layoutIniciar = findViewById(R.id.layoutIniciar);
-        btnIniciar = findViewById(R.id.btnIniciarBluetooth);
-        btnInverter = findViewById(R.id.btnInverter);
-        btnTrocar = findViewById(R.id.btnTrocar);
-        textViewMensagem = findViewById(R.id.textViewMensagem);
-        textViewStatus = findViewById(R.id.textViewStatus);
-        textViewsJogadores = new TextView[4];
-        textViewsJogadores[0] = findViewById(R.id.textViewJogador1);
-        textViewsJogadores[1] = findViewById(R.id.textViewJogador2);
-        textViewsJogadores[2] = findViewById(R.id.textViewJogador3);
-        textViewsJogadores[3] = findViewById(R.id.textViewJogador4);
+        inicializaLayoutSala();
+
         btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         String[] permissoesFaltantes = permissoesBluetoothFaltantes();
@@ -159,31 +136,6 @@ public abstract class BluetoothActivity extends SalaActivity implements
      * através da chamada deste método
      */
     abstract void iniciaAtividadeBluetooth();
-
-    protected void atualizaDisplay() {
-        runOnUiThread(() -> {
-            for (int i = 0; i < 4; i++) {
-                textViewsJogadores[i].setText(apelidos[i]);
-            }
-            if (modo != null) {
-                textViewStatus.setText("Modo: " + Partida.textoModo(modo));
-            }
-            btnIniciar.setEnabled(getNumClientes() > 0);
-            btnInverter.setEnabled(getNumClientes() > 0);
-            btnTrocar.setEnabled(getNumClientes() > 0);
-        });
-    }
-
-    protected void setMensagem(String mensagem) {
-        runOnUiThread(() -> {
-            if (mensagem == null) {
-                textViewMensagem.setVisibility(View.GONE);
-            } else {
-                textViewMensagem.setVisibility(View.VISIBLE);
-                textViewMensagem.setText(mensagem);
-            }
-        });
-    }
 
     protected void msgErroFatal(String mensagem) {
         runOnUiThread(() -> {

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
@@ -65,7 +66,7 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
                 .getDefaultSharedPreferences(this);
         // TODO titulo poderia passar como extra do intent
         modo = preferences.getString("modo", "P");
-        layoutIniciar.setVisibility(View.VISIBLE);
+        layoutBotoesGerente.setVisibility(View.VISIBLE);
         btnIniciar.setOnClickListener(v -> {
             status = STATUS_EM_JOGO;
             iniciaTrucoActivitySePreciso();
@@ -223,11 +224,10 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         }
     }
 
-    @Override
     public void atualizaDisplay() {
         // Esse array é usado pelo display para mostrar os nomes dos jogadores
         // TODO: rever isso; de repente a gente deveria atualizar direto ou passar
-        //       ele?
+        //       ele, ainda mais agora que isso só é usado no servidorbluetooth
         apelidos[0] = Jogador.sanitizaNome(btAdapter.getName());
         for(int i = 1; i <= 3; i++) {
             if (jogadores[i - 1] != null) {
@@ -236,7 +236,20 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
                 apelidos[i] = APELIDO_BOT;
             }
         }
-        super.atualizaDisplay();
+        runOnUiThread(() -> {
+            textViewJogador1.setText(apelidos[0]);
+            textViewJogador2.setText(apelidos[1]);
+            textViewJogador3.setText(apelidos[2]);
+            textViewJogador4.setText(apelidos[3]);
+            if (modo != null) {
+                textViewStatus.setText("Modo: " + Partida.textoModo(modo));
+            }
+            btnIniciar.setEnabled(getNumClientes() > 0);
+            btnInverter.setEnabled(getNumClientes() > 0);
+            btnTrocar.setEnabled(getNumClientes() > 0);
+            findViewById(R.id.layoutJogadoresEBotoesGerente).setVisibility(View.VISIBLE);
+            layoutBotoesGerente.setVisibility(View.VISIBLE);
+        });
     }
 
     @Override

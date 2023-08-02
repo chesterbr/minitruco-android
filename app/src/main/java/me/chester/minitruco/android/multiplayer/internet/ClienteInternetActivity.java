@@ -3,9 +3,6 @@ package me.chester.minitruco.android.multiplayer.internet;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.preference.PreferenceManager;
@@ -20,7 +17,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
@@ -35,15 +31,12 @@ public class ClienteInternetActivity extends SalaActivity {
 
     private final static Logger LOGGER = Logger.getLogger("ClienteInternetActivity");
 
-    public EditText editNomeJogador;
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
     private SharedPreferences preferences;
 
-    private PartidaRemota partida;
-    private String modo;
-    private int posJogador;
+    private boolean contagemRegressivaParaIniciar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +44,9 @@ public class ClienteInternetActivity extends SalaActivity {
         CriadorDePartida.setActivitySala(this);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        setContentView(R.layout.sala);
-        findViewById(R.id.btnIniciarBluetooth).setOnClickListener(v -> {
-            enviaLinha("Q");
+        inicializaLayoutSala();
+        findViewById(R.id.btnIniciar).setOnClickListener(v -> {
+            solicitaInicioDeJogoConfirmandoSeTiverBots();
         });
         findViewById(R.id.btnInverter).setOnClickListener(v -> {
             enviaLinha("R I");
@@ -62,6 +55,25 @@ public class ClienteInternetActivity extends SalaActivity {
             enviaLinha("R T");
         });
 
+        iniciaProcessamentoDeNotificacoes();
+    }
+
+    private void solicitaInicioDeJogoConfirmandoSeTiverBots() {
+        if (numJogadores == 4) {
+            enviaLinha("Q");
+        } else {
+            new AlertDialog.Builder(this)
+                .setTitle("Mesa não está cheia")
+                .setMessage("Você prefere esperar mais gente, ou jogar com bots?")
+                .setPositiveButton("Jogar", (dialog, which) -> {
+                    enviaLinha("Q");
+                })
+                .setNegativeButton("Esperar", null)
+                .show();
+        }
+    }
+
+    private void iniciaProcessamentoDeNotificacoes() {
         new Thread(() -> {
             try {
                 if (conecta()) {
@@ -124,6 +136,9 @@ public class ClienteInternetActivity extends SalaActivity {
         if (!line.startsWith("K ")) {
             // Não loga o keepalive (evita poluir o log)
             LOGGER.log(Level.INFO, "recebeu: " + line);
+            // Qualquer outra notificação cancela a contagem regressiva
+            contagemRegressivaParaIniciar = false;
+            setMensagem(null);
         }
         switch (line.charAt(0)) {
             case 'N': // Nome foi aceito
@@ -131,32 +146,9 @@ public class ClienteInternetActivity extends SalaActivity {
                 // fazer outra coisa, ela usa o botão apropriado)
                 enviaLinha("E PUB " + preferences.getString("modo", "P"));
                 break;
-            case 'I': // Entrou numa sala (ou ela foi atualizada)
-                runOnUiThread(() -> {
-                    encerraTrucoActivity();
-                    if (partida != null) {
-                        partida.abandona(0);
-                        partida = null;
-                    }
-                    String[] tokens = line.split(" ");
-                    String[] nomes = tokens[1].split(Pattern.quote("|"));
-                    modo = tokens[2];
-                    posJogador = Integer.parseInt(tokens[3]);
-
-                    ((TextView) findViewById(R.id.textViewStatus)).setText("Modo: " + Partida.textoModo(modo));
-                    // Ajusta os nomes para que o jogador local fique sempre na
-                    // parte inferior da tela (textViewJogador1)
-                    int p = (posJogador - 1) % 4;
-                    ((TextView) findViewById(R.id.textViewJogador1)).setText(nomes[p]);
-                    p = (p + 1) % 4;
-                    ((TextView) findViewById(R.id.textViewJogador2)).setText(nomes[p]);
-                    p = (p + 1) % 4;
-                    ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[p]);
-                    p = (p + 1) % 4;
-                    ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
-                    findViewById(R.id.layoutIniciar).setVisibility(
-                        posJogador == 1 ? View.VISIBLE : View.GONE);
-                });
+            case 'I': // Entrou/voltou para uma sala (ou ela foi atualizada)
+                exibeMesaForaDoJogo(line);
+                atualizaStatusEContagemRegressiva();
                 break;
             case 'X': // Erro tratável
                 switch(line) {
@@ -191,6 +183,45 @@ public class ClienteInternetActivity extends SalaActivity {
                             line.length() > 2 ? line.substring(2) : "");
                 }
         }
+    }
+
+    /**
+     * Se a mesa estiver cheia, inicia contagem regressiva para auto-início
+     * do jogo.
+     * <p>
+     * Observe que qualquer notificação (exceto o de keepalive) cancela a
+     * contagem, e isso é feito no loop de processamento de notificações.
+     * <p>
+     * Em qualquer caso, garante que a mensagem de status reflita a situação.
+     */
+    private void atualizaStatusEContagemRegressiva() {
+        runOnUiThread(() -> {
+            switch (numJogadores) {
+                case 1:
+                    setMensagem("Aguardando outra pessoa entrar");
+                    break;
+                case 2:
+                case 3:
+                    setMensagem("Aguardando mais pessoas");
+                    break;
+                case 4:
+                    // Auto-inicia se a sala estiver cheia (dando um tempo para
+                    // o gerente organizar ou dar kick de jogadores)
+                    contagemRegressivaParaIniciar = true;
+                    new Thread(() -> {
+                        for (int i = 10; i > 0; i--) {
+                            setMensagem("Mesa completa. Auto-iniciando em " + i);
+                            sleep(1000);
+                            if (!contagemRegressivaParaIniciar) {
+                                return;
+                            }
+                        }
+                        if (isGerente) {
+                            enviaLinha("Q");
+                        }
+                    }).start();
+            }
+        });
     }
 
     private void desconecta() {
