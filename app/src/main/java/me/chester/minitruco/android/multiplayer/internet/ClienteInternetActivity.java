@@ -51,18 +51,7 @@ public class ClienteInternetActivity extends SalaActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         inicializaLayoutSala();
         findViewById(R.id.btnIniciar).setOnClickListener(v -> {
-            if (numJogadores == 4) {
-                enviaLinha("Q");
-            } else {
-                new AlertDialog.Builder(this)
-                    .setTitle("Mesa não está cheia")
-                    .setMessage("Você prefere esperar mais gente, ou jogar com bots?")
-                    .setPositiveButton("Jogar", (dialog, which) -> {
-                        enviaLinha("Q");
-                    })
-                    .setNegativeButton("Esperar", null)
-                    .show();
-            }
+            solicitaInicioDeJogoConfirmandoSeTiverBots();
         });
         findViewById(R.id.btnInverter).setOnClickListener(v -> {
             enviaLinha("R I");
@@ -71,6 +60,25 @@ public class ClienteInternetActivity extends SalaActivity {
             enviaLinha("R T");
         });
 
+        iniciaProcessamentoDeNotificacoes();
+    }
+
+    private void solicitaInicioDeJogoConfirmandoSeTiverBots() {
+        if (numJogadores == 4) {
+            enviaLinha("Q");
+        } else {
+            new AlertDialog.Builder(this)
+                .setTitle("Mesa não está cheia")
+                .setMessage("Você prefere esperar mais gente, ou jogar com bots?")
+                .setPositiveButton("Jogar", (dialog, which) -> {
+                    enviaLinha("Q");
+                })
+                .setNegativeButton("Esperar", null)
+                .show();
+        }
+    }
+
+    private void iniciaProcessamentoDeNotificacoes() {
         new Thread(() -> {
             try {
                 if (conecta()) {
