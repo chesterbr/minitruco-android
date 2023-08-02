@@ -33,10 +33,14 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected Button btnTrocar;
     protected Button btnNovaSala;
     protected Button btnEntrarSala;
+    private View layoutJogadoresEBotoesGerente;
     protected View layoutBotoesGerente;
     protected View layoutBotoesSala;
     protected TextView textViewStatus;
-    protected TextView[] textViewsJogadores;
+    protected TextView textViewJogador1;
+    protected TextView textViewJogador2;
+    protected TextView textViewJogador3;
+    protected TextView textViewJogador4;
     protected TextView textViewTituloSala;
     protected TextView textViewInfoSala;
     protected int posJogador;
@@ -51,28 +55,26 @@ public abstract class SalaActivity extends AppCompatActivity {
      */
     protected void inicializaLayoutSala() {
         setContentView(R.layout.sala);
-        layoutBotoesGerente = findViewById(R.id.layoutBotoesGerente);
         btnIniciar = findViewById(R.id.btnIniciar);
         btnInverter = findViewById(R.id.btnInverter);
         btnTrocar = findViewById(R.id.btnTrocar);
+        layoutJogadoresEBotoesGerente = findViewById(R.id.layoutJogadoresEBotoesGerente);
+        layoutBotoesGerente = findViewById(R.id.layoutBotoesGerente);
         layoutBotoesSala = findViewById(R.id.layoutBotoesSala);
         btnNovaSala = findViewById(R.id.btnNovaSala);
         btnEntrarSala = findViewById(R.id.btnEntrarSala);
         textViewStatus = findViewById(R.id.textViewStatus);
         textViewTituloSala = findViewById(R.id.textViewTituloSala);
         textViewInfoSala = findViewById(R.id.textViewInfoSala);
-        textViewsJogadores = new TextView[4];
-        textViewsJogadores[0] = findViewById(R.id.textViewJogador1);
-        textViewsJogadores[1] = findViewById(R.id.textViewJogador2);
-        textViewsJogadores[2] = findViewById(R.id.textViewJogador3);
-        textViewsJogadores[3] = findViewById(R.id.textViewJogador4);
+        textViewJogador1 = findViewById(R.id.textViewJogador1);
+        textViewJogador2 = findViewById(R.id.textViewJogador2);
+        textViewJogador3 = findViewById(R.id.textViewJogador3);
+        textViewJogador4 = findViewById(R.id.textViewJogador4);
+        layoutJogadoresEBotoesGerente.setVisibility(View.GONE);
         layoutBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesSala.setVisibility(View.GONE);
         textViewStatus.setVisibility(View.GONE);
         textViewInfoSala.setVisibility(View.GONE);
-        for (TextView tv : textViewsJogadores) {
-            tv.setText("");
-        }
         setMensagem(null);
     }
 
@@ -117,24 +119,22 @@ public abstract class SalaActivity extends AppCompatActivity {
             // Ajusta os nomes para que o jogador local fique sempre na
             // parte inferior da tela (textViewJogador1)
             int p = (posJogador - 1) % 4;
-            ((TextView) findViewById(R.id.textViewJogador1)).setText(nomes[p]);
+            textViewJogador1.setText(nomes[p]);
             p = (p + 1) % 4;
-            ((TextView) findViewById(R.id.textViewJogador2)).setText(nomes[p]);
+            textViewJogador2.setText(nomes[p]);
             p = (p + 1) % 4;
-            ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[p]);
+            textViewJogador3.setText(nomes[p]);
             p = (p + 1) % 4;
-            ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
+            textViewJogador4.setText(nomes[p]);
 
             // Atualiza outros itens do display
-            ((TextView) findViewById(R.id.textViewStatus)).setText("Modo: " + Partida.textoModo(modo));
+            layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
             findViewById(R.id.layoutBotoesGerente).setVisibility(
                 isGerente ? View.VISIBLE : View.INVISIBLE);
-            if (!isGerente) {
-                if (numJogadores < 4) {
-                    setMensagem("Aguardando mais pessoas ou gerente iniciar partida");
-                } else {
-                    setMensagem("Aguardando gerente iniciar partida");
-                }
+            if (isGerente) {
+                btnIniciar.setEnabled(numJogadores > 1);
+                btnInverter.setEnabled(numJogadores > 1);
+                btnTrocar.setEnabled(numJogadores > 1);
             }
             switch (tipoSala) {
                 case "PUB":
@@ -147,13 +147,12 @@ public abstract class SalaActivity extends AppCompatActivity {
                     textViewTituloSala.setText("Bluetooth");
                     break;
             }
-
-            // Tem que ter pelo menos um jogador para deixar o gerente
-            // iniciar uma partida ou mexer no layout (se não for gerente,
-            // o layout que contém esses botões estará escondido)
-            btnIniciar.setEnabled(numJogadores > 1);
-            btnInverter.setEnabled(numJogadores > 1);
-            btnTrocar.setEnabled(numJogadores > 1);
+            textViewStatus.setText("Modo: " + Partida.textoModo(modo));
+            if (numJogadores < 4) {
+                setMensagem("Aguardando mais pessoas ou gerente iniciar partida");
+            } else {
+                setMensagem("Aguardando gerente iniciar partida");
+            }
         });
     }
 

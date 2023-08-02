@@ -236,9 +236,10 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
             }
         }
         runOnUiThread(() -> {
-            for (int i = 0; i < 4; i++) {
-                textViewsJogadores[i].setText(apelidos[i]);
-            }
+            textViewJogador1.setText(apelidos[0]);
+            textViewJogador2.setText(apelidos[1]);
+            textViewJogador3.setText(apelidos[2]);
+            textViewJogador4.setText(apelidos[3]);
             if (modo != null) {
                 textViewStatus.setText("Modo: " + Partida.textoModo(modo));
             }
