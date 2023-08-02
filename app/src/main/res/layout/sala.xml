@@ -1,39 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#1B8E3C"
     android:gravity="center"
     android:orientation="vertical"
     tools:ignore="HardcodedText,RtlHardcoded,NestedWeights">
 
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:gravity="center">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:background="@drawable/borda_sala"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#FFB37447"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:paddingBottom="2dp"
+            android:text="Bluetooth"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/layoutJogadores"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|top"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textViewJogador3"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal|top"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|bottom"
+                android:text="Posição_3"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 android:textStyle="bold" />
+
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
@@ -42,9 +57,39 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"
+                    android:paddingHorizontal="2dp"
+                    android:text="Posição_4"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#000000"
+                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/layoutBotoesGerente"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnTrocar"
+                        android:layout_width="170dp"
+                        android:layout_height="wrap_content"
+                        android:text="\u2191 Trocar Parceiro(a)" />
+
+                    <Button
+                        android:id="@+id/btnInverter"
+                        android:layout_width="170dp"
+                        android:layout_height="wrap_content"
+                        android:text="\u2190 Inverter Dupla \u2192" />
+
+                    <Button
+                        android:id="@+id/btnIniciar"
+                        android:layout_width="170dp"
+                        android:layout_height="wrap_content"
+                        android:focusedByDefault="true"
+                        android:text="💬\u00A0JOGAR"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/textViewJogador2"
@@ -52,70 +97,91 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
+                    android:paddingHorizontal="2dp"
+                    android:text="Posição_2"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#000000"
+                    android:textColor="#FFFFFF"
                     android:textStyle="bold" />
             </LinearLayout>
+
 
             <TextView
                 android:id="@+id/textViewJogador1"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center_horizontal|bottom"
+                android:gravity="center_horizontal|top"
+                android:paddingBottom="4dp"
+                android:text="Posição_1 (você)"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <TextView
-                android:id="@+id/textViewMensagem"
-                android:layout_width="200sp"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/borda_dialogo"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="mensagem"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:visibility="gone" />
-        </RelativeLayout>
-    </FrameLayout>
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutIniciar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnTrocar"
-            android:layout_width="220dp"
+        <TextView
+            android:id="@+id/textViewMensagem"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trocar Parceiro" />
+            android:layout_centerInParent="true"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/borda_dialogo"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="6dp"
+            android:text="mensagem que vai ocupar duas linhas"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewInfoSala"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:autoSizeMaxTextSize="100dp"
+        android:autoSizeTextType="uniform"
+        android:background="@drawable/borda_modo"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Código: 123456\nGerente: joselito"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:id="@+id/layoutBotoesSala"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
 
         <Button
-            android:id="@+id/btnInverter"
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:text="Inverter Adversários" />
-
-        <Button
-            android:id="@+id/btnIniciar"
-            android:layout_width="220dp"
+            android:id="@+id/btnNovaSala"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusedByDefault="true"
-            android:textStyle="bold"
-            android:text="Jogar" />
+            android:text="Trocar de Sala"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnEntrarSala"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusedByDefault="true"
+            android:text="Entrar com Código"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
     <LinearLayout

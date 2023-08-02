@@ -65,7 +65,7 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
                 .getDefaultSharedPreferences(this);
         // TODO titulo poderia passar como extra do intent
         modo = preferences.getString("modo", "P");
-        layoutIniciar.setVisibility(View.VISIBLE);
+        layoutBotoesGerente.setVisibility(View.VISIBLE);
         btnIniciar.setOnClickListener(v -> {
             status = STATUS_EM_JOGO;
             iniciaTrucoActivitySePreciso();

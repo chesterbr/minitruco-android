@@ -213,7 +213,7 @@ public class ClienteInternetActivity extends SalaActivity {
 
             // Atualiza outros itens do display
             ((TextView) findViewById(R.id.textViewStatus)).setText("Modo: " + Partida.textoModo(modo));
-            findViewById(R.id.layoutIniciar).setVisibility(
+            findViewById(R.id.layoutBotoesGerente).setVisibility(
                 isGerente ? View.VISIBLE : View.GONE);
 
             numJogadores = 4;

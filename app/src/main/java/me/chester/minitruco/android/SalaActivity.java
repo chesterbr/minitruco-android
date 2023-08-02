@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,47 @@ import me.chester.minitruco.core.Partida;
  * essa lógica).
  */
 public abstract class SalaActivity extends AppCompatActivity {
+
+    protected Button btnIniciar;
+    protected Button btnInverter;
+    protected Button btnTrocar;
+    protected Button btnNovaSala;
+    protected Button btnEntrarSala;
+    protected View layoutBotoesGerente;
+    protected View layoutBotoesSala;
+    protected TextView textViewStatus;
+    protected TextView[] textViewsJogadores;
+    protected TextView textViewInfoSala;
+
+    /**
+     * Em salas multiplayer (que de fato mostram uma "sala" com os nomes dos
+     * jogadores, etc.), ativa e inicializa o layout com esses elementos.
+     */
+    protected void inicializaLayoutSala() {
+        setContentView(R.layout.sala);
+        layoutBotoesGerente = findViewById(R.id.layoutBotoesGerente);
+        btnIniciar = findViewById(R.id.btnIniciar);
+        btnInverter = findViewById(R.id.btnInverter);
+        btnTrocar = findViewById(R.id.btnTrocar);
+        layoutBotoesSala = findViewById(R.id.layoutBotoesSala);
+        btnNovaSala = findViewById(R.id.btnNovaSala);
+        btnEntrarSala = findViewById(R.id.btnEntrarSala);
+        textViewStatus = findViewById(R.id.textViewStatus);
+        textViewInfoSala = findViewById(R.id.textViewInfoSala);
+        textViewsJogadores = new TextView[4];
+        textViewsJogadores[0] = findViewById(R.id.textViewJogador1);
+        textViewsJogadores[1] = findViewById(R.id.textViewJogador2);
+        textViewsJogadores[2] = findViewById(R.id.textViewJogador3);
+        textViewsJogadores[3] = findViewById(R.id.textViewJogador4);
+        layoutBotoesGerente.setVisibility(View.INVISIBLE);
+        layoutBotoesSala.setVisibility(View.GONE);
+        textViewStatus.setVisibility(View.GONE);
+        textViewInfoSala.setVisibility(View.GONE);
+        for (TextView tv : textViewsJogadores) {
+            tv.setText("");
+        }
+        setMensagem(null);
+    }
 
     protected void mostraAlertBox(String titulo, String texto) {
         runOnUiThread(() -> {
