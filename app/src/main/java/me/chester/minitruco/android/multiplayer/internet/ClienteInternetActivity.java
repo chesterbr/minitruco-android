@@ -49,7 +49,7 @@ public class ClienteInternetActivity extends SalaActivity {
         CriadorDePartida.setActivitySala(this);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        setContentView(R.layout.sala);
+        inicializaLayoutSala();
         findViewById(R.id.btnIniciar).setOnClickListener(v -> {
             if (numJogadores == 4) {
                 enviaLinha("Q");

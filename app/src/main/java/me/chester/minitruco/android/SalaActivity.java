@@ -37,6 +37,7 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected View layoutBotoesSala;
     protected TextView textViewStatus;
     protected TextView[] textViewsJogadores;
+    protected TextView textViewTituloSala;
     protected TextView textViewInfoSala;
     protected int posJogador;
     protected String modo;
@@ -58,6 +59,7 @@ public abstract class SalaActivity extends AppCompatActivity {
         btnNovaSala = findViewById(R.id.btnNovaSala);
         btnEntrarSala = findViewById(R.id.btnEntrarSala);
         textViewStatus = findViewById(R.id.textViewStatus);
+        textViewTituloSala = findViewById(R.id.textViewTituloSala);
         textViewInfoSala = findViewById(R.id.textViewInfoSala);
         textViewsJogadores = new TextView[4];
         textViewsJogadores[0] = findViewById(R.id.textViewJogador1);
@@ -84,11 +86,18 @@ public abstract class SalaActivity extends AppCompatActivity {
      */
     protected void exibeMesaForaDoJogo(String notificacaoI) {
         runOnUiThread(() -> {
+            // Decodifica a notificação, guardando os dados relevantes
             String[] tokens = notificacaoI.split(" ");
             String[] nomes = tokens[1].split(Pattern.quote("|"));
             modo = tokens[2];
             posJogador = Integer.parseInt(tokens[3]);
             isGerente = posJogador == 1;
+            String tipoSala = tokens[4];
+            String codigo = null;
+            if (tipoSala.startsWith("PRI-")) {
+                tipoSala = "PRI";
+                codigo = tipoSala.substring(4);
+            }
 
             // Volta pra mesa (se já não estiver nela)
             encerraTrucoActivity();
@@ -126,6 +135,17 @@ public abstract class SalaActivity extends AppCompatActivity {
                 } else {
                     setMensagem("Aguardando gerente iniciar partida");
                 }
+            }
+            switch (tipoSala) {
+                case "PUB":
+                    textViewTituloSala.setText("Sala Pública");
+                    break;
+                case "PRI":
+                    textViewTituloSala.setText("Sala Privada");
+                    break;
+                case "BLT":
+                    textViewTituloSala.setText("Bluetooth");
+                    break;
             }
 
             // Tem que ter pelo menos um jogador para deixar o gerente
