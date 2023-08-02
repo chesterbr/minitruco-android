@@ -135,6 +135,12 @@ public class JogadorConectado extends Jogador implements Runnable {
     private void iniciaThreadAuxiliar() {
         Thread threadPrincipal = Thread.currentThread();
         threadMonitorDeConexao = new Thread(() -> {
+            ServerLogger.evento(this, "Aguardando para iniciar monitor de conexão");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             ServerLogger.evento(this, "Iniciando monitor de conexão");
             boolean avisouQueVaiDesconectarNoFimDaPartida = false;
             while (true) {
