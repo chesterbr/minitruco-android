@@ -223,11 +223,10 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         }
     }
 
-    @Override
     public void atualizaDisplay() {
         // Esse array é usado pelo display para mostrar os nomes dos jogadores
         // TODO: rever isso; de repente a gente deveria atualizar direto ou passar
-        //       ele?
+        //       ele, ainda mais agora que isso só é usado no servidorbluetooth
         apelidos[0] = Jogador.sanitizaNome(btAdapter.getName());
         for(int i = 1; i <= 3; i++) {
             if (jogadores[i - 1] != null) {
@@ -236,7 +235,17 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
                 apelidos[i] = APELIDO_BOT;
             }
         }
-        super.atualizaDisplay();
+        runOnUiThread(() -> {
+            for (int i = 0; i < 4; i++) {
+                textViewsJogadores[i].setText(apelidos[i]);
+            }
+            if (modo != null) {
+                textViewStatus.setText("Modo: " + Partida.textoModo(modo));
+            }
+            btnIniciar.setEnabled(getNumClientes() > 0);
+            btnInverter.setEnabled(getNumClientes() > 0);
+            btnTrocar.setEnabled(getNumClientes() > 0);
+        });
     }
 
     @Override

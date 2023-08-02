@@ -3,9 +3,7 @@ package me.chester.minitruco.android.multiplayer.internet;
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.preference.PreferenceManager;
@@ -20,7 +18,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.R;
@@ -45,7 +42,6 @@ public class ClienteInternetActivity extends SalaActivity {
     private String modo;
     private int posJogador;
     private boolean contagemRegressivaParaIniciar;
-    private int numJogadores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,8 +143,9 @@ public class ClienteInternetActivity extends SalaActivity {
                 // fazer outra coisa, ela usa o botão apropriado)
                 enviaLinha("E PUB " + preferences.getString("modo", "P"));
                 break;
-            case 'I': // Entrou numa sala (ou ela foi atualizada)
+            case 'I': // Entrou/voltou para uma sala (ou ela foi atualizada)
                 exibeMesaForaDoJogo(line);
+                atualizaStatusEContagemRegressiva();
                 break;
             case 'X': // Erro tratável
                 switch(line) {
@@ -185,50 +182,17 @@ public class ClienteInternetActivity extends SalaActivity {
         }
     }
 
-    private void exibeMesaForaDoJogo(String line) {
+    /**
+     * Se a mesa estiver cheia, inicia contagem regressiva para auto-início
+     * do jogo.
+     * <p>
+     * Observe que qualquer notificação (exceto o de keepalive) cancela a
+     * contagem, e isso é feito no loop de processamento de notificações.
+     * <p>
+     * Em qualquer caso, garante que a mensagem de status reflita a situação.
+     */
+    private void atualizaStatusEContagemRegressiva() {
         runOnUiThread(() -> {
-            String[] tokens = line.split(" ");
-            String[] nomes = tokens[1].split(Pattern.quote("|"));
-            modo = tokens[2];
-            posJogador = Integer.parseInt(tokens[3]);
-            boolean isGerente = posJogador == 1;
-
-            // Volta pra mesa (se já não estiver nela)
-            encerraTrucoActivity();
-            if (partida != null) {
-                partida.abandona(0);
-                partida = null;
-            }
-
-            // Ajusta os nomes para que o jogador local fique sempre na
-            // parte inferior da tela (textViewJogador1)
-            int p = (posJogador - 1) % 4;
-            ((TextView) findViewById(R.id.textViewJogador1)).setText(nomes[p]);
-            p = (p + 1) % 4;
-            ((TextView) findViewById(R.id.textViewJogador2)).setText(nomes[p]);
-            p = (p + 1) % 4;
-            ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[p]);
-            p = (p + 1) % 4;
-            ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
-
-            // Atualiza outros itens do display
-            ((TextView) findViewById(R.id.textViewStatus)).setText("Modo: " + Partida.textoModo(modo));
-            findViewById(R.id.layoutBotoesGerente).setVisibility(
-                isGerente ? View.VISIBLE : View.GONE);
-
-            numJogadores = 4;
-            for (String nome : nomes) {
-                if (nome.equals("bot")) {
-                    numJogadores--;
-                }
-            }
-
-            // Tem que ter pelo menos um jogador para deixar o gerente
-            // iniciar uma partida ou mexer no layout
-            findViewById(R.id.btnIniciar).setEnabled(numJogadores > 1);
-            findViewById(R.id.btnInverter).setEnabled(numJogadores > 1);
-            findViewById(R.id.btnTrocar).setEnabled(numJogadores > 1);
-
             switch (numJogadores) {
                 case 1:
                     setMensagem("Aguardando outra pessoa entrar...");

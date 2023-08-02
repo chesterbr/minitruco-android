@@ -9,7 +9,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.regex.Pattern;
+
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.multiplayer.PartidaRemota;
 import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -35,6 +38,11 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected TextView textViewStatus;
     protected TextView[] textViewsJogadores;
     protected TextView textViewInfoSala;
+    protected int posJogador;
+    protected String modo;
+    protected PartidaRemota partida;
+    protected int numJogadores;
+    protected boolean isGerente;
 
     /**
      * Em salas multiplayer (que de fato mostram uma "sala" com os nomes dos
@@ -64,6 +72,63 @@ public abstract class SalaActivity extends AppCompatActivity {
             tv.setText("");
         }
         setMensagem(null);
+    }
+
+    /**
+     * Atualiza a sala com as informações recebidas do servidor.
+     * <p>
+     * Se houver partida em andamento, ela é encerrda (junto com a activity
+     * de jogo).
+     *
+     * @param notificacaoI notificação recebida do servidor com as infos da sala.
+     */
+    protected void exibeMesaForaDoJogo(String notificacaoI) {
+        runOnUiThread(() -> {
+            String[] tokens = notificacaoI.split(" ");
+            String[] nomes = tokens[1].split(Pattern.quote("|"));
+            modo = tokens[2];
+            posJogador = Integer.parseInt(tokens[3]);
+            isGerente = posJogador == 1;
+
+            // Volta pra mesa (se já não estiver nela)
+            encerraTrucoActivity();
+            if (partida != null) {
+                partida.abandona(0);
+                partida = null;
+            }
+
+            // "bot" é um nome especial, que indica que o jogador é um bot
+            numJogadores = 4;
+            for (String nome : nomes) {
+                if (nome.equals("bot")) {
+                    numJogadores--;
+                }
+            }
+
+            // Ajusta os nomes para que o jogador local fique sempre na
+            // parte inferior da tela (textViewJogador1)
+            int p = (posJogador - 1) % 4;
+            ((TextView) findViewById(R.id.textViewJogador1)).setText(nomes[p]);
+            p = (p + 1) % 4;
+            ((TextView) findViewById(R.id.textViewJogador2)).setText(nomes[p]);
+            p = (p + 1) % 4;
+            ((TextView) findViewById(R.id.textViewJogador3)).setText(nomes[p]);
+            p = (p + 1) % 4;
+            ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
+
+
+            // Atualiza outros itens do display
+            ((TextView) findViewById(R.id.textViewStatus)).setText("Modo: " + Partida.textoModo(modo));
+            findViewById(R.id.layoutBotoesGerente).setVisibility(
+                isGerente ? View.VISIBLE : View.INVISIBLE);
+
+            // Tem que ter pelo menos um jogador para deixar o gerente
+            // iniciar uma partida ou mexer no layout (se não for gerente,
+            // o layout que contém esses botões estará escondido)
+            btnIniciar.setEnabled(numJogadores > 1);
+            btnInverter.setEnabled(numJogadores > 1);
+            btnTrocar.setEnabled(numJogadores > 1);
+        });
     }
 
     protected void mostraAlertBox(String titulo, String texto) {

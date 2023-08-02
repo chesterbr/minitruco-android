@@ -39,11 +39,9 @@ public class ClienteBluetoothActivity extends BluetoothActivity implements
 
     private Thread threadConexao;
     private Thread threadMonitoraConexao;
-    private PartidaRemota partida;
     private BluetoothSocket socket = null;
     private InputStream in;
     private OutputStream out;
-    private int posJogador;
 
     @Override
     void iniciaAtividadeBluetooth() {
@@ -81,7 +79,6 @@ public class ClienteBluetoothActivity extends BluetoothActivity implements
         if (!conectaNoServidor()) {
             return;
         }
-        atualizaDisplay();
 
         if (socket == null) {
             msgErroFatal("Jogo não encontrado. Veja se o seu aparelho está pareado/autorizado com o que criou o jogo e tente novamente.");
@@ -103,10 +100,11 @@ public class ClienteBluetoothActivity extends BluetoothActivity implements
                     if (sbLinha.length() > 0) {
                         LOGGER.log(Level.INFO, "Recebeu:" + sbLinha);
                         char tipoNotificacao = sbLinha.charAt(0);
+                        String notificacao = sbLinha.toString();
                         String parametros = sbLinha.delete(0, 2).toString();
                         switch (tipoNotificacao) {
                         case 'I':
-                            exibeMesaForaDoJogo(parametros);
+                            exibeMesaForaDoJogo(notificacao);
                             break;
                         case 'P':
                             iniciaTrucoActivitySePreciso();
@@ -156,28 +154,6 @@ public class ClienteBluetoothActivity extends BluetoothActivity implements
                 }
             };
             threadMonitoraConexao.start();
-        }
-    }
-
-    private void exibeMesaForaDoJogo(String parametros) {
-        encerraTrucoActivity();
-        if (partida != null) {
-            partida.abandona(0);
-            partida = null;
-        }
-        // Exibe as informações recebidas fora do jogo
-        String[] tokens = parametros.split(" ");
-        String apelidos[] = tokens[0].split("\\|");
-        modo = tokens[1];
-        posJogador = Integer.parseInt(tokens[2]);
-        encaixaApelidosNaMesa(apelidos);
-        LOGGER.log(Level.INFO, "posJogador=" + posJogador);
-        atualizaDisplay();
-    }
-
-    private void encaixaApelidosNaMesa(String[] apelidosOriginais) {
-        for (int n = 1; n <= 4; n++) {
-            apelidos[getPosicaoMesa(n) - 1] = apelidosOriginais[n - 1];
         }
     }
 

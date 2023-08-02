@@ -18,7 +18,6 @@ import java.util.UUID;
 
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.SalaActivity;
-import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
@@ -74,7 +73,6 @@ public abstract class BluetoothActivity extends SalaActivity implements
 
     protected BluetoothAdapter btAdapter;
     protected final String[] apelidos = new String[4];
-    protected String modo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,20 +136,6 @@ public abstract class BluetoothActivity extends SalaActivity implements
      * através da chamada deste método
      */
     abstract void iniciaAtividadeBluetooth();
-
-    protected void atualizaDisplay() {
-        runOnUiThread(() -> {
-            for (int i = 0; i < 4; i++) {
-                textViewsJogadores[i].setText(apelidos[i]);
-            }
-            if (modo != null) {
-                textViewStatus.setText("Modo: " + Partida.textoModo(modo));
-            }
-            btnIniciar.setEnabled(getNumClientes() > 0);
-            btnInverter.setEnabled(getNumClientes() > 0);
-            btnTrocar.setEnabled(getNumClientes() > 0);
-        });
-    }
 
     protected void msgErroFatal(String mensagem) {
         runOnUiThread(() -> {
