@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
@@ -246,6 +247,8 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
             btnIniciar.setEnabled(getNumClientes() > 0);
             btnInverter.setEnabled(getNumClientes() > 0);
             btnTrocar.setEnabled(getNumClientes() > 0);
+            findViewById(R.id.layoutJogadoresEBotoesGerente).setVisibility(View.VISIBLE);
+            layoutBotoesGerente.setVisibility(View.VISIBLE);
         });
     }
 
