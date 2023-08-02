@@ -195,11 +195,11 @@ public class ClienteInternetActivity extends SalaActivity {
         runOnUiThread(() -> {
             switch (numJogadores) {
                 case 1:
-                    setMensagem("Aguardando outra pessoa entrar...");
+                    setMensagem("Aguardando outra pessoa entrar");
                     break;
                 case 2:
                 case 3:
-                    setMensagem("Aguardando mais pessoas...");
+                    setMensagem("Aguardando mais pessoas");
                     break;
                 case 4:
                     // Auto-inicia se a sala estiver cheia (dando um tempo para

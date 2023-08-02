@@ -116,11 +116,17 @@ public abstract class SalaActivity extends AppCompatActivity {
             p = (p + 1) % 4;
             ((TextView) findViewById(R.id.textViewJogador4)).setText(nomes[p]);
 
-
             // Atualiza outros itens do display
             ((TextView) findViewById(R.id.textViewStatus)).setText("Modo: " + Partida.textoModo(modo));
             findViewById(R.id.layoutBotoesGerente).setVisibility(
                 isGerente ? View.VISIBLE : View.INVISIBLE);
+            if (!isGerente) {
+                if (numJogadores < 4) {
+                    setMensagem("Aguardando mais pessoas ou gerente iniciar partida");
+                } else {
+                    setMensagem("Aguardando gerente iniciar partida");
+                }
+            }
 
             // Tem que ter pelo menos um jogador para deixar o gerente
             // iniciar uma partida ou mexer no layout (se não for gerente,
