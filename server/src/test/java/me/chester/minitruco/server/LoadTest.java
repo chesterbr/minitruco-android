@@ -7,16 +7,25 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.HashSet;
+import java.util.Set;
 
 public class LoadTest {
-    public static void main(String[] args) {
-        String host = "localhost";
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("iniciando LoadTest");
         int porta = 6912;
 
-        int numConexoes = 4096;
+        if (args.length != 2) {
+            System.out.println("passe o servidor e o # de conexões");
+            return;
+        }
+        String host = args[0];
+        int numConexoes = Integer.parseInt(args[1]);
+        Set<Thread> threads = new HashSet<>();
 
         for (int i = 0; i < numConexoes; i++) {
-            new Thread(() -> {
+            Thread.sleep(1);
+            threads.add(Thread.ofVirtual().start(() -> {
                 try {
                     Socket socket = new Socket(host, porta);
                     System.out.println("Conectado " + host + ":" + porta);
@@ -41,7 +50,13 @@ public class LoadTest {
                 } catch (IOException e) {
                     System.out.println("Erro ao conectar em " + host + ":" + porta + ": " + e.getMessage());
                 }
-            }).start();
+            }));
         }
+
+        System.out.println("Todo mundo entrou, agora eles ficam até sair!");
+        for (Thread t : threads) {
+            t.join();
+        }
+        System.out.println("Todos saíram, fim.");
     }
 }
