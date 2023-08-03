@@ -271,7 +271,7 @@ public class Sala {
         int n = 1;
         for (int i = 0; i <= 3; i++) {
             if (jogadores[i] == null) {
-                jogadores[i] = new JogadorBot();
+                jogadores[i] = new JogadorBot(Thread.ofVirtual().factory());
             }
         }
         // Cria a partida com as regras selecionadas, adiciona os jogadores na
