@@ -4,6 +4,7 @@ package me.chester.minitruco.core;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 import java.util.Vector;
+import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,15 +22,26 @@ public class JogadorBot extends Jogador implements Runnable {
     private boolean fingeQuePensa = true;
 
     public JogadorBot() {
-        // TODO se ficarmos com múltiplas estratégias, mover esse sorteio p/ Estrategia
-        this(random.nextBoolean() ? new EstrategiaSellani() : new EstrategiaGasparotto());
+        this(null, null);
     }
 
-    public JogadorBot(Estrategia e) {
-        estrategia = e;
+    public JogadorBot(ThreadFactory tf) {
+        this(null, tf);
+    }
+
+    public JogadorBot(Estrategia e, ThreadFactory tf) {
+        if (e == null) {
+            estrategia = random.nextBoolean() ? new EstrategiaSellani() : new EstrategiaGasparotto();
+        } else {
+            estrategia = e;
+        }
         LOGGER.info("Estrategia: " + estrategia.getClass().getName());
         setNome(APELIDO_BOT);
-        thread = new Thread(this);
+        if (tf == null) {
+            thread = new Thread(this);
+        } else {
+            thread = tf.newThread(this);
+        }
         thread.start();
     }
 
