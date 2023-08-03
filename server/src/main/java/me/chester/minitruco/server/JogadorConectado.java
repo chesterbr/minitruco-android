@@ -134,7 +134,7 @@ public class JogadorConectado extends Jogador implements Runnable {
      */
     private void iniciaThreadAuxiliar() {
         Thread threadPrincipal = Thread.currentThread();
-        threadMonitorDeConexao = new Thread(() -> {
+        threadMonitorDeConexao = Thread.ofVirtual().start(() -> {
             ServerLogger.evento(this, "Aguardando para iniciar monitor de conexão");
             try {
                 Thread.sleep(1000);
@@ -175,7 +175,6 @@ public class JogadorConectado extends Jogador implements Runnable {
             ServerLogger.evento(this, "Monitor de conexão finalizado");
             threadMonitorDeConexao = null;
         });
-        threadMonitorDeConexao.start();
     }
 
     private void finalizaThreadAuxiliar() {

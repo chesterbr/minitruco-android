@@ -284,8 +284,7 @@ public class Sala {
             }
 
         }
-        Thread t = new Thread(partida);
-        t.start();
+        Thread.ofVirtual().start(partida);
     }
 
     /**
