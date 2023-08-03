@@ -60,7 +60,7 @@ public class JogadorConectado extends Jogador implements Runnable {
      *
      * @param linha linha de texto a enviar
      */
-    public synchronized void println(String linha) {
+    public void println(String linha) {
         out.println(linha);
         out.flush();
         // Não fazemos log de keepalive
