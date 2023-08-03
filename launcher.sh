@@ -39,7 +39,7 @@ servidor_em_execucao() {
 }
 
 aguarda_mudanca_no_jar() {
-    (inotifywait -e modify "$jar") & # em background para não bloquer o SIGTERM
+    (inotifywait -e close_write "$jar") & # em background para não bloquer o SIGTERM
     inotify_pid=$!
     wait $inotify_pid
 }
