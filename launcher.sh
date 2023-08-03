@@ -19,7 +19,7 @@ jar="$1"
 servidor_pid=""
 
 inicia_servidor() {
-    java -jar "$jar" &
+    java --enable-preview -jar "$jar" &
     servidor_pid=$! # $! contém o PID do último processo em background
 }
 
