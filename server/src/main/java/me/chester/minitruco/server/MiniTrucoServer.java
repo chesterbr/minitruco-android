@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.HashSet;
+import java.util.Set;
 
 import sun.misc.Signal;
 
@@ -22,6 +24,12 @@ public class MiniTrucoServer {
     public static final int BUILD_MINIMO_CLIENTE = 20503;
 
     /**
+     * Guarda as threads dos jogadores conectados (para que possamos
+     * esperar elas finalizarem quando o servidor for desligado).
+     */
+    private static Set<Thread> threadsJogadores = new HashSet<>();
+
+    /**
      * Ponto de entrada do servidor. Apenas dispara a thread que aceita
      * conexões e encerra ela quando o launcher.sh solicitar.
      */
@@ -32,23 +40,25 @@ public class MiniTrucoServer {
         threadAceitaConexoes.start();
 
         // Se recebermos um USR1, o .jar foi atualizado. Nesse caso, vamos parar
-        // de aceitar conexões (liberando a porta para a nova versão) mas as
-        // threads dos jogadores conectados e partidas em andamento continuam
-        // rodando.
+        // de aceitar conexões (liberando a porta para a nova versão) e
+        // avisar as threads de JogadorConectado que o servidor está sendo
+        // desligado. Elas vão deixar os jogadores concluirem a partida em
+        // que estão (se houver uma) e desconectar/encerrar em seguida.
         Signal.handle(new Signal("USR1"), signal -> {
             ServerLogger.evento("Recebido sinal USR1 - interrompendo threadAceitaConxoes");
             threadAceitaConexoes.interrupt();
-            ServerLogger.evento("Avisando jogadores conectados que o servidor está sendo desligado");
+            ServerLogger.evento("Avisando threads de JogadorConectado que o servidor está sendo desligado");
             JogadorConectado.servidorSendoDesligado = true;
         });
 
         // Quando *todas* as threads encerrarem, loga o evento final
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            ServerLogger.evento("Servidor finalizado; JVM desligando. Tchau.");
+            ServerLogger.evento("JVM desligando. Tchau e obrigado pelos 🎏.");
         }));
 
-        // A thread inicial termina por aqui, mas o servidor continua rodandno
-        // até que todas as threads se encerrem.
+        // O servidor continua rodandno até que a threadAceitaConexoes se
+        // encerre (e ela, por sua vez, aguarda que todas as threads de
+        // JogadorConectado se encerrem).
     }
 
     /**
@@ -56,7 +66,8 @@ public class MiniTrucoServer {
      * objeto JogadorConectado que roda em uma thread separada.
      * <p>
      * Permanece em execução até que a thread onde ele está rodando receba
-     * um interrupt.
+     * um interrupt; a partir daí ele libera a porta e aguarda que as
+     * threads de JogadorConectado se encerrem.
      */
     public static void aceitaConexoes() {
         ServerLogger.evento("Servidor inicializado e escutando na porta " + PORTA_SERVIDOR);
@@ -78,7 +89,8 @@ public class MiniTrucoServer {
                     continue;
                 }
                 JogadorConectado j = new JogadorConectado(sCliente);
-                Thread.ofVirtual().start(j);
+                j.setOnFinished((t) -> threadsJogadores.remove(t));
+                threadsJogadores.add(Thread.ofVirtual().start(j));
             }
         } catch (IOException e) {
             ServerLogger.evento(e, "Erro de I/O no ServerSocket");
@@ -90,7 +102,28 @@ public class MiniTrucoServer {
                     ServerLogger.evento(e, "Erro de I/O ao fechar ServerSocket");
                 }
             }
-            ServerLogger.evento("Servidor não está mais escutando; aguardando finalização dos jogadores conectados.");
+            ServerLogger.evento("Servidor não está mais escutando (porta liberada)");
+            aguardaThreadsJogadoresFinalizarem();
         }
+    }
+
+    /**
+     * Aguarda que as threads dos jogadores conectados se encerrem.
+     * <p>
+     * Normalmente a JVM aguarda todas as threads encerrarem, mas como se
+     * trata de virtual threads, é preciso que uma thread "real" chame
+     * este método para que os jogadores tenham chance de terminar suas
+     * partidas.
+     */
+    private static void aguardaThreadsJogadoresFinalizarem() {
+        while (!threadsJogadores.isEmpty()) {
+            ServerLogger.evento("Aguardando " + threadsJogadores.size() + " jogadores (threads) finalizarem");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        ServerLogger.evento("Todos os jogadores finalizaram.");
     }
 }
