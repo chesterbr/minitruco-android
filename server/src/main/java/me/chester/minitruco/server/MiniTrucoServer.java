@@ -78,7 +78,7 @@ public class MiniTrucoServer {
                     continue;
                 }
                 JogadorConectado j = new JogadorConectado(sCliente);
-                (new Thread(j)).start();
+                Thread.ofVirtual().start(j);
             }
         } catch (IOException e) {
             ServerLogger.evento(e, "Erro de I/O no ServerSocket");

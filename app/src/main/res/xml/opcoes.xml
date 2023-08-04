@@ -44,10 +44,11 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Desenvolvimento (️☠=PRE-RI-GO, não mexa)">
-        <EditTextPreference
-            android:defaultValue="@string/opcoes_default_servidor"
-            android:key="servidor"
-            android:title="Servidor" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="servidorLocal"
+            android:summary="Usa o servidor local (hardcoded) ao invés do servidor do miniTruco"
+            android:title="Servidor de Desenvolvimento"/>
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="jogoAutomatico"

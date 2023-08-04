@@ -13,8 +13,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter:5.3.1'
 }
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_19
+    targetCompatibility = JavaVersion.VERSION_19
 }
 
 test {
@@ -22,6 +22,7 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
+    jvmArgs += '--enable-preview'
 }
 
 tasks.jar {
@@ -29,4 +30,16 @@ tasks.jar {
     from(project(':core').fileTree("build/classes/java/main")) {
         include '**/*.class'
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += '--enable-preview'
+}
+
+tasks.withType(JavaExec) {
+    jvmArgs += '--enable-preview'
+}
+
+compileJava {
+    options.compilerArgs += ["--enable-preview"]
 }

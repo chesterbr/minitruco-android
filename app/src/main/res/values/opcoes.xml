@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="opcoes_default_servidor">minitruco.chester.me</string>
+    <string name="opcoes_default_servidor_local">192.168.2.10</string>
 
     <string-array name="fonte_nomes">
         <item>Normal</item>

@@ -100,7 +100,9 @@ public class ClienteInternetActivity extends SalaActivity {
     }
 
     private boolean conecta() {
-        String servidor = preferences.getString("servidor", this.getString(R.string.opcoes_default_servidor));
+        String servidor = preferences.getBoolean("servidorLocal", false) ?
+            this.getString(R.string.opcoes_default_servidor_local) :
+            this.getString(R.string.opcoes_default_servidor);
         try {
             socket = new Socket();
             socket.connect(new InetSocketAddress(servidor, 6912), 10_000);

@@ -2,10 +2,14 @@ package me.chester.minitruco.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+
+import java.util.concurrent.ThreadFactory;
 
 class JogadorBotTest {
 
@@ -39,7 +43,7 @@ class JogadorBotTest {
             }
         };
         Partida j = new PartidaLocal(false, false, "P");
-        JogadorBot bot = new JogadorBot(e);
+        JogadorBot bot = new JogadorBot(e, null);
         j.adiciona(bot);
         j.adiciona(new JogadorBot());
         j.adiciona(new JogadorBot());
@@ -51,5 +55,17 @@ class JogadorBotTest {
         assertEquals(bot.getCartas()[0], situacaoJogo[0].cartasJogador[0]);
         assertFalse(bot.getCartas()[0] == situacaoJogo[0].cartasJogador[0]);
 
+    }
+
+    @Test
+    void testAceitaThreadFactory() {
+        ThreadFactory tf = spy(new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                return new Thread(r);
+            }
+        });
+        JogadorBot bot = new JogadorBot(tf);
+        verify(tf).newThread(bot);
     }
 }

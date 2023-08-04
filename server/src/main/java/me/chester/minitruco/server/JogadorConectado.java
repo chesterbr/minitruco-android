@@ -60,7 +60,7 @@ public class JogadorConectado extends Jogador implements Runnable {
      *
      * @param linha linha de texto a enviar
      */
-    public synchronized void println(String linha) {
+    public void println(String linha) {
         out.println(linha);
         out.flush();
         // Não fazemos log de keepalive
@@ -134,7 +134,13 @@ public class JogadorConectado extends Jogador implements Runnable {
      */
     private void iniciaThreadAuxiliar() {
         Thread threadPrincipal = Thread.currentThread();
-        threadMonitorDeConexao = new Thread(() -> {
+        threadMonitorDeConexao = Thread.ofVirtual().start(() -> {
+            ServerLogger.evento(this, "Aguardando para iniciar monitor de conexão");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
             ServerLogger.evento(this, "Iniciando monitor de conexão");
             boolean avisouQueVaiDesconectarNoFimDaPartida = false;
             while (true) {
@@ -169,7 +175,6 @@ public class JogadorConectado extends Jogador implements Runnable {
             ServerLogger.evento(this, "Monitor de conexão finalizado");
             threadMonitorDeConexao = null;
         });
-        threadMonitorDeConexao.start();
     }
 
     private void finalizaThreadAuxiliar() {
