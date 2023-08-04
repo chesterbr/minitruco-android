@@ -54,6 +54,17 @@ public class JogadorConectado extends Jogador implements Runnable {
         this.cliente = cliente;
     }
 
+    @FunctionalInterface
+    public interface OnFinishCallback {
+        void execute(Thread thread);
+    }
+
+    private OnFinishCallback onFinishCallback;
+
+    public void setOnFinished(OnFinishCallback onFinishCallback) {
+        this.onFinishCallback = onFinishCallback;
+    }
+
     /**
      * Envia uma linha de texto para o cliente (tipicamente o resultado de um
      * comando, ou um keepalive)
@@ -115,6 +126,9 @@ public class JogadorConectado extends Jogador implements Runnable {
                 ServerLogger.evento(this, "finalizou thread");
             }
             finalizaThreadAuxiliar();
+            if (onFinishCallback != null) {
+                onFinishCallback.execute(Thread.currentThread());
+            }
         }
 
     }
