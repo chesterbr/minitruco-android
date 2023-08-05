@@ -79,6 +79,7 @@ public abstract class SalaActivity extends AppCompatActivity {
         layoutBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesInternet.setVisibility(View.GONE);
         textViewInfoSala.setVisibility(View.GONE);
+        textViewStatus.setText("");
         setMensagem(null);
     }
 
