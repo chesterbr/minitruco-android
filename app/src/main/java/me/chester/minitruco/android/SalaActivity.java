@@ -36,6 +36,7 @@ public abstract class SalaActivity extends AppCompatActivity {
     private View layoutJogadoresEBotoesGerente;
     protected View layoutBotoesGerente;
     protected View layoutBotoesSala;
+    protected View layoutRegras;
     protected TextView textViewStatus;
     protected TextView textViewJogador1;
     protected TextView textViewJogador2;
@@ -61,6 +62,7 @@ public abstract class SalaActivity extends AppCompatActivity {
         layoutJogadoresEBotoesGerente = findViewById(R.id.layoutJogadoresEBotoesGerente);
         layoutBotoesGerente = findViewById(R.id.layoutBotoesGerente);
         layoutBotoesSala = findViewById(R.id.layoutBotoesSala);
+        layoutRegras = findViewById(R.id.layoutRegras);
         btnNovaSala = findViewById(R.id.btnNovaSala);
         btnEntrarSala = findViewById(R.id.btnEntrarSala);
         textViewStatus = findViewById(R.id.textViewStatus);
@@ -73,7 +75,6 @@ public abstract class SalaActivity extends AppCompatActivity {
         layoutJogadoresEBotoesGerente.setVisibility(View.GONE);
         layoutBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesSala.setVisibility(View.GONE);
-        textViewStatus.setVisibility(View.GONE);
         textViewInfoSala.setVisibility(View.GONE);
         setMensagem(null);
     }
@@ -130,6 +131,7 @@ public abstract class SalaActivity extends AppCompatActivity {
 
             // Atualiza outros itens do display
             layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
+            layoutRegras.setVisibility(View.VISIBLE);
             findViewById(R.id.layoutBotoesGerente).setVisibility(
                 isGerente ? View.VISIBLE : View.INVISIBLE);
             if (isGerente) {
