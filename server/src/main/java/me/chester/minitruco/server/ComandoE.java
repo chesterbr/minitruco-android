@@ -6,11 +6,15 @@ package me.chester.minitruco.server;
 /**
  * Entra numa sala.
  * <p>
- * Parâmetros:
- *   - "R ___" para entrar em uma sala (ou criar uma) com as regras especificadas
- *     (cada _ é T ou F para baralho limpo, manilha velha e modo mineiro)
- * <p>
- * Obs.: Se o jogador não tiver nome, um nome implícito será dado
+ * Recebe o tipo de sala e o modo de jogo. Tipos:
+ * <ul>
+ *     <li>PUB - procura uma sala pública, se não achar, cria</li>
+ *     <li>NPU - cria uma nova sala pública</li>
+ *     <li>PRI - cria uma nova sala privada</li>
+ *     <li>PRI-nnnnn - entra numa sala privada existente</li>
+ * </ul>
+ * TODO: NPU, PRI, PRI-nnnn
+ * Modos: "P" para truco paulista, "M" para mineiro, etc; vide classe `Modo`
  */
 public class ComandoE extends Comando {
 
@@ -29,7 +33,10 @@ public class ComandoE extends Comando {
                 if ("PUB".equals(args[1])) {
                     Sala s = Sala.colocaEmSalaPublica(j, args[2]);
                     s.mandaInfoParaTodos();
-                    // TODO: implementar comandos para sala privada
+                } else if ("NPU".equals(args[1])) {
+                    Sala s = new Sala(true, args[2]);
+                    s.adiciona(j);
+                    s.mandaInfoParaTodos();
                 } else {
                     j.println("X AI");
                 }
