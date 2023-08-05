@@ -55,7 +55,7 @@ public class ClienteInternetActivity extends SalaActivity {
             enviaLinha("R T");
         });
 
-        iniciaProcessamentoDeNotificacoes();
+        conectaEIniciaProcessamentoDeNotificacoes();
     }
 
     private void solicitaInicioDeJogoConfirmandoSeTiverBots() {
@@ -73,7 +73,8 @@ public class ClienteInternetActivity extends SalaActivity {
         }
     }
 
-    private void iniciaProcessamentoDeNotificacoes() {
+    private void conectaEIniciaProcessamentoDeNotificacoes() {
+        setMensagem("Conectando...");
         new Thread(() -> {
             try {
                 if (conecta()) {
@@ -117,7 +118,7 @@ public class ClienteInternetActivity extends SalaActivity {
             enviaLinha("N " + preferences.getString(
                 "nome_multiplayer", null));
         } catch (IOException e) {
-            msgErroFatal("Não foi possivel conectar.", e);
+            msgErroFatal("Falha na conexão", "Não foi possível conectar nos servidores do miniTruco. Tente novamente mais tarde.\n\nDetalhes: " + e.getLocalizedMessage());
             return false;
         }
         return true;
@@ -132,7 +133,7 @@ public class ClienteInternetActivity extends SalaActivity {
         }
         if (line == null) {
             desconecta();
-            msgErroFatal("Você foi desconectado.", null);
+            msgErroFatal("Conexão perdida.");
             return;
         }
         if (!line.startsWith("K ")) {
@@ -241,22 +242,6 @@ public class ClienteInternetActivity extends SalaActivity {
         enviaLinha("Q");
         partida = new PartidaRemota(this, jogadorHumano, posJogador, modo);
         return partida;
-    }
-
-    private void msgErroFatal(String msg, Throwable e) {
-        runOnUiThread(() -> {
-            encerraTrucoActivity();
-            if (isFinishing()) {
-                return;
-            }
-            new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_delete)
-                    .setTitle("Erro")
-                    .setMessage(e == null ? msg : msg + "\n\nDetalhes: " + e.getLocalizedMessage())
-                    .setNeutralButton("Fechar", (dialog, which) -> finish())
-                    .setOnCancelListener(v -> finish())
-                    .show();
-        });
     }
 
     public void enviaLinha(String comando) {

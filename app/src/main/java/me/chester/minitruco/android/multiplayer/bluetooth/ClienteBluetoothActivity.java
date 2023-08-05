@@ -134,7 +134,7 @@ public class ClienteBluetoothActivity extends BluetoothActivity implements
                     partida.abandona(0);
                 }
                 LOGGER.log(Level.INFO, "desconectado");
-                msgErroFatal("Você foi desconectado");
+                msgErroFatal("Conexão perdida.");
             }
         }
     }

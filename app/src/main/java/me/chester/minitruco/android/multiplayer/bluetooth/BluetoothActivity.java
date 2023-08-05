@@ -1,7 +1,6 @@
 package me.chester.minitruco.android.multiplayer.bluetooth;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -72,7 +71,6 @@ public abstract class BluetoothActivity extends SalaActivity implements
             .fromString("3B175368-ABB4-11DB-A508-C2B155D89593");
 
     protected BluetoothAdapter btAdapter;
-    protected final String[] apelidos = new String[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,23 +134,6 @@ public abstract class BluetoothActivity extends SalaActivity implements
      * através da chamada deste método
      */
     abstract void iniciaAtividadeBluetooth();
-
-    protected void msgErroFatal(String mensagem) {
-        runOnUiThread(() -> {
-            encerraTrucoActivity();
-            BluetoothActivity context = BluetoothActivity.this;
-            if (context == null || context.isFinishing()) {
-                return;
-            }
-            new AlertDialog.Builder(context)
-                .setTitle("Erro")
-                .setMessage(mensagem)
-                .setOnCancelListener(dialog -> finish())
-                .setNeutralButton("Ok",
-                    (dialog, which) -> finish())
-                .show();
-        });
-    }
 
     protected abstract int getNumClientes();
 
