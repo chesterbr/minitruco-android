@@ -159,13 +159,32 @@ public abstract class SalaActivity extends AppCompatActivity {
 
     protected void mostraAlertBox(String titulo, String texto) {
         runOnUiThread(() -> {
-            if (this == null || this.isFinishing()) {
+            if (isFinishing()) {
                 return;
             }
             new AlertDialog.Builder(this).setTitle(titulo)
                     .setMessage(Html.fromHtml(texto))
                     .setNeutralButton("Ok", (dialog, which) -> {
                     }).show();
+        });
+    }
+
+    protected void msgErroFatal(String texto) {
+        msgErroFatal("Aviso", texto);
+    }
+
+    protected void msgErroFatal(String titulo, String texto) {
+        runOnUiThread(() -> {
+            encerraTrucoActivity();
+            if (isFinishing()) {
+                return;
+            }
+            new AlertDialog.Builder(this)
+                    .setTitle(titulo)
+                    .setMessage(texto)
+                    .setNeutralButton("Fechar", (dialog, which) -> finish())
+                    .setOnCancelListener(v -> finish())
+                    .show();
         });
     }
 
