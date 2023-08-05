@@ -72,7 +72,6 @@ public abstract class BluetoothActivity extends SalaActivity implements
             .fromString("3B175368-ABB4-11DB-A508-C2B155D89593");
 
     protected BluetoothAdapter btAdapter;
-    protected final String[] apelidos = new String[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

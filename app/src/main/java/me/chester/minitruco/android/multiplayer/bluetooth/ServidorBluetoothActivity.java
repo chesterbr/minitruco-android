@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import me.chester.minitruco.R;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
@@ -128,12 +127,11 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         // Dá um tempinho para os clientes se prepararem antes de permitir
         // o início de uma nova partida
         btnIniciar.setEnabled(false);
-        new Handler().postDelayed(() -> atualizaDisplay(), 4000);
+        new Handler().postDelayed(() -> atualizaClientes(), 4000);
     }
 
     public void run() {
         LOGGER.log(Level.INFO, "iniciou atividade server");
-        atualizaDisplay();
         try {
             serverSocket = btAdapter.listenUsingRfcommWithServiceRecord(
                     NOME_BT, UUID_BT);
@@ -224,34 +222,6 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         }
     }
 
-    public void atualizaDisplay() {
-        // Esse array é usado pelo display para mostrar os nomes dos jogadores
-        // TODO: rever isso; de repente a gente deveria atualizar direto ou passar
-        //       ele, ainda mais agora que isso só é usado no servidorbluetooth
-        apelidos[0] = Jogador.sanitizaNome(btAdapter.getName());
-        for(int i = 1; i <= 3; i++) {
-            if (jogadores[i - 1] != null) {
-                apelidos[i] = jogadores[i - 1].getNome();
-            } else {
-                apelidos[i] = APELIDO_BOT;
-            }
-        }
-        runOnUiThread(() -> {
-            textViewJogador1.setText(apelidos[0]);
-            textViewJogador2.setText(apelidos[1]);
-            textViewJogador3.setText(apelidos[2]);
-            textViewJogador4.setText(apelidos[3]);
-            if (modo != null) {
-                textViewStatus.setText("Modo: " + Partida.textoModo(modo));
-            }
-            btnIniciar.setEnabled(getNumClientes() > 0);
-            btnInverter.setEnabled(getNumClientes() > 0);
-            btnTrocar.setEnabled(getNumClientes() > 0);
-            findViewById(R.id.layoutJogadoresEBotoesGerente).setVisibility(View.VISIBLE);
-            layoutBotoesGerente.setVisibility(View.VISIBLE);
-        });
-    }
-
     @Override
     public int getNumClientes() {
         int numClientes = 0;
@@ -264,16 +234,31 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
     }
 
     void atualizaClientes() {
-        // Vamos pegar os nomes do array vinculado ao display, então
-        // precisamos atualizar ele antes
-        atualizaDisplay();
 
+        // Recolhe os apelidos atuais
+        String[] apelidos = new String[4];
+        apelidos[0] = Jogador.sanitizaNome(btAdapter.getName());
+        for(int i = 1; i <= 3; i++) {
+            if (jogadores[i - 1] != null) {
+                apelidos[i] = jogadores[i - 1].getNome();
+            } else {
+                apelidos[i] = APELIDO_BOT;
+            }
+        }
+
+        // Usa eles para montar a string de notificação
         String comando = montaNotificacaoI(apelidos, modo, "BLT");
-        // Envia a notificação para cada jogador (com sua posição)
+
+        // "Envia" a notfificação para nós mesmos (para atualizar a tela)
+        exibeMesaForaDoJogo(comando.replace(POSICAO_PLACEHOLDER, "1"));
+
+        // Envia a notificação para cada cliente (com sua posição), para que
+        // eles também se atualizem
         for (int i = 0; i <= 2; i++) {
             enviaLinha(i, comando.replace(POSICAO_PLACEHOLDER,
                 Integer.toString(i + 2)));
         }
+
     }
 
     /**
