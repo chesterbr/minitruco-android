@@ -121,7 +121,7 @@ public abstract class SalaActivity extends AppCompatActivity {
             // parte inferior da tela (textViewJogador1), sucedido por
             // "(você)"; sucede a pessoa que é gerente com "(gerente)"
             int p = (posJogador - 1) % 4;
-            textViewJogador1.setText(nomes[p] + (p == 0 ? " (você/gerente)" : "(você)"));
+            textViewJogador1.setText(nomes[p] + (p == 0 ? " (você/gerente)" : " (você)"));
             p = (p + 1) % 4;
             textViewJogador2.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
             p = (p + 1) % 4;

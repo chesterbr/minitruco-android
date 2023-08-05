@@ -23,7 +23,7 @@ import me.chester.minitruco.core.PartidaLocal;
 public class Sala {
 
     /**
-     * Salas criadas por usuários (a chave é o código da sala)
+     * Salas privadas (a chave é o código da sala)
      */
     private static final Map<String, Sala> salasPrivadas = new HashMap<>();
 
@@ -58,7 +58,7 @@ public class Sala {
     }
 
     /**
-     * Código usado para os amigos acharem a sala; null se for uma sala pública
+     * Código usado para os amigos acharem a sala privada; null se for uma sala pública
      */
     String codigo;
 
@@ -76,13 +76,13 @@ public class Sala {
     private PartidaLocal partida = null;
 
     /**
-     * Cria uma sala .
+     * Cria uma nova sala, pública ou privada
      */
     public Sala(boolean publica, String modo) {
         if (publica) {
             salasPublicasDisponiveis.add(this);
         } else {
-            String codigo = UUID.randomUUID().toString().substring(0, 5);
+            String codigo = UUID.randomUUID().toString().toUpperCase().substring(0, 5);
             this.codigo = codigo;
             salasPrivadas.put(codigo, this);
         }
@@ -93,6 +93,7 @@ public class Sala {
      * Coloca o jogador em uma sala pública que tenha aquele modo de partida
      * criando uma caso estejam todas lotadas
      *
+     * @return sala em que foi colocado
      */
     public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, String modo) {
         Sala sala = salasPublicasDisponiveis.stream().filter(s ->
@@ -106,13 +107,31 @@ public class Sala {
     }
 
     /**
-     * Coloca o jogador em uma sala privada pré-existente
-     * @param codigo o código recebido de quem criou a sala
-     * @return false caso a sala não tenha sido encontrada ou esteja lotada
+     * Coloca o jogador em uma sala privada pré-existente (através do código)
+     *
+     * @return sala em que foi colocado, ou null se não existir/estiver lotada
      */
-    public static synchronized boolean colocaEmSalaPrivada(JogadorConectado j, String codigo) {
+    public static synchronized Sala colocaEmSalaPrivada(JogadorConectado j, String codigo) {
         Sala sala = salasPrivadas.get(codigo);
-        return (sala != null && sala.adiciona(j));
+        if (sala != null && sala.adiciona(j)) {
+            return sala;
+        }
+        return null;
+    }
+
+    /**
+     * Cria uma nova sala e coloca o jogador nela
+     *
+     * @param j Jogador a ser colocado na sala (vai ser sempre o gerente)
+     * @param publica true se a sala for pública, false se for privada
+     * @param modo "P" para paulista, "M" para mineiro, etc.
+     * @return nova sala em que foi colocado
+     */
+    public static synchronized Sala colocaEmNovaSala(JogadorConectado j, boolean publica, String modo) {
+        Sala sala = new Sala(publica, modo);
+        sala.adiciona(j);
+
+        return sala;
     }
 
     /**

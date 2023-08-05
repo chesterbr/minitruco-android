@@ -52,6 +52,7 @@ public class JogadorConectado extends Jogador implements Runnable {
      */
     public JogadorConectado(Socket cliente) {
         this.cliente = cliente;
+        this.setNome(Jogador.sanitizaNome("")); // atribui um nome padrão
     }
 
     @FunctionalInterface

@@ -1,5 +1,7 @@
 package me.chester.minitruco.server;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -41,6 +43,12 @@ class JogadorConectadoTest {
         t.interrupt();
         t.join();
         assertTrue(chamouOnFinished[0]);
+    }
+
+    @Test
+    void testNovoJogadorTemNomePadrao() {
+        JogadorConectado j = new JogadorConectado(mockSocket);
+        assertThat(j.getNome(), matchesPattern("^sem_nome_\\d{1,3}$"));
     }
 
 }

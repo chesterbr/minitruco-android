@@ -10,6 +10,12 @@ package me.chester.minitruco.core;
  */
 public interface Modo {
 
+    /**
+     * @return instância de Modo correspondente ao modoStr
+     * @param modoStr String de 1 caractere indicando o modo desejado. Ex.:
+     *                "M" para mineiro, "P" para paulista, etc.
+     * @throws IllegalArgumentException se o modo for inválido
+     */
     static Modo fromString(String modoStr) {
         switch (modoStr) {
             case "M":
@@ -22,6 +28,15 @@ public interface Modo {
                 return new ModoBaralhoLimpo();
             default:
                 throw new IllegalArgumentException("Modo deve ser M, P, V ou L");
+        }
+    }
+
+    static boolean isModoValido(String modoStr) {
+        try {
+            fromString(modoStr);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
     }
 
