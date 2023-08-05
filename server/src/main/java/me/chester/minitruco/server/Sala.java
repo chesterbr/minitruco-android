@@ -23,7 +23,7 @@ import me.chester.minitruco.core.PartidaLocal;
 public class Sala {
 
     /**
-     * Salas criadas por usuários (a chave é o código da sala)
+     * Salas privadas (a chave é o código da sala)
      */
     private static final Map<String, Sala> salasPrivadas = new HashMap<>();
 
@@ -58,7 +58,7 @@ public class Sala {
     }
 
     /**
-     * Código usado para os amigos acharem a sala; null se for uma sala pública
+     * Código usado para os amigos acharem a sala privada; null se for uma sala pública
      */
     String codigo;
 
@@ -76,7 +76,7 @@ public class Sala {
     private PartidaLocal partida = null;
 
     /**
-     * Cria uma sala .
+     * Cria uma nova sala, pública ou privada
      */
     public Sala(boolean publica, String modo) {
         if (publica) {
@@ -92,7 +92,6 @@ public class Sala {
     /**
      * Coloca o jogador em uma sala pública que tenha aquele modo de partida
      * criando uma caso estejam todas lotadas
-     *
      */
     public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, String modo) {
         Sala sala = salasPublicasDisponiveis.stream().filter(s ->
