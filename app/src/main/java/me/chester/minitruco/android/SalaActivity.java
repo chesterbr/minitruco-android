@@ -75,7 +75,7 @@ public abstract class SalaActivity extends AppCompatActivity {
         textViewJogador2 = findViewById(R.id.textViewJogador2);
         textViewJogador3 = findViewById(R.id.textViewJogador3);
         textViewJogador4 = findViewById(R.id.textViewJogador4);
-        layoutJogadoresEBotoesGerente.setVisibility(View.GONE);
+        layoutJogadoresEBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesInternet.setVisibility(View.GONE);
         textViewInfoSala.setVisibility(View.GONE);
