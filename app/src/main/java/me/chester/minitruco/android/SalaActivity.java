@@ -2,6 +2,7 @@ package me.chester.minitruco.android;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -124,12 +125,16 @@ public abstract class SalaActivity extends AppCompatActivity {
             // "(você)"; sucede a pessoa que é gerente com "(gerente)"
             int p = (posJogador - 1) % 4;
             textViewJogador1.setText(nomes[p] + (p == 0 ? " (você/gerente)" : " (você)"));
+            textViewJogador1.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
             p = (p + 1) % 4;
             textViewJogador2.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
+            textViewJogador2.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
             p = (p + 1) % 4;
             textViewJogador3.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
+            textViewJogador3.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
             p = (p + 1) % 4;
             textViewJogador4.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
+            textViewJogador4.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
 
             // Atualiza outros itens do display
             layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
@@ -147,7 +152,7 @@ public abstract class SalaActivity extends AppCompatActivity {
                     layoutBotoesInternet.setVisibility(View.VISIBLE);
                     break;
                 case "PRI":
-                    textViewTituloSala.setText("Sala Privada (" + codigo + ")");
+                    textViewTituloSala.setText("Sala Privada - CÓDIGO: " + codigo);
                     layoutBotoesInternet.setVisibility(View.VISIBLE);
                     break;
                 case "BLT":

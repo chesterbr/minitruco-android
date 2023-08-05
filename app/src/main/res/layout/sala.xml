@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="2"
+        android:layout_margin="2dp"
         android:background="@drawable/borda_sala"
         android:gravity="center"
         android:orientation="vertical">
@@ -21,13 +22,13 @@
             android:id="@+id/textViewTituloSala"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FFB37447"
+            android:background="#FFC69F6C"
             android:gravity="center"
             android:paddingHorizontal="8dp"
             android:paddingBottom="2dp"
             android:text="Bluetooth"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -45,7 +46,7 @@
                 android:text="Posição_3"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="italic" />
 
 
             <LinearLayout
@@ -64,7 +65,7 @@
                     android:text="Posição_4"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="italic" />
 
                 <LinearLayout
                     android:id="@+id/layoutBotoesGerente"
@@ -102,7 +103,7 @@
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:paddingHorizontal="2dp"
-                    android:text="Posição_2"
+                    android:text="Posição_2 (gerente)"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
@@ -119,7 +120,7 @@
                 android:text="Posição_1 (você)"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="italic" />
         </LinearLayout>
 
     </LinearLayout>

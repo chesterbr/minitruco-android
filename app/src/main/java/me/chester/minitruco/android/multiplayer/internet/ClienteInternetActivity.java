@@ -92,8 +92,8 @@ public class ClienteInternetActivity extends SalaActivity {
             editCodigo.setInputType(TYPE_CLASS_TEXT);
             editCodigo.setMaxLines(1);
             AlertDialog dialogNome = new AlertDialog.Builder(this)
-                .setTitle("Entrar em sala privada")
-                .setMessage("Digite o código passado pelo(a) amigo(a) que já está na sala:")
+                .setTitle("Código da sala")
+                .setMessage("Digite o código passado pela pessoa que chamou você:\n\n(esse código aparece no topo da tela dela)")
                 .setView(editCodigo)
                 .setPositiveButton("Ok", (d, w) -> {
                     comandoTrocaSala = "E PRI-" + sanitiza(editCodigo.getText().toString());
