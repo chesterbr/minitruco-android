@@ -153,17 +153,19 @@ public abstract class SalaActivity extends AppCompatActivity {
                     break;
                 case "PRI":
                     textViewTituloSala.setText("Sala Privada - CÓDIGO: " + codigo);
-                    layoutBotoesInternet.setVisibility(View.VISIBLE);
+                    layoutBotoesInternet.setVisibility(View.GONE);
                     break;
                 case "BLT":
                     textViewTituloSala.setText("Bluetooth");
                     break;
             }
             textViewStatus.setText("Modo: " + Partida.textoModo(modo));
-            if (numJogadores < 4) {
-                setMensagem("Aguardando mais pessoas ou gerente iniciar partida");
-            } else {
-                setMensagem("Aguardando gerente iniciar partida");
+            if (!isGerente) {
+                if (numJogadores < 4) {
+                    setMensagem("Aguardando mais pessoas ou gerente iniciar partida");
+                } else {
+                    setMensagem("Aguardando gerente iniciar partida");
+                }
             }
         });
     }
