@@ -133,7 +133,7 @@ public class ClienteInternetActivity extends SalaActivity {
         }
         if (line == null) {
             desconecta();
-            msgErroFatal("Conexão finalizada.");
+            msgErroFatal("Conexão perdida.");
             return;
         }
         if (!line.startsWith("K ")) {
