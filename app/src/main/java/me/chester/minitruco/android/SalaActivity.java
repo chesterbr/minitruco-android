@@ -31,11 +31,12 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected Button btnIniciar;
     protected Button btnInverter;
     protected Button btnTrocar;
-    protected Button btnNovaSala;
-    protected Button btnEntrarSala;
-    private View layoutJogadoresEBotoesGerente;
+    protected Button btnNovaSalaPublica;
+    protected Button btnNovaSalaPrivada;
+    protected Button btnEntrarComCodigo;
+    protected View layoutJogadoresEBotoesGerente;
     protected View layoutBotoesGerente;
-    protected View layoutBotoesSala;
+    protected View layoutBotoesInternet;
     protected View layoutRegras;
     protected TextView textViewStatus;
     protected TextView textViewJogador1;
@@ -61,10 +62,11 @@ public abstract class SalaActivity extends AppCompatActivity {
         btnTrocar = findViewById(R.id.btnTrocar);
         layoutJogadoresEBotoesGerente = findViewById(R.id.layoutJogadoresEBotoesGerente);
         layoutBotoesGerente = findViewById(R.id.layoutBotoesGerente);
-        layoutBotoesSala = findViewById(R.id.layoutBotoesSala);
+        layoutBotoesInternet = findViewById(R.id.layoutBotoesInternet);
         layoutRegras = findViewById(R.id.layoutRegras);
-        btnNovaSala = findViewById(R.id.btnNovaSala);
-        btnEntrarSala = findViewById(R.id.btnEntrarSala);
+        btnNovaSalaPublica = findViewById(R.id.btnNovaSalaPublica);
+        btnNovaSalaPrivada = findViewById(R.id.btnNovaSalaPrivada);
+        btnEntrarComCodigo = findViewById(R.id.btnEntrarComCodigo);
         textViewStatus = findViewById(R.id.textViewStatus);
         textViewTituloSala = findViewById(R.id.textViewTituloSala);
         textViewInfoSala = findViewById(R.id.textViewInfoSala);
@@ -74,7 +76,7 @@ public abstract class SalaActivity extends AppCompatActivity {
         textViewJogador4 = findViewById(R.id.textViewJogador4);
         layoutJogadoresEBotoesGerente.setVisibility(View.GONE);
         layoutBotoesGerente.setVisibility(View.INVISIBLE);
-        layoutBotoesSala.setVisibility(View.GONE);
+        layoutBotoesInternet.setVisibility(View.GONE);
         textViewInfoSala.setVisibility(View.GONE);
         setMensagem(null);
     }
@@ -98,8 +100,8 @@ public abstract class SalaActivity extends AppCompatActivity {
             String tipoSala = tokens[4];
             String codigo = null;
             if (tipoSala.startsWith("PRI-")) {
-                tipoSala = "PRI";
                 codigo = tipoSala.substring(4);
+                tipoSala = "PRI";
             }
 
             // Volta pra mesa (se já não estiver nela)
@@ -142,9 +144,11 @@ public abstract class SalaActivity extends AppCompatActivity {
             switch (tipoSala) {
                 case "PUB":
                     textViewTituloSala.setText("Sala Pública");
+                    layoutBotoesInternet.setVisibility(View.VISIBLE);
                     break;
                 case "PRI":
-                    textViewTituloSala.setText("Sala Privada");
+                    textViewTituloSala.setText("Sala Privada (" + codigo + ")");
+                    layoutBotoesInternet.setVisibility(View.VISIBLE);
                     break;
                 case "BLT":
                     textViewTituloSala.setText("Bluetooth");

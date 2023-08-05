@@ -1,10 +1,16 @@
 package me.chester.minitruco.android.multiplayer.internet;
 
+import static android.text.InputType.TYPE_CLASS_TEXT;
+
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import java.io.BufferedReader;
@@ -25,6 +31,7 @@ import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.SalaActivity;
 import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
+import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Partida;
 
 public class ClienteInternetActivity extends SalaActivity {
@@ -36,26 +43,73 @@ public class ClienteInternetActivity extends SalaActivity {
     private BufferedReader in;
     private SharedPreferences preferences;
 
+    private AlphaAnimation animationTrocaSala;
+    private String comandoTrocaSala;
+
     private boolean contagemRegressivaParaIniciar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CriadorDePartida.setActivitySala(this);
-
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         inicializaLayoutSala();
-        findViewById(R.id.btnIniciar).setOnClickListener(v -> {
-            solicitaInicioDeJogoConfirmandoSeTiverBots();
-        });
-        findViewById(R.id.btnInverter).setOnClickListener(v -> {
-            enviaLinha("R I");
-        });
-        findViewById(R.id.btnTrocar).setOnClickListener(v -> {
-            enviaLinha("R T");
+        configuraBotoes();
+        conectaEIniciaProcessamentoDeNotificacoes();
+    }
+
+    private void configuraBotoes() {
+        animationTrocaSala = new AlphaAnimation(1.0f, 0.0f);
+        animationTrocaSala.setDuration(500);
+        animationTrocaSala.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationEnd(Animation animation) {
+                enviaLinha(comandoTrocaSala);
+            }
+            public void onAnimationStart(Animation animation) { }
+            public void onAnimationRepeat(Animation animation) { }
         });
 
-        conectaEIniciaProcessamentoDeNotificacoes();
+        btnIniciar.setOnClickListener(v -> {
+            solicitaInicioDeJogoConfirmandoSeTiverBots();
+        });
+        btnInverter.setOnClickListener(v -> {
+            enviaLinha("R I");
+        });
+        btnTrocar.setOnClickListener(v -> {
+            enviaLinha("R T");
+        });
+        btnNovaSalaPrivada.setOnClickListener(v -> {
+            comandoTrocaSala = "E PRI " + modo;
+            layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+        });
+        btnNovaSalaPublica.setOnClickListener(v -> {
+            comandoTrocaSala = "E PUB " + modo;
+            layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+        });
+        btnEntrarComCodigo.setOnClickListener(v -> {
+            // Faz a pergunta sugerindo o nome encontrado
+            EditText editCodigo = new EditText(this);
+            editCodigo.setInputType(TYPE_CLASS_TEXT);
+            editCodigo.setMaxLines(1);
+            AlertDialog dialogNome = new AlertDialog.Builder(this)
+                .setTitle("Entrar em sala privada")
+                .setMessage("Digite o código passado pelo(a) amigo(a) que já está na sala:")
+                .setView(editCodigo)
+                .setPositiveButton("Ok", (d, w) -> {
+                    comandoTrocaSala = "E PRI-" + sanitiza(editCodigo.getText().toString());
+                    layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+                })
+                .setNegativeButton("Cancela", null)
+                .show();
+        });
+    }
+
+    /**
+     * Sanitiza o código da sala (remove espaços, deixa tudo maiúsculo e limita
+     * o tamanho; é mais pra evitar erros de digitação e abusos)
+     */
+    private String sanitiza(String codigo) {
+        Jogador.sanitizaNome(codigo).toUpperCase();
     }
 
     private void solicitaInicioDeJogoConfirmandoSeTiverBots() {
@@ -147,7 +201,7 @@ public class ClienteInternetActivity extends SalaActivity {
             case 'N': // Nome foi aceito
                 // Já vamos entrar de cara numa sala pública (se a pessoa quiser
                 // fazer outra coisa, ela usa o botão apropriado)
-                enviaLinha("E PUB " + preferences.getString("modo", "P"));
+                enviaLinha("E PUB " + getModoDasPreferencias());
                 break;
             case 'I': // Entrou/voltou para uma sala (ou ela foi atualizada)
                 exibeMesaForaDoJogo(line);
@@ -186,6 +240,11 @@ public class ClienteInternetActivity extends SalaActivity {
                             line.length() > 2 ? line.substring(2) : "");
                 }
         }
+    }
+
+    @NonNull
+    private String getModoDasPreferencias() {
+        return preferences.getString("modo", "P");
     }
 
     /**

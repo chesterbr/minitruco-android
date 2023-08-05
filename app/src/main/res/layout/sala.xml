@@ -159,29 +159,36 @@
         android:text="Código: 123456\nGerente: joselito"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FFFFFF"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/layoutBotoesSala"
-        android:layout_width="wrap_content"
+        android:id="@+id/layoutBotoesInternet"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
         <Button
-            android:id="@+id/btnNovaSala"
+            android:id="@+id/btnNovaSalaPublica"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusedByDefault="true"
-            android:text="Trocar de Sala"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Criar sala pública"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnEntrarSala"
+            android:id="@+id/btnNovaSalaPrivada"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusedByDefault="true"
-            android:text="Entrar com Código"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Criar sala privada"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnEntrarComCodigo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Entrar em sala usando código"
             android:textStyle="bold" />
 
     </LinearLayout>
