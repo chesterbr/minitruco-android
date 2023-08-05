@@ -1,7 +1,8 @@
 package me.chester.minitruco.core;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +39,7 @@ public class JogadorTest {
 
     void assertNomeDefault(String nome) {
         String regex = "^sem_nome_\\d{1,3}$";
-        assertTrue(nome.matches(regex), nome + " não deu match em " + regex);
+        assertThat(nome, matchesPattern(regex));
     }
 
     @Test
