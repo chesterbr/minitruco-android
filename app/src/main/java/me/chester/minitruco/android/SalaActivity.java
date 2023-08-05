@@ -151,10 +151,12 @@ public abstract class SalaActivity extends AppCompatActivity {
                 case "PUB":
                     textViewTituloSala.setText("Sala Pública");
                     layoutBotoesInternet.setVisibility(View.VISIBLE);
+                    textViewInfoSala.setVisibility(View.GONE);
                     break;
                 case "PRI":
                     textViewTituloSala.setText("Sala Privada - CÓDIGO: " + codigo);
                     layoutBotoesInternet.setVisibility(View.GONE);
+                    textViewInfoSala.setVisibility(View.VISIBLE);
                     break;
                 case "BLT":
                     textViewTituloSala.setText("Bluetooth");

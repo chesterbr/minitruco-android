@@ -8,6 +8,18 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText,RtlHardcoded,NestedWeights">
 
+    <TextView
+        android:id="@+id/textViewInfoSala"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Seus amigos podem entrar na sala usando o código abaixo em &quot;Entrar com código&quot;."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF"
+        android:visibility="visible" />
+
     <LinearLayout
         android:id="@+id/layoutJogadoresEBotoesGerente"
         android:layout_width="match_parent"
@@ -150,21 +162,6 @@
             android:visibility="visible" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewInfoSala"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:autoSizeMaxTextSize="100dp"
-        android:autoSizeTextType="uniform"
-        android:background="@drawable/borda_modo"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="Código: 123456\nGerente: joselito"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFFFFF"
-        android:visibility="gone" />
-
     <LinearLayout
         android:id="@+id/layoutBotoesInternet"
         android:layout_width="match_parent"
@@ -192,7 +189,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Entrar em sala usando código"
+            android:text="Entrar com código"
             android:textStyle="bold" />
 
     </LinearLayout>
