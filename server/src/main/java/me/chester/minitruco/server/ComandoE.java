@@ -4,17 +4,14 @@ package me.chester.minitruco.server;
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
 /**
- * Entra numa sala.
- * <p>
- * Recebe o tipo de sala e o modo de jogo. Tipos:
+ * Entra numa sala. Sintaxe:
  * <ul>
- *     <li>PUB - procura uma sala pública, se não achar, cria</li>
- *     <li>NPU - cria uma nova sala pública</li>
- *     <li>PRI - cria uma nova sala privada</li>
+ *     <li>PUB modo - procura uma sala pública compatível, se não achar, cria</li>
+ *     <li>NPU modo - cria nova sala pública</li>
+ *     <li>PRI modo - cria nova sala privada</li>
  *     <li>PRI-nnnnn - entra numa sala privada existente</li>
  * </ul>
- * TODO: NPU, PRI, PRI-nnnn
- * Modos: "P" para truco paulista, "M" para mineiro, etc; vide classe `Modo`
+ * modos: "P" para truco paulista, "M" para mineiro, etc; vide classe `Modo`
  */
 public class ComandoE extends Comando {
 
@@ -36,6 +33,14 @@ public class ComandoE extends Comando {
                 } else if ("NPU".equals(args[1])) {
                     Sala s = new Sala(true, args[2]);
                     s.adiciona(j);
+                    s.mandaInfoParaTodos();
+                } else if ("PRI".equals(args[1])) {
+                    Sala s = new Sala(false, args[2]);
+                    s.adiciona(j);
+                    s.mandaInfoParaTodos();
+                } else if (args[1].startsWith("PRI-")) {
+                    Sala s = Sala.colocaEmSalaPrivada(j, args[1].substring(4));
+                    // TODO tratar null
                     s.mandaInfoParaTodos();
                 } else {
                     j.println("X AI");

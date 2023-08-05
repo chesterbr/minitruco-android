@@ -1,5 +1,7 @@
 package me.chester.minitruco.server;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.spy;
@@ -8,6 +10,7 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
 class ComandoETest {
 
@@ -56,6 +59,24 @@ class ComandoETest {
         verify(j1, times(1)).println(any());
         verify(j2, times(1)).println(any());
         verify(j3, times(1)).println(any());
+    }
+
+    @Test
+    void testSalaPrivada() {
+        ArgumentCaptor<String> notificacaoCaptor = ArgumentCaptor.forClass(String.class);
+        Comando.interpreta("E PRI P", j1);
+        verify(j1).println(notificacaoCaptor.capture());
+
+        String notificacao = notificacaoCaptor.getValue();
+        assertThat(notificacao, matchesPattern("I j1\\|bot\\|bot\\|bot P 1 PRI-[0-9A-Z]+"));
+        String salaComPrefixo = notificacao.split(" ")[4];
+
+        Comando.interpreta("E " + salaComPrefixo, j2);
+        verify(j1).println("I j1|j2|bot|bot P 1 " + salaComPrefixo);
+        verify(j2).println("I j1|j2|bot|bot P 2 " + salaComPrefixo);
+
+        verify(j1, times(2)).println(any());
+        verify(j2, times(1)).println(any());
     }
 
     // TODO: X NO faz sentido? Seria melhor dar um nome default

@@ -82,7 +82,7 @@ public class Sala {
         if (publica) {
             salasPublicasDisponiveis.add(this);
         } else {
-            String codigo = UUID.randomUUID().toString().substring(0, 5);
+            String codigo = UUID.randomUUID().toString().toUpperCase().substring(0, 5);
             this.codigo = codigo;
             salasPrivadas.put(codigo, this);
         }
@@ -92,6 +92,8 @@ public class Sala {
     /**
      * Coloca o jogador em uma sala pública que tenha aquele modo de partida
      * criando uma caso estejam todas lotadas
+     *
+     * @return sala em que foi colocado
      */
     public static synchronized Sala colocaEmSalaPublica(JogadorConectado j, String modo) {
         Sala sala = salasPublicasDisponiveis.stream().filter(s ->
@@ -105,13 +107,16 @@ public class Sala {
     }
 
     /**
-     * Coloca o jogador em uma sala privada pré-existente
-     * @param codigo o código recebido de quem criou a sala
-     * @return false caso a sala não tenha sido encontrada ou esteja lotada
+     * Coloca o jogador em uma sala privada pré-existente (através do código)
+     *
+     * @return sala em que foi colocado, ou null se não existir/estiver lotada
      */
-    public static synchronized boolean colocaEmSalaPrivada(JogadorConectado j, String codigo) {
+    public static synchronized Sala colocaEmSalaPrivada(JogadorConectado j, String codigo) {
         Sala sala = salasPrivadas.get(codigo);
-        return (sala != null && sala.adiciona(j));
+        if (sala != null && sala.adiciona(j)) {
+            return sala;
+        }
+        return null;
     }
 
     /**
