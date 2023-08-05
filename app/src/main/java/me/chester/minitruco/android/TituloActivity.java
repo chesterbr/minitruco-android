@@ -142,7 +142,7 @@ public class TituloActivity extends SalaActivity {
 
     private void configuraBotoesMultiplayer() {
         boolean temBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
-        boolean temInternet = false;
+        boolean temInternet = true;
 
         Button btnBluetooth = findViewById(R.id.btnBluetooth);
         Button btnInternet = findViewById(R.id.btnInternet);
@@ -206,7 +206,6 @@ public class TituloActivity extends SalaActivity {
 
         runOnUiThread(() -> {
             AlertDialog dialogNome = new AlertDialog.Builder(this)
-                    .setIcon(R.mipmap.ic_launcher)
                     .setTitle("Nome")
                     .setMessage("Qual nome você gostaria de usar?")
                     .setView(editNomeJogador)
