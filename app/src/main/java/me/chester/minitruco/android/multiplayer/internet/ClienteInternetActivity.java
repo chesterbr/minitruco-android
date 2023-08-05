@@ -83,7 +83,7 @@ public class ClienteInternetActivity extends SalaActivity {
             layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
         });
         btnNovaSalaPublica.setOnClickListener(v -> {
-            comandoTrocaSala = "E PUB " + modo;
+            comandoTrocaSala = "E NPU " + modo;
             layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
         });
         btnEntrarComCodigo.setOnClickListener(v -> {
