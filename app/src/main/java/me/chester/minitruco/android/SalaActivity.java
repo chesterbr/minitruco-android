@@ -117,15 +117,16 @@ public abstract class SalaActivity extends AppCompatActivity {
             }
 
             // Ajusta os nomes para que o jogador local fique sempre na
-            // parte inferior da tela (textViewJogador1)
+            // parte inferior da tela (textViewJogador1), sucedido por
+            // "(você)"; precede a pessoa que é gerente com "Gerente:"
             int p = (posJogador - 1) % 4;
-            textViewJogador1.setText(nomes[p]);
+            textViewJogador1.setText(nomes[p] + (p == 0 ? " (você/gerente)" : "(você)"));
             p = (p + 1) % 4;
-            textViewJogador2.setText(nomes[p]);
+            textViewJogador2.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
             p = (p + 1) % 4;
-            textViewJogador3.setText(nomes[p]);
+            textViewJogador3.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
             p = (p + 1) % 4;
-            textViewJogador4.setText(nomes[p]);
+            textViewJogador4.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
 
             // Atualiza outros itens do display
             layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
