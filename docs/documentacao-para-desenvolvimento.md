@@ -281,7 +281,11 @@ Quando o miniTruco foi criado (2005), poucas pessoas possuíam celulares e plano
 
 Idealmente isso seria feito serializando as chamadas e objetos com um protocolo binário (se fosse hoje em dia, algo como [Protobuf](https://protobuf.dev/)). Mas eu também queria que fosse possível interagir diretamente com o servidor via terminal (para testes, depuração e também por diversão), então acabei criando uma "linguagem" que define comandos e notificações em texto simples.
 
-O protocolo consiste em _comandos_ enviados pelo cliente (ex.: `J 3c` para "`J`ogar o `3` de `c`opas") e _notificações_ enviadas pelo servidor (ex.: `V 2 F` para "`v`ez do jogador na posição `2`, que não pode (`F`alse) jogar fechada). Os clientes devem processar as notificações assincronamente, e podem enviar comandos a qualquer momento, desde que faça sentido (ex.: o comando `J` só funciona se um jogo estiver em andamento e for a vez do jogador).
+O protocolo consiste em _comandos_ enviados pelo cliente (ex.: `J 3c` para "`J`ogar o `3` de `c`opas") e _notificações_ enviadas pelo servidor (ex.: `V 2 F` para "`v`ez do jogador na posição `2`, que não pode (`F`alse) jogar fechada).
+
+Os clientes devem processar as notificações assincronamente, e podem enviar comandos a qualquer momento, desde que faça sentido (ex.: o comando `J` só funciona se um jogo estiver em andamento e for a vez do jogador).
+
+Comandos com erros de sintaxe ou argumentos inválidos são ignorados.
 
 ### Testando (jogando) via nc/telnet
 
@@ -310,7 +314,8 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `<nomes>`: Quatro sequências de caracteres, separadas por `|`. Exemplo: `john|bot|ringo|george`.
 - `<modo>`: `P` para truco paulista, `M` para truco mineiro, `V` para manilha velha ou `L` baralho limpo.
 - `<jogador>`: Posição de um jogador na sala/partida, de 1 a 4. É constante durante a partida, mas pode mudar fora dela (o servidor manda uma notificação `I` sempre que a formação da sala mudar).
-- `<sala>` : Informa o tipo de sala em que estamos conectados. Pode ser `BLT` (bluetooth), `PUB` (pública) ou `PRI-nnnnn` (privada, com o código nnnnn).
+- `<sala>` : Informa o tipo de sala em que estamos conectados. Pode ser `BLT` (bluetooth), `PUB` (pública) ou `PRI-código` (privada, com o código especificado).
+- `<codigo>` : String de números e letras maiúsculas que identifica uma sala privada. Exemplo: `A9327J`.
 - `<equipe>`: Uma das duas equipes (duplas). Pode ser 1 (equpe dos jogadores 1 e 3) ou 2 (jogadores 2 e 4).
 - `<frase>`: número aleatório grande que permite que todos os clientes mostrem a mesma frase (o "balãozinho") para um evento. Por exemplo, se o jogador 1 pediu truco (paulista) e o número sorteado foi 12345678, todos irão receber `T 1 3 12345678`; se o cliente tem 8 frases possíveis para truco, ele calcula 12345678 % 8 = 6 e exibe a frase de índice 6. Dessa forma, todos os clientes mostram a mesma frase (se estiverem com a mesma versão do [strings.xml](../app/src/main/res/values/strings.xml)) e o servidor não tem que saber quantas frases tem cada tipo de mensagem.
 
@@ -321,6 +326,9 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `B <numero>`:  Informa o número do build do cliente, para que o servidor verifique compatibilidade
 - `N <nome>`: Define o nome do jogador (é sanitizado; se for 100% inválido recebe um default)
 - `E PUB <modo>`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
+- `E NPU <modo>`: Cria uma nova sala pública e entra nela
+- `E PRI <modo> <nome>`: Cria uma nova sala privada e entra nela
+- `E PRI-<codigo>`: Entra em uma sala privada com o código <codigo>
 
 #### Dentro da sala (fora de jogo)
 - `S`: Sai da sala (encerrando a partida, se houver uma em andamento)
@@ -347,10 +355,6 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 - `W x.y`: `Versão do servidor (outras infos podem vir no futuro)
 - `X CI`: `Comando inválido
-- `X AI`: `Argumento inválido
-- `X FS`: `Você não está numa sala
-- `X NO`: `É preciso atribuir um nome para entrar na sala
-- `X JE sala`: Você já está na sala de código `sala`
 - `N nome`: Seu nome foi definido como `nome`
 - `I <nomes> <modo> <jogador> <sala>`: Informações da sala (vide detalhes em "convenções")
 - `P <jogador>`: Início da partida

@@ -120,6 +120,21 @@ public class Sala {
     }
 
     /**
+     * Cria uma nova sala e coloca o jogador nela
+     *
+     * @param j Jogador a ser colocado na sala (vai ser sempre o gerente)
+     * @param publica true se a sala for pública, false se for privada
+     * @param modo "P" para paulista, "M" para mineiro, etc.
+     * @return nova sala em que foi colocado
+     */
+    public static synchronized Sala colocaEmNovaSala(JogadorConectado j, boolean publica, String modo) {
+        Sala sala = new Sala(publica, modo);
+        sala.adiciona(j);
+
+        return sala;
+    }
+
+    /**
      * Adiciona um jogador na primeira posição disponível da sala,
      * garantindo os links bidirecionais e, se necessário,
      * trocando entre a lista das lotadas e das disponíveis.

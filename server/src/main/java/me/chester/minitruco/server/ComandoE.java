@@ -3,6 +3,8 @@ package me.chester.minitruco.server;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
+import me.chester.minitruco.core.Modo;
+
 /**
  * Entra numa sala. Sintaxe:
  * <ul>
@@ -17,37 +19,38 @@ public class ComandoE extends Comando {
 
     @Override
     public void executa(String[] args, JogadorConectado j) {
-
-        try {
-            if (j.getNome().equals("unnamed")) {
-                j.println("X NO");
+        String subcomando, modo = null;
+        if (args.length < 2 || args.length > 3) {
+            return;
+        }
+        subcomando = args[1];
+        if (args.length == 3) {
+            modo = args[2];
+            if (!Modo.isModoValido(modo)) {
                 return;
             }
-            if (j.getSala() != null) {
-                // TODO: mostrar o código se for sala pública?
-                j.println("X JE " + j.getSala().codigo);
+        }
+        if (j.getSala() != null) {
+            (new ComandoS()).executa(new String[]{"S"}, j);
+        }
+        try {
+            Sala s;
+            if ("PUB".equals(subcomando)) {
+                s = Sala.colocaEmSalaPublica(j, modo);
+            } else if ("NPU".equals(subcomando)) {
+                s = Sala.colocaEmNovaSala(j,true, modo);
+            } else if ("PRI".equals(subcomando)) {
+                s = Sala.colocaEmNovaSala(j,false, modo);
+            } else if (subcomando.startsWith("PRI-")) {
+                s = Sala.colocaEmSalaPrivada(j, subcomando.substring(4));
             } else {
-                if ("PUB".equals(args[1])) {
-                    Sala s = Sala.colocaEmSalaPublica(j, args[2]);
-                    s.mandaInfoParaTodos();
-                } else if ("NPU".equals(args[1])) {
-                    Sala s = new Sala(true, args[2]);
-                    s.adiciona(j);
-                    s.mandaInfoParaTodos();
-                } else if ("PRI".equals(args[1])) {
-                    Sala s = new Sala(false, args[2]);
-                    s.adiciona(j);
-                    s.mandaInfoParaTodos();
-                } else if (args[1].startsWith("PRI-")) {
-                    Sala s = Sala.colocaEmSalaPrivada(j, args[1].substring(4));
-                    // TODO tratar null
-                    s.mandaInfoParaTodos();
-                } else {
-                    j.println("X AI");
-                }
+                return;
+            }
+            if (s != null) {
+                s.mandaInfoParaTodos();
             }
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            j.println("X AI");
+            // Simplesmente ignoramos qualquer erro causado pelo comando
         }
 
     }
