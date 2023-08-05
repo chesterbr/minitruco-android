@@ -23,6 +23,8 @@ public class MiniTrucoServer {
     // Na real é o próximo, mas ok, esse nem tem o botão de internet
     public static final int BUILD_MINIMO_CLIENTE = 20503;
 
+    public static final int MAX_JOGADORES = 1024;
+
     /**
      * Guarda as threads dos jogadores conectados (para que possamos
      * esperar elas finalizarem quando o servidor for desligado).
@@ -86,6 +88,12 @@ public class MiniTrucoServer {
                         break;
                     }
                     // Era só o timeout, vamos continuar
+                    continue;
+                }
+                if (threadsJogadores.size() >= MAX_JOGADORES) {
+                    ServerLogger.evento("Máximo de jogadores (" + MAX_JOGADORES + ") atingido, recusando conexão");
+                    sCliente.getOutputStream().write("! T Servidor lotado, tente novamente mais tarde.\n".getBytes());
+                    sCliente.close();
                     continue;
                 }
                 JogadorConectado j = new JogadorConectado(sCliente);
