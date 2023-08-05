@@ -55,7 +55,7 @@ public class ClienteInternetActivity extends SalaActivity {
             enviaLinha("R T");
         });
 
-        iniciaProcessamentoDeNotificacoes();
+        conectaEIniciaProcessamentoDeNotificacoes();
     }
 
     private void solicitaInicioDeJogoConfirmandoSeTiverBots() {
@@ -73,7 +73,8 @@ public class ClienteInternetActivity extends SalaActivity {
         }
     }
 
-    private void iniciaProcessamentoDeNotificacoes() {
+    private void conectaEIniciaProcessamentoDeNotificacoes() {
+        setMensagem("Conectando...");
         new Thread(() -> {
             try {
                 if (conecta()) {
