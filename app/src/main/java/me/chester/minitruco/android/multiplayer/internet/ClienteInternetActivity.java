@@ -109,7 +109,7 @@ public class ClienteInternetActivity extends SalaActivity {
      * o tamanho; é mais pra evitar erros de digitação e abusos)
      */
     private String sanitiza(String codigo) {
-        Jogador.sanitizaNome(codigo).toUpperCase();
+        return Jogador.sanitizaNome(codigo).toUpperCase();
     }
 
     private void solicitaInicioDeJogoConfirmandoSeTiverBots() {
