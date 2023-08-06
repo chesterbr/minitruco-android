@@ -8,11 +8,24 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText,RtlHardcoded,NestedWeights">
 
+    <TextView
+        android:id="@+id/textViewInfoSala"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Seus amigos podem entrar na sala usando o código abaixo em &quot;Entrar com código&quot;."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#FFFFFF"
+        android:visibility="visible" />
+
     <LinearLayout
         android:id="@+id/layoutJogadoresEBotoesGerente"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:layout_margin="2dp"
         android:background="@drawable/borda_sala"
         android:gravity="center"
         android:orientation="vertical">
@@ -21,19 +34,19 @@
             android:id="@+id/textViewTituloSala"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FFB37447"
+            android:background="#FFC69F6C"
             android:gravity="center"
             android:paddingHorizontal="8dp"
             android:paddingBottom="2dp"
             android:text="Bluetooth"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#FFFFFF"
+            android:textColor="#000000"
             android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/layoutJogadores"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:gravity="center_horizontal|top"
             android:orientation="vertical">
 
@@ -45,12 +58,13 @@
                 android:text="Posição_3"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="italic" />
 
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <TextView
@@ -63,12 +77,13 @@
                     android:text="Posição_4"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="italic" />
 
                 <LinearLayout
                     android:id="@+id/layoutBotoesGerente"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:orientation="vertical">
 
                     <Button
@@ -100,7 +115,7 @@
                     android:layout_weight="1"
                     android:gravity="right|center_vertical"
                     android:paddingHorizontal="2dp"
-                    android:text="Posição_2"
+                    android:text="Posição_2 (gerente)"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold" />
@@ -111,21 +126,21 @@
                 android:id="@+id/textViewJogador1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0"
                 android:gravity="center_horizontal|top"
                 android:paddingBottom="4dp"
                 android:text="Posição_1 (você)"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="italic" />
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -137,51 +152,44 @@
             android:layout_marginHorizontal="8dp"
             android:background="@drawable/borda_dialogo"
             android:gravity="center"
+            android:layout_marginVertical="8dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="6dp"
             android:text="mensagem que vai ocupar duas linhas"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"
+            android:textStyle="bold|italic"
             android:visibility="visible" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewInfoSala"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:autoSizeMaxTextSize="100dp"
-        android:autoSizeTextType="uniform"
-        android:background="@drawable/borda_modo"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="Código: 123456\nGerente: joselito"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#FFFFFF"
-        android:visibility="visible" />
-
     <LinearLayout
-        android:id="@+id/layoutBotoesSala"
-        android:layout_width="wrap_content"
+        android:id="@+id/layoutBotoesInternet"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
         <Button
-            android:id="@+id/btnNovaSala"
+            android:id="@+id/btnNovaSalaPublica"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusedByDefault="true"
-            android:text="Trocar de Sala"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Criar sala pública"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnEntrarSala"
+            android:id="@+id/btnNovaSalaPrivada"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusedByDefault="true"
-            android:text="Entrar com Código"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Criar sala privada"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnEntrarComCodigo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Entrar com código"
             android:textStyle="bold" />
 
     </LinearLayout>

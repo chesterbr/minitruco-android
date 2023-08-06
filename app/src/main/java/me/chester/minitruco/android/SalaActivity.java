@@ -2,6 +2,7 @@ package me.chester.minitruco.android;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -31,11 +32,12 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected Button btnIniciar;
     protected Button btnInverter;
     protected Button btnTrocar;
-    protected Button btnNovaSala;
-    protected Button btnEntrarSala;
-    private View layoutJogadoresEBotoesGerente;
+    protected Button btnNovaSalaPublica;
+    protected Button btnNovaSalaPrivada;
+    protected Button btnEntrarComCodigo;
+    protected View layoutJogadoresEBotoesGerente;
     protected View layoutBotoesGerente;
-    protected View layoutBotoesSala;
+    protected View layoutBotoesInternet;
     protected View layoutRegras;
     protected TextView textViewStatus;
     protected TextView textViewJogador1;
@@ -61,10 +63,11 @@ public abstract class SalaActivity extends AppCompatActivity {
         btnTrocar = findViewById(R.id.btnTrocar);
         layoutJogadoresEBotoesGerente = findViewById(R.id.layoutJogadoresEBotoesGerente);
         layoutBotoesGerente = findViewById(R.id.layoutBotoesGerente);
-        layoutBotoesSala = findViewById(R.id.layoutBotoesSala);
+        layoutBotoesInternet = findViewById(R.id.layoutBotoesInternet);
         layoutRegras = findViewById(R.id.layoutRegras);
-        btnNovaSala = findViewById(R.id.btnNovaSala);
-        btnEntrarSala = findViewById(R.id.btnEntrarSala);
+        btnNovaSalaPublica = findViewById(R.id.btnNovaSalaPublica);
+        btnNovaSalaPrivada = findViewById(R.id.btnNovaSalaPrivada);
+        btnEntrarComCodigo = findViewById(R.id.btnEntrarComCodigo);
         textViewStatus = findViewById(R.id.textViewStatus);
         textViewTituloSala = findViewById(R.id.textViewTituloSala);
         textViewInfoSala = findViewById(R.id.textViewInfoSala);
@@ -72,10 +75,11 @@ public abstract class SalaActivity extends AppCompatActivity {
         textViewJogador2 = findViewById(R.id.textViewJogador2);
         textViewJogador3 = findViewById(R.id.textViewJogador3);
         textViewJogador4 = findViewById(R.id.textViewJogador4);
-        layoutJogadoresEBotoesGerente.setVisibility(View.GONE);
+        layoutJogadoresEBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesGerente.setVisibility(View.INVISIBLE);
-        layoutBotoesSala.setVisibility(View.GONE);
+        layoutBotoesInternet.setVisibility(View.GONE);
         textViewInfoSala.setVisibility(View.GONE);
+        textViewStatus.setText("");
         setMensagem(null);
     }
 
@@ -98,8 +102,8 @@ public abstract class SalaActivity extends AppCompatActivity {
             String tipoSala = tokens[4];
             String codigo = null;
             if (tipoSala.startsWith("PRI-")) {
-                tipoSala = "PRI";
                 codigo = tipoSala.substring(4);
+                tipoSala = "PRI";
             }
 
             // Volta pra mesa (se já não estiver nela)
@@ -122,12 +126,16 @@ public abstract class SalaActivity extends AppCompatActivity {
             // "(você)"; sucede a pessoa que é gerente com "(gerente)"
             int p = (posJogador - 1) % 4;
             textViewJogador1.setText(nomes[p] + (p == 0 ? " (você/gerente)" : " (você)"));
+            textViewJogador1.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
             p = (p + 1) % 4;
             textViewJogador2.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
+            textViewJogador2.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
             p = (p + 1) % 4;
             textViewJogador3.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
+            textViewJogador3.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
             p = (p + 1) % 4;
             textViewJogador4.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
+            textViewJogador4.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
 
             // Atualiza outros itens do display
             layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
@@ -142,19 +150,25 @@ public abstract class SalaActivity extends AppCompatActivity {
             switch (tipoSala) {
                 case "PUB":
                     textViewTituloSala.setText("Sala Pública");
+                    layoutBotoesInternet.setVisibility(View.VISIBLE);
+                    textViewInfoSala.setVisibility(View.GONE);
                     break;
                 case "PRI":
-                    textViewTituloSala.setText("Sala Privada");
+                    textViewTituloSala.setText("Sala Privada - CÓDIGO: " + codigo);
+                    layoutBotoesInternet.setVisibility(View.GONE);
+                    textViewInfoSala.setVisibility(View.VISIBLE);
                     break;
                 case "BLT":
                     textViewTituloSala.setText("Bluetooth");
                     break;
             }
             textViewStatus.setText("Modo: " + Partida.textoModo(modo));
-            if (numJogadores < 4) {
-                setMensagem("Aguardando mais pessoas ou gerente iniciar partida");
-            } else {
-                setMensagem("Aguardando gerente iniciar partida");
+            if (!isGerente) {
+                if (numJogadores < 4) {
+                    setMensagem("Aguardando mais pessoas ou gerente iniciar partida");
+                } else {
+                    setMensagem("Aguardando gerente iniciar partida");
+                }
             }
         });
     }

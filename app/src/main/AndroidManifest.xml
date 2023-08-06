@@ -35,11 +35,11 @@
         Jogo via internet
     -->
     <!--
-        Para habilitar internet, descomente aqui e mude a flag em
+        Para desligar o botão de internet, comente aqui e mude a flag em
         TituloActivity.configuraBotoesMultiplayer
+    -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    -->
 
     <uses-feature
         android:name="android.hardware.touchscreen"
