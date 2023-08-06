@@ -315,7 +315,7 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `<modo>`: `P` para truco paulista, `M` para truco mineiro, `V` para manilha velha ou `L` baralho limpo.
 - `<jogador>`: Posição de um jogador na sala/partida, de 1 a 4. É constante durante a partida, mas pode mudar fora dela (o servidor manda uma notificação `I` sempre que a formação da sala mudar).
 - `<sala>` : Informa o tipo de sala em que estamos conectados. Pode ser `BLT` (bluetooth), `PUB` (pública) ou `PRI-código` (privada, com o código especificado).
-- `<codigo>` : String de números e letras maiúsculas que identifica uma sala privada. Exemplo: `A9327J`.
+- `<codigo>` : String de 5 dígitos numéricos que identifica uma sala privada. Exemplo: `23724`.
 - `<equipe>`: Uma das duas equipes (duplas). Pode ser 1 (equpe dos jogadores 1 e 3) ou 2 (jogadores 2 e 4).
 - `<frase>`: número aleatório grande que permite que todos os clientes mostrem a mesma frase (o "balãozinho") para um evento. Por exemplo, se o jogador 1 pediu truco (paulista) e o número sorteado foi 12345678, todos irão receber `T 1 3 12345678`; se o cliente tem 8 frases possíveis para truco, ele calcula 12345678 % 8 = 6 e exibe a frase de índice 6. Dessa forma, todos os clientes mostram a mesma frase (se estiverem com a mesma versão do [strings.xml](../app/src/main/res/values/strings.xml)) e o servidor não tem que saber quantas frases tem cada tipo de mensagem.
 
