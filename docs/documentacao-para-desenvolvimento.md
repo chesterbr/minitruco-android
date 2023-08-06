@@ -325,10 +325,12 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 - `B <numero>`:  Informa o número do build do cliente, para que o servidor verifique compatibilidade
 - `N <nome>`: Define o nome do jogador (é sanitizado; se for 100% inválido recebe um default)
-- `E PUB <modo>`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
-- `E NPU <modo>`: Cria uma nova sala pública e entra nela
-- `E PRI <modo> <nome>`: Cria uma nova sala privada e entra nela
-- `E PRI-<codigo>`: Entra em uma sala privada com o código <codigo>
+- `E <subcomando> [<modo>]`: Entra em uma sala pública ou privada, existente ou nova (dependendo de `<subcomando>`):
+  - `PUB`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga)
+  - `NPU`: Cria uma nova sala pública e entra nela
+  - `PRI`: Cria uma nova sala privada e entra nela
+    - `PRI-<codigo>`: Entra em uma sala privada com o código `<codigo>`
+    Os subcomandos `PUB`, `NPU` e `PRI` devem ser seguidos de `<modo>` (ex.: `E PUB P` para entrar em uma sala pública de truco paulista). `PRI-<codigo>` vai usar o modo já existente da sala, então não recebe (ex.: `E PRI-12345` para entrar na sala de código `12345`). Em qualquer caso, se o jogador já estiver em uma sala, ele é removido dela antes de entrar na nova. Em caso de erro no `PRI-<codigo>` (sala lotada ou não-existente), o jogador recebe uma notificação de sala inválida (`X SI`), mas é removido da sala anterior (clientes devem desconectar ou recolocar o usuário em uma sala).
 
 #### Dentro da sala (fora de jogo)
 - `S`: Sai da sala (encerrando a partida, se houver uma em andamento)
@@ -353,8 +355,9 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 ### Notificações
 
-- `W x.y`: `Versão do servidor (outras infos podem vir no futuro)
-- `X CI`: `Comando inválido
+- `W x.y`: Versão do servidor (outras infos podem vir no futuro)
+- `X CI`: Comando inválido
+- `X SI`: Sala (privada) não existe ou está cheia.
 - `N nome`: Seu nome foi definido como `nome`
 - `I <nomes> <modo> <jogador> <sala>`: Informações da sala (vide detalhes em "convenções")
 - `P <jogador>`: Início da partida
