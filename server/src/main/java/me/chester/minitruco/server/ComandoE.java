@@ -33,26 +33,27 @@ public class ComandoE extends Comando {
         if (j.getSala() != null) {
             (new ComandoS()).executa(new String[]{"S"}, j);
         }
-        try {
-            Sala s;
-            if ("PUB".equals(subcomando)) {
-                s = Sala.colocaEmSalaPublica(j, modo);
-            } else if ("NPU".equals(subcomando)) {
-                s = Sala.colocaEmNovaSala(j,true, modo);
-            } else if ("PRI".equals(subcomando)) {
-                s = Sala.colocaEmNovaSala(j,false, modo);
-            } else if (subcomando.startsWith("PRI-")) {
-                s = Sala.colocaEmSalaPrivada(j, subcomando.substring(4));
-            } else {
-                return;
+        Sala sala = null;
+        if ("PUB".equals(subcomando)) {
+            sala = Sala.colocaEmSalaPublica(j, modo);
+        } else if ("NPU".equals(subcomando)) {
+            sala = Sala.colocaEmNovaSala(j,true, modo);
+        } else if ("PRI".equals(subcomando)) {
+            sala = Sala.colocaEmNovaSala(j,false, modo);
+        } else if (subcomando.startsWith("PRI-")) {
+            String codigo = subcomando.split("-")[1];
+            if (codigo.matches("[0-9]{5}")) {
+                sala = Sala.colocaEmSalaPrivada(j, codigo);
             }
-            if (s != null) {
-                s.mandaInfoParaTodos();
+            if (sala == null) {
+                j.println("X SI");
             }
-        } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            // Simplesmente ignoramos qualquer erro causado pelo comando
+        } else {
+            return;
         }
-
+        if (sala != null) {
+            sala.mandaInfoParaTodos();
+        }
     }
 
 }
