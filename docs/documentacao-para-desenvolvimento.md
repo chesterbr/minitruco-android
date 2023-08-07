@@ -358,7 +358,6 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 ### Notificações
 
-- `W x.y`: Versão do servidor (outras infos podem vir no futuro)
 - `X CI`: Comando inválido
 - `X SI`: Sala (privada) não existe ou está cheia.
 - `N nome`: Seu nome foi definido como `nome`
