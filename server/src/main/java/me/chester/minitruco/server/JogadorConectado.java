@@ -55,7 +55,8 @@ public class JogadorConectado extends Jogador implements Runnable {
      */
     public JogadorConectado(Socket cliente) {
         this.cliente = cliente;
-        this.setNome(Jogador.sanitizaNome("")); // atribui um nome padrão
+        // atribui um nome padrão, sem gerar log de troca de nome
+        super.setNome(Jogador.sanitizaNome(""));
     }
 
     @FunctionalInterface
@@ -350,6 +351,12 @@ public class JogadorConectado extends Jogador implements Runnable {
             .append(s == null ? "" : s)
             .append(']')
             .toString();
+    }
+
+    @Override
+    public void setNome(String nome) {
+        LOGGER.info(this + " mudou nome para " + nome);
+        super.setNome(nome);
     }
 
 }
