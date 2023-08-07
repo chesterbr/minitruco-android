@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import sun.misc.Signal;
 
@@ -36,6 +38,12 @@ public class MiniTrucoServer {
      * conexões e encerra ela quando o launcher.sh solicitar.
      */
     public static void main(String[] args) {
+        // Set custom formatter for all handlers
+        Handler[] handlers = Logger.getLogger("").getHandlers();
+        for (Handler handler : handlers) {
+            handler.setFormatter(new LogFormatter());
+        }
+
         // Enquanto esta thread estiver rodando, o servidor vai aceitar conexões
         // e colocar o socket de cada cliente numa thread separada
         Thread threadAceitaConexoes = new Thread(() -> aceitaConexoes());
