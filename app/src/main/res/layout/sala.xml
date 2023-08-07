@@ -118,7 +118,7 @@
                     android:text="Posição_2 (gerente)"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="italic" />
             </LinearLayout>
 
 
