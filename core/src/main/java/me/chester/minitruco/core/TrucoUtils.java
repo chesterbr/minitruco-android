@@ -49,4 +49,32 @@ public class TrucoUtils {
         return sb.toString();
     }
 
+    private static final int[] POSICAO_GERENTE_PARA_POSICAO_JOGADOR = { 0, 1, 4, 3, 2 };
+
+    /**
+     * Renderiza o HTML para o nome do jogador que vai aparecer naquela posição,
+     * indicando a posição 1 com "(você)", o gerente com "(gerente)" e bold.
+     *
+     * @param notificacaoI notificação da qual vamos tirar os nomes e posições
+     * @param posicaoNaTela qual posição de tela (1=inferior, 2=direita, etc) queremos renderizar
+     * @return String HTML com o nome do jogador e indicacões acima
+     */
+    public static String nomeHtmlParaDisplay(String notificacaoI, int posicaoNaTela) {
+        String[] partes = notificacaoI.split(" ");
+        String[] nomes = partes[1].split("\\|");
+        int posicaoNoJogo = Integer.parseInt(partes[3]);
+        int posicaoGerente = POSICAO_GERENTE_PARA_POSICAO_JOGADOR[posicaoNoJogo];
+        String nome = nomes[(posicaoNoJogo - 1 + posicaoNaTela - 1) % 4];
+        boolean isGerente = (posicaoGerente == posicaoNaTela);
+        boolean isVoce = (posicaoNaTela == 1);
+
+        return new StringBuilder()
+            .append(isGerente ? "<b>" : "")
+            .append(nome)
+            .append(isGerente ? "" : "")
+            .append(isVoce ? " (você)" : "")
+            .append(isGerente ? " (gerente)</b>" : "")
+            .toString();
+    }
+
 }

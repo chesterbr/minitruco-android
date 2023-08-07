@@ -1,8 +1,9 @@
 package me.chester.minitruco.android;
 
+import static me.chester.minitruco.core.TrucoUtils.nomeHtmlParaDisplay;
+
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +45,7 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected TextView textViewJogador2;
     protected TextView textViewJogador3;
     protected TextView textViewJogador4;
+    protected TextView[] textViewsJogadores;
     protected TextView textViewTituloSala;
     protected TextView textViewInfoSala;
     protected int posJogador;
@@ -75,6 +77,9 @@ public abstract class SalaActivity extends AppCompatActivity {
         textViewJogador2 = findViewById(R.id.textViewJogador2);
         textViewJogador3 = findViewById(R.id.textViewJogador3);
         textViewJogador4 = findViewById(R.id.textViewJogador4);
+        textViewsJogadores = new TextView[] {
+            textViewJogador1, textViewJogador2, textViewJogador3, textViewJogador4
+        };
         layoutJogadoresEBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesInternet.setVisibility(View.GONE);
@@ -121,21 +126,13 @@ public abstract class SalaActivity extends AppCompatActivity {
                 }
             }
 
-            // Ajusta os nomes para que o jogador local fique sempre na
-            // parte inferior da tela (textViewJogador1), sucedido por
-            // "(você)"; sucede a pessoa que é gerente com "(gerente)"
-            int p = (posJogador - 1) % 4;
-            textViewJogador1.setText(nomes[p] + (p == 0 ? " (você/gerente)" : " (você)"));
-            textViewJogador1.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
-            p = (p + 1) % 4;
-            textViewJogador2.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
-            textViewJogador2.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
-            p = (p + 1) % 4;
-            textViewJogador3.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
-            textViewJogador3.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
-            p = (p + 1) % 4;
-            textViewJogador4.setText(nomes[p] + (p == 0 ? " (gerente)" : ""));
-            textViewJogador4.setTypeface(null, p == 0 ? Typeface.BOLD_ITALIC : Typeface.ITALIC);
+            // Coloca os nomes dos jogadores nas posições corretas, indicando
+            // jogador da vez, gerente, expulsáveis
+            for (int i = 1; i <= 4; i++) {
+                String nomeHtml = nomeHtmlParaDisplay(notificacaoI, i);
+                TextView tv = textViewsJogadores[i - 1];
+                tv.setText(Html.fromHtml(nomeHtml));
+            }
 
             // Atualiza outros itens do display
             layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
