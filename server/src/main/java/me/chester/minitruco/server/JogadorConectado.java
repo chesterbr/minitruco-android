@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
@@ -209,7 +210,7 @@ public class JogadorConectado extends Jogador implements Runnable {
         try {
             cliente.close();
         } catch (IOException e) {
-            ServerLogger.evento(e, "Erro de I/O inesperado ao fechar socket");
+            LOGGER.log(Level.INFO, "Erro de I/O inesperado ao fechar socket", e);
         }
     }
 

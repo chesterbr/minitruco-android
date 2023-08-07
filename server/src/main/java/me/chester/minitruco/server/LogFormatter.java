@@ -1,5 +1,7 @@
 package me.chester.minitruco.server;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +20,7 @@ public class LogFormatter extends Formatter {
 
     @Override
     public String format(LogRecord record) {
-        return new StringBuilder()
+        StringBuilder sb = new StringBuilder()
             .append(DATE_FORMAT.format(new Date(record.getMillis())))
             .append(" [")
             .append(record.getLevel().getName())
@@ -28,8 +30,17 @@ public class LogFormatter extends Formatter {
             .append(record.getSourceMethodName())
             .append(": ")
             .append(formatMessage(record))
-            .append("\n")
-            .toString();
+            .append("\n");
+
+        if (record.getThrown() != null) {
+            sb.append("Exception: ");
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            record.getThrown().printStackTrace(pw);
+            sb.append(sw.toString());
+        }
+
+        return sb.toString();
     }
 
     private String nomeDaClasse(LogRecord record) {
