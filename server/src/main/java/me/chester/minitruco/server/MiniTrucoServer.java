@@ -9,10 +9,24 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import sun.misc.Signal;
 
 public class MiniTrucoServer {
+
+    static {
+        // Configura todos os loggers daqui pra frente com o nosso formatador
+        // (incluindo o dessa classe, logo abaixo)
+        Handler[] handlers = Logger.getLogger("").getHandlers();
+        for (Handler handler : handlers) {
+            handler.setFormatter(new LogFormatter());
+        }
+    }
+
+    private static final Logger LOGGER = Logger.getLogger("MiniTrucoServer");
 
     /**
      * Porta onde o servidor escuta por conexões. Acho que ninguém nunca
@@ -47,15 +61,15 @@ public class MiniTrucoServer {
         // desligado. Elas vão deixar os jogadores concluirem a partida em
         // que estão (se houver uma) e desconectar/encerrar em seguida.
         Signal.handle(new Signal("USR1"), signal -> {
-            ServerLogger.evento("Recebido sinal USR1 - interrompendo threadAceitaConxoes");
+            LOGGER.info("Recebido sinal USR1 - interrompendo threadAceitaConxoes");
             threadAceitaConexoes.interrupt();
-            ServerLogger.evento("Avisando threads de JogadorConectado que o servidor está sendo desligado");
+            LOGGER.info("Avisando threads de JogadorConectado que o servidor está sendo desligado");
             JogadorConectado.servidorSendoDesligado = true;
         });
 
         // Quando *todas* as threads encerrarem, loga o evento final
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            ServerLogger.evento("JVM desligando. Tchau e obrigado pelos 🎏.");
+            LOGGER.info("JVM desligando. Tchau e obrigado pelos 🎏.");
         }));
 
         // O servidor continua rodandno até que a threadAceitaConexoes se
@@ -72,7 +86,7 @@ public class MiniTrucoServer {
      * threads de JogadorConectado se encerrem.
      */
     public static void aceitaConexoes() {
-        ServerLogger.evento("Servidor inicializado e escutando na porta " + PORTA_SERVIDOR);
+        LOGGER.info("Servidor inicializado e escutando na porta " + PORTA_SERVIDOR);
         ServerSocket s = null;
         try {
             s = new ServerSocket(PORTA_SERVIDOR);
@@ -91,7 +105,7 @@ public class MiniTrucoServer {
                     continue;
                 }
                 if (threadsJogadores.size() >= MAX_JOGADORES) {
-                    ServerLogger.evento("Máximo de jogadores (" + MAX_JOGADORES + ") atingido, recusando conexão");
+                    LOGGER.info("Máximo de jogadores (" + MAX_JOGADORES + ") atingido, recusando conexão");
                     sCliente.getOutputStream().write("! T Servidor lotado, tente novamente mais tarde.\n".getBytes());
                     sCliente.close();
                     continue;
@@ -99,22 +113,22 @@ public class MiniTrucoServer {
                 JogadorConectado j = new JogadorConectado(sCliente);
                 j.setOnFinished((t) -> {
                     threadsJogadores.remove(t);
-                    ServerLogger.evento("Jogadores conectados: " + threadsJogadores.size());
+                    LOGGER.info("Jogadores conectados: " + threadsJogadores.size());
                 });
                 threadsJogadores.add(Thread.ofVirtual().start(j));
-                ServerLogger.evento("Jogadores conectados: " + threadsJogadores.size());
+                LOGGER.info("Jogadores conectados: " + threadsJogadores.size());
             }
         } catch (IOException e) {
-            ServerLogger.evento(e, "Erro de I/O no ServerSocket");
+            LOGGER.log(Level.INFO, "Erro de I/O no ServerSocket", e);
         } finally {
             if (s != null) {
                 try {
                     s.close();
                 } catch (IOException e) {
-                    ServerLogger.evento(e, "Erro de I/O ao fechar ServerSocket");
+                    LOGGER.log(Level.INFO, "Erro de I/O ao fechar ServerSocket", e);
                 }
             }
-            ServerLogger.evento("Servidor não está mais escutando (porta liberada)");
+            LOGGER.info("Servidor não está mais escutando (porta liberada)");
             aguardaThreadsJogadoresFinalizarem();
         }
     }
@@ -129,13 +143,13 @@ public class MiniTrucoServer {
      */
     private static void aguardaThreadsJogadoresFinalizarem() {
         while (!threadsJogadores.isEmpty()) {
-            ServerLogger.evento("Aguardando " + threadsJogadores.size() + " jogadores (threads) finalizarem");
+            LOGGER.info("Aguardando " + threadsJogadores.size() + " jogadores (threads) finalizarem");
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
-        ServerLogger.evento("Todos os jogadores finalizaram.");
+        LOGGER.info("Todos os jogadores finalizaram.");
     }
 }

@@ -26,7 +26,6 @@ public class ComandoN extends Comando {
         String nome = Jogador.sanitizaNome(
             (comando + "  ").substring(2)
         );
-        ServerLogger.evento("Nome mudou de " + j.getNome() + " para " + nome);
         j.setNome(nome);
         j.println("N " + nome);
     }

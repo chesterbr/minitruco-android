@@ -7,7 +7,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
@@ -19,6 +22,8 @@ import me.chester.minitruco.core.Jogador;
  * partida, interagir com ela.
  */
 public class JogadorConectado extends Jogador implements Runnable {
+
+    private final static Logger LOGGER = Logger.getLogger("JogadorConectado");
 
     public static final int TEMPO_KEEPALIVE = 5000;
     private final Socket cliente;
@@ -52,7 +57,8 @@ public class JogadorConectado extends Jogador implements Runnable {
      */
     public JogadorConectado(Socket cliente) {
         this.cliente = cliente;
-        this.setNome(Jogador.sanitizaNome("")); // atribui um nome padrão
+        // atribui um nome padrão, sem gerar log de troca de nome
+        super.setNome(Jogador.sanitizaNome(""));
     }
 
     @FunctionalInterface
@@ -77,7 +83,7 @@ public class JogadorConectado extends Jogador implements Runnable {
         out.flush();
         // Não fazemos log de keepalive
         if (!linha.startsWith("K")) {
-            ServerLogger.evento(this, linha);
+            LOGGER.info(this + " recebeu " + linha);
         }
     }
 
@@ -85,7 +91,7 @@ public class JogadorConectado extends Jogador implements Runnable {
      * Aguarda comandos do jogador e os executa
      */
     public void run() {
-        ServerLogger.evento(this, "conectou, iniciando thread");
+        LOGGER.info(this + " conectou, iniciando thread");
 
         try {
             cliente.setSoTimeout(0);
@@ -105,11 +111,13 @@ public class JogadorConectado extends Jogador implements Runnable {
                 if (("K " + keepAlive).equals(linha)) {
                     keepAlive = 0;
                     continue;
+                } else {
+                    LOGGER.info(this + " mandou " + linha);
                 }
                 Comando.interpreta(linha, this);
             }
         } catch (IOException e) {
-            ServerLogger.evento(e, "Erro de I/O inesperado loop principal do jogador");
+            LOGGER.info(this + " Erro de I/O inesperado loop principal do jogador");
         } finally {
             Sala s = getSala();
             // Se houver um jogo em andamento (e ainda tivermos comunicação), encerra
@@ -124,7 +132,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                 // Garante que o jogador saiu da sala, e os clientes vão ser notificados
                 s.remove(this);
                 s.mandaInfoParaTodos();
-                ServerLogger.evento(this, "finalizou thread");
+                LOGGER.info(this + " finalizou thread");
             }
             finalizaThreadAuxiliar();
             if (onFinishCallback != null) {
@@ -150,13 +158,13 @@ public class JogadorConectado extends Jogador implements Runnable {
     private void iniciaThreadAuxiliar() {
         Thread threadPrincipal = Thread.currentThread();
         threadMonitorDeConexao = Thread.ofVirtual().start(() -> {
-            ServerLogger.evento(this, "Aguardando para iniciar monitor de conexão");
+            LOGGER.info(this + " Aguardando para iniciar monitor de conexão");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            ServerLogger.evento(this, "Iniciando monitor de conexão");
+            LOGGER.info(this + " Iniciando monitor de conexão");
             boolean avisouQueVaiDesconectarNoFimDaPartida = false;
             while (true) {
                 //// Checagem de servidor dando shutdown
@@ -181,20 +189,20 @@ public class JogadorConectado extends Jogador implements Runnable {
                     Thread.currentThread().interrupt();
                 }
                 if (keepAlive != 0) {
-                    ServerLogger.evento(this, "Keepalive não respondido, fechando socket");
+                    LOGGER.info(this + " Keepalive não respondido, fechando socket");
                     desconecta();
                     threadPrincipal.interrupt();
                     break;
                 }
             }
-            ServerLogger.evento(this, "Monitor de conexão finalizado");
+            LOGGER.info(this + " Monitor de conexão finalizado");
             threadMonitorDeConexao = null;
         });
     }
 
     private void finalizaThreadAuxiliar() {
         if (threadMonitorDeConexao != null) {
-            ServerLogger.evento("Interrompendo monitor de conexão");
+            LOGGER.info(this + " Interrompendo monitor de conexão");
             threadMonitorDeConexao.interrupt();
         }
     }
@@ -203,7 +211,7 @@ public class JogadorConectado extends Jogador implements Runnable {
         try {
             cliente.close();
         } catch (IOException e) {
-            ServerLogger.evento(e, "Erro de I/O inesperado ao fechar socket");
+            LOGGER.log(Level.INFO, "Erro de I/O inesperado ao fechar socket", e);
         }
     }
 
@@ -326,8 +334,39 @@ public class JogadorConectado extends Jogador implements Runnable {
         this.sala = sala;
     }
 
+    private String ip = null;
+
     public String getIp() {
-        return cliente.getInetAddress().getHostAddress();
+        if (ip == null && cliente != null) {
+            InetAddress inetAddress = cliente.getInetAddress();
+            if (inetAddress != null) {
+                ip = inetAddress.getHostAddress();
+            }
+        }
+        return ip;
+    }
+
+    /**
+     * @return Jogador com nome, info de IP e sala (para logs)
+     */
+    @Override
+    public String toString() {
+        Sala s = sala; // caso o jogador saia da sala entre o null check e o Sala.toString
+        return new StringBuilder()
+            .append('[')
+            .append(getNome())
+            .append('@')
+            .append(getIp())
+            .append(s == null ? "" : " em ")
+            .append(s == null ? "" : s)
+            .append(']')
+            .toString();
+    }
+
+    @Override
+    public void setNome(String nome) {
+        LOGGER.info(this + " mudou nome para " + nome);
+        super.setNome(nome);
     }
 
 }
