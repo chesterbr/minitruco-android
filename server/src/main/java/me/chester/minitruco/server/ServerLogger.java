@@ -5,18 +5,20 @@ package me.chester.minitruco.server;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Jogador;
 
 /**
  * Efetua o log dos eventos do servidor.
  * <p>
- * A implementação atual coloca estes eventos em stdout num formato padronizado,
- * o que funciona bem para quem tem o grep à mão. Implementações futuras podem
- * fazer logs por sala, por jogador, efetuar alertas baseados em log, whatever.
+ * Isso veio do servidor antigo, que era um aplicativo Java SE; foi convertido
+ * para um wrapper do Java Logger, mas eu totalmente deveria refatorar para
+ * usar o Java Logger direto.
  */
 public class ServerLogger {
+
+    private final static Logger LOGGER = Logger.getLogger("ServerLogger");
 
     private static final DateFormat dataLog = new SimpleDateFormat("yyyyMMdd.HHmmss");
 
@@ -31,34 +33,13 @@ public class ServerLogger {
      * @param mensagem Mensagem do evento
      */
     public static synchronized void evento(Jogador j, String mensagem) {
-        // Formato:
-        // data thread [numsala|NA] jogador[@ip] mensagem
-        System.out.print(dataLog.format(new Date()));
-        System.out.print(' ');
-        System.out.print(Thread.currentThread().getName());
-        System.out.print(' ');
-        Sala s = null;
+        Sala sala = null;
+        StringBuilder sb = new StringBuilder();
         if (j instanceof JogadorConectado) {
-            s = ((JogadorConectado) j).getSala();
+            sb.append(j);
         }
-        if (s != null) {
-            // TODO representar salas sem código
-            System.out.print(s.codigo);
-            System.out.print(' ');
-        } else {
-            System.out.print("[sem_sala] ");
-        }
-        if (j != null) {
-            System.out.print(j.getNome());
-            if (j instanceof JogadorConectado) {
-                System.out.print('@');
-                System.out.print(((JogadorConectado) j).getIp());
-            }
-            System.out.print(' ');
-        } else {
-            System.out.print("[sem_jogador] ");
-        }
-        System.out.println(mensagem);
+        sb.append(mensagem);
+        LOGGER.info(sb.toString());
     }
 
     /**
