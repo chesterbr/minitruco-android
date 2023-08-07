@@ -38,7 +38,7 @@ public class MiniTrucoServer {
      * conexões e encerra ela quando o launcher.sh solicitar.
      */
     public static void main(String[] args) {
-        // Set custom formatter for all handlers
+        // Configura o logger para usar o nosso formatador de log
         Handler[] handlers = Logger.getLogger("").getHandlers();
         for (Handler handler : handlers) {
             handler.setFormatter(new LogFormatter());
