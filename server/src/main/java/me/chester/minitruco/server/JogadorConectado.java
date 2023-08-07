@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -333,8 +334,16 @@ public class JogadorConectado extends Jogador implements Runnable {
         this.sala = sala;
     }
 
+    private String ip = null;
+
     public String getIp() {
-        return cliente.getInetAddress().getHostAddress();
+        if (ip == null && cliente != null) {
+            InetAddress inetAddress = cliente.getInetAddress();
+            if (inetAddress != null) {
+                ip = inetAddress.getHostAddress();
+            }
+        }
+        return ip;
     }
 
     /**
