@@ -33,6 +33,7 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected Button btnIniciar;
     protected Button btnInverter;
     protected Button btnTrocar;
+    protected Button btnExpulsar;
     protected Button btnNovaSalaPublica;
     protected Button btnNovaSalaPrivada;
     protected Button btnEntrarComCodigo;
@@ -67,6 +68,7 @@ public abstract class SalaActivity extends AppCompatActivity {
         layoutBotoesGerente = findViewById(R.id.layoutBotoesGerente);
         layoutBotoesInternet = findViewById(R.id.layoutBotoesInternet);
         layoutRegras = findViewById(R.id.layoutRegras);
+        btnExpulsar = findViewById(R.id.btnExpulsar);
         btnNovaSalaPublica = findViewById(R.id.btnNovaSalaPublica);
         btnNovaSalaPrivada = findViewById(R.id.btnNovaSalaPrivada);
         btnEntrarComCodigo = findViewById(R.id.btnEntrarComCodigo);
@@ -167,6 +169,8 @@ public abstract class SalaActivity extends AppCompatActivity {
                     setMensagem("Aguardando gerente iniciar partida");
                 }
             }
+            btnExpulsar.setVisibility(isGerente ? View.VISIBLE : View.GONE);
+            btnNovaSalaPublica.setVisibility(isGerente ? View.GONE : View.VISIBLE);
         });
     }
 
