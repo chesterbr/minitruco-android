@@ -1,10 +1,12 @@
 package me.chester.minitruco.android.multiplayer.internet;
 
-import static android.text.InputType.TYPE_CLASS_TEXT;
+import static android.text.InputType.TYPE_CLASS_NUMBER;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.EditText;
@@ -89,14 +91,28 @@ public class ClienteInternetActivity extends SalaActivity {
         btnEntrarComCodigo.setOnClickListener(v -> {
             // Faz a pergunta sugerindo o nome encontrado
             EditText editCodigo = new EditText(this);
-            editCodigo.setInputType(TYPE_CLASS_TEXT);
+            editCodigo.setInputType(TYPE_CLASS_NUMBER);
             editCodigo.setMaxLines(1);
-            AlertDialog dialogNome = new AlertDialog.Builder(this)
+            editCodigo.addTextChangedListener(new TextWatcher() {
+                public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) { }
+                public void onTextChanged(CharSequence charSequence, int start, int before, int count) { }
+                public void afterTextChanged(Editable editable) {
+                    if (editable.length() > 5) {
+                        editCodigo.setText(editable.subSequence(0, 5));
+                        editCodigo.setSelection(5);
+                    }
+                }
+            });
+            new AlertDialog.Builder(this)
                 .setTitle("Código da sala")
-                .setMessage("Digite o código passado pela pessoa que chamou você:\n\n(esse código aparece no topo da tela dela)")
+                .setMessage("Digite o código de 5 dígitos passado pela pessoa que convidou você:")
                 .setView(editCodigo)
                 .setPositiveButton("Ok", (d, w) -> {
-                    comandoTrocaSala = "E PRI-" + sanitiza(editCodigo.getText().toString());
+                    if (editCodigo.getText().toString().length() != 5) {
+                        Toast.makeText(this, "Código tem que ter 5 dígitos", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    comandoTrocaSala = "E PRI-" + editCodigo.getText().toString();
                     layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
                 })
                 .setNegativeButton("Cancela", null)
@@ -207,8 +223,11 @@ public class ClienteInternetActivity extends SalaActivity {
                 exibeMesaForaDoJogo(line);
                 atualizaStatusEContagemRegressiva();
                 break;
-            case 'X': // Erro tratável
+            case 'X': // Erro
                 switch(line) {
+                    case "X SI":
+                        erroFatalSalaInvalida();
+                        break;
                 }
                 break;
             case 'K': // Keepalive, apenas temos que devolver a notificação como comando
@@ -240,6 +259,16 @@ public class ClienteInternetActivity extends SalaActivity {
                             line.length() > 2 ? line.substring(2) : "");
                 }
         }
+    }
+
+    private void erroFatalSalaInvalida() {
+        String codigo = comandoTrocaSala.length() > 6 ?
+            comandoTrocaSala.substring(6) : "";
+        msgErroFatal("Erro", "Não existe sala " +
+            "privada com o código " + codigo + " (ou ela" +
+            "está lotada). " +
+            "Confira o código com a pessoa que te convidou " +
+            "e tente novamente.");
     }
 
     @NonNull
