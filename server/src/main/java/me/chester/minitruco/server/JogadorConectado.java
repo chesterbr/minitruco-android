@@ -348,7 +348,7 @@ public class JogadorConectado extends Jogador implements Runnable {
             .append(getNome())
             .append('@')
             .append(getIp())
-            .append(s == null ? "" : "　em ")
+            .append(s == null ? "" : " em ")
             .append(s == null ? "" : s)
             .append(']')
             .toString();
