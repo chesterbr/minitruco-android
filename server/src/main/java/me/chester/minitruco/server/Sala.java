@@ -60,7 +60,7 @@ public class Sala {
     /**
      * Código usado para os amigos acharem a sala privada; null se for uma sala pública
      */
-    String codigo;
+    final String codigo;
 
     final String modo;
 
@@ -80,13 +80,14 @@ public class Sala {
      */
     public Sala(boolean publica, String modo) {
         if (publica) {
+            codigo = null;
             salasPublicasDisponiveis.add(this);
         } else {
-            String codigo;
+            String codigoUnico;
             do {
-                codigo = String.valueOf((new Random()).nextInt(90000) + 10000);
-            } while (salasPrivadas.containsKey(codigo));
-            this.codigo = codigo;
+                codigoUnico = String.valueOf((new Random()).nextInt(90000) + 10000);
+            } while (salasPrivadas.containsKey(codigoUnico));
+            codigo = codigoUnico;
             salasPrivadas.put(codigo, this);
         }
         this.modo = modo;
@@ -394,5 +395,10 @@ public class Sala {
         jogadores[i2] = temp;
 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return (codigo == null) ? "PUB-" + hashCode() : "PRI-" + codigo;
     }
 }
