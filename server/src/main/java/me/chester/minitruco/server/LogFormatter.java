@@ -2,6 +2,8 @@ package me.chester.minitruco.server;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +23,8 @@ public class LogFormatter extends Formatter {
     @Override
     public String format(LogRecord record) {
         StringBuilder sb = new StringBuilder()
+            .append(getJvmName())
+            .append(' ')
             .append(DATE_FORMAT.format(new Date(record.getMillis())))
             .append(" [")
             .append(record.getLevel().getName())
@@ -55,5 +59,15 @@ public class LogFormatter extends Formatter {
         } else {
             return nomeLongo.substring(i + 1);
         }
+    }
+
+    private static String jvmName = null;
+
+    private static String getJvmName() {
+        if (jvmName == null) {
+            RuntimeMXBean runtimeBean = ManagementFactory.getRuntimeMXBean();
+            jvmName = runtimeBean.getName();
+        }
+        return jvmName;
     }
 }
