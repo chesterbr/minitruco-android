@@ -1,5 +1,7 @@
 package me.chester.minitruco.server;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -389,5 +391,11 @@ class SalaTest {
         assertPosicoes(s, jj1, jj2, jj3, jj4);
         assertFalse(s.inverteAdversarios(jj1));
         assertPosicoes(s, jj1, jj2, jj3, jj4);
+    }
+
+    @Test
+    void testSalaPrivadaGeraCodigoNumericoDeCincoDigitos() {
+        Sala s = new Sala(false, "P");
+        assertThat(s.codigo, matchesPattern("[0-9]{5}"));
     }
 }

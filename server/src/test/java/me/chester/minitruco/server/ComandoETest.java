@@ -15,7 +15,7 @@ import org.mockito.ArgumentCaptor;
 
 class ComandoETest {
 
-    private static JogadorConectado j1, j2, j3, jAnon;
+    private static JogadorConectado j1, j2, j3, j4, jAnon;
 
     @BeforeEach
     void setUp() {
@@ -23,13 +23,16 @@ class ComandoETest {
         j1 = spy(new JogadorConectado(null));
         j2 = spy(new JogadorConectado(null));
         j3 = spy(new JogadorConectado(null));
+        j4 = spy(new JogadorConectado(null));
         jAnon = spy(new JogadorConectado(null));
         j1.setNome("j1");
         j2.setNome("j2");
         j3.setNome("j3");
+        j4.setNome("j4");
         doNothing().when(j1).println(any());
         doNothing().when(j2).println(any());
         doNothing().when(j3).println(any());
+        doNothing().when(j4).println(any());
         doNothing().when(jAnon).println(any());
     }
 
@@ -71,7 +74,7 @@ class ComandoETest {
         verify(j1).println(notificacaoCaptor.capture());
 
         String notificacao = notificacaoCaptor.getValue();
-        assertThat(notificacao, matchesPattern("I j1\\|bot\\|bot\\|bot P 1 PRI-[0-9A-Z]+"));
+        assertThat(notificacao, matchesPattern("I j1\\|bot\\|bot\\|bot P 1 PRI-[0-9]+"));
         String salaComPrefixo = notificacao.split(" ")[4];
 
         Comando.interpreta("E " + salaComPrefixo, j2);
@@ -83,14 +86,49 @@ class ComandoETest {
     }
 
     @Test
-    void testArgumentosESalasInvalidoaSaoIgnoradas() {
+    void testArgumentosInvalidosSaoIgnoradas() {
         Comando.interpreta("E", j1);
         Comando.interpreta("E ", j1);
         Comando.interpreta("E XYZ", j1);
         Comando.interpreta("E XYZ A", j1);
         Comando.interpreta("E PUB !", j1);
-        Comando.interpreta("E PRI-SALA404", j1);
         verify(j1, never()).println(any());
+    }
+
+    @Test
+    void testSalaInvalidaNotificaErro() {
+        Comando.interpreta("E PRI-SALA404", j1);
+        verify(j1).println("X SI");
+    }
+
+    @Test
+    void testSalaInexistenteNotificaErro() {
+        Comando.interpreta("E PRI-12345", j1);
+        verify(j1).println("X SI");
+    }
+
+    @Test
+    void testSalaLotadaNotificaErro() {
+        ArgumentCaptor<String> notificacaoCaptor = ArgumentCaptor.forClass(String.class);
+        Comando.interpreta("E PRI P", j1);
+        verify(j1).println(notificacaoCaptor.capture());
+
+        String notificacao = notificacaoCaptor.getValue();
+        assertThat(notificacao, matchesPattern("I j1\\|bot\\|bot\\|bot P 1 PRI-[0-9]+"));
+        String salaComPrefixo = notificacao.split(" ")[4];
+
+        Comando.interpreta("E " + salaComPrefixo, j2);
+        Comando.interpreta("E " + salaComPrefixo, j3);
+        Comando.interpreta("E " + salaComPrefixo, j4);
+        verify(j4).println("I j1|j2|j3|j4 P 4 " + salaComPrefixo);
+
+        Comando.interpreta("E " + salaComPrefixo, jAnon);
+        verify(j1, never()).println("X SI");
+        verify(j2, never()).println("X SI");
+        verify(j3, never()).println("X SI");
+        verify(j4, never()).println("X SI");
+        verify(jAnon).println("X SI");
+        verify(jAnon, times(1)).println(any());
     }
 
     @Test

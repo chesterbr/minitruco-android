@@ -20,7 +20,7 @@
   - [Jogo via Bluetooth](#jogo-via-bluetooth)
   - [Jogo via Internet](#jogo-via-internet)
 - [Protocolo de comunicação multiplayer](#protocolo-de-comunicação-multiplayer)
-  - [Jogando via nc/telnet](#jogando-via-nctelnet)
+  - [Testando (jogando) via nc/telnet](#testando-jogando-via-nctelnet)
   - [Convenções](#convenções)
   - [Comandos](#comandos)
     - [Fora da sala](#fora-da-sala)
@@ -315,7 +315,7 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 - `<modo>`: `P` para truco paulista, `M` para truco mineiro, `V` para manilha velha ou `L` baralho limpo.
 - `<jogador>`: Posição de um jogador na sala/partida, de 1 a 4. É constante durante a partida, mas pode mudar fora dela (o servidor manda uma notificação `I` sempre que a formação da sala mudar).
 - `<sala>` : Informa o tipo de sala em que estamos conectados. Pode ser `BLT` (bluetooth), `PUB` (pública) ou `PRI-código` (privada, com o código especificado).
-- `<codigo>` : String de números e letras maiúsculas que identifica uma sala privada. Exemplo: `A9327J`.
+- `<codigo>` : String de 5 dígitos numéricos que identifica uma sala privada. Exemplo: `23724`.
 - `<equipe>`: Uma das duas equipes (duplas). Pode ser 1 (equpe dos jogadores 1 e 3) ou 2 (jogadores 2 e 4).
 - `<frase>`: número aleatório grande que permite que todos os clientes mostrem a mesma frase (o "balãozinho") para um evento. Por exemplo, se o jogador 1 pediu truco (paulista) e o número sorteado foi 12345678, todos irão receber `T 1 3 12345678`; se o cliente tem 8 frases possíveis para truco, ele calcula 12345678 % 8 = 6 e exibe a frase de índice 6. Dessa forma, todos os clientes mostram a mesma frase (se estiverem com a mesma versão do [strings.xml](../app/src/main/res/values/strings.xml)) e o servidor não tem que saber quantas frases tem cada tipo de mensagem.
 
@@ -325,10 +325,15 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 - `B <numero>`:  Informa o número do build do cliente, para que o servidor verifique compatibilidade
 - `N <nome>`: Define o nome do jogador (é sanitizado; se for 100% inválido recebe um default)
-- `E PUB <modo>`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga) com o modo especificado
-- `E NPU <modo>`: Cria uma nova sala pública e entra nela
-- `E PRI <modo> <nome>`: Cria uma nova sala privada e entra nela
-- `E PRI-<codigo>`: Entra em uma sala privada com o código <codigo>
+- `E <subcomando> [<modo>]`: Entra em uma sala pública ou privada, existente ou nova (dependendo de `<subcomando>`):
+  - `PUB`: Entra em uma sala pública (criando, se não tiver nenhuma com vaga)
+  - `NPU`: Cria uma nova sala pública e entra nela
+  - `PRI`: Cria uma nova sala privada e entra nela
+  - `PRI-<codigo>`: Entra em uma sala privada com o código `<codigo>`
+
+    Os subcomandos `PUB`, `NPU` e `PRI` devem ser seguidos de `<modo>` (ex.: `E PUB P` para entrar em qualquer sala pública de truco paulista). `PRI-<codigo>` vai usar o modo já existente da sala, então não recebe modo (ex.: `E PRI-12345` para entrar na sala de código `12345`).
+
+    Em qualquer caso, se o jogador já estiver em uma sala, ele é removido dela antes de entrar na nova. Em caso de erro no `PRI-<codigo>` (sala lotada ou não-existente), o jogador recebe uma notificação de sala inválida (`X SI`), mas é removido da sala anterior (clientes devem desconectar ou recolocar o usuário em uma sala).
 
 #### Dentro da sala (fora de jogo)
 - `S`: Sai da sala (encerrando a partida, se houver uma em andamento)
@@ -353,8 +358,8 @@ TODO colocar um exemplo de jogo aqui (GIF ou whatnot)
 
 ### Notificações
 
-- `W x.y`: `Versão do servidor (outras infos podem vir no futuro)
-- `X CI`: `Comando inválido
+- `X CI`: Comando inválido
+- `X SI`: Sala (privada) não existe ou está cheia.
 - `N nome`: Seu nome foi definido como `nome`
 - `I <nomes> <modo> <jogador> <sala>`: Informações da sala (vide detalhes em "convenções")
 - `P <jogador>`: Início da partida

@@ -195,6 +195,16 @@ public abstract class SalaActivity extends AppCompatActivity {
             if (isFinishing()) {
                 return;
             }
+            if (layoutJogadoresEBotoesGerente != null) {
+                layoutJogadoresEBotoesGerente.setVisibility(View.INVISIBLE);
+            }
+            if (layoutBotoesInternet != null) {
+                layoutBotoesInternet.setVisibility(View.GONE);
+            }
+            if (layoutRegras != null) {
+                layoutRegras.setVisibility(View.GONE);
+            }
+            setMensagem(null);
             new AlertDialog.Builder(this)
                     .setTitle(titulo)
                     .setMessage(texto)
@@ -267,6 +277,9 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected void setMensagem(String mensagem) {
         runOnUiThread(() -> {
             TextView textViewMensagem = findViewById(R.id.textViewMensagem);
+            if (textViewMensagem == null) {
+                return;
+            }
             if (mensagem == null) {
                 textViewMensagem.setVisibility(View.GONE);
             } else {

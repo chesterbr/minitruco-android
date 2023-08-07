@@ -9,8 +9,8 @@ import static me.chester.minitruco.core.TrucoUtils.montaNotificacaoI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
@@ -82,7 +82,10 @@ public class Sala {
         if (publica) {
             salasPublicasDisponiveis.add(this);
         } else {
-            String codigo = UUID.randomUUID().toString().toUpperCase().substring(0, 5);
+            String codigo;
+            do {
+                codigo = String.valueOf((new Random()).nextInt(90000) + 10000);
+            } while (salasPrivadas.containsKey(codigo));
             this.codigo = codigo;
             salasPrivadas.put(codigo, this);
         }
