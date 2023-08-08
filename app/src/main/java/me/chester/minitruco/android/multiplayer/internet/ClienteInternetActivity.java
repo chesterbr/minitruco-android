@@ -89,35 +89,39 @@ public class ClienteInternetActivity extends SalaActivity {
             layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
         });
         btnEntrarComCodigo.setOnClickListener(v -> {
-            // Faz a pergunta sugerindo o nome encontrado
-            EditText editCodigo = new EditText(this);
-            editCodigo.setInputType(TYPE_CLASS_NUMBER);
-            editCodigo.setMaxLines(1);
-            editCodigo.addTextChangedListener(new TextWatcher() {
-                public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) { }
-                public void onTextChanged(CharSequence charSequence, int start, int before, int count) { }
-                public void afterTextChanged(Editable editable) {
-                    if (editable.length() > 5) {
-                        editCodigo.setText(editable.subSequence(0, 5));
-                        editCodigo.setSelection(5);
-                    }
-                }
-            });
-            new AlertDialog.Builder(this)
-                .setTitle("Código da sala")
-                .setMessage("Digite o código de 5 dígitos passado pela pessoa que convidou você:")
-                .setView(editCodigo)
-                .setPositiveButton("Ok", (d, w) -> {
-                    if (editCodigo.getText().toString().length() != 5) {
-                        Toast.makeText(this, "Código tem que ter 5 dígitos", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    comandoTrocaSala = "E PRI-" + editCodigo.getText().toString();
-                    layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
-                })
-                .setNegativeButton("Cancela", null)
-                .show();
+            pedeCodigoEEntraNaSala();
         });
+    }
+
+    private static void pedeCodigoEEntraNaSala() {
+        // Faz a pergunta sugerindo o nome encontrado
+        EditText editCodigo = new EditText(this);
+        editCodigo.setInputType(TYPE_CLASS_NUMBER);
+        editCodigo.setMaxLines(1);
+        editCodigo.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) { }
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) { }
+            public void afterTextChanged(Editable editable) {
+                if (editable.length() > 5) {
+                    editCodigo.setText(editable.subSequence(0, 5));
+                    editCodigo.setSelection(5);
+                }
+            }
+        });
+        new AlertDialog.Builder(this)
+            .setTitle("Código da sala")
+            .setMessage("Digite o código de 5 dígitos passado pela pessoa que convidou você:")
+            .setView(editCodigo)
+            .setPositiveButton("Ok", (d, w) -> {
+                if (editCodigo.getText().toString().length() != 5) {
+                    Toast.makeText(this, "Código tem que ter 5 dígitos", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                comandoTrocaSala = "E PRI-" + editCodigo.getText().toString();
+                layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+            })
+            .setNegativeButton("Cancela", null)
+            .show();
     }
 
     /**
