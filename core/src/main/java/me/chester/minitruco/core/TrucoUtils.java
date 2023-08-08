@@ -62,18 +62,20 @@ public class TrucoUtils {
     public static String nomeHtmlParaDisplay(String notificacaoI, int posicaoNaTela) {
         String[] partes = notificacaoI.split(" ");
         String[] nomes = partes[1].split("\\|");
+        boolean isPublica = partes[4].equals("PUB");
         int posicaoNoJogo = Integer.parseInt(partes[3]);
         int posicaoGerente = POSICAO_GERENTE_PARA_POSICAO_JOGADOR[posicaoNoJogo];
-        String nome = nomes[(posicaoNoJogo - 1 + posicaoNaTela - 1) % 4];
+        int indiceDoNomeNaPosicao = (posicaoNoJogo - 1 + posicaoNaTela - 1) % 4;
         boolean isGerente = (posicaoGerente == posicaoNaTela);
-        boolean isVoce = (posicaoNaTela == 1);
 
+        boolean mostraGerente = isGerente && !isPublica;
+        String nome = nomes[indiceDoNomeNaPosicao];
+        boolean isVoce = (posicaoNaTela == 1);
         return new StringBuilder()
-            .append(isGerente ? "<b>" : "")
+            .append(mostraGerente ? "<b>" : "")
             .append(nome)
-            .append(isGerente ? "" : "")
             .append(isVoce ? " (você)" : "")
-            .append(isGerente ? " (gerente)</b>" : "")
+            .append(mostraGerente ? " (gerente)</b>" : "")
             .toString();
     }
 
