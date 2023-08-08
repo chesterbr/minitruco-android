@@ -221,7 +221,7 @@ public class ClienteInternetActivity extends SalaActivity {
                 break;
             case 'I': // Entrou/voltou para uma sala (ou ela foi atualizada)
                 exibeMesaForaDoJogo(line);
-                iniciaContagemRegressivaSeMesaCheia();
+                iniciaContagemRegressivaSeNecessario();
                 break;
             case 'X': // Erro
                 switch(line) {
@@ -277,13 +277,13 @@ public class ClienteInternetActivity extends SalaActivity {
     }
 
     /**
-     * Se a mesa estiver cheia, inicia contagem regressiva para auto-início
-     * do jogo.
+     * Se estivermos numa sala pública e a mesa estiver cheia, inicia contagem
+     * regressiva para auto-início do jogo.
      * <p>
      * Observe que qualquer notificação (exceto o de keepalive) cancela a
      * contagem, e isso é feito no loop de processamento de notificações.
      */
-    private void iniciaContagemRegressivaSeMesaCheia() {
+    private void iniciaContagemRegressivaSeNecessario() {
         runOnUiThread(() -> {
             if (numJogadores == 4 && tipoSala.equals("PUB")) {
                 contagemRegressivaParaIniciar = true;
@@ -295,6 +295,9 @@ public class ClienteInternetActivity extends SalaActivity {
                             return;
                         }
                     }
+                    // Do ponto de vista da UI, salas públicas não têm gerente,
+                    // mas o servidor ainda espera que ele(a) inicie o jogo,
+                    // então...
                     if (isGerente) {
                         enviaLinha("Q");
                     }
