@@ -2,7 +2,6 @@ package me.chester.minitruco.android;
 
 import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
 import static android.provider.Settings.Global.DEVICE_NAME;
-import static android.text.InputType.TYPE_CLASS_TEXT;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -18,6 +17,7 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -198,20 +198,32 @@ public class TituloActivity extends SalaActivity {
         // Se nada disso deu certo, o sanitizador coloca o nome default
         nome = Jogador.sanitizaNome(nome);
 
+        // Se o usuário já disse que não quer perguntar, usa o nome que tem
+        if (!preferences.getBoolean("semprePerguntarNome", true)) {
+            callback.accept(nome);
+            return;
+        }
+
         // Faz a pergunta sugerindo o nome encontrado
-        EditText editNomeJogador = new EditText(this);
-        editNomeJogador.setInputType(TYPE_CLASS_TEXT);
-        editNomeJogador.setMaxLines(1);
-        editNomeJogador.setText(nome);
+        View viewConteudo = getLayoutInflater()
+            .inflate(R.layout.dialog_nome_jogador, null);
+        final CheckBox checkBoxPerguntarSempre = viewConteudo
+            .findViewById(R.id.checkBoxSemprePerguntaNome);
+        final EditText editTextNomeJogador = viewConteudo
+            .findViewById(R.id.editTextNomeJogador);
+        editTextNomeJogador.setText(nome);
 
         runOnUiThread(() -> {
             AlertDialog dialogNome = new AlertDialog.Builder(this)
                     .setTitle("Nome")
                     .setMessage("Qual nome você gostaria de usar?")
-                    .setView(editNomeJogador)
+                    .setView(viewConteudo)
                     .setPositiveButton("Ok", (d, w) -> {
+                        if (!checkBoxPerguntarSempre.isChecked()) {
+                            preferences.edit().putBoolean("semprePerguntarNome", false).apply();
+                        }
                         final String nomeFinal = Jogador.sanitizaNome(
-                            editNomeJogador.getText().toString());
+                            editTextNomeJogador.getText().toString());
                         preferences.edit().putString("nome_multiplayer",
                             nomeFinal).apply();
                         callback.accept(nomeFinal);
