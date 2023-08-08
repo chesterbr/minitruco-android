@@ -14,9 +14,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:gravity="center"
-        android:padding="8dp"
-        android:text="Seus amigos podem entrar na sala usando o código abaixo em &quot;Entrar com código&quot;."
+        android:maxLines="2"
+        android:text="Convide pessoas com o código abaixo (elas usam em &quot;Entrar com código&quot;)"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="16sp"
         android:textColor="#FFFFFF"
         android:visibility="visible" />
 
@@ -118,7 +119,7 @@
                     android:text="Posição_2 (gerente)"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
+                    android:textStyle="italic" />
             </LinearLayout>
 
 
@@ -169,19 +170,11 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnNovaSalaPublica"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Criar sala pública"
-            android:textStyle="bold" />
-
-        <Button
             android:id="@+id/btnNovaSalaPrivada"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Criar sala privada"
+            android:text="Criar sala\nprivada"
             android:textStyle="bold" />
 
         <Button
@@ -189,7 +182,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Entrar com código"
+            android:text="Entrar com\ncódigo"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnNovaSalaPublica"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Trocar\nde sala"
             android:textStyle="bold" />
 
     </LinearLayout>

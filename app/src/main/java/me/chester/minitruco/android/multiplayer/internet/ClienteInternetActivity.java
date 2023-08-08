@@ -221,7 +221,7 @@ public class ClienteInternetActivity extends SalaActivity {
                 break;
             case 'I': // Entrou/voltou para uma sala (ou ela foi atualizada)
                 exibeMesaForaDoJogo(line);
-                atualizaStatusEContagemRegressiva();
+                iniciaContagemRegressivaSeNecessario();
                 break;
             case 'X': // Erro
                 switch(line) {
@@ -264,11 +264,11 @@ public class ClienteInternetActivity extends SalaActivity {
     private void erroFatalSalaInvalida() {
         String codigo = comandoTrocaSala.length() > 6 ?
             comandoTrocaSala.substring(6) : "";
-        msgErroFatal("Erro", "Não existe sala " +
-            "privada com o código " + codigo + " (ou ela" +
-            "está lotada). " +
-            "Confira o código com a pessoa que te convidou " +
-            "e tente novamente.");
+        msgErroFatal("Erro", "A sala " +
+            "privada com o código " + codigo + " não está aberta. " +
+            "Ela pode estar lotada ou com jogo em andamento, ou " +
+            "ainda, o código pode estar errado. Confira com a pessoa que " +
+            "te convidou e tente novamente.");
     }
 
     @NonNull
@@ -277,40 +277,31 @@ public class ClienteInternetActivity extends SalaActivity {
     }
 
     /**
-     * Se a mesa estiver cheia, inicia contagem regressiva para auto-início
-     * do jogo.
+     * Se estivermos numa sala pública e a mesa estiver cheia, inicia contagem
+     * regressiva para auto-início do jogo.
      * <p>
      * Observe que qualquer notificação (exceto o de keepalive) cancela a
      * contagem, e isso é feito no loop de processamento de notificações.
-     * <p>
-     * Em qualquer caso, garante que a mensagem de status reflita a situação.
      */
-    private void atualizaStatusEContagemRegressiva() {
+    private void iniciaContagemRegressivaSeNecessario() {
         runOnUiThread(() -> {
-            switch (numJogadores) {
-                case 1:
-                    setMensagem("Aguardando outra pessoa entrar");
-                    break;
-                case 2:
-                case 3:
-                    setMensagem("Aguardando mais pessoas");
-                    break;
-                case 4:
-                    // Auto-inicia se a sala estiver cheia (dando um tempo para
-                    // o gerente organizar ou dar kick de jogadores)
-                    contagemRegressivaParaIniciar = true;
-                    new Thread(() -> {
-                        for (int i = 10; i > 0; i--) {
-                            setMensagem("Mesa completa. Auto-iniciando em " + i);
-                            sleep(1000);
-                            if (!contagemRegressivaParaIniciar) {
-                                return;
-                            }
+            if (numJogadores == 4 && tipoSala.equals("PUB")) {
+                contagemRegressivaParaIniciar = true;
+                new Thread(() -> {
+                    for (int i = 5; i > 0; i--) {
+                        setMensagem("Mesa completa. Auto-iniciando em " + i);
+                        sleep(1000);
+                        if (!contagemRegressivaParaIniciar) {
+                            return;
                         }
-                        if (isGerente) {
-                            enviaLinha("Q");
-                        }
-                    }).start();
+                    }
+                    // Do ponto de vista da UI, salas públicas não têm gerente,
+                    // mas o servidor ainda espera que ele(a) inicie o jogo,
+                    // então...
+                    if (isGerente) {
+                        enviaLinha("Q");
+                    }
+                }).start();
             }
         });
     }
