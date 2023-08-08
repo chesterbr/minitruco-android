@@ -266,7 +266,7 @@ public class ClienteInternetActivity extends SalaActivity {
             comandoTrocaSala.substring(6) : "";
         msgErroFatal("Erro", "Não existe sala " +
             "privada com o código " + codigo + " (ou ela" +
-            "está lotada). " +
+            "está lotada, ou com jogo em andamento). " +
             "Confira o código com a pessoa que te convidou " +
             "e tente novamente.");
     }
