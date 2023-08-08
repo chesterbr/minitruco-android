@@ -41,6 +41,11 @@
             android:key="limpaPlacarPartidas"
             android:summary="Se esta opção estiver ligada, o placar de partidas sempre começa em 0 x 0. Senão, ele começa com o placar da última sessão."
             android:title="Partidas começam em 0 x 0" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="semprePerguntarNome"
+            android:summary="Desligue para entrar direto no jogo via internet usando o último nome aceito ou um nome sugerido."
+            android:title="Perguntar nome no jogo internet" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Desenvolvimento (️☠=PRE-RI-GO, não mexa)">
