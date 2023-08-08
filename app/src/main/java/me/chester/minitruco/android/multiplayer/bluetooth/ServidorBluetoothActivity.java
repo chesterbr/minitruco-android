@@ -145,16 +145,13 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
             }
             atualizaClientes();
             if (status == STATUS_LOTADO) {
-                setMensagem(null);
                 sleep(1000);
                 continue;
             }
             pedePraHabilitarDiscoverableSePreciso();
-            setMensagem("Aguardando conexões...");
             // Se chegamos aqui, estamos fora de jogo e com vagas
             try {
                 BluetoothSocket socket = serverSocket.accept();
-                setMensagem(null);
                 if (socket != null) {
                     int slot = encaixaEmUmSlot(socket);
                 }

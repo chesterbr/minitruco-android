@@ -221,7 +221,7 @@ public class ClienteInternetActivity extends SalaActivity {
                 break;
             case 'I': // Entrou/voltou para uma sala (ou ela foi atualizada)
                 exibeMesaForaDoJogo(line);
-                atualizaStatusEContagemRegressiva();
+                iniciaContagemRegressivaSeMesaCheia();
                 break;
             case 'X': // Erro
                 switch(line) {
@@ -282,35 +282,23 @@ public class ClienteInternetActivity extends SalaActivity {
      * <p>
      * Observe que qualquer notificação (exceto o de keepalive) cancela a
      * contagem, e isso é feito no loop de processamento de notificações.
-     * <p>
-     * Em qualquer caso, garante que a mensagem de status reflita a situação.
      */
-    private void atualizaStatusEContagemRegressiva() {
+    private void iniciaContagemRegressivaSeMesaCheia() {
         runOnUiThread(() -> {
-            switch (numJogadores) {
-                case 1:
-                    setMensagem("Aguardando outra pessoa entrar");
-                    break;
-                case 2:
-                case 3:
-                    setMensagem("Aguardando mais pessoas");
-                    break;
-                case 4:
-                    // Auto-inicia se a sala estiver cheia (dando um tempo para
-                    // o gerente organizar ou dar kick de jogadores)
-                    contagemRegressivaParaIniciar = true;
-                    new Thread(() -> {
-                        for (int i = 10; i > 0; i--) {
-                            setMensagem("Mesa completa. Auto-iniciando em " + i);
-                            sleep(1000);
-                            if (!contagemRegressivaParaIniciar) {
-                                return;
-                            }
+            if (numJogadores == 4) {
+                contagemRegressivaParaIniciar = true;
+                new Thread(() -> {
+                    for (int i = 3; i > 0; i--) {
+                        setMensagem("Mesa completa. Auto-iniciando em " + i);
+                        sleep(1000);
+                        if (!contagemRegressivaParaIniciar) {
+                            return;
                         }
-                        if (isGerente) {
-                            enviaLinha("Q");
-                        }
-                    }).start();
+                    }
+                    if (isGerente) {
+                        enviaLinha("Q");
+                    }
+                }).start();
             }
         });
     }

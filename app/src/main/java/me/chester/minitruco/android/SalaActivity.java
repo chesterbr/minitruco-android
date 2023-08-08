@@ -160,11 +160,29 @@ public abstract class SalaActivity extends AppCompatActivity {
                     break;
             }
             textViewStatus.setText("Modo: " + Partida.textoModo(modo));
-            if (!isGerente) {
+            // Para atualizar a mensagem, levamos em conta que:
+            // - Salas públicas só iniciam quando estão cheias (e fazem isso
+            //   automaticamente, sem interação do gerente)
+            // - Salas privadas e Bluetooth precisam de pelo menos dois
+            //   jogadores humanos (e o gerente decide quando iniciar)
+            setMensagem(null);
+            if (tipoSala.equals("PUB")) {
+                if (numJogadores < 4) {
+                    setMensagem("Aguardando mais pessoas");
+                }
+            } else if (isGerente) {
+                if (numJogadores == 1) {
+                    setMensagem("Aguardando pelo menos uma pessoa");
+                } else if (numJogadores < 4) {
+                    setMensagem("Aguardando mais pessoas");
+                } else {
+                    setMensagem("Organize as pessoas na mesa e clique em JOGAR!");
+                }
+            } else {
                 if (numJogadores < 4) {
                     setMensagem("Aguardando mais pessoas ou gerente iniciar partida");
                 } else {
-                    setMensagem("Aguardando gerente iniciar partida");
+                    setMensagem("Aguardando gerente organizar a mesa e iniciar partida");
                 }
             }
         });
