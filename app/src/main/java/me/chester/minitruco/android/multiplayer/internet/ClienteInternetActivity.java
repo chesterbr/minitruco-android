@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -23,6 +24,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -91,9 +94,42 @@ public class ClienteInternetActivity extends SalaActivity {
         btnEntrarComCodigo.setOnClickListener(v -> {
             pedeCodigoEEntraNaSala();
         });
+        btnExpulsar.setOnClickListener(v -> {
+            mostraListaDeExpulsaveis();
+        });
     }
 
-    private static void pedeCodigoEEntraNaSala() {
+    private void mostraListaDeExpulsaveis() {
+        List<CharSequence> lista = new ArrayList<>();
+        lista.add("A pessoa irá para sala própria. Use apenas em caso de abuso. " +
+            "Escolha a pessoa:");
+        for (int i = 1; i <= 3; i++) {
+            String nome = Html.fromHtml(textViewsJogadores[i].getText().toString()).toString();
+            if (!nome.equals("bot")) {
+                lista.add(nome);
+            }
+        }
+
+        new AlertDialog.Builder(this)
+            .setTitle("Expulsar jogador(a)")
+            .setItems(lista.toArray(new CharSequence[0]), (dialog, posicaoNaLista) -> {
+                if (posicaoNaLista == 0) {
+                    mostraListaDeExpulsaveis();
+                    return;
+                }
+                for (int i = 1; i <= 3; i++) {
+                    String nomeAtual = Html.fromHtml(textViewsJogadores[i].getText().toString()).toString();
+                    if (!nome.equals("bot")) {
+                        lista.add(nome);
+                    }
+                }
+                nomeAtualNaPosicao =  Html.fromHtml(textViewsJogadores[i].getText().toString()).toString();
+                Toast.makeText(this, "Expulsando " + lista.get(posicaoNaLista), Toast.LENGTH_SHORT).show();
+            })
+            .show();
+    }
+
+    private void pedeCodigoEEntraNaSala() {
         // Faz a pergunta sugerindo o nome encontrado
         EditText editCodigo = new EditText(this);
         editCodigo.setInputType(TYPE_CLASS_NUMBER);
