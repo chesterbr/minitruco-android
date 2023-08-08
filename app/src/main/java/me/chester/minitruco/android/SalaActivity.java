@@ -138,7 +138,7 @@ public abstract class SalaActivity extends AppCompatActivity {
             layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
             layoutRegras.setVisibility(View.VISIBLE);
             findViewById(R.id.layoutBotoesGerente).setVisibility(
-                isGerente ? View.VISIBLE : View.INVISIBLE);
+                isGerente && !tipoSala.equals("PUB") ? View.VISIBLE : View.INVISIBLE);
             if (isGerente) {
                 btnIniciar.setEnabled(numJogadores > 1);
                 btnInverter.setEnabled(numJogadores > 1);
