@@ -288,7 +288,7 @@ public class ClienteInternetActivity extends SalaActivity {
             if (numJogadores == 4 && tipoSala.equals("PUB")) {
                 contagemRegressivaParaIniciar = true;
                 new Thread(() -> {
-                    for (int i = 3; i > 0; i--) {
+                    for (int i = 5; i > 0; i--) {
                         setMensagem("Mesa completa. Auto-iniciando em " + i);
                         sleep(1000);
                         if (!contagemRegressivaParaIniciar) {
