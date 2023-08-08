@@ -264,11 +264,11 @@ public class ClienteInternetActivity extends SalaActivity {
     private void erroFatalSalaInvalida() {
         String codigo = comandoTrocaSala.length() > 6 ?
             comandoTrocaSala.substring(6) : "";
-        msgErroFatal("Erro", "Não existe sala " +
-            "privada com o código " + codigo + " (ou ela" +
-            "está lotada, ou com jogo em andamento). " +
-            "Confira o código com a pessoa que te convidou " +
-            "e tente novamente.");
+        msgErroFatal("Erro", "A sala " +
+            "privada com o código " + codigo + " não está aberta. " +
+            "Ela pode estar lotada ou com jogo em andamento, ou " +
+            "ainda, o código pode estar errado. Confira com a pessoa que " +
+            "te convidou e tente novamente.");
     }
 
     @NonNull
