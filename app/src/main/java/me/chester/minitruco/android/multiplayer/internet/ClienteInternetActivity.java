@@ -285,7 +285,7 @@ public class ClienteInternetActivity extends SalaActivity {
      */
     private void iniciaContagemRegressivaSeMesaCheia() {
         runOnUiThread(() -> {
-            if (numJogadores == 4) {
+            if (numJogadores == 4 && tipoSala.equals("PUB")) {
                 contagemRegressivaParaIniciar = true;
                 new Thread(() -> {
                     for (int i = 3; i > 0; i--) {

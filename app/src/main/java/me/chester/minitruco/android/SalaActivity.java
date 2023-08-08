@@ -53,6 +53,7 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected PartidaRemota partida;
     protected int numJogadores;
     protected boolean isGerente;
+    public String tipoSala;
 
     /**
      * Em salas multiplayer (que de fato mostram uma "sala" com os nomes dos
@@ -104,7 +105,7 @@ public abstract class SalaActivity extends AppCompatActivity {
             modo = tokens[2];
             posJogador = Integer.parseInt(tokens[3]);
             isGerente = posJogador == 1;
-            String tipoSala = tokens[4];
+            tipoSala = tokens[4];
             String codigo = null;
             if (tipoSala.startsWith("PRI-")) {
                 codigo = tipoSala.substring(4);
