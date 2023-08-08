@@ -60,23 +60,25 @@ class TrucoUtilsTest {
             String n3 = n.replace(POSICAO_PLACEHOLDER, "3");
             String n4 = n.replace(POSICAO_PLACEHOLDER, "4");
 
-            // Jogador é gerente da sala
+            // Jogador na posição 1 (gerente)
             assertEquals("<b>j1 (você) (gerente)</b>", TrucoUtils.nomeHtmlParaDisplay(n1, 1));
             assertEquals("j2", TrucoUtils.nomeHtmlParaDisplay(n1, 2));
             assertEquals("j3", TrucoUtils.nomeHtmlParaDisplay(n1, 3));
             assertEquals("j4", TrucoUtils.nomeHtmlParaDisplay(n1, 4));
 
-            // Jogador não é gerente da sala
+            // Jogador na posição 2
             assertEquals("j2 (você)", TrucoUtils.nomeHtmlParaDisplay(n2, 1));
             assertEquals("j3", TrucoUtils.nomeHtmlParaDisplay(n2, 2));
             assertEquals("j4", TrucoUtils.nomeHtmlParaDisplay(n2, 3));
             assertEquals("<b>j1 (gerente)</b>", TrucoUtils.nomeHtmlParaDisplay(n2, 4));
 
+            // Jogador na posição 3
             assertEquals("j3 (você)", TrucoUtils.nomeHtmlParaDisplay(n3, 1));
             assertEquals("j4", TrucoUtils.nomeHtmlParaDisplay(n3, 2));
             assertEquals("<b>j1 (gerente)</b>", TrucoUtils.nomeHtmlParaDisplay(n3, 3));
             assertEquals("j2", TrucoUtils.nomeHtmlParaDisplay(n3, 4));
 
+            // Jogador na posição 4
             assertEquals("j4 (você)", TrucoUtils.nomeHtmlParaDisplay(n4, 1));
             assertEquals("<b>j1 (gerente)</b>", TrucoUtils.nomeHtmlParaDisplay(n4, 2));
             assertEquals("j2", TrucoUtils.nomeHtmlParaDisplay(n4, 3));
@@ -92,22 +94,24 @@ class TrucoUtilsTest {
         String n3 = n.replace(POSICAO_PLACEHOLDER, "3");
         String n4 = n.replace(POSICAO_PLACEHOLDER, "4");
 
-        // Jogador é gerente da sala
+        // Jogador na posição 1
         assertEquals("j1 (você)", TrucoUtils.nomeHtmlParaDisplay(n1, 1));
         assertEquals("j2", TrucoUtils.nomeHtmlParaDisplay(n1, 2));
         assertEquals("j3", TrucoUtils.nomeHtmlParaDisplay(n1, 3));
         assertEquals("j4", TrucoUtils.nomeHtmlParaDisplay(n1, 4));
 
-        // Jogador não é gerente da sala
+        // Jogador na posição 2
         assertEquals("j2 (você)", TrucoUtils.nomeHtmlParaDisplay(n2, 1));
         assertEquals("j3", TrucoUtils.nomeHtmlParaDisplay(n2, 2));
         assertEquals("j4", TrucoUtils.nomeHtmlParaDisplay(n2, 3));
         assertEquals("j1", TrucoUtils.nomeHtmlParaDisplay(n2, 4));
 
+        // Jogador na posição 3
         assertEquals("j3 (você)", TrucoUtils.nomeHtmlParaDisplay(n3, 1));
         assertEquals("j4", TrucoUtils.nomeHtmlParaDisplay(n3, 2));
         assertEquals("j1", TrucoUtils.nomeHtmlParaDisplay(n3, 3));
         assertEquals("j2", TrucoUtils.nomeHtmlParaDisplay(n3, 4));
+
 
         assertEquals("j4 (você)", TrucoUtils.nomeHtmlParaDisplay(n4, 1));
         assertEquals("j1", TrucoUtils.nomeHtmlParaDisplay(n4, 2));
