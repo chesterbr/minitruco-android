@@ -226,8 +226,13 @@ public class TituloActivity extends SalaActivity {
         }
         // Se não deu certo, tentamos pegar o nome Bluetooth
         if (nome == null) {
-            // Não-documentado e só funciona se tiver Bluetooth, cf https://stackoverflow.com/a/67949517/64635
-            nome = Settings.Secure.getString(getContentResolver(), "bluetooth_name");
+            try {
+                // Não-documentado e só funciona se tiver Bluetooth, cf https://stackoverflow.com/a/67949517/64635
+                nome = Settings.Secure.getString(getContentResolver(), "bluetooth_name");
+            } catch (Exception e) {
+                // não se preocupa com exceções aqui (a Play Store tava "ain
+                // você não pode ler esse setting na versão xyz do Android")
+            }
         }
         // Se nada disso deu certo, o sanitizador coloca o nome default
         nome = Jogador.sanitizaNome(nome);
