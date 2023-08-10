@@ -35,7 +35,7 @@ public class MiniTrucoServer {
     public static final int PORTA_SERVIDOR = 6912;
 
     // Na real é o próximo, mas ok, esse nem tem o botão de internet
-    public static final int BUILD_MINIMO_CLIENTE = 30000;
+    public static final int BUILD_MINIMO_CLIENTE = 30001;
 
     public static final int MAX_JOGADORES = 1024;
 
