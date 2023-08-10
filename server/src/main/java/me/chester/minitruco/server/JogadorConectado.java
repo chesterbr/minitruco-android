@@ -25,7 +25,7 @@ public class JogadorConectado extends Jogador implements Runnable {
 
     private final static Logger LOGGER = Logger.getLogger("JogadorConectado");
 
-    public static final int TEMPO_KEEPALIVE = 5000;
+    public static final int TEMPO_KEEPALIVE = 10000;
     private final Socket cliente;
 
     /**

@@ -115,7 +115,7 @@ public class MiniTrucoServer {
                     threadsJogadores.remove(t);
                     LOGGER.info("Jogadores conectados: " + threadsJogadores.size());
                 });
-                threadsJogadores.add(Thread.ofVirtual().start(j));
+                threadsJogadores.add(Thread.ofVirtual().name(j.getNome()).start(j));
                 LOGGER.info("Jogadores conectados: " + threadsJogadores.size());
             }
         } catch (IOException e) {
@@ -133,6 +133,10 @@ public class MiniTrucoServer {
         }
     }
 
+    // A partida mais lesada do mundo demora 45 minutos pra terminar, 60 tá
+    // de bom tamanho pra remover threads mortas e afins
+    public static final int MINUTOS_ATE_DESISTIR_DE_ESPERAR = 60;
+
     /**
      * Aguarda que as threads dos jogadores conectados se encerrem.
      * <p>
@@ -142,10 +146,22 @@ public class MiniTrucoServer {
      * partidas.
      */
     private static void aguardaThreadsJogadoresFinalizarem() {
+        int minutosEsperando = 0;
         while (!threadsJogadores.isEmpty()) {
-            LOGGER.info("Aguardando " + threadsJogadores.size() + " jogadores (threads) finalizarem");
+            LOGGER.info("Aguardando " + threadsJogadores.size() + " jogadores (threads) finalizarem. Tempo esperado até agora: " +
+                minutosEsperando  + " minutos.");
             try {
-                Thread.sleep(5000);
+                Thread.sleep(60000);
+                minutosEsperando += 1;
+                if (minutosEsperando >= MINUTOS_ATE_DESISTIR_DE_ESPERAR) {
+                    LOGGER.info("Desistindo de esperar após " + minutosEsperando +
+                        " minutos, encerrando threads restantes");
+                    for (Thread t : threadsJogadores) {
+                        LOGGER.info("Encerrando " + t);
+                        t.interrupt();
+                    }
+                    break;
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

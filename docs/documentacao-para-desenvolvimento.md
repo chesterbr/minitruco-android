@@ -291,7 +291,7 @@ Comandos com erros de sintaxe ou argumentos inválidos são ignorados.
 
 Você pode jogar via nc ou telnet. Para isso:
 
-1) Comente a linha `iniciaMonitorDeConexao()` em `JogadorConectado` (senão você vai ter que responder às notificações de keepalive, o que é humanamente muito difícil)
+1) Comente a linha `iniciaThreadAuxiliar()` em `JogadorConectado` (senão você vai ter que responder às notificações de keepalive, o que é humanamente muito difícil)
 2) Rode o servidor localmente. Você pode fazer isso com `./gradlew :server:run` (ou, em Windows, `gradlew.bat :server:run`). Alternativamente, rode a classe `MiniTrucoServer` no Android Studio.
 3) Abra um ou mais terminais e rode `nc localhost 6912` (ou `telnet localhost 6912`). Cada terminal será um jogador.
 4) Cada jogador deve se identificar com um nome, enviando um comando `N` (ex.: `N joselito`), entrar em uma sala com as regras desejadas (ex.: `E PUB P`)
