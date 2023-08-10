@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="20503"
-    android:versionName="2.5.3">
+    android:versionCode="30000"
+    android:versionName="3.0.0">
     <!--
-         Ao aumentar a versão, atualize também o versionCode
-         e não esqueça do "novidades" em strings.xml"
+         Ao aumentar a versão, atualize também:
+         - versionCode (acima)
+         - Chave "novidades" em strings.xml"
+         - versionCode mínimo exigido pelo servidor (se for o caso - evitar isso ao máximo!)
+           em MiniTrucoServer#BUILD_MINIMO_CLIENTE
     -->
     <supports-screens
         android:anyDensity="true"

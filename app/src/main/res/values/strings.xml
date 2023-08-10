@@ -215,9 +215,9 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Placar de partidas agora mostra vitórias e derrotas desde que o jogo foi instalado (você pode clicar nele para limpar e/ou configurar para começar em 0x0, como fazia antes).<br/>
-            - Pergunta de truco agora pode ser arrastada (para poder ver as cartas abaixo dela)<br/>
-            - Celular que procura jogo Bluetooth não causa mais erro na partida seguinte ao sair no final de uma partida.<br/>
+            - JOGO PELA INTERNET (EXPERIMENTAL) com salas públicas (só pessoas, sem bots) e privadas<br/>
+            - Novo visual da "sala" Bluetooth (mesmo do jogo online)<br/>
+            - Corrige erro ao conectar celulares com nomes inválidos via Bluetooth<br/>
         ]]>
     </string>
     <string name="aviso_modo_experimental">Este recurso é experimental - ainda podem ocorrer erros e
