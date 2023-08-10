@@ -174,16 +174,31 @@ public class TituloActivity extends SalaActivity {
         }
         if (temInternet) {
             btnInternet.setOnClickListener(v -> {
-                if (conectadoNaInternet()) {
-                    pedeNome((nome) -> {
-                        startActivity(new Intent(getBaseContext(),
-                            ClienteInternetActivity.class));
-                    });
+                if (!preferences.getBoolean("leuAvisoModoExperimental", false)) {
+                    new AlertDialog.Builder(this).setTitle("AVISO - RECURSO EXPERIMENTAL")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setMessage(R.string.aviso_modo_experimental)
+                        .setPositiveButton("Li TUDO e entendi", (dialog, which) -> {
+                            preferences.edit().putBoolean("leuAvisoModoExperimental", true).apply();
+                            pedeNomeEConecta();
+                        })
+                        .show();
                 } else {
-                    mostraAlertBox("Sem conexão",
-                        "Não foi possível conectar à Internet. Verifique sua conexão e tente novamente.");
+                    pedeNomeEConecta();
                 }
             });
+        }
+    }
+
+    private void pedeNomeEConecta() {
+        if (conectadoNaInternet()) {
+            pedeNome((nome) -> {
+                startActivity(new Intent(getBaseContext(),
+                    ClienteInternetActivity.class));
+            });
+        } else {
+            mostraAlertBox("Sem conexão",
+                "Não foi possível conectar à Internet. Verifique sua conexão e tente novamente.");
         }
     }
 

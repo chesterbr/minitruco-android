@@ -213,5 +213,13 @@
             - Celular que procura jogo Bluetooth não causa mais erro na partida seguinte ao sair no final de uma partida.<br/>
         ]]>
     </string>
+    <string name="aviso_modo_experimental">Este recurso é experimental - ainda podem ocorrer erros e
+        instabilidades. Ressalto que investi centenas de horas do meu tempo livre e estou cobrindo
+        os custos do servidor, sem qualquer cobrança para vocês.
+        \n\nEm troca, só peço que evitem avaliar negativamente o jogo na loja de aplicativos devido
+        a problemas temporários. Ao invés disso, me informem sobre problemas ou sugestões através
+        do link "entrar em contato".
+        \n\nAgradeço pela compreensão e apoio!
+    </string>
 
 </resources>
