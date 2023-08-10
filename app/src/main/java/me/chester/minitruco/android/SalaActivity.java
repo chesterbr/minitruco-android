@@ -39,7 +39,6 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected View layoutJogadoresEBotoesGerente;
     protected View layoutBotoesGerente;
     protected View layoutBotoesInternet;
-    protected View layoutRegras;
     protected TextView textViewStatus;
     protected TextView textViewJogador1;
     protected TextView textViewJogador2;
@@ -67,7 +66,6 @@ public abstract class SalaActivity extends AppCompatActivity {
         layoutJogadoresEBotoesGerente = findViewById(R.id.layoutJogadoresEBotoesGerente);
         layoutBotoesGerente = findViewById(R.id.layoutBotoesGerente);
         layoutBotoesInternet = findViewById(R.id.layoutBotoesInternet);
-        layoutRegras = findViewById(R.id.layoutRegras);
         btnNovaSalaPublica = findViewById(R.id.btnNovaSalaPublica);
         btnNovaSalaPrivada = findViewById(R.id.btnNovaSalaPrivada);
         btnEntrarComCodigo = findViewById(R.id.btnEntrarComCodigo);
@@ -137,7 +135,7 @@ public abstract class SalaActivity extends AppCompatActivity {
 
             // Atualiza outros itens do display
             layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
-            layoutRegras.setVisibility(View.VISIBLE);
+            textViewInfoSala.setVisibility(View.VISIBLE);
             findViewById(R.id.layoutBotoesGerente).setVisibility(
                 isGerente && !tipoSala.equals("PUB") ? View.VISIBLE : View.INVISIBLE);
             if (isGerente) {
@@ -160,7 +158,7 @@ public abstract class SalaActivity extends AppCompatActivity {
                     textViewTituloSala.setText("Bluetooth");
                     break;
             }
-            textViewStatus.setText("Modo: " + Partida.textoModo(modo));
+            textViewStatus.setText(Partida.textoModo(modo).toLowerCase());
             // Para atualizar a mensagem, levamos em conta que:
             // - Salas públicas só iniciam quando estão cheias (e fazem isso
             //   automaticamente, sem interação do gerente)
@@ -216,9 +214,6 @@ public abstract class SalaActivity extends AppCompatActivity {
             }
             if (layoutBotoesInternet != null) {
                 layoutBotoesInternet.setVisibility(View.GONE);
-            }
-            if (layoutRegras != null) {
-                layoutRegras.setVisibility(View.GONE);
             }
             setMensagem(null);
             new AlertDialog.Builder(this)

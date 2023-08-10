@@ -17,32 +17,52 @@
         android:maxLines="2"
         android:text="Convide pessoas com o código abaixo (elas usam em &quot;Entrar com código&quot;)"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="16sp"
         android:textColor="#FFFFFF"
+        android:textSize="16sp"
         android:visibility="visible" />
 
     <LinearLayout
         android:id="@+id/layoutJogadoresEBotoesGerente"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
         android:layout_margin="2dp"
+        android:layout_weight="2"
         android:background="@drawable/borda_sala"
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textViewTituloSala"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#FFC69F6C"
-            android:gravity="center"
-            android:paddingHorizontal="8dp"
-            android:paddingBottom="2dp"
-            android:text="Bluetooth"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewTituloSala"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFC69F6C"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
+                android:text="Bluetooth"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="#FFC69F6C"
+                android:paddingHorizontal="8dp"
+                android:paddingBottom="2dp"
+                android:text="truco vilaemense"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#FF404040"
+                android:textStyle="italic" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layoutJogadores"
@@ -134,6 +154,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#FFFFFF"
                 android:textStyle="italic" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -151,9 +172,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="8dp"
             android:background="@drawable/borda_dialogo"
             android:gravity="center"
-            android:layout_marginVertical="8dp"
             android:paddingHorizontal="8dp"
             android:paddingVertical="6dp"
             android:text="mensagem que vai ocupar duas linhas"
@@ -193,25 +214,6 @@
             android:text="Trocar\nde sala"
             android:textStyle="bold" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layoutRegras"
-        android:layout_width="fill_parent"
-        android:layout_height="20sp"
-        android:layout_marginTop="4sp"
-        android:background="#A0A0A0"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textViewStatus"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingHorizontal="4dp"
-            android:text="Modo: algum modo aí!"
-            android:textColor="#000000"
-            android:textStyle="italic" />
     </LinearLayout>
 
 </LinearLayout>
