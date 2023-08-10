@@ -11,9 +11,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -56,6 +60,21 @@ public class TituloActivity extends SalaActivity {
         configuraBotoesMultiplayer();
         mostraNotificacaoInicial();
         migraOpcoesLegadas();
+
+        TextView textViewLinkContato = findViewById(R.id.textViewLinkContato);
+        SpannableString textoLinkContato = new SpannableString(textViewLinkContato.getText());
+        textoLinkContato.setSpan(new UnderlineSpan(), 0, textoLinkContato.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        textViewLinkContato.setText(textoLinkContato);
+        textViewLinkContato.setOnClickListener(v -> {
+            String facebookUrl = "https://www.facebook.com/profile.php?id=61550014616104";
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href=" + facebookUrl));
+                startActivity(intent);
+            } catch (Exception e) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl));
+                startActivity(intent);
+            }
+        });
 
         findViewById(R.id.btnAjuda).setOnClickListener(v -> {
             mostraAlertBox(this.getString(R.string.titulo_instrucoes),

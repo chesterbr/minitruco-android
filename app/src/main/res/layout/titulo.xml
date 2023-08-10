@@ -109,28 +109,26 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:minLines="2"
                     android:text="feito com ❤️\n por Chester"
                     android:lines="2"
                     android:textColorLink="#FF3F28A4"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-
                 <TextView
-                    android:id="@+id/url_site"
+                    android:id="@+id/textViewLinkContato"
                     android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:autoLink="email"
-                    android:gravity="center"
-                    android:linksClickable="true"
-                    android:text="cd@pobox.com"
+                    android:layout_height="wrap_content"
+                    android:text="entre em contato"
+                    android:layout_gravity="center"
                     android:textColor="#FF3F28A4"
-                    android:textColorLink="#FF3F28A4"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground" />
             </LinearLayout>
         </TableRow>
 
