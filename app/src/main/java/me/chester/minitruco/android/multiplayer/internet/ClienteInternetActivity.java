@@ -134,11 +134,11 @@ public class ClienteInternetActivity extends SalaActivity {
         } else {
             new AlertDialog.Builder(this)
                 .setTitle("Mesa não está cheia")
-                .setMessage("Você prefere esperar mais gente, ou jogar com bots?")
+                .setMessage("Você prefere chamar/esperar mais gente, ou jogar com bots na mesa?")
                 .setPositiveButton("Jogar", (dialog, which) -> {
                     enviaLinha("Q");
                 })
-                .setNegativeButton("Esperar", null)
+                .setNegativeButton("Chamar/esperar", null)
                 .show();
         }
     }
