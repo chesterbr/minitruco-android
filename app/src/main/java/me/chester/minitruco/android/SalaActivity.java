@@ -46,7 +46,7 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected TextView textViewJogador4;
     protected TextView[] textViewsJogadores;
     protected TextView textViewTituloSala;
-    protected TextView textViewInfoSala;
+    protected TextView textViewInstrucoesSalaPrivada;
     protected int posJogador;
     protected String modo;
     protected PartidaRemota partida;
@@ -71,7 +71,7 @@ public abstract class SalaActivity extends AppCompatActivity {
         btnEntrarComCodigo = findViewById(R.id.btnEntrarComCodigo);
         textViewStatus = findViewById(R.id.textViewStatus);
         textViewTituloSala = findViewById(R.id.textViewTituloSala);
-        textViewInfoSala = findViewById(R.id.textViewInfoSala);
+        textViewInstrucoesSalaPrivada = findViewById(R.id.textViewInstrucoesSalaPrivada);
         textViewJogador1 = findViewById(R.id.textViewJogador1);
         textViewJogador2 = findViewById(R.id.textViewJogador2);
         textViewJogador3 = findViewById(R.id.textViewJogador3);
@@ -82,7 +82,7 @@ public abstract class SalaActivity extends AppCompatActivity {
         layoutJogadoresEBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesGerente.setVisibility(View.INVISIBLE);
         layoutBotoesInternet.setVisibility(View.GONE);
-        textViewInfoSala.setVisibility(View.GONE);
+        textViewInstrucoesSalaPrivada.setVisibility(View.GONE);
         textViewStatus.setText("");
         setMensagem(null);
     }
@@ -135,7 +135,6 @@ public abstract class SalaActivity extends AppCompatActivity {
 
             // Atualiza outros itens do display
             layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
-            textViewInfoSala.setVisibility(View.VISIBLE);
             findViewById(R.id.layoutBotoesGerente).setVisibility(
                 isGerente && !tipoSala.equals("PUB") ? View.VISIBLE : View.INVISIBLE);
             if (isGerente) {
@@ -147,15 +146,17 @@ public abstract class SalaActivity extends AppCompatActivity {
                 case "PUB":
                     textViewTituloSala.setText("Sala Pública");
                     layoutBotoesInternet.setVisibility(View.VISIBLE);
-                    textViewInfoSala.setVisibility(View.GONE);
+                    textViewInstrucoesSalaPrivada.setVisibility(View.GONE);
                     break;
                 case "PRI":
                     textViewTituloSala.setText("Sala Privada - CÓDIGO: " + codigo);
                     layoutBotoesInternet.setVisibility(View.GONE);
-                    textViewInfoSala.setVisibility(View.VISIBLE);
+                    textViewInstrucoesSalaPrivada.setVisibility(View.VISIBLE);
                     break;
                 case "BLT":
                     textViewTituloSala.setText("Bluetooth");
+                    layoutBotoesInternet.setVisibility(View.GONE);
+                    textViewInstrucoesSalaPrivada.setVisibility(View.GONE);
                     break;
             }
             textViewStatus.setText(Partida.textoModo(modo).toLowerCase());
