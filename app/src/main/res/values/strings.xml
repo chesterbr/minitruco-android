@@ -176,6 +176,13 @@
         O modo (paulista, mineiro, baralho limpo, manilha velha) é o que estiver configurando no celular que
         cria o jogo, e este também pode rearranjar as posições antes de começar.
         <br/><br/>
+        <b><u>Internet</u></b>: Você começa numa sala pública (usando o mesmo modo que usa para jogar
+        normalmmente - paulista, mineiro, etc.), na qual o jogo começa quando entrarem quatro pessoas.
+        Você também pode criar uma sala privada, na qual só é possível entrar com o código, e passar esse
+        código para seus(suas) amigos(as). A sala privada é parecida com o Bluetooth: a pessoa
+        gerente (mais antiga na sala) pode rearranjar as posições, decidir quando começar e as
+        posições vazias são completadas com bots.
+        <br/><br/>
         <b><u>Diferenças do miniTruco</u></b>: No jogo físico, jogadores podem trucar a qualquer
         hora; no miniTruco você só truca na sua vez. Não existem sinais (por enquanto), e não é
         possível entregar o jogo. No jogo normal, qualquer um pode jogar uma carta \"fechada\"
