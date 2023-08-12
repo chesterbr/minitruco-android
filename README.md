@@ -4,9 +4,9 @@
 
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android.
 
-Ele é completamente gratuito, sem anúncios, leve e não precisa de internet para jogar sozinho (ou em até quatro pessoas, via Bluetooth). Em breve também será possível jogar via internet.
+Ele é completamente gratuito, sem anúncios, leve e não precisa de internet para jogar sozinho (ou em até quatro pessoas, via Bluetooth). Também é possível jogar pela internet com os amigos(as) ou com gente do Brasil (e do mundo) todo.
 
-O jogo suporta as variantes mais comuns do truco (paulista e mineiro), com opções para jogar com baralho limpo ou manilha velha. Ele se adapta a diferentes formatos, orientações e resoluções de tela e permite configurar diversos aspectos visuais.
+O jogo suporta as variantes mais comuns do truco (paulista e mineiro), com opções para jogar com baralho limpo ou manilha velha. Ele se adapta a diferentes formatos, orientações e resoluções de tela e permite configurar diversos aspectos visuais e do jogo.
 
 <p align="center">
 <a href="https://play.google.com/store/apps/details?id=me.chester.minitruco&pli=1&hl=pt"><img src="docs/assets/disponivel-google-play-badge.png" alt="versão oficial no Google Play" align="middle"/></a>
@@ -17,7 +17,11 @@ O jogo suporta as variantes mais comuns do truco (paulista e mineiro), com opç�
 
 É um software livre, sem fins lucrativos, desenvolvido por hobby e com :heart: no meu tempo pessoal (com valiosas colaborações de outras pessoas).
 
-Você pode usar e modificar o código como quiser, dentro dos [termos da licença BSD](LICENSE). Consulte a **[documentação para desenvolvimento](docs/documentacao-para-desenvolvimento.md)** para saber mais sobre o funcionamento e como contribuir.
+## Licença e Desenvolvimento
+
+Você pode usar e modificar o código como quiser, dentro dos [termos da licença BSD](LICENSE).
+
+Consulte a **[documentação para desenvolvimento](docs/documentacao-para-desenvolvimento.md)** para saber mais sobre o funcionamento e como contribuir.
 
 ## Créditos
 
