@@ -118,4 +118,18 @@ class TrucoUtilsTest {
         assertEquals("j2", TrucoUtils.nomeHtmlParaDisplay(n4, 3));
         assertEquals("j3", TrucoUtils.nomeHtmlParaDisplay(n4, 4));
     }
+
+    @Test
+    void testNomeHtmlParaDispayConverteEspacos() {
+        String n = TrucoUtils.montaNotificacaoI(new String[]{
+            "John_Lennon",
+            "bot",
+            "George_Harrison",
+            "Ringo_Starr"
+        }, "M", "PUB").replace(POSICAO_PLACEHOLDER, "1");;
+        assertEquals("John Lennon (você)", TrucoUtils.nomeHtmlParaDisplay(n, 1));
+        assertEquals("bot", TrucoUtils.nomeHtmlParaDisplay(n, 2));
+
+
+    }
 }

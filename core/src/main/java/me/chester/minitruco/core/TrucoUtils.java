@@ -11,7 +11,7 @@ public class TrucoUtils {
 
     /**
      * String que deve ser substituída pela posição do jogador
-     * @see TrucoUtils#montaNotificacaoI(String[], String)
+     * @see TrucoUtils#montaNotificacaoI(Object[], String, String)
      */
     public static final String POSICAO_PLACEHOLDER = "$POSICAO";
 
@@ -69,7 +69,7 @@ public class TrucoUtils {
         boolean isGerente = (posicaoGerente == posicaoNaTela);
 
         boolean mostraGerente = isGerente && !isPublica;
-        String nome = nomes[indiceDoNomeNaPosicao];
+        String nome = nomes[indiceDoNomeNaPosicao].replaceAll("_", " ");
         boolean isVoce = (posicaoNaTela == 1);
         return new StringBuilder()
             .append(mostraGerente ? "<b>" : "")
