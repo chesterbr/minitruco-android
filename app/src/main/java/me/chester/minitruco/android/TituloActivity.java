@@ -244,13 +244,14 @@ public class TituloActivity extends SalaActivity {
         }
 
         // Faz a pergunta sugerindo o nome encontrado
+        // (mostrando os _ como espaços; a sanitização vai trocar de volta)
         View viewConteudo = getLayoutInflater()
             .inflate(R.layout.dialog_nome_jogador, null);
         final CheckBox checkBoxPerguntarSempre = viewConteudo
             .findViewById(R.id.checkBoxSemprePerguntaNome);
         final EditText editTextNomeJogador = viewConteudo
             .findViewById(R.id.editTextNomeJogador);
-        editTextNomeJogador.setText(nome);
+        editTextNomeJogador.setText(nome.replaceAll("_", " "));
 
         runOnUiThread(() -> {
             AlertDialog dialogNome = new AlertDialog.Builder(this)
