@@ -70,6 +70,9 @@ public class TrucoUtils {
 
         boolean mostraGerente = isGerente && !isPublica;
         String nome = nomes[indiceDoNomeNaPosicao].replaceAll("_", " ");
+        if (isPublica && nome.equals("bot")) {
+            nome = "";
+        }
         boolean isVoce = (posicaoNaTela == 1);
         return new StringBuilder()
             .append(mostraGerente ? "<b>" : "")

@@ -123,13 +123,63 @@ class TrucoUtilsTest {
     void testNomeHtmlParaDispayConverteEspacos() {
         String n = TrucoUtils.montaNotificacaoI(new String[]{
             "John_Lennon",
-            "bot",
+            "Paul_McCartney",
             "George_Harrison",
             "Ringo_Starr"
         }, "M", "PUB").replace(POSICAO_PLACEHOLDER, "1");;
         assertEquals("John Lennon (você)", TrucoUtils.nomeHtmlParaDisplay(n, 1));
-        assertEquals("bot", TrucoUtils.nomeHtmlParaDisplay(n, 2));
-
-
+        assertEquals("Paul McCartney", TrucoUtils.nomeHtmlParaDisplay(n, 2));
+        assertEquals("George Harrison", TrucoUtils.nomeHtmlParaDisplay(n, 3));
+        assertEquals("Ringo Starr", TrucoUtils.nomeHtmlParaDisplay(n, 4));
     }
+
+    @Test
+    void testNomeHtmlParaDisplayOmiteBotsEmSalaPublica() {
+        String n = TrucoUtils.montaNotificacaoI(new String[]{
+            "j1",
+            "bot",
+            "bot",
+            "j4"
+        }, "M", "PUB");
+        String n1 = n.replace(POSICAO_PLACEHOLDER, "1");
+        String n4 = n.replace(POSICAO_PLACEHOLDER, "4");
+
+        // Jogador na posição 1
+        assertEquals("j1 (você)", TrucoUtils.nomeHtmlParaDisplay(n1, 1));
+        assertEquals("", TrucoUtils.nomeHtmlParaDisplay(n1, 2));
+        assertEquals("", TrucoUtils.nomeHtmlParaDisplay(n1, 3));
+        assertEquals("j4", TrucoUtils.nomeHtmlParaDisplay(n1, 4));
+
+        // Jogador na posição 4
+        assertEquals("j4 (você)", TrucoUtils.nomeHtmlParaDisplay(n4, 1));
+        assertEquals("j1", TrucoUtils.nomeHtmlParaDisplay(n4, 2));
+        assertEquals("", TrucoUtils.nomeHtmlParaDisplay(n4, 3));
+        assertEquals("", TrucoUtils.nomeHtmlParaDisplay(n4, 4));
+    }
+
+    void testNomeHtmlParaDisplayNaoOmiteBotsEmSalaPrivadaOuBluetooth() {
+        for (String tipoSala : new String[]{"PRI", "BLT"}) {
+            String n = TrucoUtils.montaNotificacaoI(new String[]{
+                "j1",
+                "bot",
+                "bot",
+                "j4"
+            }, "M", tipoSala);
+            String n1 = n.replace(POSICAO_PLACEHOLDER, "1");
+            String n4 = n.replace(POSICAO_PLACEHOLDER, "4");
+
+            // Jogador na posição 1
+            assertEquals("<b>j1 (você) (gerente)</b>", TrucoUtils.nomeHtmlParaDisplay(n1, 1));
+            assertEquals("bot", TrucoUtils.nomeHtmlParaDisplay(n1, 2));
+            assertEquals("bot", TrucoUtils.nomeHtmlParaDisplay(n1, 3));
+            assertEquals("j4", TrucoUtils.nomeHtmlParaDisplay(n1, 4));
+
+            // Jogador na posição 4
+            assertEquals("j4 (você)", TrucoUtils.nomeHtmlParaDisplay(n4, 1));
+            assertEquals("<b>j1 (gerente)</b>", TrucoUtils.nomeHtmlParaDisplay(n4, 2));
+            assertEquals("bot", TrucoUtils.nomeHtmlParaDisplay(n4, 3));
+            assertEquals("bot", TrucoUtils.nomeHtmlParaDisplay(n4, 4));
+        }
+    }
+
 }
