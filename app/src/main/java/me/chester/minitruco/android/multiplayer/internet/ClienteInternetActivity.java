@@ -85,8 +85,14 @@ public class ClienteInternetActivity extends SalaActivity {
             layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
         });
         btnNovaSalaPublica.setOnClickListener(v -> {
-            comandoTrocaSala = "E NPU " + modo;
-            layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+            new AlertDialog.Builder(this)
+                .setMessage("Trocar de sala só é recomendado somente se alguém na sala atual estiver incomodando, pois vai demorar mais para achar outras pessoas para jogar. Quer mesmo trocar?")
+                .setPositiveButton("Trocar", (d, w) -> {
+                    comandoTrocaSala = "E NPU " + modo;
+                    layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+                })
+                .setNegativeButton("Ficar aqui", null)
+                .show();
         });
         btnEntrarComCodigo.setOnClickListener(v -> {
             // Faz a pergunta sugerindo o nome encontrado
