@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+        <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="#1B8E3C"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:ignore="RtlSymmetry,HardcodedText,UsingOnClickInXml">
 
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="logo do miniTruco"
+        android:scaleType="fitCenter"
+        android:src="@drawable/logo" />
+
     <GridLayout
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="2">
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:contentDescription="logo do miniTruco"
-            android:scaleType="fitCenter"
-            android:src="@drawable/logo" />
 
     </GridLayout>
 
@@ -246,3 +252,5 @@
     </LinearLayout>
 
 </LinearLayout>
+        </HorizontalScrollView>
+</ScrollView>

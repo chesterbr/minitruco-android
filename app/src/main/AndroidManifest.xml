@@ -37,10 +37,6 @@
     <!--
         Jogo via internet
     -->
-    <!--
-        Para desligar o botão de internet, comente aqui e mude a flag em
-        TituloActivity.configuraBotoesMultiplayer
-    -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -53,6 +49,9 @@
     <uses-feature
         android:name="android.hardware.wifi"
         android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.type.watch" />
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -84,6 +83,9 @@
         <activity
             android:name=".android.OpcoesActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
     </application>
 
 </manifest>
