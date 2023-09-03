@@ -144,7 +144,7 @@
         são fixos (a chamada \"manilha velha\"), então elas são sempre: 7♦, A♠, 7♥, e 4♣.
         <br/><br/>
         <b><u>Pontos e Aumentos</u></b>: A mão vale, em princípio 1 ponto no truco
-        paulista e 2 pontos no truco mineiro. Um jogador que acredite ter cartas boas pode
+        paulista e 2 pontos no truco mineiro. Um jogador que acredite ter cartas boas
         pode pedir \"truco\". Se os dois adversários recusarem, perdem a mão, mas se pelo menos
         um aceitar, a mão aumenta de valor (3 pontos no truco paulista e 4 no truco mineiro).
         A partir dali, um adversário pode aumentar a aposta
@@ -215,9 +215,9 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - JOGO PELA INTERNET (EXPERIMENTAL) com salas públicas (só pessoas, sem bots) e privadas<br/>
-            - Novo visual da "sala" Bluetooth (mesmo do jogo online)<br/>
-            - Corrige erro ao conectar celulares com nomes inválidos via Bluetooth<br/>
+            - Facilita formação de salas no multiplayer (orientando quem tenta criar nova sala)<br/>
+            - Corrige display de posições vazias e espaços em nomes<br/>
+            - Indicador visual de que é possível arrastar a caixa de pergunta<br/>
         ]]>
     </string>
     <string name="aviso_modo_experimental">Este recurso é experimental - ainda podem ocorrer erros e

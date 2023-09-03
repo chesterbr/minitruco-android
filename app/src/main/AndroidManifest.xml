@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:versionCode="30002"
-    android:versionName="3.0.2">
+    android:versionCode="30003"
+    android:versionName="3.0.3">
     <!--
          Ao aumentar a versão, atualize também:
          - versionCode (acima)
