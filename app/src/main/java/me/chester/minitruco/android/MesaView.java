@@ -215,7 +215,7 @@ public class MesaView extends View {
 
     private void init(Context context) {
         this.density = context.getResources().getDisplayMetrics().density;
-        this.indicadorDrag = getResources().getDrawable(R.drawable.indicador_drag);
+        this.indicadorDrag = context.getResources().getDrawable(R.drawable.indicador_drag);
     }
 
     public void setTrucoActivity(TrucoActivity trucoActivity) {
