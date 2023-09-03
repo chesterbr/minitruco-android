@@ -81,12 +81,22 @@ public class ClienteInternetActivity extends SalaActivity {
             enviaLinha("R T");
         });
         btnNovaSalaPrivada.setOnClickListener(v -> {
-            comandoTrocaSala = "E PRI " + modo;
-            layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+            new AlertDialog.Builder(this)
+                .setMessage("Salas privadas permitem convidar amigos(as), mas não " +
+                    "permitem que outras pessoas entrem. Se está procurando companhia " +
+                    "para jogar, é melhor ficar na sala pública.")
+                .setPositiveButton("Criar sala privada", (d, w) -> {
+                    comandoTrocaSala = "E PRI " + modo;
+                    layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+                })
+                .setNegativeButton("Ficar aqui", null)
+                .show();
         });
         btnNovaSalaPublica.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
-                .setMessage("Trocar de sala só é recomendado somente se alguém na sala atual estiver incomodando, pois vai demorar mais para achar outras pessoas para jogar. Quer mesmo trocar?")
+                .setMessage("Trocar de sala só é recomendado se alguém estiver " +
+                    "incomodando, pois vai demorar mais pra achar outras pessoas " +
+                    "para jogar. Quer mesmo trocar?")
                 .setPositiveButton("Trocar", (d, w) -> {
                     comandoTrocaSala = "E NPU " + modo;
                     layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
