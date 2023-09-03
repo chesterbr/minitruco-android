@@ -9,6 +9,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
+import me.chester.minitruco.R;
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Jogador;
 
@@ -77,6 +79,7 @@ public class MesaView extends View {
     private static final Random rand = new Random();
     private final Paint paintPergunta = new Paint();
     private float density;
+    private Drawable indicadorDrag;
     private boolean mostrarPerguntaMaoDeX = false;
     private boolean mostrarPerguntaAumento = false;
     private boolean mostrarBotaoAumento = false;
@@ -212,6 +215,7 @@ public class MesaView extends View {
 
     private void init(Context context) {
         this.density = context.getResources().getDisplayMetrics().density;
+        this.indicadorDrag = getResources().getDrawable(R.drawable.indicador_drag);
     }
 
     public void setTrucoActivity(TrucoActivity trucoActivity) {
@@ -806,6 +810,11 @@ public class MesaView extends View {
             paintPergunta.setTextAlign(Align.CENTER);
             paintPergunta.setStyle(Style.FILL);
             canvas.drawText(textoPergunta, rectPergunta.centerX(), rectPergunta.top + paintPergunta.getTextSize() * 2.3f, paintPergunta);
+
+            int tamanhoIndicador = (int) (rectBotaoSim.height() / 2);
+            int margemIndicador = tamanhoIndicador / 10;
+            indicadorDrag.setBounds(rectPergunta.right - tamanhoIndicador, rectPergunta.top + margemIndicador, rectPergunta.right, rectPergunta.top + tamanhoIndicador);
+            indicadorDrag.draw(canvas);
 
             desenhaBotao("Sim", canvas, rectBotaoSim);
             desenhaBotao("Não", canvas, rectBotaoNao);
