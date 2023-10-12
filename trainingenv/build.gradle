@@ -1,0 +1,46 @@
+plugins {
+    id 'application'
+}
+
+application {
+    mainClass = 'me.chester.minitruco.trainingenv.TrainingEnv'
+}
+
+dependencies {
+    implementation project(':core')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0-M1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.0-M1'
+    testImplementation 'org.mockito:mockito-core:5.3.1'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.3.1'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+// Não sei quão testável vai ser esse env, mas na dúvida...
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+// Não sei se vou precisar rodar isso fora do AndroidStudio, mas na dúvida...
+
+tasks.jar {
+    manifest.attributes["Main-Class"] = "me.chester.minitruco.trainingenv.TrainingEnv"
+    from(project(':core').fileTree("build/classes/java/main")) {
+        include '**/*.class'
+    }
+}
+
+// Workaround, vide https://github.com/gradle/gradle/issues/21364
+
+tasks.withType(JavaExec).configureEach {
+    if (name.endsWith("main()")) {
+        notCompatibleWithConfigurationCache("JavaExec não parece se dar bem com o cache de configuração do Gradle")
+    }
+}
