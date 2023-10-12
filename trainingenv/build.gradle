@@ -8,6 +8,7 @@ application {
 
 dependencies {
     implementation project(':core')
+    implementation 'net.sf.py4j:py4j:0.10.9.7'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0-M1'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.0-M1'
     testImplementation 'org.mockito:mockito-core:5.3.1'
