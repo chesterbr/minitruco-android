@@ -13,12 +13,49 @@ package me.chester.minitruco.core;
  */
 public class SituacaoJogo {
 
+    /**
+     * A representação string será usada para treinar a AI
+     *
+     * @return string com a tupla contendo o estado do jogo
+     */
     @Override
     public String toString() {
-        return "pos:" + posJogador + ",pontos:" + pontosEquipe[0] + ","
-                + pontosEquipe[1] + ",rodada:" + numRodadaAtual + ",results:"
-                + resultadoRodada[0] + "," + resultadoRodada[1] + ","
-                + resultadoRodada[2] + ",valMao:" + valorMao;
+        return "(" +
+            posJogador + "," +
+            numRodadaAtual + "," +
+            (numRodadaAtual > 1 ? resultadoRodada[0] : -1) + "," +
+            (numRodadaAtual > 2 ? resultadoRodada[1] : -1) + "," +
+            valorMao + "," +
+            valorProximaAposta + "," +
+            posJogadorPedindoAumento + "," +
+            posJogadorQueAbriuRodada + "," +
+            pontosEquipe[0] + "," +
+            pontosEquipe[1] + "," +
+            valorCarta(cartasJogadas[0][0]) + "," +
+            valorCarta(cartasJogadas[0][1]) + "," +
+            valorCarta(cartasJogadas[0][2]) + "," +
+            valorCarta(cartasJogadas[0][3]) + "," +
+            valorCarta(cartasJogadas[1][0]) + "," +
+            valorCarta(cartasJogadas[1][1]) + "," +
+            valorCarta(cartasJogadas[1][2]) + "," +
+            valorCarta(cartasJogadas[1][3]) + "," +
+            valorCarta(cartasJogadas[2][0]) + "," +
+            valorCarta(cartasJogadas[2][1]) + "," +
+            valorCarta(cartasJogadas[2][2]) + "," +
+            valorCarta(cartasJogadas[2][3]) + "," +
+            valorCarta(cartasJogador.length > 0 ? cartasJogador[0] : null) + "," +
+            valorCarta(cartasJogador.length > 1 ? cartasJogador[1] : null) + "," +
+            valorCarta(cartasJogador.length > 2 ? cartasJogador[2] : null) + "," +
+            (baralhoSujo ? 1 : 0) + "," +
+            (podeFechada ? 1 : 0) +
+            ")";
+    }
+
+    private int valorCarta(Carta c) {
+        if (c == null) {
+            return -1;
+        }
+        return Partida.getValorTruco(c, manilha);
     }
 
     /**
