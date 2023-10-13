@@ -1,2 +1,6 @@
 py4j==0.10.9.7
 notebook
+tensorflow==2.3.0
+gym
+keras
+keras-rl2
