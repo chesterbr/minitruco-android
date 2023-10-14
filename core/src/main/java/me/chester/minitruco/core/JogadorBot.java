@@ -29,6 +29,8 @@ public class JogadorBot extends Jogador implements Runnable {
         this(null, tf);
     }
 
+    public JogadorBot(Estrategia e) { this(e, null); }
+
     public JogadorBot(Estrategia e, ThreadFactory tf) {
         if (e == null) {
             estrategia = random.nextBoolean() ? new EstrategiaSellani() : new EstrategiaGasparotto();

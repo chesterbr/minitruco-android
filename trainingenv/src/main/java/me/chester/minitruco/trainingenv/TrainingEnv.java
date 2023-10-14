@@ -1,7 +1,9 @@
 package me.chester.minitruco.trainingenv;
 
+import java.util.concurrent.Callable;
+
 import me.chester.minitruco.core.Carta;
-import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.Estrategia;
 import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.PartidaLocal;
 import me.chester.minitruco.core.SituacaoJogo;
@@ -23,138 +25,128 @@ public class TrainingEnv {
 
     private static class Episodio {
 
+        private EstrategiaAgente estrategia;
         private PartidaLocal partida;
-        private JogadorAgente jogadorAgente;
-        public boolean vezDoAgente;
+        private int posicaoAgente;
 
         /**
-         * Cria uma nova partida contra três bots
+         * Inicia uma nova partida com 4 bots (o primeiro controlado pelo agente)
+         * e aguarda a vez do agente jogar
          */
         public Episodio() {
             partida = new PartidaLocal(false, false, "P");
-            jogadorAgente = new JogadorAgente(this);
-            partida.adiciona(jogadorAgente);
+            estrategia = new EstrategiaAgente();
+            posicaoAgente = 1;
+            partida.adiciona(new JogadorBot(estrategia));
             partida.adiciona(new JogadorBot());
             partida.adiciona(new JogadorBot());
             partida.adiciona(new JogadorBot());
-            vezDoAgente = false;
             (new Thread(partida)).start();
+            estrategia.aguardaVezDoAgente();
         }
 
         /**
-         * Aguarda a vez do agente e retorna o estado atual
+         * Executa uma ação no jogo e aguard a nova vez do agente jogar
          *
-         * @return estado do agente (string separada por espaços)
+         * @param action índice da carta a jogar, ou -1 para pedir truco
          */
-        public String proximoEstado() {
-            while (!vezDoAgente) {
+        public void executa(int action) {
+            estrategia.executa(action);
+        }
+
+        /**
+         * Recupera a tupla que representa o estado atual do jogo (observação)
+         *
+         * @return string contendo os valores separados por espaços; null
+         *         se não for a vez do agente
+         */
+        public String estado() {
+            return estrategia.situacaoJogo.toString();
+        }
+
+        /**
+         * Encerra a partida em andamento, liberando as threads e o gc
+         */
+        public void finaliza() {
+            partida.abandona(posicaoAgente);
+            partida = null;
+            estrategia = null;
+        }
+    }
+
+    private static class EstrategiaAgente implements Estrategia {
+
+        /**
+         * Estado do jogo quando é a vez do agente jogar (null se não for a vez dele)
+         */
+        public SituacaoJogo situacaoJogo;
+
+        /**
+         * Ação a ser executada pelo agente (índice da carta a jogar, -1 para pedir
+         * truco, null se estamos aguardando o agente)
+         */
+        private Integer action;
+
+        /**
+         * Chamado pelo jogo quando é a vez do agente jogar
+         * @param s
+         *            Situação da partida no momento
+         * @return
+         */
+        @Override
+        public int joga(SituacaoJogo s) {
+            action = null;
+            situacaoJogo = s;
+            aguardaAgenteJogar();
+            return action;
+        }
+
+        /**
+         * Chamado quando o env (Python/gym) quer executar uma ação
+         *
+         * @param a ação a ser executada
+         */
+        public void executa(int a) {
+            action = a;
+            situacaoJogo = null;
+            aguardaVezDoAgente();
+        }
+
+        // TODO implementar esses outros eventos do jogo
+
+        @Override
+        public boolean aceitaTruco(SituacaoJogo s) {
+            return false;
+        }
+
+        @Override
+        public boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s) {
+            return false;
+        }
+
+       public void aguardaVezDoAgente() {
+            aguarda(() -> { return situacaoJogo != null; });
+        }
+
+        public void aguardaAgenteJogar() {
+            aguarda(() -> { return action != null; });
+        }
+
+        // TODO fazer um sleep longo e interrupt aqui ao invés de sleep(1)
+
+        private void aguarda(Callable<Boolean> estado) {
+            while (true) {
+                try {
+                    if (!!estado.call()) break;
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
-            return jogadorAgente.situacaoJogo.toString();
-        }
-
-        public void joga(int indiceCarta) {
-            partida.jogaCarta(jogadorAgente, jogadorAgente.situacaoJogo.cartasJogador[indiceCarta]);
-            vezDoAgente = false;
-        }
-
-        public void finaliza() {
-            partida.abandona(jogadorAgente.getPosicao());
-        }
-    }
-
-    private static class JogadorAgente extends Jogador {
-
-        public SituacaoJogo situacaoJogo = new SituacaoJogo();
-        private Episodio episodio;
-
-        public JogadorAgente(Episodio episodio) {
-            super();
-            this.episodio = episodio;
-        }
-
-        @Override
-        public void cartaJogada(Jogador j, Carta c) {
-
-        }
-
-        @Override
-        public void inicioMao(Jogador jogadorQueAbre) {
-            System.out.println("iniciomao");
-        }
-
-        @Override
-        public void inicioPartida(int placarEquipe1, int placarEquipe2) {
-            System.out.println("iniciopartida");
-
-        }
-
-        @Override
-        public void vez(Jogador j, boolean podeFechada) {
-            if (j == this) {
-                System.out.println("vez do agente");
-
-                // TODO eu acho que isso vai sempre colocar as 3 cartas,
-                //      ver se é um problema
-                situacaoJogo.cartasJogador = getCartas();
-                partida.atualizaSituacao(situacaoJogo, this);
-                // TODO implementar
-//                if (partida.isPlacarPermiteAumento()) {
-//                    situacaoJogo.valorProximaAposta = valorProximaAposta;
-//                } else {
-//                    situacaoJogo.valorProximaAposta = 0;
-//                }
-                episodio.vezDoAgente = true;
-            }
-        }
-
-        @Override
-        public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
-
-        }
-
-        @Override
-        public void aceitouAumentoAposta(Jogador j, int valor, int rndFrase) {
-
-        }
-
-        @Override
-        public void recusouAumentoAposta(Jogador j, int rndFrase) {
-
-        }
-
-        @Override
-        public void rodadaFechada(int numRodada, int resultado, Jogador jogadorQueTorna) {
-
-        }
-
-        @Override
-        public void maoFechada(int[] pontosEquipe) {
-
-        }
-
-        @Override
-        public void jogoFechado(int numEquipeVencedora, int rndFrase) {
-
-        }
-
-        @Override
-        public void decidiuMaoDeX(Jogador j, boolean aceita, int rndFrase) {
-
-        }
-
-        @Override
-        public void informaMaoDeX(Carta[] cartasParceiro) {
-
-        }
-
-        @Override
-        public void jogoAbortado(int posicao, int rndFrase) {
-
         }
     }
 }
