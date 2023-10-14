@@ -23,6 +23,8 @@ public class SituacaoJogo {
     public String toString() {
         return
             posJogador + " " +
+            (baralhoSujo ? 1 : 0) + " " +
+            (podeFechada ? 1 : 0) + " " +
             numRodadaAtual + " " +
             (numRodadaAtual > 1 ? resultadoRodada[0] : -1) + " " +
             (numRodadaAtual > 2 ? resultadoRodada[1] : -1) + " " +
@@ -46,9 +48,7 @@ public class SituacaoJogo {
             valorCarta(cartasJogadas[2][3]) + " " +
             valorCarta(cartasJogador.length > 0 ? cartasJogador[0] : null) + " " +
             valorCarta(cartasJogador.length > 1 ? cartasJogador[1] : null) + " " +
-            valorCarta(cartasJogador.length > 2 ? cartasJogador[2] : null) + " " +
-            (baralhoSujo ? 1 : 0) + " " +
-            (podeFechada ? 1 : 0);
+            valorCarta(cartasJogador.length > 2 ? cartasJogador[2] : null);
     }
 
     private int valorCarta(Carta c) {
