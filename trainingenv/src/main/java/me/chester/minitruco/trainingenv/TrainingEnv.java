@@ -37,16 +37,16 @@ public class TrainingEnv {
             partida = new PartidaLocal(false, false, "P");
             estrategia = new EstrategiaAgente();
             posicaoAgente = 1;
-            partida.adiciona(new JogadorBot(estrategia));
-            partida.adiciona(bot());
-            partida.adiciona(bot());
-            partida.adiciona(bot());
+            partida.adiciona(bot(estrategia));
+            partida.adiciona(bot(null));
+            partida.adiciona(bot(null));
+            partida.adiciona(bot(null));
             (new Thread(partida)).start();
             estrategia.aguardaVezDoAgente();
         }
 
-        private static JogadorBot bot() {
-            JogadorBot bot = new JogadorBot();
+        private static JogadorBot bot(Estrategia e) {
+            JogadorBot bot = new JogadorBot(e);
             bot.setFingeQuePensa(false);
             return bot;
         }
