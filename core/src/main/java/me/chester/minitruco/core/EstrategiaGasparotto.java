@@ -2044,6 +2044,11 @@ public class EstrategiaGasparotto implements Estrategia {
                 && (qManilhas >= 1 || q3 >= 1 || q2 >= 2);
     }
 
+    @Override
+    public void partidaFinalizada(int numEquipeVencedora) {
+
+    }
+
     public void setGameLevel(int gameLevel) {
         this.gameLevel = gameLevel;
     }

@@ -2,6 +2,7 @@ package me.chester.minitruco.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -12,6 +13,14 @@ import org.junit.jupiter.api.Timeout;
 import java.util.concurrent.ThreadFactory;
 
 class JogadorBotTest {
+
+    @Test
+    void testNotificaFimDeJogoParaEstrategia() {
+        Estrategia e = mock(Estrategia.class);
+        JogadorBot bot = new JogadorBot(e);
+        bot.jogoFechado(1, 999);
+        verify(e).partidaFinalizada(1);
+    }
 
     // TODO limpar esse código
     // TODO testar todas as cartas (só testa a primeira)
@@ -40,6 +49,11 @@ class JogadorBotTest {
             @Override
             public boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s) {
                 return false;
+            }
+
+            @Override
+            public void partidaFinalizada(int numEquipeVencedora) {
+
             }
         };
         Partida j = new PartidaLocal(false, false, "P");

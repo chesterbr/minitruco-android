@@ -755,4 +755,9 @@ public class EstrategiaSellani implements Estrategia {
         return qExcelente >= 2 || qBoa >= 3 || (qExcelente >= 1 && qBoa >= 1);
     }
 
+    @Override
+    public void partidaFinalizada(int numEquipeVencedora) {
+
+    }
+
 }

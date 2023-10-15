@@ -66,4 +66,10 @@ public interface Estrategia {
      */
     boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s);
 
+    /**
+     * Chamado quando uma partida acaba (útil para treinar AI)
+     *
+     * @param numEquipeVencedora 1 ou 2, dependendo de qual equipe ganhou o jogo
+     */
+    void partidaFinalizada(int numEquipeVencedora);
 }

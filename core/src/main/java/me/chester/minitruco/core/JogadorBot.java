@@ -341,7 +341,7 @@ public class JogadorBot extends Jogador implements Runnable {
     }
 
     public void jogoFechado(int numEquipeVencedora, int rndFrase) {
-        // Não faz nada
+        estrategia.partidaFinalizada(numEquipeVencedora);
     }
 
     public void cartaJogada(Jogador j, Carta c) {
