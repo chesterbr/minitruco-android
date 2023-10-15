@@ -130,27 +130,30 @@ public class JogadorBot extends Jogador implements Runnable {
                     posCarta = 0;
                 }
 
-                // Se a estratégia pediu truco, processa e desencana de jogar
-                // agora
-                if ((posCarta == -1) && (situacaoJogo.valorProximaAposta != 0)) {
-                    aceitaramTruco = false;
-                    numRespostasAguardando = 2;
-                    LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
-                            + " vai aumentar aposta");
-                    estouAguardandoRepostaAumento = true;
-                    partida.aumentaAposta(this);
-                    LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
-                            + " aguardando resposta");
-                    continue;
-                }
+                // TODO REVERTER, ISSO É SÓ PRA TESTAR
+                if (posCarta == -1) { posCarta = 0; }
 
-                // Se a estratégia pediu truco fora de hora, ignora e joga a
-                // primeira carta
-                if (posCarta == -1) {
-                    LOGGER.log(Level.INFO, "Jogador" + this.getPosicao()
-                            + " pediu truco fora de hora");
-                    posCarta = 0;
-                }
+//                // Se a estratégia pediu truco, processa e desencana de jogar
+//                // agora
+//                if ((posCarta == -1) && (situacaoJogo.valorProximaAposta != 0)) {
+//                    aceitaramTruco = false;
+//                    numRespostasAguardando = 2;
+//                    LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
+//                            + " vai aumentar aposta");
+//                    estouAguardandoRepostaAumento = true;
+//                    partida.aumentaAposta(this);
+//                    LOGGER.log(Level.INFO, "Jogador " + this.getPosicao()
+//                            + " aguardando resposta");
+//                    continue;
+//                }
+//
+//                // Se a estratégia pediu truco fora de hora, ignora e joga a
+//                // primeira carta
+//                if (posCarta == -1) {
+//                    LOGGER.log(Level.INFO, "Jogador" + this.getPosicao()
+//                            + " pediu truco fora de hora");
+//                    posCarta = 0;
+//                }
 
                 // Joga a carta selecionada e remove ela da mão
                 boolean isFechada = posCarta >= 10;
@@ -225,8 +228,10 @@ public class JogadorBot extends Jogador implements Runnable {
                 }
                 boolean respostaMaoDeX = false;
                 try {
-                    respostaMaoDeX = estrategia.aceitaMaoDeX(
-                            cartasDoParceiroDaMaoDeX, situacaoJogo);
+                    // TODO REVERTER, ISSO É SÓ PRA TESTAR
+                    respostaMaoDeX = true;
+//                    respostaMaoDeX = estrategia.aceitaMaoDeX(
+//                            cartasDoParceiroDaMaoDeX, situacaoJogo);
                 } catch (Exception e) {
                     LOGGER.log(Level.INFO,
                             "Erro em aceite-mao-de-x no jogador" + this.getPosicao(),

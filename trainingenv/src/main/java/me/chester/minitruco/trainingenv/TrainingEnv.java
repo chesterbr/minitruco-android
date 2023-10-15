@@ -127,7 +127,7 @@ public class TrainingEnv {
 
         @Override
         public boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s) {
-            return false;
+            return true;
         }
 
        public void aguardaVezDoAgente() {
