@@ -94,7 +94,10 @@ public class TrainingEnv {
         private Integer action;
 
         /**
-         * Chamado pelo jogo quando é a vez do agente jogar
+         * Chamado pelo jogo quando é a vez do agente jogar. O método
+         * disponibiliza o estado atual para o agente, aguarda a jogada dele
+         * e a executa na partida.
+         *
          * @param s
          *            Situação da partida no momento
          * @return
@@ -105,6 +108,17 @@ public class TrainingEnv {
             situacaoJogo = s;
             aguardaAgenteJogar();
             return action;
+        }
+
+        /**
+         * Chamado pelo jogo quando uma partida acaba. O método disponibiliza
+         * o estado final para o agente, que deve encerrar o episódiio.
+         *
+         * @param numEquipeVencedora 1 ou 2, dependendo de qual equipe ganhou o jogo
+         */
+        @Override
+        public void partidaFinalizada(int numEquipeVencedora) {
+            situacaoJogo = new SituacaoJogo(numEquipeVencedora);
         }
 
         /**
@@ -130,7 +144,7 @@ public class TrainingEnv {
             return true;
         }
 
-       public void aguardaVezDoAgente() {
+        public void aguardaVezDoAgente() {
             aguarda(() -> { return situacaoJogo != null; });
         }
 

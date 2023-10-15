@@ -13,14 +13,38 @@ package me.chester.minitruco.core;
  */
 public class SituacaoJogo {
 
+    private int numEquipeVencedora;
+
+    /**
+     * Cria uma situação de jogo em andamento. O chamamador deve popular as
+     * propriedades de acordo com o que ele sabe sobre o jogo.
+     */
+    public SituacaoJogo() {
+        this.numEquipeVencedora = 0;
+    }
+
+    /**
+     * Cria uma situação de jogo finalizado.
+     *
+     * @param numEquipeVencedora Equipe que venceu o jogo (1 ou 2)
+     */
+    public SituacaoJogo(int numEquipeVencedora) {
+        this.numEquipeVencedora = numEquipeVencedora;
+    }
+
     /**
      * A representação string será usada para treinar a AI
      *
      * @return elementos da tupla que contém o estado do jogo, separados por
-     *         espaço (para converter facilmente em tupla com .split())
+     *         espaço (para converter facilmente em tupla com .split()). Se
+     *         for um estado terminal (fim de jogo), retorna "EQUIPE 1 VENCEU"
+     *         ou "EQUIPE 2 VENCEU", conforme o caso.
      */
     @Override
     public String toString() {
+        if (numEquipeVencedora > 0) {
+            return "EQUIPE " + numEquipeVencedora + " VENCEU";
+        }
         return
             posJogador + " " +
             (baralhoSujo ? 1 : 0) + " " +
