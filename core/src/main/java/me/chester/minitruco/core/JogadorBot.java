@@ -192,7 +192,13 @@ public class JogadorBot extends Jogador implements Runnable {
             if (recebiPedidoDeAumento) {
                 recebiPedidoDeAumento = false;
                 atualizaSituacaoJogo();
-                sleep(1000 + random.nextInt(1000));
+                if (fingeQuePensa) {
+                    sleep(1000 + random.nextInt(1000));
+                } else {
+                    // Se não estivermos fingindo que pensamos, vamos só dar
+                    // uma pausa pequena pra randomizar quem responde primeiro
+                    sleep(random.nextInt(50));
+                }
                 // O sync/if é só pra evitar resposta dupla entre 2 bots
                 synchronized (partida) {
                     if (situacaoJogo.posJogadorPedindoAumento != 0) {
@@ -212,6 +218,10 @@ public class JogadorBot extends Jogador implements Runnable {
                 atualizaSituacaoJogo();
                 if (fingeQuePensa) {
                     sleep(1000 + random.nextInt(1000));
+                } else {
+                    // Se não estivermos fingindo que pensamos, vamos só dar
+                    // uma pausa pequena pra randomizar quem responde primeiro
+                    sleep(random.nextInt(50));
                 }
                 boolean respostaMaoDeX = false;
                 try {
