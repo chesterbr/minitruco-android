@@ -362,7 +362,11 @@ public class TituloActivity extends SalaActivity {
         Partida novaPartida = new PartidaLocal(humanoDecide, jogoAutomatico, modo);
         novaPartida.adiciona(jogadorHumano);
         for (int i = 2; i <= 4; i++) {
-            novaPartida.adiciona(new JogadorBot());
+            JogadorBot bot = new JogadorBot();
+            if (jogoAutomatico) {
+                bot.setFingeQuePensa(false);
+            }
+            novaPartida.adiciona(bot);
         }
         return novaPartida;
     }
