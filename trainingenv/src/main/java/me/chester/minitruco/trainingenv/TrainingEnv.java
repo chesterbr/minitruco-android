@@ -1,6 +1,10 @@
 package me.chester.minitruco.trainingenv;
 
 import java.util.concurrent.Callable;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Estrategia;
@@ -13,7 +17,6 @@ public class TrainingEnv {
 
     public static void main(String[] args) {
         TrainingEnv app = new TrainingEnv();
-        // app is now the gateway.entry_point
         GatewayServer server = new GatewayServer(app);
         server.start();
         System.out.println("Servidor de env de treinamento iniciado");
