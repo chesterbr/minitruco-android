@@ -105,6 +105,8 @@ public class PartidaLocal extends Partida {
     private final boolean humanoDecide;
     private final boolean jogoAutomatico;
 
+    private boolean performanceMaxima = false;
+
     /*
      * (non-Javadoc)
      *
@@ -706,9 +708,19 @@ public class PartidaLocal extends Partida {
         return false;
     }
 
+    /**
+     * Configura boost de performance (para treinar AI)
+     *
+     * @param performanceMaxima se true, a classe opera na performance máxima
+     *                          (a um custo de CPU). Default é false.
+     */
+    public void setPerformanceMaxima(boolean performanceMaxima) {
+        this.performanceMaxima = performanceMaxima;
+    }
+
     private void sleep() {
         try {
-            Thread.sleep(100);
+            Thread.sleep(performanceMaxima ? 1 : 100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

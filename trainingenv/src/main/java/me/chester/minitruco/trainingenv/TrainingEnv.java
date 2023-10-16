@@ -1,10 +1,6 @@
 package me.chester.minitruco.trainingenv;
 
 import java.util.concurrent.Callable;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import me.chester.minitruco.core.Carta;
 import me.chester.minitruco.core.Estrategia;
@@ -38,6 +34,7 @@ public class TrainingEnv {
          */
         public Episodio() {
             partida = new PartidaLocal(false, false, "P");
+            partida.setPerformanceMaxima(true);
             estrategia = new EstrategiaAgente();
             posicaoAgente = 1;
             partida.adiciona(bot(estrategia));
@@ -51,6 +48,7 @@ public class TrainingEnv {
         private static JogadorBot bot(Estrategia e) {
             JogadorBot bot = new JogadorBot(e);
             bot.setFingeQuePensa(false);
+            bot.setPerformanceMaxima(true);
             return bot;
         }
 

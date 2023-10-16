@@ -20,6 +20,7 @@ public class JogadorBot extends Jogador implements Runnable {
     public static final String APELIDO_BOT = "bot";
 
     private boolean fingeQuePensa = true;
+    private boolean performanceMaxima = false;
 
     public JogadorBot() {
         this(null, null);
@@ -383,9 +384,19 @@ public class JogadorBot extends Jogador implements Runnable {
         // Não precisa tratar
     }
 
+    /**
+     * Configura boost de performance (para treinar AI)
+     *
+     * @param performanceMaxima se true, a classe opera na performance máxima
+     *                          (a um custo de CPU). Default é false.
+     */
+    public void setPerformanceMaxima(boolean performanceMaxima) {
+        this.performanceMaxima = performanceMaxima;
+    }
+
     private void sleep(int i) {
         try {
-            Thread.sleep(i);
+            Thread.sleep(performanceMaxima ? 1 : i);
         } catch (InterruptedException e) {
             LOGGER.log(Level.INFO, "Interrupted during sleep", e);
         }
