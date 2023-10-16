@@ -45,7 +45,7 @@ public class TrainingEnv {
             estrategia.aguardaVezDoAgente();
         }
 
-        private static JogadorBot bot(Estrategia e) {
+        private JogadorBot bot(Estrategia e) {
             JogadorBot bot = new JogadorBot(e);
             bot.setFingeQuePensa(false);
             bot.setPerformanceMaxima(true);
@@ -75,9 +75,13 @@ public class TrainingEnv {
          * Encerra a partida em andamento, liberando as threads e o gc
          */
         public void finaliza() {
-            partida.abandona(posicaoAgente);
+            if (partida != null) {
+                if (!partida.finalizada) {
+                    partida.abandona(posicaoAgente);
+                }
+            }
+            estrategia.action = 0; // Libera a thread do agente
             partida = null;
-            estrategia = null;
         }
     }
 
@@ -93,6 +97,7 @@ public class TrainingEnv {
          * truco, null se estamos aguardando o agente)
          */
         private Integer action;
+        private Thread threadAguardando;
 
         /**
          * Chamado pelo jogo quando é a vez do agente jogar. O método
@@ -120,6 +125,7 @@ public class TrainingEnv {
         @Override
         public void partidaFinalizada(int numEquipeVencedora) {
             situacaoJogo = new SituacaoJogo(numEquipeVencedora);
+            action = 0;
         }
 
         /**
@@ -160,12 +166,14 @@ public class TrainingEnv {
                 try {
                     if (!!estado.call()) break;
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    // Um erro aqui significa que não tem mais o que aguardar
+                    break;
                 }
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                    // Se for interrompida também não temos o que aguardar
+                    break;
                 }
             }
         }
