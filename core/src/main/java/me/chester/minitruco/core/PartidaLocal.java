@@ -401,11 +401,7 @@ public class PartidaLocal extends Partida {
 
         // Se alguém tiver jogado e ainda não foi processado, segura a onda
         while (alguemJogou) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                // No worries
-            }
+            sleep();
         }
 
         this.jogadorQueJogou = j;
