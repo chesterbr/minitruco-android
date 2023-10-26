@@ -18,6 +18,8 @@ public class TrainingEnv {
         System.out.println("Servidor de env de treinamento iniciado");
     }
 
+    public int[][] ranges() { return SituacaoJogo.ranges; }
+
     public Episodio novoEpisodio() {
         return new Episodio();
     }
@@ -68,7 +70,7 @@ public class TrainingEnv {
          *         se não for a vez do agente
          */
         public String estado() {
-            return estrategia.situacaoJogo.toString();
+            return estrategia.situacaoJogo.toObservation();
         }
 
         /**

@@ -3,6 +3,9 @@ package me.chester.minitruco.core;
 /* SPDX-License-Identifier: BSD-3-Clause */
 /* Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> */
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  * Fotografia da situação atual da partida no momento em que um bot vai jogar,
  * responder a um aumento ou decidir se joga uma mão de 10/11.
@@ -33,47 +36,102 @@ public class SituacaoJogo {
     }
 
     /**
-     * A representação string será usada para treinar a AI
+     * Representação desse estado que será usada para treinar a AI.
+     * <p>
+     * Estados possíveis:<br/>
+     *   - posições: 1=inferior, 2=direita, 3=superior, 4=esquerda<br/>
+     *   - equipes: 1=posições 1 e 3; 2=posições 2 e 4<br/>
+     *   - cartas: podem valer -1 (null), 0 (fechada) ou um valor de 1
+     *             a 14, conforme o valor relativo delas (cartas normais de 1
+     *             a 10, manilhas de 11 a 14)<br/>
+     *   - rodadas: 1 a 3<br/>
+     *   - resultado da rodada: a equipe que venceu (1 ou 2), 3 para empate
+     *                          ou -1 para rodada não conlcuída<br/>
+     *   - booleanos (ex.: podeFechada) são 0 ou 1<br/>
+     * TODO posJogadorPedindoAumento (acho que não zera depois do aumento)<br/>
+     * TODO tento mineiro (talvez só varie as recompensas, mas é preciso especificar)<br/>
+     * TODO baralho limpo (provavelmente só vamos excluir o range 1-4)<br/>
      *
-     * @return elementos da tupla que contém o estado do jogo, separados por
-     *         espaço (para converter facilmente em tupla com .split()). Se
-     *         for um estado terminal (fim de jogo), retorna "EQUIPE 1 VENCEU"
-     *         ou "EQUIPE 2 VENCEU", conforme o caso.
+     * @return valores do espaço de observação, separados por espaço.
+     *         Se for um estado terminal (fim de jogo),
+     *         "EQUIPE 1 VENCEU" ou "EQUIPE 2 VENCEU".
      */
-    @Override
-    public String toString() {
+    public String toObservation() {
         if (numEquipeVencedora > 0) {
             return "EQUIPE " + numEquipeVencedora + " VENCEU";
         }
-        return
-            posJogador + " " +
-            (baralhoSujo ? 1 : 0) + " " +
-            (podeFechada ? 1 : 0) + " " +
-            numRodadaAtual + " " +
-            (numRodadaAtual > 1 ? resultadoRodada[0] : -1) + " " +
-            (numRodadaAtual > 2 ? resultadoRodada[1] : -1) + " " +
-            valorMao + " " +
-            valorProximaAposta + " " +
-            posJogadorPedindoAumento + " " +
-            posJogadorQueAbriuRodada + " " +
-            pontosEquipe[0] + " " +
-            pontosEquipe[1] + " " +
-            valorCarta(cartasJogadas[0][0]) + " " +
-            valorCarta(cartasJogadas[0][1]) + " " +
-            valorCarta(cartasJogadas[0][2]) + " " +
-            valorCarta(cartasJogadas[0][3]) + " " +
-            valorCarta(cartasJogadas[1][0]) + " " +
-            valorCarta(cartasJogadas[1][1]) + " " +
-            valorCarta(cartasJogadas[1][2]) + " " +
-            valorCarta(cartasJogadas[1][3]) + " " +
-            valorCarta(cartasJogadas[2][0]) + " " +
-            valorCarta(cartasJogadas[2][1]) + " " +
-            valorCarta(cartasJogadas[2][2]) + " " +
-            valorCarta(cartasJogadas[2][3]) + " " +
-            valorCarta(cartasJogador.length > 0 ? cartasJogador[0] : null) + " " +
-            valorCarta(cartasJogador.length > 1 ? cartasJogador[1] : null) + " " +
-            valorCarta(cartasJogador.length > 2 ? cartasJogador[2] : null);
+        Carta[] maoJogador = (cartasJogador == null ? new Carta[0] : cartasJogador);
+        int[] estado = {
+            valorCarta(maoJogador.length > 0 ? maoJogador[0] : null),
+            valorCarta(maoJogador.length > 1 ? maoJogador[1] : null),
+            valorCarta(maoJogador.length > 2 ? maoJogador[2] : null),
+            posJogadorPedindoAumento,
+            posJogador,
+            (baralhoSujo ? 1 : 0),
+            (podeFechada ? 1 : 0),
+            numRodadaAtual,
+            (numRodadaAtual > 1 ? resultadoRodada[0] : -1),
+            (numRodadaAtual > 2 ? resultadoRodada[1] : -1),
+            valorMao,
+            valorProximaAposta,
+            posJogadorQueAbriuRodada,
+            pontosEquipe[0],
+            pontosEquipe[1],
+            valorCarta(cartasJogadas[0][0]),
+            valorCarta(cartasJogadas[0][1]),
+            valorCarta(cartasJogadas[0][2]),
+            valorCarta(cartasJogadas[0][3]),
+            valorCarta(cartasJogadas[1][0]),
+            valorCarta(cartasJogadas[1][1]),
+            valorCarta(cartasJogadas[1][2]),
+            valorCarta(cartasJogadas[1][3]),
+            valorCarta(cartasJogadas[2][0]),
+            valorCarta(cartasJogadas[2][1]),
+            valorCarta(cartasJogadas[2][2]),
+            valorCarta(cartasJogadas[2][3])
+        };
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < estado.length; i++) {
+            sb.append(estado[i]);
+            if (i < estado.length - 1) {
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
     }
+
+    /**
+     * Valores mínimo e máximo que cada valor do espaço de observação pode assumir
+     */
+    public static int[][] ranges = {
+        { -1, 14}, // carta1Jogador
+        { -1, 14}, // carta2Jogador
+        { -1, 14}, // carta3Jogador
+        {  0,  4}, // posJogadorPedindoAumento
+        {  1,  4}, // posJogador
+        {  0,  1}, // baralhoSujo
+        {  0,  1}, // podeFechada
+        {  1,  3}, // numRodadaAtual
+        { -1,  3}, // resultadoRodada1
+        { -1,  3}, // resultadoRodada2
+        {  1, 12}, // valorMao
+        {  0, 12}, // valorProximaAposta
+        {  1,  4}, // posJogadorQueAbriuRodada
+        {  0, 23}, // pontosEquipe1
+        {  0, 23}, // pontosEquipe2
+        { -1, 14}, // cartaJogadaRodada1Pos1
+        { -1, 14}, // cartaJogadaRodada1Pos2
+        { -1, 14}, // cartaJogadaRodada1Pos3
+        { -1, 14}, // cartaJogadaRodada1Pos4
+        { -1, 14}, // cartaJogadaRodada2Pos1
+        { -1, 14}, // cartaJogadaRodada2Pos2
+        { -1, 14}, // cartaJogadaRodada2Pos3
+        { -1, 14}, // cartaJogadaRodada2Pos4
+        { -1, 14}, // cartaJogadaRodada3Pos1
+        { -1, 14}, // cartaJogadaRodada3Pos2
+        { -1, 14}, // cartaJogadaRodada3Pos3
+        { -1, 14}, // cartaJogadaRodada3Pos4
+    };
 
     private int valorCarta(Carta c) {
         if (c == null) {
