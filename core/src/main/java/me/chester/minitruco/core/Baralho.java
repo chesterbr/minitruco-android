@@ -23,9 +23,20 @@ public class Baralho {
      *
      * @param limpo true se o baralho for limpo (sem 4, 5, 6 e 7)
      */
-
     public Baralho(boolean limpo) {
         this.limpo = limpo;
+    }
+
+
+    /**
+     * Cria um novo bararalho não-aleatório de truco
+     *
+     * @param limpo true se o baralho for limpo (sem 4, 5, 6 e 7)
+     * @param seed seed para o gerador de números aleatórios
+     */
+    public Baralho(boolean limpo, long seed) {
+        this.limpo = limpo;
+        random.setSeed(seed);
     }
 
     /**
