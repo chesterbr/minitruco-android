@@ -37,9 +37,18 @@ public class PartidaLocal extends Partida {
     }
 
     /**
+     * Usa um baralho não-aleatório (para testes)
+     *
+     * @param seed
+     */
+    public void setSeedBaralho(long seed) {
+        this.baralho = new Baralho(modo.isBaralhoLimpo(), seed);
+    }
+
+    /**
      * Baralho que será usado durante essa partida
      */
-    private final Baralho baralho;
+    private Baralho baralho;
 
     /**
      * Resultados de cada rodada (1 para vitória da equipe 1/3, 2 para vitória
