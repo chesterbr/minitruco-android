@@ -65,16 +65,16 @@ public class SituacaoJogo {
             valorCarta(maoJogador.length > 0 ? maoJogador[0] : null),
             valorCarta(maoJogador.length > 1 ? maoJogador[1] : null),
             valorCarta(maoJogador.length > 2 ? maoJogador[2] : null),
-            posJogadorPedindoAumento,
-            posJogador,
-            (baralhoSujo ? 1 : 0),
-            (podeFechada ? 1 : 0),
-            numRodadaAtual,
-            (numRodadaAtual > 1 ? resultadoRodada[0] : -1),
-            (numRodadaAtual > 2 ? resultadoRodada[1] : -1),
-            valorMao,
-            valorProximaAposta,
-            posJogadorQueAbriuRodada,
+//            posJogadorPedindoAumento,
+//            posJogador,
+//            (baralhoSujo ? 1 : 0),
+//            (podeFechada ? 1 : 0),
+//            numRodadaAtual,
+//            (numRodadaAtual > 1 ? resultadoRodada[0] : -1),
+//            (numRodadaAtual > 2 ? resultadoRodada[1] : -1),
+//            valorMao,
+//            valorProximaAposta,
+//            posJogadorQueAbriuRodada,
             pontosEquipe[0],
             pontosEquipe[1],
             valorCarta(cartasJogadas[0][0]),
@@ -107,16 +107,16 @@ public class SituacaoJogo {
         { -1, 14}, // carta1Jogador
         { -1, 14}, // carta2Jogador
         { -1, 14}, // carta3Jogador
-        {  0,  4}, // posJogadorPedindoAumento
-        {  1,  4}, // posJogador
-        {  0,  1}, // baralhoSujo
-        {  0,  1}, // podeFechada
-        {  1,  3}, // numRodadaAtual
-        { -1,  3}, // resultadoRodada1
-        { -1,  3}, // resultadoRodada2
-        {  1, 12}, // valorMao
-        {  0, 12}, // valorProximaAposta
-        {  1,  4}, // posJogadorQueAbriuRodada
+//        {  0,  4}, // posJogadorPedindoAumento
+//        {  1,  4}, // posJogador
+//        {  0,  1}, // baralhoSujo
+//        {  0,  1}, // podeFechada
+//        {  1,  3}, // numRodadaAtual
+//        { -1,  3}, // resultadoRodada1
+//        { -1,  3}, // resultadoRodada2
+//        {  1, 12}, // valorMao
+//        {  0, 12}, // valorProximaAposta
+//        {  1,  4}, // posJogadorQueAbriuRodada
         {  0, 23}, // pontosEquipe1
         {  0, 23}, // pontosEquipe2
         { -1, 14}, // cartaJogadaRodada1Pos1
