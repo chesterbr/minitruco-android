@@ -24,6 +24,28 @@ public class TrainingEnv {
         return new Episodio();
     }
 
+    private static class EstrategiaJogaPrimeiraCarta implements Estrategia {
+
+        @Override
+        public int joga(SituacaoJogo s) {
+            return 0;
+        }
+
+        @Override
+        public void partidaFinalizada(int numEquipeVencedora) {
+        }
+
+        @Override
+        public boolean aceitaTruco(SituacaoJogo s) {
+            return false;
+        }
+
+        @Override
+        public boolean aceitaMaoDeX(Carta[] cartasParceiro, SituacaoJogo s) {
+            return false;
+        }
+    }
+
     private static class Episodio {
 
         private EstrategiaAgente estrategia;
@@ -36,13 +58,14 @@ public class TrainingEnv {
          */
         public Episodio() {
             partida = new PartidaLocal(false, false, "P");
+//            partida.setSeedBaralho(123);
             partida.setPerformanceMaxima(true);
             estrategia = new EstrategiaAgente();
             posicaoAgente = 1;
             partida.adiciona(bot(estrategia));
-            partida.adiciona(bot(null));
-            partida.adiciona(bot(null));
-            partida.adiciona(bot(null));
+            partida.adiciona(bot(new EstrategiaJogaPrimeiraCarta()));
+            partida.adiciona(bot(new EstrategiaJogaPrimeiraCarta()));
+            partida.adiciona(bot(new EstrategiaJogaPrimeiraCarta()));
             (new Thread(partida)).start();
             estrategia.aguardaVezDoAgente();
         }
