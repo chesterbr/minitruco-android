@@ -90,7 +90,9 @@ O projeto usa o [Gradle](https://gradle.org/) para gerenciamento de dependência
 
 Em princípio, basta abrir o projeto no Android Studio e toda a configuração deve acontecer automaticamente, permitindo executar em dispositivos virtuais ou físicos.
 
-O servidor internet usa Virtual Threads, que são um feature preview; então para rodar ele é preciso baixar um OpenJDK 19 (o 20 não rola porque o Gradle não suporta rodar sob ele) e selecionar como target do Gradle no Android Studio (em Preferences => Build, Execution, Deployment => Build Tools => Gradle). No Mac, se você baixar [daqui](https://jdk.java.net/19/) e colocar sob `/Library/Java/JavaVirtualMachines/OpenJDK/`, ele deve aparecer na lista de targets (além disso, os shims do MacOS também vão achar, se for o JDK mais recente dentro de `/Library/Java/JavaVirtualMachines`, ou seja, `java`, `javac`, `./gradlew` e assemelhados vão encontrar de boa).
+O servidor internet usa Virtual Threads, então é preciso instalar Java 21 (por exemplo, o [OpenJDK 21](https://jdk.java.net/21/))  e selecionar como target do Gradle no Android Studio (em Preferences => Build, Execution, Deployment => Build Tools => Gradle).
+
+O melhor caminho é usar o gerenciador de pacotes do seu sistema operacional (ex.: `brew install openjdk@1` em macOS com Homebrew, `apt install openjdk-21` em Debian/Ubuntu, etc.). Se não for possível, você pode baixar o JDK no link acima e colocar sob `/Library/Java/JavaVirtualMachines/OpenJDK/` (pro macOS, ou na pasta equivalente do seu sistema operacional), ele deve aparecer na lista de targets (além disso, os shims do MacOS também vão achar, se for o JDK mais recente dentro de `/Library/Java/JavaVirtualMachines`, ou seja, `java`, `javac`, `./gradlew` e assemelhados vão encontrar de boa).
 
 Eu recomendo testar em dispositivos físicos mesmo, em particular se for usar Bluetooth (o emulador do Android Studio até simula Bluetooth, mas mas só em versões recentes do Android, e limitado a dois dispositivos), mas é totalmente possível desenvolver sem um.
 
