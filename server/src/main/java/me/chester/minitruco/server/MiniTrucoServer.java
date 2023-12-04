@@ -174,11 +174,11 @@ public class MiniTrucoServer {
      * for solicitada via HTTP a URL /status).
      * <p>
      * Quem processa a URL (e usa este método) é o JogadorConectado
+     *
+     * @return linhas no formato "CHAVE valor", separadas por \n
      */
     public static String status() {
-        for (Thread t : threadsJogadores) {
-
-        }
-        return "online: " + (threadsJogadores.size() - 1);
+        return "ONLINE " + (threadsJogadores.size() - 1) + "\n" +
+               "AGUARDANDO " + Sala.modosAguardandoJogadores();
     }
 }
