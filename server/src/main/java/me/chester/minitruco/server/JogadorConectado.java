@@ -108,6 +108,18 @@ public class JogadorConectado extends Jogador implements Runnable {
                     // Como o SO_TIMEOUT está em zero, podemos assumir desconexão
                     break;
                 }
+                if (linha.startsWith("GET /status HTTP/")) {
+                    // Essa parte tem que rodar em menos de 1s, para evitar que o keepalive
+                    // seja enviado antes do header HTTP (vide iniciaThreadAuxiliar())
+                    LOGGER.info("Status do servidor solicitado");
+                    out.println("HTTP/1.1 200 OK");
+                    out.println("Content-Type: text/plain");
+                    out.println();
+                    out.println("OK");
+                    out.println(MiniTrucoServer.status());
+                    out.flush();
+                    return;
+                }
                 if (("K " + keepAlive).equals(linha)) {
                     keepAlive = 0;
                     continue;

@@ -168,4 +168,17 @@ public class MiniTrucoServer {
         }
         LOGGER.info("Todos os jogadores finalizaram.");
     }
+
+    /**
+     * Gera o status do servidor (a ser retornado logo após o OK quando
+     * for solicitada via HTTP a URL /status).
+     * <p>
+     * Quem processa a URL (e usa este método) é o JogadorConectado
+     */
+    public static String status() {
+        for (Thread t : threadsJogadores) {
+
+        }
+        return "online: " + (threadsJogadores.size() - 1);
+    }
 }
