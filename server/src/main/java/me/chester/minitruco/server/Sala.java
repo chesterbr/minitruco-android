@@ -14,6 +14,7 @@ import java.util.Set;
 
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
+import me.chester.minitruco.core.Modo;
 import me.chester.minitruco.core.Partida;
 import me.chester.minitruco.core.PartidaLocal;
 
@@ -136,6 +137,24 @@ public class Sala {
         sala.adiciona(j);
 
         return sala;
+    }
+
+    /**
+     * Retorna os modos que estão precisando de jogadores em salas públicas,
+     * para que o cliente possa convidar esses jogadores quando eles abrem
+     * o app ou selecionam um novo modo.
+     *
+     * @return String com as letras dos modos. Ex.: "MP" significa que há
+     *         salas aguardando jogadores para os modos mineiro e paulista.
+     */
+    public static synchronized String modosAguardandoJogadores() {
+        StringBuilder sb = new StringBuilder();
+        for (String modo : Modo.getModosValidos()) {
+            if (salasPublicasDisponiveis.stream().anyMatch(s -> s.modo.equals(modo))) {
+                sb.append(modo);
+            }
+        }
+        return sb.toString();
     }
 
     /**

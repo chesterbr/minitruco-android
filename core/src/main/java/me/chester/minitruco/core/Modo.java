@@ -40,6 +40,10 @@ public interface Modo {
         }
     }
 
+    static String[] getModosValidos() {
+        return new String[] { "M", "P", "V", "L" };
+    }
+
     int pontuacaoParaMaoDeX();
 
     int valorInicialDaMao();
