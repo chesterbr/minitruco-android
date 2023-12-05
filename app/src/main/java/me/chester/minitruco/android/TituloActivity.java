@@ -2,7 +2,6 @@ package me.chester.minitruco.android;
 
 import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
 import static android.provider.Settings.Global.DEVICE_NAME;
-
 import static me.chester.minitruco.android.PreferenceUtils.getLetraDoModo;
 
 import android.app.AlertDialog;
@@ -26,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.util.Consumer;
 import androidx.preference.PreferenceManager;
@@ -35,6 +35,7 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
+import me.chester.minitruco.android.multiplayer.internet.InternetUtils;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
@@ -149,6 +150,8 @@ public class TituloActivity extends SalaActivity {
             mostraAlertBox(this.getString(R.string.titulo_instrucoes), this.getString(R.string.texto_instrucoes));
         } else if (!versaoQueMostrouNovidades.equals(versaoAtual)) {
             mostraAlertBox("Novidades", this.getString(R.string.novidades));
+        } else {
+            promoveJogoInternet(false);
         }
 
         Editor e = preferences.edit();
@@ -338,19 +341,32 @@ public class TituloActivity extends SalaActivity {
                 .setMessage("Estes modos são jogados com a partida valendo 1 e o truco indo a 3, depois 6, 9 e 12.")
                 .setNegativeButton("Baralho Limpo", (dialog, which) -> {
                     selecionaModo("L");
+                    promoveJogoInternet(true);
                 })
                 .setPositiveButton("Manilha Velha", (dialog, which) -> {
                     selecionaModo("V");
+                    promoveJogoInternet(true);
                 })
                 .show();
         } else {
             selecionaModo((String) view.getTag());
+            promoveJogoInternet(true);
         }
     }
 
     private void selecionaModo(String modo) {
         ((TextView) findViewById(R.id.textViewModo)).setText(Partida.textoModo(modo));
         preferences.edit().putString("modo", modo).apply();
+    }
+
+    private void promoveJogoInternet(boolean repete) {
+        new Thread(() -> {
+            if (InternetUtils.isPromoveJogoInternet(this, repete)) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Jogue pela internet agora! Pessoas estão aguardando por você.", Toast.LENGTH_LONG).show();
+                });
+            }
+        }).start();
     }
 
     @Override
