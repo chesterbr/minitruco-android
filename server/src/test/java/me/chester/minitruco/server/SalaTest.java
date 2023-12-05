@@ -19,6 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.Partida;
@@ -397,5 +399,32 @@ class SalaTest {
     void testSalaPrivadaGeraCodigoNumericoDeCincoDigitos() {
         Sala s = new Sala(false, "P");
         assertThat(s.codigo, matchesPattern("[0-9]{5}"));
+    }
+
+    String sorted(String s) {
+        return Arrays.stream(s.split("")).sorted().collect(Collectors.joining());
+    }
+
+    @Test
+    void testModosAguardandoJogadores() {
+        Sala.colocaEmSalaPublica(j1, "P");
+        Sala.colocaEmSalaPublica(j2, "P");
+        Sala.colocaEmSalaPublica(j3, "M");
+        Sala.colocaEmSalaPublica(j4, "L");
+        Sala.colocaEmSalaPublica(j5, "P");
+        Sala.colocaEmSalaPublica(j6, "P");
+        Sala.colocaEmSalaPublica(j7, "M");
+        Sala.colocaEmSalaPublica(j8, "L");
+        assertEquals("LM", sorted(Sala.modosAguardandoJogadores()));         // P está cheia; V está vazia
+
+        Sala.colocaEmSalaPublica(j9, "P");
+        assertEquals("LMP", sorted(Sala.modosAguardandoJogadores()));        // Abriu uma nova sala P para o j9
+
+        j9.getSala().remove(j9);
+        assertEquals("LM", sorted(Sala.modosAguardandoJogadores()));        // A sala fechou automaticamente com 1 jogador
+
+        Sala.colocaEmSalaPublica(j10, "L");
+        Sala.colocaEmSalaPublica(jj1, "L");
+        assertEquals("M", sorted(Sala.modosAguardandoJogadores()));        // Completou a sala L
     }
 }

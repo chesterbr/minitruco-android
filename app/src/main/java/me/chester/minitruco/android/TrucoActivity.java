@@ -25,11 +25,13 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.R;
+import me.chester.minitruco.android.multiplayer.internet.InternetUtils;
 import me.chester.minitruco.core.Partida;
 
 /* SPDX-License-Identifier: BSD-3-Clause */
@@ -367,11 +369,24 @@ public class TrucoActivity extends Activity {
             // servidor bluetooth (em ambos os casos, estará na posição 1).
             if (jogadorHumano.getPosicao() == 1) {
                 btnNovaPartida.setVisibility(View.VISIBLE);
+                if (partida.semJogadoresRemotos()) {
+                    promoveJogoInternet();
+                }
                 if (partida.isJogoAutomatico()) {
                     btnNovaPartida.performClick();
                 }
             }
         });
+    }
+
+    private void promoveJogoInternet() {
+        new Thread(() -> {
+            if (InternetUtils.isPromoveJogoInternet(this, false)) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Tem pessoas de verdade aguardando para jogar! Use o botão Internet na tela inicial.", Toast.LENGTH_LONG).show();
+                });
+            }
+        }).start();
     }
 
     /**

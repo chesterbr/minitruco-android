@@ -23,7 +23,6 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
-    jvmArgs += '--enable-preview'
 }
 
 tasks.jar {
