@@ -3,6 +3,8 @@ package me.chester.minitruco.android;
 import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
 import static android.provider.Settings.Global.DEVICE_NAME;
 
+import static me.chester.minitruco.android.PreferenceUtils.getLetraDoModo;
+
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface.OnClickListener;
@@ -96,10 +98,7 @@ public class TituloActivity extends SalaActivity {
             mostraAlertBox(this.getString(R.string.titulo_sobre), stats_versao
                 + this.getString(R.string.texto_sobre));
         });
-        // TODO ver se tem um modo mais central de garantir este default (e outros)
-        //      (provavelmente quando migrar esse PreferenceManager deprecado
-        //      e começar a centralizar as preferencias nesta view)
-        selecionaModo(preferences.getString("modo", "P"));
+        selecionaModo(getLetraDoModo(this));
     }
 
     /**
@@ -356,7 +355,7 @@ public class TituloActivity extends SalaActivity {
 
     @Override
     public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
-        String modo = preferences.getString("modo", "P");
+        String modo = getLetraDoModo(this);
         boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
         boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
         Partida novaPartida = new PartidaLocal(humanoDecide, jogoAutomatico, modo);

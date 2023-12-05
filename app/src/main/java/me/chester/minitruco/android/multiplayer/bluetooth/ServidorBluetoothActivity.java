@@ -1,5 +1,6 @@
 package me.chester.minitruco.android.multiplayer.bluetooth;
 
+import static me.chester.minitruco.android.PreferenceUtils.getLetraDoModo;
 import static me.chester.minitruco.core.JogadorBot.APELIDO_BOT;
 import static me.chester.minitruco.core.TrucoUtils.POSICAO_PLACEHOLDER;
 import static me.chester.minitruco.core.TrucoUtils.montaNotificacaoI;
@@ -61,10 +62,7 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
 
     @Override
     void iniciaAtividadeBluetooth() {
-        SharedPreferences preferences = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        // TODO titulo poderia passar como extra do intent
-        modo = preferences.getString("modo", "P");
+        modo = getLetraDoModo(this);
         layoutBotoesGerente.setVisibility(View.VISIBLE);
         btnIniciar.setOnClickListener(v -> {
             status = STATUS_EM_JOGO;

@@ -2,6 +2,9 @@ package me.chester.minitruco.android.multiplayer.internet;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 
+import static me.chester.minitruco.android.PreferenceUtils.getLetraDoModo;
+import static me.chester.minitruco.android.PreferenceUtils.getServidor;
+
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,7 +15,6 @@ import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import java.io.BufferedReader;
@@ -27,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.chester.minitruco.BuildConfig;
-import me.chester.minitruco.R;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.JogadorHumano;
 import me.chester.minitruco.android.SalaActivity;
@@ -187,9 +188,7 @@ public class ClienteInternetActivity extends SalaActivity {
     }
 
     private boolean conecta() {
-        String servidor = preferences.getBoolean("servidorLocal", false) ?
-            this.getString(R.string.opcoes_default_servidor_local) :
-            this.getString(R.string.opcoes_default_servidor);
+        String servidor = getServidor(this);
         try {
             socket = new Socket();
             socket.connect(new InetSocketAddress(servidor, 6912), 10_000);
@@ -233,7 +232,7 @@ public class ClienteInternetActivity extends SalaActivity {
             case 'N': // Nome foi aceito
                 // Já vamos entrar de cara numa sala pública (se a pessoa quiser
                 // fazer outra coisa, ela usa o botão apropriado)
-                enviaLinha("E PUB " + getModoDasPreferencias());
+                enviaLinha("E PUB " + getLetraDoModo(this));
                 break;
             case 'I': // Entrou/voltou para uma sala (ou ela foi atualizada)
                 exibeMesaForaDoJogo(line);
@@ -285,11 +284,6 @@ public class ClienteInternetActivity extends SalaActivity {
             "Ela pode estar lotada ou com jogo em andamento, ou " +
             "ainda, o código pode estar errado. Confira com a pessoa que " +
             "te convidou e tente novamente.");
-    }
-
-    @NonNull
-    private String getModoDasPreferencias() {
-        return preferences.getString("modo", "P");
     }
 
     /**
