@@ -226,7 +226,6 @@ public class JogadorConectado extends Jogador implements Runnable {
                 }
             }
             LOGGER.info(this + " Monitor de conexão finalizado");
-            threadMonitorDeConexao = null;
         });
     }
 
@@ -234,6 +233,7 @@ public class JogadorConectado extends Jogador implements Runnable {
         if (threadMonitorDeConexao != null) {
             LOGGER.info(this + " Interrompendo monitor de conexão");
             threadMonitorDeConexao.interrupt();
+            threadMonitorDeConexao = null;
         }
     }
 
