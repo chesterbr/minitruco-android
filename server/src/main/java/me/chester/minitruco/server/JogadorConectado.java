@@ -128,6 +128,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                     out.println();
                     if (linha.startsWith("HEAD")) {
                         out.flush();
+                        cliente.close();
                         return;
                     }
                     out.println("OK");
@@ -136,6 +137,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                     out.println(MiniTrucoServer.status());
                     out.println();
                     out.flush();
+                    cliente.close();
                     return;
                 }
                 if (("K " + keepAlive).equals(linha)) {
