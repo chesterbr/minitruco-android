@@ -215,9 +215,8 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Facilita formação de salas no multiplayer (orientando quem tenta criar nova sala)<br/>
-            - Corrige display de posições vazias e espaços em nomes<br/>
-            - Indicador visual de que é possível arrastar a caixa de pergunta<br/>
+            Quando uma sala pública na internet está com vagas, o jogo agora convida pessoas que
+            jogam no mesmo modo e não estão no meio de uma partida para completar.
         ]]>
     </string>
     <string name="aviso_modo_experimental">Este recurso é experimental - ainda podem ocorrer erros e
