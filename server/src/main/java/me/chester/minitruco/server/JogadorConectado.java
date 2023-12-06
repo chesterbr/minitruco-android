@@ -109,9 +109,9 @@ public class JogadorConectado extends Jogador implements Runnable {
                     break;
                 }
                 if (linha != null && linha.matches("^(GET|HEAD) /status HTTP/")) {
-                    // Essa parte (que envia o OK) tem que rodar em menos de 1s,
-                    // para evitar que o keepalive seja enviado antes do header
-                    // HTTP (vide iniciaThreadAuxiliar())
+                    // Desabilita o monitor de conexão (se o GET chegar antes de ele
+                    // começar, senão também paciência)
+                    threadMonitorDeConexao.interrupt();
                     LOGGER.info("Status do servidor solicitado (HTTP); enviando e desconectando");
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-Type: text/plain");
@@ -179,9 +179,9 @@ public class JogadorConectado extends Jogador implements Runnable {
         threadMonitorDeConexao = Thread.ofVirtual().start(() -> {
             LOGGER.info(this + " Aguardando para iniciar monitor de conexão");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                return;
             }
             LOGGER.info(this + " Iniciando monitor de conexão");
             boolean avisouQueVaiDesconectarNoFimDaPartida = false;
