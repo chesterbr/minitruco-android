@@ -108,7 +108,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                     // Como o SO_TIMEOUT está em zero, podemos assumir desconexão
                     break;
                 }
-                if (linha != null && linha.matches("^(GET|HEAD) /status HTTP/")) {
+                if (linha != null && linha.matches("(GET|HEAD) /status HTTP/.*")) {
                     // Desabilita o monitor de conexão (se o GET chegar antes de ele
                     // começar, senão também paciência)
                     threadMonitorDeConexao.interrupt();
@@ -124,6 +124,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                     out.flush();
 
                     out.println(MiniTrucoServer.status());
+                    out.println();
                     out.flush();
                     return;
                 }
