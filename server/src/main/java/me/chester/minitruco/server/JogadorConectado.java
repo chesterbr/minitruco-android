@@ -114,6 +114,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                     if (threadMonitorDeConexao != null) {
                         threadMonitorDeConexao.interrupt();
                     }
+                    boolean isGet = linha.startsWith("GET");
                     // Espera o cliente mandar todos os headers
                     while (linha != null && !linha.isEmpty()) {
                         linha = in.readLine();
@@ -126,16 +127,13 @@ public class JogadorConectado extends Jogador implements Runnable {
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-Type: text/plain");
                     out.println();
-                    if (linha.startsWith("HEAD")) {
+                    if (isGet) {
+                        out.println("OK");
                         out.flush();
-                        cliente.close();
-                        return;
-                    }
-                    out.println("OK");
-                    out.flush();
 
-                    out.println(MiniTrucoServer.status());
-                    out.println();
+                        out.println(MiniTrucoServer.status());
+                        out.println();
+                    }
                     out.flush();
                     cliente.close();
                     return;
