@@ -116,6 +116,10 @@ public class JogadorConectado extends Jogador implements Runnable {
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-Type: text/plain");
                     out.println();
+                    if (linha.startsWith("HEAD")) {
+                        out.flush();
+                        return;
+                    }
                     out.println("OK");
                     out.flush();
 
