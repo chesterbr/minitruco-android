@@ -108,7 +108,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                     // Como o SO_TIMEOUT está em zero, podemos assumir desconexão
                     break;
                 }
-                if (linha != null && linha.startsWith("GET /status HTTP/")) {
+                if (linha != null && linha.matches("^(GET|HEAD) /status HTTP/")) {
                     // Essa parte (que envia o OK) tem que rodar em menos de 1s,
                     // para evitar que o keepalive seja enviado antes do header
                     // HTTP (vide iniciaThreadAuxiliar())
