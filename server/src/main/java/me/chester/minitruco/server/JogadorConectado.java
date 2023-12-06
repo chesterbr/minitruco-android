@@ -113,7 +113,7 @@ public class JogadorConectado extends Jogador implements Runnable {
                     // começar, senão também paciência)
                     finalizaThreadAuxiliar();
                     boolean isGet = linha.startsWith("GET");
-                    boolean isStatus = linha.matches("(GET|HEAD) /status HTTP/.*");
+                    boolean isStatus = linha.matches("^(GET|HEAD) /status(?:\\?\\S*)? HTTP/.*ˆ$");
                     // Espera o cliente mandar todos os headers
                     while (linha != null && !linha.isEmpty()) {
                         linha = in.readLine();
