@@ -114,6 +114,14 @@ public class JogadorConectado extends Jogador implements Runnable {
                     if (threadMonitorDeConexao != null) {
                         threadMonitorDeConexao.interrupt();
                     }
+                    // Espera o cliente mandar todos os headers
+                    while (linha != null && !linha.isEmpty()) {
+                        linha = in.readLine();
+                    }
+                    if (linha == null) {
+                        LOGGER.info("Cliente desconectou antes de mandar headers");
+                        return;
+                    }
                     LOGGER.info("Status do servidor solicitado (HTTP); enviando e desconectando");
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-Type: text/plain");
