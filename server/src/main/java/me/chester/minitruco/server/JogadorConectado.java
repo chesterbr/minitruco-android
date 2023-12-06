@@ -108,13 +108,12 @@ public class JogadorConectado extends Jogador implements Runnable {
                     // Como o SO_TIMEOUT está em zero, podemos assumir desconexão
                     break;
                 }
-                if (linha != null && linha.matches("(GET|HEAD) /status HTTP/.*")) {
+                if (linha != null && linha.matches("(GET|HEAD) /.* HTTP/.*")) {
                     // Desabilita o monitor de conexão (se o GET chegar antes de ele
                     // começar, senão também paciência)
-                    if (threadMonitorDeConexao != null) {
-                        threadMonitorDeConexao.interrupt();
-                    }
+                    finalizaThreadAuxiliar();
                     boolean isGet = linha.startsWith("GET");
+                    boolean isStatus = linha.matches("(GET|HEAD) /status HTTP/.*");
                     // Espera o cliente mandar todos os headers
                     while (linha != null && !linha.isEmpty()) {
                         linha = in.readLine();
@@ -123,15 +122,21 @@ public class JogadorConectado extends Jogador implements Runnable {
                         LOGGER.info("Cliente desconectou antes de mandar headers");
                         return;
                     }
-                    LOGGER.info("Status do servidor solicitado (HTTP); enviando e desconectando");
-                    out.println("HTTP/1.1 200 OK");
-                    out.println("Content-Type: text/plain");
-                    out.println();
-                    if (isGet) {
-                        out.println("OK");
-                        out.flush();
+                    if (isStatus) {
+                        LOGGER.info("Status do servidor solicitado (HTTP); enviando e desconectando");
+                        out.println("HTTP/1.1 200 OK");
+                        out.println("Content-Type: text/plain");
+                        out.println();
+                        if (isGet) {
+                            out.println("OK");
+                            out.flush();
 
-                        out.println(MiniTrucoServer.status());
+                            out.println(MiniTrucoServer.status());
+                            out.println();
+                        }
+                    } else {
+                        LOGGER.info("GET/HEAD desconhecido, mandando 404 e desconectando");
+                        out.println("HTTP/1.1 404 NOT FOUND");
                         out.println();
                     }
                     out.flush();
