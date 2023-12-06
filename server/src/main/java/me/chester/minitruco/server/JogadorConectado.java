@@ -108,12 +108,12 @@ public class JogadorConectado extends Jogador implements Runnable {
                     // Como o SO_TIMEOUT está em zero, podemos assumir desconexão
                     break;
                 }
-                if (linha != null && linha.matches("(GET|HEAD) /.* HTTP/.*")) {
+                if (linha != null && linha.matches("^(GET|HEAD|POST|PUT|DELETE|OPTIONS|TRACE|CONNECT) .*$")) {
                     // Desabilita o monitor de conexão (se o GET chegar antes de ele
                     // começar, senão também paciência)
                     finalizaThreadAuxiliar();
                     boolean isGet = linha.startsWith("GET");
-                    boolean isStatus = linha.matches("^(GET|HEAD) /status(?:\\?\\S*)? HTTP/.*$");
+                    boolean isStatus = linha.matches("^(GET|HEAD) /status(?:\\?\\S*)?(?: HTTP/.*)?$");
                     // Espera o cliente mandar todos os headers
                     while (linha != null && !linha.isEmpty()) {
                         linha = in.readLine();
