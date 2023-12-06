@@ -111,7 +111,9 @@ public class JogadorConectado extends Jogador implements Runnable {
                 if (linha != null && linha.matches("(GET|HEAD) /status HTTP/.*")) {
                     // Desabilita o monitor de conexão (se o GET chegar antes de ele
                     // começar, senão também paciência)
-                    threadMonitorDeConexao.interrupt();
+                    if (threadMonitorDeConexao != null) {
+                        threadMonitorDeConexao.interrupt();
+                    }
                     LOGGER.info("Status do servidor solicitado (HTTP); enviando e desconectando");
                     out.println("HTTP/1.1 200 OK");
                     out.println("Content-Type: text/plain");
