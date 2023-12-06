@@ -108,19 +108,39 @@ public class JogadorConectado extends Jogador implements Runnable {
                     // Como o SO_TIMEOUT está em zero, podemos assumir desconexão
                     break;
                 }
-                if (linha != null && linha.startsWith("GET /status HTTP/")) {
-                    // Essa parte (que envia o OK) tem que rodar em menos de 1s,
-                    // para evitar que o keepalive seja enviado antes do header
-                    // HTTP (vide iniciaThreadAuxiliar())
-                    LOGGER.info("Status do servidor solicitado (HTTP); enviando e desconectando");
-                    out.println("HTTP/1.1 200 OK");
-                    out.println("Content-Type: text/plain");
-                    out.println();
-                    out.println("OK");
-                    out.flush();
+                if (linha != null && linha.matches("(GET|HEAD) /.* HTTP/.*")) {
+                    // Desabilita o monitor de conexão (se o GET chegar antes de ele
+                    // começar, senão também paciência)
+                    finalizaThreadAuxiliar();
+                    boolean isGet = linha.startsWith("GET");
+                    boolean isStatus = linha.matches("^(GET|HEAD) /status(?:\\?\\S*)? HTTP/.*ˆ$");
+                    // Espera o cliente mandar todos os headers
+                    while (linha != null && !linha.isEmpty()) {
+                        linha = in.readLine();
+                    }
+                    if (linha == null) {
+                        LOGGER.info("Cliente desconectou antes de mandar headers");
+                        return;
+                    }
+                    if (isStatus) {
+                        LOGGER.info("Status do servidor solicitado (HTTP); enviando e desconectando");
+                        out.println("HTTP/1.1 200 OK");
+                        out.println("Content-Type: text/plain");
+                        out.println();
+                        if (isGet) {
+                            out.println("OK");
+                            out.flush();
 
-                    out.println(MiniTrucoServer.status());
+                            out.println(MiniTrucoServer.status());
+                            out.println();
+                        }
+                    } else {
+                        LOGGER.info("GET/HEAD desconhecido, mandando 404 e desconectando");
+                        out.println("HTTP/1.1 404 NOT FOUND");
+                        out.println();
+                    }
                     out.flush();
+                    cliente.close();
                     return;
                 }
                 if (("K " + keepAlive).equals(linha)) {
@@ -175,9 +195,9 @@ public class JogadorConectado extends Jogador implements Runnable {
         threadMonitorDeConexao = Thread.ofVirtual().start(() -> {
             LOGGER.info(this + " Aguardando para iniciar monitor de conexão");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                return;
             }
             LOGGER.info(this + " Iniciando monitor de conexão");
             boolean avisouQueVaiDesconectarNoFimDaPartida = false;
@@ -211,7 +231,6 @@ public class JogadorConectado extends Jogador implements Runnable {
                 }
             }
             LOGGER.info(this + " Monitor de conexão finalizado");
-            threadMonitorDeConexao = null;
         });
     }
 
@@ -219,6 +238,7 @@ public class JogadorConectado extends Jogador implements Runnable {
         if (threadMonitorDeConexao != null) {
             LOGGER.info(this + " Interrompendo monitor de conexão");
             threadMonitorDeConexao.interrupt();
+            threadMonitorDeConexao = null;
         }
     }
 
