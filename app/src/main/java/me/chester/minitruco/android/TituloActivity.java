@@ -176,18 +176,7 @@ public class TituloActivity extends SalaActivity {
         }
         if (temInternet) {
             btnInternet.setOnClickListener(v -> {
-                if (!preferences.getBoolean("leuAvisoModoExperimental", false)) {
-                    new AlertDialog.Builder(this).setTitle("AVISO - RECURSO EXPERIMENTAL")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setMessage(R.string.aviso_modo_experimental)
-                        .setPositiveButton("Li TUDO e entendi", (dialog, which) -> {
-                            preferences.edit().putBoolean("leuAvisoModoExperimental", true).apply();
-                            pedeNomeEConecta();
-                        })
-                        .show();
-                } else {
-                    pedeNomeEConecta();
-                }
+                pedeNomeEConecta();
             });
         }
     }
