@@ -36,6 +36,7 @@ import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivi
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
 import me.chester.minitruco.android.multiplayer.internet.InternetUtils;
+import me.chester.minitruco.core.EstrategiaGasparotto;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
@@ -365,9 +366,9 @@ public class TituloActivity extends SalaActivity {
         boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
         Partida novaPartida = new PartidaLocal(humanoDecide, jogoAutomatico, modo);
         novaPartida.adiciona(jogadorHumano);
-        for (int i = 2; i <= 4; i++) {
-            novaPartida.adiciona(new JogadorBot());
-        }
+        novaPartida.adiciona(new JogadorBot()); // Rival à direita
+        novaPartida.adiciona(new JogadorBot(new EstrategiaGasparotto(), null)); // Parceira(o)
+        novaPartida.adiciona(new JogadorBot()); // Rival à esquerda
         return novaPartida;
     }
 
