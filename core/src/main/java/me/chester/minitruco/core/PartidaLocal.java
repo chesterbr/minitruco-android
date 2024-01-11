@@ -564,7 +564,7 @@ public class PartidaLocal extends Partida {
         }
     }
 
-    public void trocaUsuarioPorBot(Jogador j) {
+    public void trocaPorBot(Jogador j) {
         int posicao = j.getPosicao();
         JogadorBot bot = new JogadorBot();
         bot.partida = this;
