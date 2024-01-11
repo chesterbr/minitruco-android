@@ -564,7 +564,14 @@ public class PartidaLocal extends Partida {
         }
     }
 
+    /**
+     * Substitui o jogador por um bot (útil quando, por exemplo, um jogador
+     * cai no multiplayer)
+     *
+     * @param j Jogador a ser substituído
+     */
     public synchronized void trocaPorBot(Jogador j) {
+        sleep(); // Dá ao jogo a chance de se inicializar
         int posicao = j.getPosicao();
         JogadorBot bot = new JogadorBot();
         bot.partida = this;
