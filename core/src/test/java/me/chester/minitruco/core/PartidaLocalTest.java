@@ -190,7 +190,4 @@ class PartidaLocalTest {
         }
         assertEquals(JogadorBot.class, partida.getJogador(3).getClass());
     }
-
-    // TODO: testar trocaPorBot() quando a partida estiver aguardando o jogador responder aumento
-    //       (provavelmente vai falhar, aí vai ter que ter uma repetição da notificação, igual teve quando era a vez)
 }
