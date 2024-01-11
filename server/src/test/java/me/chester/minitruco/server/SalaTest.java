@@ -427,4 +427,12 @@ class SalaTest {
         Sala.colocaEmSalaPublica(jj1, "L");
         assertEquals("M", sorted(Sala.modosAguardandoJogadores()));        // Completou a sala L
     }
+
+    @Test
+    void testIsPublica() {
+        Sala s = new Sala(true, "P");
+        assertTrue(s.isPublica());
+        s = new Sala(false, "P");
+        assertFalse(s.isPublica());
+    }
 }

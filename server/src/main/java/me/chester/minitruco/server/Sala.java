@@ -94,6 +94,10 @@ public class Sala {
         this.modo = modo;
     }
 
+    public boolean isPublica() {
+        return codigo == null;
+    }
+
     /**
      * Coloca o jogador em uma sala pública que tenha aquele modo de partida
      * criando uma caso estejam todas lotadas
@@ -271,7 +275,7 @@ public class Sala {
     /**
      * Recupera a partida que está rolando na sala (para dar comandos, etc.)
      */
-    public Partida getPartida() {
+    public PartidaLocal getPartida() {
         return partida;
     }
 
