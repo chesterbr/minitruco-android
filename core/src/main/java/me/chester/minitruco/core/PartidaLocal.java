@@ -571,10 +571,18 @@ public class PartidaLocal extends Partida {
         bot.setPosicao(posicao);
         bot.setCartas(j.getCartas());
         bot.inicioMao(null);
+        int posParceiro = (bot.getPosicao() + 1) % 4 + 1;
         jogadores[posicao - 1] = bot;
         j.partida = null;
         if (posJogadorDaVez == posicao) {
             notificaVez();
+        } else if (aguardandoRespostaMaoDeX[posicao - 1]) {
+            bot.informaMaoDeX(getJogador(posParceiro).getCartas());
+        } else if (jogadorPedindoAumento != null && jogadorPedindoAumento.getEquipe() != bot.getEquipe()) {
+            bot.pediuAumentoAposta(jogadorPedindoAumento, modo.valorSeHouverAumento(valorMao), 0);
+            if (recusouAumento[posParceiro - 1]) {
+                bot.recusouAumentoAposta(getJogador(posParceiro), 0);
+            }
         }
     }
 
@@ -663,7 +671,7 @@ public class PartidaLocal extends Partida {
      * Recupera o jogador cuja vez é a atual
      *
      */
-    private Jogador getJogadorDaVez() {
+    public Jogador getJogadorDaVez() {
         return getJogador(posJogadorDaVez);
     }
 
