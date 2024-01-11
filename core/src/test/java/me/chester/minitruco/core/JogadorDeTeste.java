@@ -1,6 +1,39 @@
 package me.chester.minitruco.core;
 
-public class JogadorDeTeste extends Jogador {
+import java.util.Arrays;
+
+/**
+ * Jogador que joga automaticamente, sem precisar de interação do usuário.
+ */
+class JogadorDeTeste extends Jogador {
+    @Override
+    public void vez(Jogador j, boolean podeFechada) {
+        if (j == this) {
+            new Thread(() -> {
+                Carta[] cartasJogadas = Arrays.stream(partida.cartasJogadasPorRodada)
+                    .flatMap(Arrays::stream)
+                    .toArray(Carta[]::new);
+                Carta[] cartasEmMaos = Arrays.stream(getCartas())
+                    .filter(e -> !Arrays.asList(cartasJogadas).contains(e))
+                    .toArray(Carta[]::new);
+                Arrays.stream(partida.cartasJogadasPorRodada).flatMap(Arrays::stream).toArray();
+                partida.jogaCarta(j, cartasEmMaos[0]);
+            }).start();
+        }
+    }
+
+    @Override
+    public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
+        if (j.getEquipe() == this.getEquipeAdversaria()) {
+            partida.respondeAumento(this, true);
+        }
+    }
+
+    @Override
+    public void informaMaoDeX(Carta[] cartasParceiro) {
+        partida.decideMaoDeX(this, true);
+    }
+
     @Override
     public void cartaJogada(Jogador j, Carta c) {
 
@@ -13,16 +46,6 @@ public class JogadorDeTeste extends Jogador {
 
     @Override
     public void inicioPartida(int placarEquipe1, int placarEquipe2) {
-
-    }
-
-    @Override
-    public void vez(Jogador j, boolean podeFechada) {
-
-    }
-
-    @Override
-    public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
 
     }
 
@@ -57,12 +80,8 @@ public class JogadorDeTeste extends Jogador {
     }
 
     @Override
-    public void informaMaoDeX(Carta[] cartasParceiro) {
-
-    }
-
-    @Override
     public void jogoAbortado(int posicao, int rndFrase) {
 
     }
+
 }

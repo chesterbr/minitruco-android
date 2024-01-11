@@ -27,10 +27,10 @@ class PartidaLocalTest {
             }
         };
         PartidaLocal partida = new PartidaLocal(false, false, "P");
-        partida.adiciona(new JogadorQueJoga());
-        partida.adiciona(new JogadorQueJoga());
+        partida.adiciona(new JogadorDeTeste());
+        partida.adiciona(new JogadorDeTeste());
         partida.adiciona(jogadorTrocadoNaVez);
-        partida.adiciona(new JogadorQueJoga());
+        partida.adiciona(new JogadorDeTeste());
         (new Thread(partida)).start();
         while (!partida.finalizada) {
             sleep(100);
