@@ -564,6 +564,20 @@ public class PartidaLocal extends Partida {
         }
     }
 
+    public void trocaUsuarioPorBot(Jogador j) {
+        int posicao = j.getPosicao();
+        JogadorBot bot = new JogadorBot();
+        bot.partida = this;
+        bot.setPosicao(posicao);
+        bot.setCartas(j.getCartas());
+        bot.inicioMao(null);
+        jogadores[posicao - 1] = bot;
+        j.partida = null;
+        if (posJogadorDaVez == posicao) {
+            notificaVez();
+        }
+    }
+
     /**
      * Determina se o jogador em questão deve ter sua decisão (aceite de aumento ou mão 11) ignorada.
      *
