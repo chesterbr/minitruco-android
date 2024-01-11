@@ -10,9 +10,11 @@ class PartidaLocalTest {
 
 
     @Test
-    @Timeout(30)
+    @Timeout(20)
     void testTrocaPorBotNaVez() throws InterruptedException {
         PartidaLocal partida = new PartidaLocal(false, false, "P");
+        partida.pontosEquipe[0] = 7;
+        partida.pontosEquipe[1] = 7;
         partida.adiciona(new JogadorDeTeste());
         partida.adiciona(new JogadorDeTeste());
         partida.adiciona(new JogadorDeTeste() {
@@ -38,9 +40,11 @@ class PartidaLocalTest {
     }
 
     @Test
-    @Timeout(30)
+    @Timeout(20)
     void testTrocaPorBotForaDaVez() throws InterruptedException {
         PartidaLocal partida = new PartidaLocal(false, false, "P");
+        partida.pontosEquipe[0] = 7;
+        partida.pontosEquipe[1] = 7;
         partida.adiciona(new JogadorDeTeste());
         partida.adiciona(new JogadorDeTeste());
         partida.adiciona(new JogadorDeTeste() {
@@ -70,6 +74,8 @@ class PartidaLocalTest {
     @Timeout(30)
     void testTrocaTodosPorBots() throws InterruptedException {
         PartidaLocal partida = new PartidaLocal(false, false, "P");
+        partida.pontosEquipe[0] = 7;
+        partida.pontosEquipe[1] = 7;
         for (int i = 1; i <= 4; i++) {
             partida.adiciona(new JogadorDeTeste() {
                 @Override
@@ -94,7 +100,7 @@ class PartidaLocalTest {
     }
 
     @Test
-    @Timeout(10)
+    @Timeout(20)
     void testTrocaPorBotAguardandoMaoDeX() throws InterruptedException {
         class JogadorDeTesteQueRecusaMaoDe11 extends JogadorDeTeste {
             public void informaMaoDeX(Carta[] cartasParceiro) {
@@ -130,7 +136,7 @@ class PartidaLocalTest {
 
 
     @Test
-//    @Timeout(20)
+    @Timeout(20)
     void testTrocaPorBotAguardandoAumento() throws InterruptedException {
         class JogadorDeTesteQueRecusaAumento extends JogadorDeTeste {
             public void pediuAumentoAposta(Jogador j, int valor, int rndFrase) {
