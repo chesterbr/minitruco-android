@@ -27,6 +27,8 @@ public class ComandoA extends Comando {
                         ((JogadorConectado) outroJogador).println("! T " + j.getNome() + " saiu; bot🤖 entrou no lugar.");
                     }
                 }
+                j.setSala(null);
+                j.desconecta();
             } else {
                 sala.getPartida().abandona(j.getPosicao());
             }

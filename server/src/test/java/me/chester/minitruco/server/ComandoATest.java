@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
@@ -13,6 +14,8 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.net.Socket;
 
 import me.chester.minitruco.core.JogadorBot;
 
@@ -23,7 +26,7 @@ class ComandoATest {
     @BeforeEach
     void setUp() {
         j1 = spy(new JogadorConectado(null));
-        j2 = spy(new JogadorConectado(null));
+        j2 = spy(new JogadorConectado(mock(Socket.class)));
         j3 = spy(new JogadorConectado(null));
         doNothing().when(j1).println(any());
         doNothing().when(j2).println(any());
@@ -73,7 +76,7 @@ class ComandoATest {
     }
 
     @Test
-    void testAbortaSalaPublicaTrocaUsuarioPorBot() {
+    void testAbortaSalaPublicaComPartidaTrocaUsuarioPorBot() {
         Sala s = new Sala(true, "P");
         s.adiciona(j1);
         s.adiciona(j2);
@@ -82,11 +85,20 @@ class ComandoATest {
 
         Comando.interpreta("A", j2);
         assertNotNull(s.getPartida());
-        // TODO o que eu quero fazer na *sala*?
-//        assertEquals(JogadorBot.class, s.getJogador(2).getClass());
         assertEquals(JogadorBot.class, s.getPartida().getJogador(2).getClass());
     }
 
+    @Test
+    void testAbortaSalaPublicaComPartidaDesconectaUsuarioTrocado() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.iniciaPartida(j1);
+
+        Comando.interpreta("A", j2);
+        assertNull(j2.getSala());
+        verify(j2).desconecta();
+    }
 
     @Test
     void testAbortaEmSalaMasForaDeJogoAtualizaSalaParaOutrosJogadores() {
