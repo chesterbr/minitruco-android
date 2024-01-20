@@ -55,6 +55,7 @@ public class Sala {
                     sala.remove((JogadorConectado) j);
                 }
             }
+            sala.atualizaColecoesDeSalas();
         }
     }
 
