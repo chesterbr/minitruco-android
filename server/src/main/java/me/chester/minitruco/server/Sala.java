@@ -255,6 +255,44 @@ public class Sala {
     }
 
     /**
+     * Substitui o jogador por um bot, na sala e na partida
+     *
+     * Se não houver partida em andamento, não faz nada.
+     *
+     * @param j Jogador a ser conectado.
+     */
+    public synchronized void trocaPorBot(JogadorConectado j) {
+        if (partida == null || partida.finalizada) {
+            return;
+        }
+        for (int i = 0; i <= 3; i++) {
+            if (jogadores[i] == j) {
+                // Faz a troca na paritda
+                partida.trocaPorBot(j);
+                // Faz a troca na sala (sem mexer nas coleções; queremos que
+                // a sala continue constando como lotada)
+                Jogador bot = partida.getJogador(i + 1);
+                jogadores[i] = bot;
+                j.setSala(null);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Retira todos os bots da sala (para que ela volte a ficar disponível
+     * caso esteja incompleta).
+     */
+    public synchronized void removeBots() {
+        for (int i = 0; i <= 3; i++) {
+            if (jogadores[i] instanceof JogadorBot) {
+                jogadores[i] = null;
+            }
+        }
+        atualizaColecoesDeSalas();
+    }
+
+    /**
      * Mantém as coleções atualizadas quando um jogador entra ou sai da sala
      * <p>
      * Sala com 1-3 jogadores vai para salasPublicasDisponiveis

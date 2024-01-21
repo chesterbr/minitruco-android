@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
 
 class SalaTest {
@@ -434,5 +435,64 @@ class SalaTest {
         assertTrue(s.isPublica());
         s = new Sala(false, "P");
         assertFalse(s.isPublica());
+    }
+
+    @Test
+    void testTrocaPorBotsFazTrocaCompleta() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj2);
+        assertEquals(JogadorBot.class, s.getJogador(2).getClass());
+        assertEquals(s.getJogador(2), s.getPartida().getJogador(2));
+        assertNull(jj2.getSala());
+    }
+
+    @Test
+    void testTrocaPorBotsSoFuncionaComPartidaEmAndamento() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.trocaPorBot(jj2); // Ainda não iniciou
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj3); // Em andamento
+        s.getPartida().abandona(1);
+        s.trocaPorBot(jj4); // Terminada
+        assertEquals(jj2, s.getJogador(2));
+        assertNotEquals(jj3, s.getJogador(3));
+        assertEquals(jj4, s.getJogador(4));
+    }
+
+    @Test
+    void testRemoveBotsTiraOsBots() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj2);
+        assertNotNull(s.getJogador(2));
+        s.removeBots();
+        assertNotNull(s.getJogador(1));
+        assertNull(s.getJogador(2));
+        assertNotNull(s.getJogador(3));
+        assertNotNull(s.getJogador(4));
+    }
+
+    @Test
+    void testRemoveBotsNaoLiberaSalaEnquantoNinguemSair() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj2);
+        s.removeBots();
+
+        Sala.colocaEmSalaPublica(j1, "P");
+        assertNotEquals(s, j1.getSala());
+    }
+
+    @Test
+    void testRemoveBotsLiberaSalaQuandoElaEncerraOJogoAtual() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj2);
+        s.removeBots();
+        s.liberaJogo();
+
+        Sala.colocaEmSalaPublica(j1, "P");
+        assertEquals(s, j1.getSala());
     }
 }
