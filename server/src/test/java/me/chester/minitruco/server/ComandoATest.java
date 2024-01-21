@@ -8,7 +8,6 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -105,7 +104,6 @@ class ComandoATest {
         Sala s = new Sala(true, "P");
         s.adiciona(j1);
         s.adiciona(j2);
-        reset();
         Comando.interpreta("A", j2);
         verify(j1, never()).println(argThat((String msg) -> msg.startsWith("A")));
         verify(j2, never()).println(argThat((String msg) -> msg.startsWith("A")));
