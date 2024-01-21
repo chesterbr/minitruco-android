@@ -115,4 +115,28 @@ class ComandoATest {
         Comando.interpreta("A", j1);
         verify(j1, never()).println(argThat((String msg) -> msg.startsWith("A")));
     }
+
+    @Test
+    void testAbortaEmSalaPublicaComPartidaEmAndamentoTrocaUsuarioPorBotNaSalaENaPartida() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.iniciaPartida(j1);
+
+        Comando.interpreta("A", j2);
+        assertEquals(JogadorBot.class, s.getJogador(2).getClass());
+        assertEquals(s.getJogador(2), s.getPartida().getJogador(2));
+    }
+
+    @Test
+    void testAbortaEmSalaPrivadaComPartidaEmAndamentoNaoTrocaPorBotEEncerraPartida() {
+        Sala s = new Sala(false, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.iniciaPartida(j1);
+
+        Comando.interpreta("A", j2);
+        assertEquals(JogadorConectado.class, s.getJogador(2).getClass());
+        assertNull(s.getPartida());
+    }
 }

@@ -20,7 +20,7 @@ public class ComandoA extends Comando {
             sala.mandaInfoParaTodos();
         } else {
             if (sala.isPublica()) {
-                sala.getPartida().trocaPorBot(j);
+                sala.trocaPorBot(j);
                 for (int i = 1; i <= 4; i++) {
                     Jogador outroJogador = sala.getPartida().getJogador(i);
                     if (outroJogador instanceof JogadorConectado) {
