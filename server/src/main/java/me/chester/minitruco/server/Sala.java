@@ -390,13 +390,13 @@ public class Sala {
     /**
      * Recupera o jogador em uma determinada posição
      *
-     * @param i posição do jogador (de 1 a 4)
+     * @param posicao posição do jogador (de 1 a 4)
      * @return objeto que representa o jogador, ou null se a posição for
      * inválida ou não estiver ocupada
      */
-    public synchronized Jogador getJogador(int i) {
-        if (i >= 1 && i <= 4)
-            return jogadores[i - 1];
+    public synchronized Jogador getJogador(int posicao) {
+        if (posicao >= 1 && posicao <= 4)
+            return jogadores[posicao - 1];
         else
             return null;
     }
