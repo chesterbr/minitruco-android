@@ -26,6 +26,8 @@ public interface Modo {
                 return new ModoManilhaVelha();
             case "L":
                 return new ModoBaralhoLimpo();
+            case "1":
+                return new ModoFinalizaEm1();
             default:
                 throw new IllegalArgumentException("Modo deve ser M, P, V ou L");
         }
