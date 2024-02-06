@@ -362,7 +362,8 @@ public class JogadorConectado extends Jogador implements Runnable {
     }
 
     /**
-     * Associa o jogador com a sala. NÃO deve ser usado diretamente (ao invés disso,
+     * Associa o jogador com a sala. NÃO deve ser usado diretamente, a não
+     * ser que o jogador esteja sendo trocado por um bot. Em outros casos,
      * use Sala.adiciona() e Sala.remove())
      */
     public void setSala(Sala sala) {
