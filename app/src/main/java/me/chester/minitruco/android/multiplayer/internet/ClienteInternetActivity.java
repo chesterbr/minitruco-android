@@ -1,7 +1,6 @@
 package me.chester.minitruco.android.multiplayer.internet;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
-
 import static me.chester.minitruco.android.PreferenceUtils.getLetraDoModo;
 import static me.chester.minitruco.android.PreferenceUtils.getServidor;
 
@@ -31,6 +30,7 @@ import java.util.logging.Logger;
 import me.chester.minitruco.BuildConfig;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.PreferenceUtils;
 import me.chester.minitruco.android.SalaActivity;
 import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
@@ -230,6 +230,12 @@ public class ClienteInternetActivity extends SalaActivity {
         }
         switch (line.charAt(0)) {
             case 'N': // Nome foi aceito
+                // Caso as configurações de desenvolvimento sejam para usar o
+                // servidor local, respeita a opção de valer 1 ponto
+                if (PreferenceUtils.isServidorLocal(this) && PreferenceUtils.isValeUm(this)) {
+                    enviaLinha("E PUB 1");
+                    break;
+                }
                 // Já vamos entrar de cara numa sala pública (se a pessoa quiser
                 // fazer outra coisa, ela usa o botão apropriado)
                 enviaLinha("E PUB " + getLetraDoModo(this));

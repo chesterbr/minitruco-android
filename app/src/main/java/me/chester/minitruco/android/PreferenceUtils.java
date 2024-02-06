@@ -11,12 +11,20 @@ import androidx.preference.PreferenceManager;
 import me.chester.minitruco.R;
 
 public class PreferenceUtils {
+    public static Boolean isServidorLocal(Context context) {
+        return getPreferences(context).getBoolean("servidorLocal", false);
+    }
+
+    public static Boolean isValeUm(Context context) {
+        return getPreferences(context).getBoolean("valeUm", false);
+    }
+
     public static String getLetraDoModo(Context context) {
         return getPreferences(context).getString("modo", "P");
     }
 
     public static String getServidor(Context context) {
-        return getPreferences(context).getBoolean("servidorLocal", false) ?
+        return isServidorLocal(context) ?
             context.getString(R.string.opcoes_default_servidor_local) :
             context.getString(R.string.opcoes_default_servidor);
     }
