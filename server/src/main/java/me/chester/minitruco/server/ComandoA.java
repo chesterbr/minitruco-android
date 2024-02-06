@@ -6,7 +6,13 @@ package me.chester.minitruco.server;
 import me.chester.minitruco.core.Jogador;
 
 /**
- * Informa ao servidor que o jogador abandonou a partida.
+ * Informa ao servidor que o jogador abandonou a mesa.
+ *
+ * Se houver uma partida em andamento, troca ele por um bot e desconecta.
+ *
+ * Caso contrário (ex.: a partida acabou), remove quaisquer bots da sala e
+ * leva os jogadores de volta a ela, permitindo que novos jogadores completem
+ * e novas partidas se iniciem
  */
 public class ComandoA extends Comando {
 
@@ -17,6 +23,9 @@ public class ComandoA extends Comando {
             return;
         }
         if (sala.getPartida() == null) {
+            if (sala.isPublica()) {
+                sala.removeBots();
+            }
             sala.mandaInfoParaTodos();
         } else {
             if (sala.isPublica()) {
