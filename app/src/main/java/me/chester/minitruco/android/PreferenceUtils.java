@@ -15,7 +15,7 @@ public class PreferenceUtils {
         return getPreferences(context).getBoolean("servidorLocal", false);
     }
 
-    public static Boolean valeUm(Context context) {
+    public static Boolean isValeUm(Context context) {
         return getPreferences(context).getBoolean("valeUm", false);
     }
 

@@ -232,7 +232,7 @@ public class ClienteInternetActivity extends SalaActivity {
             case 'N': // Nome foi aceito
                 // Caso as configurações de desenvolvimento sejam para usar o
                 // servidor local, respeita a opção de valer 1 ponto
-                if (PreferenceUtils.isServidorLocal(this) && PreferenceUtils.valeUm(this)) {
+                if (PreferenceUtils.isServidorLocal(this) && PreferenceUtils.isValeUm(this)) {
                     enviaLinha("E PUB 1");
                     break;
                 }
