@@ -362,7 +362,7 @@ public class TituloActivity extends SalaActivity {
     @Override
     public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
         String modo = getLetraDoModo(this);
-        if (preferences.getBoolean("valeUm", false)) {
+        if (PreferenceUtils.valeUm(this)) {
             modo = "1";
         }
         boolean humanoDecide = preferences.getBoolean("humanoDecide", true);

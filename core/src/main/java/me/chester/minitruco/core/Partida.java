@@ -117,6 +117,7 @@ public abstract class Partida implements Runnable {
             case "M": return "Truco Mineiro";
             case "L": return "Baralho Limpo";
             case "V": return "Manilha Velha";
+            case "1": return "DEBUG: Finaliza em 1";
         }
         return null;
     }
