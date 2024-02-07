@@ -164,22 +164,19 @@ public class TituloActivity extends SalaActivity {
 
     private void configuraBotoesMultiplayer() {
         boolean temBluetooth = BluetoothAdapter.getDefaultAdapter() != null;
-        boolean temInternet = true;
 
         Button btnBluetooth = findViewById(R.id.btnBluetooth);
         Button btnInternet = findViewById(R.id.btnInternet);
         btnBluetooth.setVisibility(temBluetooth ? View.VISIBLE : View.GONE);
-        btnInternet.setVisibility(temInternet ? View.VISIBLE : View.GONE);
+        btnInternet.setVisibility(View.VISIBLE);
         if (temBluetooth) {
             btnBluetooth.setOnClickListener(v -> {
                 perguntaCriarOuProcurarBluetooth();
             });
         }
-        if (temInternet) {
-            btnInternet.setOnClickListener(v -> {
-                pedeNomeEConecta();
-            });
-        }
+        btnInternet.setOnClickListener(v -> {
+            pedeNomeEConecta();
+        });
     }
 
     private void pedeNomeEConecta() {
