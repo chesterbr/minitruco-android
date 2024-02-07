@@ -215,8 +215,8 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            Simplificações no jogo via internet para facilitar que as pessoas encontrem
-            parceiros(as) para jogar.
+            - Bot parceiro usa estratégia mais previsível em jogos locais
+            - Quando alguém sai no meio de um jogo internet, troca a pessoa por bot e continua o jogo
         ]]>
     </string>
 </resources>
