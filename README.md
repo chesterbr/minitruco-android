@@ -33,8 +33,8 @@ Você pode usar e modificar o código como quiser, dentro dos [termos da licenç
 
 ### Colaborações anteriores
 
-- **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram)): Tento mineiro original
-- **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**: Estratégia de bot
+- **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram)): tento mineiro original
+- **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**: estratégia de bot
 
 ### Software de terceiros
 
