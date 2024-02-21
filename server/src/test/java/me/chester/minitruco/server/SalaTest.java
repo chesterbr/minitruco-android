@@ -446,6 +446,24 @@ class SalaTest {
     }
 
     @Test
+    void testTrocaTodosPorBotEncerraPartida() {
+        Sala.colocaEmSalaPublica(j1, "P");
+        Sala.colocaEmSalaPublica(j2, "P");
+        Sala.colocaEmSalaPublica(j3, "P");
+        Sala s = Sala.colocaEmSalaPublica(j4, "P");
+        s.iniciaPartida(j1);
+        s.trocaPorBot(j1);
+        s.trocaPorBot(j2);
+        s.trocaPorBot(j3);
+        Partida p = s.getPartida();
+        assertNotNull(p);
+        assertFalse(p.finalizada);
+        s.trocaPorBot(j4);
+        assertNull(s.getPartida());
+        assertTrue(p.finalizada);
+    }
+
+    @Test
     void testIsPublica() {
         Sala s = new Sala(true, "P");
         assertTrue(s.isPublica());

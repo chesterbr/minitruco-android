@@ -274,9 +274,17 @@ public class Sala {
                 Jogador bot = partida.getJogador(i + 1);
                 jogadores[i] = bot;
                 j.setSala(null);
+            }
+        }
+        // Se a partida ficou apenas com bots, encerra e esvazia a sala
+        for (int i = 0; i <= 3; i++) {
+            if (!(jogadores[i] instanceof JogadorBot)) {
                 return;
             }
         }
+        partida.abandona(0);
+        liberaJogo();
+        atualizaColecoesDeSalas();
     }
 
     /**
