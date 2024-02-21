@@ -236,6 +236,22 @@ class SalaTest {
         s.iniciaPartida(j1);
     }
 
+    @Test
+    void testModosAguardandoJogadoresSoConsideraSalaComVaga() {
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        assertEquals("P", Sala.modosAguardandoJogadores());
+        s.adiciona(j2);
+        assertEquals("P", Sala.modosAguardandoJogadores());
+        s.iniciaPartida(j1);
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Comando.interpreta("A", j1); // Troca por bot
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Comando.interpreta("A", j2); // Troca por bot, sala vazia
+        assertEquals("", Sala.modosAguardandoJogadores());
+    }
+
    @Test
    void testSalaNaoIniciaPartidaSozinha() {
         Sala s = new Sala(true, "P");
@@ -427,6 +443,24 @@ class SalaTest {
         Sala.colocaEmSalaPublica(j10, "L");
         Sala.colocaEmSalaPublica(jj1, "L");
         assertEquals("M", sorted(Sala.modosAguardandoJogadores()));        // Completou a sala L
+    }
+
+    @Test
+    void testTrocaTodosPorBotEncerraPartida() {
+        Sala.colocaEmSalaPublica(j1, "P");
+        Sala.colocaEmSalaPublica(j2, "P");
+        Sala.colocaEmSalaPublica(j3, "P");
+        Sala s = Sala.colocaEmSalaPublica(j4, "P");
+        s.iniciaPartida(j1);
+        s.trocaPorBot(j1);
+        s.trocaPorBot(j2);
+        s.trocaPorBot(j3);
+        Partida p = s.getPartida();
+        assertNotNull(p);
+        assertFalse(p.finalizada);
+        s.trocaPorBot(j4);
+        assertNull(s.getPartida());
+        assertTrue(p.finalizada);
     }
 
     @Test

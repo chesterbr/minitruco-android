@@ -30,10 +30,12 @@ public class ComandoA extends Comando {
         } else {
             if (sala.isPublica()) {
                 sala.trocaPorBot(j);
-                for (int i = 1; i <= 4; i++) {
-                    Jogador outroJogador = sala.getPartida().getJogador(i);
-                    if (outroJogador instanceof JogadorConectado) {
-                        ((JogadorConectado) outroJogador).println("! T " + j.getNome() + " saiu; bot🤖 entrou no lugar.");
+                if (sala.getPartida() != null) {
+                    for (int i = 1; i <= 4; i++) {
+                        Jogador outroJogador = sala.getPartida().getJogador(i);
+                        if (outroJogador instanceof JogadorConectado) {
+                            ((JogadorConectado) outroJogador).println("! T " + j.getNome() + " saiu; bot🤖 entrou no lugar.");
+                        }
                     }
                 }
                 j.setSala(null);
