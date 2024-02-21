@@ -236,6 +236,22 @@ class SalaTest {
         s.iniciaPartida(j1);
     }
 
+    @Test
+    void testModosAguardandoJogadoresSoConsideraSalaComVaga() {
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        assertEquals("P", Sala.modosAguardandoJogadores());
+        s.adiciona(j2);
+        assertEquals("P", Sala.modosAguardandoJogadores());
+        s.iniciaPartida(j1);
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Comando.interpreta("A", j1); // Troca por bot
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Comando.interpreta("A", j2); // Troca por bot, sala vazia
+        assertEquals("", Sala.modosAguardandoJogadores());
+    }
+
    @Test
    void testSalaNaoIniciaPartidaSozinha() {
         Sala s = new Sala(true, "P");

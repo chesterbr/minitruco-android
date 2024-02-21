@@ -370,6 +370,7 @@ public class Sala {
 
         }
         Thread.ofVirtual().start(partida);
+        atualizaColecoesDeSalas();
     }
 
     /**
