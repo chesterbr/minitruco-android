@@ -1,5 +1,10 @@
 package me.chester.minitruco.android;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -10,11 +15,17 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.media.AudioAttributes;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -307,7 +318,7 @@ public class MesaView extends View {
         int margemBotao = (int) (8 * density);
         int bottomBotao = rectPergunta.bottom - margemBotao;
         int topBotao = bottomBotao - alturaBotao;
-        int larguraBotao =  larguraPergunta / 2 - margemBotao;
+        int larguraBotao = larguraPergunta / 2 - margemBotao;
         rectBotaoSim = new RectF(
             leftPergunta + margemBotao,
             topBotao,
@@ -561,6 +572,56 @@ public class MesaView extends View {
         aguardaFimAnimacoes();
         if (humano) {
             statusVez = STATUS_VEZ_HUMANO_OK;
+            // TODO só fazer isso se for jogo online e a app estiver em background
+            if (ActivityCompat.checkSelfPermission(getContext(), POST_NOTIFICATIONS) == PERMISSION_GRANTED) {
+                NotificationManager notificationManager;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    CharSequence name = "Meu Canal";
+                    String description = "Descrição do Canal";
+                    int importance = NotificationManager.IMPORTANCE_HIGH;
+                    AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION) // Conteúdo destinado a ser sonificação
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION) // Uso como notificação
+                        .build();
+                    NotificationChannel channel = new NotificationChannel(
+                        "meu_canal_id", name, importance);
+                    channel.setDescription(description);
+                    channel.setSound(Settings.System.DEFAULT_NOTIFICATION_URI, audioAttributes);
+                    channel.setVibrationPattern(new long[]{1000, 1000});
+                    ;
+
+                    // Não esqueça de registrar o canal no sistema
+//                    NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
+                    notificationManager = getContext().getSystemService(NotificationManager.class);
+                    notificationManager.createNotificationChannel(channel);
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), "meu_canal_id")
+                        .setSmallIcon(R.drawable.baralho_android)
+                        .setContentTitle("Sua vez")
+                        .setContentText("É sua vez de jogar no miniTruco. Estão te esperando!")
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                        .setVibrate(new long[]{1000, 1000});
+                    notificationManager.notify(1, builder.build());
+                }
+//                Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+//                if (vibrator != null) {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                        vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+//                    } else {
+//                        vibrator.vibrate(500);
+//                    }
+//                }
+            } else {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
         } else {
             statusVez = STATUS_VEZ_OUTRO;
         }
