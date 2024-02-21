@@ -27,10 +27,11 @@ class ComandoATest {
 
     @BeforeEach
     void setUp() {
-        j1 = spy(new JogadorConectado(null));
+        Sala.limpaSalas();
+        j1 = spy(new JogadorConectado(mock(Socket.class)));
         j2 = spy(new JogadorConectado(mock(Socket.class)));
         j3 = spy(new JogadorConectado(mock(Socket.class)));
-        j4 = spy(new JogadorConectado(null));
+        j4 = spy(new JogadorConectado(mock(Socket.class)));
         doNothing().when(j1).println(any());
         doNothing().when(j2).println(any());
         doNothing().when(j3).println(any());
@@ -90,6 +91,35 @@ class ComandoATest {
         Comando.interpreta("A", j2);
         assertNotNull(s.getPartida());
         assertEquals(JogadorBot.class, s.getPartida().getJogador(2).getClass());
+    }
+
+    @Test
+    void testPartidaEncerraSeTodosForemTrocadosPorBots() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.iniciaPartida(j1);
+        assertNotNull(s.getPartida());
+
+        Comando.interpreta("A", j1);
+        assertNotNull(s.getPartida());
+
+        Comando.interpreta("A", j2);
+        assertNull(s.getPartida());
+    }
+
+    @Test
+    void testSalaNaoFicaDisponivelSeTodosForemTrocadosPorBots() {
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.iniciaPartida(j1); // posição 3 e 4 serão bots
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Comando.interpreta("A", j1);
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Comando.interpreta("A", j2); // Neste ponto, todos são bots
+        assertEquals("", Sala.modosAguardandoJogadores());
     }
 
     @Test
