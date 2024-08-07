@@ -117,6 +117,7 @@ public abstract class Partida implements Runnable {
             case "M": return "Truco Mineiro";
             case "L": return "Baralho Limpo";
             case "V": return "Manilha Velha";
+            case "1": return "DEBUG: Finaliza em 1";
         }
         return null;
     }
@@ -253,7 +254,7 @@ public abstract class Partida implements Runnable {
      *            valor de 1 a 4
      * @return Objeto correspondente àquela posição
      */
-    protected Jogador getJogador(int posicao) {
+    public Jogador getJogador(int posicao) {
         return jogadores[posicao - 1];
     }
 

@@ -26,6 +26,8 @@ public interface Modo {
                 return new ModoManilhaVelha();
             case "L":
                 return new ModoBaralhoLimpo();
+            case "1":
+                return new ModoFinalizaEm1();
             default:
                 throw new IllegalArgumentException("Modo deve ser M, P, V ou L");
         }
@@ -38,6 +40,10 @@ public interface Modo {
         } catch (IllegalArgumentException e) {
             return false;
         }
+    }
+
+    static String[] getModosValidos() {
+        return new String[] { "M", "P", "V", "L" };
     }
 
     int pontuacaoParaMaoDeX();

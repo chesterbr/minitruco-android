@@ -19,8 +19,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import me.chester.minitruco.core.Jogador;
+import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
 
 class SalaTest {
@@ -233,6 +236,22 @@ class SalaTest {
         s.iniciaPartida(j1);
     }
 
+    @Test
+    void testModosAguardandoJogadoresSoConsideraSalaComVaga() {
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        assertEquals("P", Sala.modosAguardandoJogadores());
+        s.adiciona(j2);
+        assertEquals("P", Sala.modosAguardandoJogadores());
+        s.iniciaPartida(j1);
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Comando.interpreta("A", j1); // Troca por bot
+        assertEquals("", Sala.modosAguardandoJogadores());
+        Comando.interpreta("A", j2); // Troca por bot, sala vazia
+        assertEquals("", Sala.modosAguardandoJogadores());
+    }
+
    @Test
    void testSalaNaoIniciaPartidaSozinha() {
         Sala s = new Sala(true, "P");
@@ -397,5 +416,117 @@ class SalaTest {
     void testSalaPrivadaGeraCodigoNumericoDeCincoDigitos() {
         Sala s = new Sala(false, "P");
         assertThat(s.codigo, matchesPattern("[0-9]{5}"));
+    }
+
+    String sorted(String s) {
+        return Arrays.stream(s.split("")).sorted().collect(Collectors.joining());
+    }
+
+    @Test
+    void testModosAguardandoJogadores() {
+        Sala.colocaEmSalaPublica(j1, "P");
+        Sala.colocaEmSalaPublica(j2, "P");
+        Sala.colocaEmSalaPublica(j3, "M");
+        Sala.colocaEmSalaPublica(j4, "L");
+        Sala.colocaEmSalaPublica(j5, "P");
+        Sala.colocaEmSalaPublica(j6, "P");
+        Sala.colocaEmSalaPublica(j7, "M");
+        Sala.colocaEmSalaPublica(j8, "L");
+        assertEquals("LM", sorted(Sala.modosAguardandoJogadores()));         // P está cheia; V está vazia
+
+        Sala.colocaEmSalaPublica(j9, "P");
+        assertEquals("LMP", sorted(Sala.modosAguardandoJogadores()));        // Abriu uma nova sala P para o j9
+
+        j9.getSala().remove(j9);
+        assertEquals("LM", sorted(Sala.modosAguardandoJogadores()));        // A sala fechou automaticamente com 1 jogador
+
+        Sala.colocaEmSalaPublica(j10, "L");
+        Sala.colocaEmSalaPublica(jj1, "L");
+        assertEquals("M", sorted(Sala.modosAguardandoJogadores()));        // Completou a sala L
+    }
+
+    @Test
+    void testTrocaTodosPorBotEncerraPartida() {
+        Sala.colocaEmSalaPublica(j1, "P");
+        Sala.colocaEmSalaPublica(j2, "P");
+        Sala.colocaEmSalaPublica(j3, "P");
+        Sala s = Sala.colocaEmSalaPublica(j4, "P");
+        s.iniciaPartida(j1);
+        s.trocaPorBot(j1);
+        s.trocaPorBot(j2);
+        s.trocaPorBot(j3);
+        Partida p = s.getPartida();
+        assertNotNull(p);
+        assertFalse(p.finalizada);
+        s.trocaPorBot(j4);
+        assertNull(s.getPartida());
+        assertTrue(p.finalizada);
+    }
+
+    @Test
+    void testIsPublica() {
+        Sala s = new Sala(true, "P");
+        assertTrue(s.isPublica());
+        s = new Sala(false, "P");
+        assertFalse(s.isPublica());
+    }
+
+    @Test
+    void testTrocaPorBotsFazTrocaCompleta() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj2);
+        assertEquals(JogadorBot.class, s.getJogador(2).getClass());
+        assertEquals(s.getJogador(2), s.getPartida().getJogador(2));
+        assertNull(jj2.getSala());
+    }
+
+    @Test
+    void testTrocaPorBotsSoFuncionaComPartidaEmAndamento() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.trocaPorBot(jj2); // Ainda não iniciou
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj3); // Em andamento
+        s.getPartida().abandona(1);
+        s.trocaPorBot(jj4); // Terminada
+        assertEquals(jj2, s.getJogador(2));
+        assertNotEquals(jj3, s.getJogador(3));
+        assertEquals(jj4, s.getJogador(4));
+    }
+
+    @Test
+    void testRemoveBotsTiraOsBots() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj2);
+        assertNotNull(s.getJogador(2));
+        s.removeBots();
+        assertNotNull(s.getJogador(1));
+        assertNull(s.getJogador(2));
+        assertNotNull(s.getJogador(3));
+        assertNotNull(s.getJogador(4));
+    }
+
+    @Test
+    void testRemoveBotsNaoLiberaSalaEnquantoNinguemSair() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj2);
+        s.removeBots();
+
+        Sala.colocaEmSalaPublica(j1, "P");
+        assertNotEquals(s, j1.getSala());
+    }
+
+    @Test
+    void testRemoveBotsLiberaSalaQuandoElaEncerraOJogoAtual() {
+        Sala s = criaSalaCheiaComJj1Gerente();
+        s.iniciaPartida(jj1);
+        s.trocaPorBot(jj2);
+        s.removeBots();
+        s.liberaJogo();
+
+        Sala.colocaEmSalaPublica(j1, "P");
+        assertEquals(s, j1.getSala());
     }
 }

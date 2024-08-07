@@ -14,6 +14,7 @@ import java.util.Set;
 
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
+import me.chester.minitruco.core.Modo;
 import me.chester.minitruco.core.Partida;
 import me.chester.minitruco.core.PartidaLocal;
 
@@ -54,6 +55,7 @@ public class Sala {
                     sala.remove((JogadorConectado) j);
                 }
             }
+            sala.atualizaColecoesDeSalas();
         }
     }
 
@@ -91,6 +93,10 @@ public class Sala {
             salasPrivadas.put(codigo, this);
         }
         this.modo = modo;
+    }
+
+    public boolean isPublica() {
+        return codigo == null;
     }
 
     /**
@@ -136,6 +142,24 @@ public class Sala {
         sala.adiciona(j);
 
         return sala;
+    }
+
+    /**
+     * Retorna os modos que estão precisando de jogadores em salas públicas,
+     * para que o cliente possa convidar esses jogadores quando eles abrem
+     * o app ou selecionam um novo modo.
+     *
+     * @return String com as letras dos modos. Ex.: "MP" significa que há
+     *         salas aguardando jogadores para os modos mineiro e paulista.
+     */
+    public static synchronized String modosAguardandoJogadores() {
+        StringBuilder sb = new StringBuilder();
+        for (String modo : Modo.getModosValidos()) {
+            if (salasPublicasDisponiveis.stream().anyMatch(s -> s.modo.equals(modo))) {
+                sb.append(modo);
+            }
+        }
+        return sb.toString();
     }
 
     /**
@@ -231,6 +255,52 @@ public class Sala {
     }
 
     /**
+     * Substitui o jogador por um bot, na sala e na partida
+     *
+     * Se não houver partida em andamento, não faz nada.
+     *
+     * @param j Jogador a ser conectado.
+     */
+    public synchronized void trocaPorBot(JogadorConectado j) {
+        if (partida == null || partida.finalizada) {
+            return;
+        }
+        for (int i = 0; i <= 3; i++) {
+            if (jogadores[i] == j) {
+                // Faz a troca na paritda
+                partida.trocaPorBot(j);
+                // Faz a troca na sala (sem mexer nas coleções; queremos que
+                // a sala continue constando como lotada)
+                Jogador bot = partida.getJogador(i + 1);
+                jogadores[i] = bot;
+                j.setSala(null);
+            }
+        }
+        // Se a partida ficou apenas com bots, encerra e esvazia a sala
+        for (int i = 0; i <= 3; i++) {
+            if (!(jogadores[i] instanceof JogadorBot)) {
+                return;
+            }
+        }
+        partida.abandona(0);
+        liberaJogo();
+        atualizaColecoesDeSalas();
+    }
+
+    /**
+     * Retira todos os bots da sala (para que ela volte a ficar disponível
+     * caso esteja incompleta).
+     */
+    public synchronized void removeBots() {
+        for (int i = 0; i <= 3; i++) {
+            if (jogadores[i] instanceof JogadorBot) {
+                jogadores[i] = null;
+            }
+        }
+        atualizaColecoesDeSalas();
+    }
+
+    /**
      * Mantém as coleções atualizadas quando um jogador entra ou sai da sala
      * <p>
      * Sala com 1-3 jogadores vai para salasPublicasDisponiveis
@@ -252,7 +322,7 @@ public class Sala {
     /**
      * Recupera a partida que está rolando na sala (para dar comandos, etc.)
      */
-    public Partida getPartida() {
+    public PartidaLocal getPartida() {
         return partida;
     }
 
@@ -308,6 +378,7 @@ public class Sala {
 
         }
         Thread.ofVirtual().start(partida);
+        atualizaColecoesDeSalas();
     }
 
     /**
@@ -328,13 +399,13 @@ public class Sala {
     /**
      * Recupera o jogador em uma determinada posição
      *
-     * @param i posição do jogador (de 1 a 4)
+     * @param posicao posição do jogador (de 1 a 4)
      * @return objeto que representa o jogador, ou null se a posição for
      * inválida ou não estiver ocupada
      */
-    public synchronized Jogador getJogador(int i) {
-        if (i >= 1 && i <= 4)
-            return jogadores[i - 1];
+    public synchronized Jogador getJogador(int posicao) {
+        if (posicao >= 1 && posicao <= 4)
+            return jogadores[posicao - 1];
         else
             return null;
     }

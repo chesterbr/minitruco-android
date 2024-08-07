@@ -565,6 +565,35 @@ public class PartidaLocal extends Partida {
     }
 
     /**
+     * Substitui o jogador por um bot (útil quando, por exemplo, um jogador
+     * cai no multiplayer)
+     *
+     * @param j Jogador a ser substituído
+     */
+    public synchronized void trocaPorBot(Jogador j) {
+        sleep(); // Dá ao jogo a chance de se inicializar
+        int posicao = j.getPosicao();
+        JogadorBot bot = new JogadorBot();
+        bot.partida = this;
+        bot.setPosicao(posicao);
+        bot.setCartas(j.getCartas());
+        bot.inicioMao(null);
+        int posParceiro = (bot.getPosicao() + 1) % 4 + 1;
+        jogadores[posicao - 1] = bot;
+        j.partida = null;
+        if (posJogadorDaVez == posicao) {
+            notificaVez();
+        } else if (aguardandoRespostaMaoDeX[posicao - 1]) {
+            bot.informaMaoDeX(getJogador(posParceiro).getCartas());
+        } else if (jogadorPedindoAumento != null && jogadorPedindoAumento.getEquipe() != bot.getEquipe()) {
+            bot.pediuAumentoAposta(jogadorPedindoAumento, modo.valorSeHouverAumento(valorMao), 0);
+            if (recusouAumento[posParceiro - 1]) {
+                bot.recusouAumentoAposta(getJogador(posParceiro), 0);
+            }
+        }
+    }
+
+    /**
      * Determina se o jogador em questão deve ter sua decisão (aceite de aumento ou mão 11) ignorada.
      *
      * @param jogador jogador que acabou de tomar uma decisão
@@ -649,7 +678,7 @@ public class PartidaLocal extends Partida {
      * Recupera o jogador cuja vez é a atual
      *
      */
-    private Jogador getJogadorDaVez() {
+    public Jogador getJogadorDaVez() {
         return getJogador(posJogadorDaVez);
     }
 

@@ -1,6 +1,8 @@
 package me.chester.minitruco.android.multiplayer.internet;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
+import static me.chester.minitruco.android.PreferenceUtils.getLetraDoModo;
+import static me.chester.minitruco.android.PreferenceUtils.getServidor;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
@@ -12,7 +14,6 @@ import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import java.io.BufferedReader;
@@ -27,9 +28,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import me.chester.minitruco.BuildConfig;
-import me.chester.minitruco.R;
 import me.chester.minitruco.android.CriadorDePartida;
 import me.chester.minitruco.android.JogadorHumano;
+import me.chester.minitruco.android.PreferenceUtils;
 import me.chester.minitruco.android.SalaActivity;
 import me.chester.minitruco.android.TrucoActivity;
 import me.chester.minitruco.android.multiplayer.PartidaRemota;
@@ -81,12 +82,28 @@ public class ClienteInternetActivity extends SalaActivity {
             enviaLinha("R T");
         });
         btnNovaSalaPrivada.setOnClickListener(v -> {
-            comandoTrocaSala = "E PRI " + modo;
-            layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+            new AlertDialog.Builder(this)
+                .setMessage("Salas privadas permitem convidar amigos(as), mas não " +
+                    "permitem que outras pessoas entrem. Se está procurando companhia " +
+                    "para jogar, é melhor ficar na sala pública.")
+                .setPositiveButton("Criar sala privada", (d, w) -> {
+                    comandoTrocaSala = "E PRI " + modo;
+                    layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+                })
+                .setNegativeButton("Ficar aqui", null)
+                .show();
         });
         btnNovaSalaPublica.setOnClickListener(v -> {
-            comandoTrocaSala = "E NPU " + modo;
-            layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+            new AlertDialog.Builder(this)
+                .setMessage("Trocar de sala só é recomendado se alguém estiver " +
+                    "incomodando, pois vai demorar mais pra achar outras pessoas " +
+                    "para jogar. Quer mesmo trocar?")
+                .setPositiveButton("Trocar", (d, w) -> {
+                    comandoTrocaSala = "E NPU " + modo;
+                    layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
+                })
+                .setNegativeButton("Ficar aqui", null)
+                .show();
         });
         btnEntrarComCodigo.setOnClickListener(v -> {
             // Faz a pergunta sugerindo o nome encontrado
@@ -171,9 +188,7 @@ public class ClienteInternetActivity extends SalaActivity {
     }
 
     private boolean conecta() {
-        String servidor = preferences.getBoolean("servidorLocal", false) ?
-            this.getString(R.string.opcoes_default_servidor_local) :
-            this.getString(R.string.opcoes_default_servidor);
+        String servidor = getServidor(this);
         try {
             socket = new Socket();
             socket.connect(new InetSocketAddress(servidor, 6912), 10_000);
@@ -215,9 +230,15 @@ public class ClienteInternetActivity extends SalaActivity {
         }
         switch (line.charAt(0)) {
             case 'N': // Nome foi aceito
+                // Caso as configurações de desenvolvimento sejam para usar o
+                // servidor local, respeita a opção de valer 1 ponto
+                if (PreferenceUtils.isServidorLocal(this) && PreferenceUtils.isValeUm(this)) {
+                    enviaLinha("E PUB 1");
+                    break;
+                }
                 // Já vamos entrar de cara numa sala pública (se a pessoa quiser
                 // fazer outra coisa, ela usa o botão apropriado)
-                enviaLinha("E PUB " + getModoDasPreferencias());
+                enviaLinha("E PUB " + getLetraDoModo(this));
                 break;
             case 'I': // Entrou/voltou para uma sala (ou ela foi atualizada)
                 exibeMesaForaDoJogo(line);
@@ -269,11 +290,6 @@ public class ClienteInternetActivity extends SalaActivity {
             "Ela pode estar lotada ou com jogo em andamento, ou " +
             "ainda, o código pode estar errado. Confira com a pessoa que " +
             "te convidou e tente novamente.");
-    }
-
-    @NonNull
-    private String getModoDasPreferencias() {
-        return preferences.getString("modo", "P");
     }
 
     /**

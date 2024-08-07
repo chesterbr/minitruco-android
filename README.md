@@ -4,7 +4,7 @@
 
 O miniTruco é um jogo de truco para celulares, tablets e outros dispositivos Android.
 
-Ele é completamente gratuito, sem anúncios, leve e não precisa de internet para jogar sozinho (ou em até quatro pessoas, via Bluetooth). Em breve também será possível jogar via internet.
+Ele é completamente gratuito, sem anúncios, leve e não precisa de internet para jogar sozinho (ou em até quatro pessoas, via Bluetooth ou internet).
 
 O jogo suporta as variantes mais comuns do truco (paulista e mineiro), com opções para jogar com baralho limpo ou manilha velha. Ele se adapta a diferentes formatos, orientações e resoluções de tela e permite configurar diversos aspectos visuais.
 
@@ -33,8 +33,8 @@ Você pode usar e modificar o código como quiser, dentro dos [termos da licenç
 
 ### Colaborações anteriores
 
-- **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram)): Tento mineiro original
-- **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**: Estratégia de bot
+- **[Guilherme Caram](https://www.linkedin.com/in/guilherme-caram-meireles/)** ([@gcaram](https://github.com/gcaram)): tento mineiro original
+- **[Willian Gigliotti](https://www.linkedin.com/in/willian-gigliotti/)**: estratégia de bot
 
 ### Software de terceiros
 

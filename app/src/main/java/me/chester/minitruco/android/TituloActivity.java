@@ -2,6 +2,7 @@ package me.chester.minitruco.android;
 
 import static android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET;
 import static android.provider.Settings.Global.DEVICE_NAME;
+import static me.chester.minitruco.android.PreferenceUtils.getLetraDoModo;
 
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.util.Consumer;
 import androidx.preference.PreferenceManager;
@@ -33,6 +35,8 @@ import me.chester.minitruco.R;
 import me.chester.minitruco.android.multiplayer.bluetooth.ClienteBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.bluetooth.ServidorBluetoothActivity;
 import me.chester.minitruco.android.multiplayer.internet.ClienteInternetActivity;
+import me.chester.minitruco.android.multiplayer.internet.InternetUtils;
+import me.chester.minitruco.core.EstrategiaGasparotto;
 import me.chester.minitruco.core.Jogador;
 import me.chester.minitruco.core.JogadorBot;
 import me.chester.minitruco.core.Partida;
@@ -96,10 +100,7 @@ public class TituloActivity extends SalaActivity {
             mostraAlertBox(this.getString(R.string.titulo_sobre), stats_versao
                 + this.getString(R.string.texto_sobre));
         });
-        // TODO ver se tem um modo mais central de garantir este default (e outros)
-        //      (provavelmente quando migrar esse PreferenceManager deprecado
-        //      e começar a centralizar as preferencias nesta view)
-        selecionaModo(preferences.getString("modo", "P"));
+        selecionaModo(getLetraDoModo(this));
     }
 
     /**
@@ -150,6 +151,8 @@ public class TituloActivity extends SalaActivity {
             mostraAlertBox(this.getString(R.string.titulo_instrucoes), this.getString(R.string.texto_instrucoes));
         } else if (!versaoQueMostrouNovidades.equals(versaoAtual)) {
             mostraAlertBox("Novidades", this.getString(R.string.novidades));
+        } else {
+            promoveJogoInternet(false);
         }
 
         Editor e = preferences.edit();
@@ -174,18 +177,7 @@ public class TituloActivity extends SalaActivity {
         }
         if (temInternet) {
             btnInternet.setOnClickListener(v -> {
-                if (!preferences.getBoolean("leuAvisoModoExperimental", false)) {
-                    new AlertDialog.Builder(this).setTitle("AVISO - RECURSO EXPERIMENTAL")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setMessage(R.string.aviso_modo_experimental)
-                        .setPositiveButton("Li TUDO e entendi", (dialog, which) -> {
-                            preferences.edit().putBoolean("leuAvisoModoExperimental", true).apply();
-                            pedeNomeEConecta();
-                        })
-                        .show();
-                } else {
-                    pedeNomeEConecta();
-                }
+                pedeNomeEConecta();
             });
         }
     }
@@ -244,13 +236,14 @@ public class TituloActivity extends SalaActivity {
         }
 
         // Faz a pergunta sugerindo o nome encontrado
+        // (mostrando os _ como espaços; a sanitização vai trocar de volta)
         View viewConteudo = getLayoutInflater()
             .inflate(R.layout.dialog_nome_jogador, null);
         final CheckBox checkBoxPerguntarSempre = viewConteudo
             .findViewById(R.id.checkBoxSemprePerguntaNome);
         final EditText editTextNomeJogador = viewConteudo
             .findViewById(R.id.editTextNomeJogador);
-        editTextNomeJogador.setText(nome);
+        editTextNomeJogador.setText(nome.replaceAll("_", " "));
 
         runOnUiThread(() -> {
             AlertDialog dialogNome = new AlertDialog.Builder(this)
@@ -338,13 +331,16 @@ public class TituloActivity extends SalaActivity {
                 .setMessage("Estes modos são jogados com a partida valendo 1 e o truco indo a 3, depois 6, 9 e 12.")
                 .setNegativeButton("Baralho Limpo", (dialog, which) -> {
                     selecionaModo("L");
+                    promoveJogoInternet(true);
                 })
                 .setPositiveButton("Manilha Velha", (dialog, which) -> {
                     selecionaModo("V");
+                    promoveJogoInternet(true);
                 })
                 .show();
         } else {
             selecionaModo((String) view.getTag());
+            promoveJogoInternet(true);
         }
     }
 
@@ -353,16 +349,29 @@ public class TituloActivity extends SalaActivity {
         preferences.edit().putString("modo", modo).apply();
     }
 
+    private void promoveJogoInternet(boolean repete) {
+        new Thread(() -> {
+            if (InternetUtils.isPromoveJogoInternet(this, repete)) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Jogue pela internet agora! Pessoas estão aguardando por você.", Toast.LENGTH_LONG).show();
+                });
+            }
+        }).start();
+    }
+
     @Override
     public Partida criaNovaPartida(JogadorHumano jogadorHumano) {
-        String modo = preferences.getString("modo", "P");
+        String modo = getLetraDoModo(this);
+        if (PreferenceUtils.isValeUm(this)) {
+            modo = "1";
+        }
         boolean humanoDecide = preferences.getBoolean("humanoDecide", true);
         boolean jogoAutomatico = preferences.getBoolean("jogoAutomatico", false);
         Partida novaPartida = new PartidaLocal(humanoDecide, jogoAutomatico, modo);
         novaPartida.adiciona(jogadorHumano);
-        for (int i = 2; i <= 4; i++) {
-            novaPartida.adiciona(new JogadorBot());
-        }
+        novaPartida.adiciona(new JogadorBot()); // Rival à direita
+        novaPartida.adiciona(new JogadorBot(new EstrategiaGasparotto(), null)); // Parceira(o)
+        novaPartida.adiciona(new JogadorBot()); // Rival à esquerda
         return novaPartida;
     }
 

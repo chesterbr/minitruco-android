@@ -14,8 +14,8 @@ dependencies {
     testImplementation 'org.hamcrest:hamcrest:2.2'
 }
 java {
-    sourceCompatibility = JavaVersion.VERSION_19
-    targetCompatibility = JavaVersion.VERSION_19
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 test {
@@ -23,7 +23,6 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
-    jvmArgs += '--enable-preview'
 }
 
 tasks.jar {
@@ -31,16 +30,4 @@ tasks.jar {
     from(project(':core').fileTree("build/classes/java/main")) {
         include '**/*.class'
     }
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs += '--enable-preview'
-}
-
-tasks.withType(JavaExec) {
-    jvmArgs += '--enable-preview'
-}
-
-compileJava {
-    options.compilerArgs += ["--enable-preview"]
 }
