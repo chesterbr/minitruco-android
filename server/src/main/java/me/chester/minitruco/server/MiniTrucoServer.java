@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +44,7 @@ public class MiniTrucoServer {
      * Guarda as threads dos jogadores conectados (para que possamos
      * esperar elas finalizarem quando o servidor for desligado).
      */
-    private static Set<Thread> threadsJogadores = new HashSet<>();
+    private static Set<Thread> threadsJogadores = ConcurrentHashMap.newKeySet();
 
     /**
      * Ponto de entrada do servidor. Apenas dispara a thread que aceita
