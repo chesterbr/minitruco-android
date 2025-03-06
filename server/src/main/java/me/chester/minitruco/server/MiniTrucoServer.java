@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +43,7 @@ public class MiniTrucoServer {
      * Guarda as threads dos jogadores conectados (para que possamos
      * esperar elas finalizarem quando o servidor for desligado).
      */
-    private static Set<Thread> threadsJogadores = new HashSet<>();
+    private static Set<Thread> threadsJogadores = ConcurrentHashMap.newKeySet();
 
     /**
      * Ponto de entrada do servidor. Apenas dispara a thread que aceita
@@ -113,10 +113,12 @@ public class MiniTrucoServer {
                 JogadorConectado j = new JogadorConectado(sCliente);
                 j.setOnFinished((t) -> {
                     threadsJogadores.remove(t);
-                    LOGGER.info("Jogadores conectados: " + threadsJogadores.size());
+                    LOGGER.info("Thread removida da coleção. Jogadores conectados: " + threadsJogadores.size());
                 });
-                threadsJogadores.add(Thread.ofVirtual().name(j.getNome()).start(j));
-                LOGGER.info("Jogadores conectados: " + threadsJogadores.size());
+                Thread t = Thread.ofVirtual().name(j.getNome()).unstarted(j);
+                threadsJogadores.add(t);
+                LOGGER.info("Thread adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
+                t.start();
             }
         } catch (IOException e) {
             LOGGER.log(Level.INFO, "Erro de I/O no ServerSocket", e);
