@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Handler;
@@ -114,10 +113,12 @@ public class MiniTrucoServer {
                 JogadorConectado j = new JogadorConectado(sCliente);
                 j.setOnFinished((t) -> {
                     threadsJogadores.remove(t);
-                    LOGGER.info("Jogadores conectados: " + threadsJogadores.size());
+                    LOGGER.info("Thread removida da coleção. Jogadores conectados: " + threadsJogadores.size());
                 });
-                threadsJogadores.add(Thread.ofVirtual().name(j.getNome()).start(j));
-                LOGGER.info("Jogadores conectados: " + threadsJogadores.size());
+                Thread t = Thread.ofVirtual().name(j.getNome()).unstarted(j);
+                threadsJogadores.add(t);
+                LOGGER.info("Thread adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
+                t.start();
             }
         } catch (IOException e) {
             LOGGER.log(Level.INFO, "Erro de I/O no ServerSocket", e);
