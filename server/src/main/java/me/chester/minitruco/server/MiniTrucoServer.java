@@ -98,6 +98,7 @@ public class MiniTrucoServer {
                     sCliente = s.accept();
                 } catch (SocketTimeoutException e) {
                     if (Thread.interrupted()) {
+                        LOGGER.info("Thread principal foi interrompida): "+e.getMessage());
                         break;
                     }
                     LOGGER.info("Thread principal deu timeout (e não foi interrompida): "+e.getMessage());
@@ -118,6 +119,7 @@ public class MiniTrucoServer {
                 threadsJogadores.add(t);
                 LOGGER.info("Thread " + t + " adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
                 t.start();
+                LOGGER.info("Thread " + t + " iniciada. Jogadores conectados: " + threadsJogadores.size());
             }
         } catch (IOException e) {
             LOGGER.log(Level.INFO, "Erro de I/O no ServerSocket", e);
