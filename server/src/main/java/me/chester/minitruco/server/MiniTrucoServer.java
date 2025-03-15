@@ -97,11 +97,10 @@ public class MiniTrucoServer {
                 try {
                     sCliente = s.accept();
                 } catch (SocketTimeoutException e) {
-                    // Era um interrupt, vamos sair do loop
                     if (Thread.interrupted()) {
                         break;
                     }
-                    // Era só o timeout, vamos continuar
+                    LOGGER.info("Thread principal deu timeout (e não foi interrompida): "+e.getMessage());
                     continue;
                 }
                 if (threadsJogadores.size() >= MAX_JOGADORES) {
@@ -113,11 +112,11 @@ public class MiniTrucoServer {
                 JogadorConectado j = new JogadorConectado(sCliente);
                 j.setOnFinished((t) -> {
                     threadsJogadores.remove(t);
-                    LOGGER.info("Thread removida da coleção. Jogadores conectados: " + threadsJogadores.size());
+                    LOGGER.info("Thread " + t + " removida da coleção. Jogadores conectados: " + threadsJogadores.size());
                 });
                 Thread t = Thread.ofVirtual().name(j.getNome()).unstarted(j);
                 threadsJogadores.add(t);
-                LOGGER.info("Thread adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
+                LOGGER.info("Thread " + t + " adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
                 t.start();
             }
         } catch (IOException e) {
