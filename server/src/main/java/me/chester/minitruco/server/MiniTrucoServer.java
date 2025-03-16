@@ -96,7 +96,7 @@ public class MiniTrucoServer {
                 Socket sCliente;
                 try {
                     sCliente = s.accept();
-                    LOGGER.info("Socket estabelecido: "+ s);
+                    LOGGER.info("Socket estabelecido: "+ sCliente);
                 } catch (SocketTimeoutException e) {
                     if (Thread.interrupted()) {
                         LOGGER.info("Thread principal foi interrompida): "+e.getMessage());
@@ -104,7 +104,7 @@ public class MiniTrucoServer {
                     }
                     continue;
                 }
-                LOGGER.info("Não teve timeout no socket "+ s);
+                LOGGER.info("Não teve timeout no socket "+ sCliente);
                 if (threadsJogadores.size() >= MAX_JOGADORES) {
                     LOGGER.info("Máximo de jogadores (" + MAX_JOGADORES + ") atingido, recusando conexão");
                     sCliente.getOutputStream().write("! T Servidor lotado, tente novamente mais tarde.\n".getBytes());
@@ -112,13 +112,13 @@ public class MiniTrucoServer {
                     continue;
                 }
                 JogadorConectado j = new JogadorConectado(sCliente);
-                LOGGER.info("JogadorConectado criado para socket " + s + ". Nome:" + j.getNome());
+                LOGGER.info("JogadorConectado criado para socket " + sCliente + ". Nome:" + j.getNome());
                 j.setOnFinished((t) -> {
                     threadsJogadores.remove(t);
                     LOGGER.info("Thread " + t + " removida da coleção. Jogadores conectados: " + threadsJogadores.size());
                 });
                 Thread t = Thread.ofVirtual().name(j.getNome()).unstarted(j);
-                LOGGER.info("Thread " + t + " criada para socket " + s);
+                LOGGER.info("Thread " + t + " criada para socket " + sCliente);
                 threadsJogadores.add(t);
                 LOGGER.info("Thread " + t + " adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
                 t.start();
