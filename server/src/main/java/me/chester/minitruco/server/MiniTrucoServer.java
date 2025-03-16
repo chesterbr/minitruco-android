@@ -96,6 +96,7 @@ public class MiniTrucoServer {
                 Socket sCliente;
                 try {
                     sCliente = s.accept();
+                    LOGGER.info("Socket estabelecido: "+ s);
                 } catch (SocketTimeoutException e) {
                     if (Thread.interrupted()) {
                         LOGGER.info("Thread principal foi interrompida): "+e.getMessage());
@@ -116,10 +117,11 @@ public class MiniTrucoServer {
                     LOGGER.info("Thread " + t + " removida da coleção. Jogadores conectados: " + threadsJogadores.size());
                 });
                 Thread t = Thread.ofVirtual().name(j.getNome()).unstarted(j);
+                LOGGER.info("Thread " + t + " criada para socket " + s);
                 threadsJogadores.add(t);
                 LOGGER.info("Thread " + t + " adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
                 t.start();
-                LOGGER.info("Thread " + t + " iniciada. Jogadores conectados: " + threadsJogadores.size());
+                LOGGER.info("Thread " + t + " iniciada.");
             }
         } catch (IOException e) {
             LOGGER.log(Level.INFO, "Erro de I/O no ServerSocket", e);
