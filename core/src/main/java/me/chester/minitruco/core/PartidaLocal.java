@@ -404,7 +404,8 @@ public class PartidaLocal extends Partida {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                // No worries
+                Thread.currentThread().interrupt();
+                LOGGER.info("sleep interrompido: " + e);
             }
         }
 
@@ -743,7 +744,8 @@ public class PartidaLocal extends Partida {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            LOGGER.info("sleep interrompido: " + e);
         }
     }
 

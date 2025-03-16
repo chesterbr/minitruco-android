@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import me.chester.minitruco.R;
@@ -30,6 +31,7 @@ import me.chester.minitruco.core.Partida;
  */
 public abstract class SalaActivity extends AppCompatActivity {
 
+    private final static Logger LOGGER = Logger.getLogger("SalaActivity");
     protected Button btnIniciar;
     protected Button btnInverter;
     protected Button btnTrocar;
@@ -275,7 +277,8 @@ public abstract class SalaActivity extends AppCompatActivity {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
-            // não precisa tratar
+            Thread.currentThread().interrupt();
+            LOGGER.info("sleep interrompido: " + e);
         }
     }
 

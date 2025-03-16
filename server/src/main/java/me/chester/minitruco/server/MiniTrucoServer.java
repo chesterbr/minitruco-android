@@ -167,6 +167,7 @@ public class MiniTrucoServer {
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                LOGGER.info("sleep interrompido: " + e);
             }
         }
         LOGGER.info("Todos os jogadores finalizaram.");
