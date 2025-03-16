@@ -102,9 +102,9 @@ public class MiniTrucoServer {
                         LOGGER.info("Thread principal foi interrompida): "+e.getMessage());
                         break;
                     }
-                    LOGGER.info("Thread principal deu timeout (e não foi interrompida): "+e.getMessage());
                     continue;
                 }
+                LOGGER.info("Não teve timeout no socket "+ s);
                 if (threadsJogadores.size() >= MAX_JOGADORES) {
                     LOGGER.info("Máximo de jogadores (" + MAX_JOGADORES + ") atingido, recusando conexão");
                     sCliente.getOutputStream().write("! T Servidor lotado, tente novamente mais tarde.\n".getBytes());
@@ -112,6 +112,7 @@ public class MiniTrucoServer {
                     continue;
                 }
                 JogadorConectado j = new JogadorConectado(sCliente);
+                LOGGER.info("JogadorConectado criado para socket " + s + ". Nome:" + j.getNome());
                 j.setOnFinished((t) -> {
                     threadsJogadores.remove(t);
                     LOGGER.info("Thread " + t + " removida da coleção. Jogadores conectados: " + threadsJogadores.size());
