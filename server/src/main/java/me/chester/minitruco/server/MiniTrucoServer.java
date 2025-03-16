@@ -86,10 +86,12 @@ public class MiniTrucoServer {
      * threads de JogadorConectado se encerrem.
      */
     public static void aceitaConexoes() {
-        LOGGER.info("Servidor inicializado e escutando na porta " + PORTA_SERVIDOR);
+        LOGGER.info("Servidor inicializado");
         ServerSocket s = null;
         try {
             s = new ServerSocket(PORTA_SERVIDOR);
+            LOGGER.info("Servidor escutando na porta " + PORTA_SERVIDOR );
+            LOGGER.info("ServerSocket:" + s);
             // Vamos checar a cada 1s se recebemos um interrupt
             s.setSoTimeout(1000);
             while (true) {
