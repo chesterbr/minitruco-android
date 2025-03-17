@@ -119,7 +119,8 @@ public class MiniTrucoServer {
                     threadsJogadores.remove(t);
                     LOGGER.info("Thread " + t + " removida da coleção. Jogadores conectados: " + threadsJogadores.size());
                 });
-                Thread t = Thread.ofVirtual().name(j.getNome()).unstarted(j);
+//                Thread t = Thread.ofVirtual().name(j.getNome()).unstarted(j);
+                Thread t = Thread.ofPlatform().name(j.getNome()).unstarted(j);
                 LOGGER.info("Thread " + t + " criada para socket " + sCliente);
                 threadsJogadores.add(t);
                 LOGGER.info("Thread " + t + " adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
