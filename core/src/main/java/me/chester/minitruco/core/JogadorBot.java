@@ -370,7 +370,8 @@ public class JogadorBot extends Jogador implements Runnable {
         try {
             Thread.sleep(i);
         } catch (InterruptedException e) {
-            LOGGER.log(Level.INFO, "Interrupted during sleep", e);
+            Thread.currentThread().interrupt();
+            LOGGER.info("sleep interrompido: " + e);
         }
     }
 

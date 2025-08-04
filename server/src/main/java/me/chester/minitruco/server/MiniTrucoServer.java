@@ -86,24 +86,27 @@ public class MiniTrucoServer {
      * threads de JogadorConectado se encerrem.
      */
     public static void aceitaConexoes() {
-        LOGGER.info("Servidor inicializado e escutando na porta " + PORTA_SERVIDOR);
+        LOGGER.info("Servidor inicializado");
         ServerSocket s = null;
         try {
             s = new ServerSocket(PORTA_SERVIDOR);
+            LOGGER.info("Servidor escutando na porta " + PORTA_SERVIDOR );
+            LOGGER.info("ServerSocket:" + s);
             // Vamos checar a cada 1s se recebemos um interrupt
             s.setSoTimeout(1000);
             while (true) {
                 Socket sCliente;
                 try {
                     sCliente = s.accept();
+                    LOGGER.info("Socket estabelecido: "+ sCliente);
                 } catch (SocketTimeoutException e) {
-                    // Era um interrupt, vamos sair do loop
                     if (Thread.interrupted()) {
+                        LOGGER.info("Thread principal foi interrompida): "+e.getMessage());
                         break;
                     }
-                    // Era só o timeout, vamos continuar
                     continue;
                 }
+                LOGGER.info("Não teve timeout no socket "+ sCliente);
                 if (threadsJogadores.size() >= MAX_JOGADORES) {
                     LOGGER.info("Máximo de jogadores (" + MAX_JOGADORES + ") atingido, recusando conexão");
                     sCliente.getOutputStream().write("! T Servidor lotado, tente novamente mais tarde.\n".getBytes());
@@ -111,14 +114,18 @@ public class MiniTrucoServer {
                     continue;
                 }
                 JogadorConectado j = new JogadorConectado(sCliente);
+                LOGGER.info("JogadorConectado criado para socket " + sCliente + ". Nome:" + j.getNome());
                 j.setOnFinished((t) -> {
                     threadsJogadores.remove(t);
-                    LOGGER.info("Thread removida da coleção. Jogadores conectados: " + threadsJogadores.size());
+                    LOGGER.info("Thread " + t + " removida da coleção. Jogadores conectados: " + threadsJogadores.size());
                 });
-                Thread t = Thread.ofVirtual().name(j.getNome()).unstarted(j);
+//                Thread t = Thread.ofVirtual().name(j.getNome()).unstarted(j);
+                Thread t = Thread.ofPlatform().name(j.getNome()).unstarted(j);
+                LOGGER.info("Thread " + t + " criada para socket " + sCliente);
                 threadsJogadores.add(t);
-                LOGGER.info("Thread adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
+                LOGGER.info("Thread " + t + " adicionada na coleção. Jogadores conectados: " + threadsJogadores.size());
                 t.start();
+                LOGGER.info("Thread " + t + " iniciada.");
             }
         } catch (IOException e) {
             LOGGER.log(Level.INFO, "Erro de I/O no ServerSocket", e);
@@ -166,6 +173,7 @@ public class MiniTrucoServer {
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                LOGGER.info("sleep interrompido: " + e);
             }
         }
         LOGGER.info("Todos os jogadores finalizaram.");
