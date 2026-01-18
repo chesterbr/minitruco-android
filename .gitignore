@@ -35,3 +35,4 @@ build/
 
 #NDK
 obj/
+/.claude/settings.local.json

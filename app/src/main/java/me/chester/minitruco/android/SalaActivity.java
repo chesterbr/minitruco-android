@@ -4,6 +4,7 @@ import static me.chester.minitruco.core.TrucoUtils.nomeHtmlParaDisplay;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -55,6 +56,12 @@ public abstract class SalaActivity extends AppCompatActivity {
     protected int numJogadores;
     protected boolean isGerente;
     public String tipoSala;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdgeHelper.aplicaSystemBarInsets(this);
+    }
 
     /**
      * Em salas multiplayer (que de fato mostram uma "sala" com os nomes dos
