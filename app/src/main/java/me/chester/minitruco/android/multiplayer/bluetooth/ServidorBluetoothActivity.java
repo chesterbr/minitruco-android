@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import java.io.IOException;
@@ -70,8 +71,12 @@ public class ServidorBluetoothActivity extends BluetoothActivity {
         });
         btnInverter.setOnClickListener(v -> inverteAdversarios());
         btnTrocar.setOnClickListener(v -> trocaParceiro());
-        registerReceiver(receiverMantemDiscoverable, new IntentFilter(
-                BluetoothAdapter.ACTION_SCAN_MODE_CHANGED));
+        ContextCompat.registerReceiver(
+            this,
+            receiverMantemDiscoverable,
+            new IntentFilter(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED),
+            ContextCompat.RECEIVER_EXPORTED
+        );
         pedePraHabilitarDiscoverableSePreciso();
         if (!aguardandoDiscoverable) {
             iniciaThreads();

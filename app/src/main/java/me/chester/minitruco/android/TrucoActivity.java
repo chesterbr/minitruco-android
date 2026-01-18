@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import me.chester.minitruco.R;
@@ -122,6 +123,7 @@ public class TrucoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.truco);
+        EdgeToEdgeHelper.aplicaSystemBarInsets(this);
         reorientaLayoutPlacar();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         textViewPartidas = findViewById(R.id.textViewPartidas);
@@ -245,7 +247,12 @@ public class TrucoActivity extends Activity {
     protected void onResume() {
         super.onResume();
         mesa.setVisivel(true);
-        registerReceiver(broadcastReceiver, new IntentFilter(BROADCAST_IDENTIFIER));
+        ContextCompat.registerReceiver(
+            this,
+            broadcastReceiver,
+            new IntentFilter(BROADCAST_IDENTIFIER),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        );
     }
 
     @Override
