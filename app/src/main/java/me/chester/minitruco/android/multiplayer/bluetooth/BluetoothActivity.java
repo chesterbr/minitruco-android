@@ -92,6 +92,9 @@ public abstract class BluetoothActivity extends SalaActivity implements
     protected void onResume() {
         super.onResume();
         CriadorDePartida.setActivitySala(this);
+        if (permissoesBluetoothFaltantes().length > 0) {
+            finish();
+        }
     }
 
     private String[] permissoesBluetoothFaltantes() {
