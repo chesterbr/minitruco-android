@@ -20,7 +20,7 @@ android {
         resources.excludes.add("META-INF/*")
     }
 
-    namespace 'me.chester.minitruco'
+    namespace = 'me.chester.minitruco'
 
     testOptions {
         unitTests.all {
@@ -28,13 +28,13 @@ android {
             testLogging {
                 outputs.upToDateWhen { false }
                 events "passed", "failed", "skipped", "standardError"
-                showCauses true
-                showExceptions true
+                showCauses = true
+                showExceptions = true
             }
         }
     }
     buildFeatures {
-        buildConfig true
+        buildConfig = true
     }
 }
 
