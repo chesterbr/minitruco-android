@@ -12,4 +12,6 @@ Thank you for your interest in contributing to this game! While the documentatio
 
 5. Follow coding conventions and best practices mentioned in the documentation.
 
+6. AI-assisted contributions are welcome (the maintainer uses AI too!) - but every PR needs a real person behind it, who has personally reproduced the problem and tested the fix, and can discuss/defend the change if asked. See "Sobre uso de IA" in the development docs for details.
+
 Contributions from everyone are appreciated, regardless of language proficiency. Thank you for making this game better for the community!
