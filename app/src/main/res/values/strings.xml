@@ -215,8 +215,11 @@
     <string name="jogar_bold"><b>Jogar</b></string>
     <string name="novidades">
         <![CDATA[
-            - Bot parceiro usa estratégia mais previsível em jogos locais
-            - Quando alguém sai no meio de um jogo internet, troca a pessoa por bot e continua o jogo
+            - Suporte a controle/teclado (D-pad) para jogar em TVs (Fire TV) e outros aparelhos sem toque<br/>
+            - Mostra quem vai ser o \"pé\" na hora de decidir a mão de 10/11<br/>
+            - Corrige travamentos que às vezes aconteciam no servidor do jogo pela internet<br/>
+            - Atualizado para ficar em conformidade com as versões mais recentes do Android<br/>
+            - Política de contribuição do projeto agora fala sobre uso de IA (bem-vinda, desde que com supervisão humana) - veja no GitHub<br/>
         ]]>
     </string>
 </resources>
