@@ -14,10 +14,13 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
@@ -99,6 +102,20 @@ public class MesaView extends View {
     private RectF rectBotaoNao;
     private RectF rectBotaoAumento;
     private RectF rectBotaoAbertaFechada;
+
+    /**
+     * Elementos que podem receber foco via navegação por teclado/D-pad,
+     * numa determinada tela do jogo (mão de cartas, ou diálogo de
+     * sim/não). Ver {@link #elementosFocaveisAtuais()}.
+     */
+    private enum ElementoFocavel {CARTA_ESQUERDA, CARTA_MEIO, CARTA_DIREITA, AUMENTO, ABERTA_FECHADA, SIM, NAO}
+
+    /**
+     * Elemento atualmente selecionado via teclado/D-pad. Só é exibido
+     * (borda amarela) quando a view não está em touch mode - ver
+     * {@link #onDraw(Canvas)}.
+     */
+    private ElementoFocavel foco = ElementoFocavel.CARTA_ESQUERDA;
     private float tamanhoFonte;
     private float divisorTamanhoFonte = 20;
     private int ultimoyDaPergunta = -1;
@@ -218,6 +235,8 @@ public class MesaView extends View {
     private void init(Context context) {
         this.density = context.getResources().getDisplayMetrics().density;
         this.indicadorDrag = context.getResources().getDrawable(R.drawable.indicador_drag);
+        setFocusable(true);
+        setFocusableInTouchMode(true);
     }
 
     public void setTrucoActivity(TrucoActivity trucoActivity) {
@@ -297,6 +316,10 @@ public class MesaView extends View {
                 cartas[i].movePara(leftBaralho, topBaralho);
             }
             cartas[0].visible = false;
+            for (int i = 4; i <= 15; i++) {
+                cartas[i].visible = false;
+            }
+            requestFocus();
         }
 
         // Define posição e tamanho da caixa de pergunta e seus botões
@@ -512,12 +535,10 @@ public class MesaView extends View {
                     respondePergunta(false);
                 }
                 if (mostrarBotaoAumento && rectBotaoAumento.contains(x, y)) {
-                    mostrarBotaoAumento = false;
-                    statusVez = STATUS_VEZ_HUMANO_AGUARDANDO;
-                    trucoActivity.partida.aumentaAposta(trucoActivity.jogadorHumano);
+                    ativaBotaoAumento();
                 }
                 if (mostrarBotaoAbertaFechada && rectBotaoAbertaFechada.contains(x, y)) {
-                    vaiJogarFechada = !vaiJogarFechada;
+                    ativaBotaoAbertaFechada();
                 }
                 // Verificamos primeiro a carta mais à direita porque ela é desenhada
                 // em cima da do meio, e esta em cima da carta à esquerda
@@ -546,6 +567,144 @@ public class MesaView extends View {
                 return true;
             default:
                 return super.onTouchEvent(event);
+        }
+    }
+
+    /**
+     * Aceita o pedido de aumento em curso (botão "truco"/"seis"/etc).
+     */
+    private void ativaBotaoAumento() {
+        mostrarBotaoAumento = false;
+        statusVez = STATUS_VEZ_HUMANO_AGUARDANDO;
+        trucoActivity.partida.aumentaAposta(trucoActivity.jogadorHumano);
+    }
+
+    /**
+     * Alterna entre jogar a próxima carta aberta ou fechada.
+     */
+    private void ativaBotaoAbertaFechada() {
+        vaiJogarFechada = !vaiJogarFechada;
+    }
+
+    /**
+     * Lista, da esquerda para a direita (mesma ordem em que aparecem na tela),
+     * os elementos que podem ser navegados via teclado/D-pad no momento.
+     * Espelha exatamente as condições verificadas em {@link #onTouchEvent(MotionEvent)}.
+     * <p>
+     * As cartas continuam na lista mesmo fora da vez do humano (assim como o
+     * toque nelas continua não fazendo nada via {@link #jogaCarta(int)}), para
+     * que o foco atual permaneça "grudado" na carta certa e, quando a vez
+     * voltar, {@link #focoValido(List, ElementoFocavel)} não precise adivinhar
+     * qual carta focar - a exibição da borda de destaque nelas é que fica
+     * condicionada à vez do humano, em {@link #onDraw(Canvas)}.
+     */
+    private List<ElementoFocavel> elementosFocaveisAtuais() {
+        List<ElementoFocavel> elementos = new ArrayList<>();
+        if (mostrarPerguntaAumento || mostrarPerguntaMaoDeX) {
+            elementos.add(ElementoFocavel.SIM);
+            elementos.add(ElementoFocavel.NAO);
+            return elementos;
+        }
+        if (mostrarBotaoAumento) {
+            elementos.add(ElementoFocavel.AUMENTO);
+        }
+        if (!cartas[4].descartada) {
+            elementos.add(ElementoFocavel.CARTA_ESQUERDA);
+        }
+        if (!cartas[5].descartada) {
+            elementos.add(ElementoFocavel.CARTA_MEIO);
+        }
+        if (!cartas[6].descartada) {
+            elementos.add(ElementoFocavel.CARTA_DIREITA);
+        }
+        if (mostrarBotaoAbertaFechada) {
+            elementos.add(ElementoFocavel.ABERTA_FECHADA);
+        }
+        return elementos;
+    }
+
+    /**
+     * Garante que o foco atual seja um elemento realmente navegável no
+     * momento, corrigindo-o (sem precisar espalhar resets em cada método que
+     * muda a visibilidade de botões/diálogos) sempre que o conjunto de
+     * elementos focáveis mudar.
+     */
+    private ElementoFocavel focoValido(List<ElementoFocavel> focaveis, ElementoFocavel atual) {
+        if (focaveis.contains(atual)) {
+            return atual;
+        }
+        // Prioriza a primeira carta não jogada (ex.: quando a vez volta para
+        // o humano após jogar uma carta) em vez do primeiro elemento da
+        // lista, que poderia ser o botão de aumento
+        for (ElementoFocavel elemento : focaveis) {
+            if (elemento == ElementoFocavel.CARTA_ESQUERDA
+                || elemento == ElementoFocavel.CARTA_MEIO
+                || elemento == ElementoFocavel.CARTA_DIREITA) {
+                return elemento;
+            }
+        }
+        return focaveis.isEmpty() ? null : focaveis.get(0);
+    }
+
+    /**
+     * Executa a ação do elemento atualmente focado (equivalente a tocá-lo na
+     * tela), disparada por {@link #onKeyDown(int, KeyEvent)}.
+     */
+    private void ativaElementoFocado(ElementoFocavel elemento) {
+        switch (elemento) {
+            case CARTA_ESQUERDA:
+                jogaCarta(0);
+                break;
+            case CARTA_MEIO:
+                jogaCarta(1);
+                break;
+            case CARTA_DIREITA:
+                jogaCarta(2);
+                break;
+            case AUMENTO:
+                ativaBotaoAumento();
+                break;
+            case ABERTA_FECHADA:
+                ativaBotaoAbertaFechada();
+                break;
+            case SIM:
+                respondePergunta(true);
+                break;
+            case NAO:
+                respondePergunta(false);
+                break;
+        }
+    }
+
+    /**
+     * Permite navegar (setas esquerda/direita) e confirmar (centro/enter) os
+     * elementos interativos da mesa via teclado/D-pad, para dispositivos sem
+     * touchscreen ou controlados por controle remoto.
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        List<ElementoFocavel> focaveis = elementosFocaveisAtuais();
+        if (focaveis.isEmpty()) {
+            return super.onKeyDown(keyCode, event);
+        }
+        foco = focoValido(focaveis, foco);
+        int indice = focaveis.indexOf(foco);
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                foco = focaveis.get((indice - 1 + focaveis.size()) % focaveis.size());
+                invalidate();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                foco = focaveis.get((indice + 1) % focaveis.size());
+                invalidate();
+                return true;
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+            case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_NUMPAD_ENTER:
+                ativaElementoFocado(foco);
+                return true;
+            default:
+                return super.onKeyDown(keyCode, event);
         }
     }
 
@@ -614,6 +773,7 @@ public class MesaView extends View {
             for (int j = 1; j <= 4; j++) {
                 CartaVisual c = cartas[4 + i + 3 * (j - 1)];
                 c.setFechada(true);
+                c.visible = true;
                 entregaCarta(c, j, i);
             }
         }
@@ -659,6 +819,12 @@ public class MesaView extends View {
                 c.escura = false;
                 cartasJogadas.remove(c);
             }
+        }
+        // Mantém as cartas invisíveis quando estiverem empilhadas no
+        // baralho para evitar artefatos de zoom que se acumulam
+        aguardaFimAnimacoes();
+        for (int i = 4; i <= 15; i++) {
+            cartas[i].visible = false;
         }
     }
 
@@ -733,11 +899,26 @@ public class MesaView extends View {
             case 3:
                 return (getWidth() / 2) - (CartaVisual.largura / 2) + (i - 1) * deslocamentoHorizontalEntreCartas;
             case 2:
-                return getWidth() - CartaVisual.largura;
+                return getWidth() - CartaVisual.largura - margemBordaCarta();
             case 4:
             default:
-                return 0;
+                return margemBordaCarta();
         }
+    }
+
+    /**
+     * Folga entre as cartas e a borda do Canvas, para as posições em que
+     * elas encostariam exatamente em x=0/y=0 ou na largura/altura da mesa.
+     * <p>
+     * Sem essa folga, algumas TVs (que escalam o app de uma resolução menor
+     * para a física, ex.: 1080p -> 4K) deixam "fantasmas" de 1px do contorno
+     * da carta na borda extrema da tela, mesmo depois que ela sai dali - a
+     * suspeita é de um problema de composição/upscale fora do nosso controle
+     * (o Canvas é sempre redesenhado por inteiro a cada frame), então a
+     * folga é só pra nunca dar a essas TVs um pixel bem na borda pra "errar".
+     */
+    private int margemBordaCarta() {
+        return (int) (3 * density);
     }
 
     /**
@@ -747,13 +928,13 @@ public class MesaView extends View {
         int deslocamentoVerticalEntreCartas = CartaVisual.altura / 12;
         switch (numJogador) {
             case 1:
-                return getHeight() - CartaVisual.altura;
+                return getHeight() - CartaVisual.altura - margemBordaCarta();
             case 2:
             case 4:
                 return getHeight() / 2 - CartaVisual.altura / 2 - (i - 1) * deslocamentoVerticalEntreCartas;
             case 3:
             default:
-                return 0;
+                return margemBordaCarta();
         }
     }
 
@@ -796,6 +977,20 @@ public class MesaView extends View {
 
         // Fundo verde
         canvas.drawRGB(27, 142, 60);
+
+        // Atualiza o foco de navegação por teclado/D-pad e decide se a borda
+        // de destaque deve ser exibida (só fora do touch mode, para não
+        // atrapalhar quem está jogando por toque - ver isInTouchMode())
+        List<ElementoFocavel> focaveis = elementosFocaveisAtuais();
+        foco = focoValido(focaveis, foco);
+        boolean mostrarFoco = !isInTouchMode();
+        // A borda das cartas só aparece quando realmente é a vez do humano
+        // jogar (ver elementosFocaveisAtuais() sobre o foco continuar
+        // "grudado" nelas mesmo fora da vez, sem mostrar a borda)
+        boolean mostrarFocoCarta = mostrarFoco && statusVez == STATUS_VEZ_HUMANO_OK;
+        cartas[4].focada = mostrarFocoCarta && foco == ElementoFocavel.CARTA_ESQUERDA;
+        cartas[5].focada = mostrarFocoCarta && foco == ElementoFocavel.CARTA_MEIO;
+        cartas[6].focada = mostrarFocoCarta && foco == ElementoFocavel.CARTA_DIREITA;
 
         // Desenha as cartas que já foram jogadas (se houverem),
         // na ordem em que foram jogadas
@@ -876,17 +1071,17 @@ public class MesaView extends View {
             indicadorDrag.setBounds(rectPergunta.right - tamanhoIndicador, rectPergunta.top + margemIndicador, rectPergunta.right, rectPergunta.top + tamanhoIndicador);
             indicadorDrag.draw(canvas);
 
-            desenhaBotao("Sim", canvas, rectBotaoSim);
-            desenhaBotao("Não", canvas, rectBotaoNao);
+            desenhaBotao("Sim", canvas, rectBotaoSim, mostrarFoco && foco == ElementoFocavel.SIM);
+            desenhaBotao("Não", canvas, rectBotaoNao, mostrarFoco && foco == ElementoFocavel.NAO);
         }
 
         desenhaBalao(canvas);
         desenhaIndicadorDeVez(canvas);
         if (mostrarBotaoAumento) {
-            desenhaBotao(textosBotaoAumento.get(valorProximaAposta), canvas, rectBotaoAumento);
+            desenhaBotao(textosBotaoAumento.get(valorProximaAposta), canvas, rectBotaoAumento, mostrarFoco && foco == ElementoFocavel.AUMENTO);
         }
         if (mostrarBotaoAbertaFechada) {
-            desenhaBotao(vaiJogarFechada ? "Aberta" : "Fechada", canvas, rectBotaoAbertaFechada);
+            desenhaBotao(vaiJogarFechada ? "Aberta" : "Fechada", canvas, rectBotaoAbertaFechada, mostrarFoco && foco == ElementoFocavel.ABERTA_FECHADA);
         }
 
         // TODO: modo automático nunca pede truco (e crasha bonito se a gente
@@ -899,7 +1094,7 @@ public class MesaView extends View {
         }
     }
 
-    private void desenhaBotao(String texto, Canvas canvas, RectF outerRect) {
+    private void desenhaBotao(String texto, Canvas canvas, RectF outerRect, boolean focado) {
         // TODO evitar instanciar objetos aqui (e no caller)
         Paint paint = new Paint();
         paint.setStyle(Style.FILL);
@@ -916,6 +1111,13 @@ public class MesaView extends View {
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Align.CENTER);
         canvas.drawText(texto, outerRect.centerX(), outerRect.centerY() - tamanhoFonte * 0.2f + tamanhoFonte * 0.5f, paint);
+        // Borda de destaque, se o botão estiver selecionado via teclado/D-pad
+        if (focado) {
+            paint.setStyle(Style.STROKE);
+            paint.setStrokeWidth(3);
+            paint.setColor(Color.YELLOW);
+            canvas.drawRoundRect(outerRect, tamanhoFonte * 4 / 5, tamanhoFonte * 4 / 5, paint);
+        }
     }
 
     private void desenhaIndicadorDeVez(Canvas canvas) {
