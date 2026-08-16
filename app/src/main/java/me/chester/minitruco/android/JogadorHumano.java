@@ -28,6 +28,8 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
     int valorProximaAposta;
 
+    private int posicaoAbsolutaDoPe;
+
     public JogadorHumano(TrucoActivity activity, MesaView mesa) {
         this.activity = activity;
         this.mesa = mesa;
@@ -62,7 +64,7 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
 
     @Override
     public void informaMaoDeX(Carta[] cartasParceiro) {
-        mesa.maoDeX(cartasParceiro);
+        mesa.maoDeX(cartasParceiro, convertePosicaoJogadorParaPosicaoTela(posicaoAbsolutaDoPe));
     }
 
     @Override
@@ -76,6 +78,12 @@ public class JogadorHumano extends me.chester.minitruco.core.JogadorHumano {
         activity.setValorMao(partida.getModo().valorInicialDaMao());
         mesa.setPosicaoVez(posicaoNaTela(jogadorQueAbre));
         activity.tiraDestaqueDoPlacar();
+
+        // Pé = posição anterior à do mão na rotação (mão..pé é 0..3)
+        posicaoAbsolutaDoPe = jogadorQueAbre.getPosicao() - 1;
+        if (posicaoAbsolutaDoPe < 1) {
+            posicaoAbsolutaDoPe += 4;
+        }
     }
 
     @Override
