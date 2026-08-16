@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.preference.PreferenceManager;
 
 import java.io.BufferedReader;
@@ -59,6 +60,14 @@ public class ClienteInternetActivity extends SalaActivity {
         inicializaLayoutSala();
         configuraBotoes();
         conectaEIniciaProcessamentoDeNotificacoes();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                desconecta();
+                finish();
+            }
+        });
     }
 
     private void configuraBotoes() {
@@ -179,12 +188,6 @@ public class ClienteInternetActivity extends SalaActivity {
     protected void onResume() {
         super.onResume();
         CriadorDePartida.setActivitySala(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        desconecta();
-        finish();
     }
 
     private boolean conecta() {
