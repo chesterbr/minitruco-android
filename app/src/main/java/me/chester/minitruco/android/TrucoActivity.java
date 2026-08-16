@@ -186,6 +186,8 @@ public class TrucoActivity extends Activity {
 
     public void novaPartidaClickHandler(View v) {
         btnNovaPartida.setVisibility(View.INVISIBLE);
+        mesa.setFocusable(true);
+        mesa.requestFocus();
         iniciaNovaPartida();
     }
 
@@ -384,6 +386,14 @@ public class TrucoActivity extends Activity {
             // servidor bluetooth (em ambos os casos, estará na posição 1).
             if (jogadorHumano.getPosicao() == 1) {
                 btnNovaPartida.setVisibility(View.VISIBLE);
+                // Tira o foco da MesaView antes de focar o botão: como ele
+                // fica centralizado por cima dela (que ocupa a tela toda),
+                // uma seta pressionada por engano devolveria o foco pra
+                // MesaView (candidata "por baixo" em qualquer direção) e,
+                // como o botão fica contido dentro do retângulo dela, nunca
+                // mais seria possível navegar de volta até ele
+                mesa.setFocusable(false);
+                btnNovaPartida.requestFocus();
                 if (partida.semJogadoresRemotos()) {
                     promoveJogoInternet();
                 }

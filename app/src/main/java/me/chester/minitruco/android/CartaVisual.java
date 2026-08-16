@@ -179,6 +179,12 @@ public class CartaVisual extends Carta {
                 canvas.drawRoundRect(rectCarta, raio_canto, raio_canto, paintCartaEscura);
             }
 
+            if (focada) {
+                paintCarta.setStrokeWidth(5);
+                paintCarta.setColor(Color.YELLOW);
+                canvas.drawRoundRect(rectCarta, raio_canto, raio_canto, paintCarta);
+            }
+
         }
 
     }
@@ -360,6 +366,12 @@ public class CartaVisual extends Carta {
      * rodada)
      */
     public boolean destacada = false;
+
+    /**
+     * Se true, desenha uma borda amarela indicando que esta é a carta
+     * selecionada via navegação por teclado/D-pad
+     */
+    public boolean focada = false;
 
     /**
      * Acessor dos resources da aplicação

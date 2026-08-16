@@ -27,8 +27,11 @@
             android:layout_width="200sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/fundo_botao_nova_partida"
+            android:foreground="@drawable/foco_botao"
             android:onClick="novaPartidaClickHandler"
             android:visibility="gone"
+            android:textColor="#FFFFFF"
             android:text="Nova Partida" />
 
     </FrameLayout>
@@ -160,6 +163,7 @@
             android:layout_weight="1"
             android:layout_margin="1dp"
             android:background="@drawable/borda_placar"
+            android:focusable="false"
             android:orientation="vertical">
 
             <FrameLayout
