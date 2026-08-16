@@ -111,18 +111,21 @@
                         android:id="@+id/btnTrocar"
                         android:layout_width="170dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
                         android:text="\u2191 Trocar Parceiro(a)" />
 
                     <Button
                         android:id="@+id/btnInverter"
                         android:layout_width="170dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
                         android:text="\u2190 Inverter Dupla \u2192" />
 
                     <Button
                         android:id="@+id/btnIniciar"
                         android:layout_width="170dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
                         android:focusedByDefault="true"
                         android:text="💬\u00A0JOGAR"
                         android:textStyle="bold" />
@@ -195,6 +198,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_margin="3dp"
             android:text="Criar sala\nprivada"
             android:textStyle="bold" />
 
@@ -203,6 +207,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_margin="3dp"
             android:text="Entrar com\ncódigo"
             android:textStyle="bold" />
 
@@ -211,6 +216,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_margin="3dp"
             android:visibility="gone"
             android:text="Trocar\nde sala"
             android:textStyle="bold" />
