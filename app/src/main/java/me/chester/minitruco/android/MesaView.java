@@ -10,6 +10,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -90,6 +91,7 @@ public class MesaView extends View {
     private int valorProximaAposta;
     protected int velocidade = 1;
     private int posicaoVez;
+    private int posicaoPe;
     private int corFundoCartaBalao = Color.WHITE;
     private TrucoActivity trucoActivity;
     private Rect rectPergunta;
@@ -415,13 +417,47 @@ public class MesaView extends View {
      * Torna as cartas da mão de 10/11 visíveis e exibe a pergunta de aceite
      *
      * @param cartasParceiro cartas do seu parceiro
+     * @param posicaoPe posição na tela (1-4) de quem será o pé nesta mão
      */
-    public void maoDeX(Carta[] cartasParceiro) {
+    public void maoDeX(Carta[] cartasParceiro, int posicaoPe) {
         for (int i = 0; i <= 2; i++) {
             cartas[10 + i].copiaCarta(cartasParceiro[i]);
         }
         perguntaMaoDeX = "Aceita mão de " + trucoActivity.partida.getModo().pontuacaoParaMaoDeX() + "?";
         mostrarPerguntaMaoDeX = true;
+        this.posicaoPe = posicaoPe;
+    }
+
+    /**
+     * Seta indicando a posição de quem será o pé, para exibir ao lado da
+     * pergunta de mão de 10/11 (mesmos glyphs de desenhaIndicadorDeVez).
+     */
+    private String setaPe() {
+        switch (posicaoPe) {
+            case 1:
+                return "⇩";
+            case 2:
+                return "⇨";
+            case 3:
+                return "⇧";
+            case 4:
+                return "⇦";
+            default:
+                return "";
+        }
+    }
+
+    /**
+     * Ícone de pé para o marcador de mão de 10/11: prefere o emoji 🦶 (mais
+     * bonito), caindo para 👣 (mais antigo, melhor suportado em Android
+     * anterior ao Marshmallow, onde não dá pra checar via hasGlyph) quando a
+     * fonte do aparelho não tiver o glyph de 🦶.
+     */
+    private String iconePe() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && paintPergunta.hasGlyph("🦶")) {
+            return "🦶";
+        }
+        return "👣";
     }
 
     /**
@@ -807,9 +843,33 @@ public class MesaView extends View {
             canvas.drawRect(rectPergunta, paintPergunta);
 
             paintPergunta.setTextSize(tamanhoFonte * 0.75f);
-            paintPergunta.setTextAlign(Align.CENTER);
             paintPergunta.setStyle(Style.FILL);
-            canvas.drawText(textoPergunta, rectPergunta.centerX(), rectPergunta.top + paintPergunta.getTextSize() * 2.3f, paintPergunta);
+            float yTextoPergunta = rectPergunta.top + paintPergunta.getTextSize() * 2.3f;
+
+            if (mostrarPerguntaMaoDeX) {
+                float margemPergunta = tamanhoFonte * 0.3f;
+
+                paintPergunta.setTextAlign(Align.LEFT);
+                canvas.drawText(textoPergunta, rectPergunta.left + margemPergunta, yTextoPergunta, paintPergunta);
+
+                // Seta do pé: mesmo tamanho/cor da seta de vez (bem maior e mais
+                // chamativa que o texto da pergunta), para ficar reconhecível
+                String seta = setaPe();
+                float xSeta = rectPergunta.right - margemPergunta;
+                float tamanhoSeta = CartaVisual.altura / 3f;
+                paintPergunta.setTextSize(tamanhoSeta);
+                paintPergunta.setColor(Color.YELLOW);
+                paintPergunta.setTextAlign(Align.RIGHT);
+                canvas.drawText(seta, xSeta, rectPergunta.top + tamanhoSeta * 1.05f, paintPergunta);
+                float larguraSeta = paintPergunta.measureText(seta);
+
+                paintPergunta.setTextSize(tamanhoFonte * 0.75f);
+                paintPergunta.setColor(Color.WHITE);
+                canvas.drawText(iconePe(), xSeta - larguraSeta - margemPergunta / 2, yTextoPergunta, paintPergunta);
+            } else {
+                paintPergunta.setTextAlign(Align.CENTER);
+                canvas.drawText(textoPergunta, rectPergunta.centerX(), yTextoPergunta, paintPergunta);
+            }
 
             int tamanhoIndicador = (int) (rectBotaoSim.height() / 2);
             int margemIndicador = tamanhoIndicador / 10;
