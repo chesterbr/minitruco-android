@@ -316,6 +316,9 @@ public class MesaView extends View {
                 cartas[i].movePara(leftBaralho, topBaralho);
             }
             cartas[0].visible = false;
+            for (int i = 4; i <= 15; i++) {
+                cartas[i].visible = false;
+            }
             requestFocus();
         }
 
@@ -770,6 +773,7 @@ public class MesaView extends View {
             for (int j = 1; j <= 4; j++) {
                 CartaVisual c = cartas[4 + i + 3 * (j - 1)];
                 c.setFechada(true);
+                c.visible = true;
                 entregaCarta(c, j, i);
             }
         }
@@ -815,6 +819,12 @@ public class MesaView extends View {
                 c.escura = false;
                 cartasJogadas.remove(c);
             }
+        }
+        // Mantém as cartas invisíveis quando estiverem empilhadas no
+        // baralho para evitar artefatos de zoom que se acumulam
+        aguardaFimAnimacoes();
+        for (int i = 4; i <= 15; i++) {
+            cartas[i].visible = false;
         }
     }
 
