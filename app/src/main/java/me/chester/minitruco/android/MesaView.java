@@ -889,11 +889,26 @@ public class MesaView extends View {
             case 3:
                 return (getWidth() / 2) - (CartaVisual.largura / 2) + (i - 1) * deslocamentoHorizontalEntreCartas;
             case 2:
-                return getWidth() - CartaVisual.largura;
+                return getWidth() - CartaVisual.largura - margemBordaCarta();
             case 4:
             default:
-                return 0;
+                return margemBordaCarta();
         }
+    }
+
+    /**
+     * Folga entre as cartas e a borda do Canvas, para as posições em que
+     * elas encostariam exatamente em x=0/y=0 ou na largura/altura da mesa.
+     * <p>
+     * Sem essa folga, algumas TVs (que escalam o app de uma resolução menor
+     * para a física, ex.: 1080p -> 4K) deixam "fantasmas" de 1px do contorno
+     * da carta na borda extrema da tela, mesmo depois que ela sai dali - a
+     * suspeita é de um problema de composição/upscale fora do nosso controle
+     * (o Canvas é sempre redesenhado por inteiro a cada frame), então a
+     * folga é só pra nunca dar a essas TVs um pixel bem na borda pra "errar".
+     */
+    private int margemBordaCarta() {
+        return (int) (3 * density);
     }
 
     /**
@@ -903,13 +918,13 @@ public class MesaView extends View {
         int deslocamentoVerticalEntreCartas = CartaVisual.altura / 12;
         switch (numJogador) {
             case 1:
-                return getHeight() - CartaVisual.altura;
+                return getHeight() - CartaVisual.altura - margemBordaCarta();
             case 2:
             case 4:
                 return getHeight() / 2 - CartaVisual.altura / 2 - (i - 1) * deslocamentoVerticalEntreCartas;
             case 3:
             default:
-                return 0;
+                return margemBordaCarta();
         }
     }
 
