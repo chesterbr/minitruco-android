@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "me.chester.minitruco"
         minSdkVersion 16
-        targetSdkVersion 35
+        targetSdkVersion 36
     }
 
     buildTypes {

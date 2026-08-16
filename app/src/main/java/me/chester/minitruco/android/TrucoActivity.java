@@ -13,8 +13,10 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.window.OnBackInvokedDispatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -125,6 +127,11 @@ public class TrucoActivity extends Activity {
         setContentView(R.layout.truco);
         EdgeToEdgeHelper.aplicaSystemBarInsets(this);
         reorientaLayoutPlacar();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT, this::onBackPressed);
+        }
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         textViewPartidas = findViewById(R.id.textViewPartidas);
         textViewNos = findViewById(R.id.textViewNos);
@@ -274,6 +281,7 @@ public class TrucoActivity extends Activity {
     }
 
     @Override
+    @SuppressLint("GestureBackNavigation") // chamado manualmente via OnBackInvokedCallback no onCreate (API 33+)
     public void onBackPressed() {
         boolean naoPrecisaConfirmar = !preferences.getBoolean("sempreConfirmaFecharJogo", true);
         if (partida == null || partida.finalizada || naoPrecisaConfirmar) {
