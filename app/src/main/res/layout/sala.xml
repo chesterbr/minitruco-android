@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -127,8 +128,13 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
                         android:focusedByDefault="true"
-                        android:text="💬\u00A0JOGAR"
-                        android:textStyle="bold" />
+                        android:maxLines="1"
+                        android:text="Jogar"
+                        android:textStyle="bold"
+                        app:autoSizeMaxTextSize="24sp"
+                        app:autoSizeMinTextSize="10sp"
+                        app:autoSizeStepGranularity="1sp"
+                        app:autoSizeTextType="uniform" />
                 </LinearLayout>
 
 
