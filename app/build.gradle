@@ -23,6 +23,7 @@ android {
     namespace = 'me.chester.minitruco'
 
     testOptions {
+        unitTests.returnDefaultValues = true
         unitTests.all {
             useJUnitPlatform()
             testLogging {
