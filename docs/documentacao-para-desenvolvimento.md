@@ -62,6 +62,10 @@ Se você for trabalhar em algum issue com intenção de fazer um pull request, s
 
 Familiarize-se com esta documentação, com as regras do truco e com o código-fonte antes de começar a contribuir. Se tiver alguma dúvida, pode abrir um issue ou entrar em contato comigo de outra forma.
 
+### Sobre uso de IA
+
+Não tenho nenhum problema com colaboradores usando IA pra desenvolver (eu uso, inclusive) - o que eu preciso é de uma pessoa de verdade supervisionando: alguém que reproduziu o problema, testou a solução e entende o que está sendo proposto o suficiente pra discutir/defender a mudança se eu perguntar algo (como costumo fazer). PRs que parecem ter sido só "IA encontrou e resolveu um issue", sem esse acompanhamento humano, não vão ser aceitas - então descreva como testou (aparelho, versão do Android, passos) e, se usou IA, seja transparente sobre isso.
+
 ## Diretrizes e decisões
 
 As **diretrizes do projeto** são:
