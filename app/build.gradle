@@ -1,18 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "me.chester.minitruco"
         minSdkVersion 16
-        targetSdkVersion 35
+        targetSdkVersion 36
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.txt'
         }
     }
 
@@ -20,21 +20,22 @@ android {
         resources.excludes.add("META-INF/*")
     }
 
-    namespace 'me.chester.minitruco'
+    namespace = 'me.chester.minitruco'
 
     testOptions {
+        unitTests.returnDefaultValues = true
         unitTests.all {
             useJUnitPlatform()
             testLogging {
                 outputs.upToDateWhen { false }
                 events "passed", "failed", "skipped", "standardError"
-                showCauses true
-                showExceptions true
+                showCauses = true
+                showExceptions = true
             }
         }
     }
     buildFeatures {
-        buildConfig true
+        buildConfig = true
     }
 }
 
@@ -46,6 +47,7 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0-M1'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.0-M1'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.mockito:mockito-core:5.3.1'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.3.1'
     testImplementation 'org.hamcrest:hamcrest:2.2'

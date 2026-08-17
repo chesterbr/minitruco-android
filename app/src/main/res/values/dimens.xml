@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: BSD-3-Clause -->
+<!-- Copyright © 2005-2023 Carlos Duarte do Nascimento "Chester" <cd@pobox.com> -->
+<resources>
+    <!-- Tamanho dos ícones de modo (Paulista/Mineiro/Outros) na tela de
+         título. Menor aqui (telas estreitas) para não cortar o terceiro
+         ícone; telas com pelo menos 360dp de largura usam o valor maior
+         em values-w360dp/dimens.xml. -->
+    <dimen name="tamanho_icone_modo">38sp</dimen>
+</resources>

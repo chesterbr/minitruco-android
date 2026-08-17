@@ -13,8 +13,10 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.window.OnBackInvokedDispatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -125,6 +127,11 @@ public class TrucoActivity extends Activity {
         setContentView(R.layout.truco);
         EdgeToEdgeHelper.aplicaSystemBarInsets(this);
         reorientaLayoutPlacar();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT, this::onBackPressed);
+        }
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         textViewPartidas = findViewById(R.id.textViewPartidas);
         textViewNos = findViewById(R.id.textViewNos);
@@ -179,6 +186,8 @@ public class TrucoActivity extends Activity {
 
     public void novaPartidaClickHandler(View v) {
         btnNovaPartida.setVisibility(View.INVISIBLE);
+        mesa.setFocusable(true);
+        mesa.requestFocus();
         iniciaNovaPartida();
     }
 
@@ -274,6 +283,7 @@ public class TrucoActivity extends Activity {
     }
 
     @Override
+    @SuppressLint("GestureBackNavigation") // chamado manualmente via OnBackInvokedCallback no onCreate (API 33+)
     public void onBackPressed() {
         boolean naoPrecisaConfirmar = !preferences.getBoolean("sempreConfirmaFecharJogo", true);
         if (partida == null || partida.finalizada || naoPrecisaConfirmar) {
@@ -376,6 +386,14 @@ public class TrucoActivity extends Activity {
             // servidor bluetooth (em ambos os casos, estará na posição 1).
             if (jogadorHumano.getPosicao() == 1) {
                 btnNovaPartida.setVisibility(View.VISIBLE);
+                // Tira o foco da MesaView antes de focar o botão: como ele
+                // fica centralizado por cima dela (que ocupa a tela toda),
+                // uma seta pressionada por engano devolveria o foco pra
+                // MesaView (candidata "por baixo" em qualquer direção) e,
+                // como o botão fica contido dentro do retângulo dela, nunca
+                // mais seria possível navegar de volta até ele
+                mesa.setFocusable(false);
+                btnNovaPartida.requestFocus();
                 if (partida.semJogadoresRemotos()) {
                     promoveJogoInternet();
                 }

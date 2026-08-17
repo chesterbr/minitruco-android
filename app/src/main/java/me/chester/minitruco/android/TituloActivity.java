@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.core.util.Consumer;
 import androidx.preference.PreferenceManager;
 
@@ -64,6 +65,15 @@ public class TituloActivity extends SalaActivity {
         configuraBotoesMultiplayer();
         mostraNotificacaoInicial();
         migraOpcoesLegadas();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    finishAndRemoveTask();
+                }
+            }
+        });
 
         TextView textViewLinkContato = findViewById(R.id.textViewLinkContato);
         SpannableString textoLinkContato = new SpannableString(textViewLinkContato.getText());
@@ -316,13 +326,6 @@ public class TituloActivity extends SalaActivity {
         Intent settingsActivity = new Intent(getBaseContext(),
             OpcoesActivity.class);
         startActivity(settingsActivity);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.finishAndRemoveTask();
-        }
     }
 
     public void modoButtonClickHandler(View view) {
