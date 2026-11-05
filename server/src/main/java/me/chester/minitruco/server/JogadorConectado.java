@@ -99,7 +99,6 @@ public class JogadorConectado extends Jogador implements Runnable {
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     cliente.getInputStream()));
             out = new PrintStream(cliente.getOutputStream());
-            iniciaThreadAuxiliar();
             String linha = "";
             while (linha != null) {
                 try {
@@ -109,11 +108,9 @@ public class JogadorConectado extends Jogador implements Runnable {
                     break;
                 }
                 if (linha != null && linha.matches("^(GET|HEAD|POST|PUT|DELETE|OPTIONS|TRACE|CONNECT) .*$")) {
-                    // Desabilita o monitor de conexão (se o GET chegar antes de ele
-                    // começar, senão também paciência)
-                    finalizaThreadAuxiliar();
                     boolean isGet = linha.startsWith("GET");
                     boolean isStatus = linha.matches("^(GET|HEAD) /status(?:\\?\\S*)?(?: HTTP/.*)?$");
+                    boolean isConectar = linha.matches("^GET /conectar(?:\\?\\S*)?(?: HTTP/.*)?$");
                     // Espera o cliente mandar todos os headers
                     while (linha != null && !linha.isEmpty()) {
                         linha = in.readLine();
@@ -122,26 +119,39 @@ public class JogadorConectado extends Jogador implements Runnable {
                         LOGGER.info("Cliente desconectou antes de mandar headers");
                         return;
                     }
+                    if (isConectar) {
+                        LOGGER.info("Conexão atualizada para protocolo miniTruco via HTTP 101 (Switching Protocols)");
+                        out.print("HTTP/1.1 101 Switching Protocols\r\n");
+                        out.print("Upgrade: minitruco\r\n");
+                        out.print("Connection: Upgrade\r\n");
+                        out.print("\r\n");
+                        out.flush();
+                        iniciaThreadAuxiliar();
+                        continue;
+                    }
                     if (isStatus) {
                         LOGGER.info("Status do servidor solicitado (HTTP); enviando e desconectando");
-                        out.println("HTTP/1.1 200 OK");
-                        out.println("Content-Type: text/plain");
-                        out.println();
+                        out.print("HTTP/1.1 200 OK\r\n");
+                        out.print("Content-Type: text/plain\r\n");
+                        out.print("\r\n");
                         if (isGet) {
-                            out.println("OK");
+                            out.print("OK\r\n");
                             out.flush();
 
-                            out.println(MiniTrucoServer.status());
-                            out.println();
+                            out.print(MiniTrucoServer.status());
+                            out.print("\r\n");
                         }
                     } else {
                         LOGGER.info("GET/HEAD desconhecido, mandando 404 e desconectando");
-                        out.println("HTTP/1.1 404 NOT FOUND");
-                        out.println();
+                        out.print("HTTP/1.1 404 NOT FOUND\r\n");
+                        out.print("\r\n");
                     }
                     out.flush();
                     cliente.close();
                     return;
+                }
+                if (threadMonitorDeConexao == null) {
+                    iniciaThreadAuxiliar();
                 }
                 if (("K " + keepAlive).equals(linha)) {
                     keepAlive = 0;
