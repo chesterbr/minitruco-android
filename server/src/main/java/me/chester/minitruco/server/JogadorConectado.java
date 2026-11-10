@@ -223,8 +223,9 @@ public class JogadorConectado extends Jogador implements Runnable {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                // Monitor finalizado (finalizaThreadAuxiliar), não é falta de keepalive
                 LOGGER.info("sleep interrompido: " + e);
+                return;
             }
             LOGGER.info(this + " Iniciando monitor de conexão");
             boolean avisouQueVaiDesconectarNoFimDaPartida = false;
@@ -248,8 +249,9 @@ public class JogadorConectado extends Jogador implements Runnable {
                 try {
                     Thread.sleep(TEMPO_KEEPALIVE);
                 } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                    // Monitor finalizado (finalizaThreadAuxiliar), não é falta de keepalive
                     LOGGER.info("sleep interrompido: " + e);
+                    break;
                 }
                 if (keepAlive != 0) {
                     LOGGER.info(this + " Keepalive não respondido, fechando socket");
