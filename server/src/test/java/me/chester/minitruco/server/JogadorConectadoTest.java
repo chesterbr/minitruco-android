@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
@@ -149,6 +150,27 @@ class JogadorConectadoTest {
 
         t.interrupt();
         t.join(2000);
+    }
+
+    @Test
+    void testClienteQueConectaEFicaMudoEhDesconectado() throws Exception {
+        try (ServerSocket servidor = new ServerSocket(0);
+             Socket cliente = new Socket(InetAddress.getLoopbackAddress(), servidor.getLocalPort());
+             Socket doLadoDoServidor = servidor.accept()) {
+            JogadorConectado j = new JogadorConectado(doLadoDoServidor);
+            Thread t = Thread.ofPlatform().unstarted(j);
+            t.start();
+
+            // O cliente não manda nada; a thread deve terminar sozinha
+            t.join(15000);
+            boolean continuaViva = t.isAlive();
+            if (continuaViva) {
+                // Limpeza: sem isso a thread ficaria presa até o fim da JVM
+                doLadoDoServidor.close();
+                t.join(2000);
+            }
+            assertFalse(continuaViva, "Cliente que não manda nenhuma linha deve ser desconectado");
+        }
     }
 
 }

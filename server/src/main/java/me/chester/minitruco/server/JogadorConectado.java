@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,6 +27,13 @@ public class JogadorConectado extends Jogador implements Runnable {
     private final static Logger LOGGER = Logger.getLogger("JogadorConectado");
 
     public static final int TEMPO_KEEPALIVE = 10000;
+
+    /**
+     * Tempo máximo que um cliente pode ficar sem mandar a primeira linha.
+     * O monitor de conexão só começa depois dela, então sem isso um cliente
+     * que conecta e some prende a thread para sempre.
+     */
+    public static final int TEMPO_MAXIMO_PRIMEIRA_LINHA = 10000;
     private final Socket cliente;
 
     /**
@@ -94,17 +102,25 @@ public class JogadorConectado extends Jogador implements Runnable {
         LOGGER.info(this + " conectou, iniciando thread");
 
         try {
-            cliente.setSoTimeout(0);
+            cliente.setSoTimeout(TEMPO_MAXIMO_PRIMEIRA_LINHA);
             // Prepara os buffers de entrada e saída
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     cliente.getInputStream()));
             out = new PrintStream(cliente.getOutputStream());
             String linha = "";
+            boolean recebeuPrimeiraLinha = false;
             while (linha != null) {
                 try {
                     linha = in.readLine();
+                    if (!recebeuPrimeiraLinha) {
+                        recebeuPrimeiraLinha = true;
+                        cliente.setSoTimeout(0);
+                    }
+                } catch (SocketTimeoutException e) {
+                    LOGGER.info(this + " não mandou nada em " + TEMPO_MAXIMO_PRIMEIRA_LINHA + "ms, desconectando");
+                    break;
                 } catch (IOException e) {
-                    // Como o SO_TIMEOUT está em zero, podemos assumir desconexão
+                    // Depois da primeira linha o SO_TIMEOUT é zero, então podemos assumir desconexão
                     break;
                 }
                 if (linha != null && linha.matches("^(GET|HEAD|POST|PUT|DELETE|OPTIONS|TRACE|CONNECT) .*$")) {
