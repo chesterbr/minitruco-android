@@ -41,7 +41,14 @@ servidor_em_execucao() {
 aguarda_mudanca_no_jar() {
     (inotifywait -e close_write "$jar") & # em background para não bloquer o SIGTERM
     inotify_pid=$!
-    wait $inotify_pid
+    # Também acorda se o servidor morrer sozinho (ex.: porta ainda ocupada pela
+    # instância anterior), para que o supervisor possa reiniciar o launcher
+    wait -n "$inotify_pid" "$servidor_pid"
+    if ! servidor_em_execucao; then
+        echo "Servidor (PID $servidor_pid) finalizou sozinho; saindo para o supervisor reiniciar."
+        kill "$inotify_pid" 2>/dev/null
+        exit 1
+    fi
 }
 
 aguarda_o_novo_jar_estar_pronto() {
