@@ -135,6 +135,23 @@ class SalaTest {
     }
 
     @Test
+    void testGerenteSaiComSalaPublicaCheiaAntesDeIniciarPassaGerenciaESalaFicaDisponivel() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.adiciona(j3);
+        s.adiciona(j4);
+        assertEquals("", Sala.modosAguardandoJogadores());
+
+        s.remove(j1);
+
+        assertEquals(j2, s.getGerente());
+        assertEquals(3, s.getNumPessoas());
+        assertEquals("P", Sala.modosAguardandoJogadores());
+        assertNull(s.getPartida());
+    }
+
+    @Test
     void testRemoveUltimoJogador() {
         Sala s = criaSalaCheiaComJj1Gerente();
         s.remove(jj1);

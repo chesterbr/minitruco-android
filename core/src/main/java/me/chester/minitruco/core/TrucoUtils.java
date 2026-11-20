@@ -68,7 +68,7 @@ public class TrucoUtils {
         int indiceDoNomeNaPosicao = (posicaoNoJogo - 1 + posicaoNaTela - 1) % 4;
         boolean isGerente = (posicaoGerente == posicaoNaTela);
 
-        boolean mostraGerente = isGerente && !isPublica;
+        boolean mostraGerente = isGerente;
         String nome = nomes[indiceDoNomeNaPosicao].replaceAll("_", " ");
         if (isPublica && nome.equals("bot")) {
             nome = "";
