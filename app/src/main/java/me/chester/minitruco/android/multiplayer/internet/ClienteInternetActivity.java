@@ -50,8 +50,6 @@ public class ClienteInternetActivity extends SalaActivity {
     private AlphaAnimation animationTrocaSala;
     private String comandoTrocaSala;
 
-    private boolean contagemRegressivaParaIniciar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,13 +156,16 @@ public class ClienteInternetActivity extends SalaActivity {
         if (numJogadores == 4) {
             enviaLinha("Q");
         } else {
+            boolean podeChamar = tipoSala.equals("PRI");
             new AlertDialog.Builder(this)
                 .setTitle("Mesa não está cheia")
-                .setMessage("Você prefere chamar/esperar mais gente, ou jogar com bots na mesa?")
+                .setMessage(podeChamar ?
+                    "Você prefere chamar/esperar mais gente, ou jogar com bots na mesa?" :
+                    "Você prefere esperar mais gente, ou jogar com bots na mesa?")
                 .setPositiveButton("Jogar", (dialog, which) -> {
                     enviaLinha("Q");
                 })
-                .setNegativeButton("Chamar/esperar", null)
+                .setNegativeButton(podeChamar ? "Chamar/esperar" : "Esperar", null)
                 .show();
         }
     }
@@ -227,9 +228,6 @@ public class ClienteInternetActivity extends SalaActivity {
         if (!line.startsWith("K ")) {
             // Não loga o keepalive (evita poluir o log)
             LOGGER.log(Level.INFO, "recebeu: " + line);
-            // Qualquer outra notificação cancela a contagem regressiva
-            contagemRegressivaParaIniciar = false;
-            setMensagem(null);
         }
         switch (line.charAt(0)) {
             case 'N': // Nome foi aceito
@@ -245,7 +243,6 @@ public class ClienteInternetActivity extends SalaActivity {
                 break;
             case 'I': // Entrou/voltou para uma sala (ou ela foi atualizada)
                 exibeMesaForaDoJogo(line);
-                iniciaContagemRegressivaSeNecessario();
                 break;
             case 'X': // Erro
                 switch(line) {
@@ -293,36 +290,6 @@ public class ClienteInternetActivity extends SalaActivity {
             "Ela pode estar lotada ou com jogo em andamento, ou " +
             "ainda, o código pode estar errado. Confira com a pessoa que " +
             "te convidou e tente novamente.");
-    }
-
-    /**
-     * Se estivermos numa sala pública e a mesa estiver cheia, inicia contagem
-     * regressiva para auto-início do jogo.
-     * <p>
-     * Observe que qualquer notificação (exceto o de keepalive) cancela a
-     * contagem, e isso é feito no loop de processamento de notificações.
-     */
-    private void iniciaContagemRegressivaSeNecessario() {
-        runOnUiThread(() -> {
-            if (numJogadores == 4 && tipoSala.equals("PUB")) {
-                contagemRegressivaParaIniciar = true;
-                new Thread(() -> {
-                    for (int i = 5; i > 0; i--) {
-                        setMensagem("Mesa completa. Auto-iniciando em " + i);
-                        sleep(1000);
-                        if (!contagemRegressivaParaIniciar) {
-                            return;
-                        }
-                    }
-                    // Do ponto de vista da UI, salas públicas não têm gerente,
-                    // mas o servidor ainda espera que ele(a) inicie o jogo,
-                    // então...
-                    if (isGerente) {
-                        enviaLinha("Q");
-                    }
-                }).start();
-            }
-        });
     }
 
     private void desconecta() {
