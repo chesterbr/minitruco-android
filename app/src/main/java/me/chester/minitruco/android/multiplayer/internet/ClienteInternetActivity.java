@@ -102,10 +102,10 @@ public class ClienteInternetActivity extends SalaActivity {
         });
         btnNovaSalaPublica.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
-                .setMessage("Trocar de sala só é recomendado se alguém estiver " +
-                    "incomodando, pois vai demorar mais pra achar outras pessoas " +
-                    "para jogar. Quer mesmo trocar?")
-                .setPositiveButton("Trocar", (d, w) -> {
+                .setMessage("Você vai sair desta sala e criar uma nova sala " +
+                    "pública, na qual será gerente. Outras pessoas que " +
+                    "procurarem sala pública poderão entrar nela.")
+                .setPositiveButton("Criar sala pública", (d, w) -> {
                     comandoTrocaSala = "E NPU " + modo;
                     layoutJogadoresEBotoesGerente.startAnimation(animationTrocaSala);
                 })
