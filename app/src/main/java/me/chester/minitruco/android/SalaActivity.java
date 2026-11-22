@@ -145,7 +145,7 @@ public abstract class SalaActivity extends AppCompatActivity {
             // Atualiza outros itens do display
             layoutJogadoresEBotoesGerente.setVisibility(View.VISIBLE);
             findViewById(R.id.layoutBotoesGerente).setVisibility(
-                isGerente && !tipoSala.equals("PUB") ? View.VISIBLE : View.INVISIBLE);
+                isGerente ? View.VISIBLE : View.INVISIBLE);
             if (isGerente) {
                 btnIniciar.setEnabled(numJogadores > 1);
                 btnInverter.setEnabled(numJogadores > 1);
@@ -169,17 +169,11 @@ public abstract class SalaActivity extends AppCompatActivity {
                     break;
             }
             textViewStatus.setText(Partida.textoModo(modo).toLowerCase());
-            // Para atualizar a mensagem, levamos em conta que:
-            // - Salas públicas só iniciam quando estão cheias (e fazem isso
-            //   automaticamente, sem interação do gerente)
-            // - Salas privadas e Bluetooth precisam de pelo menos dois
-            //   jogadores humanos (e o gerente decide quando iniciar)
+            // Para atualizar a mensagem, levamos em conta que, em qualquer
+            // tipo de sala, o jogo precisa de pelo menos dois jogadores
+            // humanos e o gerente decide quando iniciar
             setMensagem(null);
-            if (tipoSala.equals("PUB")) {
-                if (numJogadores < 4) {
-                    setMensagem("Aguardando mais pessoas");
-                }
-            } else if (isGerente) {
+            if (isGerente) {
                 if (numJogadores == 1) {
                     setMensagem("Aguardando pelo menos uma pessoa");
                 } else if (numJogadores < 4) {

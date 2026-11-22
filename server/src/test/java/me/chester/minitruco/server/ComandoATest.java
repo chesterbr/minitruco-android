@@ -3,6 +3,7 @@ package me.chester.minitruco.server;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doNothing;
@@ -173,6 +174,39 @@ class ComandoATest {
         Comando.interpreta("A", j2);
         assertEquals(JogadorConectado.class, s.getJogador(2).getClass());
         assertNull(s.getPartida());
+    }
+
+    @Test
+    void testAbortaEmSalaPrivadaComPartidaRemoveBotsEReabreVagas() {
+        Sala s = new Sala(false, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.iniciaPartida(j1);
+        assertEquals(JogadorBot.class, s.getJogador(3).getClass());
+
+        Comando.interpreta("A", j2);
+        assertNull(s.getJogador(3));
+        assertNull(s.getJogador(4));
+        assertEquals(2, s.getNumPessoas());
+        assertTrue(s.adiciona(j3));
+    }
+
+    @Test
+    void testVoltarParaSalaPublicaAposPartidaRemoveBotsEReabreVagas() {
+        Sala s = new Sala(true, "P");
+        s.adiciona(j1);
+        s.adiciona(j2);
+        s.iniciaPartida(j1);
+        assertEquals(JogadorBot.class, s.getJogador(3).getClass());
+        assertEquals("", Sala.modosAguardandoJogadores());
+
+        s.getPartida().abandona(0);
+        Comando.interpreta("A", j2);
+        assertNull(s.getJogador(3));
+        assertNull(s.getJogador(4));
+        assertEquals(2, s.getNumPessoas());
+        assertEquals("P", Sala.modosAguardandoJogadores());
+        assertEquals(s, Sala.colocaEmSalaPublica(j3, "P"));
     }
 
     @Test
